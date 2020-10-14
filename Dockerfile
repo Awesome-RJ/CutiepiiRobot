@@ -65,7 +65,7 @@ RUN apt update && apt upgrade -y && \
 RUN pip3 install --upgrade pip setuptools
 
 # Copy Python Requirements to /root/CutiepiiRobot
-RUN git clone -b shiken https://github.com/Rajkumar-27/test-1-cutiepii /root/CutiepiiRobot
+RUN git clone -b shiken https://github.com/Rajkumar-27/Cutiepii-Robot /root/CutiepiiRobot
 WORKDIR /root/CutiepiiRobot
 
 #Copy config file to /root/CutiepiiRobot/CutiepiiRobot
