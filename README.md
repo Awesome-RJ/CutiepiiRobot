@@ -11,6 +11,10 @@ The Support group can be reached out to at [Cutiepii Support](https://t.me/Cutie
 
 News channel as at [Cutiepii Updates](https://t.me/Cutiepii_Updates) 
 
+
+## Stats
+![Rajkumar's Github stats](https://github-readme-stats.vercel.app/api?username=Rajkumar-27&show_icons=true&theme=tokyonight)
+
 ## How to setup/deploy.
 
 ### Read these notes carefully before proceeding 
@@ -210,5 +214,3 @@ Any other authorship/credits can be seen through the commits.
 
 Should any be missing kindly let us know at [Cutiepii Support](https://t.me/Cutiepii_Support) or simply submit a pull request on the readme.
 
-## Stats
-![Rajkumar's Github stats](https://github-readme-stats.vercel.app/api?username=Rajkumar-27&show_icons=true&theme=tokyonight)
