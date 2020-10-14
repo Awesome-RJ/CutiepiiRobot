@@ -209,3 +209,6 @@ Also, missing proper credit for blacklistusers taken from TheRealPhoenixBot (wil
 Any other authorship/credits can be seen through the commits.
 
 Should any be missing kindly let us know at [Cutiepii Support](https://t.me/Cutiepii_Support) or simply submit a pull request on the readme.
+
+## Stats
+![Rajkumar's Github stats](https://github-readme-stats.vercel.app/api?username=Rajkumar-27&show_icons=true&theme=tokyonight)
