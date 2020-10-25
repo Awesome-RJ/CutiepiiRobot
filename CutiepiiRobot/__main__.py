@@ -59,7 +59,9 @@ You can find my list of available commands with /help.
 
 FREE MOVIES AND SERIES ON [HINDI K DRAMA](https://Hindikdrama.xyz)
 
-Maintained by @WadiwalaTech
+Developed By Techno Ocean
+
+Maintained by [Rajkumar](http://t.me/Wadiwala_Tech)
 
 """
 
