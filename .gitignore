@@ -1,7 +1,7 @@
-SaitamaRobot/config.py
-SaitamaRobot/*.session
-SaitamaRobot/*.session-journal
-SaitamaRobot/config.ini
+CutiepiiRobot/config.py
+CutiepiiRobot/*.session
+CutiepiiRobot/*.session-journal
+CutiepiiRobot/config.ini
 log.txt
 *.pyc
 .idea/

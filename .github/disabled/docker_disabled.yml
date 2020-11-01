@@ -24,7 +24,7 @@ jobs:
 
         with:
 
-          name:  animekaizoku/cutiepiirobot
+          name:  animekaizoku/saitamarobot
 
           username: ${{ secrets.DOCKER_USERNAME }}
 

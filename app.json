@@ -1,4 +1,14 @@
 {
+      "name": "Cutiepii Robot",
+      "description": "An Anime themed advance Telegram group management bot.",
+      "keywords": [
+         "telegram",
+         "anime",
+         "group",
+         "manager",
+         "Cutiepii"
+      ],   
+   "repository": "https://github.com/Rajkumar-27/CutiepiiRobot",
    "addons": [
       {
          "options": {
@@ -7,7 +17,6 @@
          "plan": "heroku-postgresql"
       }
    ],
-   "description": "An Anime themed Advance Telegram group management bot.",
    "env": {
       "TOKEN": {
          "description": "Your bot token. Get one from @BotFather duh",
@@ -23,7 +32,7 @@
          "description": "Get API_HASH from my.telegram.org, used for telethon based modules.",
          "required": true,
          "value": ""
-      },    
+      },
       "SQLALCHEMY_DATABASE_URI": {
          "description": "Your postgres sql db, empty this field if you dont have one.",
          "required": false,
@@ -39,7 +48,7 @@
          "value": "Wadiwala_Tech"
       },
       "SUPPORT_CHAT": {
-         "description": "Your Telegram support group chat username where your users will go and bother you with shit But be like: MyGroupChatUsernameBlah. If this ever points to Cutiepii support than consider you made an enemy.",
+         "description": "Your Telegram support group chat username where your users will go and bother you with shit But be like: MyGroupChatUsernameBlah. If this ever points to Cutipii support than consider you made an enemy.",
          "required": true,
          "value": "MyAwesomeSupportGroupGoesHere"
       },
@@ -64,7 +73,7 @@
          "value": "-xyz"
       },
       "DEV_USERS": {
-         "description": "ID of users who are Devs of your bot (can use /py etc.). If you are a noob and would come and bother Cutiepii support then keep the current ID's here at they are and add yours.",
+         "description": "ID of users who are Devs of your bot (can use /py etc.). If you are a noob and would come and bother Saitama support then keep the current ID's here at they are and add yours.",
          "required": false,
          "value": "660565862 459034222 189005567 346981140 367222759"
       },
@@ -77,22 +86,22 @@
          "description": "Enforce gbans across new groups as well as old groups. When a gbanned user talks, he will be banned.",
          "value": "True"
       },
-      "SUDO_USERS": {
+      "DRAGONS": {
          "description": "A space separated list of user IDs who you want to assign as sudo users.",
          "required": false,
-         "value": "726331443"
+         "value": "459034222 189005567 660565862 346981140 367222759"
       },
-      "SUPPORT_USERS": {
+      "DEMONS": {
          "description": "A space separated list of user IDs who you wanna assign as support users(gban perms only).",
          "required": false,
-         "value": "974650192"
+         "value": "615304572"
       },
-      "TIGER_USERS": {
+      "TIGERS": {
          "description": "A space separated list of user IDs who you wanna assign as tiger users.",
          "required": false,
          "value": ""
       },
-      "WHITELIST_USERS": {
+      "WOLVES": {
          "description": "A space separated list of user IDs who you want to assign as whitelisted - can't be banned with your bot.",
          "required": false,
          "value": ""
@@ -133,26 +142,22 @@
       "DONATION_LINK": {
          "description": "Optional: link where you would like to receive donations. If you are a noob, better leave it linking to paul",
          "required": false,
-         "value": "https://www.paypal.me/Wadiwalatech"
+         "value": "https://www.paypal.me/WadiwalaTech"
       },
       "DEL_CMDS": {
          "description": "Set this to True if you want to delete command messages from users who don't have the perms to run that command.",
          "value": "True"
       },
+      "AI_API_KEY": {
+      "description": "Make your bot talk using Intellivoid's chatbot API, get your key from https://coffeehouse.intellivoid.net/",
+         "required": false,
+         "value": ""
+   },      
       "BAN_STICKER": {
          "description": "ID of the sticker you want to use when banning people.",
          "required": false,
-         "value": "CAACAgQAAx0CU_rCTAABAczQXyBOv1TsVK4EfwnkCUT1H0GCkPQAAtwAAwEgTQaYsMtAltpEwhoE"
+         "value": "CAACAgUAAx0CTvy7KwABBgHEX55sibphbDtyjiJxDQZ54hslReoAAnMKAAKJAAFzH185yGiYmPR0HgQ"
       }
-   },
-   "keywords": [
-      "telegram",
-      "anime",
-      "group",
-      "manager",
-      "Cutiepii"
-   ],
-   "name": "Cutiepii Robot",
-   "logo": "https://telegra.ph/file/93d872f6ae4e069c8d57c.png",
-   "repository": "https://github.com/Rajkumar-27/Cutiepii-Robot"
+      
+   }
 }

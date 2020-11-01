@@ -1,7 +1,6 @@
 import html
 
-from CutiepiiRobot import (LOGGER, SUDO_USERS, TIGER_USERS, WHITELIST_USERS,
-                          dispatcher)
+from CutiepiiRobot import (LOGGER, DRAGONS, TIGERS, WOLVES, dispatcher)
 from CutiepiiRobot.modules.helper_funcs.chat_status import (user_admin,
                                                            user_not_admin)
 from CutiepiiRobot.modules.log_channel import loggable
@@ -14,7 +13,7 @@ from telegram.ext import (CallbackContext, CallbackQueryHandler, CommandHandler,
 from telegram.utils.helpers import mention_html
 
 REPORT_GROUP = 12
-REPORT_IMMUNE_USERS = SUDO_USERS + TIGER_USERS + WHITELIST_USERS
+REPORT_IMMUNE_USERS = DRAGONS + TIGERS + WOLVES
 
 
 @run_async
@@ -89,7 +88,7 @@ def report(update: Update, context: CallbackContext) -> str:
             return ""
 
         if reported_user.id in REPORT_IMMUNE_USERS:
-            message.reply_text("Uh? You reporting whitelisted users?")
+            message.reply_text("Uh? You reporting a disaster?")
             return ""
 
         if chat.username and chat.type == Chat.SUPERGROUP:

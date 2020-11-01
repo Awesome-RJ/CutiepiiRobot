@@ -10,7 +10,7 @@ from telegram.utils.helpers import mention_html
 from alphabet_detector import AlphabetDetector
 
 import CutiepiiRobot.modules.sql.locks_sql as sql
-from CutiepiiRobot import dispatcher, SUDO_USERS, LOGGER
+from CutiepiiRobot import dispatcher, DRAGONS, LOGGER
 from CutiepiiRobot.modules.disable import DisableAbleCommandHandler
 from CutiepiiRobot.modules.helper_funcs.chat_status import (
     can_delete,
@@ -157,7 +157,7 @@ def restr_members(bot,
                   other=False,
                   previews=False):
     for mem in members:
-        if mem.user in SUDO_USERS:
+        if mem.user in DRAGONS:
             pass
         try:
             bot.restrict_chat_member(
