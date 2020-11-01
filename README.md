@@ -1,4 +1,4 @@
-![Cutiepii](https://telegra.ph/file/d1f83886dd1c5d0b3c530.png)
+![Cutiepii](https://telegra.ph/file/2e61aafdbc29d0205d980.png)
 # Cutiepii Robot 
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity) [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://perso.crans.org/besson/LICENSE.html) [![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com) [![Updates channel!](https://img.shields.io/badge/Join%20Channel-Cutiepii-red)](https://t.me/Cutiepii_Updates) [![Join Support!](https://img.shields.io/badge/Support%20Chat-Cutiepii-red)](https://t.me/Cutieppii_Support)
 
