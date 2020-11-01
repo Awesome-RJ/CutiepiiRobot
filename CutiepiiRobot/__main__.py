@@ -85,7 +85,7 @@ And the following:
     dispatcher.bot.first_name, ""
     if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
 
-SAITAMA_IMG ="https://telegra.ph/file/d1f83886dd1c5d0b3c530.png"
+SAITAMA_IMG ="https://telegra.ph/file/2e61aafdbc29d0205d980.png"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
 Cutiepii is hosted on one of Kaizoku's Servers and doesn't require any donations as of now but \
