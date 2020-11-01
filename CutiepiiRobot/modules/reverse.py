@@ -2,32 +2,32 @@ import os
 import re
 import requests
 import urllib
-from urllib.request import urlopen
+import urllib.request
+import urllib.parse
 from urllib.error import URLError, HTTPError
 from bs4 import BeautifulSoup
 
-from typing import List
-from telegram import ParseMode, InputMediaPhoto, Update, Bot, TelegramError
-from telegram.ext import run_async
+from telegram import InputMediaPhoto, TelegramError
+from telegram import Update
+from telegram.ext import CallbackContext, run_async
 
 from CutiepiiRobot import dispatcher
 
 from CutiepiiRobot.modules.disable import DisableAbleCommandHandler
-
+from CutiepiiRobot.modules.helper_funcs.alternate import typing_action
 
 opener = urllib.request.build_opener()
-useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.38 Safari/537.36'
-#useragent = 'Mozilla/5.0 (Linux; Android 6.0.1; SM-G920V Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36'
+useragent = 'Mozilla/5.0 (Linux; Android 6.0.1; SM-G920V Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36'
 opener.addheaders = [('User-agent', useragent)]
 
-
 @run_async
-def reverse(bot: Bot, update: Update : List[str]):
+def reverse(update: Update, context:CallbackContext):
     if os.path.isfile("okgoogle.png"):
         os.remove("okgoogle.png")
 
     msg = update.effective_message
     chat_id = update.effective_chat.id
+    bot, args = context.bot, context.args
     rtmid = msg.message_id
     imagename = "okgoogle.png"
 
@@ -82,7 +82,7 @@ def reverse(bot: Bot, update: Update : List[str]):
             msg.reply_text(f"{VE}\nPlease try again using http or https protocol.")
             return
     else:
-        msg.reply_markdown("Please reply to a sticker, or an image to search it!\nDo you know that you can search an image with a link too? `/reverse [picturelink] <amount>`.")
+        msg.reply_markdown("Please reply to a sticker, or an image to search it!\nDo you know that you can search an image with a link too? /reverse [picturelink] <amount>.")
         return
 
     try:
@@ -93,7 +93,7 @@ def reverse(bot: Bot, update: Update : List[str]):
 
         if response != 400:
             xx = bot.send_message(chat_id, "Image was successfully uploaded to Google."
-                                  "\nParsing source now. Maybe.", reply_to_message_id=rtmid)
+                                  "\nParsing it, please wait.", reply_to_message_id=rtmid)
         else:
             xx = bot.send_message(chat_id, "Google told me to go away.", reply_to_message_id=rtmid)
             return
@@ -107,7 +107,7 @@ def reverse(bot: Bot, update: Update : List[str]):
             imgspage = match['similar_images']
 
         if guess and imgspage:
-            xx.edit_text(f"[{guess}]({fetchUrl})\nLooking for images...", parse_mode='Markdown', disable_web_page_preview=True)
+            xx.edit_text(f"[{guess}]({fetchUrl})\nProcessing...", parse_mode='Markdown', disable_web_page_preview=True)
         else:
             xx.edit_text("Couldn't find anything.")
             return
@@ -181,12 +181,8 @@ def scam(imgspage, lim):
     return imglinks
 
 
-__help__ = """
-- /reverse: Does a reverse image search of the media which it was replied to.
-"""
-
-__mod_name__ = "Reverse"
-
-REVERSE_HANDLER = DisableAbleCommandHandler("reverse", reverse, pass_args=True, admin_ok=True)
+REVERSE_HANDLER = DisableAbleCommandHandler(
+    "reverse", reverse, pass_args=True, admin_ok=True
+)
 
 dispatcher.add_handler(REVERSE_HANDLER)
