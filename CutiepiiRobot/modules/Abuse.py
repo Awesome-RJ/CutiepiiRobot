@@ -27,6 +27,24 @@ ABUSE_STRINGS = (
     "CUnt",
     " Gay is here",
     "Ur dad gey bc ",
+    "gando",
+"sakura",
+"son of a bitch",
+"fuck you bitch",
+"wtf",
+"sala",
+"dick",
+"whore",
+"lesbians",
+"son of a bitch",
+"butt hole",
+"bhosdike",
+"lund",
+"oppai",
+"bastard",
+"bhenchodh",
+"bhen ke lode",
+"anal",
   )
 
 @run_async
@@ -39,7 +57,7 @@ def abuse(bot: Bot, update: Update):
       message.reply_text(random.choice(ABUSE_STRINGS))
 
 __help__ = """
-- /abuse : Abuse someone in malayalam.
+ • /abuse : Abuse someone in malayalam.
 """
 
 __mod_name__ = "Abuse"
