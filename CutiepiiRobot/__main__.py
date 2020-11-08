@@ -85,7 +85,7 @@ And the following:
     dispatcher.bot.first_name, ""
     if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
 
-SAITAMA_IMG ="https://telegra.ph/file/2e61aafdbc29d0205d980.png"
+SAITAMA_IMG = "https://telegra.ph/file/2e61aafdbc29d0205d980.png"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
 Cutiepii is hosted on one of Kaizoku's Servers and doesn't require any donations as of now but \
@@ -208,7 +208,7 @@ def start(update: Update, context: CallbackContext):
                 reply_markup=InlineKeyboardMarkup(
                     [[
                         InlineKeyboardButton(
-                            text="☑️ Add Cutiepii to your group",
+                            text="☑️ Add Saitama to your group",
                             url="t.me/{}?startgroup=true".format(
                                 context.bot.username))
                     ],
@@ -218,17 +218,17 @@ def start(update: Update, context: CallbackContext):
                              url=f"https://t.me/{SUPPORT_CHAT}"),
                          InlineKeyboardButton(
                              text="🔔 Updates Channel",
-                             url="https://t.me/techno_ocean")
+                             url="https://t.me/OnePunchUpdates")
                      ],
                      [
                          InlineKeyboardButton(
                              text="🧾 Getting started guide",
-                             url="https://t.me/techno_ocean/10")
+                             url="https://t.me/OnePunchUpdates/29")
                      ],
                      [
                          InlineKeyboardButton(
                              text="🗄 Source code",
-                             url="https://github.com/Rajkumar-27/Cutiepii-Robot")
+                             url="https://github.com/AnimeKaizoku/CutiepiiRobot")
                      ]]))
     else:
         update.effective_message.reply_text(
@@ -492,7 +492,8 @@ def get_settings(update: Update, context: CallbackContext):
 
     else:
         send_settings(chat.id, user.id, True)
-       
+
+
 @run_async
 def donate(update: Update, context: CallbackContext):
     user = update.effective_message.from_user
