@@ -42,7 +42,7 @@ Want to get the lyrics of your favorite songs straight from the app? This module
  You can either enter just the song name or both the artist and song name.
 """
 
-__mod_name__ = "SONGS LYRICS"
+__mod_name__ = "Lyrics"
 
 
 
