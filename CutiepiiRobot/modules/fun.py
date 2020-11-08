@@ -14,7 +14,6 @@ from CutiepiiRobot.modules.helper_funcs.extraction import extract_user
 
 GIF_ID = 'CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE'
 
-
 @run_async
 def abuse(update: Update, context: CallbackContext):
     update.effective_message.reply_text(random.choice(fun_strings.ABUSE_STRINGS))
