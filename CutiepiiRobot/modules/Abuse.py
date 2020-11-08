@@ -62,6 +62,6 @@ __help__ = """
 
 __mod_name__ = "Abuse"
 
-ABUSE_HANDLER = DisableAbleMessageHandler("abuse", abuse)
+ABUSE_HANDLER = DisableAbleCommandHandler(("abuse", abuse)
 
 dispatcher.add_handler(ABUSE_HANDLER)
