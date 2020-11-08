@@ -57,7 +57,7 @@ def abuse(bot: Bot, update: Update):
       message.reply_text(random.choice(ABUSE_STRINGS))
 
 __help__ = """
- • /abuse : Abuse someone in malayalam.
+ • /abuse : Abuse someone in Hindi/English.
 """
 
 __mod_name__ = "Abuse"
