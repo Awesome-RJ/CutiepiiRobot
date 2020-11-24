@@ -64,12 +64,12 @@ RUN apt update && apt upgrade -y && \
 # Pypi package Repo upgrade
 RUN pip3 install --upgrade pip setuptools
 
-# Copy Python Requirements to /root/CutiepiiRobot
-RUN git clone -b shiken https://github.com/Rajkumar-27/CutiepiiRobot /root/CutiepiiRobot
-WORKDIR /root/CutiepiiRobot
+# Copy Python Requirements to /root/Cutiepii_Robot
+RUN git clone -b shiken https://github.com/Rajkumar-27/Cutiepii_Robot /root/Cutiepii_Robot
+WORKDIR /root/Cutiepii_Robot
 
-#Copy config file to /root/CutiepiiRobot/CutiepiiRobot
-COPY ./CutiepiiRobot/sample_config.py ./CutiepiiRobot/config.py* /root/CutiepiiRobot/CutiepiiRobot/
+#Copy config file to /root/Cutiepii_Robot/Cutiepii_Robot
+COPY ./Cutiepii_Robot/sample_config.py ./Cutiepii_Robot/config.py* /root/Cutiepii_Robot/Cutiepii_Robot/
 
 ENV PATH="/home/bot/bin:$PATH"
 
@@ -77,4 +77,4 @@ ENV PATH="/home/bot/bin:$PATH"
 RUN pip3 install -U -r requirements.txt
 
 # Starting Worker
-CMD ["python3","-m","CutiepiiRobot"]
+CMD ["python3","-m","Cutiepii_Robot"]

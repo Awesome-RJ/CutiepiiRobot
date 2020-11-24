@@ -1,7 +1,7 @@
-CutiepiiRobot/config.py
-CutiepiiRobot/*.session
-CutiepiiRobot/*.session-journal
-CutiepiiRobot/config.ini
+Cutiepii_Robot/config.py
+Cutiepii_Robot/*.session
+Cutiepii_Robot/*.session-journal
+Cutiepii_Robot/config.ini
 log.txt
 *.pyc
 .idea/
@@ -9,8 +9,8 @@ log.txt
 .pydevproject
 .directory
 .vscode
-CutiepiiRobot/modules/helper_funcs/temp.txt
-CutiepiiRobot/elevated_users.json
+Cutiepii_Robot/modules/helper_funcs/temp.txt
+Cutiepii_Robot/elevated_users.json
 start-3.6.bat
 *.session
 kangsticker.png
