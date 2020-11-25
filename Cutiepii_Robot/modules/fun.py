@@ -205,16 +205,6 @@ weebyfont = [
 ]
 
 @run_async
-def pat(update: Update, _):
-    msg = update.effective_message
-    pat = requests.get("https://some-random-api.ml/animu/pat").json()
-    link = pat.get("link")
-    if not link:
-        msg.reply_text("No URL was received from the API!")
-        return
-    msg.reply_video(link)  
-
-@run_async
 def weebify(update: Update, context: CallbackContext):
     args = context.args
     message = update.effective_message
@@ -286,16 +276,15 @@ dispatcher.add_handler(SHRUG_HANDLER)
 dispatcher.add_handler(BLUETEXT_HANDLER)
 dispatcher.add_handler(RLG_HANDLER)
 dispatcher.add_handler(DECIDE_HANDLER)
-dispatcher.add_handler(PAT_HANDLER)
 dispatcher.add_handler(TABLE_HANDLER)
 
 __mod_name__ = "Fun"
 __command_list__ = [
     "runs", "slap", "roll", "toss", "shrug", "bluetext", "rlg", "decide",
-    "table", "pat", "sanitize", "shout", "weebify", "pat"
+    "table", "pat", "sanitize", "shout", "weebify"
 ]
 __handlers__ = [
     RUNS_HANDLER, SLAP_HANDLER, PAT_HANDLER, ROLL_HANDLER, TOSS_HANDLER,
     SHRUG_HANDLER, BLUETEXT_HANDLER, RLG_HANDLER, DECIDE_HANDLER, TABLE_HANDLER,
-    SANITIZE_HANDLER, SHOUT_HANDLER, WEEBIFY_HANDLER, PAT_HANDLER
+    SANITIZE_HANDLER, SHOUT_HANDLER, WEEBIFY_HANDLER
 ]
