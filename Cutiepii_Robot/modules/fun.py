@@ -232,7 +232,6 @@ DECIDE_HANDLER = DisableAbleCommandHandler("decide", decide)
 TABLE_HANDLER = DisableAbleCommandHandler("table", table)
 SHOUT_HANDLER = DisableAbleCommandHandler("shout", shout)
 WEEBIFY_HANDLER = DisableAbleCommandHandler("weebify", weebify)
-HUG_HANDLER = DisableAbleCommandHandler("hug", hug)
 
 
 dispatcher.add_handler(WEEBIFY_HANDLER)
@@ -253,10 +252,10 @@ dispatcher.add_handler(HUG_HANDLER)
 __mod_name__ = "Fun"
 __command_list__ = [
     "runs", "slap", "roll", "toss", "shrug", "bluetext", "rlg", "decide",
-    "table", "pat", "sanitize", "shout", "weebify", "hug"
+    "table", "pat", "sanitize", "shout", "weebify"
 ]
 __handlers__ = [
     RUNS_HANDLER, SLAP_HANDLER, PAT_HANDLER, ROLL_HANDLER, TOSS_HANDLER,
     SHRUG_HANDLER, BLUETEXT_HANDLER, RLG_HANDLER, DECIDE_HANDLER, TABLE_HANDLER,
-    SANITIZE_HANDLER, SHOUT_HANDLER, WEEBIFY_HANDLER, HUG_HANDLER
+    SANITIZE_HANDLER, SHOUT_HANDLER, WEEBIFY_HANDLER
 ]
