@@ -247,7 +247,6 @@ dispatcher.add_handler(BLUETEXT_HANDLER)
 dispatcher.add_handler(RLG_HANDLER)
 dispatcher.add_handler(DECIDE_HANDLER)
 dispatcher.add_handler(TABLE_HANDLER)
-dispatcher.add_handler(HUG_HANDLER)
 
 __mod_name__ = "Fun"
 __command_list__ = [
