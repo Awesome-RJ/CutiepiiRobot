@@ -44,7 +44,7 @@ dispatcher.add_handler(TTS_HANDLER)
 __help__ = """ Text to speech
 - /tts <your text>
 """
-__mod_name__ = "TEXT TO SPEECH"
+__mod_name__ = "tts
 
 __handlers__ = [
     TTS_HANDLER
