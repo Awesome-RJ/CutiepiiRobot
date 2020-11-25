@@ -102,6 +102,17 @@ def pat(update: Update, _):
         return
     msg.reply_video(link)
     
+    
+    @run_async
+def hug(update: Update, _):
+    msg = update.effective_message
+    hug = requests.get("https://some-random-api.ml/animu/hug").json()
+    link = pat.get("link")
+    if not link:
+        msg.reply_text("No URL was received from the API!")
+        return
+    msg.reply_video(link)
+    
 
 @run_async
 def roll(update: Update, context: CallbackContext):
@@ -223,6 +234,7 @@ SANITIZE_HANDLER = DisableAbleCommandHandler("sanitize", sanitize)
 RUNS_HANDLER = DisableAbleCommandHandler("runs", runs)
 SLAP_HANDLER = DisableAbleCommandHandler("slap", slap)
 PAT_HANDLER = DisableAbleCommandHandler("pat", pat)
+HUG_HANDLER = DisableAbleCommandHandler("HUG", HUG)
 ROLL_HANDLER = DisableAbleCommandHandler("roll", roll)
 TOSS_HANDLER = DisableAbleCommandHandler("toss", toss)
 SHRUG_HANDLER = DisableAbleCommandHandler("shrug", shrug)
@@ -240,6 +252,7 @@ dispatcher.add_handler(SANITIZE_HANDLER)
 dispatcher.add_handler(RUNS_HANDLER)
 dispatcher.add_handler(SLAP_HANDLER)
 dispatcher.add_handler(PAT_HANDLER)
+dispatcher.add_handler(HUG_HANDLER)
 dispatcher.add_handler(ROLL_HANDLER)
 dispatcher.add_handler(TOSS_HANDLER)
 dispatcher.add_handler(SHRUG_HANDLER)
