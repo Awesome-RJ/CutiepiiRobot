@@ -160,17 +160,6 @@ def decide(update: Update, context: CallbackContext):
     reply_text(random.choice(fun_strings.DECIDE))
 
     
-    @run_async
-def hug(update: Update, _):
-    msg = update.effective_message
-    hug = requests.get("https://some-random-api.ml/animu/hug").json()
-    link = hug.get("link")
-    if not link:
-        msg.reply_text("No URL was received from the API!")
-        return
-    msg.reply_video(link)
-    
-
 @run_async
 def table(update: Update, context: CallbackContext):
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
