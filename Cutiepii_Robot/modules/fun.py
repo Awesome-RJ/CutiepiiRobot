@@ -104,7 +104,7 @@ def pat(update: Update, _):
     
     
 @run_async
-def hug(update, context):
+def hug(update: Update, context: CallbackContext)
     msg = update.effective_message
     hug = requests.get("https://some-random-api.ml/animu/hug").json()
     link = pat.get("link")
