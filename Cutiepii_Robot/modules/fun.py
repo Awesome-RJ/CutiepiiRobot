@@ -103,8 +103,8 @@ def pat(update: Update, _):
     msg.reply_video(link)
     
     
-    @run_async
-def hug(update: Update, _):
+@run_async
+def hug(update, context):
     msg = update.effective_message
     hug = requests.get("https://some-random-api.ml/animu/hug").json()
     link = pat.get("link")
