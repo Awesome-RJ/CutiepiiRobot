@@ -1,5 +1,6 @@
 import html
 import random
+import requests
 import time
 
 import Cutiepii_Robot.modules.fun_strings as fun_strings
