@@ -7,13 +7,11 @@ A modular Telegram Python bot running on python3 with a sqlalchemy database and 
 
 Can be found on telegram as [Cutiepii Robot](https://t.me/Cutiepii_Robot).
 
+Froked Of [Saitama]{https://github.com/AnimeKaizoku/SaitamaRobot}
+
 The Support group can be reached out to at [Cutiepii Support](https://t.me/Cutiepii_Support), where you can ask for help about [Cutiepii Robot](https://t.me/Cutiepii_Robot), discover/request new features, report bugs, and stay in the loop whenever a new update is available. 
 
 News channel as at [Cutiepii Updates](https://t.me/Cutiepii_Updates) 
-
-
-## Stats
-![Rajkumar's Github stats](https://github-readme-stats.vercel.app/api?username=Rajkumar-27&show_icons=true&theme=tokyonight)
 
 ## How to setup/deploy.
 
