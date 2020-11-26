@@ -59,7 +59,7 @@ FREE MOVIES AND SERIES ON [HINDI K DRAMA](https://Hindikdrama.xyz)
 
 You can find my list of available commands with /help.
 
-Maintained by [Rajkumar](http://t.me/Wadiwala_Tech)
+Maintained by [Rajkumar](http://t.me/Awesome_RJ)
 
 """
 
@@ -206,22 +206,22 @@ def start(update: Update, context: CallbackContext):
                 reply_markup=InlineKeyboardMarkup(
                     [[
                         InlineKeyboardButton(
-                            text="☑️ Add Cutiepii to your group",
+                            text="Add Cutiepii to your group",
                             url="t.me/{}?startgroup=true".format(
                                 context.bot.username))
                     ],
                      [
                          InlineKeyboardButton(
-                             text="🚑 Support Group",
+                             text="Support Chat",
                              url=f"https://t.me/{SUPPORT_CHAT}"),
                          InlineKeyboardButton(
-                             text="🔔 Updates Channel",
+                             text="Updates Channel",
                              url="https://t.me/Techno_Ocean")
                      ],
                      [
                          InlineKeyboardButton(
-                             text="🧾 Getting started guide",
-                             url="https://t.me/Techno_Ocean/17")
+                             text="Source Code (Licensed Under GPLv3)",
+                             url="https://github.com/Rajkumar-27/CutiepiiRobot")
                      ]]))
     else:
         update.effective_message.reply_text(
