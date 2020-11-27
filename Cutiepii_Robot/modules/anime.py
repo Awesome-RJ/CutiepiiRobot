@@ -5,7 +5,7 @@ import textwrap
 import bs4
 import jikanpy
 import requests
-from Cutiepii_Robot import DEV_USERS, OWNER_ID, SUDO_USERS, dispatcher
+from Cutiepii_Robot import DEV_USERS, OWNER_ID, DRAGONS, dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode,
                       Update)
@@ -14,6 +14,9 @@ from telegram.ext import CallbackContext, CallbackQueryHandler, run_async
 info_btn = "More Information"
 kaizoku_btn = "Kaizoku ☠️"
 kayo_btn = "Kayo 🏴‍☠️"
+animespot_btn = "Animespot ☠️"
+animetm_btn = "Animetm ☠️"
+coolsanime_btn = "coolsanime ☠️"
 prequel_btn = "⬅️ Prequel"
 sequel_btn = "Sequel ➡️"
 close_btn = "Close ❌"
@@ -277,10 +280,12 @@ def character(update: Update, context: CallbackContext):
         if image:
             image = image.get('large')
             update.effective_message.reply_photo(
-                photo=image, caption=msg, parse_mode=ParseMode.MARKDOWN)
+                photo=image,
+                caption=msg.replace('<b>', '</b>'),
+                parse_mode=ParseMode.MARKDOWN)
         else:
             update.effective_message.reply_text(
-                msg, parse_mode=ParseMode.MARKDOWN)
+                msg.replace('<b>', '</b>'), parse_mode=ParseMode.MARKDOWN)
 
 
 @run_async
@@ -456,7 +461,7 @@ def button(update: Update, context: CallbackContext):
     query_type = data[0]
     original_user_id = int(data[1])
 
-    user_and_admin_list = [original_user_id, OWNER_ID] + SUDO_USERS + DEV_USERS
+    user_and_admin_list = [original_user_id, OWNER_ID] + DRAGONS + DEV_USERS
 
     bot.answer_callback_query(query.id)
     if query_type == "anime_close":
@@ -504,7 +509,7 @@ def site_search(update: Update, context: CallbackContext, site: str):
         if search_result:
             result = f"<b>Search results for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKaizoku</code>: \n"
             for entry in search_result:
-                post_link = entry.a['href']
+                post_link = "https://animekaizoku.com/" + entry.a['href']
                 post_name = html.escape(entry.text)
                 result += f"• <a href='{post_link}'>{post_name}</a>\n"
         else:
@@ -522,6 +527,60 @@ def site_search(update: Update, context: CallbackContext, site: str):
 
             if entry.text.strip() == "Nothing Found":
                 result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKayo</code>"
+                more_results = False
+                break
+
+            post_link = entry.a['href']
+            post_name = html.escape(entry.text.strip())
+            result += f"• <a href='{post_link}'>{post_name}</a>\n"
+            
+    elif site == "animespot":
+        search_url = f"https://dubspotteam.blogspot.com/?q={search_query}"
+        html_text = requests.get(search_url).text
+        soup = bs4.BeautifulSoup(html_text, "html.parser")
+        search_result = soup.find_all("h2", {'class': "title"}) 
+        
+        result = f"<b>Search results for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>Animespotdubber</code>: \n"
+        for entry in search_result:
+                 
+           if entry.text.strip() == "Nothing Found":
+                result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeSpot</code>"
+                more_results = False
+                break
+                
+           post_link = entry.a['href']
+           post_name = html.escape(entry.text.strip())
+           result += f"• <a href='{post_link}'>{post_name}</a>\n"
+           
+    elif site == "animetm":
+        search_url = f"https://animetmdubbers.in/?s={search_query}"
+        html_text = requests.get(search_url).text
+        soup = bs4.BeautifulSoup(html_text, "html.parser")
+        search_result = soup.find_all("h2", {'class': "title"}) 
+        
+        result = f"<b>Search results for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>Animetmdubber</code>: \n"
+        for entry in search_result:
+                 
+           if entry.text.strip() == "Nothing Found":
+                result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKayo</code>"
+                more_results = False
+                break
+                
+           post_link = entry.a['href']
+           post_name = html.escape(entry.text.strip())
+           result += f"• <a href='{post_link}'>{post_name}</a>\n"
+           
+    elif site == "coolsanime":
+        search_url = f"https://coolsanime.org/?s={search_query}"
+        html_text = requests.get(search_url).text
+        soup = bs4.BeautifulSoup(html_text, "html.parser")
+        search_result = soup.find_all("h2", {'class': "title"})
+
+        result = f"<b>Search results for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>CoolsAnime</code>: \n"
+        for entry in search_result:
+
+            if entry.text.strip() == "Nothing Found":
+                result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>CoolsAnime</code>"
                 more_results = False
                 break
 
@@ -550,6 +609,18 @@ def kaizoku(update: Update, context: CallbackContext):
 @run_async
 def kayo(update: Update, context: CallbackContext):
     site_search(update, context, "kayo")
+    
+@run_async
+def animespot(update: Update, context: CallbackContext):
+    site_search(update, context, "animespot")
+   
+@run_async
+def animetm(update: Update, context: CallbackContext):
+    site_search(update, context, "animetm")
+    
+@run_async
+def coolsanime(update: Update, context: CallbackContext):
+    site_search(update, context, "coolsanime")
 
 
 __help__ = """
@@ -564,6 +635,9 @@ Get information about anime, manga or characters from [AniList](anilist.co).
  • `/upcoming`*:* returns a list of new anime in the upcoming seasons.
  • `/kaizoku <anime>`*:* search an anime on animekaizoku.com
  • `/kayo <anime>`*:* search an anime on animekayo.com
+ • `/animespot <anime>`*:* search an anime on dubspotteam.blogspot.com
+ • `/animetm <anime>`*:* search an anime on animetmdubbers.in
+ • `/coolsanime <anime>`*:* search an anime on coolsanime.org
  • `/airing <anime>`*:* returns anime airing info.
 
  """
@@ -576,6 +650,9 @@ USER_HANDLER = DisableAbleCommandHandler("user", user)
 UPCOMING_HANDLER = DisableAbleCommandHandler("upcoming", upcoming)
 KAIZOKU_SEARCH_HANDLER = DisableAbleCommandHandler("kaizoku", kaizoku)
 KAYO_SEARCH_HANDLER = DisableAbleCommandHandler("kayo", kayo)
+ANIMESPOT_SEARCH_HANDLER = DisableAbleCommandHandler("animespot", animespot)
+ANIMETM_SEARCH_HANDLER = DisableAbleCommandHandler("animetm", animetm)
+COOLSANIME_SEARCH_HANDLER = DisableAbleCommandHandler("coolsanime", coolsanime)
 BUTTON_HANDLER = CallbackQueryHandler(button, pattern='anime_.*')
 
 dispatcher.add_handler(BUTTON_HANDLER)
@@ -586,15 +663,18 @@ dispatcher.add_handler(AIRING_HANDLER)
 dispatcher.add_handler(USER_HANDLER)
 dispatcher.add_handler(KAIZOKU_SEARCH_HANDLER)
 dispatcher.add_handler(KAYO_SEARCH_HANDLER)
+dispatcher.add_handler(ANIMESPOT_SEARCH_HANDLER)
+dispatcher.add_handler(ANIMETM_SEARCH_HANDLER)
+dispatcher.add_handler(COOLSANIME_SEARCH_HANDLER)
 dispatcher.add_handler(UPCOMING_HANDLER)
 
 __mod_name__ = "Anime"
 __command_list__ = [
     "anime", "manga", "character", "user", "upcoming", "kaizoku", "airing",
-    "kayo"
+    "kayo" "animespot", "animetm", "coolsanime",
 ]
 __handlers__ = [
     ANIME_HANDLER, CHARACTER_HANDLER, MANGA_HANDLER, USER_HANDLER,
     UPCOMING_HANDLER, KAIZOKU_SEARCH_HANDLER, KAYO_SEARCH_HANDLER,
-    BUTTON_HANDLER, AIRING_HANDLER
+     ANIMESPOT_SEARCH_HANDLER,  ANIMETM_SEARCH_HANDLER,  COOLSANIME_SEARCH_HANDLER,  BUTTON_HANDLER, AIRING_HANDLER
 ]
