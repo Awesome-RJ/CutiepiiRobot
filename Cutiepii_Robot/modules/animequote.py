@@ -1,3 +1,5 @@
+ # animequote Module Developed and Provided by @uday_gondaliya
+
 import html
 import random
 import Cutiepii_Robot.modules.animequote_string as animequote_string
