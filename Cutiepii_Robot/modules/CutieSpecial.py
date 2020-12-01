@@ -2,11 +2,11 @@
 __help__ = """
 *Commands:*
 
- • `/pat`*:* pats a user by a reply to the message.
  • `/plet <your text> `*:* text get funny emojify.
+ 
  • `/tts <your text> `*:*  text to speech.
- • `/Truth`*:* for random truth.
- • `/dare`*:* for random dare.
+ 
+ • `/pat`*:* pats a user by a reply to the message.
  • `/neko`*:* sends random neko image
  • `/hug`*:* sends random hug gif
  • `/tickle`*:* sends random tickle gif
@@ -18,6 +18,15 @@ __help__ = """
  • `/smug`*:* sends random smug gif
  • `/foxgirl`*:* sends random foxgirl image
  • `/feed`*:* sends random feed gif
+ 
+ • `/qu`*:* quote a replied message. Like QuotLyBot
+ 
+ • `/aq`*:* get random anime quote.
+ 
+ • `/zombies`*:* Search and remove Deleted Accounts from Group.
+ 
+ • `/Truth`*:* for random truth.
+ • `/dare`*:* for random dare.
 """
 
 
