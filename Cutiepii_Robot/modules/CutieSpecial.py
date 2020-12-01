@@ -2,10 +2,6 @@
 __help__ = """
 *Commands:*
 
- • `/plet <your text> `*:* text get funny emojify.
- 
- • `/tts <your text> `*:*  text to speech.
- 
  • `/pat`*:* pats a user by a reply to the message.
  • `/neko`*:* sends random neko image
  • `/hug`*:* sends random hug gif
@@ -19,14 +15,23 @@ __help__ = """
  • `/foxgirl`*:* sends random foxgirl image
  • `/feed`*:* sends random feed gif
  
+ • `/Truth`*:* for random truth.
+ • `/dare`*:* for random dare.
+ 
  • `/qu`*:* quote a replied message. Like QuotLyBot
  
  • `/aq`*:* get random anime quote.
  
  • `/zombies`*:* Search and remove Deleted Accounts from Group.
  
- • `/Truth`*:* for random truth.
- • `/dare`*:* for random dare.
+ • `/wallpaper`*:* sends random best anime wallpapers.
+  
+ • `/plet <your text> `*:* text get funny emojify.
+ 
+ • `/tts <your text> `*:*  text to speech.
+ 
+ 
+
 """
 
 
