@@ -121,3 +121,4 @@ ANIMEQUOTE = (
     "❝Stand tall and be proud. No matter how weak or unworthy you feel keep your heart burning, grit your teeth and move forward. If you just curl up in a ball and hide, time will pass you by. It won't stop for you while you wallow in your grief.❞ - Kyojuro Rengoku (Demon Slayer:Kimetsu No Yaiba)",
     "❝You think you can just escape? Walk out of this world like it’s some bad movie? It’s too easy to make like a bird. To flap your wings as you chicken out after causing all these problems. The tough part’s walking. Taking what comes along and walking right through it. That’s what real people do.❞ – Eikichi Onizuka (Great Teacher Onizuka)",
 )
+
