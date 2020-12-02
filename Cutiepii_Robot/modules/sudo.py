@@ -23,17 +23,17 @@ def sudopromote(bot: Bot, update: Update, args: List[str]):
         return ""
         
     if int(user_id) == OWNER_ID:
-        message.reply_text("The specified user is my owner! No need add him to SUDO_USERS list!")
+        message.reply_text("The specified user is my owner! No need add him to DRAGONS list!")
         return ""
         
-    if int(user_id) in SUDO_USERS:
+    if int(user_id) in DRAGONS:
         message.reply_text("The user is already a sudo user.")
         return ""
     
-    with open("sudo_users.txt","a") as file:
+    with open("DRAGONS.txt","a") as file:
         file.write(str(user_id) + "\n")
     
-    SUDO_USERS.append(user_id)
+    DRAGONS.append(user_id)
     message.reply_text("Succefully added to SUDO user list!")
         
     return ""
@@ -49,24 +49,25 @@ def sudodemote(bot: Bot, update: Update, args: List[str]):
         return ""
 
     if int(user_id) == OWNER_ID:
-        message.reply_text("The specified user is my owner! I won't remove him from SUDO_USERS list!")
+        message.reply_text("The specified user is my owner! I won't remove him from DRAGONS list!")
         return ""
     
-    if user_id not in SUDO_USERS:
+    if user_id not in DRAGONS:
         message.reply_text("{} is not a sudo user".format(user_id))
         return ""
 
-    users = [line.rstrip('\n') for line in open("sudo_users.txt")]
+    users = [line.rstrip('\n') for line in open("DRAGONS.txt")]
 
-    with open("sudo_users.txt","w") as file:
+    with open("DRAGONS.txt","w") as file:
         for user in users:
             if not int(user) == user_id:
                 file.write(str(user) + "\n")
 
-    SUDO_USERS.remove(user_id)
+    DRAGONS.remove(user_id)
     message.reply_text("Succefully removed from SUDO user list!")
     
     return ""
+
 
 SUDOPROMOTE_HANDLER = CommandHandler("sudopromote", sudopromote, pass_args=True, filters=Filters.user(OWNER_ID))
 SUDODEMOTE_HANDLER = CommandHandler("sudodemote", sudodemote, pass_args=True, filters=Filters.user(OWNER_ID))
