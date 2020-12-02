@@ -6,7 +6,7 @@ from telegram import Update, Bot
 from telegram.ext import CommandHandler, Filters
 from telegram.ext.dispatcher import run_async
 
-from Cutiepii_Robot import dispatcher, SUDO_USERS, OWNER_USERNAME, OWNER_ID
+from Cutiepii_Robot import dispatcher, DRAGONS, OWNER_USERNAME, OWNER_ID
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from Cutiepii_Robot.modules.helper_funcs.chat_status import bot_admin
 
