@@ -33,3 +33,4 @@ animu-cf
 gTTS
 nekos.py
 fontTools
+thonkifydict
