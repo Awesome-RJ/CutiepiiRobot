@@ -49,3 +49,5 @@ async def getmusic(so):
     await so.client.delete_messages(conv.chat_id,
                                        [msg.id, response.id, respond.id])
     await so.delete()
+
+    
