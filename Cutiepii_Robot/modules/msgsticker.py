@@ -1,3 +1,5 @@
+# Oringinal Source from Nicegrill: https://github.com/erenmetesar/NiceGrill/
+# Ported to Lynda by: @pokurt
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from telethon.tl import types, functions
 from fontTools.ttLib import TTFont 
@@ -10,7 +12,7 @@ import random
 import json
 import os
 import re
-from Cutiepii_Robot.events import register
+from Cutiepii_Robot.Cutiepii_Robot import Cutiepii_Robot
 
 COLORS = [
     "#F07975", "#F49F69", "#F9C84A", "#8CC56E", "#6CC7DC", "#80C1FA", "#BCB3F9", "#E181AC"]
@@ -267,7 +269,7 @@ async def drawer(width, height):
 
         # Middle part
         middle = Image.new("RGBA", (top.width, height + 75), (29, 29, 29, 255))
-
+        
         # Bottom part
         bottom = ImageOps.flip(top)
 
@@ -336,11 +338,11 @@ async def emoji_fetch(emoji):
         else:
             img = emojis["⛔"]
             return await transparent(urllib.request.urlretrieve(img, "resources/emoji.png")[0])
-
+        
 async def transparent(emoji):
         emoji = Image.open(emoji).convert("RGBA")
         emoji.thumbnail((40, 40))
-
+        
         # Mask
         mask = Image.new("L", (40, 40), 0)
         draw = ImageDraw.Draw(mask)
@@ -371,8 +373,8 @@ async def replied_user(draw, tot, text, maxlength, title):
             else:
                 draw.text((180 + space, 132), letter, font=textfont, fill="white")
                 space += textfont.getsize(letter)[0]
-
-@register(pattern="^/qu")
+                
+@Cutiepii_Robot(pattern="^/q")
 async def _(event):
     if event.fwd_from:
         return
@@ -388,3 +390,9 @@ async def _(event):
     canvas.save('sticker.webp')
     await event.client.send_file(event.chat_id, "sticker.webp", reply_to=event.reply_to_msg_id)
     os.remove('sticker.webp')
+    
+    __help__ = f"""
+*Usage :*
+- /q : reply any message with this command to create a sticker.
+"""
+__mod_name__ = "Quotly"

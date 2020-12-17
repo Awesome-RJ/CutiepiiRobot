@@ -1,5 +1,4 @@
 import re
-import random
 from html import escape
 
 import telegram
@@ -17,7 +16,6 @@ from telegram.utils.helpers import mention_html, escape_markdown
 
 from Cutiepii_Robot import dispatcher, LOGGER, DRAGONS
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot.modules.helper_funcs.handlers import MessageHandlerChecker
 from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_text
 from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
@@ -210,7 +208,7 @@ def filters(update, context):
     # This is an old method
     # sql.add_filter(chat_id, keyword, content, is_sticker, is_document, is_image, is_audio, is_voice, is_video, buttons)
 
-    if add is True:
+    if add == True:
         send_message(
             update.effective_message,
             "Saved filter '{}' in *{}*!".format(keyword, chat_name),
@@ -280,8 +278,6 @@ def reply_filter(update, context):
     for keyword in chat_filters:
         pattern = r"( |^|[^\w])" + re.escape(keyword) + r"( |$|[^\w])"
         if re.search(pattern, to_match, flags=re.IGNORECASE):
-            if MessageHandlerChecker.check_user(update.effective_user.id):
-                return
             filt = sql.get_filter(chat.id, keyword)
             if filt.reply == "there is should be a new reply":
                 buttons = sql.get_buttons(chat.id, filt.keyword)
@@ -298,12 +294,8 @@ def reply_filter(update, context):
                     "mention",
                 ]
                 if filt.reply_text:
-                    if '%%%' in filt.reply_text:
-                        text = random.choice(filt.reply_text.split('%%%'))
-                    else:
-                        text = filt.reply_text
                     valid_format = escape_invalid_curly_brackets(
-                        text, VALID_WELCOME_FORMATTERS)
+                        filt.reply_text, VALID_WELCOME_FORMATTERS)
                     if valid_format:
                         filtext = valid_format.format(
                             first=escape(message.from_user.first_name),

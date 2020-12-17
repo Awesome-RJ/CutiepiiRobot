@@ -96,7 +96,7 @@ if ENV:
             "Your blacklisted chats list does not contain valid integers.")
 
 else:
-    from Cutiepii_Robot.config import Development as Config
+    from AkenoHimejimabot.config import Development as Config
     TOKEN = Config.TOKEN
 
     try:
@@ -184,7 +184,7 @@ DEMONS = list(DEMONS)
 TIGERS = list(TIGERS)
 
 # Load at end to ensure all prev variables have been set
-from Cutiepii_Robot.modules.helper_funcs.handlers import (CustomCommandHandler,
+from AkenoHimejimabot.modules.helper_funcs.handlers import (CustomCommandHandler,
                                                         CustomMessageHandler,
                                                         CustomRegexHandler)
 

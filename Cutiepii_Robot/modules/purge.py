@@ -11,10 +11,7 @@ async def purge_messages(event):
     if event.from_id is None:
         return
 
-    if not await user_is_admin(
-            user_id=event.from_id, message=event) and event.from_id not in [
-                1087968824
-            ]:
+    if not await user_is_admin(user_id=event.from_id, message=event):
         await event.reply("Only Admins are allowed to use this command")
         return
 
@@ -49,10 +46,7 @@ async def delete_messages(event):
     if event.from_id is None:
         return
 
-    if not await user_is_admin(
-            user_id=event.from_id, message=event) and event.from_id not in [
-                1087968824
-            ]:
+    if not await user_is_admin(user_id=event.from_id, message=event):
         await event.reply("Only Admins are allowed to use this command")
         return
 
@@ -62,7 +56,7 @@ async def delete_messages(event):
 
     message = await event.get_reply_message()
     if not message:
-        await event.reply("Whadya want to delete?")
+        await event.reply("Deleted...")
         return
     chat = await event.get_input_chat()
     del_message = [message, event.message]

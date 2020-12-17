@@ -13,6 +13,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (is_user_admin,
 from Cutiepii_Robot.modules.helper_funcs.extraction import (extract_user,
                                                           extract_user_and_text)
 from Cutiepii_Robot.modules.helper_funcs.misc import send_to_list
+from Cutiepii_Robot.modules.sql.users_sql import get_all_chats
 from telegram import ParseMode, Update
 from telegram.error import BadRequest, TelegramError
 from telegram.ext import (CallbackContext, CommandHandler, Filters,
@@ -69,31 +70,31 @@ def gban(update: Update, context: CallbackContext):
 
     if int(user_id) in DEV_USERS:
         message.reply_text(
-            "That user is part of the Association\nI can't act against our own."
+            "That user is part of the Gremory family!\nI can't act against our own."
         )
         return
 
     if int(user_id) in DRAGONS:
         message.reply_text(
-            "I spy, with my little eye... a disaster! Why are you guys turning on each other?"
+            "Issei! Show em power of the red dragon emperor!"
         )
         return
 
     if int(user_id) in DEMONS:
         message.reply_text(
-            "OOOH someone's trying to gban a Demon Disaster! *grabs popcorn*")
+            "Trying to gban a Rias's servant?, you got a death wish or something?")
         return
 
     if int(user_id) in TIGERS:
-        message.reply_text("That's a Tiger! They cannot be banned!")
+        message.reply_text("I'm unable to take action againts devils...")
         return
 
     if int(user_id) in WOLVES:
-        message.reply_text("That's a Wolf! They cannot be banned!")
+        message.reply_text("Low rank devils are immune to such a pathetic magic... duh")
         return
 
     if user_id == bot.id:
-        message.reply_text("You uhh...want me to punch myself?")
+        message.reply_text("That's what you want? You hate me that much?")
         return
 
     if user_id in [777000, 1087968824]:
@@ -125,7 +126,7 @@ def gban(update: Update, context: CallbackContext):
             user_id, user_chat.username or user_chat.first_name, reason)
         if old_reason:
             message.reply_text(
-                "This user is already gbanned, for the following reason:\n"
+                "Ara ara!! this user is already gbanned, for the following reason:\n"
                 "<code>{}</code>\n"
                 "I've gone and updated it with your new reason!".format(
                     html.escape(old_reason)),
@@ -133,7 +134,7 @@ def gban(update: Update, context: CallbackContext):
 
         else:
             message.reply_text(
-                "This user is already gbanned, but had no reason set; I've gone and updated it!"
+                "Ara ara!, this user is already gbanned, but had no reason set; I've gone and updated it!"
             )
 
         return
@@ -151,6 +152,7 @@ def gban(update: Update, context: CallbackContext):
         chat_origin = "<b>{}</b>\n".format(chat.id)
 
     log_message = (
+        f"*Ara Ara*\n"
         f"#GBANNED\n"
         f"<b>Originated from:</b> <code>{chat_origin}</code>\n"
         f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
@@ -227,14 +229,14 @@ def gban(update: Update, context: CallbackContext):
 
     if gban_time > 60:
         gban_time = round((gban_time / 60), 2)
-        message.reply_text("Done! Gbanned.", parse_mode=ParseMode.HTML)
+        message.reply_text("Ara ara!..\nDone! #Gbanned.", parse_mode=ParseMode.HTML)
     else:
-        message.reply_text("Done! Gbanned.", parse_mode=ParseMode.HTML)
+        message.reply_text("Ara ara!..\nDone! #Gbanned.", parse_mode=ParseMode.HTML)
 
     try:
         bot.send_message(
             user_id, "#EVENT"
-            "You have been marked as Malicious and as such have been banned from any future groups we manage."
+            "You have been marked as Malicious and as such have been banned from any future groups we manage. get some life bruh."
             f"\n<b>Reason:</b> <code>{html.escape(user.reason)}</code>"
             f"</b>Appeal Chat:</b> @{SUPPORT_CHAT}",
             parse_mode=ParseMode.HTML)
@@ -281,6 +283,7 @@ def ungban(update: Update, context: CallbackContext):
         chat_origin = f"<b>{chat.id}</b>\n"
 
     log_message = (
+        f"*Ara ara!*\n"
         f"#UNGBANNED\n"
         f"<b>Originated from:</b> <code>{chat_origin}</code>\n"
         f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"

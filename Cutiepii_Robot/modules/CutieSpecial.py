@@ -19,6 +19,7 @@ __help__ = """
  • `/qu`*:* quote a replied message. Like QuotLyBot
  • `/aq`*:* get random anime quote.
  • `/zombies`*:* Search and remove Deleted Accounts from Group.
+
  • `/plet <your text> `*:* text get funny emojify.
  • `/tts <your text> `*:*  text to speech.
  

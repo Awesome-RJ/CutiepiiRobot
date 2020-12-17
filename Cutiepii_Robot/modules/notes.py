@@ -5,7 +5,6 @@ from typing import Optional
 import Cutiepii_Robot.modules.sql.notes_sql as sql
 from Cutiepii_Robot import LOGGER, JOIN_LOGGER, SUPPORT_CHAT, dispatcher, DRAGONS
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot.modules.helper_funcs.handlers import MessageHandlerChecker
 from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin, connection_status
 from Cutiepii_Robot.modules.helper_funcs.misc import (build_keyboard,
                                                     revert_buttons)
@@ -50,13 +49,12 @@ def get(update, context, notename, show_none=True, no_format=False):
     message = update.effective_message  # type: Optional[Message]
 
     if note:
-        if MessageHandlerChecker.check_user(update.effective_user.id):
-            return
         # If we're replying to a message, reply to that message (unless it's an error)
         if message.reply_to_message:
             reply_id = message.reply_to_message.message_id
         else:
             reply_id = message.message_id
+
         if note.is_reply:
             if JOIN_LOGGER:
                 try:

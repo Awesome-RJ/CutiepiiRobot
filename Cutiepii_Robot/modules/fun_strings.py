@@ -1,3 +1,22 @@
+ARAGIFS = [
+         'CgACAgUAAx0CTCs8lgABAg1KX6e6iLkD3UVmuqDXJKWg8C1dljwAArgBAAK0pThVvwOSjYhlMsQeBA',
+         'CgACAgUAAx0CTCs8lgABAg8eX6fCo-C_5jepnqtlEljgbNuXbnsAAtABAAL8LUFVgFSPB8jG874eBA',
+          'CgACAgUAAx0CTCs8lgABAhAXX6fIxIEa1yx5BrOkmuqggwAB0ePMAAL-AQACCXk5Vc8MzDnCRP7xHgQ'
+]
+
+DEATHGIF = [
+         'CgACAgQAAxkBAAIVYF-8xEe_VTpV64Y2KrlJpyiOZ5XQAAKIAgAC1g2cUngIWCy4keBVHgQ',
+         'CgACAgQAAxkBAAIVY1-8xIot4JgiRorWFn23XzzxWWPeAAJnAgAChmbMU3sPMmmrVBViHgQ',
+         'CgACAgQAAxkBAAIVZl-8xOXQdlnoxitp-FnVk3YKLKLlAAJqAgACAdWdUkdW6XodFVDmHgQ',
+         'CgACAgQAAxkBAAIVaV-8xSAIOZZQ8ipSe1d-8pFdLn_3AAIaAgACeSmVUmjbXZv8-QU5HgQ',
+         'CgACAgQAAxkBAAIVbF-8xaNFj64lyQLqGzC42OBjR5nMAAJ3AgAC7F-UUklCkwQvihFRHgQ',
+         'CgACAgQAAxkBAAIVbV-8xbx8ApvUXKGIQSF-57vFeURSAAJlAgACTs2lUn0i--kTmIndHgQ',
+         'CgACAgQAAxkBAAIVbl-8xcUOOEQ2vAO8OMdq3FxeSzeuAAITAgACeImtUq5Wu_WWgi2LHgQ',
+         'CgACAgQAAxkBAAIVel-8xhNRYR4f-5Z-OBoklP1sioNFAAK3AgACH629UQiGai1gP6BwHgQ',
+         'CgACAgQAAxkBAAIVfV-8xlU7GoIXi9miynEdIJYcouvDAAIoAgAChja1UqZXtQABXQ5Trh4E',
+         'CgACAgQAAxkBAAIVgF-8xoLyjW22C6msT83ZUrCp5fGAAAJ2AgACTnTEU5p58iyb02bDHgQ'
+]         
+
 RUN_STRINGS = (
     "Now you see me, now you don't."
     "ε=ε=ε=ε=┌(;￣▽￣)┘",

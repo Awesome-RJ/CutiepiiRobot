@@ -3,16 +3,14 @@ import html
 from telegram import ParseMode, Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler, Filters, run_async
-from telegram.utils.helpers import mention_html
+from telegram.utils.helpers import mention_html, mention_markdown, escape_markdown
 
 from Cutiepii_Robot import DRAGONS, dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (bot_admin, can_pin,
                                                            can_promote,
                                                            connection_status,
-                                                           user_admin,
-                                                           ADMIN_CACHE)
-
+                                                           user_admin)
 from Cutiepii_Robot.modules.helper_funcs.extraction import (extract_user,
                                                           extract_user_and_text)
 from Cutiepii_Robot.modules.log_channel import loggable
@@ -172,17 +170,6 @@ def demote(update: Update, context: CallbackContext) -> str:
             "Could not demote. I might not be admin, or the admin status was appointed by another"
             " user, so I can't act upon them!")
         return
-
-
-@run_async
-@user_admin
-def refresh_admin(update, _):
-    try:
-        ADMIN_CACHE.pop(update.effective_chat.id)
-    except KeyError:
-        pass
-
-    update.effective_message.reply_text("Admins cache refreshed!")
 
 
 @run_async
@@ -359,13 +346,15 @@ def adminlist(update, context):
 
     try:
         msg = update.effective_message.reply_text(
-            'Fetching group admins...', parse_mode=ParseMode.HTML)
+            'Fetching group admins...', parse_mode=ParseMode.MARKDOWN)
     except BadRequest:
         msg = update.effective_message.reply_text(
-            'Fetching group admins...', quote=False, parse_mode=ParseMode.HTML)
+            'Fetching group admins...',
+            quote=False,
+            parse_mode=ParseMode.MARKDOWN)
 
     administrators = bot.getChatAdministrators(chat_id)
-    text = "Admins in <b>{}</b>:".format(html.escape(update.effective_chat.title))
+    text = "Admins in *{}*:".format(update.effective_chat.title)
 
     bot_admin_list = []
 
@@ -378,10 +367,8 @@ def adminlist(update, context):
             name = "☠ Deleted Account"
         else:
             name = "{}".format(
-                mention_html(
-                    user.id,
-                    html.escape(user.first_name + " " +
-                                (user.last_name or ""))))
+                mention_markdown(user.id, user.first_name + " " +
+                                 (user.last_name or "")))
 
         if user.is_bot:
             bot_admin_list.append(name)
@@ -392,10 +379,10 @@ def adminlist(update, context):
         #    name = escape_markdown("@" + user.username)
         if status == "creator":
             text += "\n 👑 Creator:"
-            text += "\n<code> • </code>{}\n".format(name)
+            text += "\n` • `{}\n".format(name)
 
             if custom_title:
-                text += f"<code> ┗━ {html.escape(custom_title)}</code>\n"
+                text += f"┗━ `{escape_markdown(custom_title)}`\n"
 
     text += "\n🔱 Admins:"
 
@@ -411,10 +398,8 @@ def adminlist(update, context):
             name = "☠ Deleted Account"
         else:
             name = "{}".format(
-                mention_html(
-                    user.id,
-                    html.escape(user.first_name + " " +
-                                (user.last_name or ""))))
+                mention_markdown(user.id, user.first_name + " " +
+                                 (user.last_name or "")))
         #if user.username:
         #    name = escape_markdown("@" + user.username)
         if status == "administrator":
@@ -427,27 +412,27 @@ def adminlist(update, context):
                 normal_admin_list.append(name)
 
     for admin in normal_admin_list:
-        text += "\n<code> • </code>{}".format(admin)
+        text += "\n` • `{}".format(admin)
 
     for admin_group in custom_admin_list.copy():
         if len(custom_admin_list[admin_group]) == 1:
-            text += "\n<code> • </code>{} | <code>{}</code>".format(
-                custom_admin_list[admin_group][0], html.escape(admin_group))
+            text += "\n` • `{} | `{}`".format(custom_admin_list[admin_group][0],
+                                              escape_markdown(admin_group))
             custom_admin_list.pop(admin_group)
 
     text += "\n"
     for admin_group in custom_admin_list:
-        text += "\n🚨 <code>{}</code>".format(admin_group)
+        text += "\n🔘 `{}`".format(admin_group)
         for admin in custom_admin_list[admin_group]:
-            text += "\n<code> • </code>{}".format(admin)
+            text += "\n` • `{}".format(admin)
         text += "\n"
 
     text += "\n🤖 Bots:"
     for each_bot in bot_admin_list:
-        text += "\n<code> • </code>{}".format(each_bot)
+        text += "\n` • `{}".format(each_bot)
 
     try:
-        msg.edit_text(text, parse_mode=ParseMode.HTML)
+        msg.edit_text(text, parse_mode=ParseMode.MARKDOWN)
     except BadRequest:  # if original message is deleted
         return
 
@@ -475,8 +460,6 @@ PROMOTE_HANDLER = DisableAbleCommandHandler("promote", promote)
 DEMOTE_HANDLER = DisableAbleCommandHandler("demote", demote)
 
 SET_TITLE_HANDLER = CommandHandler("title", set_title)
-ADMIN_REFRESH_HANDLER = CommandHandler(
-    "admincache", refresh_admin, filters=Filters.group)
 
 dispatcher.add_handler(ADMINLIST_HANDLER)
 dispatcher.add_handler(PIN_HANDLER)
@@ -485,13 +468,10 @@ dispatcher.add_handler(INVITE_HANDLER)
 dispatcher.add_handler(PROMOTE_HANDLER)
 dispatcher.add_handler(DEMOTE_HANDLER)
 dispatcher.add_handler(SET_TITLE_HANDLER)
-dispatcher.add_handler(ADMIN_REFRESH_HANDLER)
 
 __mod_name__ = "Admin"
-__command_list__ = [
-    "adminlist", "admins", "invitelink", "promote", "demote", "admincache"
-]
+__command_list__ = ["adminlist", "admins", "invitelink", "promote", "demote"]
 __handlers__ = [
     ADMINLIST_HANDLER, PIN_HANDLER, UNPIN_HANDLER, INVITE_HANDLER,
-    PROMOTE_HANDLER, DEMOTE_HANDLER, SET_TITLE_HANDLER, ADMIN_REFRESH_HANDLER
+    PROMOTE_HANDLER, DEMOTE_HANDLER, SET_TITLE_HANDLER
 ]

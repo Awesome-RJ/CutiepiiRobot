@@ -3,7 +3,7 @@ from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot import dispatcher
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram import ParseMode, Update
+from telegram import MessageEntity, ParseMode, Update
 from telegram.ext.dispatcher import run_async
 from telegram.ext import CallbackContext, Filters, CommandHandler
 
@@ -83,17 +83,15 @@ __help__ = """
 *Paste:*
  • `/paste`*:* Saves replied content to `nekobin.com` and replies with a url
 *React:*
- • `/react`*:* Reacts with a random reaction 
+ • `/react`*:* Reacts with a random reaction
 *Urban Dictonary:*
  • `/ud <word>`*:* Type the word or expression you want to search use
 *Wikipedia:*
  • `/wiki <query>`*:* wikipedia your query
-*Wallpapers:*
- • `/wall <query>`*:* get a wallpaper from wall.alphacoders.com
-*Currency converter:* 
+*Currency converter:*
  • `/cash`*:* currency converter
 Example:
- `/cash 1 USD INR`  
+ `/cash 1 USD INR`
       _OR_
  `/cash 1 usd inr`
 Output: `1.0 USD = 75.505 INR`

@@ -1,16 +1,16 @@
 import html
 import random
-import requests
 import time
+
+from telegram import ParseMode, Update, ChatPermissions
+from telegram.ext import CallbackContext, run_async, Filters, MessageHandler
+from telegram.error import BadRequest
 
 import Cutiepii_Robot.modules.fun_strings as fun_strings
 from Cutiepii_Robot import dispatcher
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler, DisableAbleMessageHandler
+from Cutiepii_Robot.modules.helper_funcs.chat_status import (is_user_admin)
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
-from telegram import ChatPermissions, ParseMode, Update
-from telegram.error import BadRequest
-from telegram.ext import CallbackContext, run_async
 
 GIF_ID = 'CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE'
 
@@ -18,6 +18,26 @@ GIF_ID = 'CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr
 @run_async
 def runs(update: Update, context: CallbackContext):
     update.effective_message.reply_text(random.choice(fun_strings.RUN_STRINGS))
+# -----------------------------
+
+@run_async
+def ara(update: Update, context: CallbackContext):
+    message = update.effective_message
+    name = message.reply_to_message.from_user.first_name if message.reply_to_message else message.from_user.first_name
+    reply_animation = message.reply_to_message.reply_animation if message.reply_to_message else message.reply_animation
+    reply_animation(
+        random.choice(fun_strings.ARAGIFS), caption=f'Ara Ara! {name}')
+    
+    
+@run_async
+def kill(update: Update, context: CallbackContext):
+    message = update.effective_message
+    name = message.reply_to_message.from_user.first_name if message.reply_to_message else message.from_user.first_name
+    reply_animation = message.reply_to_message.reply_animation if message.reply_to_message else message.reply_animation
+    reply_animation(
+        random.choice(fun_strings.DEATHGIF), caption=f'Time to die! {name}')  
+
+# ----------------------------
 
 
 @run_async
@@ -101,26 +121,11 @@ def pat(update: Update, _):
         msg.reply_text("No URL was received from the API!")
         return
     msg.reply_video(link)
-    
 
 @run_async
 def roll(update: Update, context: CallbackContext):
     update.message.reply_text(random.choice(range(1, 7)))
 
-
-@run_async
-def shout(update: Update, context: CallbackContext):
-    args = context.args
-    text = " ".join(args)
-    result = []
-    result.append(' '.join(list(text)))
-    for pos, symbol in enumerate(text[1:]):
-        result.append(symbol + ' ' + '  ' * pos + symbol)
-    result = list("\n".join(result))
-    result[0] = text[0]
-    result = "".join(result)
-    msg = "```\n" + result + "```"
-    return update.effective_message.reply_text(msg, parse_mode="MARKDOWN")
 
 @run_async
 def toss(update: Update, context: CallbackContext):
@@ -142,6 +147,7 @@ def bluetext(update: Update, context: CallbackContext):
         "/BLUE /TEXT\n/MUST /CLICK\n/I /AM /A /STUPID /ANIMAL /THAT /IS /ATTRACTED /TO /COLORS"
     )
 
+
 @run_async
 def rlg(update: Update, context: CallbackContext):
     eyes = random.choice(fun_strings.EYES)
@@ -153,56 +159,35 @@ def rlg(update: Update, context: CallbackContext):
     else:
         repl = ears[0] + eyes[0] + mouth[0] + eyes[0] + ears[1]
     update.message.reply_text(repl)
-    
+
+
 @run_async
 def decide(update: Update, context: CallbackContext):
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
     reply_text(random.choice(fun_strings.DECIDE))
 
-    
+
 @run_async
 def table(update: Update, context: CallbackContext):
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
     reply_text(random.choice(fun_strings.TABLE))
 
-normiefont = [
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-    'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-]
-weebyfont = [
-    '卂', '乃', '匚', '刀', '乇', '下', '厶', '卄', '工', '丁', '长', '乚', '从', '𠘨', '口',
-    '尸', '㔿', '尺', '丂', '丅', '凵', 'リ', '山', '乂', '丫', '乙'
-]
-
-@run_async
-def weebify(update: Update, context: CallbackContext):
-    args = context.args
-    message = update.effective_message
-    string = ""
-
-    if message.reply_to_message:
-        string = message.reply_to_message.text.lower().replace(" ", "  ")
-
-    if args:
-        string = '  '.join(args).lower()
-
-    if not string:
-        message.reply_text(
-            "Usage is `/weebify <text>`", parse_mode=ParseMode.MARKDOWN)
-        return
-
-    for normiecharacter in string:
-        if normiecharacter in normiefont:
-            weebycharacter = weebyfont[normiefont.index(normiecharacter)]
-            string = string.replace(normiecharacter, weebycharacter)
-
-    if message.reply_to_message:
-        message.reply_to_message.reply_text(string)
-    else:
-        message.reply_text(string)
-
 
 __help__ = """
+ • `/ara`*:* Ara Ara
+ • `/kill`*:* Kills
+ • `/neko`*:* sends random neko image
+ • `/hug`*:* sends random hug gif
+ • `/tickle`*:* sends random tickle gif
+ • `/feed`*:* sends random feed gif
+ • `/poke`*:* sends random poke gif
+ • `/waifu`*:* sends random waifu sticker/image
+ • `/kiss`*:* sends random kiss gif
+ • `/baka`*:* sends random baka gif
+ • `/smug`*:* sends random smug gif
+ • `/foxgirl`*:* sends random foxgirl image
+ • `/feed`*:* sends random feed gif
+ -------------------
  • `/runs`*:* reply a random string from an array of replies
  • `/slap`*:* slap a user, or get slapped if not a reply
  • `/shrug`*:* get shrug XD
@@ -216,9 +201,13 @@ __help__ = """
  • `/weebify <text>`*:* returns a weebified text
  • `/sanitize`*:* always use this before /pat or any contact
  • `/pat`*:* pats a user, or get patted
+ --------------------
+ • `/wall`*:* Usage- /wall <wallpaper name>. fetches wallpaper using wall alphacoders api.
 """
-
-
+ARA_HANDLER = DisableAbleCommandHandler("ara", ara)
+ARA_REGEX_HANDLER = DisableAbleMessageHandler(
+    Filters.regex(r"^Ara(.*)$"), ara, friendly="ara")
+KILL_HANDLER = DisableAbleCommandHandler("kill", kill)
 SANITIZE_HANDLER = DisableAbleCommandHandler("sanitize", sanitize)
 RUNS_HANDLER = DisableAbleCommandHandler("runs", runs)
 SLAP_HANDLER = DisableAbleCommandHandler("slap", slap)
@@ -230,12 +219,10 @@ BLUETEXT_HANDLER = DisableAbleCommandHandler("bluetext", bluetext)
 RLG_HANDLER = DisableAbleCommandHandler("rlg", rlg)
 DECIDE_HANDLER = DisableAbleCommandHandler("decide", decide)
 TABLE_HANDLER = DisableAbleCommandHandler("table", table)
-SHOUT_HANDLER = DisableAbleCommandHandler("shout", shout)
-WEEBIFY_HANDLER = DisableAbleCommandHandler("weebify", weebify)
 
-
-dispatcher.add_handler(WEEBIFY_HANDLER)
-dispatcher.add_handler(SHOUT_HANDLER)
+dispatcher.add_handler(ARA_HANDLER)
+dispatcher.add_handler(ARA_REGEX_HANDLER)
+dispatcher.add_handler(KILL_HANDLER)
 dispatcher.add_handler(SANITIZE_HANDLER)
 dispatcher.add_handler(RUNS_HANDLER)
 dispatcher.add_handler(SLAP_HANDLER)
@@ -251,10 +238,10 @@ dispatcher.add_handler(TABLE_HANDLER)
 __mod_name__ = "Fun"
 __command_list__ = [
     "runs", "slap", "roll", "toss", "shrug", "bluetext", "rlg", "decide",
-    "table", "pat", "sanitize", "shout", "weebify"
+    "table", "pat", "sanitize", "ara", "kill"
 ]
 __handlers__ = [
     RUNS_HANDLER, SLAP_HANDLER, PAT_HANDLER, ROLL_HANDLER, TOSS_HANDLER,
     SHRUG_HANDLER, BLUETEXT_HANDLER, RLG_HANDLER, DECIDE_HANDLER, TABLE_HANDLER,
-    SANITIZE_HANDLER, SHOUT_HANDLER, WEEBIFY_HANDLER
+    SANITIZE_HANDLER, ARA_HANDLER, KILL_HANDLER, ARA_REGEX_HANDLER
 ]

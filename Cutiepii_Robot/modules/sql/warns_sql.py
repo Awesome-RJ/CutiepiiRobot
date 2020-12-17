@@ -1,6 +1,6 @@
 import threading
 
-from Cutiepii_Robot.modules.sql import BASE, SESSION
+from AkenoHimejimabot.modules.sql import BASE, SESSION
 from sqlalchemy import (Boolean, Column, Integer, String, UnicodeText, distinct,
                         func)
 from sqlalchemy.dialects import postgresql
