@@ -16,7 +16,8 @@ psutil
 aiohttp>=2.2.5
 Pillow>=4.2.0
 CurrencyConverter
-googletrans
+#googletrans
+google_trans_new
 jikanpy
 speedtest-cli
 coffeehouse
@@ -28,3 +29,16 @@ telethon==1.16.4
 spamwatch
 alphabet_detector
 pyrate-limiter
+nekos.py
+pymongo
+dnspython
+spotdl
+gtts
+pandas
+fontTools
+youtube_dl
+validators
+pySmartDL
+pybase64
+hachoir
+pytz
