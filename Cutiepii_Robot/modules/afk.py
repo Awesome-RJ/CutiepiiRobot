@@ -57,7 +57,7 @@ def no_longer_afk(update: Update, context: CallbackContext):
         firstname = update.effective_user.first_name
         try:
             options = [
-                '{} Ara Ara!', '{} Yōkoso!', '{} welcome back.. no one missed you!!',
+                '{} Cutie Cutie!', '{} Yōkoso!', '{} welcome back.. no one missed you!!',
                 '{} why you came here?', '{} is wasting his time in this chat!', '{} welcome back...Now pay 100$ or get banned.',
                 'Yamete...Yamete-kudasai {}-sama', 'Oh my! {} got no chills!!', '{} got a girlfriend! thats why he was afk.', '{} welcome to hell again.', '{} is here! start the show!', '{} bruh you should delete your telegram account.', '{} ahem! my love is here!', '{} damn... I saw you were online.. reading the messages.. but u were afk.', '{} yess.. lets start trashing the chat!', 'Spammer just arrived.. be ready everyone.. let me grab my ban-hammer!', '{} please be gentle with me... in the chat..'             
             ]

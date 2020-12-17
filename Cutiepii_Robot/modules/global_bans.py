@@ -126,7 +126,7 @@ def gban(update: Update, context: CallbackContext):
             user_id, user_chat.username or user_chat.first_name, reason)
         if old_reason:
             message.reply_text(
-                "Ara ara!! this user is already gbanned, for the following reason:\n"
+                "Cutie Cutie!! this user is already gbanned, for the following reason:\n"
                 "<code>{}</code>\n"
                 "I've gone and updated it with your new reason!".format(
                     html.escape(old_reason)),
@@ -134,7 +134,7 @@ def gban(update: Update, context: CallbackContext):
 
         else:
             message.reply_text(
-                "Ara ara!, this user is already gbanned, but had no reason set; I've gone and updated it!"
+                "Cutie Cutie!, this user is already gbanned, but had no reason set; I've gone and updated it!"
             )
 
         return

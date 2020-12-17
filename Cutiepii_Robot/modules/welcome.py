@@ -171,7 +171,7 @@ def new_member(update: Update, context: CallbackContext):
             # Give the owner a special welcome
             if new_mem.id == OWNER_ID:
                 update.effective_message.reply_text(
-                    "President! Where is our Issei-kun?",
+                    "Hy Horny I need Some Fun",
                     reply_to_message_id=reply)
                 welcome_log = (f"{html.escape(chat.title)}\n"
                                f"#USER_JOINED\n"
@@ -189,7 +189,7 @@ def new_member(update: Update, context: CallbackContext):
             # Welcome Sudos
             elif new_mem.id in DRAGONS:
                 update.effective_message.reply_text(
-                    "Ara Ara! the Red Dragon emperor is here! Issei-kun, you should continue practicing to focus your magic. ",
+                    "Cutie Cutie! the Red Dragon emperor is here! Issei-kun, you should continue practicing to focus your magic. ",
                     reply_to_message_id=reply,
                 )
                 continue

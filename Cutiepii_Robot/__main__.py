@@ -1,12 +1,11 @@
 import importlib
-import html
 import time
 import re
 from sys import argv
 from typing import Optional
 
 from Cutiepii_Robot import (ALLOW_EXCL, CERT_PATH, DONATION_LINK, LOGGER,
-                          OWNER_ID, PORT, SUPPORT_CHAT, TOKEN, URL, WEBHOOK,
+                          OWNER_ID, PORT, SUPPORT_CHAT, TOKEN, URL, WEBHOOK, SUPPORT_CHAT,
                           dispatcher, StartTime, telethn, updater)
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
@@ -18,12 +17,10 @@ from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode,
 from telegram.error import (BadRequest, ChatMigrated, NetworkError,
                             TelegramError, TimedOut, Unauthorized)
 from telegram.ext import (CallbackContext, CallbackQueryHandler, CommandHandler,
-                          Filters, MessageHandler, Updater)
+                          Filters, MessageHandler)
 from telegram.ext.dispatcher import DispatcherHandlerStop, run_async
 from telegram.utils.helpers import escape_markdown
 
-
-#---------------------------------------------------
 
 def get_readable_time(seconds: int) -> str:
     count = 0
@@ -54,9 +51,22 @@ def get_readable_time(seconds: int) -> str:
 
 
 PM_START_TEXT = """
+Hi {}, my name is {}!
+
+I am an Anime themed advance group management bot with a lot of Special Features.
+
+FREE MOVIES AND SERIES ON [HINDI K DRAMA](https://Hindikdrama.xyz)
+
+You can find my list of available commands with /help.
+
+Maintained by [Rajkumar](http://t.me/Awesome_RJ)
+
+"""
+
+HELP_STRINGS = """
 Hey there! My name is *{}*.
-I'm a Kuīn For Fun and help admins manage their groups with Cutiepii! Have a look at the following for an idea of some of \
-the things I can help you with.
+I'm a heroine For Fun and help admins manage their groups with Cutiepii! Have a look at the following for an idea of some of \
+the things I can help you with.-
 
 *Main* commands available:
  • /help: PM's you this message.
@@ -65,15 +75,15 @@ the things I can help you with.
  • /settings:
    • in PM: will send you your settings for all supported modules.
    • in a group: will redirect you to pm, with all that chat's settings.
+
+
 {}
 And the following:
 """.format(
     dispatcher.bot.first_name, ""
     if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
 
-
-CUTIEIMG = "https://telegra.ph/file/77e9231a97fa066836a55.mp4"
-CUTIEPINGIMG = "https://telegra.ph/file/6cd255ca75a70c4ebe92d.gif"
+SAITAMA_IMG = "https://telegra.ph/file/ac68ce78fd9c723304ada.jpg"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
 Cutiepii is hosted on one of Kaizoku's Servers and doesn't require any donations as of now but \
@@ -186,9 +196,9 @@ def start(update: Update, context: CallbackContext):
 
         else:
             first_name = update.effective_user.first_name
-            update.effective_message.reply_animation(
-                CUTIEIMG,
-                caption=PM_START_TEXT.format(
+            update.effective_message.reply_photo(
+                SAITAMA_IMG,
+                PM_START_TEXT.format(
                     escape_markdown(first_name),
                     escape_markdown(context.bot.first_name)),
                 parse_mode=ParseMode.MARKDOWN,
@@ -214,15 +224,10 @@ def start(update: Update, context: CallbackContext):
                              url="https://github.com/Rajkumar-27/CutiepiiRobot")
                      ]]))
     else:
-  
-        update.effective_message.reply_video(
-                CUTIEPINGIMG)
         update.effective_message.reply_text(
-            "Cutie Cutie! \n<b>Queen in command! since:</b> <code>{}</code>".format(uptime),
+            "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>"
+            .format(uptime),
             parse_mode=ParseMode.HTML)
-                    
-          
-
 
 
 # for test purposes
@@ -320,7 +325,7 @@ def get_help(update: Update, context: CallbackContext):
         if len(args) >= 2 and any(args[1].lower() == x for x in HELPABLE):
             module = args[1].lower()
             update.effective_message.reply_text(
-                f"Cutie Cutie, come to my PM. {module.capitalize()}",
+                f"Contact me in PM to get help of {module.capitalize()}",
                 reply_markup=InlineKeyboardMarkup([[
                     InlineKeyboardButton(
                         text="Help",
@@ -329,7 +334,7 @@ def get_help(update: Update, context: CallbackContext):
                 ]]))
             return
         update.effective_message.reply_text(
-            "Cutie Cutie! come meet me in PM to get the list of possible commands.",
+            "Contact me in PM to get the list of possible commands.",
             reply_markup=InlineKeyboardMarkup([[
                 InlineKeyboardButton(
                     text="Help",
@@ -535,6 +540,15 @@ def migrate_chats(update: Update, context: CallbackContext):
 
 
 def main():
+
+    if SUPPORT_CHAT is not None and isinstance(SUPPORT_CHAT, str):
+        try:
+            dispatcher.bot.sendMessage(f"@{SUPPORT_CHAT}", "Cutie Is No")
+        except Unauthorized:
+            LOGGER.warning("Bot isnt able to send message to support_chat, go and check!")
+        except BadRequest as e:
+            LOGGER.warning(e.message)
+
     test_handler = CommandHandler("test", test)
     start_handler = CommandHandler("start", start)
 
@@ -572,7 +586,7 @@ def main():
             updater.bot.set_webhook(url=URL + TOKEN)
 
     else:
-        LOGGER.info("Using long polling. Ahh Baby Good ")
+        LOGGER.info("Ahh Baby. I am Feeling So Good.")
         updater.start_polling(timeout=15, read_latency=4, clean=True)
 
     if len(argv) not in (1, 3, 4):
