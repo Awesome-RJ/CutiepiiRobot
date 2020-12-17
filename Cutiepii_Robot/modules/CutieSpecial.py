@@ -30,8 +30,11 @@ __help__ = """
  
  • `/tts <your text> `*:*  text to speech.
  
+ • `/song <songname artist(optional)> `*:* uploads the song in it's best quality available
  
-
+ • `/video <songname artist(optional)> `*:* uploads the video song in it's best quality available
+ 
+ • `/lyrics <songname artist(optional)> `*:* uploads the Song Lyrics
 """
 
 
