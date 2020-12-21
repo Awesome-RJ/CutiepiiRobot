@@ -6,7 +6,7 @@ from typing import Optional
 
 from Cutiepii_Robot import (ALLOW_EXCL, CERT_PATH, DONATION_LINK, LOGGER,
                           OWNER_ID, PORT, SUPPORT_CHAT, TOKEN, URL, WEBHOOK, SUPPORT_CHAT,
-                          dispatcher, StartTime, telethn, updater)
+                          dispatcher, StartTime, telethn, updater, pgram)
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
 from Cutiepii_Robot.modules import ALL_MODULES
@@ -84,6 +84,7 @@ And the following:
     if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
 
 SAITAMA_IMG = "https://telegra.ph/file/ac68ce78fd9c723304ada.jpg"
+CUTIEPINGIMG = "https://telegra.ph/file/213a05719a33e0e504cf9.gif"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
 Cutiepii is hosted on one of Kaizoku's Servers and doesn't require any donations as of now but \
@@ -224,11 +225,12 @@ def start(update: Update, context: CallbackContext):
                              url="https://github.com/Rajkumar-27/CutiepiiRobot")
                      ]]))
     else:
+        update.effective_message.reply_video(
+                CUTIEPINGIMG)
         update.effective_message.reply_text(
-            "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>"
-            .format(uptime),
+            "Cutie Cutie! \n<b>Queen in command! since:</b> <code>{}</code>".format(uptime),
             parse_mode=ParseMode.HTML)
-
+                    
 
 # for test purposes
 def error_callback(update: Update, context: CallbackContext):
@@ -600,4 +602,5 @@ def main():
 if __name__ == '__main__':
     LOGGER.info("Successfully loaded modules: " + str(ALL_MODULES))
     telethn.start(bot_token=TOKEN)
+    pgram.start()
     main()

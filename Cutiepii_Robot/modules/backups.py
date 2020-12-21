@@ -94,7 +94,7 @@ def import_data(update, context):
                 mod.__import_data__(str(chat.id), data)
         except Exception:
             msg.reply_text(
-                "An error occurred while recovering your data. The process failed. If you experience a problem with this, please take it to @OnePunchSupport"
+                "An error occurred while recovering your data. The process failed. If you experience a problem with this, please take it to @Techno_Ocean"
             )
 
             LOGGER.exception(

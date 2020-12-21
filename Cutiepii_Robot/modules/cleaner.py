@@ -212,7 +212,7 @@ Blue text cleaner removed any made up commands that people send in your chat.
  • `/listblue`*:* list currently whitelisted commands
 
  *Following are Disasters only commands, admins cannot use these:*
- • `/gignoreblue <word>`*:* globally ignorea bluetext cleaning of saved word across Saitama.
+ • `/gignoreblue <word>`*:* globally ignorea bluetext cleaning of saved word across Cutiepii.
  • `/ungignoreblue <word>`*:* remove said command from global cleaning list
 """
 

@@ -72,7 +72,7 @@ def ban(update: Update, context: CallbackContext) -> str:
             )
             return log_message
         elif user_id in WOLVES:
-            message.reply_text("Ara ara...Can't ban Rias's servants!")
+            message.reply_text("Cutie Cutie...Can't ban Rias's servants!")
             return log_message
         else:
             message.reply_text("This user has immunity and cannot be banned.")

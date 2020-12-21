@@ -229,9 +229,9 @@ def gban(update: Update, context: CallbackContext):
 
     if gban_time > 60:
         gban_time = round((gban_time / 60), 2)
-        message.reply_text("Ara ara!..\nDone! #Gbanned.", parse_mode=ParseMode.HTML)
+        message.reply_text("Cutie Cutie!..\nDone! #Gbanned.", parse_mode=ParseMode.HTML)
     else:
-        message.reply_text("Ara ara!..\nDone! #Gbanned.", parse_mode=ParseMode.HTML)
+        message.reply_text("Cutie Cutie!..\nDone! #Gbanned.", parse_mode=ParseMode.HTML)
 
     try:
         bot.send_message(
@@ -283,7 +283,7 @@ def ungban(update: Update, context: CallbackContext):
         chat_origin = f"<b>{chat.id}</b>\n"
 
     log_message = (
-        f"*Ara ara!*\n"
+        f"*Cutie Cutie!*\n"
         f"#UNGBANNED\n"
         f"<b>Originated from:</b> <code>{chat_origin}</code>\n"
         f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
