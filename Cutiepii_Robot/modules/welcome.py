@@ -193,6 +193,14 @@ def new_member(update: Update, context: CallbackContext):
                     reply_to_message_id=reply,
                 )
                 continue
+                
+            # Welcome Rikka
+            elif new_mem.id in 1400406972:
+                update.effective_message.reply_text(
+                    "Cutie Cutie! the Red Řįkkå is here! Issei-kun, you should continue practicing to focus your magic. ",
+                    reply_to_message_id=reply,
+                )
+                continue
 
             # Welcome Support
             elif new_mem.id in DEMONS:
