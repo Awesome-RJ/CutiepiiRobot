@@ -43,3 +43,4 @@ pybase64
 hachoir
 pytz
 pyrogram>=1.0.7
+TgCrypto
