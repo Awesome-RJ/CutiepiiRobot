@@ -13,7 +13,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 
 @run_async
-def abuse(bot: Bot, update: Update):
+def abuse(update: Update, context: CallbackContext):
     msg = update.effective_message
     reply_text = (
         msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
