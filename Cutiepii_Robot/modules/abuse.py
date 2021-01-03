@@ -4,7 +4,7 @@ import time
 from typing import List
 
 from telegram import Bot, Update, ParseMode
-from telegram.ext import run_async
+from telegram.ext import CallbackContext, run_async
 
 import Cutiepii_Robot.modules.fun_strings as fun_strings
 from Cutiepii_Robot import dispatcher
