@@ -218,11 +218,7 @@ def start(update: Update, context: CallbackContext):
                          InlineKeyboardButton(
                              text="Updates Channel",
                              url="https://t.me/Techno_Ocean")
-                     ],
-                     [
-                         InlineKeyboardButton(
-                             text="Source Code (Licensed Under GPLv3)",
-                             url="https://github.com/Rajkumar-27/CutiepiiRobot")
+                  
                      ]]))
     else:
         update.effective_message.reply_video(
