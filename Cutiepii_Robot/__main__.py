@@ -51,22 +51,18 @@ def get_readable_time(seconds: int) -> str:
 
 
 PM_START_TEXT = """
-Hi {}, my name is {}!
+Welcome user: {}, , I am cutest bot: Zero Two! 
 
 I am an Anime themed advance group management bot with a lot of Special Features.
 
-FREE MOVIES AND SERIES ON [HINDI K DRAMA](https://Hindikdrama.xyz)
+You can also make my sister. [Cutiepii Repo](https://github.com/Rajkumar-27/CutiepiiRobot)
 
-You can find my list of available commands with /help.
-
-Maintained by [Rajkumar](http://t.me/Awesome_RJ)
-
+Use /help to know my abilities [^_^](https://telegra.ph/file/d31755c8e0245be16c4f5.png).
 """
 
 HELP_STRINGS = """
-Hey there! My name is *{}*.
-I'm a heroine For Fun and help admins manage their groups with Cutiepii! Have a look at the following for an idea of some of \
-the things I can help you with.-
+Cutie at your service.
+I can help you with following functions in managing group.
 
 *Main* commands available:
  • /help: PM's you this message.
