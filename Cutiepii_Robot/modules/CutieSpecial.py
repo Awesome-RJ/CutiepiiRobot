@@ -26,10 +26,6 @@ __help__ = """
  *Truth And Dare:*
  • `/Truth`*:* for random truth.
  • `/dare`*:* for random dare.
- 
-  *Song:*
- • `/song <songname artist(optional)> `*:* uploads the song in it's best quality available
- • `/video <songname artist(optional)> `*:* uploads the video song in it's best quality available
 """
 
 
