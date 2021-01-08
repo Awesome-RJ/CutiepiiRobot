@@ -51,7 +51,7 @@ def get_readable_time(seconds: int) -> str:
 
 
 PM_START_TEXT = """
-Welcome user: {}, , I am cutest bot: Zero Two! 
+Welcome user: {}, , I am cutest bot: Cutiepii! 
 
 I am an Anime themed advance group management bot with a lot of Special Features.
 
