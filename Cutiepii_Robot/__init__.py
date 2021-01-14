@@ -40,14 +40,6 @@ if ENV:
     OWNER_USERNAME = os.environ.get("OWNER_USERNAME", None)
 
     try:
-        DRAGONS = set(int(x) for x in os.environ.get("DRAGONS", "").split())
-                purple_heart = set(int(x) for x in os.environ.get("PURPLE_HEART", "").split())
-        DEV_USERS = set(int(x) for x in os.environ.get("DEV_USERS", "").split())
-    except ValueError:
-        raise Exception(
-            "Your sudo or dev users list does not contain valid integers.")
-
-    try:
         DEMONS = set(int(x) for x in os.environ.get("DEMONS", "").split())
     except ValueError:
         raise Exception(
@@ -110,14 +102,6 @@ else:
     OWNER_USERNAME = Config.OWNER_USERNAME
 
     try:
-        DRAGONS = set(int(x) for x in Config.DRAGONS or [])
-                PURPLE_HEART = set(int(x) for x in Config.PURPLE_HEART or [])
-        DEV_USERS = set(int(x) for x in Config.DEV_USERS or [])
-    except ValueError:
-        raise Exception(
-            "Your sudo or dev users list does not contain valid integers.")
-
-    try:
         DEMONS = set(int(x) for x in Config.DEMONS or [])
     except ValueError:
         raise Exception(
@@ -168,7 +152,6 @@ else:
             "Your blacklisted chats list does not contain valid integers.")
 
 DRAGONS.add(OWNER_ID)
-PURPLE_HEART.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
 
 if not SPAMWATCH_API:
@@ -183,7 +166,6 @@ pgram = Client("Cutiepiiprio", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN
 dispatcher = updater.dispatcher
 
 DRAGONS = list(DRAGONS) + list(DEV_USERS)
-PURPLE_HEART = list(PURPLE_HEART) + list(DEV_USERS)
 DEV_USERS = list(DEV_USERS)
 WOLVES = list(WOLVES)
 DEMONS = list(DEMONS)
