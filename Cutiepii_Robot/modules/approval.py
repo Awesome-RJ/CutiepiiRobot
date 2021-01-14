@@ -5,7 +5,7 @@ from telegram.utils.helpers import mention_html
 from telegram import ParseMode , Bot, Update
 from telegram.ext import CallbackContext, CommandHandler, Filters, run_async
 
-from Cutiepii_Robot import dispatcher, REDIS
+from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_admin,
