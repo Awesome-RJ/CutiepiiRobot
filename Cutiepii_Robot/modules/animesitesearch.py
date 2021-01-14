@@ -2,8 +2,8 @@ import html
 
 import bs4
 import requests
-from SaitamaRobot import dispatcher
-from SaitamaRobot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot import dispatcher
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode,
                       Update)
 from telegram.ext import CallbackContext, run_async
