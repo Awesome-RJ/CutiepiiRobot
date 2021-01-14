@@ -8,7 +8,7 @@ import jikanpy
 import requests
 from telegram.utils.helpers import mention_html
 from telegram.error import BadRequest
-from Cutiepii_Robot import DEV_USERS, OWNER_ID, DRAGONS, REDIS, dispatcher
+from Cutiepii_Robot import DEV_USERS, OWNER_ID, DRAGONS, dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode,
                       Update ,replymarkup)
