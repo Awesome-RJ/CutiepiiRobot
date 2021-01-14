@@ -15,15 +15,25 @@ __help__ = """
  • `/feed`*:* sends random feed gif
  • `/wallpaper`*:* sends random best anime wallpapers.
  • `/whatanime`*:* to search source of anime reply to photo or gif. 
-  *Extra Fun With Cutiepii:*
+ 
+ *Extra Fun With Cutiepii:*
  • `/qu`*:* quote a replied message. Like QuotLyBot
- • `/aq`*:* get random anime quote.
  • `/zombies`*:* Search and remove Deleted Accounts from Group.
 
  • `/plet <your text> `*:* text get funny emojify.
  • `/tts <your text> `*:*  text to speech.
+
+*Stylish your text!*
+ • `//weebify <text>`*:* weebify your text!
+ • `//bubble <text>`*:* bubble your text!
+ • `/fbubble <text>`*:* bubble-filled your text!
+ • `/square <text>`*:* square your text!
+ • `/fsquare <text>`*:* square-filled your text!
+ • `/blue <text>`*:* bluify your text!
+ • `/latin <text>`*:* latinify your text!
+ • `/lined <text>`*:* lined your text!
  
- *Truth And Dare:*
+ *Truth And Dare*
  • `/Truth`*:* for random truth.
  • `/dare`*:* for random dare.
 """
