@@ -5,7 +5,6 @@ import time
 import spamwatch
 
 import telegram.ext as tg
-from redis import StrictRedis
 from telethon import TelegramClient
 from pyrogram import Client, errors
 
@@ -42,6 +41,7 @@ if ENV:
 
     try:
         DRAGONS = set(int(x) for x in os.environ.get("DRAGONS", "").split())
+                purple_heart = set(int(x) for x in os.environ.get("PURPLE_HEART", "").split())
         DEV_USERS = set(int(x) for x in os.environ.get("DEV_USERS", "").split())
     except ValueError:
         raise Exception(
@@ -70,7 +70,6 @@ if ENV:
     WEBHOOK = bool(os.environ.get('WEBHOOK', False))
     URL = os.environ.get('URL', "")  # Does not contain token
     PORT = int(os.environ.get('PORT', 5000))
-    REDIS_URL = os.environ.get('REDIS_URL')
     CERT_PATH = os.environ.get("CERT_PATH")
     API_ID = os.environ.get('API_ID', None)
     API_HASH = os.environ.get('API_HASH', None)
@@ -112,6 +111,7 @@ else:
 
     try:
         DRAGONS = set(int(x) for x in Config.DRAGONS or [])
+                PURPLE_HEART = set(int(x) for x in Config.PURPLE_HEART or [])
         DEV_USERS = set(int(x) for x in Config.DEV_USERS or [])
     except ValueError:
         raise Exception(
@@ -142,7 +142,6 @@ else:
     CERT_PATH = Config.CERT_PATH
     API_ID = Config.API_ID
     API_HASH = Config.API_HASH
-    REDIS_URL = os.environ.get('REDIS_URL')
 
     DB_URI = Config.SQLALCHEMY_DATABASE_URI
     DONATION_LINK = Config.DONATION_LINK
@@ -169,25 +168,8 @@ else:
             "Your blacklisted chats list does not contain valid integers.")
 
 DRAGONS.add(OWNER_ID)
+PURPLE_HEART.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
-
-REDIS = StrictRedis.from_url(REDIS_URL,decode_responses=True)
-
-try:
-
-    REDIS.ping()
-
-    LOGGER.info("Your redis server is now alive!")
-
-except BaseException:
-
-    raise Exception("Your redis server is not alive, please check again.")
-
-finally:
-
-   REDIS.ping()
-
-   LOGGER.info("Your redis server is now alive!")
 
 if not SPAMWATCH_API:
     sw = None
@@ -201,6 +183,7 @@ pgram = Client("Cutiepiiprio", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN
 dispatcher = updater.dispatcher
 
 DRAGONS = list(DRAGONS) + list(DEV_USERS)
+PURPLE_HEART = list(PURPLE_HEART) + list(DEV_USERS)
 DEV_USERS = list(DEV_USERS)
 WOLVES = list(WOLVES)
 DEMONS = list(DEMONS)
