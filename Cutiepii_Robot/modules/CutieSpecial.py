@@ -24,8 +24,8 @@ __help__ = """
  • `/tts <your text> `*:*  text to speech.
 
 *Stylish your text!*
- • `//weebify <text>`*:* weebify your text!
- • `//bubble <text>`*:* bubble your text!
+ • `/weebify <text>`*:* weebify your text!
+ • `/bubble <text>`*:* bubble your text!
  • `/fbubble <text>`*:* bubble-filled your text!
  • `/square <text>`*:* square your text!
  • `/fsquare <text>`*:* square-filled your text!
