@@ -177,7 +177,7 @@ def temp_ban(update: Update, context: CallbackContext) -> str:
 
     try:
         chat.kick_member(user_id, until_date=bantime)
-        # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
+         bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
         bot.sendMessage(
             chat.id,
             f"Banned! User {mention_html(member.user.id, html.escape(member.user.first_name))} "
