@@ -44,4 +44,5 @@ hachoir
 pytz
 pyrogram>=1.0.7
 TgCrypto
-redis
+register
+bing_image_downloader
