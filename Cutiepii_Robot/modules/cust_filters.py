@@ -15,25 +15,25 @@ from telegram.ext import (
 )
 from telegram.utils.helpers import mention_html, escape_markdown
 
-from  import dispatcher, LOGGER, DRAGONS
-from .modules.disable import DisableAbleCommandHandler
-from .modules.helper_funcs.handlers import MessageHandlerChecker
-from .modules.helper_funcs.chat_status import user_admin
-from .modules.helper_funcs.extraction import extract_text
-from .modules.helper_funcs.filters import CustomFilters
-from .modules.helper_funcs.misc import build_keyboard_parser
-from .modules.helper_funcs.msg_types import get_filter_type
-from .modules.helper_funcs.string_handling import (
+from CutiepiiRobot import dispatcher, LOGGER, DRAGONS
+from CutiepiiRobot.modules.disable import DisableAbleCommandHandler
+from CutiepiiRobot.modules.helper_funcs.handlers import MessageHandlerChecker
+from CutiepiiRobot.modules.helper_funcs.chat_status import user_admin
+from CutiepiiRobot.modules.helper_funcs.extraction import extract_text
+from CutiepiiRobot.modules.helper_funcs.filters import CustomFilters
+from CutiepiiRobot.modules.helper_funcs.misc import build_keyboard_parser
+from CutiepiiRobot.modules.helper_funcs.msg_types import get_filter_type
+from CutiepiiRobot.modules.helper_funcs.string_handling import (
     split_quotes,
     button_markdown_parser,
     escape_invalid_curly_brackets,
     markdown_to_html,
 )
-from .modules.sql import cust_filters_sql as sql
+from CutiepiiRobot.modules.sql import cust_filters_sql as sql
 
-from .modules.connection import connected
+from CutiepiiRobot.modules.connection import connected
 
-from .modules.helper_funcs.alternate import send_message, typing_action
+from CutiepiiRobot.modules.helper_funcs.alternate import send_message, typing_action
 
 HANDLER_GROUP = 10
 
@@ -312,18 +312,15 @@ def reply_filter(update, context):
                             context.bot.send_sticker(
                                 chat.id,
                                 sticker_id,
-                                reply_to_message_id=message.message_id)
+                                reply_to_message_id=message.message_id
+                            )
                             return
                         except BadRequest as excp:
                             if excp.message == 'Wrong remote file identifier specified: wrong padding in the string':
-                                context.bot.send_message(
-                                    chat.id,
-                                    "Message couldn't be sent, Is the sticker id valid?"
-                                )
+                                context.bot.send_message(chat.id, "Message couldn't be sent, Is the sticker id valid?")
                                 return
                             else:
-                                LOGGER.exception("Error in filters: " +
-                                                 excp.message)
+                                LOGGER.exception("Error in filters: " + excp.message)
                                 return
                     valid_format = escape_invalid_curly_brackets(
                         text, VALID_WELCOME_FORMATTERS)
@@ -393,21 +390,15 @@ def reply_filter(update, context):
                                                  excp.message)
                                 pass
                 else:
-                    try:
-                        ENUM_FUNC_MAP[filt.file_type](
-                            chat.id,
-                            filt.file_id,
-                            caption=markdown_to_html(filtext),
-                            reply_to_message_id=message.message_id,
-                            parse_mode=ParseMode.HTML,
-                            disable_web_page_preview=True,
-                            reply_markup=keyboard,
-                        )
-                    except BadRequest:
-                        send_message(
-                            message,
-                            "I don't have the permission to send the content of the filter."
-                        )
+                    ENUM_FUNC_MAP[filt.file_type](
+                        chat.id,
+                        filt.file_id,
+                        caption=markdown_to_html(filtext),
+                        reply_to_message_id=message.message_id,
+                        parse_mode=ParseMode.HTML,
+                        disable_web_page_preview=True,
+                        reply_markup=keyboard,
+                    )
                 break
             else:
                 if filt.is_sticker:
