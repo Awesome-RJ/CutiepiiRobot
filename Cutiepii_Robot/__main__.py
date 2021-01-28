@@ -61,7 +61,7 @@ Use /help to know my abilities [^_^](https://telegra.ph/file/d31755c8e0245be16c4
 """
 
 HELP_STRINGS = """
-Cutie at your service.
+[Cutie](https://telegra.ph/file/d0441d0d700f54b55c9a1.gif) at your service.
 I can help you with following functions in managing group.
 
 *Main* commands available:
