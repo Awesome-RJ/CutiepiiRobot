@@ -15,25 +15,25 @@ from telegram.ext import (
 )
 from telegram.utils.helpers import mention_html, escape_markdown
 
-from CutiepiiRobot import dispatcher, LOGGER, DRAGONS
-from CutiepiiRobot.modules.disable import DisableAbleCommandHandler
-from CutiepiiRobot.modules.helper_funcs.handlers import MessageHandlerChecker
-from CutiepiiRobot.modules.helper_funcs.chat_status import user_admin
-from CutiepiiRobot.modules.helper_funcs.extraction import extract_text
-from CutiepiiRobot.modules.helper_funcs.filters import CustomFilters
-from CutiepiiRobot.modules.helper_funcs.misc import build_keyboard_parser
-from CutiepiiRobot.modules.helper_funcs.msg_types import get_filter_type
-from CutiepiiRobot.modules.helper_funcs.string_handling import (
+from Cutiepii_Robot import dispatcher, LOGGER, DRAGONS
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot.modules.helper_funcs.handlers import MessageHandlerChecker
+from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
+from Cutiepii_Robot.modules.helper_funcs.extraction import extract_text
+from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
+from Cutiepii_Robot.modules.helper_funcs.misc import build_keyboard_parser
+from Cutiepii_Robot.modules.helper_funcs.msg_types import get_filter_type
+from Cutiepii_Robot.modules.helper_funcs.string_handling import (
     split_quotes,
     button_markdown_parser,
     escape_invalid_curly_brackets,
     markdown_to_html,
 )
-from CutiepiiRobot.modules.sql import cust_filters_sql as sql
+from Cutiepii_Robot.modules.sql import cust_filters_sql as sql
 
-from CutiepiiRobot.modules.connection import connected
+from Cutiepii_Robot.modules.connection import connected
 
-from CutiepiiRobot.modules.helper_funcs.alternate import send_message, typing_action
+from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
 
 HANDLER_GROUP = 10
 
