@@ -16,11 +16,18 @@ __help__ = """
  • `/wallpaper`*:* sends random best anime wallpapers.
  • `/whatanime`*:* to search source of anime reply to photo or gif. 
  
+ *Image Search:*
+  • `/whatanime`*:* to search source of anime reply to photo or gif. 
+  • `/reverse`*:* to search source of Image reply to photo. 
+  • `/img <keyword>`*:* to search Image any. 
+  
+   *Image Search:*
+  • `/imdb`*:* to search source of Movie And Series.
+
  *Extra Fun With Cutiepii:*
  • `/qu`*:* quote a replied message. Like QuotLyBot
  • `/zombies`*:* Search and remove Deleted Accounts from Group.
-
- • `/plet <your text> `*:* text get funny emojify.
+ 
  • `/tts <your text> `*:*  text to speech.
 
 *Stylish your text!*
@@ -32,6 +39,7 @@ __help__ = """
  • `/blue <text>`*:* bluify your text!
  • `/latin <text>`*:* latinify your text!
  • `/lined <text>`*:* lined your text!
+ • `/plet <text> `*:* text get funny emojify.
  
  *Truth And Dare*
  • `/Truth`*:* for random truth.
