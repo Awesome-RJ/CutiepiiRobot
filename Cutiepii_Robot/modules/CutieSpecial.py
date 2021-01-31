@@ -21,11 +21,14 @@ __help__ = """
   • `/reverse`*:* to search source of Image reply to photo. 
   • `/img <keyword>`*:* to search Image any. 
   
-   *Image Search:*
+ *Image Search:*
   • `/imdb`*:* to search source of Movie And Series.
+  
+ *covid:*
+  • `/covid <country>`*:* To get data of a covid.
 
  *Extra Fun With Cutiepii:*
- • `/qu`*:* quote a replied message. Like QuotLyBot
+ • `/q`*:* quote a replied message. Like QuotLyBot
  • `/zombies`*:* Search and remove Deleted Accounts from Group.
  
  • `/tts <your text> `*:*  text to speech.
