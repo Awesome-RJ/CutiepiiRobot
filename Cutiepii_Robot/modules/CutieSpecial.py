@@ -25,7 +25,7 @@ __help__ = """
   • `/imdb`*:* to search source of Movie And Series.
   
  *covid:*
-  • `/covid <country>`*:* To get data of a covid.
+  • `/covid`*:* To get data of a covid.
 
  *Extra Fun With Cutiepii:*
  • `/q`*:* quote a replied message. Like QuotLyBot
