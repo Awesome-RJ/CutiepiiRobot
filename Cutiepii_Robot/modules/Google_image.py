@@ -51,3 +51,5 @@ async def img_sampler(event):
      await event.client.send_file(event.chat_id, filesgrabbed, reply_to=event.id)
      os.remove(filesgrabbed)
      os.chdir('./')
+
+    
