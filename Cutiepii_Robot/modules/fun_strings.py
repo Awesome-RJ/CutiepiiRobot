@@ -20,6 +20,7 @@ RUN_STRINGS = (
     "As The Doctor would say... RUN!",
 )
 
+
 ABUSE_STRINGS = (
    "What the fuck just happened?/What the fuck is going on here?",
    "(Respectfully), shut the fuck up!",
