@@ -204,3 +204,4 @@ dispatcher.add_handler(ANIME_HANDLER)
 dispatcher.add_handler(CHARACTER_HANDLER)
 dispatcher.add_handler(UPCOMING_HANDLER)
 dispatcher.add_handler(MANGA_HANDLER)
+
