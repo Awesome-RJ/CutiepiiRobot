@@ -41,7 +41,7 @@ async def is_register_admin(chat, user):
 JULIASONG = "@MissJuliaRobotMP3"
 JULIAVSONG = "@MissJuliaRobotMP4"
 
-@saitama(pattern="^/song (.*)")
+@Cutiepii_Robot(pattern="^/song (.*)")
 async def download_song(v_url):
     if v_url.is_group:
         if (await is_register_admin(v_url.input_chat, v_url.message.sender_id)):
@@ -147,7 +147,7 @@ async def download_song(v_url):
         os.system("rm -rf *.webp")
 
 
-@saitama(pattern="^/video (.*)")
+@Cutiepii_Robot(pattern="^/video (.*)")
 async def download_video(v_url):
     if v_url.is_group:
         if (await is_register_admin(v_url.input_chat, v_url.message.sender_id)):
@@ -245,7 +245,7 @@ async def download_video(v_url):
         os.system("rm -rf *.webp")
 
 
-@saitama(pattern="^/lyrics ?(.*)")
+@Cutiepii_Robot(pattern="^/lyrics ?(.*)")
 async def download_lyrics(v_url):
     if v_url.is_group:
         if (await is_register_admin(v_url.input_chat, v_url.message.sender_id)):
