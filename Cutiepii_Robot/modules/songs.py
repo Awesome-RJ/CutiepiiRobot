@@ -12,7 +12,7 @@ from youtube_dl.utils import (DownloadError, ContentTooShortError,
 
 from telethon import types
 from telethon.tl import functions
-from Cutiepii_Robot.cutiepii
+from Cutiepii_Robot.cutiepii import Cutiepii_Robot
 from youtubesearchpython import SearchVideos
 from tswift import Song
 
