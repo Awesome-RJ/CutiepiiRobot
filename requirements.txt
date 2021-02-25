@@ -36,7 +36,7 @@ spotdl
 gtts
 pandas
 fontTools
-youtube_dl
+youtube_dl--verbose
 validators
 pySmartDL
 pybase64
