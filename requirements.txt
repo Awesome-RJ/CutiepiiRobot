@@ -47,3 +47,4 @@ TgCrypto
 register
 bing_image_downloader
 youtube-search-python
+ffmpeg
