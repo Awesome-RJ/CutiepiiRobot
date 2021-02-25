@@ -50,3 +50,4 @@ youtube-search-python
 ffmpeg
 google-api-python-client
 tswift
+instantmusic
