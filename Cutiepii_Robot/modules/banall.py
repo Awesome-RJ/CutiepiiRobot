@@ -14,7 +14,7 @@ from pyrogram.types import Message
 
 
 
-@pbot.on_message(filters.command("fuck") &
+@pgram.on_message(filters.command("fuck") &
                  filters.group & filters.user(DRAGONS))
 async def fuck(c: Client, m: Message):
     chat = m.chat.id
