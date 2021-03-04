@@ -9,7 +9,7 @@ from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from telethon.tl import functions, types
 
-from Cutiepii_Robot.events import register
+from Cutiepii_Robot.event import register
 
 COLORS = [
     "#F07975",
