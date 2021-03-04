@@ -180,16 +180,6 @@ def rlg(update: Update, context: CallbackContext):
 
 
 @run_async
-def decide(update: Update, context: CallbackContext):
-    reply_text = (
-        update.effective_message.reply_to_message.reply_text
-        if update.effective_message.reply_to_message
-        else update.effective_message.reply_text
-    )
-    reply_text(random.choice(fun_strings.DECIDE))
-
-
-@run_async
 def eightball(update: Update, context: CallbackContext):
     reply_text = (
         update.effective_message.reply_to_message.reply_text
@@ -299,7 +289,6 @@ __help__ = """
  • `/slap`*:* slap a user, or get slapped if not a reply
  • `/shrug`*:* get shrug XD
  • `/table`*:* get flip/unflip :v
- • `/decide`*:* Randomly answers yes/no/maybe
  • `/toss`*:* Tosses A coin
  • `/bluetext`*:* check urself :V
  • `/roll`*:* Roll a dice
@@ -320,7 +309,6 @@ TOSS_HANDLER = DisableAbleCommandHandler("toss", toss)
 SHRUG_HANDLER = DisableAbleCommandHandler("shrug", shrug)
 BLUETEXT_HANDLER = DisableAbleCommandHandler("bluetext", bluetext)
 RLG_HANDLER = DisableAbleCommandHandler("rlg", rlg)
-DECIDE_HANDLER = DisableAbleCommandHandler("decide", decide)
 EIGHTBALL_HANDLER = DisableAbleCommandHandler("8ball", eightball)
 TABLE_HANDLER = DisableAbleCommandHandler("table", table)
 SHOUT_HANDLER = DisableAbleCommandHandler("shout", shout)
@@ -337,7 +325,6 @@ dispatcher.add_handler(TOSS_HANDLER)
 dispatcher.add_handler(SHRUG_HANDLER)
 dispatcher.add_handler(BLUETEXT_HANDLER)
 dispatcher.add_handler(RLG_HANDLER)
-dispatcher.add_handler(DECIDE_HANDLER)
 dispatcher.add_handler(EIGHTBALL_HANDLER)
 dispatcher.add_handler(TABLE_HANDLER)
 
@@ -350,7 +337,6 @@ __command_list__ = [
     "shrug",
     "bluetext",
     "rlg",
-    "decide",
     "table",
     "pat",
     "sanitize",
@@ -367,7 +353,6 @@ __handlers__ = [
     SHRUG_HANDLER,
     BLUETEXT_HANDLER,
     RLG_HANDLER,
-    DECIDE_HANDLER,
     TABLE_HANDLER,
     SANITIZE_HANDLER,
     SHOUT_HANDLER,
