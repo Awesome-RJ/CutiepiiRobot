@@ -10,7 +10,7 @@ from requests import get, post
 from telethon.tl import functions, types
 
 from Cutiepii_Robot import telethn as client
-from Cutiepii_Robot.events import register
+from Cutiepii_Robot.event import register
 
 
 def progress(current, total):
