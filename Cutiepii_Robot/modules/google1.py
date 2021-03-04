@@ -1,4 +1,4 @@
- " Hai.. You are not admin..  You can't use this command.. But you can use in my pm"
+ "Hai.. You are not admin..  You can't use this command.. But you can use in my pm"
             )
             return
     # SHOW_DESCRIPTION = False
