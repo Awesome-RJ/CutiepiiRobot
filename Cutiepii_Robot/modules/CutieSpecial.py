@@ -32,7 +32,8 @@ __help__ = """
  • `/q`*:* quote a replied message. Like QuotLyBot
  • `/zombies`*:* Search and remove Deleted Accounts from Group.  
  • `/img <keyword>`*:* to search Image any. 
- • `/tts <your text> `*:*  text to speech.
+ • `/tts <your text>`*:*  text to speech.
+ • `/phone <tp no>`*:* Track Phone no
 
 *Stylish your text!*
  • `/weebify <text>`*:* weebify your text!
