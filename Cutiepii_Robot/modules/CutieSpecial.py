@@ -19,9 +19,10 @@ __help__ = """
  *Image Search:*
   • `/whatanime`*:* to search source of anime reply to photo or gif. 
   • `/reverse`*:* to search source of Image reply to photo. 
-  • `/img <keyword>`*:* to search Image any. 
+  • `/getqr <reply to image>`*:* Read QR code
+  • `/makeqr <reply to text>`*:* Make QR code
   
- *Image Search:*
+ *Movies And Series:*
   • `/imdb`*:* to search source of Movie And Series.
   
  *covid:*
@@ -29,8 +30,8 @@ __help__ = """
 
  *Extra Fun With Cutiepii:*
  • `/q`*:* quote a replied message. Like QuotLyBot
- • `/zombies`*:* Search and remove Deleted Accounts from Group.
- 
+ • `/zombies`*:* Search and remove Deleted Accounts from Group.  
+ • `/img <keyword>`*:* to search Image any. 
  • `/tts <your text> `*:*  text to speech.
 
 *Stylish your text!*
