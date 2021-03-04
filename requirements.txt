@@ -51,3 +51,4 @@ ffmpeg
 google-api-python-client
 tswift
 instantmusic
+html2text
