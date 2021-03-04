@@ -6,7 +6,7 @@ from telethon import types
 from telethon.tl import functions
 
 from Cutiepii_Robot import telethn
-from Cutiepii_Robot.events import register
+from Cutiepii_Robot.event import register
 
 langi = "en"
 
