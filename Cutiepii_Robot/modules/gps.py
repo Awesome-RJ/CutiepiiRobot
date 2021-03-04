@@ -43,3 +43,4 @@ dispatcher.add_handler(GPS_HANDLER)
 
 
 __handlers__ = [GPS_HANDLER]
+
