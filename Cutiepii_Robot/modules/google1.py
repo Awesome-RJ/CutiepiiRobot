@@ -1,4 +1,58 @@
- "Hai.. You are not admin..  You can't use this command.. But you can use in my pm"
+import glob
+import os
+from asyncio import sleep
+from datetime import datetime
+
+import html2text
+import requests
+from bing_image_downloader import downloader
+from requests import get, post
+from telethon.tl import functions, types
+
+from Cutiepii_Robot import telethn as client
+from Cutiepii_Robot.events import register
+
+
+def progress(current, total):
+    """ Calculate and return the download progress with given arguments. """
+    print(
+        "Downloaded {} of {}\nCompleted {}".format(
+            current, total, (current / total) * 100
+        )
+    )
+
+
+async def is_register_admin(chat, user):
+    if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
+
+        return isinstance(
+            (
+                await client(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
+            (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
+        )
+    elif isinstance(chat, types.InputPeerChat):
+
+        ui = await client.get_peer_id(user)
+        ps = (
+            await client(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
+        return isinstance(
+            next((p for p in ps if p.user_id == ui), None),
+            (types.ChatParticipantAdmin, types.ChatParticipantCreator),
+        )
+    else:
+        return None
+
+
+@register(pattern="^/gs (.*)")
+async def _(event):
+    if event.fwd_from:
+        return
+    if event.is_group:
+        if not (await is_register_admin(event.input_chat, event.message.sender_id)):
+            await event.reply(
+                "Hai.. You are not admin..  You can't use this command.. But you can use in my pm"
             )
             return
     # SHOW_DESCRIPTION = False
