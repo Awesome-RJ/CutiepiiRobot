@@ -99,7 +99,7 @@ if ENV:
             "Your blacklisted chats list does not contain valid integers.")
 
 else:
-    from Cutiepii_Robot.config import Development as Config
+    from Cutiepii_Robot.Config import Development as Config
     TOKEN = Config.TOKEN
 
     try:
