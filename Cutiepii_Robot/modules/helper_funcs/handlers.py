@@ -5,7 +5,7 @@ from Cutiepii_Robot import (DEV_USERS, DRAGONS, DEMONS, TIGERS, WOLVES)
 from telegram import MessageEntity, Update
 from telegram.ext import CommandHandler, MessageHandler, RegexHandler, Filters
 from time import sleep
-from pyrate_limiter import (BucketFullException, Duration, RequestRate, Limiter,
+from rate_limiter import (BucketFullException, Duration, RequestRate, Limiter,
                             MemoryListBucket)
 
 if ALLOW_EXCL:
