@@ -1,3 +1,4 @@
+#thanks To Rajkumar
 import math
 import time
 
