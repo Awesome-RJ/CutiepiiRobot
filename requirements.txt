@@ -4,7 +4,7 @@ lxml
 beautifulsoup4
 requests
 sqlalchemy
-python-telegram-bot==13.3
+python-telegram-bot==12.8
 psycopg2-binary
 feedparser
 pynewtonmath
@@ -13,8 +13,8 @@ zalgo-text
 geopy
 nltk
 psutil
-aiohttp>=3.7.4
-Pillow>=8.1.2
+aiohttp>=2.2.5
+Pillow>=4.2.0
 CurrencyConverter
 #googletrans
 google_trans_new
