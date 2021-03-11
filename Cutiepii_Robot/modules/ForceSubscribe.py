@@ -1,5 +1,4 @@
-#    Copyright (C) 2020-2021 by @InukaAsith
-#    This programme is a part of LipsaRobot TG bot project
+#    Copyright (C) 2020-2021 by @Awesome_RJ
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published by
@@ -12,11 +11,8 @@
 #
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
 import logging
 import time
-
 from pyrogram import filters
 from pyrogram.errors.exceptions.bad_request_400 import (
     ChatAdminRequired,
@@ -25,19 +21,14 @@ from pyrogram.errors.exceptions.bad_request_400 import (
     UserNotParticipant,
 )
 from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
-
-from Cutiepii_Robot import DRAGONS as SUDO_USERS
-from Cutiepii_Robot import pgram
-from Cutiepii_Robot.modules.sql import forceSubscribe_sql as sql
-
+#from Cutiepii_Robot import OWNER_ID as SUDO_USERS
+from Cutiepii_Robot.services.pyrogram import pbot
+from Cutiepii_Robot.services.sql import forceSubscribe_sql as sql
 logging.basicConfig(level=logging.INFO)
-
 static_data_filter = filters.create(
     lambda _, __, query: query.data == "onUnMuteRequest"
 )
-
-
-@pgram.on_callback_query(static_data_filter)
+@pbot.on_callback_query(static_data_filter)
 def _onUnMuteRequest(client, cb):
     user_id = cb.from_user.id
     chat_id = cb.message.chat.id
@@ -56,13 +47,13 @@ def _onUnMuteRequest(client, cb):
                 except UserNotParticipant:
                     client.answer_callback_query(
                         cb.id,
-                        text=f"❗ of our @{channel} Join the channel and press the 'UnMute Me' button again.",
+                        text=f"❗ Join our @{channel} channel and press 'UnMute Me' button.",
                         show_alert=True,
                     )
             else:
                 client.answer_callback_query(
                     cb.id,
-                    text="❗ Admin has muted you for some other reason.",
+                    text="❗ You have been muted by admins due to some other reason.",
                     show_alert=True,
                 )
         else:
@@ -74,16 +65,13 @@ def _onUnMuteRequest(client, cb):
                     chat_id,
                     f"❗ **{cb.from_user.mention} is trying to UnMute himself but i can't unmute him because i am not an admin in this chat add me as admin again.**\n__#Leaving this chat...__",
                 )
-
             else:
                 client.answer_callback_query(
                     cb.id,
-                    text="Warning: Do not click the button when you can talk.",
+                    text="❗ Warning! Don't press the button when you cn talk.",
                     show_alert=True,
                 )
-
-
-@pgram.on_message(filters.text & ~filters.private & ~filters.edited, group=1)
+@pbot.on_message(filters.text & ~filters.private & ~filters.edited, group=1)
 def _check_member(client, message):
     chat_id = message.chat.id
     chat_db = sql.fs_settings(chat_id)
@@ -92,7 +80,7 @@ def _check_member(client, message):
         if (
             not client.get_chat_member(chat_id, user_id).status
             in ("administrator", "creator")
-            and not user_id in SUDO_USERS
+            and not user_id == 1418166549
         ):
             channel = chat_db.channel
             try:
@@ -100,7 +88,7 @@ def _check_member(client, message):
             except UserNotParticipant:
                 try:
                     sent_message = message.reply_text(
-                        "Welcome {} 🙏 \n \n **You are ours @{} Channel Not joined yet** 😭 \n Please do that Join At the bottom **UNMUTE ME** Button Touch it. \n \n **[👉 OUR CHANNEL 👈](https://t.me/{})**".format(
+                        "Welcome {} 🙏 \n **You havent joined our @{} Channel yet** 😭 \n \nPlease Join [Our Channel](https://t.me/{}) and hit the **UNMUTE ME** Button. \n \n ".format(
                             message.from_user.mention, channel, channel
                         ),
                         disable_web_page_preview=True,
@@ -108,9 +96,15 @@ def _check_member(client, message):
                             [
                                 [
                                     InlineKeyboardButton(
+                                        "Join Channel",
+                                        url="https://t.me/{}".format(channel),
+                                    )
+                                ],
+                                [
+                                    InlineKeyboardButton(
                                         "UnMute Me", callback_data="onUnMuteRequest"
                                     )
-                                ]
+                                ],
                             ]
                         ),
                     )
@@ -119,20 +113,17 @@ def _check_member(client, message):
                     )
                 except ChatAdminRequired:
                     sent_message.edit(
-                        "❗ **I am in this Admin Not at all..**\n__to me Ban Permissions With Admin Give it a try again .. \n#Ending FSub...__"
+                        "❗ **Daisy is not admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
                     )
-
             except ChatAdminRequired:
                 client.send_message(
                     chat_id,
-                    text=f"❗ **I am @{channel} In one Admin Not at all.**\n__I have it Admin Deela back Add .\n#Leaving this chat...__",
+                    text=f"❗ **I not an admin of @{channel} channel.**\n__Give me admin of that channel and retry.\n#Ending FSub...__",
                 )
-
-
-@pgram.on_message(filters.command(["forcesubscribe", "fsub"]) & ~filters.private)
+@pbot.on_message(filters.command(["forcesubscribe", "forcesub"]) & ~filters.private)
 def config(client, message):
     user = client.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status is "creator" or user.user.id in SUDO_USERS:
+    if user.status is "creator" or user.user.id == 1141839926:
         chat_id = message.chat.id
         if len(message.command) > 1:
             input_str = message.command[1]
@@ -185,8 +176,6 @@ def config(client, message):
         message.reply_text(
             "❗ **Group Creator Required**\n__You have to be the group creator to do that.__"
         )
-
-
 __help__ = """
 *ForceSubscribe:*
 *Channel Manageer Inbuilt*
@@ -201,9 +190,7 @@ Note: Only creator of the group can setup me and i will not allow force subscrib
 • `/ForceSubscribe no/off/disable - To turn of ForceSubscribe.
 • `/ForceSubscribe {channel username} - To turn on and setup the channel.
 • `/ForceSubscribe clear - To unmute all members who muted by me.
-
 Note: /FSub is an alias of /ForceSubscribe
-💭 Only on Sinhala 🇱🇰 yet
  
 """
 __mod_name__ = "Force Subscribe"
