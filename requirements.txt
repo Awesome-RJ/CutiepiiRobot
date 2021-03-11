@@ -4,7 +4,7 @@ lxml
 beautifulsoup4
 requests
 sqlalchemy
-python-telegram-bot==12.8
+python-telegram-bot==13.3
 psycopg2-binary
 feedparser
 pynewtonmath
@@ -13,8 +13,8 @@ zalgo-text
 geopy
 nltk
 psutil
-aiohttp>=2.2.5
-Pillow>=4.2.0
+aiohttp>=3.7.4
+Pillow>=8.1.2
 CurrencyConverter
 #googletrans
 google_trans_new
@@ -25,7 +25,7 @@ regex
 bleach
 git+https://github.com/starry69/python-markdown2.git
 wikipedia
-telethon==1.16.4
+telethon==1.20
 spamwatch
 alphabet_detector
 pyrate-limiter
@@ -42,7 +42,7 @@ pySmartDL
 pybase64
 hachoir
 pytz
-pyrogram>=1.0.7
+pyrogram>=1.1.13
 TgCrypto
 register
 bing_image_downloader
