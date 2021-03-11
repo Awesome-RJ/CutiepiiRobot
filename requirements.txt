@@ -25,7 +25,7 @@ regex
 bleach
 git+https://github.com/starry69/python-markdown2.git
 wikipedia
-telethon==1.20
+telethon==1.16.4
 spamwatch
 alphabet_detector
 rate-limiter
@@ -42,7 +42,7 @@ pySmartDL
 pybase64
 hachoir
 pytz
-pyrogram>=1.1.13
+pyrogram>=1.0.7
 TgCrypto
 register
 bing_image_downloader
