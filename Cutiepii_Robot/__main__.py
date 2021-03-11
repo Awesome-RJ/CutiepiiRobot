@@ -79,7 +79,7 @@ And the following:
     dispatcher.bot.first_name, ""
     if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
 
-CUTIEPI_IMG = "https://telegra.ph/file/d31755c8e0245be16c4f5.png"
+SAITAMA_IMG= "https://telegra.ph/file/d31755c8e0245be16c4f5.png"
 CUTIEPINGIMG = "https://telegra.ph/file/ea42efe4fb0ccbb578fce.gif"
 
 
@@ -195,7 +195,7 @@ def start(update: Update, context: CallbackContext):
         else:
             first_name = update.effective_user.first_name
             update.effective_message.reply_photo(
-                CUTIEPI_IMG,
+                SAITAMA_IMG,
                 PM_START_TEXT.format(
                     escape_markdown(first_name),
                     escape_markdown(context.bot.first_name)),
