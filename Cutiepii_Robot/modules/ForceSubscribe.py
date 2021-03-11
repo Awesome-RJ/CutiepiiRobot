@@ -22,7 +22,7 @@ from pyrogram.errors.exceptions.bad_request_400 import (
 )
 from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
 #from Cutiepii_Robot import OWNER_ID as SUDO_USERS
-from Cutiepii_Robot.services.pyrogram import pbot
+from Cutiepii_Robot import pgram
 from Cutiepii_Robot.services.sql import forceSubscribe_sql as sql
 logging.basicConfig(level=logging.INFO)
 static_data_filter = filters.create(
