@@ -52,3 +52,10 @@ google-api-python-client
 tswift
 instantmusic
 html2text
+aiohttp[speedups]
+cryptg
+cryptography
+redis
+aioredis 
+pymongo
+motor
