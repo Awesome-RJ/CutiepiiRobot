@@ -46,33 +46,33 @@ def ban(update: Update, context: CallbackContext) -> str:
             raise
 
     if user_id == bot.id:
-        message.reply_text("Sumimasen...You baka?")
+        message.reply_text("Oh yeah, ban myself, noob!")
         return log_message
 
     if is_user_ban_protected(chat, user_id, member) and user not in DEV_USERS:
         if user_id == OWNER_ID:
             message.reply_text(
-                "Rias-sama is my everything. Don't ever think about it.")
+                "Trying to put me against a God level disaster huh?")
             return log_message
         elif user_id in DEV_USERS:
             message.reply_text("I can't act against our own.")
             return log_message
         elif user_id in DRAGONS:
             message.reply_text(
-                "No!, Issei is Red dragon emperor. YOU WILL GET BANNED BY RIAS FOR YOUR BAD INTENSIONS.")
+                "Fighting this Dragon here will put civilian lives at risk.")
             return log_message
         elif user_id in DEMONS:
             message.reply_text(
-                "Can't go against the member of Gremory family."
+                "Hey, you are crazy! This is a Demon disaster user. I can't ban it!"
             )
             return log_message
         elif user_id in TIGERS:
             message.reply_text(
-                "Wait...President Rias is coming...She will deal with you."
+                "Hey, you are crazy! This is a Demon disaster user. I can't ban it!"
             )
             return log_message
         elif user_id in WOLVES:
-            message.reply_text("Cutie Cutie...Can't ban Rias's servants!")
+            message.reply_text("Wolf abilities make them ban immune!")
             return log_message
         else:
             message.reply_text("This user has immunity and cannot be banned.")
@@ -89,7 +89,7 @@ def ban(update: Update, context: CallbackContext) -> str:
 
     try:
         chat.kick_member(user_id)
-         # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
+        # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
         reply = (
             f"<code>❕</code><b>Ban Event</b>\n"
             f"<code> </code><b>•  User:</b> {mention_html(member.user.id, html.escape(member.user.first_name))}"
@@ -238,7 +238,7 @@ def punch(update: Update, context: CallbackContext) -> str:
 
     res = chat.unban_member(user_id)  # unban on current user = kick
     if res:
-       # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
+        # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
         bot.sendMessage(
             chat.id,
             f"One Punched! {mention_html(member.user.id, html.escape(member.user.first_name))}.",
@@ -328,7 +328,7 @@ def unban(update: Update, context: CallbackContext) -> str:
 
     return log
 
-  
+
 @run_async
 @connection_status
 @bot_admin
@@ -404,4 +404,3 @@ __handlers__ = [
     BAN_HANDLER, TEMPBAN_HANDLER, PUNCH_HANDLER, UNBAN_HANDLER, ROAR_HANDLER,
     PUNCHME_HANDLER
 ]
-

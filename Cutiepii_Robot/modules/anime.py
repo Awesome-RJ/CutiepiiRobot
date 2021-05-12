@@ -8,7 +8,7 @@ import jikanpy
 import requests
 from telegram.utils.helpers import mention_html
 from telegram.error import BadRequest
-from Cutiepii_Robot import DEV_USERS, OWNER_ID, DRAGONS, dispatcher
+from Cutiepii_Robot import DEV_USERS, OWNER_ID, DRAGONS, REDIS, dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode,
                       Update ,replymarkup)
@@ -18,6 +18,10 @@ info_btn = "More Information"
 prequel_btn = "⬅️"
 sequel_btn = "➡️"
 close_btn = "❌"
+
+ANIME_IMG = "https://telegra.ph/file/56b16e6599af473d692f9.mp4"
+MANGA_IMG = "https://telegra.ph/file/e6b1c11a9cd09a9c0e223.mp4"
+CHARACTER_IMG = "https://telegra.ph/file/a355b31aa5dfe112605d2.mp4"
 
 
 def shorten(description, info='anilist.co'):
@@ -189,6 +193,8 @@ def anime(update, context):
     user = update.effective_user
     search = message.text.split(' ', 1)
     if len(search) == 1:
+        update.effective_message.reply_animation(
+                ANIME_IMG)
         update.effective_message.reply_text('Format : /anime < anime name >')
         return
     else:
@@ -202,6 +208,7 @@ def anime(update, context):
     if 'errors' in json.keys():
         update.effective_message.reply_text('Anime not found')
         return
+      
     if json:
         json = json['data']['Media']
         msg = f"*{json['title']['romaji']}*(`{json['title']['native']}`)\n*Type*: {json['format']}\n*Status*: {json['status']}\n*Episodes*: {json.get('episodes', 'N/A')}\n*Duration*: {json.get('duration', 'N/A')} Per Ep.\n*Score*: {json['averageScore']}\n*Genres*: `"
@@ -258,6 +265,8 @@ def character(update, context):
     message = update.effective_message
     search = message.text.split(' ', 1)
     if len(search) == 1:
+        update.effective_message.reply_animation(
+                CHARACTER_IMG)
         update.effective_message.reply_text(
             'Format : /character < character name >')
         return
@@ -299,6 +308,8 @@ def manga(update, context):
     message = update.effective_message
     search = message.text.split(' ', 1)
     if len(search) == 1:
+        update.effective_message.reply_animation(
+                MANGA_IMG)
         update.effective_message.reply_text('Format : /manga < manga name >')
         return
     search = search[1]
@@ -458,13 +469,16 @@ def upcoming(update, context):
     update.effective_message.reply_text(upcoming_message)
     
 def anime_quote():
-    url = "https://animechanapi.xyz/api/quotes/random"
-    response = requests.get(url)
+    url = "https://animechan.vercel.app/api/random"
     # since text attribute returns dictionary like string
-    dic = json.loads(response.text)
-    quote = dic["data"][0]["quote"]
-    character = dic["data"][0]["character"]
-    anime = dic["data"][0]["anime"]
+    response = requests.get(url)
+    try:
+        dic = json.loads(response.text)
+    except Exception:
+        pass
+    quote = dic["quote"]
+    character = dic["character"]
+    anime = dic["anime"]
     return quote, character, anime
 
 
@@ -473,9 +487,10 @@ def quotes(update: Update, context: CallbackContext):
     message = update.effective_message
     quote, character, anime = anime_quote()
     msg = f"<i>❝{quote}❞</i>\n\n<b>{character} from {anime}</b>"
-    keyboard = InlineKeyboardMarkup(
-        [[InlineKeyboardButton(text="Change🔁", callback_data="change_quote")]]
-    )
+    keyboard = InlineKeyboardMarkup([[
+        InlineKeyboardButton(
+            text="Change🔁",
+            callback_data="change_quote")]])
     message.reply_text(
         msg,
         reply_markup=keyboard,
@@ -490,10 +505,12 @@ def change_quote(update: Update, context: CallbackContext):
     message = update.effective_message
     quote, character, anime = anime_quote()
     msg = f"<i>❝{quote}❞</i>\n\n<b>{character} from {anime}</b>"
-    keyboard = InlineKeyboardMarkup(
-        [[InlineKeyboardButton(text="Change🔁", callback_data="quote_change")]]
-    )
-    message.edit_text(msg, reply_markup=keyboard, parse_mode=ParseMode.HTML)
+    keyboard = InlineKeyboardMarkup([[
+        InlineKeyboardButton(
+            text="Change🔁",
+            callback_data="quote_change")]])
+    message.edit_text(msg, reply_markup=keyboard,
+                      parse_mode=ParseMode.HTML)
 
 
 
@@ -715,21 +732,33 @@ def button(update, context):
 
 __help__ = """
 Get information about anime, manga or characters from [AniList](anilist.co).
-*Available commands:*
+*Available Commands:*
  - /anime <anime>: returns information about the anime.
  - /character <character>: returns information about the character.
  - /manga <manga>: returns information about the manga.
  - /user <user>: returns information about a MyAnimeList user.
  - /upcoming: returns a list of new anime in the upcoming seasons.
  - /airing <anime>: returns anime airing info.
- - /aq: get random anime quote
- - /whatanime: to search source of anime reply to photo
  - /watchlist: to get your saved watchlist.
  - /mangalist: to get your saved manga read list.
  - /characterlist | fcl: to get your favorite characters list.
  - /removewatchlist | rwl <anime>: to remove a anime from your list.
  - /rfcharacter | rfcl <character>: to remove a character from your list.  
  - /rmanga | rml <manga>: to remove a manga from your list.
+
+ Get information about anime, manga or characters with the help of this module! All data is fetched from [MyAnimeList](https://myanimelist.net).
+*Available Commands:*
+ - /manime <anime>: returns information about the anime.
+ - /mcharacter <character>: returns information about the character.
+ - /mmanga <manga>: returns information about the manga.
+ - /mupcoming: returns a list of new anime in the upcoming seasons.
+
+*Anime Quote:*
+ - /quote: get random anime quote
+ - /animequotes : gives random anime quotes
+
+*Anime Search:*
+- /whatanime: to search source of anime reply to photo
  """
 
 ANIME_HANDLER = DisableAbleCommandHandler("anime", anime)

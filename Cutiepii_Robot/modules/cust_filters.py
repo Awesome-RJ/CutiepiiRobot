@@ -1,4 +1,5 @@
 import re
+import random
 from html import escape
 
 import telegram
@@ -16,6 +17,7 @@ from telegram.utils.helpers import mention_html, escape_markdown
 
 from Cutiepii_Robot import dispatcher, LOGGER, DRAGONS
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot.modules.helper_funcs.handlers import MessageHandlerChecker
 from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_text
 from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
@@ -208,7 +210,7 @@ def filters(update, context):
     # This is an old method
     # sql.add_filter(chat_id, keyword, content, is_sticker, is_document, is_image, is_audio, is_voice, is_video, buttons)
 
-    if add == True:
+    if add is True:
         send_message(
             update.effective_message,
             "Saved filter '{}' in *{}*!".format(keyword, chat_name),
@@ -278,6 +280,8 @@ def reply_filter(update, context):
     for keyword in chat_filters:
         pattern = r"( |^|[^\w])" + re.escape(keyword) + r"( |$|[^\w])"
         if re.search(pattern, to_match, flags=re.IGNORECASE):
+            if MessageHandlerChecker.check_user(update.effective_user.id):
+                return
             filt = sql.get_filter(chat.id, keyword)
             if filt.reply == "there is should be a new reply":
                 buttons = sql.get_buttons(chat.id, filt.keyword)
@@ -294,8 +298,35 @@ def reply_filter(update, context):
                     "mention",
                 ]
                 if filt.reply_text:
+                    if '%%%' in filt.reply_text:
+                        split = filt.reply_text.split('%%%')
+                        if all(split):
+                            text = random.choice(split)
+                        else:
+                            text = filt.reply_text
+                    else:
+                        text = filt.reply_text
+                    if text.startswith('~!') and text.endswith('!~'):
+                        sticker_id = text.replace('~!', '').replace('!~', '')
+                        try:
+                            context.bot.send_sticker(
+                                chat.id,
+                                sticker_id,
+                                reply_to_message_id=message.message_id)
+                            return
+                        except BadRequest as excp:
+                            if excp.message == 'Wrong remote file identifier specified: wrong padding in the string':
+                                context.bot.send_message(
+                                    chat.id,
+                                    "Message couldn't be sent, Is the sticker id valid?"
+                                )
+                                return
+                            else:
+                                LOGGER.exception("Error in filters: " +
+                                                 excp.message)
+                                return
                     valid_format = escape_invalid_curly_brackets(
-                        filt.reply_text, VALID_WELCOME_FORMATTERS)
+                        text, VALID_WELCOME_FORMATTERS)
                     if valid_format:
                         filtext = valid_format.format(
                             first=escape(message.from_user.first_name),
@@ -362,15 +393,21 @@ def reply_filter(update, context):
                                                  excp.message)
                                 pass
                 else:
-                    ENUM_FUNC_MAP[filt.file_type](
-                        chat.id,
-                        filt.file_id,
-                        caption=markdown_to_html(filtext),
-                        reply_to_message_id=message.message_id,
-                        parse_mode=ParseMode.HTML,
-                        disable_web_page_preview=True,
-                        reply_markup=keyboard,
-                    )
+                    try:
+                        ENUM_FUNC_MAP[filt.file_type](
+                            chat.id,
+                            filt.file_id,
+                            caption=markdown_to_html(filtext),
+                            reply_to_message_id=message.message_id,
+                            parse_mode=ParseMode.HTML,
+                            disable_web_page_preview=True,
+                            reply_markup=keyboard,
+                        )
+                    except BadRequest:
+                        send_message(
+                            message,
+                            "I don't have the permission to send the content of the filter."
+                        )
                 break
             else:
                 if filt.is_sticker:
@@ -560,16 +597,28 @@ def __chat_settings__(chat_id, user_id):
 
 __help__ = """
  • `/filters`*:* List all active filters saved in the chat.
+
 *Admin only:*
  • `/filter <keyword> <reply message>`*:* Add a filter to this chat. The bot will now reply that message whenever 'keyword'\
 is mentioned. If you reply to a sticker with a keyword, the bot will reply with that sticker. NOTE: all filter \
 keywords are in lowercase. If you want your keyword to be a sentence, use quotes. eg: /filter "hey there" How you \
 doin?
+ Separate diff replies by `%%%` to get random replies
+ *Example:* 
+ `/filter "filtername"
+ Reply 1
+ %%%
+ Reply 2
+ %%%
+ Reply 3`
  • `/stop <filter keyword>`*:* Stop that filter.
+
 *Chat creator only:*
  • `/removeallfilters`*:* Remove all chat filters at once.
+
 *Note*: Filters also support markdown formatters like: {first}, {last} etc.. and buttons.
 Check `/markdownhelp` to know more!
+
 """
 
 __mod_name__ = "Filters"

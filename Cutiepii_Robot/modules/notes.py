@@ -1,10 +1,12 @@
 import re, ast
 from io import BytesIO
+import random
 from typing import Optional
 
 import Cutiepii_Robot.modules.sql.notes_sql as sql
 from Cutiepii_Robot import LOGGER, JOIN_LOGGER, SUPPORT_CHAT, dispatcher, DRAGONS
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot.modules.helper_funcs.handlers import MessageHandlerChecker
 from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin, connection_status
 from Cutiepii_Robot.modules.helper_funcs.misc import (build_keyboard,
                                                     revert_buttons)
@@ -41,20 +43,21 @@ ENUM_FUNC_MAP = {
 
 
 # Do not async
-@connection_status
 def get(update, context, notename, show_none=True, no_format=False):
     bot = context.bot
-    chat_id = update.effective_chat.id
-    note = sql.get_note(chat_id, notename)
+    chat_id = update.effective_message.chat.id
+    note_chat_id = update.effective_chat.id
+    note = sql.get_note(note_chat_id, notename)
     message = update.effective_message  # type: Optional[Message]
 
     if note:
+        if MessageHandlerChecker.check_user(update.effective_user.id):
+            return
         # If we're replying to a message, reply to that message (unless it's an error)
         if message.reply_to_message:
             reply_id = message.reply_to_message.message_id
         else:
             reply_id = message.message_id
-
         if note.is_reply:
             if JOIN_LOGGER:
                 try:
@@ -67,7 +70,7 @@ def get(update, context, notename, show_none=True, no_format=False):
                         message.reply_text(
                             "This message seems to have been lost - I'll remove it "
                             "from your notes list.")
-                        sql.rm_note(chat_id, notename)
+                        sql.rm_note(note_chat_id, notename)
                     else:
                         raise
             else:
@@ -83,7 +86,7 @@ def get(update, context, notename, show_none=True, no_format=False):
                             "their message - sorry! Get your bot admin to start using a "
                             "message dump to avoid this. I'll remove this note from "
                             "your saved notes.")
-                        sql.rm_note(chat_id, notename)
+                        sql.rm_note(note_chat_id, notename)
                     else:
                         raise
         else:
@@ -94,7 +97,18 @@ def get(update, context, notename, show_none=True, no_format=False):
             valid_format = escape_invalid_curly_brackets(
                 note.value, VALID_NOTE_FORMATTERS)
             if valid_format:
-                text = valid_format.format(
+                if not no_format:
+                    if '%%%' in valid_format:
+                        split = valid_format.split('%%%')
+                        if all(split):
+                            text = random.choice(split)
+                        else:
+                            text = valid_format
+                    else:
+                        text = valid_format
+                else:
+                    text = valid_format
+                text = text.format(
                     first=escape_markdown(message.from_user.first_name),
                     last=escape_markdown(message.from_user.last_name or
                                          message.from_user.first_name),
@@ -118,7 +132,7 @@ def get(update, context, notename, show_none=True, no_format=False):
 
             keyb = []
             parseMode = ParseMode.MARKDOWN
-            buttons = sql.get_buttons(chat_id, notename)
+            buttons = sql.get_buttons(note_chat_id, notename)
             if no_format:
                 parseMode = None
                 text += revert_buttons(buttons)
@@ -157,13 +171,13 @@ def get(update, context, notename, show_none=True, no_format=False):
                         "This note was an incorrectly imported file from another bot - I can't use "
                         "it. If you really need it, you'll have to save it again. In "
                         "the meantime, I'll remove it from your notes list.")
-                    sql.rm_note(chat_id, notename)
+                    sql.rm_note(note_chat_id, notename)
                 else:
                     message.reply_text(
                         "This note could not be sent, as it is incorrectly formatted. Ask in "
                         f"@{SUPPORT_CHAT} if you can't figure out why!")
                     LOGGER.exception("Could not parse message #%s in chat %s",
-                                     notename, str(chat_id))
+                                     notename, str(note_chat_id))
                     LOGGER.warning("Message was: %s", str(note.value))
         return
     elif show_none:
@@ -328,7 +342,11 @@ def list_notes(update: Update, context: CallbackContext):
         msg += note_name
 
     if not note_list:
-        update.effective_message.reply_text("No notes in this chat!")
+        try:
+            update.effective_message.reply_text("No notes in this chat!")
+        except BadRequest:
+            update.effective_message.reply_text(
+                "No notes in this chat!", quote=False)
 
     elif len(msg) != 0:
         update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
@@ -480,15 +498,23 @@ __help__ = """
  • `/get <notename>`*:* get the note with this notename
  • `#<notename>`*:* same as /get
  • `/notes` or `/saved`*:* list all saved notes in this chat
- • `/number` *:* Will pull the note of that number in the list.
+ • `/number` *:* Will pull the note of that number in the list
 If you would like to retrieve the contents of a note without any formatting, use `/get <notename> noformat`. This can \
-be useful when updating a current note.
+be useful when updating a current note
 
 *Admins only:*
  • `/save <notename> <notedata>`*:* saves notedata as a note with name notename
 A button can be added to a note by using standard markdown link syntax - the link should just be prepended with a \
-`buttonurl:` section, as such: `[somelink](buttonurl:example.com)`. Check `/markdownhelp` for more info.
+`buttonurl:` section, as such: `[somelink](buttonurl:example.com)`. Check `/markdownhelp` for more info
  • `/save <notename>`*:* save the replied message as a note with name notename
+ Separate diff replies by `%%%` to get random notes
+ *Example:* 
+ `/save notename
+ Reply 1
+ %%%
+ Reply 2
+ %%%
+ Reply 3`
  • `/clear <notename>`*:* clear note with this name
  • `/removeallnotes`*:* removes all notes from the group
  *Note:* Note names are case-insensitive, and they are automatically converted to lowercase before getting saved.

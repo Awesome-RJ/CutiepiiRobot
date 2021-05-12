@@ -34,7 +34,7 @@ def gps(update, context, *args, **kwargs):
             disable_web_page_preview=True,
         )
     except AttributeError:
-        update.message.reply_text("I can't find that")
+        update.message.reply_text("Cutie Cutie! I can't find that")
 
 
 GPS_HANDLER = CommandHandler("gps", gps)

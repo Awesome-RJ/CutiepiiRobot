@@ -2,9 +2,8 @@ import Cutiepii_Robot.modules.sql.blacklistusers_sql as sql
 from Cutiepii_Robot import ALLOW_EXCL
 from Cutiepii_Robot import (DEV_USERS, DRAGONS, DEMONS, TIGERS, WOLVES)
 
-from telegram import MessageEntity, Update
+from telegram import Update
 from telegram.ext import CommandHandler, MessageHandler, RegexHandler, Filters
-from time import sleep
 from pyrate_limiter import (BucketFullException, Duration, RequestRate, Limiter,
                             MemoryListBucket)
 
@@ -47,6 +46,7 @@ class AntiSpam:
 
 
 SpamChecker = AntiSpam()
+MessageHandlerChecker = AntiSpam()
 
 
 class CustomCommandHandler(CommandHandler):
@@ -85,7 +85,8 @@ class CustomCommandHandler(CommandHandler):
                     args = message.text.split()[1:]
                     command = fst_word[1:].split("@")
                     command.append(message.bot.username)
-
+                    if user_id == 1087968824:
+                        user_id = update.effective_chat.id
                     if not (command[0].lower() in self.command and
                             command[1].lower() == message.bot.username.lower()):
                         return None

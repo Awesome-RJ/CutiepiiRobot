@@ -41,7 +41,7 @@ async def _(event):
         await event.reply("Reply to a file to compress it.")
         return
     if event.is_group:
-        if not (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if not await is_register_admin(event.input_chat, event.message.sender_id):
             await event.reply(
                 "Hai.. You are not admin.. You can't use this command.. But you can use in my pm"
             )
@@ -123,7 +123,7 @@ async def _(event):
         await event.reply("Reply to a zip file.")
         return
     if event.is_group:
-        if not (await is_register_admin(event.input_chat, event.message.sender_id)):
+        if not await is_register_admin(event.input_chat, event.message.sender_id):
             await event.reply(
                 " Hai.. You are not admin.. You can't use this command.. But you can use in my pm🙈"
             )

@@ -13,7 +13,10 @@ sites_list = {
     "Telegram": "https://api.telegram.org",
     "Google": "https://google.com",
     "Anilist": "https://graphql.anilist.co",
-    "Jikan": "https://api.jikan.moe/v3"
+    "Jikan": "https://api.jikan.moe/v3",
+    "Hindi K Drama": "https://hindikdrama.xyz",
+    "Yuki": "https://cdn-hindikdrama.com/"
+    
 }
 
 
@@ -80,7 +83,7 @@ def ping(update: Update, context: CallbackContext):
     uptime = get_readable_time((time.time() - StartTime))
 
     message.edit_text(
-        "PONG!!\n"
+        "Cutie Cutie! PONG PONG!\n"
         "<b>Time Taken:</b> <code>{}</code>\n"
         "<b>Service uptime:</b> <code>{}</code>".format(telegram_ping, uptime),
         parse_mode=ParseMode.HTML)
@@ -89,7 +92,7 @@ def ping(update: Update, context: CallbackContext):
 @run_async
 @sudo_plus
 def pingall(update: Update, context: CallbackContext):
-    to_ping = ["Google", "Anilist", "Telegram", "Jikan"]
+    to_ping = ["Google", "Anilist", "Telegram", "Jikan", "Hindi K Drama", "Yuki"]
     pinged_list = ping_func(to_ping)
     pinged_list.insert(2, '')
     uptime = get_readable_time((time.time() - StartTime))

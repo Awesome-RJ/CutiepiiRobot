@@ -1,22 +1,27 @@
 import json, time, os
 from io import BytesIO
-from telegram.error import BadRequest
+
 from telegram import ParseMode, Message
-from Cutiepii_Robot.__main__ import DATA_IMPORT
+from telegram.error import BadRequest
 from telegram.ext import CommandHandler, run_async
+
 import Cutiepii_Robot.modules.sql.notes_sql as sql
+from Cutiepii_Robot import dispatcher, LOGGER, OWNER_ID, JOIN_LOGGER
+from Cutiepii_Robot.__main__ import DATA_IMPORT
+from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
+from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
+
 # from Cutiepii_Robot.modules.rules import get_rules
-import Cutiepii_Robot.modules.sql.locks_sql as locksql
 import Cutiepii_Robot.modules.sql.rules_sql as rulessql
-from Cutiepii_Robot.modules.connection import connected
-# import Cutiepii_Robot.modules.sql.welcome_sql as welcsql
+
 # from Cutiepii_Robot.modules.sql import warns_sql as warnssql
 import Cutiepii_Robot.modules.sql.blacklist_sql as blacklistsql
 from Cutiepii_Robot.modules.sql import disable_sql as disabledsql
-from Cutiepii_Robot import dispatcher, LOGGER, OWNER_ID, JOIN_LOGGER
-from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
+
 # from Cutiepii_Robot.modules.sql import cust_filters_sql as filtersql
-from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
+# import Cutiepii_Robot.modules.connectionnRobot.modules.sql.welcome_sql as welcsql
+import Cutiepii_Robot.modules.sql.locks_sql as locksql
+from Cutiepii_Robot.modules.connection import connected
 
 
 @run_async
@@ -94,7 +99,7 @@ def import_data(update, context):
                 mod.__import_data__(str(chat.id), data)
         except Exception:
             msg.reply_text(
-                "An error occurred while recovering your data. The process failed. If you experience a problem with this, please take it to @Techno_Ocean"
+                "An error occurred while recovering your data. The process failed. If you experience a problem with this, please take it to @OnePunchSupport"
             )
 
             LOGGER.exception(
@@ -313,7 +318,7 @@ def export_data(update, context):
         },
     }
     baccinfo = json.dumps(backup, indent=4)
-    f = open("Cutiepii_Robot{}.backup".format(chat_id), "w")
+    f = open("SaitamaRobot{}.backup".format(chat_id), "w")
     f.write(str(baccinfo))
     f.close()
     context.bot.sendChatAction(current_chat_id, "upload_document")
@@ -329,8 +334,8 @@ def export_data(update, context):
         pass
     context.bot.sendDocument(
         current_chat_id,
-        document=open("Cutiepii_Robot{}.backup".format(chat_id), "rb"),
-        caption="*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `Cutiepii_Robot-Backup` was specially made for notes."
+        document=open("SaitamaRobot{}.backup".format(chat_id), "rb"),
+        caption="*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `SaitamaRobot-Backup` was specially made for notes."
         .format(chat.title, chat_id, tgl),
         timeout=360,
         reply_to_message_id=msg.message_id,
@@ -346,7 +351,7 @@ def put_chat(chat_id, value, chat_data):
         status = False
     else:
         status = True
-    chat_data[chat_id] = {"backups": {"status": status, "value": value}}
+    chat_data[chat_id]=  {"backups": {"status": status, "value": value}}
 
 
 def get_chat(chat_id, chat_data):

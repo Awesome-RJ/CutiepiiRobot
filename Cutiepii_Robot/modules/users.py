@@ -1,14 +1,15 @@
 from io import BytesIO
 from time import sleep
 
+from telegram import TelegramError, Update
+from telegram.error import BadRequest, Unauthorized
+from telegram.ext import (CallbackContext, CommandHandler, Filters,
+                          MessageHandler, run_async)
+
 import Cutiepii_Robot.modules.sql.users_sql as sql
 from Cutiepii_Robot import DEV_USERS, LOGGER, OWNER_ID, dispatcher
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus, sudo_plus
 from Cutiepii_Robot.modules.sql.users_sql import get_all_users
-from telegram import TelegramError, Update
-from telegram.error import BadRequest
-from telegram.ext import (CallbackContext, CommandHandler, Filters,
-                          MessageHandler, run_async)
 
 USERS_GROUP = 4
 CHAT_GROUP = 5
@@ -127,19 +128,22 @@ def chats(update: Update, context: CallbackContext):
             pass
 
     with BytesIO(str.encode(chatfile)) as output:
-        output.name = "chatslist.txt"
+        output.name = "groups_list.txt"
         update.effective_message.reply_document(
             document=output,
-            filename="chatslist.txt",
-            caption="Here is the list of chats in my database.")
+            filename="groups_list.txt",
+            caption="Here be the list of groups in my database.")
 
 
 @run_async
 def chat_checker(update: Update, context: CallbackContext):
     bot = context.bot
-    if update.effective_message.chat.get_member(
-            bot.id).can_send_messages is False:
-        bot.leaveChat(update.effective_message.chat.id)
+    try:
+        if update.effective_message.chat.get_member(
+                bot.id).can_send_messages is False:
+            bot.leaveChat(update.effective_message.chat.id)
+    except Unauthorized:
+        pass
 
 
 def __user_info__(user_id):

@@ -1,16 +1,3 @@
-#    Copyright (C) 2020-2021 by @Awesome_RJ
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import time
 from pyrogram import filters
@@ -22,7 +9,9 @@ from pyrogram.errors.exceptions.bad_request_400 import (
 )
 from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
 #from Cutiepii_Robot import OWNER_ID as SUDO_USERS
-from Cutiepii_Robot import pgram
+
+from Cutiepii_Robot import pgram 
+
 from Cutiepii_Robot.modules.sql import forceSubscribe_sql as sql
 logging.basicConfig(level=logging.INFO)
 static_data_filter = filters.create(
@@ -123,7 +112,7 @@ def _check_member(client, message):
 @pgram.on_message(filters.command(["forcesubscribe", "forcesub"]) & ~filters.private)
 def config(client, message):
     user = client.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status is "creator" or user.user.id == 1141839926:
+    if user.status == "creator" or user.user.id == 1141839926:
         chat_id = message.chat.id
         if len(message.command) > 1:
             input_str = message.command[1]

@@ -56,12 +56,16 @@ if is_module_loaded(FILENAME):
                                 command[1].lower()
                                 == message.bot.username.lower()):
                             return None
-                        if SpamChecker.check_user(update.effective_user.id):
+                        chat = update.effective_chat
+                        user = update.effective_user
+                        if user.id == 1087968824:
+                            user_id = chat.id
+                        else:
+                            user_id = user.id
+                        if SpamChecker.check_user(user_id):
                             return None
                         filter_result = self.filters(update)
                         if filter_result:
-                            chat = update.effective_chat
-                            user = update.effective_user
                             # disabled, admincmd, user admin
                             if sql.is_command_disabled(chat.id,
                                                        command[0].lower()):
@@ -157,7 +161,7 @@ if is_module_loaded(FILENAME):
         args = context.args
         chat = update.effective_chat
         if len(args) >= 1:
-            disable_module = "Cutiepii_Robot.modules." + args[0].rsplit(".", 1)[0]
+            disable_module = "SaitamaRobot.modules." + args[0].rsplit(".", 1)[0]
 
             try:
                 module = importlib.import_module(disable_module)

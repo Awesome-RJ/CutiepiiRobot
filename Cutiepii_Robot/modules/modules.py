@@ -1,6 +1,7 @@
 import importlib
+import collections
 
-from Cutiepii_Robot import dispatcher
+from Cutiepii_Robot import dispatcher, telethn
 from Cutiepii_Robot.__main__ import (CHAT_SETTINGS, DATA_EXPORT, DATA_IMPORT,
                                    HELPABLE, IMPORTED, MIGRATEABLE, STATS,
                                    USER_INFO, USER_SETTINGS)
@@ -18,7 +19,7 @@ def load(update: Update, context: CallbackContext):
         f"Attempting to load module : <b>{text}</b>", parse_mode=ParseMode.HTML)
 
     try:
-        imported_module = importlib.import_module("Cutiepii_Robot.modules." +
+        imported_module = importlib.import_module("SaitamaRobot.modules." +
                                                   text)
     except:
         load_messasge.edit_text("Does that module even exist?")
@@ -35,11 +36,15 @@ def load(update: Update, context: CallbackContext):
     if "__handlers__" in dir(imported_module):
         handlers = imported_module.__handlers__
         for handler in handlers:
-            if type(handler) != tuple:
+            if not isinstance(handler, tuple):
                 dispatcher.add_handler(handler)
             else:
-                handler_name, priority = handler
-                dispatcher.add_handler(handler_name, priority)
+                if isinstance(handler[0], collections.Callable):
+                    callback, telethon_event = handler
+                    telethn.add_event_handler(callback, telethon_event)
+                else:
+                    handler_name, priority = handler
+                    dispatcher.add_handler(handler_name, priority)
     else:
         IMPORTED.pop(imported_module.__mod_name__.lower())
         load_messasge.edit_text("The module cannot be loaded.")
@@ -85,7 +90,7 @@ def unload(update: Update, context: CallbackContext):
         parse_mode=ParseMode.HTML)
 
     try:
-        imported_module = importlib.import_module("Cutiepii_Robot.modules." +
+        imported_module = importlib.import_module("SaitamaRobot.modules." +
                                                   text)
     except:
         unload_messasge.edit_text("Does that module even exist?")
@@ -101,14 +106,18 @@ def unload(update: Update, context: CallbackContext):
     if "__handlers__" in dir(imported_module):
         handlers = imported_module.__handlers__
         for handler in handlers:
-            if type(handler) == bool:
+            if isinstance(handler, bool):
                 unload_messasge.edit_text("This module can't be unloaded!")
                 return
-            elif type(handler) != tuple:
+            elif not isinstance(handler, tuple):
                 dispatcher.remove_handler(handler)
             else:
-                handler_name, priority = handler
-                dispatcher.remove_handler(handler_name, priority)
+                if isinstance(handler[0], collections.Callable):
+                    callback, telethon_event = handler
+                    telethn.remove_event_handler(callback, telethon_event)
+                else:
+                    handler_name, priority = handler
+                    dispatcher.remove_handler(handler_name, priority)
     else:
         unload_messasge.edit_text("The module cannot be unloaded.")
         return
@@ -152,7 +161,7 @@ def listmodules(update: Update, context: CallbackContext):
     for helpable_module in HELPABLE:
         helpable_module_info = IMPORTED[helpable_module]
         file_info = IMPORTED[helpable_module_info.__mod_name__.lower()]
-        file_name = file_info.__name__.rsplit("Cutiepii_Robot.modules.", 1)[1]
+        file_name = file_info.__name__.rsplit("SaitamaRobot.modules.", 1)[1]
         mod_name = file_info.__mod_name__
         module_list.append(f'- <code>{mod_name} ({file_name})</code>\n')
     module_list = "Following modules are loaded : \n\n" + ''.join(module_list)

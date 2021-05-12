@@ -12,10 +12,10 @@ from youtube_dl.utils import (DownloadError, ContentTooShortError,
 
 from telethon import types
 from telethon.tl import functions
-from Cutiepii_Robot.cutiepii import Cutiepii_Robot
+from Cutiepii_Robot.Cutiepii_Robot import Cutiepii_Robot
 from youtubesearchpython import SearchVideos
 from tswift import Song
-
+from Cutiepii_Robot import telethn as tbot
 
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
@@ -45,7 +45,7 @@ JULIAVSONG = "@MissJuliaRobotMP4"
 @Cutiepii_Robot(pattern="^/lyrics ?(.*)")
 async def download_lyrics(v_url):
     if v_url.is_group:
-        if (await is_register_admin(v_url.input_chat, v_url.message.sender_id)):
+        if await is_register_admin(v_url.input_chat, v_url.message.sender_id):
             pass
         elif v_url.chat_id == iid and v_url.sender_id == userss:
             pass
@@ -80,9 +80,14 @@ file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
 
 __help__ = """
- - /song <songname artist(optional)>: uploads the song in it's best quality available
- - /video <songname artist(optional)>: uploads the video song in it's best quality available
- - /lyrics <songname artist(optional)>: sends the complete lyrics of the song provided as input
+*Song:*
+ • `/song <songname artist(optional)`*:* uploads the song in it's best quality available
+ • `/video <songname artist(optional)>`*:* uploads the video song in it's best quality available
+ • `/lyrics <songname artist(optional)>`*:* sends the complete lyrics of the song provided as input
+ 
+ *Youtube:*
+ • `/yt <text>`*:* perform a youtube search
+ • `/ytaudio <link> or /ytvideo <link>`*:* Downlods a video or audio from a youtube video to the bots local server
  
 """
-__mod_name__ = "Music"
+__mod_name__ = "YT And Music"

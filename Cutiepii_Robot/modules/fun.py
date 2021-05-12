@@ -1,6 +1,7 @@
 import html
 import random
 import time
+import requests
 
 import Cutiepii_Robot.modules.fun_strings as fun_strings
 from Cutiepii_Robot import dispatcher
@@ -18,38 +19,7 @@ GIF_ID = "CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr
 def runs(update: Update, context: CallbackContext):
     update.effective_message.reply_text(random.choice(fun_strings.RUN_STRINGS))
 
-
-@run_async
-def sanitize(update: Update, context: CallbackContext):
-    message = update.effective_message
-    name = (
-        message.reply_to_message.from_user.first_name
-        if message.reply_to_message
-        else message.from_user.first_name
-    )
-    reply_animation = (
-        message.reply_to_message.reply_animation
-        if message.reply_to_message
-        else message.reply_animation
-    )
-    reply_animation(GIF_ID, caption=f"*Sanitizes {name}*")
-
-
-@run_async
-def sanitize(update: Update, context: CallbackContext):
-    message = update.effective_message
-    name = (
-        message.reply_to_message.from_user.first_name
-        if message.reply_to_message
-        else message.from_user.first_name
-    )
-    reply_animation = (
-        message.reply_to_message.reply_animation
-        if message.reply_to_message
-        else message.reply_animation
-    )
-    reply_animation(random.choice(fun_strings.GIFS), caption=f"*Sanitizes {name}*")
-
+# -----------------------------
 
 @run_async
 def slap(update: Update, context: CallbackContext):
@@ -286,21 +256,27 @@ def weebify(update: Update, context: CallbackContext):
 
 __help__ = """
  • `/runs`*:* reply a random string from an array of replies
+ • `/pasta*:* Famous copypasta meme, try and see. 
  • `/slap`*:* slap a user, or get slapped if not a reply
- • `/shrug`*:* get shrug XD
+ • `/shrug or /cri`*:* get shrug XD
  • `/table`*:* get flip/unflip :v
  • `/toss`*:* Tosses A coin
+ • `/clap*:* Claps on someones message!
  • `/bluetext`*:* check urself :V
  • `/roll`*:* Roll a dice
  • `/rlg`*:* Join ears,nose,mouth and create an emo ;-;
  • `/shout <keyword>`*:* write anything you want to give loud shout
  • `/weebify <text>`*:* returns a weebified text
- • `/sanitize`*:* always use this before /pat or any contact
  • `/pat`*:* pats a user, or get patted
+ • `/decide*:* Randomly answer yes no etc. 
+ • `/abuse*:* Abuses the retard!
  • `/8ball`*:* predicts using 8ball method 
+ • `/owo*:* UwU-fy whole text XD.
+ • `/recite*:* Logical quotes to change your life.
+ • `/stretch*:*  streeeeeeetch iiiiiiit.
+ • `/roll*:* Rolls a dice
 """
 
-SANITIZE_HANDLER = DisableAbleCommandHandler("sanitize", sanitize)
 RUNS_HANDLER = DisableAbleCommandHandler("runs", runs)
 SLAP_HANDLER = DisableAbleCommandHandler("slap", slap)
 PAT_HANDLER = DisableAbleCommandHandler("pat", pat)
@@ -316,7 +292,6 @@ WEEBIFY_HANDLER = DisableAbleCommandHandler("weebify", weebify)
 
 dispatcher.add_handler(WEEBIFY_HANDLER)
 dispatcher.add_handler(SHOUT_HANDLER)
-dispatcher.add_handler(SANITIZE_HANDLER)
 dispatcher.add_handler(RUNS_HANDLER)
 dispatcher.add_handler(SLAP_HANDLER)
 dispatcher.add_handler(PAT_HANDLER)
@@ -339,10 +314,9 @@ __command_list__ = [
     "rlg",
     "table",
     "pat",
-    "sanitize",
     "shout",
     "weebify",
-    "8ball",
+    "8ball"
 ]
 __handlers__ = [
     RUNS_HANDLER,
@@ -354,8 +328,7 @@ __handlers__ = [
     BLUETEXT_HANDLER,
     RLG_HANDLER,
     TABLE_HANDLER,
-    SANITIZE_HANDLER,
     SHOUT_HANDLER,
     WEEBIFY_HANDLER,
-    EIGHTBALL_HANDLER,
+    EIGHTBALL_HANDLER
 ]

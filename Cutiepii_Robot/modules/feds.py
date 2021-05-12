@@ -5,7 +5,6 @@ import re
 import time
 import uuid
 from io import BytesIO
-import html
 
 import Cutiepii_Robot.modules.sql.feds_sql as sql
 from Cutiepii_Robot import (EVENT_LOGS, LOGGER, OWNER_ID, DRAGONS, TIGERS, WOLVES,
@@ -678,7 +677,7 @@ def fed_ban(update: Update, context: CallbackContext):
 							 "\n<b>Federation Admin:</b> {}" \
 							 "\n<b>User:</b> {}" \
 							 "\n<b>User ID:</b> <code>{}</code>" \
-							 "\n<b>Reason:</b> {}".format(fed_name, mention_html(user.id, user.first_name), user_target, fban_user_id, reason),
+							 "\n<b>Reason:</b> {}".format(fed_name, mention_html(user.id, user.first_name), user_target, fban_user_id, reason), 
 							html=True)
 		"""
 
@@ -788,7 +787,7 @@ def fed_ban(update: Update, context: CallbackContext):
 							 "\n<b>Federation Admin:</b> {}" \
 							 "\n<b>User:</b> {}" \
 							 "\n<b>User ID:</b> <code>{}</code>" \
-							 "\n<b>Reason:</b> {}".format(fed_name, mention_html(user.id, user.first_name), user_target, fban_user_id, reason),
+							 "\n<b>Reason:</b> {}".format(fed_name, mention_html(user.id, user.first_name), user_target, fban_user_id, reason), 
 							html=True)
 		"""
 
@@ -2120,7 +2119,7 @@ But then you have many groups, and you don't want this spammer to be in one of y
 You can even designate federation admins, so your trusted admin can ban all the spammers from chats you want to protect.\n
 
 *Commands:*\n
-Feds are now divided into 3 sections for your ease.
+Feds are now divided into 3 sections for your ease. 
 • `/fedownerhelp`*:* Provides help for fed creation and owner only commands
 • `/fedadminhelp`*:* Provides help for fed administration commands
 • `/feduserhelp`*:* Provides help for commands anyone can use

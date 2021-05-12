@@ -1,18 +1,63 @@
- # animequote Module Developed and Provided by @uday_gondaliya
-
-import html
-import random
-import Cutiepii_Robot.modules.animequote_string as animequote_string
+import json
+import requests
 from Cutiepii_Robot import dispatcher
-from telegram import ParseMode, Update, Bot
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from telegram.ext import CallbackContext, run_async
+from telegram import ParseMode, Update, InlineKeyboardMarkup, InlineKeyboardButton, replymarkup
+from telegram.error import BadRequest
+from telegram.ext import CallbackContext, CommandHandler, Filters, run_async, CallbackQueryHandler
+
+
+def anime_quote():
+    url = "https://elianaapi.herokuapp.com/fun/quoterandom"
+    # since text attribute returns dictionary like string
+    response = requests.get(url)
+    try:
+        dic = json.loads(response.text)
+    except Exception:
+        pass
+    quote = dic["quote"]
+    character = dic["character"]
+    anime = dic["anime"]
+    return quote, character, anime
+
 
 @run_async
-def aq(update: Update, context: CallbackContext):
-    args = context.args
-    update.effective_message.reply_text(random.choice(animequote_string.ANIMEQUOTE))
+def quotes(update: Update, context: CallbackContext):
+    message = update.effective_message
+    quote, character, anime = anime_quote()
+    msg = f"<i>❝{quote}❞</i>\n\n<b>{character} from {anime}</b>"
+    keyboard = InlineKeyboardMarkup([[
+        InlineKeyboardButton(
+            text="Change🔁",
+            callback_data="change_quote")]])
+    message.reply_text(
+        msg,
+        reply_markup=keyboard,
+        parse_mode=ParseMode.HTML,
+    )
 
-AQ_HANDLER = DisableAbleCommandHandler("aq", aq)
 
-dispatcher.add_handler(AQ_HANDLER)
+@run_async
+def change_quote(update: Update, context: CallbackContext):
+    query = update.callback_query
+    chat = update.effective_chat
+    message = update.effective_message
+    quote, character, anime = anime_quote()
+    msg = f"<i>❝{quote}❞</i>\n\n<b>{character} from {anime}</b>"
+    keyboard = InlineKeyboardMarkup([[
+        InlineKeyboardButton(
+            text="Change🔁",
+            callback_data="quote_change")]])
+    message.edit_text(msg, reply_markup=keyboard,
+                      parse_mode=ParseMode.HTML)
+
+
+QUOTE = DisableAbleCommandHandler("quote", quotes)
+CHANGE_QUOTE = CallbackQueryHandler(
+    change_quote, pattern=r"change_.*")
+QUOTE_CHANGE = CallbackQueryHandler(
+    change_quote, pattern=r"quote_.*")
+
+dispatcher.add_handler(QUOTE)
+dispatcher.add_handler(CHANGE_QUOTE)
+dispatcher.add_handler(QUOTE_CHANGE)
