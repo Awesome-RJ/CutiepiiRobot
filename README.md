@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-<a href="https://app.codacy.com/gh/Rajkumar-27/CutiepiiRobot?utm_source=github.com&utm_medium=referral&utm_content=AnimeKaizoku/Cutiepii-Robot&utm_campaign=Badge_Grade_Settings" alt="Codacy Badge">
+<a href="https://app.codacy.com/gh/Rajkumar-27/CutiepiiRobot?utm_source=github.com&utm_medium=referral&utm_content=Awesome-RJ/CutiepiiRobot&utm_campaign=Badge_Grade_Settings" alt="Codacy Badge">
 <img src="https://api.codacy.com/project/badge/Grade/6141417ceaf84545bab6bd671503df51" /> </a>
 <a href="https://github.com/Rajkumar-27/CutiepiiRobot" alt="Libraries.io dependency status for GitHub repo"> <img src="https://img.shields.io/librariesio/github/animekaizoku/Cutiepii-Robot" /> </a>
 <a href="http://hits.dwyl.com/animekaizoku/CutiepiiRobot" alt="HitCount"> <img src="http://hits.dwyl.com/animekaizoku/Cutiepii-Robot.svg" /> </a>
@@ -18,7 +18,7 @@
 <a href="https://github.com/Rajkumar-27/CutiepiiRobot" alt="GitHub closed issues"> <img src="https://img.shields.io/github/issues-closed-raw/animekaizoku/Cutiepii-Robot?style=flat&logo=github&color=success" /> </a>
 <a href="https://github.com/Rajkumar-27/CutiepiiRobot" alt="GitHub commit activity"> <img src="https://img.shields.io/github/commit-activity/m/animekaizoku/Cutiepii-Robot" /> </a>
 <a href="https://github.com/Rajkumar-27/CutiepiiRobot/graphs/contributors" alt="GitHub contributors"> <img src="https://img.shields.io/github/contributors/animekaizoku/Cutiepii-Robot?style=flat&logo=github" /> </a>
-<a href="https://github.com/Rajkumar-27/CutiepiiRobot/network/members" alt="GitHub forks"> <img src="https://img.shields.io/github/forks/AnimeKaizoku/Cutiepii-Robot?label=Forks&logo=github" /> </a>
+<a href="https://github.com/Rajkumar-27/CutiepiiRobot/network/members" alt="GitHub forks"> <img src="https://img.shields.io/github/forks/Awesome-RJ/Cutiepii-Robot?label=Forks&logo=github" /> </a>
 <a href="https://github.com/Rajkumar-27/CutiepiiRobot" alt="GitHub closed pull requests"> <img src="https://img.shields.io/github/issues-pr-closed-raw/animekaizoku/Cutiepii-Robot?color=success" /> </a>
 <a href="https://github.com/Rajkumar-27/CutiepiiRobot" alt="GitHub issues"> <img src="https://img.shields.io/github/issues-raw/animekaizoku/Cutiepii-Robot?style=flat&logo=github&color=yellow" /> </a>
 </p>
