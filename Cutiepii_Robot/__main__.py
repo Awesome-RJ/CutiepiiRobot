@@ -1,13 +1,11 @@
 import importlib
-import html
-import time
 import re
 from sys import argv
 from typing import Optional
 
 from Cutiepii_Robot import (ALLOW_EXCL, CERT_PATH, DONATION_LINK, LOGGER,
                           OWNER_ID, PORT, SUPPORT_CHAT, TOKEN, URL, WEBHOOK,
-                          dispatcher, StartTime, telethn, updater, pgram)
+                          dispatcher, telethn, updater)
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
 from Cutiepii_Robot.modules import ALL_MODULES
@@ -22,44 +20,13 @@ from telegram.ext import (CallbackContext, CallbackQueryHandler, CommandHandler,
 from telegram.ext.dispatcher import DispatcherHandlerStop, run_async
 from telegram.utils.helpers import escape_markdown
 
-
-def get_readable_time(seconds: int) -> str:
-    count = 0
-    ping_time = ""
-    time_list = []
-    time_suffix_list = ["s", "m", "h", "days"]
-
-    while count < 4:
-        count += 1
-        if count < 3:
-            remainder, result = divmod(seconds, 60)
-        else:
-            remainder, result = divmod(seconds, 24)
-        if seconds == 0 and remainder == 0:
-            break
-        time_list.append(int(result))
-        seconds = int(remainder)
-
-    for x in range(len(time_list)):
-        time_list[x] = str(time_list[x]) + time_suffix_list[x]
-    if len(time_list) == 4:
-        ping_time += time_list.pop() + ", "
-
-    time_list.reverse()
-    ping_time += ":".join(time_list)
-
-    return ping_time
-
-CUTIEPII_IMG = "https://telegra.ph/file/d31755c8e0245be16c4f5.png"
-CUTIEPINGIMG = "https://telegra.ph/file/986ab26f3ef5902ef8061.mp4"
-
-
 PM_START_TEXT = """
-Hy my Darling {}, I am Your SweetHeart.
-
-I am an Anime themed advance group management bot with a lot of Sexy Features.
-
+Hy my Darling {}, I am Your SweetHeart!
+// I am an Anime themed advance group management bot with a lot of Sexy Features.
+==========================
+Wanna Add me to your Group? Just click the button below!
 Try the Help buttons below to know my abilities [^_^](https://telegra.ph/file/d31755c8e0245be16c4f5.png).
+==========================
 """
 
 HELP_STRINGS = """
@@ -73,14 +40,14 @@ I can help you with following functions in managing group.
  • /settings:
    • in PM: will send you your settings for all supported modules.
    • in a group: will redirect you to pm, with all that chat's settings.
-
-
 {}
 And the following:
 """.format(
     dispatcher.bot.first_name, ""
     if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
 
+CUTIEPII_IMG = "https://telegra.ph/file/d31755c8e0245be16c4f5.png"
+CUTIEPINGIMG = "https://telegra.ph/file/986ab26f3ef5902ef8061.mp4"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
 Cutiepii is hosted on one of Yuki's Servers.\
@@ -93,6 +60,7 @@ STATS = []
 USER_INFO = []
 DATA_IMPORT = []
 DATA_EXPORT = []
+
 CHAT_SETTINGS = {}
 USER_SETTINGS = {}
 
@@ -142,7 +110,6 @@ def send_help(chat_id, text, keyboard=None):
         chat_id=chat_id,
         text=text,
         parse_mode=ParseMode.MARKDOWN,
-        disable_web_page_preview=True,
         reply_markup=keyboard)
 
 
@@ -157,23 +124,10 @@ def test(update: Update, context: CallbackContext):
 @run_async
 def start(update: Update, context: CallbackContext):
     args = context.args
-    uptime = get_readable_time((time.time() - StartTime))
     if update.effective_chat.type == "private":
         if len(args) >= 1:
             if args[0].lower() == "help":
                 send_help(update.effective_chat.id, HELP_STRINGS)
-            elif args[0].lower().startswith("ghelp_"):
-                mod = args[0].lower().split('_', 1)[1]
-                if not HELPABLE.get(mod, False):
-                    return
-                send_help(
-                    update.effective_chat.id, HELPABLE[mod].__help__,
-                    InlineKeyboardMarkup([[
-                        InlineKeyboardButton(
-                            text="Back", callback_data="help_back")
-                    ]]))
-            elif args[0].lower() == "markdownhelp":
-                IMPORTED["extras"].markdown_help_sender(update)
             elif args[0].lower() == "disasters":
                 IMPORTED["disasters"].send_disasters(update)
             elif args[0].lower().startswith("stngs_"):
@@ -196,36 +150,33 @@ def start(update: Update, context: CallbackContext):
                 CUTIEPII_IMG,
                 PM_START_TEXT.format(
                     escape_markdown(first_name),
-                    escape_markdown(context.bot.first_name)),
+                    escape_markdown(context.bot.first_name), SUPPORT_CHAT),
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup(
                     [[
                         InlineKeyboardButton(
-                            text="Add Cutiepii to your group",
+                            text="👥 Add Cutiepii to your group",
                             url="t.me/{}?startgroup=true".format(
                                 context.bot.username))
                     ],
                    [
-                       InlineKeyboardButton(
-                                text="Help",
-                                url="t.me/{}?start=help".format(
-                                    context.bot.username))
+                       InlineKeyboardButton(text="❓ Help", callback_data="help_back")
                      ],
                     [
                         InlineKeyboardButton(
-                                 text="Try inline mode",
+                                 text="⚙️ Try inline mode",
                                  switch_inline_query_current_chat=""),                   
                        InlineKeyboardButton(
-                             text="Chat With Cutiepii Lovers",
+                             text="👨‍❤️‍💋‍👨 Chat With Cutiepii Lovers",
                              url="https://t.me/Hindi_K_Drama_1")
                      ],
                      [
                          InlineKeyboardButton(
-                             text="Support Chat",
+                             text="🙋 Support Chat",
                              url=f"https://t.me/{SUPPORT_CHAT}"),
                          InlineKeyboardButton(
-                             text="Updates Channel",
+                             text="📺 Updates Channel",
                              url="https://t.me/Black_Knights_Union")
                   
                      ]]))
@@ -268,21 +219,18 @@ def error_callback(update: Update, context: CallbackContext):
 
 
 @run_async
-def help_button(update, context):
+def help_button(update: Update, context: CallbackContext):
     query = update.callback_query
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     prev_match = re.match(r"help_prev\((.+?)\)", query.data)
     next_match = re.match(r"help_next\((.+?)\)", query.data)
     back_match = re.match(r"help_back", query.data)
-
-    print(query.message.chat.id)
-
     try:
         if mod_match:
             module = mod_match.group(1)
-            text = ("Here is the help for the *{}* module:\n".format(
-                HELPABLE[module].__mod_name__) + HELPABLE[module].__help__)
-            query.message.edit_text(
+            text = "Here is the help for the *{}* module:\n".format(HELPABLE[module].__mod_name__) \
+                   + HELPABLE[module].__help__
+            query.message.reply_text(
                 text=text,
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
@@ -293,22 +241,22 @@ def help_button(update, context):
 
         elif prev_match:
             curr_page = int(prev_match.group(1))
-            query.message.edit_text(
-                text=HELP_STRINGS,
+            query.message.reply_text(
+                HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(curr_page - 1, HELPABLE, "help")))
 
         elif next_match:
             next_page = int(next_match.group(1))
-            query.message.edit_text(
-                text=HELP_STRINGS,
+            query.message.reply_text(
+                HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(next_page + 1, HELPABLE, "help")))
 
         elif back_match:
-            query.message.edit_text(
+            query.message.reply_text(
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
@@ -316,10 +264,16 @@ def help_button(update, context):
 
         # ensure no spinny white circle
         context.bot.answer_callback_query(query.id)
-        # query.message.delete()
-
-    except BadRequest:
-        pass
+        query.message.delete()
+    except BadRequest as excp:
+        if excp.message == "Message is not modified":
+            pass
+        elif excp.message == "Query_id_invalid":
+            pass
+        elif excp.message == "Message can't be deleted":
+            pass
+        else:
+            LOGGER.exception("Exception in help buttons. %s", str(query.data))
 
 
 @run_async
@@ -329,17 +283,7 @@ def get_help(update: Update, context: CallbackContext):
 
     # ONLY send help in PM
     if chat.type != chat.PRIVATE:
-        if len(args) >= 2 and any(args[1].lower() == x for x in HELPABLE):
-            module = args[1].lower()
-            update.effective_message.reply_text(
-                f"Contact me in PM to get help of {module.capitalize()}",
-                reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton(
-                        text="Help",
-                        url="t.me/{}?start=ghelp_{}".format(
-                            context.bot.username, module))
-                ]]))
-            return
+
         update.effective_message.reply_text(
             "Contact me in PM to get the list of possible commands.",
             reply_markup=InlineKeyboardMarkup([[
@@ -551,8 +495,7 @@ def main():
     start_handler = CommandHandler("start", start)
 
     help_handler = CommandHandler("help", get_help)
-    help_callback_handler = CallbackQueryHandler(
-        help_button, pattern=r"help_.*")
+    help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_")
 
     settings_handler = CommandHandler("settings", get_settings)
     settings_callback_handler = CallbackQueryHandler(
@@ -575,7 +518,7 @@ def main():
 
     if WEBHOOK:
         LOGGER.info("Using webhooks.")
-        updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
+        updater.start_webhook(listen="127.0.0.1", port=PORT, url_path=TOKEN)
 
         if CERT_PATH:
             updater.bot.set_webhook(
