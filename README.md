@@ -55,6 +55,8 @@ News channel as at [Cutiepii Updates](https://t.me/Cutiepii_Updates)
 
 • [Rajkumar](https://github.com/Awesome-RJ) 
 
+• [pokurt](https://github.com/pokurt) 
+
 • [Pranav ⁪⁬⁮⁮⁮⁮ajay](https://github.com/Red-Aura) 
 
 • [Paul Larsen](https://github.com/PaulSonOfLars) 
