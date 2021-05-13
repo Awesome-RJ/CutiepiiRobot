@@ -11,22 +11,22 @@
 <p align="center">
 <a href="https://app.codacy.com/gh/Awesome-RJ/CutiepiiRobot?utm_source=github.com&utm_medium=referral&utm_content=Awesome-RJ/CutiepiiRobot&utm_campaign=Badge_Grade_Settings" alt="Codacy Badge">
 <img src="https://api.codacy.com/project/badge/Grade/6141417ceaf84545bab6bd671503df51" /> </a>
-<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="Libraries.io dependency status for GitHub repo"> <img src="https://img.shields.io/librariesio/github/animekaizoku/Cutiepii-Robot" /> </a>
-<a href="http://hits.dwyl.com/animekaizoku/CutiepiiRobot" alt="HitCount"> <img src="http://hits.dwyl.com/animekaizoku/Cutiepii-Robot.svg" /> </a>
+<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="Libraries.io dependency status for GitHub repo"> <img src="https://img.shields.io/librariesio/github/Awesome-RJ/Cutiepii-Robot" /> </a>
+<a href="http://hits.dwyl.com/Awesome-RJ/CutiepiiRobot" alt="HitCount"> <img src="http://hits.dwyl.com/Awesome-RJ/Cutiepii-Robot.svg" /> </a>
 </p>
 <p align="center">
-<a href="https://github.com/Awesome-RJ7/CutiepiiRobot" alt="GitHub closed issues"> <img src="https://img.shields.io/github/issues-closed-raw/animekaizoku/Cutiepii-Robot?style=flat&logo=github&color=success" /> </a>
-<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub commit activity"> <img src="https://img.shields.io/github/commit-activity/m/animekaizoku/Cutiepii-Robot" /> </a>
-<a href="https://github.com/Awesome-RJ/CutiepiiRobot/graphs/contributors" alt="GitHub contributors"> <img src="https://img.shields.io/github/contributors/animekaizoku/Cutiepii-Robot?style=flat&logo=github" /> </a>
+<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub closed issues"> <img src="https://img.shields.io/github/issues-closed-raw/Awesome-RJ/Cutiepii-Robot?style=flat&logo=github&color=success" /> </a>
+<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub commit activity"> <img src="https://img.shields.io/github/commit-activity/m/Awesome-RJ/Cutiepii-Robot" /> </a>
+<a href="https://github.com/Awesome-RJ/CutiepiiRobot/graphs/contributors" alt="GitHub contributors"> <img src="https://img.shields.io/github/contributors/Awesome-RJ/Cutiepii-Robot?style=flat&logo=github" /> </a>
 <a href="https://github.com/Awesome-RJ/CutiepiiRobot/network/members" alt="GitHub forks"> <img src="https://img.shields.io/github/forks/Awesome-RJ/Cutiepii-Robot?label=Forks&logo=github" /> </a>
-<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub closed pull requests"> <img src="https://img.shields.io/github/issues-pr-closed-raw/animekaizoku/Cutiepii-Robot?color=success" /> </a>
-<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub issues"> <img src="https://img.shields.io/github/issues-raw/animekaizoku/Cutiepii-Robot?style=flat&logo=github&color=yellow" /> </a>
+<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub closed pull requests"> <img src="https://img.shields.io/github/issues-pr-closed-raw/Awesome-RJ/Cutiepii-Robot?color=success" /> </a>
+<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub issues"> <img src="https://img.shields.io/github/issues-raw/Awesome-RJ/Cutiepii-Robot?style=flat&logo=github&color=yellow" /> </a>
 </p>
 <p align="center">
-<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub release (latest by date including pre-releases)"> <img src="https://img.shields.io/github/v/release/animekaizoku/Cutiepii-Robot?include_prereleases?style=flat&logo=github" /> </a>
+<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub release (latest by date including pre-releases)"> <img src="https://img.shields.io/github/v/release/Awesome-RJ/Cutiepii-Robot?include_prereleases?style=flat&logo=github" /> </a>
 <a href="https://www.python.org/" alt="made-with-python"> <img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg?style=flat&logo=python&color=blue" /> </a>
 <a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="Docker!"> <img src="https://aleen42.github.io/badges/src/docker.svg" /> </a>
-<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub repo size"> <img src="https://img.shields.io/github/repo-size/animekaizoku/Cutiepii-Robot" /> </a>
+<a href="https://github.com/Awesome-RJ/CutiepiiRobot" alt="GitHub repo size"> <img src="https://img.shields.io/github/repo-size/Awesome-RJ/Cutiepii-Robot" /> </a>
 <a href="https://github.com/Awesome-RJ/CutiepiiRobot/blob/master/LICENSE" alt="GPLv3 license"> <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" /> </a>
 </p>
 <p align="center">
