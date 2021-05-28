@@ -53,18 +53,20 @@ News channel as at [Cutiepii Updates](https://t.me/Cutiepii_Updates)
 
 ## Credits 📍
 
-• [Rajkumar](https://github.com/Awesome-RJ) 
+• [Rajkumar](https://github.com/Awesome-RJ) :Dev, Owner
 
-• [pokurt](https://github.com/pokurt) 
+• [Martin](https://github.com/noob-kittu) :Dev
 
-• [Pranav ⁪⁬⁮⁮⁮⁮ajay](https://github.com/Red-Aura) 
+• [pokurt](https://github.com/pokurt) :Dev
 
-• [Paul Larsen](https://github.com/PaulSonOfLars) 
+• [Pranav ⁪⁬⁮⁮⁮⁮ajay](https://github.com/Red-Aura) :Dev
 
-• [Sawada](https://github.com/TsunayoshiSawada)
+• [Paul Larsen](https://github.com/PaulSonOfLars) :Dev
 
-• [Uday](https://github.com/Uday0011) 
+• [Sawada](https://github.com/TsunayoshiSawada):Dev
 
-• [InukaAsith](https://github.com/InukaAsith) 
+• [Uday](https://github.com/Uday0011) :Dev
+
+• [InukaAsith](https://github.com/InukaAsith) :Dev
 
 ## Thank You So Much all Contributors To Fix The Bug And Make A SweetHeart.
