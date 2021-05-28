@@ -55,9 +55,9 @@ News channel as at [Cutiepii Updates](https://t.me/Cutiepii_Updates)
 
 • [Rajkumar](https://github.com/Awesome-RJ) :Dev, Owner
 
-• [Martin](https://github.com/noob-kittu) :Dev
+• [Kittu](https://github.com/noob-kittu) :Dev
 
-• [pokurt](https://github.com/pokurt) :Dev
+• [Pokurt](https://github.com/pokurt) :Dev
 
 • [Pranav ⁪⁬⁮⁮⁮⁮ajay](https://github.com/Red-Aura) :Dev
 
