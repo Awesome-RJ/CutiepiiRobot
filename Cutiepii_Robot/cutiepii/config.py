@@ -1,3 +1,5 @@
+import sys
+
 from envparse import env
 from Cutiepii_Robot import LOGGER
 

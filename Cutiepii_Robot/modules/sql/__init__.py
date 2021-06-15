@@ -1,5 +1,6 @@
 from Cutiepii_Robot import DB_URI
 from sqlalchemy import create_engine
+from sqlalchemy.exc import NoSuchModuleError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -12,4 +13,9 @@ def start() -> scoped_session:
 
 
 BASE = declarative_base()
-SESSION = start()
+try:
+    SESSION = start()
+except NoSuchModuleError:
+    raise Exception(
+        "Your database config seems wrong, or bot can't connect to database!"
+    )

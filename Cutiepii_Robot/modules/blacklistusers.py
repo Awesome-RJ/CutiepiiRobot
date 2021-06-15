@@ -1,22 +1,30 @@
 # Module to blacklist users and prevent them from using commands by @TheRealPhoenix
 import html
 import Cutiepii_Robot.modules.sql.blacklistusers_sql as sql
-from Cutiepii_Robot import (DEV_USERS, OWNER_ID, DRAGONS, DEMONS, TIGERS, WOLVES,
-                          dispatcher)
+from Cutiepii_Robot import (
+    DEV_USERS,
+    OWNER_ID,
+    DRAGONS,
+    DEMONS,
+    TIGERS,
+    WOLVES,
+    dispatcher,
+)
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
-from Cutiepii_Robot.modules.helper_funcs.extraction import (extract_user,
-                                                          extract_user_and_text)
+from Cutiepii_Robot.modules.helper_funcs.extraction import (
+    extract_user,
+    extract_user_and_text,
+)
 from Cutiepii_Robot.modules.log_channel import gloggable
 from telegram import ParseMode, Update
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext, CommandHandler, run_async
+from telegram.ext import CallbackContext, CommandHandler
 from telegram.utils.helpers import mention_html
 
 BLACKLISTWHITELIST = [OWNER_ID] + DEV_USERS + DRAGONS + WOLVES + DEMONS
 BLABLEUSERS = [OWNER_ID] + DEV_USERS
 
 
-@run_async
 @dev_plus
 @gloggable
 def bl_user(update: Update, context: CallbackContext) -> str:
@@ -30,8 +38,7 @@ def bl_user(update: Update, context: CallbackContext) -> str:
         return ""
 
     if user_id == bot.id:
-        message.reply_text(
-            "How am I supposed to do my work if I am ignoring myself?")
+        message.reply_text("How am I supposed to do my work if I am ignoring myself?")
         return ""
 
     if user_id in BLACKLISTWHITELIST:
@@ -60,7 +67,6 @@ def bl_user(update: Update, context: CallbackContext) -> str:
     return log_message
 
 
-@run_async
 @dev_plus
 @gloggable
 def unbl_user(update: Update, context: CallbackContext) -> str:
@@ -103,7 +109,6 @@ def unbl_user(update: Update, context: CallbackContext) -> str:
         return ""
 
 
-@run_async
 @dev_plus
 def bl_users(update: Update, context: CallbackContext):
     users = []
@@ -114,17 +119,16 @@ def bl_users(update: Update, context: CallbackContext):
 
         if reason:
             users.append(
-                f"• {mention_html(user.id, html.escape(user.first_name))} :- {reason}"
+                f"• {mention_html(user.id, html.escape(user.first_name))} :- {reason}",
             )
         else:
-            users.append(
-                f"• {mention_html(user.id, html.escape(user.first_name))}")
+            users.append(f"• {mention_html(user.id, html.escape(user.first_name))}")
 
     message = "<b>Blacklisted Users</b>\n"
     if not users:
         message += "Noone is being ignored as of yet."
     else:
-        message += '\n'.join(users)
+        message += "\n".join(users)
 
     update.effective_message.reply_text(message, parse_mode=ParseMode.HTML)
 

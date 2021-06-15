@@ -1,7 +1,6 @@
 import html
 import random
 import time
-import requests
 
 import Cutiepii_Robot.modules.fun_strings as fun_strings
 from Cutiepii_Robot import dispatcher
@@ -12,16 +11,46 @@ from telegram import ChatPermissions, ParseMode, Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, run_async
 
-GIF_ID = "CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE"
+GIF_ID = "CgACAgQAAx0CSVUvGgAC7pgramfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE"
 
 
-@run_async
 def runs(update: Update, context: CallbackContext):
-    update.effective_message.reply_text(random.choice(fun_strings.RUN_STRINGS))
+    temp = random.choice(fun_strings.RUN_STRINGS)
+    if update.effective_user.id == 1170714920:
+        temp = "Run everyone, they just dropped a bomb 💣💣"
+    update.effective_message.reply_text(temp)
 
-# -----------------------------
 
-@run_async
+def sanitize(update: Update, context: CallbackContext):
+    message = update.effective_message
+    name = (
+        message.reply_to_message.from_user.first_name
+        if message.reply_to_message
+        else message.from_user.first_name
+    )
+    reply_animation = (
+        message.reply_to_message.reply_animation
+        if message.reply_to_message
+        else message.reply_animation
+    )
+    reply_animation(GIF_ID, caption=f"*Sanitizes {name}*")
+
+
+def sanitize(update: Update, context: CallbackContext):
+    message = update.effective_message
+    name = (
+        message.reply_to_message.from_user.first_name
+        if message.reply_to_message
+        else message.from_user.first_name
+    )
+    reply_animation = (
+        message.reply_to_message.reply_animation
+        if message.reply_to_message
+        else message.reply_animation
+    )
+    reply_animation(random.choice(fun_strings.GIFS), caption=f"*Sanitizes {name}*")
+
+
 def slap(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     message = update.effective_message
@@ -80,23 +109,50 @@ def slap(update: Update, context: CallbackContext):
     reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-@run_async
-def pat(update: Update, _):
-    msg = update.effective_message
-    pat = requests.get("https://some-random-api.ml/animu/pat").json()
-    link = pat.get("link")
-    if not link:
-        msg.reply_text("No URL was received from the API!")
-        return
-    msg.reply_video(link)
+def pat(update: Update, context: CallbackContext):
+    bot = context.bot
+    args = context.args
+    message = update.effective_message
+
+    reply_to = message.reply_to_message if message.reply_to_message else message
+
+    curr_user = html.escape(message.from_user.first_name)
+    user_id = extract_user(message, args)
+
+    if user_id:
+        patted_user = bot.get_chat(user_id)
+        user1 = curr_user
+        user2 = html.escape(patted_user.first_name)
+
+    else:
+        user1 = bot.first_name
+        user2 = curr_user
+
+    pat_type = random.choice(("Text", "Gif", "Sticker"))
+    if pat_type == "Gif":
+        try:
+            temp = random.choice(fun_strings.PAT_GIFS)
+            reply_to.reply_animation(temp)
+        except BadRequest:
+            pat_type = "Text"
+
+    if pat_type == "Sticker":
+        try:
+            temp = random.choice(fun_strings.PAT_STICKERS)
+            reply_to.reply_sticker(temp)
+        except BadRequest:
+            pat_type = "Text"
+
+    if pat_type == "Text":
+        temp = random.choice(fun_strings.PAT_TEMPLATES)
+        reply = temp.format(user1=user1, user2=user2)
+        reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-@run_async
 def roll(update: Update, context: CallbackContext):
     update.message.reply_text(random.choice(range(1, 7)))
 
 
-@run_async
 def shout(update: Update, context: CallbackContext):
     args = context.args
     text = " ".join(args)
@@ -111,12 +167,10 @@ def shout(update: Update, context: CallbackContext):
     return update.effective_message.reply_text(msg, parse_mode="MARKDOWN")
 
 
-@run_async
 def toss(update: Update, context: CallbackContext):
     update.message.reply_text(random.choice(fun_strings.TOSS))
 
 
-@run_async
 def shrug(update: Update, context: CallbackContext):
     msg = update.effective_message
     reply_text = (
@@ -125,18 +179,16 @@ def shrug(update: Update, context: CallbackContext):
     reply_text(r"¯\_(ツ)_/¯")
 
 
-@run_async
 def bluetext(update: Update, context: CallbackContext):
     msg = update.effective_message
     reply_text = (
         msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
     )
     reply_text(
-        "/BLUE /TEXT\n/MUST /CLICK\n/I /AM /A /STUPID /ANIMAL /THAT /IS /ATTRACTED /TO /COLORS"
+        "/BLUE /TEXT\n/MUST /CLICK\n/I /AM /A /STUPID /ANIMAL /THAT /IS /ATTRACTED /TO /COLORS",
     )
 
 
-@run_async
 def rlg(update: Update, context: CallbackContext):
     eyes = random.choice(fun_strings.EYES)
     mouth = random.choice(fun_strings.MOUTHS)
@@ -149,7 +201,15 @@ def rlg(update: Update, context: CallbackContext):
     update.message.reply_text(repl)
 
 
-@run_async
+def decide(update: Update, context: CallbackContext):
+    reply_text = (
+        update.effective_message.reply_to_message.reply_text
+        if update.effective_message.reply_to_message
+        else update.effective_message.reply_text
+    )
+    reply_text(random.choice(fun_strings.DECIDE))
+
+
 def eightball(update: Update, context: CallbackContext):
     reply_text = (
         update.effective_message.reply_to_message.reply_text
@@ -159,7 +219,6 @@ def eightball(update: Update, context: CallbackContext):
     reply_text(random.choice(fun_strings.EIGHTBALL))
 
 
-@run_async
 def table(update: Update, context: CallbackContext):
     reply_text = (
         update.effective_message.reply_to_message.reply_text
@@ -227,7 +286,6 @@ weebyfont = [
 ]
 
 
-@run_async
 def weebify(update: Update, context: CallbackContext):
     args = context.args
     message = update.effective_message
@@ -256,27 +314,22 @@ def weebify(update: Update, context: CallbackContext):
 
 __help__ = """
  • `/runs`*:* reply a random string from an array of replies
- • `/pasta*:* Famous copypasta meme, try and see. 
  • `/slap`*:* slap a user, or get slapped if not a reply
- • `/shrug or /cri`*:* get shrug XD
+ • `/shrug`*:* get shrug XD
  • `/table`*:* get flip/unflip :v
+ • `/decide`*:* Randomly answers yes/no/maybe
  • `/toss`*:* Tosses A coin
- • `/clap*:* Claps on someones message!
  • `/bluetext`*:* check urself :V
  • `/roll`*:* Roll a dice
  • `/rlg`*:* Join ears,nose,mouth and create an emo ;-;
  • `/shout <keyword>`*:* write anything you want to give loud shout
  • `/weebify <text>`*:* returns a weebified text
+ • `/sanitize`*:* always use this before /pat or any contact
  • `/pat`*:* pats a user, or get patted
- • `/decide*:* Randomly answer yes no etc. 
- • `/abuse*:* Abuses the retard!
- • `/8ball`*:* predicts using 8ball method 
- • `/owo*:* UwU-fy whole text XD.
- • `/recite*:* Logical quotes to change your life.
- • `/stretch*:*  streeeeeeetch iiiiiiit.
- • `/roll*:* Rolls a dice
+ • `/8ball`*:* predicts using 8ball method
 """
 
+SANITIZE_HANDLER = DisableAbleCommandHandler("sanitize", sanitize)
 RUNS_HANDLER = DisableAbleCommandHandler("runs", runs)
 SLAP_HANDLER = DisableAbleCommandHandler("slap", slap)
 PAT_HANDLER = DisableAbleCommandHandler("pat", pat)
@@ -285,6 +338,7 @@ TOSS_HANDLER = DisableAbleCommandHandler("toss", toss)
 SHRUG_HANDLER = DisableAbleCommandHandler("shrug", shrug)
 BLUETEXT_HANDLER = DisableAbleCommandHandler("bluetext", bluetext)
 RLG_HANDLER = DisableAbleCommandHandler("rlg", rlg)
+DECIDE_HANDLER = DisableAbleCommandHandler("decide", decide)
 EIGHTBALL_HANDLER = DisableAbleCommandHandler("8ball", eightball)
 TABLE_HANDLER = DisableAbleCommandHandler("table", table)
 SHOUT_HANDLER = DisableAbleCommandHandler("shout", shout)
@@ -292,6 +346,7 @@ WEEBIFY_HANDLER = DisableAbleCommandHandler("weebify", weebify)
 
 dispatcher.add_handler(WEEBIFY_HANDLER)
 dispatcher.add_handler(SHOUT_HANDLER)
+dispatcher.add_handler(SANITIZE_HANDLER)
 dispatcher.add_handler(RUNS_HANDLER)
 dispatcher.add_handler(SLAP_HANDLER)
 dispatcher.add_handler(PAT_HANDLER)
@@ -300,6 +355,7 @@ dispatcher.add_handler(TOSS_HANDLER)
 dispatcher.add_handler(SHRUG_HANDLER)
 dispatcher.add_handler(BLUETEXT_HANDLER)
 dispatcher.add_handler(RLG_HANDLER)
+dispatcher.add_handler(DECIDE_HANDLER)
 dispatcher.add_handler(EIGHTBALL_HANDLER)
 dispatcher.add_handler(TABLE_HANDLER)
 
@@ -312,11 +368,13 @@ __command_list__ = [
     "shrug",
     "bluetext",
     "rlg",
+    "decide",
     "table",
     "pat",
+    "sanitize",
     "shout",
     "weebify",
-    "8ball"
+    "8ball",
 ]
 __handlers__ = [
     RUNS_HANDLER,
@@ -327,8 +385,10 @@ __handlers__ = [
     SHRUG_HANDLER,
     BLUETEXT_HANDLER,
     RLG_HANDLER,
+    DECIDE_HANDLER,
     TABLE_HANDLER,
+    SANITIZE_HANDLER,
     SHOUT_HANDLER,
     WEEBIFY_HANDLER,
-    EIGHTBALL_HANDLER
+    EIGHTBALL_HANDLER,
 ]

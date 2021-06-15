@@ -1,4 +1,3 @@
-
 import asyncio
 import io
 import json
@@ -17,6 +16,7 @@ from cowpy import cow
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageEnhance, ImageFont, ImageOps
 from selenium import webdriver
+from io import BytesIO
 from selenium.webdriver.chrome.options import Options
 from telethon import *
 from telethon.tl import functions

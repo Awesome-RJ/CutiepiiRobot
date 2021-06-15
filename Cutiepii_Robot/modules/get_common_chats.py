@@ -7,10 +7,8 @@ from Cutiepii_Robot.modules.sql.users_sql import get_user_com_chats
 from telegram import Update
 from telegram.error import BadRequest, RetryAfter, Unauthorized
 from telegram.ext import CallbackContext, CommandHandler, Filters
-from telegram.ext.dispatcher import run_async
 
 
-@run_async
 def get_user_common_chats(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     msg = update.effective_message
@@ -39,14 +37,15 @@ def get_user_common_chats(update: Update, context: CallbackContext):
     if len(text) < 4096:
         msg.reply_text(text, parse_mode="HTML")
     else:
-        with open("common_chats.txt", 'w') as f:
+        with open("common_chats.txt", "w") as f:
             f.write(text)
-        with open("common_chats.txt", 'rb') as f:
+        with open("common_chats.txt", "rb") as f:
             msg.reply_document(f)
         os.remove("common_chats.txt")
 
 
 COMMON_CHATS_HANDLER = CommandHandler(
-    "getchats", get_user_common_chats, filters=Filters.user(OWNER_ID))
+    "getchats", get_user_common_chats, filters=Filters.user(OWNER_ID),
+)
 
 dispatcher.add_handler(COMMON_CHATS_HANDLER)

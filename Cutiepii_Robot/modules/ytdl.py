@@ -3,6 +3,8 @@ import time
 import math
 import asyncio
 import shutil
+import requests
+
 from youtube_dl import YoutubeDL
 from youtube_dl.utils import (DownloadError, ContentTooShortError,
                               ExtractorError, GeoRestrictedError,
@@ -12,10 +14,10 @@ from asyncio import sleep
 from telethon.tl.types import DocumentAttributeAudio
 from collections import deque
 from googleapiclient.discovery import build
-from Cutiepii_Robot.Cutiepii_Robot import Cutiepii_Robot
-from Cutiepii_Robot import YOUTUBE_API_KEY
 from html import unescape
-import requests
+
+from Cutiepii_Robot.event import register as Cutiepii_Robot
+from Cutiepii_Robot import YOUTUBE_API_KEY
 
 
 
@@ -140,4 +142,10 @@ async def download_video(v_url):
             supports_streaming=True,
             caption=ytdl_data['title'])
         os.remove(f"{ytdl_data['id']}.mp4")
-      
+
+__mod_name__ = "YouTube"
+
+__help__ = """
+ • `/ytvideo YTLINK`*:* download video from youtube. 
+ • `/ytaudio YTLINK`*:* download audio from youtube.
+"""

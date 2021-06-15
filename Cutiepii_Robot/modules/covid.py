@@ -14,7 +14,7 @@ from telegram import ParseMode, InputMediaPhoto, Update, TelegramError, ChatActi
 from telegram.ext import CommandHandler, run_async, CallbackContext
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
-@run_async
+
 def covid(update: Update, context: CallbackContext):
     message = update.effective_message
     text = message.text.split(' ', 1)

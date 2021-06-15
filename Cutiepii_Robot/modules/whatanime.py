@@ -5,15 +5,13 @@ import aiohttp
 import asyncio
 import datetime
 import tempfile
-
 from urllib.parse import quote as urlencode
 from decimal import Decimal
 from datetime import timedelta
-
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from Cutiepii_Robot import pgram 
+from Cutiepii_Robot import pgram as pbot
 
 session = aiohttp.ClientSession()
 progress_callback_data = {}
@@ -48,7 +46,7 @@ def calculate_eta(current, total, start_time):
     return ', '.join(thing)
 
 
-@pgram.on_message(filters.command('whatanime'))
+@pbot.on_message(filters.command('whatanime'))
 async def whatanime(c: Client, m: Message):
     media = m.photo or m.animation or m.video or m.document
     if not media:

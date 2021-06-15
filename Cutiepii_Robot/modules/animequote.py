@@ -21,7 +21,7 @@ def anime_quote():
     return quote, character, anime
 
 
-@run_async
+
 def quotes(update: Update, context: CallbackContext):
     message = update.effective_message
     quote, character, anime = anime_quote()
@@ -37,7 +37,7 @@ def quotes(update: Update, context: CallbackContext):
     )
 
 
-@run_async
+
 def change_quote(update: Update, context: CallbackContext):
     query = update.callback_query
     chat = update.effective_chat

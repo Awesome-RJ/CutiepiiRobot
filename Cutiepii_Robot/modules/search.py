@@ -1,152 +1,178 @@
+import io
+import os
 import re
+import glob
+import time
+import bs4
 import urllib
+import aiohttp
+import requests
+import html2text
 import urllib.request
 
-import bs4
-import requests
-from bs4 import BeautifulSoup
-from pyrogram import filters
-
-# This plugin is ported from https://github.com/thehamkercat/WilliamButcherBot
+from PIL import Image
 from search_engine_parser import GoogleSearch
+from bing_image_downloader import downloader
+from geopy.geocoders import Nominatim
+from urllib.parse import urlencode
+from bs4 import BeautifulSoup
+from io import BytesIO
+from telethon import *
+from telethon.tl import *
+from telethon.tl import functions
+from telethon.tl import types
+from telethon.tl.types import *
 
-from Cutiepii_Robot.modules.utils.fetch import fetch
+from Cutiepii_Robot import *
 from Cutiepii_Robot.event import register
-from Cutiepii_Robot import pgram as app
+from Cutiepii_Robot import telethn as tbot
 
-ARQ = "https://thearq.tech/"
+opener = urllib.request.build_opener()
+useragent = "Mozilla/5.0 (Linux; Android 9; SM-G960F Build/PPR1.180610.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.157 Mobile Safari/537.36"
+opener.addheaders = [("User-agent", useragent)]
+GMAPS_LOC = "https://maps.googleapis.com/maps/api/geocode/json"
 
+async def is_register_admin(chat, user):
+    if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
+        return isinstance(
+            (
+                await tbot(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
+            (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
+        )
+    if isinstance(chat, types.InputPeerUser):
+        return True
 
-@app.on_message(filters.command("ud") & ~filters.edited)
-async def urbandict(_, message):
-    if len(message.command) < 2:
-        await message.reply_text('"/ud" Needs An Argument.')
+@register(pattern="^/google (.*)")
+async def _(event):
+    if event.fwd_from:
         return
-    text = message.text.split(None, 1)[1]
+    
+    webevent = await event.reply("searching........")
+    match = event.pattern_match.group(1)
+    page = re.findall(r"page=\d+", match)
     try:
-        results = await fetch(f"{ARQ}ud?query={text}")
-        reply_text = f"""**Definition:** __{results["list"][0]["definition"]}__
-**Example:** __{results["list"][0]["example"]}__"""
+        page = page[0]
+        page = page.replace("page=", "")
+        match = match.replace("page=" + page[0], "")
     except IndexError:
-        reply_text = "Sorry could not find any matching results!"
-    ignore_chars = "[]"
-    reply = reply_text
-    for chars in ignore_chars:
-        reply = reply.replace(chars, "")
-    if len(reply) >= 4096:
-        reply = reply[:4096]
-    await message.reply_text(reply)
+        page = 1
+    search_args = (str(match), int(page))
+    gsearch = GoogleSearch()
+    gresults = await gsearch.async_search(*search_args)
+    msg = ""
+    for i in range(len(gresults["links"])):
+        try:
+            title = gresults["titles"][i]
+            link = gresults["links"][i]
+            desc = gresults["descriptions"][i]
+            msg += f"❍[{title}]({link})\n**{desc}**\n\n"
+        except IndexError:
+            break
+    await webevent.edit(
+        "**Search Query:**\n`" + match + "`\n\n**Results:**\n" + msg, link_preview=False
+    )
 
-
-# google
-
-
-@app.on_message(filters.command("google") & ~filters.edited)
-async def google(_, message):
-    try:
-        if len(message.command) < 2:
-            await message.reply_text("/google Needs An Argument")
-            return
-        text = message.text.split(None, 1)[1]
-        gresults = await GoogleSearch().async_search(text, 1)
-        result = ""
-        for i in range(4):
-            try:
-                title = gresults["titles"][i].replace("\n", " ")
-                source = gresults["links"][i]
-                description = gresults["descriptions"][i]
-                result += f"[{title}]({source})\n"
-                result += f"`{description}`\n\n"
-            except IndexError:
-                pass
-        await message.reply_text(result, disable_web_page_preview=True)
-    except Exception as e:
-        await message.reply_text(str(e))
-
-
-# StackOverflow [This is also a google search with some added args]
-
-
-@app.on_message(filters.command("so") & ~filters.edited)
-async def stack(_, message):
-    try:
-        if len(message.command) < 2:
-            await message.reply_text('"/so" Needs An Argument')
-            return
-        gett = message.text.split(None, 1)[1]
-        text = gett + ' "site:stackoverflow.com"'
-        gresults = await GoogleSearch().async_search(text, 1)
-        result = ""
-        for i in range(4):
-            try:
-                title = gresults["titles"][i].replace("\n", " ")
-                source = gresults["links"][i]
-                description = gresults["descriptions"][i]
-                result += f"[{title}]({source})\n"
-                result += f"`{description}`\n\n"
-            except IndexError:
-                pass
-        await message.reply_text(result, disable_web_page_preview=True)
-    except Exception as e:
-        await message.reply_text(str(e))
-
-
-# Github [This is also a google search with some added args]
-
-
-@app.on_message(filters.command("gh") & ~filters.edited)
-async def github(_, message):
-    try:
-        if len(message.command) < 2:
-            await message.reply_text('"/gh" Needs An Argument')
-            return
-        gett = message.text.split(None, 1)[1]
-        text = gett + ' "site:github.com"'
-        gresults = await GoogleSearch().async_search(text, 1)
-        result = ""
-        for i in range(4):
-            try:
-                title = gresults["titles"][i].replace("\n", " ")
-                source = gresults["links"][i]
-                description = gresults["descriptions"][i]
-                result += f"[{title}]({source})\n"
-                result += f"`{description}`\n\n"
-            except IndexError:
-                pass
-        await message.reply_text(result, disable_web_page_preview=True)
-    except Exception as e:
-        await message.reply_text(str(e))
-
-
-# YouTube
-
-
-@app.on_message(filters.command("yts") & ~filters.edited)
-async def ytsearch(_, message):
-    try:
-        if len(message.command) < 2:
-            await message.reply_text("/yt needs an argument")
-            return
-        query = message.text.split(None, 1)[1]
-        m = await message.reply_text("Searching....")
-        results = await fetch(f"{ARQ}youtube?query={query}&count=3")
-        i = 0
-        text = ""
-        while i < 3:
-            text += f"**Title:** `{results[i]['title']}`\n"
-            text += f"**Duration:** `{results[i]['duration']}`\n"
-            text += f"**Views:** `{results[i]['views']}`\n"
-            text += f"**Channel:** `{results[i]['channel']}`\n"
-            text += f"**Watch:** [YouTube](https://youtube.com{results[i]['url_suffix']})\n\n"
-            i += 1
-        await m.edit(text, disable_web_page_preview=True)
-    except Exception as e:
-        await message.reply_text(str(e))
+@register(pattern="^/img (.*)")
+async def img_sampler(event):
+    if event.fwd_from:
+        return
+    
+    query = event.pattern_match.group(1)
+    jit = f'"{query}"'
+    downloader.download(
+        jit,
+        limit=4,
+        output_dir="store",
+        adult_filter_off=False,
+        force_replace=False,
+        timeout=60,
+    )
+    os.chdir(f'./store/"{query}"')
+    types = ("*.png", "*.jpeg", "*.jpg")  # the tuple of file types
+    files_grabbed = []
+    for files in types:
+        files_grabbed.extend(glob.glob(files))
+    await tbot.send_file(event.chat_id, files_grabbed, reply_to=event.id)
+    os.chdir("/app")
+    os.system("rm -rf store")
 
 
 opener = urllib.request.build_opener()
 useragent = "Mozilla/5.0 (Linux; Android 9; SM-G960F Build/PPR1.180610.011; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/74.0.3729.157 Mobile Safari/537.36"
 opener.addheaders = [("User-agent", useragent)]
+
+
+@register(pattern=r"^/reverse(?: |$)(\d*)")
+async def okgoogle(img):
+    """ For .reverse command, Google search images and stickers. """
+    if os.path.isfile("okgoogle.png"):
+        os.remove("okgoogle.png")
+    
+    message = await img.get_reply_message()
+    if message and message.media:
+        photo = io.BytesIO()
+        await tbot.download_media(message, photo)
+    else:
+        await img.reply("`Reply to photo or sticker nigger.`")
+        return
+
+    if photo:
+        dev = await img.reply("`Processing...`")
+        try:
+            image = Image.open(photo)
+        except OSError:
+            await dev.edit("`Unsupported sexuality, most likely.`")
+            return
+        name = "okgoogle.png"
+        image.save(name, "PNG")
+        image.close()
+        # https://stackoverflow.com/questions/23270175/google-reverse-image-search-using-post-request#28792943
+        searchUrl = "https://www.google.com/searchbyimage/upload"
+        multipart = {"encoded_image": (name, open(name, "rb")), "image_content": ""}
+        response = requests.post(searchUrl, files=multipart, allow_redirects=False)
+        fetchUrl = response.headers["Location"]
+
+        if response != 400:
+            await dev.edit(
+                "`Image successfully uploaded to Google. Maybe.`"
+                "\n`Parsing source now. Maybe.`"
+            )
+        else:
+            await dev.edit("`Google told me to fuck off.`")
+            return
+
+        os.remove(name)
+        match = await ParseSauce(fetchUrl + "&preferences?hl=en&fg=1#languages")
+        guess = match["best_guess"]
+        imgspage = match["similar_images"]
+
+        if guess and imgspage:
+            await dev.edit(f"[{guess}]({fetchUrl})\n\n`Looking for this Image...`")
+        else:
+            await dev.edit("`Can't find this piece of shit.`")
+            return
+
+        if img.pattern_match.group(1):
+            lim = img.pattern_match.group(1)
+        else:
+            lim = 3
+        images = await scam(match, lim)
+        yeet = []
+        for i in images:
+            k = requests.get(i)
+            yeet.append(k.content)
+        try:
+            await tbot.send_file(
+                entity=await tbot.get_input_entity(img.chat_id),
+                file=yeet,
+                reply_to=img,
+            )
+        except TypeError:
+            pass
+        await dev.edit(
+            f"[{guess}]({fetchUrl})\n\n[Visually similar images]({imgspage})"
+        )
 
 
 async def ParseSauce(googleurl):
@@ -195,6 +221,7 @@ async def scam(results, lim):
 
 @register(pattern="^/app (.*)")
 async def apk(e):
+    
     try:
         app_name = e.pattern_match.group(1)
         remove_space = app_name.split(" ")
@@ -202,7 +229,7 @@ async def apk(e):
         page = requests.get(
             "https://play.google.com/store/search?q=" + final_name + "&c=apps"
         )
-        str(page.status_code)
+        lnk = str(page.status_code)
         soup = bs4.BeautifulSoup(page.content, "lxml", from_encoding="utf-8")
         results = soup.findAll("div", "ZmHEEd")
         app_name = (
@@ -253,7 +280,7 @@ async def apk(e):
             + app_link
             + "'>View in Play Store</a>"
         )
-        app_details += "\n\n===> @Cutiepii_Support <==="
+        app_details += "\n\n===> Yone <==="
         await e.reply(app_details, link_preview=True, parse_mode="HTML")
     except IndexError:
         await e.reply("No result found in search. Please enter **Valid app name**")
@@ -261,12 +288,105 @@ async def apk(e):
         await e.reply("Exception Occured:- " + str(err))
 
 
-__help__ = """
- - /google <i>text</i>: Perform a google search
- - /so - Search For Something On Stack OverFlow
- - /gh - Search For Something On GitHub
- - /yts - Search For Something On YouTub
- - /app <i>appname</i>: Searches for an app in Play Store and returns its details.
-"""
+@register(pattern="^/gps (.*)")
+async def _(event):
+    args = event.pattern_match.group(1)
+
+    try:
+        geolocator = Nominatim(user_agent="SkittBot")
+        location = args
+        geoloc = geolocator.geocode(location)
+        longitude = geoloc.longitude
+        latitude = geoloc.latitude
+        gm = "https://www.google.com/maps/search/{},{}".format(latitude, longitude)
+        await tbot.send_file(
+            event.chat_id,
+            file=types.InputMediaGeoPoint(
+                types.InputGeoPoint(float(latitude), float(longitude))
+            ),
+        )
+        await event.reply(
+            "Open with: [🌏Google Maps]({})".format(gm),
+            link_preview=False,
+        )
+    except Exception as e:
+        print(e)
+        await event.reply("I can't find that")
+
+
+@register(pattern="^/weather (.*)")
+async def _(event):
+    if event.fwd_from:
+        return
+
+    sample_url = (
+        "https://api.openweathermap.org/data/2.5/weather?q={}&APPID={}&units=metric"
+    )
+    input_str = event.pattern_match.group(1)
+    async with aiohttp.ClientSession() as session:
+        response_api_zero = await session.get(
+            sample_url.format(input_str, OPENWEATHERMAP_ID)
+        )
+    response_api = await response_api_zero.json()
+    if response_api["cod"] == 200:
+        country_code = response_api["sys"]["country"]
+        country_time_zone = int(response_api["timezone"])
+        sun_rise_time = int(response_api["sys"]["sunrise"]) + country_time_zone
+        sun_set_time = int(response_api["sys"]["sunset"]) + country_time_zone
+        await event.reply(
+            """**Location**: {}
+**Temperature**: {}°С
+    __minimium__: {}°С
+    __maximum__ : {}°С
+**Humidity**: {}%
+**Wind**: {}m/s
+**Clouds**: {}hpa
+**Sunrise**: {} {}
+**Sunset**: {} {}""".format(
+                input_str,
+                response_api["main"]["temp"],
+                response_api["main"]["temp_min"],
+                response_api["main"]["temp_max"],
+                response_api["main"]["humidity"],
+                response_api["wind"]["speed"],
+                response_api["clouds"]["all"],
+                # response_api["main"]["pressure"],
+                time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(sun_rise_time)),
+                country_code,
+                time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(sun_set_time)),
+                country_code,
+            )
+        )
+    else:
+        await event.reply(response_api["message"])
+
+
+@register(pattern="^/wttr (.*)")
+async def _(event):
+    if event.fwd_from:
+        return
+
+    sample_url = "https://wttr.in/{}.png"
+    # logger.info(sample_url)
+    input_str = event.pattern_match.group(1)
+    async with aiohttp.ClientSession() as session:
+        response_api_zero = await session.get(sample_url.format(input_str))
+        # logger.info(response_api_zero)
+        response_api = await response_api_zero.read()
+        with io.BytesIO(response_api) as out_file:
+            await event.reply(file=out_file)
+
+
 
 __mod_name__ = "Search"
+
+__help__ = """
+  • /google <text>*:* Perform a google search
+  • /img <text>*:* Search Google for images and returns them\nFor greater no. of results specify lim, For eg: `/img hello lim=10`
+  • /app <appname>*:* Searches for an app in Play Store and returns its details.
+  • /reverse: Does a reverse image search of the media which it was replied to.
+  • /gps <location>*:* Get gps location.
+  • /github <username>*:* Get information about a GitHub user.
+  • /country <country name>*:* Gathering info about given country
+  • /imdb <Movie name>*:* Get full info about a movie with imdb.com
+"""

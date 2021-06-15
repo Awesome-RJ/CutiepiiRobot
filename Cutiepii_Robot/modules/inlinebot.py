@@ -25,8 +25,8 @@ from tswift import Song
 from youtubesearchpython import VideosSearch
 
 from Cutiepii_Robot.cutiepii.config import get_str_key
-from Cutiepii_Robot.function.inlinehelper import *
-from Cutiepii_Robot.function.pluginhelpers import fetch, json_prettify
+from Cutiepii_Robot.functions.inlinehelper import *
+from Cutiepii_Robot.functions.pluginhelpers import fetch, json_prettify
 from Cutiepii_Robot import pgram as app
 
 OPENWEATHERMAP_ID = get_str_key("OPENWEATHERMAP_ID", "")
@@ -57,12 +57,12 @@ class AioHttp:
 
 __mod_name__ = "Inline"
 __help__ = """
-INLINE BOT SERVICE OF @Cutiepii_Robot
+*INLINE BOT SERVICE OF @CUTIEPII_ROBOT*
  
-I'm more efficient when added as group admin. By the way these commands can be used by anyone in a group via inline.
-Syntax
+*I'm more efficient when added as group admin. By the way these commands can be used by anyone in a group via inline.*
+*Syntax*
    @Cutiepii_Robot [command] [query]
-Commands Available:
+*Commands Available*
 - alive - Check Bot's Stats.
 - yt [query] - Youtube Search.
 - tr [LANGUAGE_CODE] [QUERY]** - Translate Text.
@@ -90,7 +90,7 @@ Commands Available:
 - fakegen - Gathers fake information.
 - weather [QUERY] - Get weather information.
 - datetime [QUERY] - Get Date & time information of given country/region.
-- app [QUERY] - Search for apps in playstore.
+- pgram [QUERY] - Search for pgrams in playstore.
 - gh [QUERY] - Search github.
 - so [QUERY] - Search stack overflow.
 - wiki [QUERY] - Search wikipedia.
@@ -100,7 +100,7 @@ Commands Available:
 
 __MODULE__ = "Inline"
 __HELP__ = """
- ==>> **INLINE BOT SERVICE OF @Cutiepii_Robot** <<==
+ ==>> **INLINE BOT SERVICE OF @CUTIEPII_ROBOT** <<==
 `I'm more efficient when added as group admin. By the way these commands can be used by anyone in a group via inline.`
    >> Syntax <<
 @Cutiepii_Robot [command] [query]
@@ -132,7 +132,7 @@ __HELP__ = """
 - **fakegen** - __Gathers fake information.__
 - **weather [QUERY]** - __Get weather information.__
 - **datetime [QUERY]** - __Get Date & time information of given country/region.__
-- **app [QUERY]** - __Search for apps on playstore.
+- **pgram [QUERY]** - __Search for pgrams on playstore.
 - **gh [QUERY]** - __Search github.__
 - **so [QUERY]** - __Search stack overfolw.__
 - **wiki [QUERY]** - __Search wikipedia.__
@@ -628,7 +628,7 @@ async def inline_query_handler(client, query):
         Time Zones:- {tom}
         Top Level Domain:- {lanester}
         wikipedia:- {wiki}</b>
-        Gathered By Cutiepii X.</b>
+        Gathered By Daisy X.</b>
         """
             results.append(
                 InlineQueryResultArticle(
@@ -894,7 +894,7 @@ async def inline_query_handler(client, query):
                 + app_link
                 + "'>View in Play Store</a>"
             )
-            app_details += "\n\n===> @Cutiepii_Support <==="
+            app_details += "\n\n===> @DaisySupport_Official <==="
             rip.append(
                 InlineQueryResultArticle(
                     title=f"Datails of {app_name}",

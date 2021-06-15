@@ -1,7 +1,6 @@
-from time import perf_counter
 from functools import wraps
 from cachetools import TTLCache
-from threading import RLock
+
 from Cutiepii_Robot import (DEL_CMDS, DEV_USERS, DRAGONS, SUPPORT_CHAT, DEMONS,
                           TIGERS, WOLVES, dispatcher)
 
@@ -9,9 +8,7 @@ from telegram import Chat, ChatMember, ParseMode, Update
 from telegram.ext import CallbackContext
 
 # stores admemes in memory for 10 min.
-ADMIN_CACHE = TTLCache(maxsize=512, ttl=60 * 10, timer=perf_counter)
-THREAD_LOCK = RLock()
-
+ADMIN_CACHE = TTLCache(maxsize=512, ttl=60*10)
 
 def is_whitelist_plus(chat: Chat,
                       user_id: int,
@@ -38,21 +35,20 @@ def is_user_admin(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
         return True
 
     if not member:
-        with THREAD_LOCK:
-            # try to fetch from cache first.
-            try:
-                return user_id in ADMIN_CACHE[chat.id]
-            except KeyError:
-                # keyerror happend means cache is deleted,
-                # so query bot api again and return user status
-                # while saving it in cache for future useage...
-                chat_admins = dispatcher.bot.getChatAdministrators(chat.id)
-                admin_list = [x.user.id for x in chat_admins]
-                ADMIN_CACHE[chat.id] = admin_list
+        # try to fetch from cache first.
+        try:
+           return user_id in ADMIN_CACHE[chat.id]
+        except KeyError:
+           # keyerror happend means cache is deleted,
+           # so query bot api again and return user status
+           # while saving it in cache for future useage...
+           chat_admins = dispatcher.bot.getChatAdministrators(chat.id)
+           admin_list = [x.user.id for x in chat_admins]
+           ADMIN_CACHE[chat.id] = admin_list
 
-                if user_id in admin_list:
-                    return True
-                return False
+           if user_id in admin_list:
+               return True
+           return False
 
 
 def is_bot_admin(chat: Chat,
@@ -105,10 +101,7 @@ def dev_plus(func):
         elif not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
-            try:
-                update.effective_message.delete()
-            except:
-                pass
+            update.effective_message.delete()
         else:
             update.effective_message.reply_text(
                 "This is a developer restricted command."
@@ -131,10 +124,7 @@ def sudo_plus(func):
         elif not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
-            try:
-                update.effective_message.delete()
-            except:
-                pass
+            update.effective_message.delete()
         else:
             update.effective_message.reply_text(
                 "Who dis non-admin telling me what to do? You want a punch?")
@@ -154,10 +144,7 @@ def support_plus(func):
         if user and is_support_plus(chat, user.id):
             return func(update, context, *args, **kwargs)
         elif DEL_CMDS and " " not in update.effective_message.text:
-            try:
-                update.effective_message.delete()
-            except:
-                pass
+            update.effective_message.delete()
 
     return is_support_plus_func
 
@@ -193,10 +180,7 @@ def user_admin(func):
         elif not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
-            try:
-                update.effective_message.delete()
-            except:
-                pass
+            update.effective_message.delete()
         else:
             update.effective_message.reply_text(
                 "Who dis non-admin telling me what to do? You want a punch?")
@@ -218,10 +202,7 @@ def user_admin_no_reply(func):
         elif not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
-            try:
-                update.effective_message.delete()
-            except:
-                pass
+            update.effective_message.delete()
 
     return is_not_admin_no_reply
 

@@ -1,5 +1,3 @@
-# Module to get info about anime, characters, manga etc. by @TheRealPhoenix
-
 from jikanpy import Jikan
 from jikanpy.exceptions import APIException
 
@@ -11,7 +9,7 @@ from Cutiepii_Robot import dispatcher
 jikan = Jikan()
 
 
-@run_async
+
 def anime(update: Update, context: CallbackContext):
     msg = update.effective_message
     args = context.args
@@ -84,7 +82,7 @@ def anime(update: Update, context: CallbackContext):
     msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
     
 
-@run_async
+
 def character(update: Update, context: CallbackContext):
     msg = update.effective_message
     res = ""
@@ -119,7 +117,7 @@ def character(update: Update, context: CallbackContext):
         msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
         
         
-@run_async
+
 def upcoming(update: Update, context: CallbackContext):
     msg = update.effective_message
     rep = "<b>Upcoming anime</b>\n"
@@ -134,7 +132,7 @@ def upcoming(update: Update, context: CallbackContext):
     msg.reply_text(rep, parse_mode=ParseMode.HTML)
     
     
-@run_async
+
 def manga(update: Update, context: CallbackContext):
     msg = update.effective_message
     args = context.args

@@ -1,10 +1,6 @@
 
 __help__ = """
- *QR code:*
-  • `/getqr <reply to image>`*:* Read QR code
-  • `/makeqr <reply to text>`*:* Make QR code
-
-*Stylish your text!*
+*Stylish your text:*
  • `/weebify <text>`*:* weebify your text!
  • `/bubble <text>`*:* bubble your text!
  • `/fbubble <text>`*:* bubble-filled your text!
@@ -14,29 +10,14 @@ __help__ = """
  • `/latin <text>`*:* latinify your text!
  • `/lined <text>`*:* lined your text!
  • `/plet <text> `*:* text get funny emojify.
+
+*QR code:*
+ • `/getqr <reply to image>`*:* Read QR code
+ • `/makeqr <reply to text>`*:* Make QR code
  
-*Wallpaper:*
- • `/wallpaper`*:* sends random best anime wallpapers.
- • `/waifu`*:* sends random waifu sticker/image
- • `/neko`*:* sends random neko image
- • `/img <keyword>`*:* to search Image any. 
- 
-*Games*
- • `/Truth`*:* for random truth.
- • `/dare`*:* for random dare.
- 
-*Games*
- • `/Truth`*:* for random truth.
- • `/dare`*:* for random dare.
- 
-*Cricket Score:*
- • `/cs`*:* Get cricket Score.
- 
-*Extras:*
- • `/json`*:* Get Detailed info about any message.
- • `/logo <text>`*:* Get logo.
- • `/logoo <text>`*:* Get logo.
- • `/tts <text>`*:* Text to speech.
+*Compress And Decompress:* 
+ • `/zip`*:* reply to a telegram file to compress it in .zip format
+ • `/unzip`*:* reply to a telegram file to decompress it from the .zip format
 """
 
-__mod_name__ = "Cutie"
+__mod_name__ = "Tools"

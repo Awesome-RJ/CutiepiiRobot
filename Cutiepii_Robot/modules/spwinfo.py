@@ -5,7 +5,8 @@ import aiohttp
 from pyrogram import filters
 from pyrogram.errors import PeerIdInvalid
 
-from Cutiepii_Robot import pgram 
+from Cutiepii_Robot import pgram as pbot
+
 
 class AioHttp:
     @staticmethod
@@ -27,7 +28,7 @@ class AioHttp:
                 return await resp.read()
 
 
-@pgram.on_message(filters.command("spwinfo") & ~filters.edited & ~filters.bot)
+@pbot.on_message(filters.command("spwinfo") & ~filters.edited & ~filters.bot)
 async def lookup(client, message):
     cmd = message.command
     if not message.reply_to_message and len(cmd) == 1:
