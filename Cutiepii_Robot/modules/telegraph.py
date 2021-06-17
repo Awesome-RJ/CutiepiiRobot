@@ -92,9 +92,9 @@ def resize_image(image):
 
 
 __mod_name__ = """
-<b> Telegraph text/video upload plugin </b>
- - /telegraph media <i>reply to image or video<i> : Upload image and video directly to telegraph.
- - /telegraph text <i>reply to text</i> : upload text directly to telegraph .
+*Telegraph text/video upload plugin*
+ - /telegraph media *reply to image or video* : Upload image and video directly to telegraph.
+ - /telegraph text *reply to text* : upload text directly to telegraph .
 """
 
 __mod_name__ = "Telegraph"
