@@ -76,9 +76,7 @@ def get_readable_time(seconds: int) -> str:
 
 PM_START_TEXT = """
 Hy my Darling, I am Your SweetHeart!
-
 I am an Anime themed advance group management bot with a lot of Sexy Features.
-
 Try the Help buttons below to know my abilities [^_^](https://telegra.ph/file/5058a17bd9447eb07a47f.png).
 """
 
@@ -113,7 +111,6 @@ buttons = [
 
 HELP_STRINGS = """
 *Main* commands available:
-
  ➛ /help: PM's you this message.
  ➛ /help <module name>: PM's you info about that module.
  ➛ /donate: information on how to donate!
@@ -173,7 +170,6 @@ for module_name in ALL_MODULES:
 # do not async
 def send_help(chat_id, text, keyboard=None):
     """#TODO
-
     Params:
         chat_id  -
         text     -
@@ -279,7 +275,6 @@ def cutie_about_callback(update, context):
 # for test purposes
 def error_callback(update, context):
     """#TODO
-
     Params:
         update  -
         context -
@@ -602,7 +597,6 @@ def get_settings(update: Update, context: CallbackContext):
 
 def donate(update: Update, context: CallbackContext):
     """#TODO
-
     Params:
         update: Update           -
         context: CallbackContext -
@@ -641,6 +635,8 @@ def main():
 
     settings_handler = CommandHandler("settings", get_settings)
     settings_callback_handler = CallbackQueryHandler(settings_button, pattern=r"stngs_")
+    about_callback_handler = CallbackQueryHandler(cutie_about_callback, pattern=r"cutie_")
+    
 
     donate_handler = CommandHandler("donate", donate)
     migrate_handler = MessageHandler(Filters.status_update.migrate, migrate_chats)
