@@ -53,7 +53,6 @@ def extract_user_and_text(
             return None, None
 
         else:
-            user_id = user_id
             res = message.text.split(None, 2)
             if len(res) >= 3:
                 text = res[2]
@@ -127,7 +126,6 @@ def extract_unt_fedban(
             return None, None
 
         else:
-            user_id = user_id
             res = message.text.split(None, 2)
             if len(res) >= 3:
                 text = res[2]
