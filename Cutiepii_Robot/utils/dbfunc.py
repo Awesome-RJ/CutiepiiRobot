@@ -89,3 +89,12 @@ async def update_karma(chat_id: int, name: str, karma: dict):
         },
         upsert=True
     )
+
+async def alpha_to_int(user_id_alphabet: str) -> int:
+    alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+    user_id = ""
+    for i in user_id_alphabet:
+        index = alphabet.index(i)
+        user_id += str(index)
+    user_id = int(user_id)
+    return user_id
