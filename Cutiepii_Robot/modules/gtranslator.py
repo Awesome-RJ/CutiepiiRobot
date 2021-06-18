@@ -11,7 +11,6 @@ from telegram import (
 )
 from Cutiepii_Robot import dispatcher, pgram
 from pyrogram import filters
-from pyrogram.types import Message
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 

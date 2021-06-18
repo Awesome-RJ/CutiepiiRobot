@@ -17,28 +17,7 @@ from pyrogram.types import (
 )
 from Python_ARQ import ARQ
 from search_engine_parser import GoogleSearch
-
-
-import json
-import sys
-from random import randint
-from time import time
-
-import aiohttp
 from aiohttp import ClientSession
-from googletrans import Translator
-from motor import version as mongover
-from pykeyboard import InlineKeyboard
-from pyrogram import __version__ as pyrover
-from pyrogram.raw.functions import Ping
-from pyrogram.types import (
-    InlineKeyboardButton,
-    InlineQueryResultArticle,
-    InlineQueryResultPhoto,
-    InputTextMessageContent,
-)
-from Python_ARQ import ARQ
-from search_engine_parser import GoogleSearch
 
 from Cutiepii_Robot import BOT_USERNAME, OWNER_ID
 from Cutiepii_Robot.cutiepii.config import get_str_key
