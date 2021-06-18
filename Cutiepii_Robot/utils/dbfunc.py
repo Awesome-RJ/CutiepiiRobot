@@ -1,4 +1,4 @@
-from CutiepiiRobot.mongo import db
+from Cutiepii_Robot import db
 from typing import Dict, List, Union
 
 
