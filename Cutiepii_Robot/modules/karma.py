@@ -1,8 +1,8 @@
-from AsunaRobot import pbot as app
-from AsunaRobot.utils.errors import capture_err
-from AsunaRobot.utils.dbfunc import (update_karma, get_karma, get_karmas,
+from Cutiepii_Robot import pbot as app
+from Cutiepii_Robot.utils.errors import capture_err
+from Cutiepii_Robot.utils.dbfunc import (update_karma, get_karma, get_karmas,
                                    int_to_alpha, alpha_to_int)
-from AsunaRobot.utils.filter_groups import karma_positive_group, karma_negative_group
+from Cutiepii_Robot.utils.filter_groups import karma_positive_group, karma_negative_group
 from pyrogram import filters
 
 
