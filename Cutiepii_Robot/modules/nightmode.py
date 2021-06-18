@@ -138,7 +138,7 @@ async def _(event):
         ttime = dateparser.parse(
             "now", settings={"TIMEZONE": f"{zone}", "DATE_ORDER": "YMD"}
         )
-        if ttime == None or otime == None or ctime == None:
+        if ttime is None or otime is None or ctime is None:
             await event.reply("Please enter valid date and time and zone.")
             return
         cctime = dateparser.parse(
@@ -161,7 +161,7 @@ async def _(event):
         # print (ootime)
         chats = nightmod.find({})
         for c in chats:
-            if event.chat_id == c["id"] and c["valid"] == True:
+            if event.chat_id == c["id"] and c["valid"] is True:
                 to_check = get_info(
                     id=event.chat_id,
                 )
