@@ -1,4 +1,4 @@
-from Cutiepii_Robot import pbot as app
+from Cutiepii_Robot import pgram as app
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.dbfunc import (update_karma, get_karma, get_karmas,
                                    int_to_alpha, alpha_to_int)
