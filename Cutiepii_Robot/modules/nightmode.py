@@ -208,12 +208,12 @@ async def _(event):
             ctime = c["ctime"]
             c["otime"]
             present = dateparser.parse(
-                f"now", settings={"TIMEZONE": f"{zone}", "DATE_ORDER": "YMD"}
+                "now", settings={"TIMEZONE": f"{zone}", "DATE_ORDER": "YMD"}
             )
             if present > ctime and valid:
                 await tbot.send_message(
                     id,
-                    f"**Nightbot:** It's time closing the chat now ...",
+                    "**Nightbot:** It's time closing the chat now ...",
                 )
                 await tbot(
                     functions.messages.EditChatDefaultBannedRightsRequest(
@@ -258,12 +258,12 @@ async def _(event):
             c["ctime"]
             otime = c["otime"]
             present = dateparser.parse(
-                f"now", settings={"TIMEZONE": f"{zone}", "DATE_ORDER": "YMD"}
+                "now", settings={"TIMEZONE": f"{zone}", "DATE_ORDER": "YMD"}
             )
             if present > otime and valid:
                 await tbot.send_message(
                     id,
-                    f"**Nightbot:** It's time opening the chat now ...",
+                    "**Nightbot:** It's time opening the chat now ...",
                 )
                 await tbot(
                     functions.messages.EditChatDefaultBannedRightsRequest(

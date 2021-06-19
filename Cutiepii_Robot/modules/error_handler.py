@@ -116,7 +116,7 @@ def list_errors(update: Update, context: CallbackContext):
         context.bot.send_document(
             update.effective_chat.id,
             open("errors_msg.txt", "rb"),
-            caption=f"Too many errors have occured..",
+            caption="Too many errors have occured..",
             parse_mode="html",
         )
         return    
