@@ -254,7 +254,7 @@ def cutiepii_data_callback(update, context):
                 ]
             ),
         )
-    elif query.data == "eren_back":
+    elif query.data == "cutiepii_back":
         query.message.edit_text(
                 PM_START_TEXT,
                 reply_markup=InlineKeyboardMarkup(buttons),
