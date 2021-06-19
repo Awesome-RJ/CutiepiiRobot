@@ -1,11 +1,10 @@
 import io
 from Cutiepii_Robot.event import register
 from Cutiepii_Robot import telethn as borg
-from Cutiepii_Robot import telethn as tbot
 from telethon import types
 from telethon import events
 from io import BytesIO
-from telethon.tl import functions, types
+from telethon.tl import functions
 from telethon.tl.types import *
 
 
