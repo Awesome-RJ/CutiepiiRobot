@@ -238,7 +238,6 @@ def start(update: Update, context: CallbackContext):
         )
 
         
-@run_async
 def cutiepii_data_callback(update, context):
     query = update.callback_query
     if query.data == "cutiepii_":
