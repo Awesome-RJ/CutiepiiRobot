@@ -176,7 +176,7 @@ async def apk(e):
     except Exception as err:
         await e.reply("Exception Occured:- " + str(err))
 
-@run_async
+
 def reverse(update: Update, context:CallbackContext):
     if os.path.isfile("okgoogle.png"):
         os.remove("okgoogle.png")
