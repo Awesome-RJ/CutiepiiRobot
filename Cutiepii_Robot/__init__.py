@@ -248,8 +248,8 @@ else:
 
 from Cutiepii_Robot.modules.sql import SESSION
 
-defaults = tg.Defaults(run_async = True)
-updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True, defaults = defaults)
+
+updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
 telethn = TelegramClient("cutiepii", API_ID, API_HASH)
 
 dispatcher = updater.dispatcher
