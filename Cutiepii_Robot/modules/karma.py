@@ -1,6 +1,6 @@
 from Cutiepii_Robot import pgram as cutiepii 
 from Cutiepii_Robot.functions.errors import capture_err
-from Cutiepii_Robot.modules.mongo.karma_mongo import (update_karma, get_karma, get_karmas,
+from Cutiepii_Robot.utils.dbfunc import (update_karma, get_karma, get_karmas,
                                    int_to_alpha, alpha_to_int)
 from Cutiepii_Robot.utils.filter_groups import karma_positive_group, karma_negative_group
 from pyrogram import filters
