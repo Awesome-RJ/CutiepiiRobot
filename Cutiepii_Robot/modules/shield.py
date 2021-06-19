@@ -14,7 +14,6 @@ from telethon.tl.types import ChatBannedRights
 from Cutiepii_Robot import BOT_ID
 from Cutiepii_Robot.cutiepii.config import get_int_key, get_str_key
 from Cutiepii_Robot import MONGO_DB_URI, db, telethn as tbot
-from Cutiepii_Robot import 
 
 
 # from Cutiepii_Robot.db.mongo_helpers.nsfw_guard import add_chat, get_all_nsfw_chats, is_chat_in_db, rm_chat
