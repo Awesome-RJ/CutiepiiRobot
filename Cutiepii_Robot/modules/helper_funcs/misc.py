@@ -1,7 +1,7 @@
 from math import ceil
 from typing import Dict, List
 
-from Cutiepii_Robot import NO_LOAD
+from SaitamaRobot import NO_LOAD
 from telegram import MAX_MESSAGE_LENGTH, Bot, InlineKeyboardButton, ParseMode
 from telegram.error import TelegramError
 
@@ -30,8 +30,9 @@ def split_message(msg: str) -> List[str]:
         else:
             result.append(small_msg)
             small_msg = line
-    # Else statement at the end of the for loop, so append the leftover string.
-    result.append(small_msg)
+    else:
+        # Else statement at the end of the for loop, so append the leftover string.
+        result.append(small_msg)
 
     return result
 
@@ -66,11 +67,11 @@ def paginate_modules(page_n: int, module_dict: Dict, prefix, chat=None) -> List:
     if len(pairs) > 8:
         pairs = pairs[modulo_page * 8:8 * (modulo_page + 1)] + [
             (EqInlineKeyboardButton("↖️", callback_data="{}_prev({})".format(prefix, modulo_page)),
-                EqInlineKeyboardButton("𝙱𝚊𝚌𝚔", callback_data="cutie_back"),
+                EqInlineKeyboardButton("Back", callback_data="cutiepii_back"),
              EqInlineKeyboardButton("↘️", callback_data="{}_next({})".format(prefix, modulo_page)))]
 
     else:
-        pairs += [[EqInlineKeyboardButton("Back", callback_data="cutie_back")]]
+        pairs += [[EqInlineKeyboardButton("Back", callback_data="cutiepii_back")]]
 
     return pairs
 
