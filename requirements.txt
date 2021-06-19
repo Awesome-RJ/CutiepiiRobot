@@ -14,7 +14,7 @@ zalgo-text
 geopy
 nltk
 psutil
-aiohttp>=2.2.5
+aiohttp
 Pillow>=4.2.0
 CurrencyConverter
 googletrans==4.0.0-rc1
@@ -41,7 +41,7 @@ hachoir
 pytz
 pyrogram
 python-rapidjson
-TgCrypto>=1.2.2
+TgCrypto
 youtube_dl>=2021.4.26
 register
 bing_image_downloader
