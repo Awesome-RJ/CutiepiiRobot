@@ -1,10 +1,9 @@
 import sys
 import traceback
 from functools import wraps
-from Cutiepii_Robot import pgram as app
+from Cutiepii_Robot import pgram, SUPPORT_CHAT
 from pyrogram.errors.exceptions.forbidden_403 import ChatWriteForbidden
 
-LOG_GROUP_ID = int(-1001151980503)
 
 def split_limits(text):
     if len(text) < 2048:
@@ -19,8 +18,8 @@ def split_limits(text):
         else:
             result.append(small_msg)
             small_msg = line
-        
-    result.append(small_msg)
+    else:
+        result.append(small_msg)
 
     return result
 
@@ -31,7 +30,7 @@ def capture_err(func):
         try:
             return await func(client, message, *args, **kwargs)
         except ChatWriteForbidden:
-            await app.leave_chat(message.chat.id)
+            await pgram.leave_chat(message.chat.id)
             return
         except Exception as err:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -47,8 +46,8 @@ def capture_err(func):
                 ),
             )
             for x in error_feedback:
-                await app.send_message(
-                    LOG_GROUP_ID,
+                await pgram.send_message(
+                    SUPPORT_CHAT,
                     x
                 )
             raise err
