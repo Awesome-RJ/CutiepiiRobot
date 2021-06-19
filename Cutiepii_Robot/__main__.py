@@ -238,31 +238,23 @@ def start(update: Update, context: CallbackContext):
         )
 
         
-def cutie_about_callback(update, context):
+@run_async
+def cutiepii_data_callback(update, context):
     query = update.callback_query
-    if query.data == "cutie_":
+    if query.data == "cutiepii_":
         query.message.edit_text(
-            text=""" ℹ️ I'm *Cutiepii*, a powerful group management bot built to help you manage your group easily.
-                 \n •  I can restrict users.
-                 \n •  I can greet users with customizable welcome messages and even set a group's rules.
-                 \n •  I have an advanced anti-flood system.
-                 \n •  I can warn users until they reach max warns, with each predefined actions such as ban, mute, kick, etc.
-                 \n •  I have a note keeping system, blacklists, and even predetermined replies on certain keywords.
-                 \n •  I check for admins' permissions before executing any command and more stuffs
-                 \n\n_Cutiepii's licensed under the GNU General Public License v3.0_
-                 \nHere is the [💾Repository](https://github.com/Awesome-RJ/Cutiepii_Robot).
-                 \n\nIf you have any question about cutiepii, let us know at .""",
+            text="""CallBackQueriesData Here""",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup(
                 [
                  [
-                    InlineKeyboardButton(text="Back", callback_data="cutie_back")
+                    InlineKeyboardButton(text="Back", callback_data="cutiepii_back")
                  ]
                 ]
             ),
         )
-    elif query.data == "cutie_back":
+    elif query.data == "eren_back":
         query.message.edit_text(
                 PM_START_TEXT,
                 reply_markup=InlineKeyboardMarkup(buttons),
@@ -635,7 +627,7 @@ def main():
 
     settings_handler = CommandHandler("settings", get_settings)
     settings_callback_handler = CallbackQueryHandler(settings_button, pattern=r"stngs_")
-    about_callback_handler = CallbackQueryHandler(cutie_about_callback, pattern=r"cutie_")
+    data_callback_handler = CallbackQueryHandler(cutiepii_data_callback, pattern=r"cutiepii_")
     
 
     donate_handler = CommandHandler("donate", donate)
