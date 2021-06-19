@@ -12,7 +12,7 @@ from telethon import events
 from telethon.tl.types import ChatBannedRights
 
 from Cutiepii_Robot import BOT_ID
-from Cutiepii_Robot.cutiepii.conf import get_int_key, get_str_key
+from Cutiepii_Robot.cutiepii.config import get_int_key, get_str_key
 from Cutiepii_Robot import telethn as tbot
 from Cutiepii_Robot import MONGO_DB_URI 
 
