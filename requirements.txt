@@ -4,7 +4,7 @@ lxml
 beautifulsoup4
 requests==2.20.0
 sqlalchemy==1.3.20
-python-telegram-bot==13.5
+python-telegram-bot==12.8
 coffeehouse==2.2.4
 psycopg2-binary==2.8.6
 feedparser
