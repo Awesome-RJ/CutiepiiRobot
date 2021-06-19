@@ -886,14 +886,13 @@ def welcomemute(update: Update, context: CallbackContext) -> str:
             parse_mode=ParseMode.HTML,
         )
         return ""
-    else:
-        curr_setting = sql.welcome_mutes(chat.id)
-        reply = (
-            f"\n Give me a setting!\nChoose one out of: <code>off</code>/<code>no</code> or <code>soft</code> or <code>strong</code> only! \n"
-            f"Current setting: <code>{curr_setting}</code>"
-        )
-        msg.reply_text(reply, parse_mode=ParseMode.HTML)
-        return ""
+    curr_setting = sql.welcome_mutes(chat.id)
+    reply = (
+        f"\n Give me a setting!\nChoose one out of: <code>off</code>/<code>no</code> or <code>soft</code> or <code>strong</code> only! \n"
+        f"Current setting: <code>{curr_setting}</code>"
+    )
+    msg.reply_text(reply, parse_mode=ParseMode.HTML)
+    return ""
 
 
 @user_admin
