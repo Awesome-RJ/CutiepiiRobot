@@ -15,7 +15,6 @@ async def lego(event):
   if not quew:
      await event.reply('Darling Listen! Provide Some Text To Draw!')
      return
-  pass
  await event.reply('Cutie Cutie! Creating your logo...wait!')
  try:
     text = event.pattern_match.group(1)
@@ -54,7 +53,6 @@ async def lego(event):
   if not quew:
      await event.reply('Darling Listen! Provide Some Text To Draw!')
      return
-  pass
  await event.reply('Cutie Cutie! Creating your logo...wait!')
  try:
     text = event.pattern_match.group(1)
