@@ -1,16 +1,16 @@
-from Cutiepii_Robot import pgram as app
-from Cutiepii_Robot.functions.errors import capture_err
-from Cutiepii_Robot.utils.dbfunc import (update_karma, get_karma, get_karmas,
+from Cutiepii_Robot import pgram as cutiepii 
+from Cutiepii_Robot.utils.errors import capture_err
+from Cutiepii_Robot.modules.mongo.karma_mongo import (update_karma, get_karma, get_karmas,
                                    int_to_alpha, alpha_to_int)
 from Cutiepii_Robot.utils.filter_groups import karma_positive_group, karma_negative_group
 from pyrogram import filters
 
 
-regex_upvote = r"^((?i)\+|\+\+|\+1|thx|tnx|ty|thank you|thanx|thanks|pro|cool|good|👍)$"
-regex_downvote = r"^(\-|\-\-|\-1|👎)$"
+regex_upvote = r"^((?i)\+|\+\+|\+1|thx|tnx|ty|thank you|thanx|thanks|pro|cool|good|👍|nice|noice|piro)$"
+regex_downvote = r"^(\-|\-\-|\-1|👎|noob|Noob|gross|fuck off)$"
 
 
-@app.on_message(
+@cutiepii.on_message(
     filters.text
     & filters.group
     & filters.incoming
@@ -43,7 +43,7 @@ async def upvote(_, message):
     )
 
 
-@app.on_message(
+@cutiepii.on_message(
     filters.text
     & filters.group
     & filters.incoming
@@ -76,7 +76,7 @@ async def downvote(_, message):
     )
 
 
-@app.on_message(filters.command("karma") & filters.group)
+@cutiepii.on_message(filters.command("karma") & filters.group)
 @capture_err
 async def karma(_, message):
     chat_id = message.chat.id
@@ -96,7 +96,7 @@ async def karma(_, message):
             if limit > 9:
                 break
             try:
-                user_name = (await app.get_users(int(user_idd))).username
+                user_name = (await EREN.get_users(int(user_idd))).username
             except Exception:
                 continue
             msg += f"{user_name} : `{karma_count}`\n"
