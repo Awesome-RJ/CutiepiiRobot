@@ -1,5 +1,6 @@
 import flag
-import html, os
+import html
+import os
 
 from countryinfo import CountryInfo
 from telethon.tl.functions.photos import GetUserPhotosRequest
@@ -19,9 +20,9 @@ async def msg(event):
     lol = input_str
     country = CountryInfo(lol)
     try:
-	    a = country.info()
+     a = country.info()
     except:
-	    await event.reply("Country Not Avaiable Currently")
+     await event.reply("Country Not Avaiable Currently")
     name = a.get("name")
     bb= a.get("altSpellings")
     hu = ''
@@ -32,18 +33,18 @@ async def msg(event):
     borders = ""
     hell = a.get("borders")
     for fk in hell:
-	    borders += fk+",  "
+     borders += fk+",  "
 	
     call = "" 
     WhAt = a.get("callingCodes")
     for what in WhAt:
-	    call+= what+"  "
+     call+= what+"  "
 	
     capital = a.get("capital")
     currencies = ""
     fker = a.get("currencies")
     for FKer in fker:
-	    currencies += FKer+",  "
+     currencies += FKer+",  "
 
     HmM = a.get("demonym")
     geo = a.get("geoJSON")
@@ -63,7 +64,7 @@ async def msg(event):
     languages = a.get("languages")
     lMAO=""
     for lmao in languages:
-	    lMAO += lmao+",  "
+     lMAO += lmao+",  "
 
     nonive = a.get("nativeName")
     waste = a.get("population")
@@ -72,12 +73,12 @@ async def msg(event):
     tik = a.get("timezones")
     tom =""
     for jerry in tik:
-	    tom+=jerry+",   "
+     tom+=jerry+",   "
 
     GOT = a.get("tld")
     lanester = ""
     for targaryen in GOT:
-	    lanester+=targaryen+",   "
+     lanester+=targaryen+",   "
 
     wiki = a.get("wiki")
 
