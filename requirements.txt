@@ -2,11 +2,11 @@ future
 emoji
 lxml
 beautifulsoup4
-requests
+requests==2.20.0
 SQLAlchemy==1.4.0
 python-telegram-bot>=13.0
 coffeehouse==2.2.4
-psycopg2-binary
+psycopg2-binary==2.8.6
 feedparser
 pynewtonmath
 spongemock
@@ -14,7 +14,7 @@ zalgo-text
 geopy
 nltk
 psutil
-aiohttp
+aiohttp>=2.2.5
 Pillow>=4.2.0
 CurrencyConverter
 googletrans==4.0.0-rc1
@@ -41,7 +41,7 @@ hachoir
 pytz
 pyrogram
 python-rapidjson
-TgCrypto
+TgCrypto>=1.2.2
 youtube_dl>=2021.4.26
 register
 bing_image_downloader
@@ -53,7 +53,7 @@ html2text
 telegraph
 cryptg
 cryptography
-pymongo
+pymongo==3.11.0
 pretty_errors
 envparse
 PyYAML>5.0
@@ -68,6 +68,7 @@ PyDictionary==2.0.1
 selenium
 zalgo_text
 cowpy
+gitpython==3.1.11
 heroku3==4.2.3
 cachetools
 redis
@@ -93,3 +94,4 @@ gpytranslate
 youtube_search
 wget
 aiofiles
+multicolorcaptcha
