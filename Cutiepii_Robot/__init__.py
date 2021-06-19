@@ -1,6 +1,7 @@
 import logging
 import os
-import sys, json
+import sys
+import json
 import asyncio
 import time
 import spamwatch
