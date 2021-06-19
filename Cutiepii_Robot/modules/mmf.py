@@ -2,7 +2,7 @@ import textwrap
 import os
 
 from PIL import Image, ImageFont, ImageDraw
-from Cutiepii_Robot.events import register
+from Cutiepii_Robot.event import register
 from Cutiepii_Robot import (
     LOGGER,
     TEMP_DOWNLOAD_DIRECTORY
