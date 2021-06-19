@@ -114,7 +114,7 @@ async def hmm(client, message):
         test = msg
         test = test.replace("Cutiepii", "Aco")
         test = test.replace("Cutiepii", "Aco")
-        URL = "https://api.affiliateplus.xyz/api/chatbot?message=hi&botname=@Cutiepii_Robot&ownername=@Awesome_Rj"
+        URL = "https://api.affiliateplus.xyz/api/chatbot?message={test}&botname=@Cutiepii_Robot&ownername=@Awesome_Rj"
 
         try:
             r = requests.request("GET", url=URL)
@@ -326,7 +326,6 @@ async def inuka(client, message):
 
     # test = emoji.demojize(test.strip())
 
-    # Kang with the credits bitches @InukaASiTH
     test = test.replace("Cutiepii", "Aco")
     test = test.replace("Cutiepii", "Aco")
     URL = f"https://api.affiliateplus.xyz/api/chatbot?message={test}&botname=@Cutiepii_Robot&ownername=@Awesome_Rj"
@@ -353,7 +352,7 @@ async def inuka(client, message):
 
 
 __help__ = """
-<b> Chatbot </b>
+*Chatbot*
 Cutiepii AI 3.0 IS THE ONLY AI SYSTEM WHICH CAN DETECT & REPLY UPTO 200 LANGUAGES
   • /chatbot [ON/OFF]: Enables and disables AI Chat mode (EXCLUSIVE)
   • /chatbot EN : Enables English only chatbot
