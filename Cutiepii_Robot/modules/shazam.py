@@ -55,5 +55,5 @@ __mod_name__ = "Shazam"
 __help__ = """
 *Find any song with it's music or part of song*
 
- - /shazam : identify the song from Friday's Database
+ • `/shazam `*:* identify the song from Friday's Database
 """

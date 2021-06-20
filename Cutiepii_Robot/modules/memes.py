@@ -1705,40 +1705,40 @@ file_helpo = file_help.replace("_", " ")
 
 __help__ = """
 **Some memes command, find it all out yourself !**
- - /owo: OWO de text
- - /stretch: STRETCH de text
- - /clapmoji: Type in reply to a message and see magic
- - /bmoji: Type in reply to a message and see magic
- - /copypasta: Type in reply to a message and see magic
- - /vapor: owo vapor dis
- - /shout <i>text</i>: Write anything that u want it to should
- - /zalgofy: reply to a message to glitch it out!
- - /table: get flip/unflip :v.
- - /decide: Randomly answers yes/no/maybe
- - /bluetext: Must type for fun
- - /toss: Tosses A coin
- - /abuse: Abuses the cunt
- - /insult: Insult the cunt
- - /slap: Slaps the cunt
- - /roll: Roll a dice.
- - /rlg: Join ears,nose,mouth and create an emo ;-;
- - /react: Check on your own
- - /rhappy: Check on your own
- - /rangry: Check on your own
- - /angrymoji: Check on your own
- - /crymoji: Check on your own
- - /cowsay, /tuxsay , /milksay , /kisssay , /wwwsay , /defaultsay , /bunnysay , /moosesay , /sheepsay , /rensay , /cheesesay , /ghostbusterssay , /skeletonsay <i>text</i>: Returns a stylish art text from the given text
- - /deepfry: Type this in reply to an image/sticker to roast the image/sticker
- - /figlet: Another Style art
- - /dice: Roll A dice
- - /dart: Throw a dart and try your luck
- - /basketball: Try your luck if you can enter the ball in the ring
- - /type <i>text</i>: Make the bot type something for you in a professional way
- - /carbon <i>text</i>: Beautifies your text and enwraps inside a terminal image [ENGLISH ONLY]
- - /sticklet <i>text</i>: Turn a text into a sticker
- - /fortune: gets a random fortune quote
- - /quotly: Type /quotly in reply to a message to make a sticker of that
- - /animate: Enwrap your text in a beautiful anime
+ • `/owo`*:* OWO de text
+ • `/stretch`*:* STRETCH de text
+ • `/clapmoji`*:* Type in reply to a message and see magic
+ • `/bmoji`*:* Type in reply to a message and see magic
+ • `/copypasta`*:* Type in reply to a message and see magic
+ • `/vapor`*:* owo vapor dis
+ • `/shout text `*:* Write anything that u want it to should
+ • `/zalgofy`*:* reply to a message to glitch it out!
+ • `/table`*:* get flip/unflip `*:*v.
+ • `/decide`*:* Randomly answers yes/no/maybe
+ • `/bluetext`*:* Must type for fun
+ • `/toss`*:* Tosses A coin
+ • `/abuse`*:* Abuses the cunt
+ • `/insult`*:* Insult the cunt
+ • `/slap`*:* Slaps the cunt
+ • `/roll`*:* Roll a dice.
+ • `/rlg`*:* Join ears,nose,mouth and create an emo ;-;
+ • `/react`*:* Check on your own
+ • `/rhappy`*:* Check on your own
+ • `/rangry`*:* Check on your own
+ • `/angrymoji`*:* Check on your own
+ • `/crymoji`*:* Check on your own
+ • `/cowsay, /tuxsay , /milksay , /kisssay , /wwwsay , /defaultsay , /bunnysay , /moosesay , /sheepsay , /rensay , /cheesesay , /ghostbusterssay , /skeletonsay text `*:* Returns a stylish art text from the given text
+ • `/deepfry`*:* Type this in reply to an image/sticker to roast the image/sticker
+ • `/figlet`*:* Another Style art
+ • `/dice`*:* Roll A dice
+ • `/dart`*:* Throw a dart and try your luck
+ • `/basketball`*:* Try your luck if you can enter the ball in the ring
+ • `/type text c Make the bot type something for you in a professional way
+ • `/carbon text`*:* Beautifies your text and enwraps inside a terminal image [ENGLISH ONLY]
+ • `/sticklet text`*:* Turn a text into a sticker
+ • `/fortune`*:* gets a random fortune quote
+ • `/quotly`*:* Type /quotly in reply to a message to make a sticker of that
+ • `/animate`*:* Enwrap your text in a beautiful anime
  
 The Memes module copied and modified from @Missjuliarobot.. Full credits goes to julia 
 """

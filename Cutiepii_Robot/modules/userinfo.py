@@ -543,7 +543,7 @@ Examples:
  
 *AFk:*
 When marked as AFK, any mentions will be replied to with a message stating that you're not available!
-  - /afk <reason>: Mark yourself as AFK.
+ • `/afk <reason>`*:* Mark yourself as AFK.
   - brb <reason>: Same as the afk command, but not a command.\n 
   
 *What is that health thingy?*

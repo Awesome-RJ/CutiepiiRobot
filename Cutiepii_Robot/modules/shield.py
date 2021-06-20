@@ -410,10 +410,10 @@ __help__ = """
 *Group Guardian:*
 Cutiepii can protect your group from NSFW senders, Slag word users and also can force members to use English
 *Commmands*
- - /gshield <i>on/off</i> - Enable|Disable Porn cleaning
- - /globalmode <i>on/off</i> - Enable|Disable English only mode
- - /profanity <i>on/off</i> - Enable|Disable slag word cleaning
+ • `/gshield on/off`*:* Enable|Disable Porn cleaning
+ • `/globalmode on/off`*:* Enable|Disable English only mode
+ • `/profanity on/off`*:* Enable|Disable slag word cleaning
  
 Note: Special credits goes to Julia project and Friday Userbot
 """
-__mod_name__ = "SHIELD"
+__mod_name__ = "Shield"
