@@ -530,8 +530,8 @@ def devlist(update: Update, context: CallbackContext):
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
-
-__help__ = f"""
+"""
+__help__ = f
 *⚠️ Notice:*
 Commands listed here only work for users with special access and are mainly used for troubleshooting, debugging purposes.
 Group admins/group owners do not need these commands.
@@ -650,7 +650,7 @@ dispatcher.add_handler(SUPPORTLIST_HANDLER)
 dispatcher.add_handler(SUDOLIST_HANDLER)
 dispatcher.add_handler(DEVLIST_HANDLER)
 
-__mod_name__ = "Disasters"
+# __mod_name__ = "Disasters"
 __handlers__ = [
     SUDO_HANDLER,
     SUPPORT_HANDLER,
