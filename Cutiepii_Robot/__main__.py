@@ -435,7 +435,7 @@ def send_settings(chat_id, user_id, user=False):
 
         else:
         
-        .bot.send_message(
+        dispatcher.bot.send_message(
                 user_id,
                 "Seems like there aren't any user specific settings available :'(",
                 parse_mode=ParseMode.MARKDOWN,
