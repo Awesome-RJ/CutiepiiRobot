@@ -24,7 +24,6 @@ from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 from Cutiepii_Robot import telethn as tbot
-from Cutiepii_Robot import telethn as client
 from Cutiepii_Robot.event import register
 
 opener = urllib.request.build_opener()
