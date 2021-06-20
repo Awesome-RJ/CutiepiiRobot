@@ -16,7 +16,6 @@ This repo was just reamped to suit an Anime-centric community. All original cred
 Thank you for contributing with me in this Project:
 + [Rajkumar](https://github.com/Awesome-RJ)
 + [HuntingBots](https://github.com/HuntingBots)
-+ [XDENVIL](https://github.com/XDENVIL)
 + [TheRealPhoenix](https://github.com/rsktg)
 + [DragSama](https://github.com/DragSama)
 + [TsunayoshiSawada](https://github.com/TsunayoshiSawada)
