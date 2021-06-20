@@ -82,8 +82,8 @@ async def msg(event):
 
     wiki = a.get("wiki")
 
-    caption = f"""<b><u>  • Information Gathered Successfully •  </b></u>
-<b>
+    caption = f"""• Information Gathered Successfully •\n
+
   • Country Name:- {name}
   • Alternative Spellings:- {hu}
   • Country Area:- {area} square kilometers
