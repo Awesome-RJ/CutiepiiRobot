@@ -434,7 +434,8 @@ def send_settings(chat_id, user_id, user=False):
             )
 
         else:
-            dispatcher.bot.send_message(
+        
+        .bot.send_message(
                 user_id,
                 "Seems like there aren't any user specific settings available :'(",
                 parse_mode=ParseMode.MARKDOWN,
@@ -642,6 +643,7 @@ def main():
     dispatcher.add_handler(migrate_handler)
     dispatcher.add_handler(donate_handler)
     dispatcher.add_error_handler(error_callback)
+    dispatcher.add_handler(data_callback_handler)
     # dispatcher.add_error_handler(error_handler)
 
     if WEBHOOK:
