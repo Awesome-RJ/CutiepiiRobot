@@ -24,7 +24,6 @@ from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 from Cutiepii_Robot import telethn as tbot
-from Cutiepii_Robot import telethn as client
 from Cutiepii_Robot.event import register
 
 opener = urllib.request.build_opener()
@@ -228,7 +227,7 @@ def reverse(update: Update, context:CallbackContext):
             if HE.reason == 'Not Found':
                 msg.reply_text("Image not found.")
                 return
-            elif HE.reason == 'Forbidden':
+            if HE.reason == 'Forbidden':
                 msg.reply_text("Couldn't access the provided link, The website might have blocked accessing to the website by bot or the website does not existed.")
                 return
         except URLError as UE:
@@ -257,7 +256,7 @@ def reverse(update: Update, context:CallbackContext):
         os.remove(imagename)
         match = ParseSauce(fetchUrl + "&hl=en")
         guess = match['best_guess']
-        if match['override'] and not match['override'] == '':
+        if match['override'] and match['override'] != '':
             imgspage = match['override']
         else:
             imgspage = match['similar_images']
@@ -355,7 +354,7 @@ async def is_register_admin(chat, user):
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
-    elif isinstance(chat, types.InputPeerChat):
+    if isinstance(chat, types.InputPeerChat):
 
         ui = await client.get_peer_id(user)
         ps = (
@@ -365,8 +364,7 @@ async def is_register_admin(chat, user):
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
         )
-    else:
-        return None
+    return None
 
 
 @register(pattern=r"^/getqr$")

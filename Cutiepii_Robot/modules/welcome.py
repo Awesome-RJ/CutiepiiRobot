@@ -211,7 +211,7 @@ def new_member(update: Update, context: CallbackContext):
                 continue
 
             # Welcome Devs
-            elif new_mem.id in DEV_USERS:
+            if new_mem.id in DEV_USERS:
                 update.effective_message.reply_text(
                     "Be cool! A member of the Heroes Association just joined.",
                     reply_to_message_id=reply,
@@ -224,7 +224,7 @@ def new_member(update: Update, context: CallbackContext):
                 continue
 
             # Welcome Sudos
-            elif new_mem.id in DRAGONS:
+            if new_mem.id in DRAGONS:
                 update.effective_message.reply_text(
                     "Whoa! A Dragon disaster just joined! Stay Alert!",
                     reply_to_message_id=reply,
@@ -237,7 +237,7 @@ def new_member(update: Update, context: CallbackContext):
                 continue
 
             # Welcome Support
-            elif new_mem.id in DEMONS:
+            if new_mem.id in DEMONS:
                 update.effective_message.reply_text(
                     "Huh! Someone with a Demon disaster level just joined!",
                     reply_to_message_id=reply,
@@ -250,7 +250,7 @@ def new_member(update: Update, context: CallbackContext):
                 continue
 
             # Welcome Whitelisted
-            elif new_mem.id in TIGERS:
+            if new_mem.id in TIGERS:
                 update.effective_message.reply_text(
                     "Roar! A Tiger disaster just joined!",
                     reply_to_message_id=reply,
@@ -263,7 +263,7 @@ def new_member(update: Update, context: CallbackContext):
                 continue
 
             # Welcome Tigers
-            elif new_mem.id in WOLVES:
+            if new_mem.id in WOLVES:
                 update.effective_message.reply_text(
                     "Awoo! A Wolf disaster just joined!",
                     reply_to_message_id=reply,
@@ -276,7 +276,7 @@ def new_member(update: Update, context: CallbackContext):
                 continue
 
             # Welcome yourself
-            elif new_mem.id == bot.id:
+            if new_mem.id == bot.id:
                 creator = None
                 for x in bot.bot.get_chat_administrators(update.effective_chat.id):
                     if x.status == "creator":
@@ -306,60 +306,58 @@ def new_member(update: Update, context: CallbackContext):
                     reply_to_message_id=reply,
                 )
                 continue
+            buttons = sql.get_welc_buttons(chat.id)
+            keyb = build_keyboard(buttons)
+
+            if welc_type not in (sql.Types.TEXT, sql.Types.BUTTON_TEXT):
+                media_wel = True
+
+            first_name = (
+                new_mem.first_name or "PersonWithNoName"
+            )  # edge case of empty name - occurs for some bugs.
+
+            if cust_welcome:
+                if cust_welcome == sql.DEFAULT_WELCOME:
+                    cust_welcome = random.choice(
+                        sql.DEFAULT_WELCOME_MESSAGES,
+                    ).format(first=escape_markdown(first_name))
+
+                if new_mem.last_name:
+                    fullname = escape_markdown(f"{first_name} {new_mem.last_name}")
+                else:
+                    fullname = escape_markdown(first_name)
+                count = chat.get_members_count()
+                mention = mention_markdown(new_mem.id, escape_markdown(first_name))
+                if new_mem.username:
+                    username = "@" + escape_markdown(new_mem.username)
+                else:
+                    username = mention
+
+                valid_format = escape_invalid_curly_brackets(
+                    cust_welcome,
+                    VALID_WELCOME_FORMATTERS,
+                )
+                res = valid_format.format(
+                    first=escape_markdown(first_name),
+                    last=escape_markdown(new_mem.last_name or first_name),
+                    fullname=escape_markdown(fullname),
+                    username=username,
+                    mention=mention,
+                    count=count,
+                    chatname=escape_markdown(chat.title),
+                    id=new_mem.id,
+                )
 
             else:
-                buttons = sql.get_welc_buttons(chat.id)
-                keyb = build_keyboard(buttons)
-
-                if welc_type not in (sql.Types.TEXT, sql.Types.BUTTON_TEXT):
-                    media_wel = True
-
-                first_name = (
-                    new_mem.first_name or "PersonWithNoName"
-                )  # edge case of empty name - occurs for some bugs.
-
-                if cust_welcome:
-                    if cust_welcome == sql.DEFAULT_WELCOME:
-                        cust_welcome = random.choice(
-                            sql.DEFAULT_WELCOME_MESSAGES,
-                        ).format(first=escape_markdown(first_name))
-
-                    if new_mem.last_name:
-                        fullname = escape_markdown(f"{first_name} {new_mem.last_name}")
-                    else:
-                        fullname = escape_markdown(first_name)
-                    count = chat.get_members_count()
-                    mention = mention_markdown(new_mem.id, escape_markdown(first_name))
-                    if new_mem.username:
-                        username = "@" + escape_markdown(new_mem.username)
-                    else:
-                        username = mention
-
-                    valid_format = escape_invalid_curly_brackets(
-                        cust_welcome,
-                        VALID_WELCOME_FORMATTERS,
-                    )
-                    res = valid_format.format(
-                        first=escape_markdown(first_name),
-                        last=escape_markdown(new_mem.last_name or first_name),
-                        fullname=escape_markdown(fullname),
-                        username=username,
-                        mention=mention,
-                        count=count,
-                        chatname=escape_markdown(chat.title),
-                        id=new_mem.id,
-                    )
-
-                else:
-                    res = random.choice(sql.DEFAULT_WELCOME_MESSAGES).format(
-                        first=escape_markdown(first_name),
-                    )
-                    keyb = []
-
-                backup_message = random.choice(sql.DEFAULT_WELCOME_MESSAGES).format(
+                res = random.choice(sql.DEFAULT_WELCOME_MESSAGES).format(
                     first=escape_markdown(first_name),
                 )
-                keyboard = InlineKeyboardMarkup(keyb)
+                keyb = []
+
+            backup_message = random.choice(sql.DEFAULT_WELCOME_MESSAGES).format(
+                first=escape_markdown(first_name),
+            )
+            keyboard = InlineKeyboardMarkup(keyb)
 
         else:
             welcome_bool = False
@@ -580,7 +578,7 @@ def left_member(update: Update, context: CallbackContext):
                 return
 
             # Give the devs a special goodbye
-            elif left_mem.id in DEV_USERS:
+            if left_mem.id in DEV_USERS:
                 update.effective_message.reply_text(
                     "See you later at the Hero's Association!",
                     reply_to_message_id=reply,
@@ -861,7 +859,7 @@ def welcomemute(update: Update, context: CallbackContext) -> str:
                 f"<b>• Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"Has toggled welcome mute to <b>OFF</b>."
             )
-        elif args[0].lower() in ["soft"]:
+        if args[0].lower() in ["soft"]:
             sql.set_welcome_mutes(chat.id, "soft")
             msg.reply_text(
                 "I will restrict users' permission to send media for 24 hours.",
@@ -872,7 +870,7 @@ def welcomemute(update: Update, context: CallbackContext) -> str:
                 f"<b>• Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"Has toggled welcome mute to <b>SOFT</b>."
             )
-        elif args[0].lower() in ["strong"]:
+        if args[0].lower() in ["strong"]:
             sql.set_welcome_mutes(chat.id, "strong")
             msg.reply_text(
                 "I will now mute people when they join until they prove they're not a bot.\nThey will have 120seconds before they get kicked.",
@@ -883,20 +881,18 @@ def welcomemute(update: Update, context: CallbackContext) -> str:
                 f"<b>• Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"Has toggled welcome mute to <b>STRONG</b>."
             )
-        else:
-            msg.reply_text(
-                "Please enter <code>off</code>/<code>no</code>/<code>soft</code>/<code>strong</code>!",
-                parse_mode=ParseMode.HTML,
-            )
-            return ""
-    else:
-        curr_setting = sql.welcome_mutes(chat.id)
-        reply = (
-            f"\n Give me a setting!\nChoose one out of: <code>off</code>/<code>no</code> or <code>soft</code> or <code>strong</code> only! \n"
-            f"Current setting: <code>{curr_setting}</code>"
+        msg.reply_text(
+            "Please enter <code>off</code>/<code>no</code>/<code>soft</code>/<code>strong</code>!",
+            parse_mode=ParseMode.HTML,
         )
-        msg.reply_text(reply, parse_mode=ParseMode.HTML)
         return ""
+    curr_setting = sql.welcome_mutes(chat.id)
+    reply = (
+        f"\n Give me a setting!\nChoose one out of: <code>off</code>/<code>no</code> or <code>soft</code> or <code>strong</code> only! \n"
+        f"Current setting: <code>{curr_setting}</code>"
+    )
+    msg.reply_text(reply, parse_mode=ParseMode.HTML)
+    return ""
 
 
 @user_admin
@@ -927,7 +923,7 @@ def clean_welcome(update: Update, context: CallbackContext) -> str:
             f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
             f"Has toggled clean welcomes to <code>ON</code>."
         )
-    elif args[0].lower() in ("off", "no"):
+    if args[0].lower() in ("off", "no"):
         sql.set_clean_welcome(str(chat.id), False)
         update.effective_message.reply_text("I won't delete old welcome messages.")
         return (
@@ -936,9 +932,8 @@ def clean_welcome(update: Update, context: CallbackContext) -> str:
             f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
             f"Has toggled clean welcomes to <code>OFF</code>."
         )
-    else:
-        update.effective_message.reply_text("I understand 'on/yes' or 'off/no' only!")
-        return ""
+    update.effective_message.reply_text("I understand 'on/yes' or 'off/no' only!")
+    return ""
 
 
 @user_admin

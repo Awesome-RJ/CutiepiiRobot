@@ -317,8 +317,8 @@ def help_button(update, context):
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup(
                     [
-                        [InlineKeyboardButton(text="【Ｂａｃｋ】", callback_data="help_back")],
-                        [InlineKeyboardButton(text="【Ｓｕｐｐｏｒｔ】", url="https://t.me/Black_Knights_Union_Support")]
+                        [InlineKeyboardButton(text="【Ｂａｃｋ】", callback_data="help_back"),
+                         InlineKeyboardButton(text="【Ｓｕｐｐｏｒｔ】", url="https://t.me/Black_Knights_Union_Support")]
                     ],
                 ),
             )

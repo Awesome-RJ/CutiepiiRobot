@@ -7,7 +7,7 @@ A modular telegram Python bot running on python3 with an sqlalchemy, Redis, mong
 
 Can be found on telegram as [Cutiepii](https://t.me/Cutiepii_Robot).
 
-The Support group can be reached out to at [Eagle Union](https://t.me/YorktownEagleUnion), where you can ask for help setting up your bot, discover/request new features, report bugs, and stay in the loop whenever a new update is available. 
+The Support group can be reached out to at [Black Knights Union](https://t.me/Black_Knights_Union), where you can ask for help setting up your bot, discover/request new features, report bugs, and stay in the loop whenever a new update is available. 
 
 ## Credits
 The bot is based of on the original work done by [PaulSonOfLars](https://github.com/PaulSonOfLars)
