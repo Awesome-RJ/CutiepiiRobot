@@ -227,7 +227,7 @@ def reverse(update: Update, context:CallbackContext):
             if HE.reason == 'Not Found':
                 msg.reply_text("Image not found.")
                 return
-            elif HE.reason == 'Forbidden':
+            if HE.reason == 'Forbidden':
                 msg.reply_text("Couldn't access the provided link, The website might have blocked accessing to the website by bot or the website does not existed.")
                 return
         except URLError as UE:
@@ -354,7 +354,7 @@ async def is_register_admin(chat, user):
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
-    elif isinstance(chat, types.InputPeerChat):
+    if isinstance(chat, types.InputPeerChat):
 
         ui = await client.get_peer_id(user)
         ps = (
@@ -364,8 +364,7 @@ async def is_register_admin(chat, user):
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
         )
-    else:
-        return None
+    return None
 
 
 @register(pattern=r"^/getqr$")
