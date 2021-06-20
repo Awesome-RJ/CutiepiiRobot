@@ -1235,7 +1235,7 @@ WELC_HELP_TXT = (
     "Welcome messages also support markdown, so you can make any elements bold/italic/code/links. "
     "Buttons are also supported, so you can make your welcomes look awesome with some nice intro "
     "buttons.\n"
-    f"To create a button linking to your rules, use this: `[Rules](buttonurl://t.me/{dispatcher.bot.username}?start=group_id)`. "
+    "To create a button linking to your rules, use this: `[Rules](buttonurl://t.me/{dispatcher.bot.username}?start=group_id)`."
     "Simply replace `group_id` with your group's id, which can be obtained via /id, and you're good to "
     "go. Note that group ids are usually preceded by a `-` sign; this is required, so please don't "
     "remove it.\n"
