@@ -29,7 +29,6 @@ Thank you for contributing with me in this Project:
 + [InukaAsith](https://github.com/InukaAsith)
 + [AyraHikari](https://github.com/AyraHikari)
 + [Peaktogoo](https://github.com/peaktogoo)
-+ [DESTROYER-32](https://github.com/DESTROYER-32)
 
 
 Any other authorship/credits can be seen through the commits.
