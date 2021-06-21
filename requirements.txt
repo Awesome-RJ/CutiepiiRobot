@@ -2,11 +2,11 @@ future
 emoji
 lxml
 beautifulsoup4
-requests
+requests==2.20.0
 SQLAlchemy==1.4.0
 python-telegram-bot>=13.0
 coffeehouse==2.2.4
-psycopg2-binary
+psycopg2-binary==2.8.6
 feedparser
 pynewtonmath
 spongemock
@@ -94,4 +94,3 @@ gpytranslate
 youtube_search
 wget
 aiofiles
-multicolorcaptcha
