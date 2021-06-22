@@ -41,7 +41,7 @@ hachoir
 pytz
 pyrogram>=2.0.0
 python-rapidjson
-TgCrypto
+tgCrypto>=1.2.2
 youtube_dl>=2021.4.26
 register
 bing_image_downloader
