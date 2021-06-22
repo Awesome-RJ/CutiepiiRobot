@@ -39,7 +39,7 @@ pySmartDL
 pybase64
 hachoir
 pytz
-pyrogram>=2.0.0
+pyrogram
 python-rapidjson
 tgCrypto>=1.2.2
 youtube_dl>=2021.4.26
