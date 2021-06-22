@@ -273,6 +273,8 @@ def info(update: Update, context: CallbackContext):
         userhp = hpmanager(user)
         text += f"\n\n<b>Health:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[<i>{make_bar(int(userhp['percentage']))} </i>{userhp['percentage']}%]"
 
+        
+
     try:
         spamwtc = sw.get_ban(int(user.id))
         if spamwtc:
