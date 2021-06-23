@@ -3,7 +3,7 @@ import time
 
 import aiohttp
 
-from Cutiepii_Robot.utils.uputils import humanbytes, time_formatter
+from Cutiepii_Robot.functions.pluginhelpers import humanbytes, time_formatter
 
 
 async def download_file(url, file_name, message, start_time, bot):

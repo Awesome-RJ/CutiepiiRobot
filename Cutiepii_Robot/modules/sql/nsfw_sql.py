@@ -1,7 +1,10 @@
 import threading
 from sqlalchemy import Column, String
 from Cutiepii_Robot.modules.sql import BASE, SESSION
-
+#   |----------------------------------|
+#   |  Test Module by @EverythingSuckz |
+#   |        Kang with Credits         |
+#   |----------------------------------|
 class NSFWChats(BASE):
     __tablename__ = "nsfw_chats"
     chat_id = Column(String(14), primary_key=True)
@@ -16,7 +19,10 @@ INSERTION_LOCK = threading.RLock()
 def is_nsfw(chat_id):
     try:
         chat = SESSION.query(NSFWChats).get(str(chat_id))
-        return bool(chat)
+        if chat:
+            return True
+        else:
+            return False
     finally:
         SESSION.close()
 

@@ -134,3 +134,7 @@ class CustomMessageHandler(MessageHandler):
             self.filters &= ~(
                 Filters.update.edited_message | Filters.update.edited_channel_post
             )
+
+        def check_update(self, update):
+            if isinstance(update, Update) and update.effective_message:
+                return self.filters(update)

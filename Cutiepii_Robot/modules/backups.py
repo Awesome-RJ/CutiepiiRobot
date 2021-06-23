@@ -1,11 +1,9 @@
-import json
-import time
-import os
+import json, time, os
 from io import BytesIO
 
 from telegram import ParseMode, Message
 from telegram.error import BadRequest
-from telegram.ext import CommandHandler
+from telegram.ext import CommandHandler, run_async
 
 import Cutiepii_Robot.modules.sql.notes_sql as sql
 from Cutiepii_Robot import dispatcher, LOGGER, OWNER_ID, JOIN_LOGGER, SUPPORT_CHAT
@@ -24,6 +22,7 @@ from Cutiepii_Robot.modules.sql import disable_sql as disabledsql
 # import Cutiepii_Robot.modules.sql.welcome_sql as welcsql
 import Cutiepii_Robot.modules.sql.locks_sql as locksql
 from Cutiepii_Robot.modules.connection import connected
+
 
 
 @user_admin
@@ -119,6 +118,7 @@ def import_data(update, context):
         msg.reply_text(text, parse_mode="markdown")
 
 
+
 @user_admin
 def export_data(update, context):
     chat_data = context.chat_data
@@ -155,8 +155,9 @@ def export_data(update, context):
                 parse_mode=ParseMode.MARKDOWN,
             )
             return
-        if user.id != OWNER_ID:
-            put_chat(chat_id, new_jam, chat_data)
+        else:
+            if user.id != OWNER_ID:
+                put_chat(chat_id, new_jam, chat_data)
     else:
         if user.id != OWNER_ID:
             put_chat(chat_id, new_jam, chat_data)
@@ -341,7 +342,7 @@ def export_data(update, context):
     context.bot.sendDocument(
         current_chat_id,
         document=open("Cutiepii_Robot{}.backup".format(chat_id), "rb"),
-        caption="*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `Cutiepii_Robot-Backup` was specially made for notes.".format(
+        caption="*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `FoundingTitanRobot-Backup` was specially made for notes.".format(
             chat.title, chat_id, tgl,
         ),
         timeout=360,
@@ -378,8 +379,8 @@ __help__ = """
 
 """
 
-IMPORT_HANDLER = CommandHandler("import", import_data)
-EXPORT_HANDLER = CommandHandler("export", export_data, pass_chat_data=True)
+IMPORT_HANDLER = CommandHandler("import", import_data, run_async=True)
+EXPORT_HANDLER = CommandHandler("export", export_data, pass_chat_data=True, run_async=True)
 
 dispatcher.add_handler(IMPORT_HANDLER)
 dispatcher.add_handler(EXPORT_HANDLER)

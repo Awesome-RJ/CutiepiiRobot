@@ -1,3 +1,4 @@
+# By @TroJanzHEX
 import os
 import shutil
 
@@ -36,12 +37,13 @@ async def bright(client, message):
         print("bright-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def mix(client, message):
@@ -76,12 +78,13 @@ async def mix(client, message):
         print("mix-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def black_white(client, message):
@@ -115,12 +118,13 @@ async def black_white(client, message):
         print("black_white-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def normal_blur(client, message):
@@ -154,12 +158,13 @@ async def normal_blur(client, message):
         print("normal_blur-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def g_blur(client, message):
@@ -193,12 +198,13 @@ async def g_blur(client, message):
         print("g_blur-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def box_blur(client, message):
@@ -232,9 +238,10 @@ async def box_blur(client, message):
         print("box_blur-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return

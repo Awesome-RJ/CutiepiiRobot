@@ -112,8 +112,10 @@ def rm_note(chat_id, note_name):
             SESSION.delete(note)
             SESSION.commit()
             return True
-        SESSION.close()
-        return False
+
+        else:
+            SESSION.close()
+            return False
 
 
 def get_all_chat_notes(chat_id):

@@ -1,3 +1,4 @@
+# By @TroJanzHEX
 import os
 import shutil
 
@@ -35,12 +36,13 @@ async def black_border(client, message):
         print("black_border-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def green_border(client, message):
@@ -74,12 +76,13 @@ async def green_border(client, message):
         print("green_border-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def blue_border(client, message):
@@ -113,12 +116,13 @@ async def blue_border(client, message):
         print("blue_border-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def red_border(client, message):
@@ -152,9 +156,10 @@ async def red_border(client, message):
         print("red_border-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return

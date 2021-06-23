@@ -32,7 +32,8 @@ def check_user(user_id: int, bot: Bot, chat: Chat) -> Optional[str]:
         if excp.message == "User not found":
             reply = "I can't seem to find this user"
             return reply
-        raise
+        else:
+            raise
 
     if user_id == bot.id:
         reply = "I'm not gonna MUTE myself, How high are you?"
@@ -43,6 +44,7 @@ def check_user(user_id: int, bot: Bot, chat: Chat) -> Optional[str]:
         return reply
 
     return None
+
 
 
 @connection_status
@@ -85,9 +87,12 @@ def mute(update: Update, context: CallbackContext) -> str:
             parse_mode=ParseMode.HTML,
         )
         return log
-    message.reply_text("This user is already muted!")
+
+    else:
+        message.reply_text("This user is already muted!")
 
     return ""
+
 
 
 @connection_status
@@ -152,6 +157,7 @@ def unmute(update: Update, context: CallbackContext) -> str:
     return ""
 
 
+
 @connection_status
 @bot_admin
 @can_restrict
@@ -211,22 +217,24 @@ def temp_mute(update: Update, context: CallbackContext) -> str:
                 parse_mode=ParseMode.HTML,
             )
             return log
-        message.reply_text("This user is already muted.")
+        else:
+            message.reply_text("This user is already muted.")
 
     except BadRequest as excp:
         if excp.message == "Reply message not found":
             # Do not reply
             message.reply_text(f"Muted for {time_val}!", quote=False)
             return log
-        LOGGER.warning(update)
-        LOGGER.exception(
-            "ERROR muting user %s in chat %s (%s) due to %s",
-            user_id,
-            chat.title,
-            chat.id,
-            excp.message,
-        )
-        message.reply_text("Well damn, I can't mute that user.")
+        else:
+            LOGGER.warning(update)
+            LOGGER.exception(
+                "ERROR muting user %s in chat %s (%s) due to %s",
+                user_id,
+                chat.title,
+                chat.id,
+                excp.message,
+            )
+            message.reply_text("Well damn, I can't mute that user.")
 
     return ""
 
@@ -238,9 +246,9 @@ __help__ = """
  • `/unmute <userhandle>`*:* unmutes a user. Can also be used as a reply, muting the replied to user.
 """
 
-MUTE_HANDLER = CommandHandler("mute", mute)
-UNMUTE_HANDLER = CommandHandler("unmute", unmute)
-TEMPMUTE_HANDLER = CommandHandler(["tmute", "tempmute"], temp_mute)
+MUTE_HANDLER = CommandHandler("mute", mute, run_async=True)
+UNMUTE_HANDLER = CommandHandler("unmute", unmute, run_async=True)
+TEMPMUTE_HANDLER = CommandHandler(["tmute", "tempmute"], temp_mute, run_async=True)
 
 dispatcher.add_handler(MUTE_HANDLER)
 dispatcher.add_handler(UNMUTE_HANDLER)

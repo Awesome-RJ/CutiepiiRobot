@@ -11,12 +11,9 @@ from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 sites_list = {
     "Telegram": "https://api.telegram.org",
-    "Google": "https://google.com",
-    "Anilist": "https://graphql.anilist.co",
+    "Kaizoku": "https://animekaizoku.com",
+    "Kayo": "https://animekayo.com",
     "Jikan": "https://api.jikan.moe/v3",
-    "Hindi K Drama": "https://hindikdrama.xyz",
-    "Yuki": "https://cdn-hindikdrama.com/"
-    
 }
 
 
@@ -71,6 +68,7 @@ def ping_func(to_ping: List[str]) -> List[str]:
     return ping_result
 
 
+
 @sudo_plus
 def ping(update: Update, context: CallbackContext):
     msg = update.effective_message
@@ -82,28 +80,32 @@ def ping(update: Update, context: CallbackContext):
     uptime = get_readable_time((time.time() - StartTime))
 
     message.edit_text(
-        "Cutie Cutie! PONG PONG!\n"
+        "PONG!!\n"
         "<b>Time Taken:</b> <code>{}</code>\n"
         "<b>Service uptime:</b> <code>{}</code>".format(telegram_ping, uptime),
-        parse_mode=ParseMode.HTML)
+        parse_mode=ParseMode.HTML,
+    )
+
+
 
 @sudo_plus
 def pingall(update: Update, context: CallbackContext):
-    to_ping = ["Google", "Anilist", "Telegram", "Jikan", "Hindi K Drama", "Yuki"]
+    to_ping = ["Kaizoku", "Kayo", "Telegram", "Jikan"]
     pinged_list = ping_func(to_ping)
-    pinged_list.insert(2, '')
+    pinged_list.insert(2, "")
     uptime = get_readable_time((time.time() - StartTime))
 
     reply_msg = "⏱Ping results are:\n"
     reply_msg += "\n".join(pinged_list)
-    reply_msg += '\n<b>Service uptime:</b> <code>{}</code>'.format(uptime)
+    reply_msg += "\n<b>Service uptime:</b> <code>{}</code>".format(uptime)
 
     update.effective_message.reply_text(
-        reply_msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+        reply_msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True,
+    )
 
 
-PING_HANDLER = DisableAbleCommandHandler("ping", ping)
-PINGALL_HANDLER = DisableAbleCommandHandler("pingall", pingall)
+PING_HANDLER = DisableAbleCommandHandler("ping", ping, run_async=True)
+PINGALL_HANDLER = DisableAbleCommandHandler("pingall", pingall, run_async=True)
 
 dispatcher.add_handler(PING_HANDLER)
 dispatcher.add_handler(PINGALL_HANDLER)

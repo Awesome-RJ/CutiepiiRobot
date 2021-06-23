@@ -31,8 +31,9 @@ def add_nsfw(update: Update, context: CallbackContext):
             f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
         )
         return message
-    msg.reply_text("NSFW Mode is already Activated for this chat!")
-    return ""
+    else:
+        msg.reply_text("NSFW Mode is already Activated for this chat!")
+        return ""
 
 
 
@@ -46,14 +47,15 @@ def rem_nsfw(update: Update, context: CallbackContext):
     if not is_nsfw:
         msg.reply_text("NSFW Mode is already Deactivated")
         return ""
-    sql.rem_nsfw(chat.id)
-    msg.reply_text("Rolled Back to SFW Mode!")
-    message = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"DEACTIVATED_NSFW\n"
-        f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-    )
-    return message
+    else:
+        sql.rem_nsfw(chat.id)
+        msg.reply_text("Rolled Back to SFW Mode!")
+        message = (
+            f"<b>{html.escape(chat.title)}:</b>\n"
+            f"DEACTIVATED_NSFW\n"
+            f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+        )
+        return message
 
 
 def list_nsfw_chats(update: Update, context: CallbackContext):
@@ -506,6 +508,11 @@ def hentaigif(update, context):
 
 
 def classic(update, context):
+    chat_id = update.effective_chat.id
+    if not update.effective_message.chat.type == "private":
+        is_nsfw = sql.is_nsfw(chat_id)
+        if not is_nsfw:
+            return
     msg = update.effective_message
     target = "classic"
     msg.reply_video(nekos.img(target))
@@ -559,6 +566,11 @@ def hug(update, context):
     target = "cuddle"
     msg.reply_video(nekos.img(target))
 
+
+def cuddle(update, context):
+    msg = update.effective_message
+    target = "cuddle"
+    msg.reply_video(nekos.img(target))
 
 
 def erok(update, context):
@@ -638,62 +650,63 @@ def dva(update, context):
         return
     msg.reply_photo(url)
 
-ADD_NSFW_HANDLER = CommandHandler("addnsfw", add_nsfw)
-REMOVE_NSFW_HANDLER = CommandHandler("rmnsfw", rem_nsfw)
+ADD_NSFW_HANDLER = CommandHandler("addnsfw", add_nsfw, run_async=True)
+REMOVE_NSFW_HANDLER = CommandHandler("rmnsfw", rem_nsfw, run_async=True)
 LIST_NSFW_CHATS_HANDLER = CommandHandler(
-    "nsfwchats", list_nsfw_chats, filters=CustomFilters.dev_filter)
-LEWDKEMO_HANDLER = CommandHandler("lewdkemo", lewdkemo)
-NEKO_HANDLER = CommandHandler("neko", neko)
-FEET_HANDLER = CommandHandler("feet", feet)
-YURI_HANDLER = CommandHandler("yuri", yuri)
-TRAP_HANDLER = CommandHandler("trap", trap)
-FUTANARI_HANDLER = CommandHandler("futanari", futanari)
-HOLOLEWD_HANDLER = CommandHandler("hololewd", hololewd)
-SOLOGIF_HANDLER = CommandHandler("sologif", sologif)
-CUMGIF_HANDLER = CommandHandler("cumgif", cumgif)
-EROKEMO_HANDLER = CommandHandler("erokemo", erokemo)
-LESBIAN_HANDLER = CommandHandler("lesbian", lesbian)
-WALLPAPER_HANDLER = CommandHandler("wallpaper", wallpaper)
-LEWDK_HANDLER = CommandHandler("lewdk", lewdk)
-NGIF_HANDLER = CommandHandler("ngif", ngif)
-TICKLE_HANDLER = CommandHandler("tickle", tickle)
-LEWD_HANDLER = CommandHandler("lewd", lewd)
-FEED_HANDLER = CommandHandler("feed", feed)
-EROYURI_HANDLER = CommandHandler("eroyuri", eroyuri)
-ERON_HANDLER = CommandHandler("eron", eron)
-CUM_HANDLER = CommandHandler("cum", cum)
-BJGIF_HANDLER = CommandHandler("bjgif", bjgif)
-BJ_HANDLER = CommandHandler("bj", bj)
-NEKONSFW_HANDLER = CommandHandler("nekonsfw", nekonsfw)
-SOLO_HANDLER = CommandHandler("solo", solo)
-KEMONOMIMI_HANDLER = CommandHandler("kemonomimi", kemonomimi)
-AVATARLEWD_HANDLER = CommandHandler("avatarlewd", avatarlewd)
-GASM_HANDLER = CommandHandler("gasm", gasm)
-POKE_HANDLER = CommandHandler("poke", poke)
-ANAL_HANDLER = CommandHandler("anal", anal)
-HENTAI_HANDLER = CommandHandler("hentai", hentai)
-AVATAR_HANDLER = CommandHandler("avatar", avatar)
-EROFEET_HANDLER = CommandHandler("erofeet", erofeet)
-HOLO_HANDLER = CommandHandler("holo", holo)
-TITS_HANDLER = CommandHandler("tits", tits)
-PUSSYGIF_HANDLER = CommandHandler("pussygif", pussygif)
-HOLOERO_HANDLER = CommandHandler("holoero", holoero)
-PUSSY_HANDLER = CommandHandler("pussy", pussy)
-HENTAIGIF_HANDLER = CommandHandler("hentaigif", hentaigif)
-CLASSIC_HANDLER = CommandHandler("classic", classic)
-KUNI_HANDLER = CommandHandler("kuni", kuni)
-WAIFU_HANDLER = CommandHandler("waifu", waifu)
-LEWD_HANDLER = CommandHandler("lewd", lewd)
-KISS_HANDLER = CommandHandler("kiss", kiss)
-FEMDOM_HANDLER = CommandHandler("femdom", femdom)
-CUDDLE_HANDLER = CommandHandler("hug", hug)
-EROK_HANDLER = CommandHandler("erok", erok)
-FOXGIRL_HANDLER = CommandHandler("foxgirl", foxgirl)
-TITSGIF_HANDLER = CommandHandler("titsgif", titsgif)
-ERO_HANDLER = CommandHandler("ero", ero)
-SMUG_HANDLER = CommandHandler("smug", smug)
-BAKA_HANDLER = CommandHandler("baka", baka)
-DVA_HANDLER = CommandHandler("dva", dva)
+    "nsfwchats", list_nsfw_chats, filters=CustomFilters.dev_filter, run_async=True)
+LEWDKEMO_HANDLER = CommandHandler("lewdkemo", lewdkemo, run_async=True)
+NEKO_HANDLER = CommandHandler("neko", neko, run_async=True)
+FEET_HANDLER = CommandHandler("feet", feet, run_async=True)
+YURI_HANDLER = CommandHandler("yuri", yuri, run_async=True)
+TRAP_HANDLER = CommandHandler("trap", trap, run_async=True)
+FUTANARI_HANDLER = CommandHandler("futanari", futanari, run_async=True)
+HOLOLEWD_HANDLER = CommandHandler("hololewd", hololewd, run_async=True)
+SOLOGIF_HANDLER = CommandHandler("sologif", sologif, run_async=True)
+CUMGIF_HANDLER = CommandHandler("cumgif", cumgif, run_async=True)
+EROKEMO_HANDLER = CommandHandler("erokemo", erokemo, run_async=True)
+LESBIAN_HANDLER = CommandHandler("lesbian", lesbian, run_async=True)
+WALLPAPER_HANDLER = CommandHandler("wallpaper", wallpaper, run_async=True)
+LEWDK_HANDLER = CommandHandler("lewdk", lewdk, run_async=True)
+NGIF_HANDLER = CommandHandler("ngif", ngif, run_async=True)
+TICKLE_HANDLER = CommandHandler("tickle", tickle, run_async=True)
+LEWD_HANDLER = CommandHandler("lewd", lewd, run_async=True)
+FEED_HANDLER = CommandHandler("feed", feed, run_async=True)
+EROYURI_HANDLER = CommandHandler("eroyuri", eroyuri, run_async=True)
+ERON_HANDLER = CommandHandler("eron", eron, run_async=True)
+CUM_HANDLER = CommandHandler("cum", cum, run_async=True)
+BJGIF_HANDLER = CommandHandler("bjgif", bjgif, run_async=True)
+BJ_HANDLER = CommandHandler("bj", bj, run_async=True)
+NEKONSFW_HANDLER = CommandHandler("nekonsfw", nekonsfw, run_async=True)
+SOLO_HANDLER = CommandHandler("solo", solo, run_async=True)
+KEMONOMIMI_HANDLER = CommandHandler("kemonomimi", kemonomimi, run_async=True)
+AVATARLEWD_HANDLER = CommandHandler("avatarlewd", avatarlewd, run_async=True)
+GASM_HANDLER = CommandHandler("gasm", gasm, run_async=True)
+POKE_HANDLER = CommandHandler("poke", poke, run_async=True)
+ANAL_HANDLER = CommandHandler("anal", anal, run_async=True)
+HENTAI_HANDLER = CommandHandler("hentai", hentai, run_async=True)
+AVATAR_HANDLER = CommandHandler("avatar", avatar, run_async=True)
+EROFEET_HANDLER = CommandHandler("erofeet", erofeet, run_async=True)
+HOLO_HANDLER = CommandHandler("holo", holo, run_async=True)
+TITS_HANDLER = CommandHandler("tits", tits, run_async=True)
+PUSSYGIF_HANDLER = CommandHandler("pussygif", pussygif, run_async=True)
+HOLOERO_HANDLER = CommandHandler("holoero", holoero, run_async=True)
+PUSSY_HANDLER = CommandHandler("pussy", pussy, run_async=True)
+HENTAIGIF_HANDLER = CommandHandler("hentaigif", hentaigif, run_async=True)
+CLASSIC_HANDLER = CommandHandler("classic", classic, run_async=True)
+KUNI_HANDLER = CommandHandler("kuni", kuni, run_async=True)
+WAIFU_HANDLER = CommandHandler("waifu", waifu, run_async=True)
+LEWD_HANDLER = CommandHandler("lewd", lewd, run_async=True)
+KISS_HANDLER = CommandHandler("kiss", kiss, run_async=True)
+FEMDOM_HANDLER = CommandHandler("femdom", femdom, run_async=True)
+CUDDLE_HANDLER = CommandHandler("cuddle", cuddle, run_async=True)
+HUG_HANDLER = CommandHandler("hug", hug, run_async=True)
+EROK_HANDLER = CommandHandler("erok", erok, run_async=True)
+FOXGIRL_HANDLER = CommandHandler("foxgirl", foxgirl, run_async=True)
+TITSGIF_HANDLER = CommandHandler("titsgif", titsgif, run_async=True)
+ERO_HANDLER = CommandHandler("ero", ero, run_async=True)
+SMUG_HANDLER = CommandHandler("smug", smug, run_async=True)
+BAKA_HANDLER = CommandHandler("baka", baka, run_async=True)
+DVA_HANDLER = CommandHandler("dva", dva, run_async=True)
 
 
 dispatcher.add_handler(ADD_NSFW_HANDLER)
@@ -744,6 +757,7 @@ dispatcher.add_handler(LEWD_HANDLER)
 dispatcher.add_handler(KISS_HANDLER)
 dispatcher.add_handler(FEMDOM_HANDLER)
 dispatcher.add_handler(CUDDLE_HANDLER)
+dispatcher.add_handler(HUG_HANDLER)
 dispatcher.add_handler(EROK_HANDLER)
 dispatcher.add_handler(FOXGIRL_HANDLER)
 dispatcher.add_handler(TITSGIF_HANDLER)
@@ -808,67 +822,69 @@ __handlers__ = [
     SMUG_HANDLER,
     BAKA_HANDLER,
     DVA_HANDLER,
+    HUG_HANDLER,
 ]
 
 __help__ = """
-Module credits`*:* [Dank-del](https`*:*//github.com/Dank-del/Chizuru/) ,
-Also thanks to [EverythingSuckz](https`*:*//t.me/EverythingSuckz) for NSFW filter.
+Module credits: [Dank-del](https://github.com/Dank-del/Chizuru/) ,
+Also thanks to [EverythingSuckz](https://t.me/EverythingSuckz) for NSFW filter.
     
-Usage`*:*
- • `/addnsfw `*:* Enable NSFW mode
- • `/rmnsfw `*:* Disable NSFW mode
+*ENABLE AND DISABLE* :
+    
+/addnsfw : Enable NSFW mode
+/rmnsfw : Disable NSFW mode
  
-Commands`*:*   
- • `/neko`*:* Sends Random SFW Neko source Images.
- • `/feet`*:* Sends Random Anime Feet Images.
- • `/yuri`*:* Sends Random Yuri source Images.
- • `/trap`*:* Sends Random Trap source Images.
- • `/futanari`*:* Sends Random Futanari source Images.
- • `/hololewd`*:* Sends Random Holo Lewds.
- • `/lewdkemo`*:* Sends Random Kemo Lewds.
- • `/sologif`*:* Sends Random Solo GIFs.
- • `/cumgif`*:* Sends Random Cum GIFs.
- • `/erokemo`*:* Sends Random Ero-Kemo Images.
- • `/lesbian`*:* Sends Random Les Source Images.
- • `/lewdk`*:* Sends Random Kitsune Lewds.
- • `/ngif`*:* Sends Random Neko GIFs.
- • `/tickle`*:* Sends Random Tickle GIFs.
- • `/lewd`*:* Sends Random Lewds.
- • `/feed`*:* Sends Random Feeding GIFs.
- • `/eroyuri`*:* Sends Random Ero-Yuri source Images.
- • `/eron`*:* Sends Random Ero-Neko source Images.
- • `/cum`*:* Sends Random Cum Images.
- • `/bjgif`*:* Sends Random Blow Job GIFs.
- • `/bj`*:* Sends Random Blow Job source Images.
- • `/nekonsfw`*:* Sends Random NSFW Neko source Images.
- • `/solo`*:* Sends Random NSFW Neko GIFs.
- • `/kemonomimi`*:* Sends Random KemonoMimi source Images.
- • `/avatarlewd`*:* Sends Random Avater Lewd Stickers.
- • `/gasm`*:* Sends Random Orgasm Stickers.
- • `/poke`*:* Sends Random Poke GIFs.
- • `/anal`*:* Sends Random Anal GIFs.
- • `/hentai`*:* Sends Random Hentai source Images.
- • `/avatar`*:* Sends Random Avatar Stickers.
- • `/erofeet`*:* Sends Random Ero-Feet source Images.
- • `/holo`*:* Sends Random Holo source Images.
- • `/tits`*:* Sends Random Tits source Images.
- • `/pussygif`*:* Sends Random Pussy GIFs.
- • `/holoero`*:* Sends Random Ero-Holo source Images.
- • `/pussy`*:* Sends Random Pussy source Images.
- • `/hentaigif`*:* Sends Random Hentai GIFs.
- • `/classic`*:* Sends Random Classic Hentai GIFs.
- • `/kuni`*:* Sends Random Pussy Lick GIFs.
- • `/waifu`*:* Sends Random Waifu Stickers.
- • `/kiss`*:* Sends Random Kissing GIFs.
- • `/femdom`*:* Sends Random Femdom source Images.
- • `/cuddle`*:* Sends Random Cuddle GIFs.
- • `/erok`*:* Sends Random Ero-Kitsune source Images.
- • `/foxgirl`*:* Sends Random FoxGirl source Images.
- • `/titsgif`*:* Sends Random Tits GIFs.
- • `/ero`*:* Sends Random Ero source Images.
- • `/smug`*:* Sends Random Smug GIFs.
- • `/baka`*:* Sends Random Baka Shout GIFs.
- • `/dva`*:* Sends Random D.VA source Images.
+*Commands* :   
+ - /neko: Sends Random SFW Neko source Images.
+ - /feet: Sends Random Anime Feet Images.
+ - /yuri: Sends Random Yuri source Images.
+ - /trap: Sends Random Trap source Images.
+ - /futanari: Sends Random Futanari source Images.
+ - /hololewd: Sends Random Holo Lewds.
+ - /lewdkemo: Sends Random Kemo Lewds.
+ - /sologif: Sends Random Solo GIFs.
+ - /cumgif: Sends Random Cum GIFs.
+ - /erokemo: Sends Random Ero-Kemo Images.
+ - /lesbian: Sends Random Les Source Images.
+ - /lewdk: Sends Random Kitsune Lewds.
+ - /ngif: Sends Random Neko GIFs.
+ - /tickle: Sends Random Tickle GIFs.
+ - /lewd: Sends Random Lewds.
+ - /feed: Sends Random Feeding GIFs.
+ - /eroyuri: Sends Random Ero-Yuri source Images.
+ - /eron: Sends Random Ero-Neko source Images.
+ - /cum: Sends Random Cum Images.
+ - /bjgif: Sends Random Blow Job GIFs.
+ - /bj: Sends Random Blow Job source Images.
+ - /nekonsfw: Sends Random NSFW Neko source Images.
+ - /solo: Sends Random NSFW Neko GIFs.
+ - /kemonomimi: Sends Random KemonoMimi source Images.
+ - /avatarlewd: Sends Random Avater Lewd Stickers.
+ - /gasm: Sends Random Orgasm Stickers.
+ - /poke: Sends Random Poke GIFs.
+ - /anal: Sends Random Anal GIFs.
+ - /hentai: Sends Random Hentai source Images.
+ - /avatar: Sends Random Avatar Stickers.
+ - /erofeet: Sends Random Ero-Feet source Images.
+ - /holo: Sends Random Holo source Images.
+ - /tits: Sends Random Tits source Images.
+ - /pussygif: Sends Random Pussy GIFs.
+ - /holoero: Sends Random Ero-Holo source Images.
+ - /pussy: Sends Random Pussy source Images.
+ - /hentaigif: Sends Random Hentai GIFs.
+ - /classic: Sends Random Classic Hentai GIFs.
+ - /kuni: Sends Random Pussy Lick GIFs.
+ - /waifu: Sends Random Waifu Stickers.
+ - /kiss: Sends Random Kissing GIFs.
+ - /femdom: Sends Random Femdom source Images.
+ - /cuddle: Sends Random Cuddle GIFs.
+ - /erok: Sends Random Ero-Kitsune source Images.
+ - /foxgirl: Sends Random FoxGirl source Images.
+ - /titsgif: Sends Random Tits GIFs.
+ - /ero: Sends Random Ero source Images.
+ - /smug: Sends Random Smug GIFs.
+ - /baka: Sends Random Baka Shout GIFs.
+ - /dva: Sends Random D.VA source Images.
 """
 
 __mod_name__ = "NSFW"

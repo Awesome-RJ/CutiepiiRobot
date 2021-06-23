@@ -1,5 +1,5 @@
 RUN_STRINGS = (
-    "Now you see me, now you don't.", "ε=ε=ε=ε=┌(;￣▽￣)┘",
+    "Now you see me, now you don't." "ε=ε=ε=ε=┌(;￣▽￣)┘",
     "Get back here!",
     "REEEEEEEEEEEEEEEEEE!!!!!!!",
     "Look out for the wall!",
@@ -20,12 +20,12 @@ RUN_STRINGS = (
 )
 
 GIFS = [
-    "CgACAgQAAx0CSVUvGgAC7pgramfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE",
+    "CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE",
     "CgACAgUAAx0CU_rCTAABAjdgX1s4NVaeCls6YaH3p43vgdCRwQIAAqsAA4P_MFUYQhyoR-kgpRsE",
     "CgACAgUAAx0CU_rCTAABAjdSX1s3fq5iEJ64YeQLKI8cD7CSuSEAAlUBAAJu09hW5iqWB0hTPD4bBA",
 ]
 
-SLAP_SAITAMA_TEMPLATES = (
+SLAP_CUTIEPII_TEMPLATES = (
     "Slap me one more time and I'll mute you.",
     "Stop slapping me. REEEEEEEEEEEEEE.",
     [
@@ -442,4 +442,43 @@ TABLE = (
     "(╯°□°）╯彡 ┻━┻",
     "I ran out of tables, will order more.",
     "Go do some work instead of flippin tables.",
+)
+
+GBUN = (
+    "Beware! This Bot-Admeme Can Gbun You Right Off The Map.",
+    "I Guess You've Forgot Spelling Of GBAN Maybe...?",
+    "Don't Misuse Your Powers...",
+    "Nah, He Looks Innocent...",
+)
+
+
+GBAM = "<b>Beginning Of Global Bam For {user2}</b>  \n \nChat Id : <code>{chatid}</code> \nReason : <i>{reason}</i> \nGBammed By {user1}"
+
+
+GBAM_REASON = (
+    "sasta noob",
+    "sasta waifu stealer",
+    "sasta white-het hekur",
+    "sasta white-het codur",
+    "sasta white-het vala chintu",
+    "sasta hexa hekur",
+    "sasta hexa playur",
+    "sasta tiktokur💃🏾",
+    "sasta membor of team 7",
+    "sasta selmon boi",
+    "sasta fri-fire player",
+    "sasta chhota bhim",
+    "sasta chhapri",
+    "sasta jony sin",
+    "sasta chhapri nibba",
+    "sasta nibba",
+    "sasti ria chokroborti",
+    "sasti nibbi",
+    "sasta camper",
+    "sasta pubji mobeil player",
+    "Aine me khudko dekh ke hilane wala",
+    "Bts ka choda",
+    "Kabhi Kabhi lagta he apun hi bhagwan he",
+    "Aise hi sexy lag raha tha",
+    "Eminem ka choda",
 )

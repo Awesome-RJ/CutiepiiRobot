@@ -27,11 +27,11 @@ from Cutiepii_Robot.__main__ import STATS, TOKEN, USER_INFO
 import Cutiepii_Robot.modules.sql.userinfo_sql as sql
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.sql.global_bans_sql import is_user_gbanned
-from Cutiepii_Robot.modules.sql.afk_redis import is_user_afk, afk_reason
+from Cutiepii_Robot.modules.redis.afk_redis import is_user_afk, afk_reason
 from Cutiepii_Robot.modules.sql.users_sql import get_user_num_chats
 from Cutiepii_Robot.modules.helper_funcs.chat_status import sudo_plus
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
-from Cutiepii_Robot import telethn as SaitamaTelethonClient
+from Cutiepii_Robot import telethn as CutiepiiTelethonClient
 
 
 def no_by_per(totalhp, percentage):
@@ -160,7 +160,7 @@ def get_id(update: Update, context: CallbackContext):
             )
 
 
-@SaitamaTelethonClient.on(
+@CutiepiiTelethonClient.on(
     events.NewMessage(
         pattern="/ginfo ",
         from_users=(TIGERS or []) + (DRAGONS or []) + (DEMONS or []),
@@ -272,8 +272,6 @@ def info(update: Update, context: CallbackContext):
     if user_id not in [bot.id, 777000, 1087968824]:
         userhp = hpmanager(user)
         text += f"\n\n<b>Health:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[<i>{make_bar(int(userhp['percentage']))} </i>{userhp['percentage']}%]"
-
-        
 
     try:
         spamwtc = sw.get_ban(int(user.id))

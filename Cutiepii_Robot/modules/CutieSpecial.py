@@ -1,16 +1,5 @@
 
 __help__ = """
-*Stylish your text:*
- • `/weebify <text>`*:* weebify your text!
- • `/bubble <text>`*:* bubble your text!
- • `/fbubble <text>`*:* bubble-filled your text!
- • `/square <text>`*:* square your text!
- • `/fsquare <text>`*:* square-filled your text!
- • `/blue <text>`*:* bluify your text!
- • `/latin <text>`*:* latinify your text!
- • `/lined <text>`*:* lined your text!
- • `/plet <text> `*:* text get funny emojify.
-
 *QR code:*
  • `/getqr <reply to image>`*:* Read QR code
  • `/makeqr <reply to text>`*:* Make QR code

@@ -10,6 +10,7 @@ from telegram.ext import (
     CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
+    run_async,
 )
 
 
@@ -53,10 +54,11 @@ def get_invalid_chats(update: Update, context: CallbackContext, remove: bool = F
 
     if not remove:
         return kicked_chats
-    for muted_chat in chat_list:
-        sleep(0.1)
-        user_sql.rem_chat(muted_chat)
-    return kicked_chats
+    else:
+        for muted_chat in chat_list:
+            sleep(0.1)
+            user_sql.rem_chat(muted_chat)
+        return kicked_chats
 
 
 def get_invalid_gban(update: Update, context: CallbackContext, remove: bool = False):
@@ -78,10 +80,12 @@ def get_invalid_gban(update: Update, context: CallbackContext, remove: bool = Fa
 
     if not remove:
         return ungbanned_users
-    for user_id in ungban_list:
-        sleep(0.1)
-        gban_sql.ungban_user(user_id)
-    return ungbanned_users
+    else:
+        for user_id in ungban_list:
+            sleep(0.1)
+            gban_sql.ungban_user(user_id)
+        return ungbanned_users
+
 
 
 @dev_plus
@@ -102,6 +106,7 @@ def dbcleanup(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
         reply, reply_markup=InlineKeyboardMarkup(buttons),
     )
+
 
 
 def callback_button(update: Update, context: CallbackContext):
@@ -135,8 +140,8 @@ def callback_button(update: Update, context: CallbackContext):
             query.answer("You are not allowed to use this.")
 
 
-DB_CLEANUP_HANDLER = CommandHandler("dbcleanup", dbcleanup)
-BUTTON_HANDLER = CallbackQueryHandler(callback_button, pattern="db_.*")
+DB_CLEANUP_HANDLER = CommandHandler("dbcleanup", dbcleanup, run_async=True)
+BUTTON_HANDLER = CallbackQueryHandler(callback_button, pattern="db_.*", run_async=True)
 
 dispatcher.add_handler(DB_CLEANUP_HANDLER)
 dispatcher.add_handler(BUTTON_HANDLER)

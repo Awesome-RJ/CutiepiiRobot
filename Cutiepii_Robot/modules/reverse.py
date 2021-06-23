@@ -1,3 +1,4 @@
+
 import os
 import re
 import requests
@@ -17,6 +18,7 @@ from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 opener = urllib.request.build_opener()
 useragent = 'Mozilla/5.0 (Linux; Android 6.0.1; SM-G920V Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36'
 opener.addheaders = [('User-agent', useragent)]
+
 
 def reverse(update: Update, context:CallbackContext):
     if os.path.isfile("okgoogle.png"):
@@ -69,7 +71,7 @@ def reverse(update: Update, context:CallbackContext):
             if HE.reason == 'Not Found':
                 msg.reply_text("Image not found.")
                 return
-            if HE.reason == 'Forbidden':
+            elif HE.reason == 'Forbidden':
                 msg.reply_text("Couldn't access the provided link, The website might have blocked accessing to the website by bot or the website does not existed.")
                 return
         except URLError as UE:
@@ -98,7 +100,7 @@ def reverse(update: Update, context:CallbackContext):
         os.remove(imagename)
         match = ParseSauce(fetchUrl + "&hl=en")
         guess = match['best_guess']
-        if match['override'] and match['override'] != '':
+        if match['override'] and not match['override'] == '':
             imgspage = match['override']
         else:
             imgspage = match['similar_images']
@@ -178,8 +180,11 @@ def scam(imgspage, lim):
     return imglinks
 
 
-REVERSE_HANDLER = DisableAbleCommandHandler(
-    "reverse", reverse, pass_args=True, admin_ok=True
+
+__mod_name__ = "reverse"
+
+REVERSE_HANDLER = DisableAbleCommandHandler([
+    "reverse", "grs"], reverse, pass_args=True, admin_ok=True, run_async=True
 )
 
 dispatcher.add_handler(REVERSE_HANDLER)

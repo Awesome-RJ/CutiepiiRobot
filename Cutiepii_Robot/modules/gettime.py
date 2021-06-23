@@ -5,7 +5,7 @@ import requests
 from Cutiepii_Robot import TIME_API_KEY, dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import ParseMode, Update
-from telegram.ext import CallbackContext
+from telegram.ext import CallbackContext, run_async
 
 
 def generate_time(to_find: str, findtype: List[str]) -> str:
@@ -58,6 +58,7 @@ def generate_time(to_find: str, findtype: List[str]) -> str:
     return result
 
 
+
 def gettime(update: Update, context: CallbackContext):
     message = update.effective_message
 
@@ -90,7 +91,7 @@ def gettime(update: Update, context: CallbackContext):
     )
 
 
-TIME_HANDLER = DisableAbleCommandHandler("time", gettime)
+TIME_HANDLER = DisableAbleCommandHandler("time", gettime, run_async=True)
 
 dispatcher.add_handler(TIME_HANDLER)
 

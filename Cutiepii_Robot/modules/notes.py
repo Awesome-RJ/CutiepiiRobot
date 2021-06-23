@@ -1,5 +1,4 @@
-import re
-import ast
+import re, ast
 from io import BytesIO
 import random
 from typing import Optional
@@ -184,8 +183,8 @@ def get(update, context, notename, show_none=True, no_format=False):
                         note.file,
                         caption=text,
                         reply_to_message_id=reply_id,
-                        disable_web_page_preview=True,
                         parse_mode=parseMode,
+                        disable_web_page_preview=True,
                         reply_markup=keyboard,
                     )
 
@@ -215,8 +214,9 @@ def get(update, context, notename, show_none=True, no_format=False):
                     )
                     LOGGER.warning("Message was: %s", str(note.value))
         return
-    if show_none:
+    elif show_none:
         message.reply_text("This note doesn't exist")
+
 
 
 @connection_status
@@ -230,12 +230,14 @@ def cmd_get(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Get rekt")
 
 
+
 @connection_status
 def hash_get(update: Update, context: CallbackContext):
     message = update.effective_message.text
     fst_word = message.split()[0]
     no_hash = fst_word[1:].lower()
     get(update, context, no_hash, show_none=False)
+
 
 
 @connection_status
@@ -250,6 +252,7 @@ def slash_get(update: Update, context: CallbackContext):
         get(update, context, note_name, show_none=False)
     except IndexError:
         update.effective_message.reply_text("Wrong Note ID 😾")
+
 
 
 @user_admin
@@ -291,6 +294,7 @@ def save(update: Update, context: CallbackContext):
         return
 
 
+
 @user_admin
 @connection_status
 def clear(update: Update, context: CallbackContext):
@@ -303,6 +307,7 @@ def clear(update: Update, context: CallbackContext):
             update.effective_message.reply_text("Successfully removed note.")
         else:
             update.effective_message.reply_text("That's not a note in my database!")
+
 
 
 def clearall(update: Update, context: CallbackContext):
@@ -329,6 +334,7 @@ def clearall(update: Update, context: CallbackContext):
             reply_markup=buttons,
             parse_mode=ParseMode.MARKDOWN,
         )
+
 
 
 def clearall_btn(update: Update, context: CallbackContext):
@@ -360,6 +366,7 @@ def clearall_btn(update: Update, context: CallbackContext):
             query.answer("Only owner of the chat can do this.")
         if member.status == "member":
             query.answer("You need to be admin to do this.")
+
 
 
 @connection_status
@@ -537,16 +544,16 @@ A button can be added to a note by using standard markdown link syntax - the lin
 
 __mod_name__ = "Notes"
 
-GET_HANDLER = CommandHandler("get", cmd_get)
-HASH_GET_HANDLER = MessageHandler(Filters.regex(r"^#[^\s]+"), hash_get)
-SLASH_GET_HANDLER = MessageHandler(Filters.regex(r"^/\d+$"), slash_get)
-SAVE_HANDLER = CommandHandler("save", save)
-DELETE_HANDLER = CommandHandler("clear", clear)
+GET_HANDLER = CommandHandler("get", cmd_get, run_async=True)
+HASH_GET_HANDLER = MessageHandler(Filters.regex(r"^#[^\s]+"), hash_get, run_async=True)
+SLASH_GET_HANDLER = MessageHandler(Filters.regex(r"^/\d+$"), slash_get, run_async=True)
+SAVE_HANDLER = CommandHandler("save", save, run_async=True)
+DELETE_HANDLER = CommandHandler("clear", clear, run_async=True)
 
-LIST_HANDLER = DisableAbleCommandHandler(["notes", "saved"], list_notes, admin_ok=True)
+LIST_HANDLER = DisableAbleCommandHandler(["notes", "saved"], list_notes, admin_ok=True, run_async=True)
 
-CLEARALL = DisableAbleCommandHandler("removeallnotes", clearall)
-CLEARALL_BTN = CallbackQueryHandler(clearall_btn, pattern=r"notes_.*")
+CLEARALL = DisableAbleCommandHandler("removeallnotes", clearall, run_async=True)
+CLEARALL_BTN = CallbackQueryHandler(clearall_btn, pattern=r"notes_.*", run_async=True)
 
 dispatcher.add_handler(GET_HANDLER)
 dispatcher.add_handler(SAVE_HANDLER)

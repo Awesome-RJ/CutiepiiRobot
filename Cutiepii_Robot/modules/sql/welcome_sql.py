@@ -12,7 +12,7 @@ DEFAULT_GOODBYE = "Nice knowing ya!"
 DEFAULT_WELCOME_MESSAGES = [
     "{first} is here!",  # Discord welcome messages copied
     "Ready player {first}",
-    "Genos, {first} is here.",
+    "Armin, {first} is here.",
     "A wild {first} appeared.",
     "{first} came in like a Lion!",
     "{first} has joined your party.",
@@ -53,7 +53,7 @@ DEFAULT_WELCOME_MESSAGES = [
     "It's a bird! It's a plane! - Nope, its {first}!",
     "{first} Joined! - Ok.",  # Discord welcome messages end.
     "All Hail {first}!",
-    "Hi, {first}. Don't lurk, only Villans do that.",
+    "Hi, {first}. Don't lurk, only Titans do that.",
     "{first} has joined the battle bus.",
     "A new Challenger enters!",  # Tekken
     "Ok!",
@@ -61,12 +61,11 @@ DEFAULT_WELCOME_MESSAGES = [
     "Something just fell from the sky! - oh, its {first}.",
     "{first} Just teleported into the chat!",
     "Hi, {first}, show me your Hunter License!",  # Hunter Hunter
-    "I'm looking for Garo, oh wait nvm it's {first}.",  # One Punch man s2
+    "I'm looking for Levi, oh wait nvm it's {first}.",  # One Punch man s2
     "Welcome {first}, leaving is not an option!",
     "Run Forest! ..I mean...{first}.",
-    "{first} do 100 push-ups, 100 sit-ups, 100 squats, and 10km running EVERY SINGLE DAY!!!",  # One Punch ma
-    "Huh?\nDid someone with a disaster level just join?\nOh wait, it's just {first}.",  # One Punch ma
-    "Hey, {first}, ever heard the King Engine?",  # One Punch ma
+    "Huh?\nDid someone with a Disaster level just join?\nOh wait, it's just {first}.",  # One Punch ma
+    "Hey, {first}, ever heard the Titan Engine?",  # One Punch ma
     "Hey, {first}, empty your pockets.",
     "Hey, {first}!, are you strong?",
     "Call the Avengers! - {first} just joined the chat.",
@@ -159,6 +158,14 @@ DEFAULT_WELCOME_MESSAGES = [
     "I'm back - {first}.",
     "Bond. {first} Bond.",
     "Come with me if you want to live",
+    "I Believe My Squad Will Be Victorious! ...",
+    "You Have The Freedom To Defend The World's Freedom And I Have The Freedom To Continue Moving Forward.",
+    "I'm The Same As You {first},I didnt had any choice",
+    "I'm Not Planning On Handing It Down To Any Of You",
+    "I'm Gonna Destroy Them! Every last one of those titans thats on this earth",
+    "Hey {first} If we kill all our enemies over there will we finally be free?",
+    "You're Not a Soldier {first}",
+    " Sasageyo, Sasageyo! {first}wa Sasageyo",
 ]
 DEFAULT_GOODBYE_MESSAGES = [
     "{first} will be missed.",
@@ -221,6 +228,7 @@ DEFAULT_GOODBYE_MESSAGES = [
     "The devil in disguise",
     "Go outside",
     "Always your head in the clouds",
+    " Give Up On Your Dreams And Die!",
 ]
 # Line 111 to 152 are references from https://bindingofisaac.fandom.com/wiki/Fortune_Telling_Machine
 
@@ -397,8 +405,10 @@ def get_welc_pref(chat_id):
             welc.custom_content,
             welc.welcome_type,
         )
-    # Welcome by default.
-    return True, DEFAULT_WELCOME, None, Types.TEXT
+
+    else:
+        # Welcome by default.
+        return True, DEFAULT_WELCOME, None, Types.TEXT
 
 
 def get_gdbye_pref(chat_id):
@@ -406,8 +416,9 @@ def get_gdbye_pref(chat_id):
     SESSION.close()
     if welc:
         return welc.should_goodbye, welc.custom_leave, welc.leave_type
-    # Welcome by default.
-    return True, DEFAULT_GOODBYE, Types.TEXT
+    else:
+        # Welcome by default.
+        return True, DEFAULT_GOODBYE, Types.TEXT
 
 
 def set_clean_welcome(chat_id, clean_welcome):

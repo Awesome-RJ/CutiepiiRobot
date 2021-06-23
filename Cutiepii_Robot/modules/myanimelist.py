@@ -1,3 +1,5 @@
+# Module to get info about anime, characters, manga etc. by @TheRealPhoenix
+
 from jikanpy import Jikan
 from jikanpy.exceptions import APIException
 
@@ -179,12 +181,15 @@ def manga(update: Update, context: CallbackContext):
         ]
         
         msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
-                
         
-ANIME_HANDLER = CommandHandler("manime", anime, pass_args=True)
-CHARACTER_HANDLER = CommandHandler("mcharacter", character, pass_args=True)
-UPCOMING_HANDLER = CommandHandler("mupcoming", upcoming)
-MANGA_HANDLER = CommandHandler("mmanga", manga, pass_args=True)
+        
+
+        
+        
+ANIME_HANDLER = CommandHandler("manime", anime, pass_args=True, run_async=True)
+CHARACTER_HANDLER = CommandHandler("mcharacter", character, pass_args=True, run_async=True)
+UPCOMING_HANDLER = CommandHandler("mupcoming", upcoming, run_async=True)
+MANGA_HANDLER = CommandHandler("mmanga", manga, pass_args=True, run_async=True)
 
 dispatcher.add_handler(ANIME_HANDLER)
 dispatcher.add_handler(CHARACTER_HANDLER)

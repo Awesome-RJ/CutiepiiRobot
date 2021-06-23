@@ -1,11 +1,11 @@
 from functools import wraps
+
 from pyrogram.errors.exceptions.forbidden_403 import ChatWriteForbidden
 from pyrogram.types import Message
-from Cutiepii_Robot import DRAGONS, DEV_USERS, WOLVES, DEMONS, TIGERS
-from Cutiepii_Robot.utils.adminperms import member_permissions
 
-SUDO = DRAGONS, DEV_USERS, WOLVES, DEMONS, TIGERS
-
+from Cutiepii_Robot import DRAGONS
+from Cutiepii_Robot.functions.pluginhelpers import member_permissions
+from Cutiepii_Robot import pgram as app
 
 async def authorised(func, subFunc2, client, message, *args, **kwargs):
     chatID = message.chat.id
@@ -49,7 +49,7 @@ def adminsOnly(permission):
             # For admins and sudo users
             userID = message.from_user.id
             permissions = await member_permissions(chatID, userID)
-            if userID not in SUDOERS and permission not in permissions:
+            if userID not in DRAGONS and permission not in permissions:
                 return await unauthorised(message, permission, subFunc2)
             return await authorised(
                 func, subFunc2, client, message, *args, **kwargs
@@ -58,14 +58,3 @@ def adminsOnly(permission):
         return subFunc2
 
     return subFunc
-
-
-async def edit_or_reply(message, text, parse_mode="md"):
-    if message.from_user.id:
-        if message.reply_to_message:
-            kk = message.reply_to_message.message_id
-            return await message.reply_text(
-                text, reply_to_message_id=kk, parse_mode=parse_mode
-            )
-        return await message.reply_text(text, parse_mode=parse_mode)
-    return await message.edit(text, parse_mode=parse_mode)

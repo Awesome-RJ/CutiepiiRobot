@@ -1,3 +1,4 @@
+# By @TroJanzHEX
 import io
 import os
 import shutil
@@ -6,7 +7,6 @@ import cv2
 import numpy as np
 import requests
 from PIL import Image, ImageDraw, ImageOps
-from io import BytesIO
 
 from Cutiepii_Robot.cutiepii.config import get_str_key
 
@@ -44,12 +44,13 @@ async def rotate_90(client, message):
         print("rotate_90-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def rotate_180(client, message):
@@ -83,12 +84,13 @@ async def rotate_180(client, message):
         print("rotate_180-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def rotate_270(client, message):
@@ -122,12 +124,13 @@ async def rotate_270(client, message):
         print("rotate_270-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 def resize_photo(photo: str, userid: str) -> io.BytesIO:
@@ -180,12 +183,13 @@ async def round_sticker(client, message):
         print("round_sticker-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def inverted(client, message):
@@ -219,17 +223,18 @@ async def inverted(client, message):
         print("inverted-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def removebg_plain(client, message):
     try:
-        if not RemoveBG_API == "":
+        if not (RemoveBG_API == ""):
             userid = str(message.chat.id)
             if not os.path.isdir(f"./DOWNLOADS/{userid}"):
                 os.makedirs(f"./DOWNLOADS/{userid}")
@@ -278,17 +283,18 @@ async def removebg_plain(client, message):
         print("removebg_plain-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def removebg_white(client, message):
     try:
-        if not RemoveBG_API == "":
+        if not (RemoveBG_API == ""):
             userid = str(message.chat.id)
             if not os.path.isdir(f"./DOWNLOADS/{userid}"):
                 os.makedirs(f"./DOWNLOADS/{userid}")
@@ -337,17 +343,18 @@ async def removebg_white(client, message):
         print("removebg_white-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return
 
 
 async def removebg_sticker(client, message):
     try:
-        if not RemoveBG_API == "":
+        if not (RemoveBG_API == ""):
             userid = str(message.chat.id)
             if not os.path.isdir(f"./DOWNLOADS/{userid}"):
                 os.makedirs(f"./DOWNLOADS/{userid}")
@@ -396,9 +403,10 @@ async def removebg_sticker(client, message):
         print("removebg_sticker-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_to_message.reply_text(
+                    "Something went wrong!", quote=True
+                )
+            except Exception:
+                return

@@ -10,8 +10,7 @@ from decimal import Decimal
 from datetime import timedelta
 from pyrogram import Client, filters
 from pyrogram.types import Message
-
-from Cutiepii_Robot import pgram as pbot
+from Cutiepii_Robot import pgram
 
 session = aiohttp.ClientSession()
 progress_callback_data = {}
@@ -46,7 +45,7 @@ def calculate_eta(current, total, start_time):
     return ', '.join(thing)
 
 
-@pbot.on_message(filters.command('whatanime'))
+@pgram.on_message(filters.command('whatanime'))
 async def whatanime(c: Client, m: Message):
     media = m.photo or m.animation or m.video or m.document
     if not media:
@@ -54,7 +53,7 @@ async def whatanime(c: Client, m: Message):
         if not getattr(reply, 'empty', True):
             media = reply.photo or reply.animation or reply.video or reply.document
     if not media:
-        await m.reply_text('Photo or GIF or Video required')
+        await m.reply_text('Please reply it to a Photo or Gif or Video to work')
         return
     with tempfile.TemporaryDirectory() as tempdir:
         reply = await m.reply_text('Downloading...')
@@ -145,3 +144,4 @@ async def progress_callback(current, total, reply):
             prevtext = text
             last_edit_time = time.time()
             progress_callback_data[message_identifier] = last_edit_time, prevtext, start_time
+

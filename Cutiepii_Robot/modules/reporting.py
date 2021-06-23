@@ -12,11 +12,13 @@ from telegram.ext import (
     CommandHandler,
     Filters,
     MessageHandler,
+    run_async,
 )
 from telegram.utils.helpers import mention_html
 
 REPORT_GROUP = 12
 REPORT_IMMUNE_USERS = DRAGONS + TIGERS + WOLVES
+
 
 
 @user_admin
@@ -61,6 +63,7 @@ def report_setting(update: Update, context: CallbackContext):
                 f"This group's current setting is: `{sql.chat_should_report(chat.id)}`",
                 parse_mode=ParseMode.MARKDOWN,
             )
+
 
 
 @user_not_admin
@@ -228,7 +231,7 @@ def buttons(update: Update, context: CallbackContext):
             query.answer("✅ Succesfully kicked")
             return ""
         except Exception as err:
-            query.answer("🛑 Failed to Kick")
+            query.answer("🛑 Failed to Punch")
             bot.sendMessage(
                 text=f"Error: {err}",
                 chat_id=query.message.chat_id,
@@ -271,11 +274,11 @@ __help__ = """
    • If in group, toggles that groups's status.
 """
 
-SETTING_HANDLER = CommandHandler("reports", report_setting)
-REPORT_HANDLER = CommandHandler("report", report, filters=Filters.chat_type.groups)
-ADMIN_REPORT_HANDLER = MessageHandler(Filters.regex(r"(?i)@admin(s)?"), report)
+SETTING_HANDLER = CommandHandler("reports", report_setting, run_async=True)
+REPORT_HANDLER = CommandHandler("report", report, filters=Filters.chat_type.groups, run_async=True)
+ADMIN_REPORT_HANDLER = MessageHandler(Filters.regex(r"(?i)@admin(s)?"), report, run_async=True)
 
-REPORT_BUTTON_USER_HANDLER = CallbackQueryHandler(buttons, pattern=r"report_")
+REPORT_BUTTON_USER_HANDLER = CallbackQueryHandler(buttons, pattern=r"report_", run_async=True)
 dispatcher.add_handler(REPORT_BUTTON_USER_HANDLER)
 
 dispatcher.add_handler(SETTING_HANDLER)

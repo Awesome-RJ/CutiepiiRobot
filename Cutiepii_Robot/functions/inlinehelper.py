@@ -23,11 +23,11 @@ from Cutiepii_Robot import BOT_USERNAME, OWNER_ID
 from Cutiepii_Robot.cutiepii.config import get_str_key
 from Cutiepii_Robot.functions.pluginhelpers import convert_seconds_to_minutes as time_convert
 from Cutiepii_Robot.functions.pluginhelpers import fetch
-from Cutiepii_Robot import arq, pgram as pbot
+from Cutiepii_Robot import arq, pgram as pgram
 
 SUDOERS = OWNER_ID
 
-app = pbot
+app = pgram
 import socket
 
 

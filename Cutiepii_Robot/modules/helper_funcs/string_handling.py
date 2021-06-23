@@ -102,10 +102,12 @@ def markdown_parser(
                     for match in LINK_REGEX.finditer(txt)
                 ):
                     continue
-                # TODO: investigate possible offset bug when lots of emoji are present
-                res += _selective_escape(txt[prev:start] or "") + escape_markdown(
-                    ent_text,
-                )
+                # else, check the escapes between the prev and last and forcefully escape the url to avoid mangling
+                else:
+                    # TODO: investigate possible offset bug when lots of emoji are present
+                    res += _selective_escape(txt[prev:start] or "") + escape_markdown(
+                        ent_text,
+                    )
 
             # code handling
             elif ent.type == "code":
@@ -154,8 +156,8 @@ def button_markdown_parser(
         else:
             note_data += markdown_note[prev:to_check]
             prev = match.start(1) - 1
-        
-    note_data += markdown_note[prev:]
+    else:
+        note_data += markdown_note[prev:]
 
     return note_data, buttons
 
@@ -169,23 +171,26 @@ def escape_invalid_curly_brackets(text: str, valids: List[str]) -> str:
                 idx += 2
                 new_text += "{{{{"
                 continue
-            success = False
-            for v in valids:
-                if text[idx:].startswith("{" + v + "}"):
-                    success = True
-                    break
-            if success:
-                new_text += text[idx : idx + len(v) + 2]
-                idx += len(v) + 2
-                continue
-            new_text += "{{"
+            else:
+                success = False
+                for v in valids:
+                    if text[idx:].startswith("{" + v + "}"):
+                        success = True
+                        break
+                if success:
+                    new_text += text[idx : idx + len(v) + 2]
+                    idx += len(v) + 2
+                    continue
+                else:
+                    new_text += "{{"
 
         elif text[idx] == "}":
             if idx + 1 < len(text) and text[idx + 1] == "}":
                 idx += 2
                 new_text += "}}}}"
                 continue
-            new_text += "}}"
+            else:
+                new_text += "}}"
 
         else:
             new_text += text[idx]
@@ -265,12 +270,13 @@ def extract_time(message, time_val):
             # how even...?
             return ""
         return bantime
-    message.reply_text(
-        "Invalid time type specified. Expected m,h, or d, got: {}".format(
-            time_val[-1],
-        ),
-    )
-    return ""
+    else:
+        message.reply_text(
+            "Invalid time type specified. Expected m,h, or d, got: {}".format(
+                time_val[-1],
+            ),
+        )
+        return ""
 
 
 def markdown_to_html(text):

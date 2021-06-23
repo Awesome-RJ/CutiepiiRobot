@@ -3,7 +3,7 @@ import re
 
 from telegram import ParseMode, InlineKeyboardMarkup, InlineKeyboardButton, Update, Bot
 from telegram.error import BadRequest, Unauthorized
-from telegram.ext import CommandHandler, CallbackQueryHandler
+from telegram.ext import CommandHandler, CallbackQueryHandler, run_async
 
 import Cutiepii_Robot.modules.sql.connection_sql as sql
 from Cutiepii_Robot import dispatcher, DRAGONS, DEV_USERS
@@ -61,6 +61,7 @@ def allow_connections(update, context) -> str:
         )
 
 
+
 @typing_action
 def connection_chat(update, context):
 
@@ -83,6 +84,7 @@ def connection_chat(update, context):
     else:
         message = "You are currently not connected in any group.\n"
     send_message(update.effective_message, message, parse_mode="markdown")
+
 
 
 @typing_action
@@ -285,10 +287,11 @@ def connected(bot: Bot, update: Update, chat, user_id, need_admin=True):
                     or user.id in DEV_USERS
                 ):
                     return conn_id
-                send_message(
-                    update.effective_message,
-                    "You must be an admin in the connected group!",
-                )
+                else:
+                    send_message(
+                        update.effective_message,
+                        "You must be an admin in the connected group!",
+                    )
             else:
                 return conn_id
         else:
@@ -314,6 +317,7 @@ CONN_HELP = """
  • More in future!"""
 
 
+
 def help_connect_chat(update, context):
 
     args = context.args
@@ -321,7 +325,9 @@ def help_connect_chat(update, context):
     if update.effective_message.chat.type != "private":
         send_message(update.effective_message, "PM me with that command to get help.")
         return
-    send_message(update.effective_message, CONN_HELP, parse_mode="markdown")
+    else:
+        send_message(update.effective_message, CONN_HELP, parse_mode="markdown")
+
 
 
 def connect_button(update, context):
@@ -395,14 +401,14 @@ This allows you to connect to a chat's database, and add things to it without th
  • /allowconnect <yes/no>: allow a user to connect to a chat
 """
 
-CONNECT_CHAT_HANDLER = CommandHandler("connect", connect_chat, pass_args=True)
-CONNECTION_CHAT_HANDLER = CommandHandler("connection", connection_chat)
-DISCONNECT_CHAT_HANDLER = CommandHandler("disconnect", disconnect_chat)
+CONNECT_CHAT_HANDLER = CommandHandler("connect", connect_chat, pass_args=True, run_async=True)
+CONNECTION_CHAT_HANDLER = CommandHandler("connection", connection_chat, run_async=True)
+DISCONNECT_CHAT_HANDLER = CommandHandler("disconnect", disconnect_chat, run_async=True)
 ALLOW_CONNECTIONS_HANDLER = CommandHandler(
-    "allowconnect", allow_connections, pass_args=True,
+    "allowconnect", allow_connections, pass_args=True, run_async=True
 )
-HELP_CONNECT_CHAT_HANDLER = CommandHandler("helpconnect", help_connect_chat)
-CONNECT_BTN_HANDLER = CallbackQueryHandler(connect_button, pattern=r"connect")
+HELP_CONNECT_CHAT_HANDLER = CommandHandler("helpconnect", help_connect_chat, run_async=True)
+CONNECT_BTN_HANDLER = CallbackQueryHandler(connect_button, pattern=r"connect", run_async=True)
 
 dispatcher.add_handler(CONNECT_CHAT_HANDLER)
 dispatcher.add_handler(CONNECTION_CHAT_HANDLER)

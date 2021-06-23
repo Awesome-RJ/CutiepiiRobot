@@ -4,10 +4,10 @@ import requests
 from pyrogram import filters
 
 from Cutiepii_Robot.functions.pluginhelpers import admins_only, edit_or_reply, fetch_audio
-from Cutiepii_Robot import pgram as pbot
+from Cutiepii_Robot import pgram as pgram
 
 
-@pbot.on_message(filters.command(["identify", "shazam"]))
+@pgram.on_message(filters.command(["identify", "shazam"]))
 @admins_only
 async def shazamm(client, message):
     kek = await edit_or_reply(message, "`Shazaming In Progress!`")

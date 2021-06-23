@@ -135,7 +135,7 @@ async def ws(event):
 
 
 """
-@pbot.on_message(filters.command("nsfwguardian") & ~filters.edited & ~filters.bot)
+@pgram.on_message(filters.command("nsfwguardian") & ~filters.edited & ~filters.bot)
 async def add_nsfw(client, message):
     if len(await member_permissions(message.chat.id, message.from_user.id)) < 1:
         await message.reply_text("**You don't have enough permissions**")
@@ -160,7 +160,7 @@ async def add_nsfw(client, message):
     else:
         await message.reply(" I undestand only `/nsfwguardian on` or `/nsfwguardian off` only")
         
-@pbot.on_message(filters.incoming & filters.media & ~filters.private & ~filters.channel & ~filters.bot)
+@pgram.on_message(filters.incoming & filters.media & ~filters.private & ~filters.channel & ~filters.bot)
 async def nsfw_watch(client, message):
     lol = get_all_nsfw_chats()
     if len(lol) == 0:

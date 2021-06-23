@@ -2,7 +2,7 @@ import html
 
 from telegram import ParseMode, Update
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext, CommandHandler, Filters
+from telegram.ext import CallbackContext, CommandHandler, Filters, run_async
 from telegram.utils.helpers import mention_html
 
 from Cutiepii_Robot import DRAGONS, dispatcher
@@ -181,7 +181,7 @@ def fullpromote(update: Update, context: CallbackContext) -> str:
 
     log_message = (
         f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#PROMOTED\n"
+        f"#FULLPROMOTED\n"
         f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
         f"<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
     )
@@ -271,7 +271,6 @@ def refresh_admin(update, _):
         pass
 
     update.effective_message.reply_text("Admins cache refreshed!")
-
 
 @connection_status
 @bot_admin
@@ -484,13 +483,13 @@ def adminlist(update, context):
         # if user.username:
         #    name = escape_markdown("@" + user.username)
         if status == "creator":
-            text += "\n 👑 Creator:"
+            text += "\n 🌏 Creator:"
             text += "\n<code> • </code>{}\n".format(name)
 
             if custom_title:
                 text += f"<code> ┗━ {html.escape(custom_title)}</code>\n"
 
-    text += "\n🔱 Admins:"
+    text += "\n🌟 Admins:"
 
     custom_admin_list = {}
     normal_admin_list = []
@@ -546,62 +545,59 @@ def adminlist(update, context):
 
 __help__ = """
  • `/admins`*:* list of admins in the chat
+
 *Admins only:*
  • `/pin`*:* silently pins the message replied to - add `'loud'` or `'notify'` to give notifs to users
  • `/unpin`*:* unpins the currently pinned message
  • `/invitelink`*:* gets invitelink
  • `/promote`*:* promotes the user replied to
+ • `/fullpromote`*:* promotes the user replied to with full rights
  • `/demote`*:* demotes the user replied to
  • `/title <title here>`*:* sets a custom title for an admin that the bot promoted
  • `/admincache`*:* force refresh the admins list
+ • `/zombies` :- searches deleted accounts
+ • `/zombies clean` :- removes deleted accounts from the group.
+ 
+*Log Channel*:
+• `/logchannel`*:* get log channel info
+• `/setlog`*:* set the log channel.
+• `/unsetlog`*:* unset the log channel.
+
+*Setting the log channel is done by*:
+• adding the bot to the desired channel (as an admin!)
+• sending `/setlog` in the channel
+• forwarding the `/setlog` to the group
 """
 
-ADMINLIST_HANDLER = DisableAbleCommandHandler("admins", adminlist)
+ADMINLIST_HANDLER = DisableAbleCommandHandler("admins", adminlist, run_async=True)
 
-PIN_HANDLER = CommandHandler("pin", pin, filters=Filters.chat_type.groups)
-UNPIN_HANDLER = CommandHandler("unpin", unpin, filters=Filters.chat_type.groups)
+PIN_HANDLER = CommandHandler("pin", pin, filters=Filters.chat_type.groups, run_async=True)
+UNPIN_HANDLER = CommandHandler("unpin", unpin, filters=Filters.chat_type.groups, run_async=True)
 
-INVITE_HANDLER = DisableAbleCommandHandler("invitelink", invite)
+INVITE_HANDLER = DisableAbleCommandHandler("invitelink", invite, run_async=True)
 
-PROMOTE_HANDLER = DisableAbleCommandHandler("promote", promote)
-FULLPROMOTE_HANDLER = DisableAbleCommandHandler("fullpromote", fullpromote)
-DEMOTE_HANDLER = DisableAbleCommandHandler("demote", demote)
+PROMOTE_HANDLER = DisableAbleCommandHandler("promote", promote, run_async=True)
+FULLPROMOTE_HANDLER = DisableAbleCommandHandler("fullpromote", fullpromote, run_async=True)
+DEMOTE_HANDLER = DisableAbleCommandHandler("demote", demote, run_async=True)
 
-SET_TITLE_HANDLER = CommandHandler("title", set_title)
-ADMIN_REFRESH_HANDLER = CommandHandler(
-    "admincache",
-    refresh_admin,
-    filters=Filters.chat_type.groups,
-)
+SET_TITLE_HANDLER = CommandHandler("title", set_title, run_async=True)
+ADMIN_REFRESH_HANDLER = CommandHandler("admincache", refresh_admin, filters=Filters.chat_type.groups, run_async=True)
 
 dispatcher.add_handler(ADMINLIST_HANDLER)
 dispatcher.add_handler(PIN_HANDLER)
 dispatcher.add_handler(UNPIN_HANDLER)
 dispatcher.add_handler(INVITE_HANDLER)
 dispatcher.add_handler(PROMOTE_HANDLER)
+dispatcher.add_handler(FULLPROMOTE_HANDLER)
 dispatcher.add_handler(DEMOTE_HANDLER)
 dispatcher.add_handler(SET_TITLE_HANDLER)
 dispatcher.add_handler(ADMIN_REFRESH_HANDLER)
-dispatcher.add_handler(FULLPROMOTE_HANDLER)
 
 __mod_name__ = "Admin"
 __command_list__ = [
-    "adminlist",
-    "admins",
-    "invitelink",
-    "promote",
-    "demote",
-    "admincache",
-    "fullpromote",
+    "adminlist", "admins", "invitelink", "promote", "fullpromote", "demote", "admincache"
 ]
 __handlers__ = [
-    ADMINLIST_HANDLER,
-    PIN_HANDLER,
-    UNPIN_HANDLER,
-    INVITE_HANDLER,
-    PROMOTE_HANDLER,
-    DEMOTE_HANDLER,
-    SET_TITLE_HANDLER,
-    ADMIN_REFRESH_HANDLER,
-    FULLPROMOTE_HANDLER,
+    ADMINLIST_HANDLER, PIN_HANDLER, UNPIN_HANDLER, INVITE_HANDLER,
+    PROMOTE_HANDLER, FULLPROMOTE_HANDLER, DEMOTE_HANDLER, SET_TITLE_HANDLER, ADMIN_REFRESH_HANDLER
 ]

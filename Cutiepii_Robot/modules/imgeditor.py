@@ -1,3 +1,6 @@
+# By @TroJanzHEX
+# Improved by ShasaBot
+
 from pyrogram import filters
 from pyrogram.types import (
     CallbackQuery,
@@ -6,6 +9,7 @@ from pyrogram.types import (
     Message,
 )
 
+# By @TroJanzHEX
 from Cutiepii_Robot.resources.ImageEditor.edit_1 import (  # pylint:disable=import-error
     black_white,
     box_blur,
@@ -115,10 +119,11 @@ async def photo(client: Client, message: Message):
         print("photomarkup error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        try:
-            await message.reply_text("Something went wrong!", quote=True)
-        except Exception:
-            return
+        else:
+            try:
+                await message.reply_text("Something went wrong!", quote=True)
+            except Exception:
+                return
 
 
 @Client.on_callback_query()
@@ -447,8 +452,12 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
 __mod_name__ = "Image Editor"
 __help__ = """
-Shasa have some advanced image editing tools inbuilt
+ *IMAGE EDITOR*
+Cutiepii has some advanced image editing tools inbuilt
 Bright, Circle, RemBG, Blur, Border, Flip, Glitch, Sticker maker and more
+
 - /edit [reply to image]: Open the image editor
 - /rmbg [REPLY]: Revove BG of replied image/sticker.
+
+ Special credits to TroJanzHEX 
 """

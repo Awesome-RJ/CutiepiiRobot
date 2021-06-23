@@ -21,7 +21,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from Cutiepii_Robot.modules.log_channel import gloggable
 from telegram import ParseMode, TelegramError, Update
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import CallbackContext, CommandHandler, run_async
 from telegram.utils.helpers import mention_html
 
 ELEVATED_USERS_FILE = os.path.join(os.getcwd(), "Cutiepii_Robot/elevated_users.json")
@@ -52,6 +52,7 @@ def check_user_id(user_id: int, context: CallbackContext) -> Optional[str]:
 ### Deep link example ends
 
 
+
 @dev_plus
 @gloggable
 def addsudo(update: Update, context: CallbackContext) -> str:
@@ -72,16 +73,16 @@ def addsudo(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in DRAGONS:
-        message.reply_text("This member is already a Dragon Disaster")
+        message.reply_text("This member is already a Titan Shifter")
         return ""
 
     if user_id in DEMONS:
-        rt += "Requested HA to promote a Demon Disaster to Dragon."
+        rt += "Requested the Ackermans to promote a Royal Blood to Titan Shifter."
         data["supports"].remove(user_id)
         DEMONS.remove(user_id)
 
     if user_id in WOLVES:
-        rt += "Requested HA to promote a Wolf Disaster to Dragon."
+        rt += "Requested the Ackermans to promote a Garrison to Titan Shifter."
         data["whitelists"].remove(user_id)
         WOLVES.remove(user_id)
 
@@ -93,7 +94,7 @@ def addsudo(update: Update, context: CallbackContext) -> str:
 
     update.effective_message.reply_text(
         rt
-        + "\nSuccessfully set Disaster level of {} to Dragon!".format(
+        + "\nSuccessfully set Disaster level of {} to Titan Shifter!".format(
             user_member.first_name,
         ),
     )
@@ -108,6 +109,7 @@ def addsudo(update: Update, context: CallbackContext) -> str:
         log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
     return log_message
+
 
 
 @sudo_plus
@@ -133,16 +135,16 @@ def addsupport(
         data = json.load(infile)
 
     if user_id in DRAGONS:
-        rt += "Requested HA to demote this Dragon to Demon"
+        rt += "Requested the Ackermans to demote this Titan Shifter to Royal Blood"
         data["sudos"].remove(user_id)
         DRAGONS.remove(user_id)
 
     if user_id in DEMONS:
-        message.reply_text("This user is already a Demon Disaster.")
+        message.reply_text("This user is already a Royal Blood.")
         return ""
 
     if user_id in WOLVES:
-        rt += "Requested HA to promote this Wolf Disaster to Demon"
+        rt += "Requested the Ackermans to promote this Garrison to Royal Blood"
         data["whitelists"].remove(user_id)
         WOLVES.remove(user_id)
 
@@ -153,7 +155,7 @@ def addsupport(
         json.dump(data, outfile, indent=4)
 
     update.effective_message.reply_text(
-        rt + f"\n{user_member.first_name} was added as a Demon Disaster!",
+        rt + f"\n{user_member.first_name} was added as a Royal Blood!",
     )
 
     log_message = (
@@ -166,6 +168,7 @@ def addsupport(
         log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
     return log_message
+
 
 
 @sudo_plus
@@ -188,17 +191,17 @@ def addwhitelist(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in DRAGONS:
-        rt += "This member is a Dragon Disaster, Demoting to Wolf."
+        rt += "This member is a Titan Shifter, Demoting to Garrison."
         data["sudos"].remove(user_id)
         DRAGONS.remove(user_id)
 
     if user_id in DEMONS:
-        rt += "This user is already a Demon Disaster, Demoting to Wolf."
+        rt += "This user is already a Royal Blood, Demoting to Garrison."
         data["supports"].remove(user_id)
         DEMONS.remove(user_id)
 
     if user_id in WOLVES:
-        message.reply_text("This user is already a Wolf Disaster.")
+        message.reply_text("This user is already a Garrison.")
         return ""
 
     data["whitelists"].append(user_id)
@@ -208,7 +211,7 @@ def addwhitelist(update: Update, context: CallbackContext) -> str:
         json.dump(data, outfile, indent=4)
 
     update.effective_message.reply_text(
-        rt + f"\nSuccessfully promoted {user_member.first_name} to a Wolf Disaster!",
+        rt + f"\nSuccessfully promoted {user_member.first_name} to a Garrison!",
     )
 
     log_message = (
@@ -221,6 +224,7 @@ def addwhitelist(update: Update, context: CallbackContext) -> str:
         log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
     return log_message
+
 
 
 @sudo_plus
@@ -243,22 +247,22 @@ def addtiger(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in DRAGONS:
-        rt += "This member is a Dragon Disaster, Demoting to Tiger."
+        rt += "This member is a Titan Shifter, Demoting to Scout."
         data["sudos"].remove(user_id)
         DRAGONS.remove(user_id)
 
     if user_id in DEMONS:
-        rt += "This user is already a Demon Disaster, Demoting to Tiger."
+        rt += "This user is already a Royal Blood, Demoting to Scout."
         data["supports"].remove(user_id)
         DEMONS.remove(user_id)
 
     if user_id in WOLVES:
-        rt += "This user is already a Wolf Disaster, Demoting to Tiger."
+        rt += "This user is already a Garrison, Demoting to No Acces.."
         data["whitelists"].remove(user_id)
         WOLVES.remove(user_id)
 
     if user_id in TIGERS:
-        message.reply_text("This user is already a Tiger.")
+        message.reply_text("This user is already a Scout.")
         return ""
 
     data["tigers"].append(user_id)
@@ -268,11 +272,11 @@ def addtiger(update: Update, context: CallbackContext) -> str:
         json.dump(data, outfile, indent=4)
 
     update.effective_message.reply_text(
-        rt + f"\nSuccessfully promoted {user_member.first_name} to a Tiger Disaster!",
+        rt + f"\nSuccessfully promoted {user_member.first_name} to a Scout!",
     )
 
     log_message = (
-        f"#TIGER\n"
+        f"#SCOUT\n"
         f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))} \n"
         f"<b>User:</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
     )
@@ -281,6 +285,7 @@ def addtiger(update: Update, context: CallbackContext) -> str:
         log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
     return log_message
+
 
 
 @dev_plus
@@ -302,7 +307,7 @@ def removesudo(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in DRAGONS:
-        message.reply_text("Requested HA to demote this user to Civilian")
+        message.reply_text("Requested the Ackermans to demote this user to Civilian")
         DRAGONS.remove(user_id)
         data["sudos"].remove(user_id)
 
@@ -319,8 +324,11 @@ def removesudo(update: Update, context: CallbackContext) -> str:
             log_message = "<b>{}:</b>\n".format(html.escape(chat.title)) + log_message
 
         return log_message
-    message.reply_text("This user is not a Dragon Disaster!")
-    return ""
+
+    else:
+        message.reply_text("This user is not a Titan Shifter!")
+        return ""
+
 
 
 @sudo_plus
@@ -342,7 +350,7 @@ def removesupport(update: Update, context: CallbackContext) -> str:
         data = json.load(infile)
 
     if user_id in DEMONS:
-        message.reply_text("Requested HA to demote this user to Civilian")
+        message.reply_text("Requested the Ackermans to demote this user to Civilian")
         DEMONS.remove(user_id)
         data["supports"].remove(user_id)
 
@@ -359,8 +367,11 @@ def removesupport(update: Update, context: CallbackContext) -> str:
             log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
         return log_message
-    message.reply_text("This user is not a Demon level Disaster!")
-    return ""
+
+    else:
+        message.reply_text("This user is not a Royal Blood!")
+        return ""
+
 
 
 @sudo_plus
@@ -399,8 +410,10 @@ def removewhitelist(update: Update, context: CallbackContext) -> str:
             log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
         return log_message
-    message.reply_text("This user is not a Wolf Disaster!")
-    return ""
+    else:
+        message.reply_text("This user is not a Garrison!")
+        return ""
+
 
 
 @sudo_plus
@@ -424,13 +437,13 @@ def removetiger(update: Update, context: CallbackContext) -> str:
     if user_id in TIGERS:
         message.reply_text("Demoting to normal user")
         TIGERS.remove(user_id)
-        data["tigers"].remove(user_id)
+        data["Tigers"].remove(user_id)
 
         with open(ELEVATED_USERS_FILE, "w") as outfile:
             json.dump(data, outfile, indent=4)
 
         log_message = (
-            f"#UNTIGER\n"
+            f"#UNSCOUT\n"
             f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
             f"<b>User:</b> {mention_html(user_member.id, html.escape(user_member.first_name))}"
         )
@@ -439,13 +452,15 @@ def removetiger(update: Update, context: CallbackContext) -> str:
             log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
         return log_message
-    message.reply_text("This user is not a Tiger Disaster!")
-    return ""
+    else:
+        message.reply_text("This user is not a Scout!")
+        return ""
+
 
 
 @whitelist_plus
 def whitelistlist(update: Update, context: CallbackContext):
-    reply = "<b>Known Wolf Disasters 🐺:</b>\n"
+    reply = "<b>Known Garrisons♠️:</b>\n"
     m = update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
     )
@@ -461,9 +476,10 @@ def whitelistlist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
+
 @whitelist_plus
 def tigerlist(update: Update, context: CallbackContext):
-    reply = "<b>Known Tiger Disasters 🐯:</b>\n"
+    reply = "<b>Known Scouts🔰:</b>\n"
     m = update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
     )
@@ -478,13 +494,14 @@ def tigerlist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
+
 @whitelist_plus
 def supportlist(update: Update, context: CallbackContext):
     bot = context.bot
     m = update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
     )
-    reply = "<b>Known Demon Disasters 👹:</b>\n"
+    reply = "<b>Known Royal Bloods⭐:</b>\n"
     for each_user in DEMONS:
         user_id = int(each_user)
         try:
@@ -495,6 +512,7 @@ def supportlist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
+
 @whitelist_plus
 def sudolist(update: Update, context: CallbackContext):
     bot = context.bot
@@ -502,7 +520,7 @@ def sudolist(update: Update, context: CallbackContext):
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
     )
     true_sudo = list(set(DRAGONS) - set(DEV_USERS))
-    reply = "<b>Known Dragon Disasters 🐉:</b>\n"
+    reply = "<b>Known Titan Shifters💥:</b>\n"
     for each_user in true_sudo:
         user_id = int(each_user)
         try:
@@ -513,6 +531,7 @@ def sudolist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
+
 @whitelist_plus
 def devlist(update: Update, context: CallbackContext):
     bot = context.bot
@@ -520,7 +539,7 @@ def devlist(update: Update, context: CallbackContext):
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
     )
     true_dev = list(set(DEV_USERS) - {OWNER_ID})
-    reply = "<b>Hero Association Members ⚡️:</b>\n"
+    reply = "<b>Ackerman Clan Members⚡️:</b>\n"
     for each_user in true_dev:
         user_id = int(each_user)
         try:
@@ -530,22 +549,22 @@ def devlist(update: Update, context: CallbackContext):
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
-"""
-__help__ = f
+
+__help__ = f"""
 *⚠️ Notice:*
 Commands listed here only work for users with special access and are mainly used for troubleshooting, debugging purposes.
 Group admins/group owners do not need these commands.
 
  ╔ *List all special users:*
- ╠ `/dragons`*:* Lists all Dragon disasters
- ╠ `/demons`*:* Lists all Demon disasters
- ╠ `/tigers`*:* Lists all Tigers disasters
- ╠ `/wolves`*:* Lists all Wolf disasters
- ╠ `/heroes`*:* Lists all Hero Association members
- ╠ `/adddragon`*:* Adds a user to Dragon
- ╠ `/adddemon`*:* Adds a user to Demon
- ╠ `/addtiger`*:* Adds a user to Tiger
- ╠ `/addwolf`*:* Adds a user to Wolf
+ ╠ `/titanshifters`*:* Lists all Titan Shifters
+ ╠ `/royalbloods`*:* Lists all Royal Bloods
+ ╠ `/scouts`*:* Lists all Scouts
+ ╠ `/garrisons`*:* Lists all Garrisons
+ ╠ `/ackermans`*:* Lists all Ackerman Clan members
+ ╠ `/addtitanshifter`*:* Adds a user to Titan Shifter
+ ╠ `/addroyalblood`*:* Adds a user to Royal Blood
+ ╠ `/addscout`*:* Adds a user to Scout Regiment
+ ╠ `/addgarrison`*:* Adds a user to Garrison Regiment
  ╚ `Add dev doesnt exist, devs should know how to add themselves`
 
  ╔ *Ping:*
@@ -602,6 +621,9 @@ Group admins/group owners do not need these commands.
  ╠ `/reboot`*:* Restarts the bots service
  ╚ `/gitpull`*:* Pulls the repo and then restarts the bots service
 
+ ╔ *Chatbot:*
+ ╚ `/listaichats`*:* Lists the chats the chatmode is enabled in
+
  ╔ *Debugging and Shell:*
  ╠ `/debug <on/off>`*:* Logs commands to updates.txt
  ╠ `/logs`*:* Run this in support group to get logs in pm
@@ -620,20 +642,20 @@ Group admins/group owners do not need these commands.
 Visit @{SUPPORT_CHAT} for more information.
 """
 
-SUDO_HANDLER = CommandHandler(("addsudo", "adddragon"), addsudo)
-SUPPORT_HANDLER = CommandHandler(("addsupport", "adddemon"), addsupport)
-TIGER_HANDLER = CommandHandler(("addtiger"), addtiger)
-WHITELIST_HANDLER = CommandHandler(("addwhitelist", "addwolf"), addwhitelist)
-UNSUDO_HANDLER = CommandHandler(("removesudo", "removedragon"), removesudo)
-UNSUPPORT_HANDLER = CommandHandler(("removesupport", "removedemon"), removesupport)
-UNTIGER_HANDLER = CommandHandler(("removetiger"), removetiger)
-UNWHITELIST_HANDLER = CommandHandler(("removewhitelist", "removewolf"), removewhitelist)
+SUDO_HANDLER = CommandHandler(("addsudo", "addtitanshifter"), addsudo, run_async=True)
+SUPPORT_HANDLER = CommandHandler(("addsupport", "addroyalblood"), addsupport, run_async=True)
+TIGER_HANDLER = CommandHandler(("addscout"), addtiger)
+WHITELIST_HANDLER = CommandHandler(("addgarrison", "addwhitelist"), addwhitelist, run_async=True)
+UNSUDO_HANDLER = CommandHandler(("removesudo", "removetitanshifter"), removesudo, run_async=True)
+UNSUPPORT_HANDLER = CommandHandler(("removesupport", "removeroyalblood"), removesupport, run_async=True)
+UNTIGER_HANDLER = CommandHandler(("removescout"), removetiger)
+UNWHITELIST_HANDLER = CommandHandler(("removewhitelist", "removegarrison"), removewhitelist, run_async=True)
 
-WHITELISTLIST_HANDLER = CommandHandler(["whitelistlist", "wolves"], whitelistlist)
-TIGERLIST_HANDLER = CommandHandler(["tigers"], tigerlist)
-SUPPORTLIST_HANDLER = CommandHandler(["supportlist", "demons"], supportlist)
-SUDOLIST_HANDLER = CommandHandler(["sudolist", "dragons"], sudolist)
-DEVLIST_HANDLER = CommandHandler(["devlist", "heroes"], devlist)
+WHITELISTLIST_HANDLER = CommandHandler(["whitelistlist", "garrisons"], whitelistlist, run_async=True)
+TIGERLIST_HANDLER = CommandHandler(["scouts"], tigerlist)
+SUPPORTLIST_HANDLER = CommandHandler(["supportlist", "royalbloods"], supportlist, run_async=True)
+SUDOLIST_HANDLER = CommandHandler(["sudolist", "titanshifters"], sudolist, run_async=True)
+DEVLIST_HANDLER = CommandHandler(["devlist", "ackermans"], devlist, run_async=True)
 
 dispatcher.add_handler(SUDO_HANDLER)
 dispatcher.add_handler(SUPPORT_HANDLER)
@@ -650,7 +672,7 @@ dispatcher.add_handler(SUPPORTLIST_HANDLER)
 dispatcher.add_handler(SUDOLIST_HANDLER)
 dispatcher.add_handler(DEVLIST_HANDLER)
 
-# __mod_name__ = "Disasters"
+__mod_name__ = "Disasters"
 __handlers__ = [
     SUDO_HANDLER,
     SUPPORT_HANDLER,

@@ -38,7 +38,8 @@ def send_rules(update, chat_id, from_pm=False):
                 "fix this.\nMaybe they forgot the hyphen in ID",
             )
             return
-        raise
+        else:
+            raise
 
     rules = sql.get_rules(chat_id)
     text = f"The rules for *{escape_markdown(chat.title)}* are:\n\n{rules}"
@@ -132,6 +133,7 @@ def __chat_settings__(chat_id, user_id):
 
 __help__ = """
  • `/rules`*:* get the rules for this chat.
+
 *Admins only:*
  • `/setrules <your rules here>`*:* set the rules for this chat.
  • `/clearrules`*:* clear the rules for this chat.
@@ -139,9 +141,9 @@ __help__ = """
 
 __mod_name__ = "Rules"
 
-GET_RULES_HANDLER = CommandHandler("rules", get_rules, filters=Filters.chat_type.groups)
-SET_RULES_HANDLER = CommandHandler("setrules", set_rules, filters=Filters.chat_type.groups)
-RESET_RULES_HANDLER = CommandHandler("clearrules", clear_rules, filters=Filters.chat_type.groups)
+GET_RULES_HANDLER = CommandHandler("rules", get_rules, filters=Filters.chat_type.groups, run_async=True)
+SET_RULES_HANDLER = CommandHandler("setrules", set_rules, filters=Filters.chat_type.groups, run_async=True)
+RESET_RULES_HANDLER = CommandHandler("clearrules", clear_rules, filters=Filters.chat_type.groups, run_async=True)
 
 dispatcher.add_handler(GET_RULES_HANDLER)
 dispatcher.add_handler(SET_RULES_HANDLER)

@@ -3,12 +3,13 @@ import datetime
 
 from telethon import events
 from telegram import Update
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import CallbackContext, CommandHandler, run_async
 
 from Cutiepii_Robot import telethn, dispatcher
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 
 DEBUG_MODE = False
+
 
 
 @dev_plus
@@ -51,6 +52,7 @@ async def i_do_nothing_yes(event):
 support_chat = os.getenv("SUPPORT_CHAT")
 
 
+
 @dev_plus
 def logs(update: Update, context: CallbackContext):
     user = update.effective_user
@@ -58,10 +60,10 @@ def logs(update: Update, context: CallbackContext):
         context.bot.send_document(document=f, filename=f.name, chat_id=user.id)
 
 
-LOG_HANDLER = CommandHandler("logs", logs)
+LOG_HANDLER = CommandHandler("logs", logs, run_async=True)
 dispatcher.add_handler(LOG_HANDLER)
 
-DEBUG_HANDLER = CommandHandler("debug", debug)
+DEBUG_HANDLER = CommandHandler("debug", debug, run_async=True)
 dispatcher.add_handler(DEBUG_HANDLER)
 
 __mod_name__ = "Debug"

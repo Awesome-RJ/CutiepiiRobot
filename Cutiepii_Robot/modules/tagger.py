@@ -1,22 +1,23 @@
-#This Module (Tagall) Is Taken From @Saber_herobot
+
+#This Module (Tagall) Is Taken From @zoldycktmbot
 
 from telegram import ParseMode
 from telegram.error import BadRequest
 from telegram.utils.helpers import mention_html
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import (
-    Filters, 
-    CommandHandler,
-    CallbackQueryHandler,
-)
+from telegram.ext import (run_async,
+                          Filters, CommandHandler,
+                          CallbackQueryHandler)
+
 from Cutiepii_Robot import dispatcher, REDIS
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_admin,
-    user_admin,
+    user_admin
 )
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user_and_text
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
+
 
 
 @bot_admin
@@ -66,6 +67,7 @@ def addtag(update, context):
         parse_mode=ParseMode.HTML
     )
 
+
 @bot_admin
 @user_admin
 @typing_action
@@ -107,6 +109,7 @@ def removetag(update, context):
         parse_mode=ParseMode.HTML
     )
 
+
 def tagg_all_button(update, context):
     query = update.callback_query
     chat = update.effective_chat  
@@ -141,6 +144,7 @@ def tagg_all_button(update, context):
                                               text="You're not the user being added in tag list!"
                                               )           
             
+
 @typing_action
 def untagme(update, context): 
     chat = update.effective_chat  
@@ -160,6 +164,7 @@ def untagme(update, context):
                                                          chat.title),
         parse_mode=ParseMode.HTML
     )
+
 
 @typing_action
 def tagme(update, context): 
@@ -181,6 +186,7 @@ def tagme(update, context):
         parse_mode=ParseMode.HTML
     )
     
+
 @bot_admin
 @user_admin
 @typing_action
@@ -219,6 +225,7 @@ def tagall(update, context):
             "Tagall list is empty!"
         )
 
+
 @bot_admin
 @user_admin
 @typing_action
@@ -238,10 +245,8 @@ __mod_name__ = "Tagger"
 
 __help__ = """ 
 Tagger is an essential feature to mention all subscribed members in the group. Any chat members can subscribe to tagger.
-
 - /tagme: registers to the chat tag list.
 - /untagme: unsubscribes from the chat tag list.
-
 *Admin only:*
 - /tagall: mention all subscribed members.
 - /untagall: clears all subscribed members. 
@@ -249,13 +254,13 @@ Tagger is an essential feature to mention all subscribed members in the group. A
 - /removetag <userhandle>: remove a user to chat tag list. (via handle, or reply)
 """    
 
-TAG_ALL_HANDLER = DisableAbleCommandHandler("tagall", tagall, filters=Filters.chat_type.groups)
-UNTAG_ALL_HANDLER = DisableAbleCommandHandler("untagall", untagall, filters=Filters.chat_type.groups)
-UNTAG_ME_HANDLER = CommandHandler("untagme", untagme, filters=Filters.chat_type.groups)
-TAG_ME_HANDLER = CommandHandler("tagme", tagme, filters=Filters.chat_type.groups)
-ADD_TAG_HANDLER = DisableAbleCommandHandler("addtag", addtag, pass_args=True, filters=Filters.chat_type.groups)
-REMOVE_TAG_HANDLER = DisableAbleCommandHandler("removetag", removetag, pass_args=True, filters=Filters.chat_type.groups)
-TAGALL_CALLBACK_HANDLER = CallbackQueryHandler(tagg_all_button, pattern=r"tagall_")
+TAG_ALL_HANDLER = DisableAbleCommandHandler("tagall", tagall, filters=Filters.chat_type.groups, run_async=True)
+UNTAG_ALL_HANDLER = DisableAbleCommandHandler("untagall", untagall, filters=Filters.chat_type.groups, run_async=True)
+UNTAG_ME_HANDLER = CommandHandler("untagme", untagme, filters=Filters.chat_type.groups, run_async=True)
+TAG_ME_HANDLER = CommandHandler("tagme", tagme, filters=Filters.chat_type.groups, run_async=True)
+ADD_TAG_HANDLER = DisableAbleCommandHandler("addtag", addtag, pass_args=True, filters=Filters.chat_type.groups, run_async=True)
+REMOVE_TAG_HANDLER = DisableAbleCommandHandler("removetag", removetag, pass_args=True, filters=Filters.chat_type.groups, run_async=True)
+TAGALL_CALLBACK_HANDLER = CallbackQueryHandler(tagg_all_button, pattern=r"tagall_", run_async=True)
 
 
 

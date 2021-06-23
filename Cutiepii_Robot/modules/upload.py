@@ -9,7 +9,7 @@ from telethon import events
 
 from Cutiepii_Robot import telethn as bot
 from Cutiepii_Robot.modules.urluploader import download_file
-from Cutiepii_Robot.utils.uputils import humanbytes, progress
+from Cutiepii_Robot.functions.pluginhelpers import humanbytes, progress
 
 DOWNLOADPATH = "Downloads/"
 

@@ -8,7 +8,7 @@ import requests
 from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update, Message
-from telegram.ext import CallbackContext
+from telegram.ext import CallbackContext, run_async
 
 info_btn = "More Information"
 kaizoku_btn = "Kaizoku ☠️"
@@ -17,9 +17,6 @@ prequel_btn = "⬅️ Prequel"
 sequel_btn = "Sequel ➡️"
 close_btn = "Close ❌"
 
-ANIME_IMG = "https://telegra.ph/file/56b16e6599af473d692f9.mp4"
-MANGA_IMG = "https://telegra.ph/file/e6b1c11a9cd09a9c0e223.mp4"
-CHARACTER_IMG = "https://telegra.ph/file/a355b31aa5dfe112605d2.mp4"
 
 def shorten(description, info="anilist.co"):
     msg = ""
@@ -171,6 +168,7 @@ def extract_arg(message: Message):
         return reply.text
     return None
 
+
 def airing(update: Update, context: CallbackContext):
     message = update.effective_message
     search_str = extract_arg(message)
@@ -193,11 +191,12 @@ def airing(update: Update, context: CallbackContext):
     update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
+
 def anime(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
     if not search:
-        update.effective_message.reply_animation(ANIME_IMG, caption="""Format : /anime < anime name >""", parse_mode="markdown")
+        update.effective_message.reply_text("Format : /anime < anime name >")
         return
     variables = {"search": search}
     json = requests.post(
@@ -264,11 +263,12 @@ def anime(update: Update, context: CallbackContext):
             )
 
 
+
 def character(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
     if not search:
-        update.effective_message.reply_animation(CHARACTER_IMG, caption="""Format : /character < character name >""", parse_mode="markdown")
+        update.effective_message.reply_text("Format : /character < character name >")
         return
     variables = {"query": search}
     json = requests.post(
@@ -297,11 +297,12 @@ def character(update: Update, context: CallbackContext):
             )
 
 
+
 def manga(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
     if not search:
-        update.effective_message.reply_animation(MANGA_IMG, caption="""Format : /manga < manga name >""", parse_mode="markdown")
+        update.effective_message.reply_text("Format : /manga < manga name >")
         return
     variables = {"search": search}
     json = requests.post(
@@ -360,6 +361,7 @@ def manga(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
+
 
 
 def user(update: Update, context: CallbackContext):
@@ -445,6 +447,7 @@ def user(update: Update, context: CallbackContext):
     progress_message.delete()
 
 
+
 def upcoming(update: Update, context: CallbackContext):
     jikan = jikanpy.jikan.Jikan()
     upcomin = jikan.top("anime", page=1, subtype="upcoming")
@@ -518,8 +521,10 @@ def site_search(update: Update, context: CallbackContext, site: str):
         )
 
 
+
 def kaizoku(update: Update, context: CallbackContext):
     site_search(update, context, "kaizoku")
+
 
 
 def kayo(update: Update, context: CallbackContext):
@@ -527,48 +532,44 @@ def kayo(update: Update, context: CallbackContext):
 
 
 __help__ = """
-Get information about anime, manga or characters from [AniList](anilist.co).
-*Available Commands:*
-   • /anime <anime>: returns information about the anime.
-   • /character <character>*:* returns information about the character.
-   • /manga <manga>*:* returns information about the manga.
-   • /user <user>*:* returns information about a MyAnimeList user.
-   • /upcoming*:* returns a list of new anime in the upcoming seasons.
-   • /airing <anime>*:* returns anime airing info.
-   • /watchlist: to get your saved watchlist.
-   • /mangalist: to get your saved manga read list.
-   • /characterlist | fcl*:* to get your favorite characters list.
-   • /removewatchlist | rwl <anime>*:* to remove a anime from your list.
-   • /rfcharacter | rfcl <character>*:* to remove a character from your list.  
-   • /rmanga | rml <manga>*:* to remove a manga from your list.
-   
-Get information about anime, manga or characters with the help of this module! All data is fetched from [MyAnimeList](https://myanimelist.net).
-*Available Commands:*
-   • /manime <anime>*:* returns information about the anime.
-   • /mcharacter <character>*:* returns information about the character.
-   • /mmanga <manga>*:* returns information about the manga.
-   • /mupcoming*:* returns a list of new anime in the upcoming seasons.
-   
-*Anime Quote Commands:*
-   • /quote*:* get random anime quote
-   • /animequotes*:* gives random anime quotes
-   
-*Anime Search Commands:*
-   • /whatanime*:* to search source of anime reply to photo
-*Anime Watch Commands:*
-   • /animerocks*:* Direct Watch Anime Without Anime.
-*Anime Downloading:*
-   • /search*:* Direct Watch Anime Downloading Link.
- """
+Get information about anime, manga or characters from [AniList](anilist.co) and [MAL](https://myanimelist.net/)
 
-ANIME_HANDLER = DisableAbleCommandHandler("anime", anime)
-AIRING_HANDLER = DisableAbleCommandHandler("airing", airing)
-CHARACTER_HANDLER = DisableAbleCommandHandler("character", character)
-MANGA_HANDLER = DisableAbleCommandHandler("manga", manga)
-USER_HANDLER = DisableAbleCommandHandler("user", user)
-UPCOMING_HANDLER = DisableAbleCommandHandler("upcoming", upcoming)
-KAIZOKU_SEARCH_HANDLER = DisableAbleCommandHandler("kaizoku", kaizoku)
-KAYO_SEARCH_HANDLER = DisableAbleCommandHandler("kayo", kayo)
+*AniList Commands:*
+
+ • `/anime <anime>`*:* returns information about the anime from AniList
+ • `/character <character>`*:* returns information about the character from AniList
+ • `/manga <manga>`*:* returns information about the manga from AniList
+ • `/upcoming`*:* returns a list of new anime in the upcoming seasons from AniList
+ • `/airing <anime>`*:* returns anime airing info from AniList
+ 
+*MyAnimelist Commands:*
+
+ • `/manime <anime>`*:* returns information about the anime MAL.
+ • `/mcharacter` <character>*:* returns information about the character from MAL.
+ • `/mmanga <manga>`*:* returns information about the manga from MAL.
+ • `/mupcoming`*:* returns a list of new anime in the upcoming seasons from MAL.
+ • `/user <user>`*:* returns information about a MyAnimeList user
+ • `/animequotes`*:* sends random anime quotes
+
+*Anime Search Commands:*
+
+• `/kayo`*:* search an Anime on AnimeKayo website
+• `kaizoku`*:* search an Anime on AnimeKaizoku website
+• `/whatanime`*:* Please reply to a Gif or Photo or Video,
+You saw a good anime video, photo, gif but dont know what is that anime's name?
+This is where whatanime comes in, just reply to that media with /whatanime and it will search the anime name for you from anilist.
+
+"""
+
+
+ANIME_HANDLER = DisableAbleCommandHandler("anime", anime, run_async=True)
+AIRING_HANDLER = DisableAbleCommandHandler("airing", airing, run_async=True)
+CHARACTER_HANDLER = DisableAbleCommandHandler("character", character, run_async=True)
+MANGA_HANDLER = DisableAbleCommandHandler("manga", manga, run_async=True)
+USER_HANDLER = DisableAbleCommandHandler("user", user, run_async=True)
+UPCOMING_HANDLER = DisableAbleCommandHandler("upcoming", upcoming, run_async=True)
+KAIZOKU_SEARCH_HANDLER = DisableAbleCommandHandler("kaizoku", kaizoku, run_async=True)
+KAYO_SEARCH_HANDLER = DisableAbleCommandHandler("kayo", kayo, run_async=True)
 
 dispatcher.add_handler(ANIME_HANDLER)
 dispatcher.add_handler(CHARACTER_HANDLER)
@@ -586,9 +587,9 @@ __command_list__ = [
     "character",
     "user",
     "upcoming",
-    "kaizoku",
     "airing",
     "kayo",
+    "kaizoku",
 ]
 __handlers__ = [
     ANIME_HANDLER,
@@ -596,7 +597,7 @@ __handlers__ = [
     MANGA_HANDLER,
     USER_HANDLER,
     UPCOMING_HANDLER,
-    KAIZOKU_SEARCH_HANDLER,
     KAYO_SEARCH_HANDLER,
     AIRING_HANDLER,
+    KAIZOKU_SEARCH_HANDLER
 ]

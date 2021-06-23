@@ -49,13 +49,13 @@ async def is_administrator(user_id: int, message):
 
 
 
-@telethn.on(events.NewMessage(pattern="^[!/]zombies ?(.*)"))
+@telethn.on(events.NewMessage(pattern=f"^[!/]zombies ?(.*)"))
 async def zombies(event):
     """ For .zombies command, list all the zombies in a chat. """
 
     con = event.pattern_match.group(1).lower()
     del_u = 0
-    del_status = "Darling Listen! No Deleted Accounts Found, Group Is Clean."
+    del_status = "No Deleted Accounts Found, Group Is Clean."
 
     if con != "clean":
         find_zombies = await event.respond("Searching For Zombies...")
@@ -65,7 +65,7 @@ async def zombies(event):
                 del_u += 1
                 await sleep(1)
         if del_u > 0:
-            del_status = f"Found **{del_u}**Cutie Cutie! Zombies In This Group.\
+            del_status = f"Found **{del_u}** Zombies In This Group.\
             \nClean Them By Using - `/zombies clean`"
         await find_zombies.edit(del_status)
         return
@@ -77,14 +77,14 @@ async def zombies(event):
 
     # Well
     if not await is_administrator(user_id=event.from_id, message=event):
-        await event.respond("Darling Listen! You're Not An Admin!")
+        await event.respond("You're Not An Admin!")
         return
 
     if not admin and not creator:
-        await event.respond("Darling Listen! I Am Not An Admin Here!")
+        await event.respond("I Am Not An Admin Here!")
         return
 
-    cleaning_zombies = await event.respond("Cutie Cutie! Cleaning Zombies...")
+    cleaning_zombies = await event.respond("Cleaning Zombies...")
     del_u = 0
     del_a = 0
 
@@ -95,7 +95,7 @@ async def zombies(event):
                     EditBannedRequest(event.chat_id, user.id, BANNED_RIGHTS)
                 )
             except ChatAdminRequiredError:
-                await cleaning_zombies.edit("Darling Listen! I Don't Have Ban Rights In This Group.")
+                await cleaning_zombies.edit("I Don't Have Ban Rights In This Group.")
                 return
             except UserAdminInvalidError:
                 del_u -= 1
@@ -108,6 +108,8 @@ async def zombies(event):
 
     if del_a > 0:
         del_status = f"Cleaned `{del_u}` Zombies \
-        \nCutie Cutie!`{del_a}` Zombie Admin Accounts Are Not Removed!"
+        \n`{del_a}` Zombie Admin Accounts Are Not Removed!"
 
     await cleaning_zombies.edit(del_status)
+
+__mod_name__ = "Zombies"
