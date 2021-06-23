@@ -3,8 +3,8 @@ emoji
 lxml
 beautifulsoup4
 requests==2.20.0
-SQLAlchemy==1.4.0
-python-telegram-bot>=13.0
+sqlalchemy==1.3.20
+python-telegram-bot==13.6
 coffeehouse==2.2.4
 psycopg2-binary
 feedparser
@@ -88,7 +88,6 @@ opencv-python-headless
 aioredis
 asyncio
 odmantic
-git+https://github.com/python-telegram-bot/ptbcontrib.git
 ujson
 gpytranslate
 youtube_search
@@ -96,3 +95,5 @@ wget
 aiofiles
 uvloop
 python-dotenv
+humanize
+git+https://github.com/python-telegram-bot/ptbcontrib.git
