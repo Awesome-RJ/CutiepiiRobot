@@ -9,7 +9,7 @@ STRING_SESSION = get_str_key("STRING_SESSION", required=False)
 APP_ID = get_int_key("APP_ID", required=False)
 APP_HASH = get_str_key("APP_HASH", required=False)
 
-ubot = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH)
+ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
 try:
     ubot.start()
 except BaseException:
