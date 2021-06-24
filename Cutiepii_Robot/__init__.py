@@ -249,7 +249,13 @@ else:
 from Cutiepii_Robot.modules.sql import SESSION
 
 defaults = tg.Defaults(run_async = True)
-updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True, defaults = defaults)
+updater = tg.Updater(
+    TOKEN,
+    workers=min(32, os.cpu_count() + 4),
+    request_kwargs={"read_timeout": 10, "connect_timeout": 10},
+    persistence=PostgresPersistence(SESSION),
+)
+
 telethn = TelegramClient("cutiepii", API_ID, API_HASH)
 
 dispatcher = updater.dispatcher
@@ -264,7 +270,13 @@ aiohttpsession = ClientSession()
 # ARQ Client
 print("[INFO]: INITIALIZING ARQ CLIENT")
 arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
-pgram = Client("cutiepiipro", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
+pgram = Client(
+    ":memory:",
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=TOKEN,
+    workers=min(32, os.cpu_count() + 4),
+)
 
 apps = []
 apps.append(pgram)
