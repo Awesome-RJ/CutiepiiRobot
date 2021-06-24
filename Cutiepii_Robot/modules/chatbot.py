@@ -1,3 +1,8 @@
+# CREDITS GOES TO @daisyx and Daisyx's Developers
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 import emoji
 import re
 import aiohttp
@@ -7,7 +12,7 @@ from pyrogram import filters
 from Cutiepii_Robot import BOT_ID
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
 from Cutiepii_Robot import arq
-from Cutiepii_Robot.functions.pluginhelpers import admins_only, edit_or_reply
+from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
 from Cutiepii_Robot import pgram as eren
 
 translator = google_translator()
@@ -338,7 +343,7 @@ async def sasuke(client, message):
 
 
 __help__ = """
- Chatbot utilizes the Branshop's API and allows Cutiepii to talk and provides a more interactive group chat experience.
+ Chatbot utilizes the Branshop's API and allows Eren to talk and provides a more interactive group chat experience.
  *Admins Only Commands*:
  • `/chatbot [ON/OFF]`: Enables and disables Chatbot mode in the chat.
  • `/chatbot EN` : Enables English only Chatbot mode in the chat.

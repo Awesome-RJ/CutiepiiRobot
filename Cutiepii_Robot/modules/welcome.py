@@ -147,7 +147,6 @@ def send(update, message, keyboard, backup_message):
     return msg
 
 
-
 @loggable
 def new_member(update: Update, context: CallbackContext):
     bot, job_queue = context.bot, context.job_queue
@@ -259,7 +258,7 @@ def new_member(update: Update, context: CallbackContext):
                 )
                 continue
 
-            # Welcome Tigers
+            # Welcome Garrisons
             elif new_mem.id in WOLVES:
                 update.effective_message.reply_text(
                     "A member of Garrison Regiment just joined the group!", reply_to_message_id=reply,
@@ -749,7 +748,7 @@ def goodbye(update: Update, context: CallbackContext):
             )
 
 
-
+@run_async
 @user_admin
 @loggable
 def set_welcome(update: Update, context: CallbackContext) -> str:
@@ -894,7 +893,6 @@ def welcomemute(update: Update, context: CallbackContext) -> str:
         return ""
 
 
-
 @user_admin
 @loggable
 def clean_welcome(update: Update, context: CallbackContext) -> str:
@@ -935,7 +933,6 @@ def clean_welcome(update: Update, context: CallbackContext) -> str:
     else:
         update.effective_message.reply_text("I understand 'on/yes' or 'off/no' only!")
         return ""
-
 
 
 @user_admin
@@ -1073,11 +1070,9 @@ WELC_MUTE_HELP_TXT = (
 )
 
 
-
 @user_admin
 def welcome_help(update: Update, context: CallbackContext):
     update.effective_message.reply_text(WELC_HELP_TXT, parse_mode=ParseMode.MARKDOWN)
-
 
 
 @user_admin
@@ -1137,7 +1132,7 @@ LEFT_MEM_HANDLER = MessageHandler(Filters.status_update.left_chat_member, left_m
 WELC_PREF_HANDLER = CommandHandler("welcome", welcome, filters=Filters.chat_type.groups, run_async=True)
 GOODBYE_PREF_HANDLER = CommandHandler("goodbye", goodbye, filters=Filters.chat_type.groups, run_async=True)
 SET_WELCOME = CommandHandler("setwelcome", set_welcome, filters=Filters.chat_type.groups, run_async=True)
-SET_GOODBYE = CommandHandler("setgoodbye", set_goodbye, filters=Filters.group, run_async=True)
+SET_GOODBYE = CommandHandler("setgoodbye", set_goodbye, filters=Filters.chat_type.groups, run_async=True)
 RESET_WELCOME = CommandHandler("resetwelcome", reset_welcome, filters=Filters.chat_type.groups, run_async=True)
 RESET_GOODBYE = CommandHandler("resetgoodbye", reset_goodbye, filters=Filters.chat_type.groups, run_async=True)
 WELCOMEMUTE_HANDLER = CommandHandler("welcomemute", welcomemute, filters=Filters.chat_type.groups, run_async=True)

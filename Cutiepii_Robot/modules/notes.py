@@ -179,8 +179,9 @@ def get(update, context, notename, show_none=True, no_format=False):
                     )
                 else:
                     ENUM_FUNC_MAP[note.msgtype](
+                        chat_id,
                         note.file,                        
-                        reply_to_message_id=reply_id,
+                        reply_to_message_id=reply_id,                                               
                         reply_markup=keyboard,
                     )
 
@@ -214,7 +215,6 @@ def get(update, context, notename, show_none=True, no_format=False):
         message.reply_text("This note doesn't exist")
 
 
-
 @connection_status
 def cmd_get(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
@@ -226,14 +226,12 @@ def cmd_get(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Get rekt")
 
 
-
 @connection_status
 def hash_get(update: Update, context: CallbackContext):
     message = update.effective_message.text
     fst_word = message.split()[0]
     no_hash = fst_word[1:].lower()
     get(update, context, no_hash, show_none=False)
-
 
 
 @connection_status
@@ -248,7 +246,6 @@ def slash_get(update: Update, context: CallbackContext):
         get(update, context, note_name, show_none=False)
     except IndexError:
         update.effective_message.reply_text("Wrong Note ID 😾")
-
 
 
 @user_admin
@@ -290,7 +287,6 @@ def save(update: Update, context: CallbackContext):
         return
 
 
-
 @user_admin
 @connection_status
 def clear(update: Update, context: CallbackContext):
@@ -303,7 +299,6 @@ def clear(update: Update, context: CallbackContext):
             update.effective_message.reply_text("Successfully removed note.")
         else:
             update.effective_message.reply_text("That's not a note in my database!")
-
 
 
 def clearall(update: Update, context: CallbackContext):
@@ -330,7 +325,6 @@ def clearall(update: Update, context: CallbackContext):
             reply_markup=buttons,
             parse_mode=ParseMode.MARKDOWN,
         )
-
 
 
 def clearall_btn(update: Update, context: CallbackContext):
@@ -362,7 +356,6 @@ def clearall_btn(update: Update, context: CallbackContext):
             query.answer("Only owner of the chat can do this.")
         if member.status == "member":
             query.answer("You need to be admin to do this.")
-
 
 
 @connection_status

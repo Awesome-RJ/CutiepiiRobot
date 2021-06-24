@@ -201,7 +201,6 @@ def locktypes(update, context):
                      sorted(list(LOCK_TYPES) + list(LOCK_CHAT_RESTRICTION))))
 
 
-
 @user_admin
 @loggable
 @typing_action
@@ -308,7 +307,6 @@ def lock(update, context) -> str:
     return ""
 
 
-
 @user_admin
 @loggable
 @typing_action
@@ -406,7 +404,6 @@ def unlock(update, context) -> str:
                          "What are you trying to unlock...?")
 
     return ""
-
 
 
 @user_not_admin
@@ -547,7 +544,6 @@ def build_lock_message(chat_id):
     return res
 
 
-
 @user_admin
 @typing_action
 def list_locks(update, context):
@@ -652,4 +648,4 @@ dispatcher.add_handler(LOCKTYPES_HANDLER)
 dispatcher.add_handler(LOCKED_HANDLER)
 
 dispatcher.add_handler(
-    MessageHandler(Filters.all & Filters.chat_type.groups, del_lockables), PERM_GROUP)
+    MessageHandler(Filters.all & Filters.chat_type.groups, del_lockables, run_async=True), PERM_GROUP)

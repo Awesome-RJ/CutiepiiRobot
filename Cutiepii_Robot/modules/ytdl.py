@@ -85,7 +85,7 @@ async def download_video(v_url):
         song = False
         video = True
     try:
-        await lmao.edit("`Fetching data, please wait..`")
+        await lmao.edit("`Cutie Cutie! Fetching data, please wait..`")
         with YoutubeDL(opts) as ytdl:
             ytdl_data = ytdl.extract_info(url)
     except DownloadError as DE:
@@ -143,7 +143,7 @@ async def download_video(v_url):
             caption=ytdl_data['title'])
         os.remove(f"{ytdl_data['id']}.mp4")
 
-__mod_name__ = "YouTube"
+__mod_name__ = "YouTubeDL"
 
 __help__ = """
  • `/ytvideo YTLINK`*:* download video from youtube. 

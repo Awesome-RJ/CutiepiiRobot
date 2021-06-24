@@ -10,7 +10,7 @@ from pyrogram.types import (
 )
 
 # By @TroJanzHEX
-from Cutiepii_Robot.resources.ImageEditor.edit_1 import (  # pylint:disable=import-error
+from Cutiepii_Robot.utils.ImageEditor.edit_1 import (  # pylint:disable=import-error
     black_white,
     box_blur,
     bright,
@@ -18,7 +18,7 @@ from Cutiepii_Robot.resources.ImageEditor.edit_1 import (  # pylint:disable=impo
     mix,
     normal_blur,
 )
-from Cutiepii_Robot.resources.ImageEditor.edit_2 import (  # pylint:disable=import-error
+from Cutiepii_Robot.utils.ImageEditor.edit_2 import (  # pylint:disable=import-error
     cartoon,
     circle_with_bg,
     circle_without_bg,
@@ -28,13 +28,13 @@ from Cutiepii_Robot.resources.ImageEditor.edit_2 import (  # pylint:disable=impo
     sepia_mode,
     sticker,
 )
-from Cutiepii_Robot.resources.ImageEditor.edit_3 import (  # pylint:disable=import-error
+from Cutiepii_Robot.utils.ImageEditor.edit_3 import (  # pylint:disable=import-error
     black_border,
     blue_border,
     green_border,
     red_border,
 )
-from Cutiepii_Robot.resources.ImageEditor.edit_4 import (  # pylint:disable=import-error
+from Cutiepii_Robot.utils.ImageEditor.edit_4 import (  # pylint:disable=import-error
     inverted,
     removebg_plain,
     removebg_sticker,
@@ -44,7 +44,7 @@ from Cutiepii_Robot.resources.ImageEditor.edit_4 import (  # pylint:disable=impo
     rotate_270,
     round_sticker,
 )
-from Cutiepii_Robot.resources.ImageEditor.edit_5 import (  # pylint:disable=import-error
+from Cutiepii_Robot.utils.ImageEditor.edit_5 import (  # pylint:disable=import-error
     normalglitch_1,
     normalglitch_2,
     normalglitch_3,
@@ -453,7 +453,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 __mod_name__ = "Image Editor"
 __help__ = """
  *IMAGE EDITOR*
-Cutiepii has some advanced image editing tools inbuilt
+Eren has some advanced image editing tools inbuilt
 Bright, Circle, RemBG, Blur, Border, Flip, Glitch, Sticker maker and more
 
 - /edit [reply to image]: Open the image editor

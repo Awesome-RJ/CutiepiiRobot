@@ -84,7 +84,7 @@ def warn(user: User,
         for warn_reason in reasons:
             reply += f"\n - {html.escape(warn_reason)}"
 
-        # message.bot.send_sticker(chat.id, BAN_STICKER)  # cutiepii's sticker
+        # message.bot.send_sticker(chat.id, BAN_STICKER)  # Cutiepii's sticker
         keyboard = None
         log_reason = (f"<b>{html.escape(chat.title)}:</b>\n"
                       f"#WARN_BAN\n"
@@ -129,7 +129,6 @@ def warn(user: User,
     return log_reason
 
 
-
 @user_admin_no_reply
 @bot_admin
 @loggable
@@ -160,7 +159,6 @@ def button(update: Update, context: CallbackContext) -> str:
     return ""
 
 
-
 @user_admin
 @can_restrict
 @loggable
@@ -182,7 +180,6 @@ def warn_user(update: Update, context: CallbackContext) -> str:
     else:
         message.reply_text("That looks like an invalid User ID to me.")
     return ""
-
 
 
 @user_admin
@@ -207,7 +204,6 @@ def reset_warns(update: Update, context: CallbackContext) -> str:
     else:
         message.reply_text("No user has been designated!")
     return ""
-
 
 
 def warns(update: Update, context: CallbackContext):
@@ -307,7 +303,6 @@ def remove_warn_filter(update: Update, context: CallbackContext):
     )
 
 
-
 def list_warn_filters(update: Update, context: CallbackContext):
     chat: Optional[Chat] = update.effective_chat
     all_handlers = sql.get_chat_warn_triggers(chat.id)
@@ -330,7 +325,6 @@ def list_warn_filters(update: Update, context: CallbackContext):
     if filter_list != CURRENT_WARNING_FILTER_STRING:
         update.effective_message.reply_text(
             filter_list, parse_mode=ParseMode.HTML)
-
 
 
 @loggable
@@ -367,7 +361,6 @@ def reply_filter(update: Update, context: CallbackContext) -> str:
     return ""
 
 
-
 @user_admin
 @loggable
 def set_warn_limit(update: Update, context: CallbackContext) -> str:
@@ -395,7 +388,6 @@ def set_warn_limit(update: Update, context: CallbackContext) -> str:
 
         msg.reply_text("The current warn limit is {}".format(limit))
     return ""
-
 
 
 @user_admin
@@ -478,7 +470,7 @@ __help__ = """
 be a sentence, encompass it with quotes, as such: `/addwarn "very angry" This is an angry user`. 
  • `/nowarn <keyword>`*:* stop a warning filter
  • `/warnlimit <num>`*:* set the warning limit
- • `/strongwarn <on/yes/off/no>`*:* If set to on, exceeding the warn limit will result in a ban. Else, will just punch.
+ • `/strongwarn <on/yes/off/no>`*:* If set to on, exceeding the warn limit will result in a ban. Else, will just kick.
 """
 
 __mod_name__ = "Warnings"
@@ -491,10 +483,10 @@ CALLBACK_QUERY_HANDLER = CallbackQueryHandler(button, pattern=r"rm_warn", run_as
 MYWARNS_HANDLER = DisableAbleCommandHandler(
     "warns", warns, filters=Filters.chat_type.groups, run_async=True)
 ADD_WARN_HANDLER = CommandHandler(
-    "addwarn", add_warn_filter, filters=Filters.chat_type.groups, run_async=True)
+    "addwarn", add_warn_filter, filters=Filters.chat_type.groups)
 RM_WARN_HANDLER = CommandHandler(["nowarn", "stopwarn"],
                                  remove_warn_filter,
-                                 filters=Filters.chat_type.groups, run_async=True)
+                                 filters=Filters.chat_type.groups)
 LIST_WARN_HANDLER = DisableAbleCommandHandler(["warnlist", "warnfilters"],
                                               list_warn_filters,
                                               filters=Filters.chat_type.groups,

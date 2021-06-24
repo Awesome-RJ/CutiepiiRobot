@@ -52,7 +52,6 @@ def check_user_id(user_id: int, context: CallbackContext) -> Optional[str]:
 ### Deep link example ends
 
 
-
 @dev_plus
 @gloggable
 def addsudo(update: Update, context: CallbackContext) -> str:
@@ -109,7 +108,6 @@ def addsudo(update: Update, context: CallbackContext) -> str:
         log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
     return log_message
-
 
 
 @sudo_plus
@@ -170,7 +168,6 @@ def addsupport(
     return log_message
 
 
-
 @sudo_plus
 @gloggable
 def addwhitelist(update: Update, context: CallbackContext) -> str:
@@ -224,7 +221,6 @@ def addwhitelist(update: Update, context: CallbackContext) -> str:
         log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
     return log_message
-
 
 
 @sudo_plus
@@ -287,7 +283,6 @@ def addtiger(update: Update, context: CallbackContext) -> str:
     return log_message
 
 
-
 @dev_plus
 @gloggable
 def removesudo(update: Update, context: CallbackContext) -> str:
@@ -328,7 +323,6 @@ def removesudo(update: Update, context: CallbackContext) -> str:
     else:
         message.reply_text("This user is not a Titan Shifter!")
         return ""
-
 
 
 @sudo_plus
@@ -373,7 +367,6 @@ def removesupport(update: Update, context: CallbackContext) -> str:
         return ""
 
 
-
 @sudo_plus
 @gloggable
 def removewhitelist(update: Update, context: CallbackContext) -> str:
@@ -413,7 +406,6 @@ def removewhitelist(update: Update, context: CallbackContext) -> str:
     else:
         message.reply_text("This user is not a Garrison!")
         return ""
-
 
 
 @sudo_plus
@@ -457,7 +449,6 @@ def removetiger(update: Update, context: CallbackContext) -> str:
         return ""
 
 
-
 @whitelist_plus
 def whitelistlist(update: Update, context: CallbackContext):
     reply = "<b>Known Garrisons♠️:</b>\n"
@@ -494,7 +485,6 @@ def tigerlist(update: Update, context: CallbackContext):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
-
 @whitelist_plus
 def supportlist(update: Update, context: CallbackContext):
     bot = context.bot
@@ -510,7 +500,6 @@ def supportlist(update: Update, context: CallbackContext):
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
-
 
 
 @whitelist_plus
@@ -529,7 +518,6 @@ def sudolist(update: Update, context: CallbackContext):
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
-
 
 
 @whitelist_plus
@@ -652,7 +640,7 @@ UNTIGER_HANDLER = CommandHandler(("removescout"), removetiger)
 UNWHITELIST_HANDLER = CommandHandler(("removewhitelist", "removegarrison"), removewhitelist, run_async=True)
 
 WHITELISTLIST_HANDLER = CommandHandler(["whitelistlist", "garrisons"], whitelistlist, run_async=True)
-TIGERLIST_HANDLER = CommandHandler(["scouts"], tigerlist)
+TIGERLIST_HANDLER = CommandHandler(["scouts"], tigerlist, run_async=True)
 SUPPORTLIST_HANDLER = CommandHandler(["supportlist", "royalbloods"], supportlist, run_async=True)
 SUDOLIST_HANDLER = CommandHandler(["sudolist", "titanshifters"], sudolist, run_async=True)
 DEVLIST_HANDLER = CommandHandler(["devlist", "ackermans"], devlist, run_async=True)
@@ -672,7 +660,7 @@ dispatcher.add_handler(SUPPORTLIST_HANDLER)
 dispatcher.add_handler(SUDOLIST_HANDLER)
 dispatcher.add_handler(DEVLIST_HANDLER)
 
-__mod_name__ = "Disasters"
+__mod_name__ = "Bot Owner"
 __handlers__ = [
     SUDO_HANDLER,
     SUPPORT_HANDLER,

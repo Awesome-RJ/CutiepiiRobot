@@ -1,3 +1,4 @@
+import ast
 import csv
 import json
 import os
@@ -5,7 +6,7 @@ import re
 import time
 import uuid
 from io import BytesIO
-import ast
+
 import Cutiepii_Robot.modules.sql.feds_sql as sql
 from Cutiepii_Robot import (
     EVENT_LOGS,
@@ -38,6 +39,7 @@ from telegram.ext import (
     CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
+    run_async,
 )
 from telegram.utils.helpers import mention_html, mention_markdown
 
@@ -79,6 +81,7 @@ UNFBAN_ERRORS = {
 }
 
 
+@run_async
 def new_fed(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
@@ -132,6 +135,7 @@ def new_fed(update: Update, context: CallbackContext):
         )
 
 
+@run_async
 def del_fed(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -178,6 +182,7 @@ def del_fed(update: Update, context: CallbackContext):
     )
 
 
+@run_async
 def rename_fed(update, context):
     user = update.effective_user
     msg = update.effective_message
@@ -199,6 +204,7 @@ def rename_fed(update, context):
         msg.reply_text("Only federation owner can do this!")
 
 
+@run_async
 def fed_chat(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -226,6 +232,7 @@ def fed_chat(update: Update, context: CallbackContext):
     update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
+@run_async
 def join_fed(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -288,6 +295,7 @@ def join_fed(update: Update, context: CallbackContext):
         )
 
 
+@run_async
 def leave_fed(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -329,6 +337,7 @@ def leave_fed(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Only group creators can use this command!")
 
 
+@run_async
 def user_join_fed(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -392,6 +401,7 @@ def user_join_fed(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Only federation owners can do this!")
 
 
+@run_async
 def user_demote_fed(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -451,6 +461,7 @@ def user_demote_fed(update: Update, context: CallbackContext):
         return
 
 
+@run_async
 def fed_info(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -503,6 +514,7 @@ def fed_info(update: Update, context: CallbackContext):
     update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
+@run_async
 def fed_admin(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -550,6 +562,7 @@ def fed_admin(update: Update, context: CallbackContext):
     update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
+@run_async
 def fed_ban(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -632,7 +645,7 @@ def fed_ban(update: Update, context: CallbackContext):
         if not str(user_id).isdigit():
             send_message(update.effective_message, excp.message)
             return
-        if len(str(user_id)) != 9:
+        elif len(str(user_id)) != 9:
             send_message(update.effective_message, "That's so not a user!")
             return
         isvalid = False
@@ -968,6 +981,7 @@ def fed_ban(update: Update, context: CallbackContext):
     #                 "Fedban affected {} chats. ".format(chats_in_fed))
 
 
+@run_async
 def unfban(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -1012,7 +1026,7 @@ def unfban(update: Update, context: CallbackContext):
         if not str(user_id).isdigit():
             send_message(update.effective_message, excp.message)
             return
-        if len(str(user_id)) != 9:
+        elif len(str(user_id)) != 9:
             send_message(update.effective_message, "That's so not a user!")
             return
         isvalid = False
@@ -1187,6 +1201,7 @@ def unfban(update: Update, context: CallbackContext):
 	"""
 
 
+@run_async
 def set_frules(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -1243,6 +1258,7 @@ def set_frules(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Please write rules to set this up!")
 
 
+@run_async
 def get_frules(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -1265,6 +1281,7 @@ def get_frules(update: Update, context: CallbackContext):
     update.effective_message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
 
 
+@run_async
 def fed_broadcast(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     msg = update.effective_message
@@ -1326,6 +1343,7 @@ def fed_broadcast(update: Update, context: CallbackContext):
         update.effective_message.reply_text(send_text)
 
 
+@run_async
 def fed_ban_list(update: Update, context: CallbackContext):
     bot, args, chat_data = context.bot, context.args, context.chat_data
     chat = update.effective_chat
@@ -1378,8 +1396,9 @@ def fed_ban_list(update: Update, context: CallbackContext):
                         parse_mode=ParseMode.MARKDOWN,
                     )
                     return
-                if user.id not in DRAGONS:
-                    put_chat(chat.id, new_jam, chat_data)
+                else:
+                    if user.id not in DRAGONS:
+                        put_chat(chat.id, new_jam, chat_data)
             else:
                 if user.id not in DRAGONS:
                     put_chat(chat.id, new_jam, chat_data)
@@ -1405,7 +1424,7 @@ def fed_ban_list(update: Update, context: CallbackContext):
                     ),
                 )
             return
-        if args[0] == "csv":
+        elif args[0] == "csv":
             jam = time.time()
             new_jam = jam + 1800
             cek = get_chat(chat.id, chat_data)
@@ -1421,8 +1440,9 @@ def fed_ban_list(update: Update, context: CallbackContext):
                         parse_mode=ParseMode.MARKDOWN,
                     )
                     return
-                if user.id not in DRAGONS:
-                    put_chat(chat.id, new_jam, chat_data)
+                else:
+                    if user.id not in DRAGONS:
+                        put_chat(chat.id, new_jam, chat_data)
             else:
                 if user.id not in DRAGONS:
                     put_chat(chat.id, new_jam, chat_data)
@@ -1485,8 +1505,9 @@ def fed_ban_list(update: Update, context: CallbackContext):
                     parse_mode=ParseMode.MARKDOWN,
                 )
                 return
-            if user.id not in DRAGONS:
-                put_chat(chat.id, new_jam, chat_data)
+            else:
+                if user.id not in DRAGONS:
+                    put_chat(chat.id, new_jam, chat_data)
         else:
             if user.id not in DRAGONS:
                 put_chat(chat.id, new_jam, chat_data)
@@ -1503,6 +1524,7 @@ def fed_ban_list(update: Update, context: CallbackContext):
             )
 
 
+@run_async
 def fed_notif(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -1537,6 +1559,7 @@ def fed_notif(update: Update, context: CallbackContext):
         )
 
 
+@run_async
 def fed_chats(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -1600,6 +1623,7 @@ def fed_chats(update: Update, context: CallbackContext):
             )
 
 
+@run_async
 def fed_import_bans(update: Update, context: CallbackContext):
     bot, chat_data = context.bot, context.chat_data
     chat = update.effective_chat
@@ -1643,8 +1667,9 @@ def fed_import_bans(update: Update, context: CallbackContext):
                     parse_mode=ParseMode.MARKDOWN,
                 )
                 return
-            if user.id not in DRAGONS:
-                put_chat(chat.id, new_jam, chat_data)
+            else:
+                if user.id not in DRAGONS:
+                    put_chat(chat.id, new_jam, chat_data)
         else:
             if user.id not in DRAGONS:
                 put_chat(chat.id, new_jam, chat_data)
@@ -1826,6 +1851,7 @@ def fed_import_bans(update: Update, context: CallbackContext):
         send_message(update.effective_message, text)
 
 
+@run_async
 def del_fed_button(update: Update, context: CallbackContext):
     query = update.callback_query
     userid = query.message.chat.id
@@ -1847,6 +1873,7 @@ def del_fed_button(update: Update, context: CallbackContext):
             )
 
 
+@run_async
 def fed_stat_user(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -1903,11 +1930,12 @@ def fed_stat_user(update: Update, context: CallbackContext):
                 "{} is not banned in any federation!".format(user_name),
             )
             return
-        teks = "{} has been banned in this federation:\n".format(user_name)
-        for x in fbanlist:
-            teks += "- `{}`: {}\n".format(x[0], x[1][:20])
-        teks += "\nIf you want to find out more about the reasons for Fedban specifically, use /fbanstat <FedID>"
-        send_message(update.effective_message, teks, parse_mode="markdown")
+        else:
+            teks = "{} has been banned in this federation:\n".format(user_name)
+            for x in fbanlist:
+                teks += "- `{}`: {}\n".format(x[0], x[1][:20])
+            teks += "\nIf you want to find out more about the reasons for Fedban specifically, use /fbanstat <FedID>"
+            send_message(update.effective_message, teks, parse_mode="markdown")
 
     elif not msg.reply_to_message and not args:
         user_id = msg.from_user.id
@@ -1954,6 +1982,7 @@ def fed_stat_user(update: Update, context: CallbackContext):
         )
 
 
+@run_async
 def set_fed_log(update: Update, context: CallbackContext):
     args = context.args
     chat = update.effective_chat
@@ -1994,6 +2023,7 @@ def set_fed_log(update: Update, context: CallbackContext):
         )
 
 
+@run_async
 def unset_fed_log(update: Update, context: CallbackContext):
     args = context.args
     chat = update.effective_chat
@@ -2034,6 +2064,7 @@ def unset_fed_log(update: Update, context: CallbackContext):
         )
 
 
+@run_async
 def subs_feds(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -2098,6 +2129,7 @@ def subs_feds(update: Update, context: CallbackContext):
         )
 
 
+@run_async
 def unsubs_feds(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -2162,6 +2194,7 @@ def unsubs_feds(update: Update, context: CallbackContext):
         )
 
 
+@run_async
 def get_myfedsubs(update: Update, context: CallbackContext):
     args = context.args
     chat = update.effective_chat
@@ -2200,17 +2233,19 @@ def get_myfedsubs(update: Update, context: CallbackContext):
             parse_mode="markdown",
         )
         return
-    listfed = "Federation `{}` is subscribing federation:\n".format(
-        fedinfo["fname"],
-    )
-    for x in getmy:
-        listfed += "- `{}`\n".format(x)
-    listfed += (
-        "\nTo get fed info `/fedinfo <fedid>`. To unsubscribe `/unsubfed <fedid>`."
-    )
-    send_message(update.effective_message, listfed, parse_mode="markdown")
+    else:
+        listfed = "Federation `{}` is subscribing federation:\n".format(
+            fedinfo["fname"],
+        )
+        for x in getmy:
+            listfed += "- `{}`\n".format(x)
+        listfed += (
+            "\nTo get fed info `/fedinfo <fedid>`. To unsubscribe `/unsubfed <fedid>`."
+        )
+        send_message(update.effective_message, listfed, parse_mode="markdown")
 
 
+@run_async
 def get_myfeds_list(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
@@ -2230,7 +2265,10 @@ def is_user_fed_admin(fed_id, user_id):
     fed_admins = sql.all_fed_users(fed_id)
     if fed_admins is False:
         return False
-    return bool(int(user_id) in fed_admins or int(user_id) == OWNER_ID)
+    if int(user_id) in fed_admins or int(user_id) == OWNER_ID:
+        return True
+    else:
+        return False
 
 
 def is_user_fed_owner(fed_id, user_id):
@@ -2241,10 +2279,14 @@ def is_user_fed_owner(fed_id, user_id):
     if getfedowner is None or getfedowner is False:
         return False
     getfedowner = getfedowner["owner"]
-    return bool(str(user_id) == getfedowner or int(user_id) == OWNER_ID)
+    if str(user_id) == getfedowner or int(user_id) == OWNER_ID:
+        return True
+    else:
+        return False
 
 
 # There's no handler for this yet, but updating for v12 in case its used
+@run_async
 def welcome_fed(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
@@ -2257,7 +2299,8 @@ def welcome_fed(update: Update, context: CallbackContext):
         )
         bot.kick_chat_member(chat.id, user.id)
         return True
-    return False
+    else:
+        return False
 
 
 def __stats__():
@@ -2309,6 +2352,7 @@ def get_chat(chat_id, chat_data):
         return {"status": False, "value": False}
 
 
+@run_async
 def fed_owner_help(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
         """*👑 Fed Owner Only:*
@@ -2327,6 +2371,7 @@ def fed_owner_help(update: Update, context: CallbackContext):
     )
 
 
+@run_async
 def fed_admin_help(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
         """*🔱 Fed Admins:*
@@ -2344,6 +2389,7 @@ def fed_admin_help(update: Update, context: CallbackContext):
     )
 
 
+@run_async
 def fed_user_help(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
         """*🎩 Any user:*

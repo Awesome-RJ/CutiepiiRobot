@@ -17,7 +17,6 @@ from telegram.ext import CallbackContext, CommandHandler, Filters, run_async
 from telegram.utils.helpers import escape_markdown
 
 
-
 def get_rules(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     send_rules(update, chat_id)
@@ -87,7 +86,6 @@ def send_rules(update, chat_id, from_pm=False):
         )
 
 
-
 @user_admin
 def set_rules(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
@@ -103,7 +101,6 @@ def set_rules(update: Update, context: CallbackContext):
 
         sql.set_rules(chat_id, markdown_rules)
         update.effective_message.reply_text("Successfully set rules for this group.")
-
 
 
 @user_admin

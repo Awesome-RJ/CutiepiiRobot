@@ -9,7 +9,6 @@ from telegram.ext import CallbackContext, run_async
 # Wallpaper module powered by wall.alphacoders.com
 
 
-
 def wall(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     msg = update.effective_message

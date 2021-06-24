@@ -231,7 +231,7 @@ def buttons(update: Update, context: CallbackContext):
             query.answer("✅ Succesfully kicked")
             return ""
         except Exception as err:
-            query.answer("🛑 Failed to Punch")
+            query.answer("🛑 Failed to kick")
             bot.sendMessage(
                 text=f"Error: {err}",
                 chat_id=query.message.chat_id,
@@ -278,7 +278,7 @@ SETTING_HANDLER = CommandHandler("reports", report_setting, run_async=True)
 REPORT_HANDLER = CommandHandler("report", report, filters=Filters.chat_type.groups, run_async=True)
 ADMIN_REPORT_HANDLER = MessageHandler(Filters.regex(r"(?i)@admin(s)?"), report, run_async=True)
 
-REPORT_BUTTON_USER_HANDLER = CallbackQueryHandler(buttons, pattern=r"report_", run_async=True)
+REPORT_BUTTON_USER_HANDLER = CallbackQueryHandler(buttons, pattern=r"report_")
 dispatcher.add_handler(REPORT_BUTTON_USER_HANDLER)
 
 dispatcher.add_handler(SETTING_HANDLER)

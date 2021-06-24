@@ -6,7 +6,6 @@ from telegram.ext import CallbackContext, run_async
 from wikipedia.exceptions import DisambiguationError, PageError
 
 
-
 def wiki(update: Update, context: CallbackContext):
     msg = (
         update.effective_message.reply_to_message

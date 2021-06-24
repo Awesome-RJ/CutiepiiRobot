@@ -19,7 +19,6 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user_and_text
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 
 
-
 @bot_admin
 @user_admin
 @typing_action
@@ -66,7 +65,6 @@ def addtag(update, context):
                                    ),
         parse_mode=ParseMode.HTML
     )
-
 
 @bot_admin
 @user_admin

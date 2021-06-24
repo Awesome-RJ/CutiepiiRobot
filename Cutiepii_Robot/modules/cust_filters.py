@@ -391,8 +391,9 @@ def reply_filter(update, context):
                                 pass
                 else:
                     ENUM_FUNC_MAP[filt.file_type](
+                        chat.id,
                         filt.file_id,                        
-                        reply_to_message_id=message.message_id,                       
+                        reply_to_message_id=message.message_id,                        
                         reply_markup=keyboard,
                     )
                 break
@@ -610,8 +611,8 @@ Check `/markdownhelp` to know more!
 
 __mod_name__ = "Filters"
 
-FILTER_HANDLER = CommandHandler("filter", filters, run_async=True)
-STOP_HANDLER = CommandHandler("stop", stop_filter, run_async=True)
+FILTER_HANDLER = CommandHandler("filter", filters)
+STOP_HANDLER = CommandHandler("stop", stop_filter)
 RMALLFILTER_HANDLER = CommandHandler(
     "removeallfilters", rmall_filters, filters=Filters.chat_type.groups, run_async=True)
 RMALLFILTER_CALLBACK = CallbackQueryHandler(

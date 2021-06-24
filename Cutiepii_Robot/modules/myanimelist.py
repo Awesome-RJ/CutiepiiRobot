@@ -11,7 +11,6 @@ from Cutiepii_Robot import dispatcher
 jikan = Jikan()
 
 
-
 def anime(update: Update, context: CallbackContext):
     msg = update.effective_message
     args = context.args
@@ -84,7 +83,6 @@ def anime(update: Update, context: CallbackContext):
     msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
     
 
-
 def character(update: Update, context: CallbackContext):
     msg = update.effective_message
     res = ""
@@ -119,7 +117,6 @@ def character(update: Update, context: CallbackContext):
         msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
         
         
-
 def upcoming(update: Update, context: CallbackContext):
     msg = update.effective_message
     rep = "<b>Upcoming anime</b>\n"
@@ -133,8 +130,7 @@ def upcoming(update: Update, context: CallbackContext):
             break
     msg.reply_text(rep, parse_mode=ParseMode.HTML)
     
-    
-
+  
 def manga(update: Update, context: CallbackContext):
     msg = update.effective_message
     args = context.args

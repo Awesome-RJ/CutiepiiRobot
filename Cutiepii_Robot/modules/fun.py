@@ -19,13 +19,11 @@ from telegram.ext import CallbackContext, run_async
 GIF_ID = "CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE"
 
 
-
 def runs(update: Update, context: CallbackContext):
     temp = random.choice(fun_strings.RUN_STRINGS)
     if update.effective_user.id == 1170714920:
         temp = "Run everyone, they just dropped a bomb 💣💣"
     update.effective_message.reply_text(temp)
-
 
 
 def sanitize(update: Update, context: CallbackContext):
@@ -43,7 +41,6 @@ def sanitize(update: Update, context: CallbackContext):
     reply_animation(GIF_ID, caption=f"*Sanitizes {name}*")
 
 
-
 def sanitize(update: Update, context: CallbackContext):
     message = update.effective_message
     name = (
@@ -57,7 +54,6 @@ def sanitize(update: Update, context: CallbackContext):
         else message.reply_animation
     )
     reply_animation(random.choice(fun_strings.GIFS), caption=f"*Sanitizes {name}*")
-
 
 
 def slap(update: Update, context: CallbackContext):
@@ -118,7 +114,6 @@ def slap(update: Update, context: CallbackContext):
     reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-
 def pat(update: Update, context: CallbackContext):
     bot = context.bot
     args = context.args
@@ -159,10 +154,8 @@ def pat(update: Update, context: CallbackContext):
         reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-
 def roll(update: Update, context: CallbackContext):
     update.message.reply_text(random.choice(range(1, 7)))
-
 
 
 def shout(update: Update, context: CallbackContext):
@@ -179,10 +172,8 @@ def shout(update: Update, context: CallbackContext):
     return update.effective_message.reply_text(msg, parse_mode="MARKDOWN")
 
 
-
 def toss(update: Update, context: CallbackContext):
     update.message.reply_text(random.choice(fun_strings.TOSS))
-
 
 
 def shrug(update: Update, context: CallbackContext):
@@ -193,7 +184,6 @@ def shrug(update: Update, context: CallbackContext):
     reply_text(r"¯\_(ツ)_/¯")
 
 
-
 def bluetext(update: Update, context: CallbackContext):
     msg = update.effective_message
     reply_text = (
@@ -202,7 +192,6 @@ def bluetext(update: Update, context: CallbackContext):
     reply_text(
         "/BLUE /TEXT\n/MUST /CLICK\n/I /AM /A /STUPID /ANIMAL /THAT /IS /ATTRACTED /TO /COLORS",
     )
-
 
 
 def rlg(update: Update, context: CallbackContext):
@@ -217,7 +206,6 @@ def rlg(update: Update, context: CallbackContext):
     update.message.reply_text(repl)
 
 
-
 def decide(update: Update, context: CallbackContext):
     reply_text = (
         update.effective_message.reply_to_message.reply_text
@@ -227,7 +215,6 @@ def decide(update: Update, context: CallbackContext):
     reply_text(random.choice(fun_strings.DECIDE))
 
 
-
 def eightball(update: Update, context: CallbackContext):
     reply_text = (
         update.effective_message.reply_to_message.reply_text
@@ -235,7 +222,6 @@ def eightball(update: Update, context: CallbackContext):
         else update.effective_message.reply_text
     )
     reply_text(random.choice(fun_strings.EIGHTBALL))
-
 
 
 def table(update: Update, context: CallbackContext):
@@ -305,7 +291,6 @@ weebyfont = [
 ]
 
 
-
 def weebify(update: Update, context: CallbackContext):
     args = context.args
     message = update.effective_message
@@ -332,7 +317,6 @@ def weebify(update: Update, context: CallbackContext):
         message.reply_text(string)
 
 
-
 def meme(update: Update, context: CallbackContext):
     msg = update.effective_message
     meme = r.get("https://meme-api.herokuapp.com/gimme/Animemes/").json()
@@ -344,7 +328,6 @@ def meme(update: Update, context: CallbackContext):
     msg.reply_photo(
                 photo=image, caption=caption)
 
-
 def gbun(update, context):
     user = update.effective_user
     chat = update.effective_chat
@@ -353,7 +336,6 @@ def gbun(update, context):
         return
     if int(user.id) in DRAGONS or int(user.id) in DEMONS:
         context.bot.sendMessage(chat.id, (random.choice(fun_strings.GBUN)))
-
 
 
 def gbam(update, context):
@@ -416,8 +398,8 @@ TABLE_HANDLER = DisableAbleCommandHandler("table", table, run_async=True)
 SHOUT_HANDLER = DisableAbleCommandHandler("shout", shout, run_async=True)
 WEEBIFY_HANDLER = DisableAbleCommandHandler("weebify", weebify, run_async=True)
 MEME_HANDLER = DisableAbleCommandHandler(["meme", "memes"], meme, run_async=True)
-GBUN_HANDLER = DisableAbleCommandHandler("gbun", gbun)
-GBAM_HANDLER = DisableAbleCommandHandler("gbam", gbam)
+GBUN_HANDLER = DisableAbleCommandHandler("gbun", gbun, run_async=True)
+GBAM_HANDLER = DisableAbleCommandHandler("gbam", gbam, run_async=True)
 
 dispatcher.add_handler(GBAM_HANDLER)
 dispatcher.add_handler(GBUN_HANDLER)

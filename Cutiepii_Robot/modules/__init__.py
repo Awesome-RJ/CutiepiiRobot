@@ -1,5 +1,4 @@
 from Cutiepii_Robot import LOAD, LOGGER, NO_LOAD
-import sys
 
 
 def __list_all_modules():
@@ -22,7 +21,7 @@ def __list_all_modules():
                 for mod in to_load
             ):
                 LOGGER.error("Invalid loadorder names. Quitting.")
-                sys.exit(1)
+                quit(1)
 
             all_modules = sorted(set(all_modules) - set(to_load))
             to_load = list(all_modules) + to_load

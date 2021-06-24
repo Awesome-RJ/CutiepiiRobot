@@ -13,7 +13,6 @@ from telegram import TelegramError, Update
 from telegram.error import Unauthorized
 from telegram.ext import CallbackContext, CommandHandler, run_async
 
-
 @dev_plus
 def allow_groups(update: Update, context: CallbackContext):
     args = context.args
@@ -29,7 +28,6 @@ def allow_groups(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Format: /lockdown Yes/No or Off/On")
         return
     update.effective_message.reply_text("Done! Lockdown value toggled.")
-
 
 @dev_plus
 def leave(update: Update, context: CallbackContext):
@@ -50,7 +48,6 @@ def leave(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Send a valid chat ID")
 
 
-
 @dev_plus
 def gitpull(update: Update, context: CallbackContext):
     sent_msg = update.effective_message.reply_text(
@@ -68,7 +65,6 @@ def gitpull(update: Update, context: CallbackContext):
 
     os.system("restart.bat")
     os.execv("start.bat", sys.argv)
-
 
 
 @dev_plus

@@ -6,11 +6,9 @@ from telegram import ParseMode, Update, Bot
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram.ext import CallbackContext, run_async
 
-
 def truth(update: Update, context: CallbackContext):
     args = context.args
     update.effective_message.reply_text(random.choice(truth_and_dare_string.TRUTH))
-
 
 def dare(update: Update, context: CallbackContext):
     args = context.args

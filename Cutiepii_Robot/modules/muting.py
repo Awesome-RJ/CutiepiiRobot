@@ -46,7 +46,6 @@ def check_user(user_id: int, bot: Bot, chat: Chat) -> Optional[str]:
     return None
 
 
-
 @connection_status
 @bot_admin
 @user_admin
@@ -92,7 +91,6 @@ def mute(update: Update, context: CallbackContext) -> str:
         message.reply_text("This user is already muted!")
 
     return ""
-
 
 
 @connection_status
@@ -155,7 +153,6 @@ def unmute(update: Update, context: CallbackContext) -> str:
         )
 
     return ""
-
 
 
 @connection_status

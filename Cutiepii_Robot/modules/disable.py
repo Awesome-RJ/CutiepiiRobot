@@ -130,7 +130,6 @@ if is_module_loaded(FILENAME):
                 else:
                     return True
 
-    
     @connection_status
     @user_admin
     def disable(update: Update, context: CallbackContext):
@@ -152,7 +151,6 @@ if is_module_loaded(FILENAME):
 
         else:
             update.effective_message.reply_text("What should I disable?")
-
     
     @connection_status
     @user_admin
@@ -205,7 +203,6 @@ if is_module_loaded(FILENAME):
 
         else:
             update.effective_message.reply_text("What should I disable?")
-
     
     @connection_status
     @user_admin
@@ -226,7 +223,6 @@ if is_module_loaded(FILENAME):
 
         else:
             update.effective_message.reply_text("What should I enable?")
-
     
     @connection_status
     @user_admin
@@ -279,7 +275,6 @@ if is_module_loaded(FILENAME):
 
         else:
             update.effective_message.reply_text("What should I enable?")
-
     
     @connection_status
     @user_admin
@@ -305,7 +300,6 @@ if is_module_loaded(FILENAME):
         for cmd in disabled:
             result += " - `{}`\n".format(escape_markdown(cmd))
         return "The following commands are currently restricted:\n{}".format(result)
-
     
     @connection_status
     def commands(update: Update, context: CallbackContext):

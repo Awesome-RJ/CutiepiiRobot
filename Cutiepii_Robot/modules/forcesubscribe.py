@@ -106,8 +106,7 @@ def _check_member(client, message):
         try:
             if (
                 not client.get_chat_member(chat_id, user_id).status
-                in ("administrator", "creator")
-                and not user_id == 1141839926
+                in ("administrator", "creator")                
             ):
                 channel = chat_db.channel
                 try:
@@ -140,7 +139,7 @@ def _check_member(client, message):
                         )
                     except ChatAdminRequired:
                         sent_message.edit(
-                            "❗ **Cutiepii is not an admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
+                            "❗ **Eren is not an admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
                         )
                     except RPCError:
                         return
@@ -159,7 +158,7 @@ def _check_member(client, message):
 @pgram.on_message(filters.command(["forcesubscribe", "forcesub"]) & ~filters.private)
 def config(client, message):
     user = client.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status is "creator" or user.user.id == 1141839926:
+    if user.status is "creator":
         chat_id = message.chat.id
         if len(message.command) > 1:
             input_str = message.command[1]
@@ -216,7 +215,7 @@ def config(client, message):
 
 __help__ = """
 *ForceSubscribe*:
-- Cutiepii can mute members who are not subscribed your channel until they subscribe
+- Eren can mute members who are not subscribed your channel until they subscribe
 - When enabled I will mute unsubscribed members and show them a unmute button. When they pressed the button I will unmute them
 <b>Setup</b>
 1) First of all add me in the group as admin with ban users permission and in the channel as admin.
