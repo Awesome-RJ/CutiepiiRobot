@@ -179,12 +179,8 @@ def get(update, context, notename, show_none=True, no_format=False):
                     )
                 else:
                     ENUM_FUNC_MAP[note.msgtype](
-                        chat_id,
-                        note.file,
-                        caption=text,
+                        note.file,                        
                         reply_to_message_id=reply_id,
-                        parse_mode=parseMode,
-                        disable_web_page_preview=True,
                         reply_markup=keyboard,
                     )
 
