@@ -13,7 +13,7 @@ from youtube_dl import YoutubeDL
 from youtubesearchpython import SearchVideos
 
 from Cutiepii_Robot.utils.conf import get_str_key
-from from Cutiepii_Robot.functions.pluginhelpers import get_text, progress
+from Cutiepii_Robot.functions.pluginhelpers import get_text, progress
 from Cutiepii_Robot import pgram
 
 GENIUS = get_str_key("GENIUS_API_TOKEN", None)

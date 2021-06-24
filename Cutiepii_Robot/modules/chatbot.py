@@ -12,7 +12,7 @@ from pyrogram import filters
 from Cutiepii_Robot import BOT_ID
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
 from Cutiepii_Robot import arq
-from from Cutiepii_Robot.functions.pluginhelpers import admins_only, edit_or_reply
+from Cutiepii_Robot.functions.pluginhelpers import admins_only, edit_or_reply
 from Cutiepii_Robot import pgram as eren
 
 translator = google_translator()
