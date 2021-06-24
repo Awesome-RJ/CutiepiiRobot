@@ -249,12 +249,7 @@ else:
 from Cutiepii_Robot.modules.sql import SESSION
 
 defaults = tg.Defaults(run_async = True)
-updater = tg.Updater(
-    TOKEN,
-    workers=min(32, os.cpu_count() + 4),
-    request_kwargs={"read_timeout": 10, "connect_timeout": 10},
-    persistence=PostgresPersistence(SESSION),
-)
+updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
 
 telethn = TelegramClient("cutiepii", API_ID, API_HASH)
 
