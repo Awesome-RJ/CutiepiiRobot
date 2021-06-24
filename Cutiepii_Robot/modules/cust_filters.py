@@ -391,12 +391,8 @@ def reply_filter(update, context):
                                 pass
                 else:
                     ENUM_FUNC_MAP[filt.file_type](
-                        chat.id,
-                        filt.file_id,
-                        caption=markdown_to_html(filtext),
-                        reply_to_message_id=message.message_id,
-                        parse_mode=ParseMode.HTML,
-                        disable_web_page_preview=True,
+                        filt.file_id,                        
+                        reply_to_message_id=message.message_id,                       
                         reply_markup=keyboard,
                     )
                 break
