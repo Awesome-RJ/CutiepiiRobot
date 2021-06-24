@@ -1,24 +1,20 @@
 import logging
 import os
 import sys
-import json
-import asyncio
 import time
 import spamwatch
-import telegram.ext as tg
-from redis import StrictRedis
-from aiohttp import ClientSession
-from Python_ARQ import ARQ
-from pymongo import MongoClient
-from odmantic import AIOEngine
-from motor import motor_asyncio
-from telethon import TelegramClient
-from telethon.sessions import MemorySession
 from pyrogram import Client, errors
+import telegram.ext as tg
+from telethon import TelegramClient
+from motor import motor_asyncio
+from odmantic import AIOEngine
+from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
-from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
-from pyrogram.types import Chat, User
-from ptbcontrib.postgres_persistence import PostgresPersistence
+from redis import StrictRedis
+from Python_ARQ import ARQ
+import aiohttp
+from aiohttp import ClientSession
+
 
 StartTime = time.time()
 
@@ -135,11 +131,8 @@ if ENV:
     IBM_WATSON_CRED_URL = os.environ.get("IBM_WATSON_CRED_URL", None)
     IBM_WATSON_CRED_PASSWORD = os.environ.get("IBM_WATSON_CRED_PASSWORD", None)
     
-
-    ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True)
-
     try:
-        BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
+        BL_CHATS = set(int(x) for x in os.environ.get("BL_CHATS", "").split())
     except ValueError:
         raise Exception("Your blacklisted chats list does not contain valid integers.")
 
@@ -157,23 +150,23 @@ else:
     OWNER_USERNAME = Config.OWNER_USERNAME
     ALLOW_CHATS = Config.ALLOW_CHATS
     try:
-        DRAGONS = {int(x) for x in Config.DRAGONS or []}
-        DEV_USERS = {int(x) for x in Config.DEV_USERS or []}
+        DRAGONS = set(int(x) for x in Config.TITANSHIFTERS or [])
+        DEV_USERS = set(int(x) for x in Config.ACKERMANS or [])
     except ValueError:
         raise Exception("Your sudo or dev users list does not contain valid integers.")
 
     try:
-        DEMONS = {int(x) for x in Config.DEMONS or []}
+        DEMONS = set(int(x) for x in Config.ROYALS or [])
     except ValueError:
         raise Exception("Your support users list does not contain valid integers.")
 
     try:
-        WOLVES = {int(x) for x in Config.WOLVES or []}
+        WOLVES = set(int(x) for x in Config.GARRISONS or [])
     except ValueError:
         raise Exception("Your whitelisted users list does not contain valid integers.")
 
     try:
-        TIGERS = {int(x) for x in Config.TIGERS or []}
+        TIGERS = set(int(x) for x in Config.SCOUTS or [])
     except ValueError:
         raise Exception("Your tiger users list does not contain valid integers.")
 
@@ -185,11 +178,7 @@ else:
     API_ID = Config.API_ID
     API_HASH = Config.API_HASH
 
-    DB_URI = Config.SQLALCHEMY_DATABASE_URI
-    REDIS_URL = Config.REDIS_URL
-    MONGO_DB_URI = Config.MONGO_DB_URI
-    ARQ_API = Config.ARQ_API_KEY
-    ARQ_API_URL = Config.ARQ_API_URL
+    DB_URI = Config.DATABASE_URL
     DONATION_LINK = Config.DONATION_LINK
     LOAD = Config.LOAD
     NO_LOAD = Config.NO_LOAD
@@ -200,19 +189,26 @@ else:
     ALLOW_EXCL = Config.ALLOW_EXCL
     CASH_API_KEY = Config.CASH_API_KEY
     TIME_API_KEY = Config.TIME_API_KEY
+    REDIS_URL = Config.REDIS_URL
     WALL_API = Config.WALL_API
     SUPPORT_CHAT = Config.SUPPORT_CHAT
     SPAMWATCH_SUPPORT_CHAT = Config.SPAMWATCH_SUPPORT_CHAT
     SPAMWATCH_API = Config.SPAMWATCH_API
     INFOPIC = Config.INFOPIC
-    LASTFM_API_KEY = Config.LASTFM_API_KEY
-    CF_API_KEY = Config.CF_API_KEY
-    MONGO_DB_URI = Config.MONGO_DB_URI
+    APP_ID = Config.APP_ID
+    APP_HASH = Config.APP_HASH
+    MONGO_URI = Config.MONGO_DB_URI
+    MONGO_PORT = Config.MONGO_PORT
+    MONGO_DB = Config.MONGO_DB
+    ARQ_API = Config.ARQ_API
+    BOT_ID = Config.BOT_ID
+    TEMP_DOWNLOAD_DIRECTORY = Config.TEMP_DOWNLOAD_DIRECTORY
 
     try:
-        BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
+        BL_CHATS = set(int(x) for x in Config.BL_CHATS or [])
     except ValueError:
         raise Exception("Your blacklisted chats list does not contain valid integers.")
+        
 
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
@@ -223,7 +219,7 @@ try:
 
     REDIS.ping()
 
-    LOGGER.info("Your redis server is now alive!")
+    LOGGER.info("Connecting to the Redis Database!")
 
 except BaseException:
 
@@ -231,13 +227,14 @@ except BaseException:
 
 finally:
 
-    REDIS.ping()
+   REDIS.ping()
 
-    LOGGER.info("Your redis server is now alive!")
+   LOGGER.info("Connection to the Redis Database Established Successfully!")
+    
 
 if not SPAMWATCH_API:
     sw = None
-    LOGGER.warning("SpamWatch API key missing! recheck your config")
+    LOGGER.warning("SpamWatch API key missing! recheck your config.")
 else:
     try:
         sw = spamwatch.Client(SPAMWATCH_API)
@@ -245,64 +242,25 @@ else:
         sw = None
         LOGGER.warning("Can't connect to SpamWatch!")
 
-
-from Cutiepii_Robot.modules.sql import SESSION
-
-defaults = tg.Defaults(run_async = True)
 updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
-
-telethn = TelegramClient("cutiepii", API_ID, API_HASH)
-
+print("[CUTIEPII]: TELETHON CLIENT STARTING")
+telethn = TelegramClient("eren", API_ID, API_HASH)
 dispatcher = updater.dispatcher
+print("[CUTIEPII]: PYROGRAM CLIENT STARTING")
+pgram = Client("ErenPyro", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
+print("[CUTIEPII]: CONNECTING TO MONGO DATABASE")
 mongodb = MongoClient()
 mongodb = MongoClient(MONGO_URI, MONGO_PORT)[MONGO_DB]
 motor = motor_asyncio.AsyncIOMotorClient(MONGO_URI)
 db = motor[MONGO_DB]
 db = mongodb["cutiepii"]
 engine = AIOEngine(motor, MONGO_DB)
-print("[INFO]: INITIALIZING AIOHTTP SESSION")
+print("[INFO]: INITIALZING AIOHTTP SESSION")
 aiohttpsession = ClientSession()
 # ARQ Client
 print("[INFO]: INITIALIZING ARQ CLIENT")
 arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
-pgram = Client(
-    ":memory:",
-    api_id=API_ID,
-    api_hash=API_HASH,
-    bot_token=TOKEN,
-    workers=min(32, os.cpu_count() + 4),
-)
-
-apps = []
-apps.append(pgram)
-
-
-async def get_entity(client, entity):
-    entity_client = client
-    if not isinstance(entity, Chat):
-        try:
-            entity = int(entity)
-        except ValueError:
-            pass
-        except TypeError:
-            entity = entity.id
-        try:
-            entity = await client.get_chat(entity)
-        except (PeerIdInvalid, ChannelInvalid):
-            for pgram in apps:
-                if pgram != client:
-                    try:
-                        entity = await pgram.get_chat(entity)
-                    except (PeerIdInvalid, ChannelInvalid):
-                        pass
-                    else:
-                        entity_client = pgram
-                        break
-            else:
-                entity = await pgram.get_chat(entity)
-                entity_client = pgram
-    return entity, entity_client
-
+print("[CUTIEPII]: CONNECTING TO ELEPHANT SQL DATABASE")
 
 DRAGONS = list(DRAGONS) + list(DEV_USERS)
 DEV_USERS = list(DEV_USERS)
