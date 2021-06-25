@@ -1,8 +1,3 @@
-# CREDITS GOES TO @daisyx and Daisyx's Developers
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
 import emoji
 import re
 import aiohttp
@@ -13,7 +8,7 @@ from Cutiepii_Robot import BOT_ID
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
 from Cutiepii_Robot import arq
 from Cutiepii_Robot.functions.pluginhelpers import admins_only, edit_or_reply
-from Cutiepii_Robot import pgram as eren
+from Cutiepii_Robot import pgram as cutiepii
 
 translator = google_translator()
 url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
@@ -41,16 +36,16 @@ async def fetch(url):
         print("AI response Timeout")
         return
 
-eren_chats = []
+cutiepii_chats = []
 en_chats = []
 
 
-@eren.on_message(
+@cutiepii.on_message(
     filters.command("chatbot") & ~filters.edited & ~filters.bot & ~filters.private
 )
 @admins_only
 async def chatbot_status(_, message):
-    global eren_chats
+    global cutiepii_chats
     if len(message.command) != 2:
         await message.reply_text(
             "I only recognize `/chatbot on` and `/chatbot off` only"
@@ -91,7 +86,7 @@ async def chatbot_status(_, message):
         )
 
 
-@eren.on_message(
+@cutiepii.on_message(
     filters.text
     & filters.reply
     & ~filters.bot
@@ -117,17 +112,20 @@ async def chatbot_function(client, message):
         message.continue_propagation()
     if chat_id in en_chats:
         test = msg
-        test = test.replace("Aco", "Eren")
-        test = test.replace("aco", "eren")
+        test = test.replace("Aco", "Cutiepii")
+        test = test.replace("aco", "cutiepii")
         response = await lunaQuery(
             test, message.from_user.id if message.from_user else 0
         )
-        response = response.replace("aco", "eren")
-        response = response.replace("Aco", "Eren")
+        response = response.replace("aco", "cutiepii")
+        response = response.replace("Aco", "Cutiepii")
+        response = response.replace("Luna", "Cutiepii")
+        response = response.replace("Luna", "cutiepii")
+        response = response.replace("female", "male")
 
         pro = response
         try:
-            await eren.send_chat_action(message.chat.id, "typing")
+            await cutiepii.send_chat_action(message.chat.id, "typing")
             await message.reply_text(pro)
         except CFError:
             return
@@ -173,16 +171,17 @@ async def chatbot_function(client, message):
                 return
         # test = emoji.demojize(test.strip())
 
-        test = test.replace("Eren", "aco")
-        test = test.replace("eren", "aco")
+        test = test.replace("Cutiepii", "aco")
+        test = test.replace("cutiepii", "aco")
         
         response = await lunaQuery(
             test, message.from_user.id if message.from_user else 0
         )
-        response = response.replace("aco", "Eren")
-        response = response.replace("Aco", "eren")
-        response = response.replace("Luna", "Eren")
-        response = response.replace("Luna", "eren")
+        response = response.replace("aco", "Cutiepii")
+        response = response.replace("Aco", "cutiepii")
+        response = response.replace("Luna", "Cutiepii")
+        response = response.replace("Luna", "cutiepii")
+        response = response.replace("female", "male")
 
         pro = response
         if not "en" in lan and not lan == "":
@@ -191,13 +190,13 @@ async def chatbot_function(client, message):
             except:
                 return
         try:
-            await eren.send_chat_action(message.chat.id, "typing")
+            await cutiepii.send_chat_action(message.chat.id, "typing")
             await message.reply_text(pro)
         except CFError:
             return
 
 
-@eren.on_message(
+@cutiepii.on_message(
     filters.text & filters.private & ~filters.edited & filters.reply & ~filters.bot
 )
 async def sasuke(client, message):
@@ -246,28 +245,28 @@ async def sasuke(client, message):
     # test = emoji.demojize(test.strip())
 
     # Kang with the credits bitches @InukaASiTH
-    test = test.replace("aco", "Eren")
-    test = test.replace("aco", "eren")    
+    test = test.replace("aco", "Cutiepii")
+    test = test.replace("aco", "cutiepii")    
     
     response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
-    response = response.replace("Aco", "Eren")
-    response = response.replace("aco", "eren")
-    response = response.replace("Luna", "Eren")
-    response = response.replace("Luna", "eren")
-
+    response = response.replace("Aco", "Cutiepii")
+    response = response.replace("aco", "cutiepii")
+    response = response.replace("Luna", "Cutiepii")
+    response = response.replace("Luna", "cutiepii")
+    response = response.replace("female", "male")
 
     pro = response
     if not "en" in lan and not lan == "":
         pro = translator.translate(pro, lang_tgt=lan[0])
     try:
-        await eren.send_chat_action(message.chat.id, "typing")
+        await cutiepii.send_chat_action(message.chat.id, "typing")
         await message.reply_text(pro)
     except CFError:
         return
 
 
-@eren.on_message(
-    filters.regex("Eren")
+@cutiepii.on_message(
+    filters.regex("Cutiepii")
     & ~filters.bot
     & ~filters.via_bot
     & ~filters.forwarded
@@ -320,14 +319,14 @@ async def sasuke(client, message):
 
     # test = emoji.demojize(test.strip())
 
-    test = test.replace("Aco", "Eren")
-    test = test.replace("aco", "eren")
+    test = test.replace("Aco", "Cutiepii")
+    test = test.replace("aco", "cutiepii")
     response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
-    response = response.replace("Aco", "Eren")
-    response = response.replace("aco", "eren")
-    response = response.replace("Luna", "Eren")
-    response = response.replace("Luna", "eren")
-
+    response = response.replace("Aco", "Cutiepii")
+    response = response.replace("aco", "cutiepii")
+    response = response.replace("Luna", "Cutiepii")
+    response = response.replace("Luna", "cutiepii")
+    response = response.replace("female", "male")
 
     pro = response
     if not "en" in lan and not lan == "":
@@ -336,14 +335,14 @@ async def sasuke(client, message):
         except Exception:
             return
     try:
-        await eren.send_chat_action(message.chat.id, "typing")
+        await cutiepii.send_chat_action(message.chat.id, "typing")
         await message.reply_text(pro)
     except CFError:
         return
 
 
 __help__ = """
- Chatbot utilizes the Branshop's API and allows Eren to talk and provides a more interactive group chat experience.
+ Chatbot utilizes the Branshop's API and allows Cutiepii to talk and provides a more interactive group chat experience.
  *Admins Only Commands*:
  • `/chatbot [ON/OFF]`: Enables and disables Chatbot mode in the chat.
  • `/chatbot EN` : Enables English only Chatbot mode in the chat.
