@@ -18,7 +18,6 @@ from requests import get, post
 
 from Cutiepii_Robot import telethn as client
 from Cutiepii_Robot import *
-from Cutiepii_Robot import telethn as tbot
 from Cutiepii_Robot.event import register
 
 @register(pattern="^/google (.*)")
