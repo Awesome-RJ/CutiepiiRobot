@@ -5,7 +5,7 @@ import aiohttp
 from pyrogram import filters
 from pyrogram.errors import PeerIdInvalid
 
-from Cutiepii_Robot import pgram as pgram
+from Cutiepii_Robot import pgram
 
 
 class AioHttp:

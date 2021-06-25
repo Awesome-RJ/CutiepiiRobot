@@ -4,7 +4,7 @@ import requests
 from pyrogram import filters
 
 from Cutiepii_Robot.functions.pluginhelpers import admins_only, edit_or_reply, fetch_audio
-from Cutiepii_Robot import pgram as pgram
+from Cutiepii_Robot import pgram
 
 
 @pgram.on_message(filters.command(["identify", "shazam"]))
