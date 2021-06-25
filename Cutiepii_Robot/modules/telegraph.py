@@ -83,8 +83,8 @@ file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
 
 __help__ = """
- - /telegraphmedia : Get Telegraph Link Of Replied Media
- - /telegraphtext: Get Telegraph Link of Replied Text
+ - /tgm : Get Telegraph Link Of Replied Media
+ - /tgt: Get Telegraph Link of Replied Text
 """
 
 __mod_name__ = "Telegraph"
