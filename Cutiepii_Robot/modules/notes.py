@@ -179,12 +179,22 @@ def get(update, context, notename, show_none=True, no_format=False):
                         reply_markup=keyboard,
                     )
                 else:
-                    ENUM_FUNC_MAP[note.msgtype](
-                        chat_id,
-                        note.file,                        
-                        reply_to_message_id=reply_id,                                               
-                        reply_markup=keyboard,
-                    )
+                    if ENUM_FUNC_MAP[note.msgtype] == dispatcher.bot.send_sticker:
+                        ENUM_FUNC_MAP[note.msgtype](
+                            chat_id,
+                            note.file,
+                            reply_to_message_id=reply_id,
+                            reply_markup=keyboard,
+                        )
+                    else:
+                        ENUM_FUNC_MAP[note.msgtype](
+                            chat_id,
+                            note.file,
+                            caption=text,
+                            reply_to_message_id=reply_id,
+                            parse_mode=parseMode,
+                            reply_markup=keyboard,
+                        )
 
             except BadRequest as excp:
                 if excp.message == "Entity_mention_user_invalid":
