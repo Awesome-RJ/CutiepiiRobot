@@ -608,7 +608,7 @@ async def inline_query_handler(client, query):
 
             wiki = a.get("wiki")
 
-            caption = f"""<b><u>Information Gathered Successfully</b></u>
+            caption = f"""<b><u>Information Gathered Successfully</u><u>
                 <b>
                 Country Name:- {name}
                 Alternative Spellings:- {hu}
@@ -662,7 +662,7 @@ async def inline_query_handler(client, query):
             job = fake.job()
             android = fake.android_platform_token()
             pc = fake.chrome()
-            res = f"<b><u> Fake Information Generated</b></u>\n<b>Name :-</b><code>{name}</code>\n\n<b>Address:-</b><code>{address}</code>\n\n<b>IP ADDRESS:-</b><code>{ip}</code>\n\n<b>credit card:-</b><code>{cc}</code>\n\n<b>Email Id:-</b><code>{email}</code>\n\n<b>Job:-</b><code>{job}</code>\n\n<b>android user agent:-</b><code>{android}</code>\n\n<b>Pc user agent:-</b><code>{pc}</code>"
+            res = f"<b><u> Fake Information Generated</u></b>\n<b>Name :-</b><code>{name}</code>\n\n<b>Address:-</b><code>{address}</code>\n\n<b>IP ADDRESS:-</b><code>{ip}</code>\n\n<b>credit card:-</b><code>{cc}</code>\n\n<b>Email Id:-</b><code>{email}</code>\n\n<b>Job:-</b><code>{job}</code>\n\n<b>android user agent:-</b><code>{android}</code>\n\n<b>Pc user agent:-</b><code>{pc}</code>"
             results.append(
                 InlineQueryResultArticle(
                     title="Fake infomation gathered",
@@ -683,7 +683,7 @@ async def inline_query_handler(client, query):
             Sed = ""
             for match in result:
                 Sed += match.get_text() + "\n\n"
-            res = f"<b><u>Match information gathered successful</b></u>\n\n\n<code>{Sed}</code>"
+            res = f"<b><u>Match information gathered successful</u></b>\n\n\n<code>{Sed}</code>"
             results.append(
                 InlineQueryResultArticle(
                     title="Match information gathered",

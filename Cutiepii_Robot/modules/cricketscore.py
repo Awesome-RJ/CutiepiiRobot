@@ -36,6 +36,6 @@ async def _(event):
     for match in result:
         Sed += match.get_text() + "\n\n"
     await event.reply(
-        f"<b><u>Match information gathered successful</b></u>\n\n\n<code>{Sed}</code>",
+        f"<b><u>Match information gathered successful</u></b>x\n\n\n<code>{Sed}</code>",
         parse_mode="HTML",
     )
