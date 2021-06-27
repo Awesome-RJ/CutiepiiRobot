@@ -76,7 +76,7 @@ def error_callback(update: Update, context: CallbackContext):
         tb,
     )
     key = requests.post(
-        "https://nekobin.com/api/documents", json={"content": pretty_message},
+        "https://nekobin.com/", json={"content": pretty_message},
     ).json()
     e = html.escape(f"{context.error}")
     if not key.get("result", {}).get("key"):
