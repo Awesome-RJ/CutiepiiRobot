@@ -30,7 +30,7 @@ def get_user_list(__init__, key):
 logging.basicConfig(
     handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
     level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     datefmt="[%X]",
 )
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
