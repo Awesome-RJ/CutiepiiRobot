@@ -19,8 +19,6 @@ from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInv
 from ptbcontrib.postgres_persistence import PostgresPersistence
 from pyrogram import Client
 
-from Cutiepii_Robot.modules.sql.__init__ import SESSION
-
 StartTime = time.time()
 
 
@@ -251,7 +249,7 @@ updater = tg.Updater(
     TOKEN,
     workers=min(32, os.cpu_count() + 4),
     request_kwargs={"read_timeout": 10, "connect_timeout": 10},
-    persistence=PostgresPersistence(SESSION),
+    use_context=True, defaults = defaults
 )
 
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
