@@ -19,7 +19,7 @@ from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInv
 from ptbcontrib.postgres_persistence import PostgresPersistence
 from pyrogram import Client
 
-from Cutiepii_Robot.modules.sql import SESSION
+from Cutiepii_Robot.modules.sql.__init__ import SESSION
 
 StartTime = time.time()
 
