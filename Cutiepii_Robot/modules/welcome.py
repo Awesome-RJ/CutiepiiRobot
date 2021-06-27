@@ -748,6 +748,7 @@ def goodbye(update: Update, context: CallbackContext):
             )
 
 
+
 @user_admin
 @loggable
 def set_welcome(update: Update, context: CallbackContext) -> str:
@@ -1121,7 +1122,6 @@ __help__ = """
  • `/cleanservice <on/off`*:* deletes telegrams welcome/left service messages.
  *Example:*
 user joined chat, user left chat.
-
 *Welcome markdown:*
  • `/welcomehelp`*:* view more formatting information for custom welcome/goodbye messages.
 """
