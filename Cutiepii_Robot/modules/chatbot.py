@@ -1,6 +1,7 @@
 import re
 import aiohttp
 import emoji
+import requests
 
 from google_trans_new import google_translator
 from pyrogram import filters
@@ -11,8 +12,6 @@ from Cutiepii_Robot.functions.pluginhelpers import admins_only, edit_or_reply
 from Cutiepii_Robot import pgram as cutiepii
 
 translator = google_translator()
-import requests
-
 
 IBM_WATSON_CRED_URL = "https://api.us-south.speech-to-text.watson.cloud.ibm.com/instances/bd6b59ba-3134-4dd4-aff2-49a79641ea15"
 IBM_WATSON_CRED_PASSWORD = "UQ1MtTzZhEsMGK094klnfa-7y_4MCpJY1yhd52MXOo3Y"
@@ -353,11 +352,11 @@ async def inuka(client, message):
 
 
 __help__ = """
-<b> Chatbot </b>
-cutiepii AI 3.0 IS THE ONLY AI SYSTEM WHICH CAN DETECT & REPLY UPTO 200 LANGUAGES
- - /chatbot [ON/OFF]: Enables and disables AI Chat mode (EXCLUSIVE)
- - /chatbot EN : Enables English only chatbot
- 
+ Chatbot utilizes the Brainshop's API and allows Eren to talk and provides a more interactive group chat experience.
+ *Admins Only Commands*:
+ • `/chatbot [ON/OFF]`: Enables and disables Chatbot mode in the chat.
+ • `/chatbot EN` : Enables English only Chatbot mode in the chat.
+ *Powered by Brainshop* (brainshop.ai)
 """
 
-__mod_name__ = "chatbot"
+__mod_name__ = "ChatBot"
