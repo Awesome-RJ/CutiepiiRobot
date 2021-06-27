@@ -14,21 +14,19 @@ The bot is based of on the original work done by [PaulSonOfLars](https://github.
 This repo was just reamped to suit an Anime-centric community. All original credits go to Paul and his dedication, Without his efforts, this fork would not have been possible!
 
 Thank you for contributing with me in this Project:
-+ [Rajkumar](https://github.com/Awesome-RJ)
-+ [HuntingBots](https://github.com/HuntingBots)
-+ [TheRealPhoenix](https://github.com/rsktg)
-+ [DragSama](https://github.com/DragSama)
-+ [TsunayoshiSawada](https://github.com/TsunayoshiSawada)
-+ [Athphane](https://github.com/athphane)
-+ [Dank-del](https://github.com/Dank-del)
-+ [Kittu](https://github.com/noob-kittu)
-+ [Pokurt](https://github.com/pokurt)
-+ [Pranav ⁪⁬⁮⁮⁮⁮Ajay](https://github.com/Red-Aura)
-+ [Dank-del](https://github.com/Dank-del)
-+ [InukaAsith](https://github.com/InukaAsith)
-+ [AyraHikari](https://github.com/AyraHikari)
-+ [Peaktogoo](https://github.com/peaktogoo)
-+ [sasukeuchiha912](https://github.com/sasukeuchiha912)
++ [Rajkumar](https://github.com/Awesome-RJ) : OWNER
++ [HuntingBots](https://github.com/HuntingBots) : ARQ MODULES
++ [TheRealPhoenix](https://github.com/rsktg) : BASE
++ [DragSama](https://github.com/DragSama) : ANIME
++ [TsunayoshiSawada](https://github.com/TsunayoshiSawada) : BASE
++ [Kittu](https://github.com/noob-kittu) : /START IMPROVE
++ [Pokurt](https://github.com/pokurt) : WHATANIME MODULE
++ [Pranav ⁪⁬⁮⁮⁮⁮Ajay](https://github.com/Red-Aura) : POKEDEX, CHATBOT API ETC
++ [Dank-del](https://github.com/Dank-del) : LEWD MODULE
++ [InukaAsith](https://github.com/InukaAsith) : MEMES, INLINE ETC MODULES 
++ [AyraHikari](https://github.com/AyraHikari): FED MODULE
++ [Peaktogoo](https://github.com/peaktogoo) : FED MODULE
++ [sasukeuchiha912](https://github.com/sasukeuchiha912) : PTB 13.6
 
 
 Any other authorship/credits can be seen through the commits.
