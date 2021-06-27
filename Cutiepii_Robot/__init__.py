@@ -27,11 +27,10 @@ def get_user_list(__init__, key):
 
 
 # enable logging
-FORMAT = "[CUTIEPII] %(message)s"
 logging.basicConfig(
     handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
     level=logging.INFO,
-    format=FORMAT,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",,
     datefmt="[%X]",
 )
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
