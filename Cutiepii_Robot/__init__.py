@@ -14,6 +14,8 @@ from odmantic import AIOEngine
 from motor import motor_asyncio
 from telethon import TelegramClient
 from telethon.sessions import MemorySession
+from pymongo.errors import ServerSelectionTimeoutError
+from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
 from pyrogram import Client
 
 StartTime = time.time()
