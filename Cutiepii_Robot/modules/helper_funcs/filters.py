@@ -1,4 +1,4 @@
-from Cutiepii_Robot import DEV_USERS, DRAGONS, DEMONS
+from SaitamaRobot import DEV_USERS, DRAGONS, DEMONS
 from telegram import Message
 from telegram.ext import MessageFilter
 
