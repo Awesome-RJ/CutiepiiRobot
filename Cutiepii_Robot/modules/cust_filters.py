@@ -617,8 +617,8 @@ RMALLFILTER_HANDLER = CommandHandler(
 RMALLFILTER_CALLBACK = CallbackQueryHandler(
     rmall_callback, pattern=r"filters_.*", run_async=True)
 LIST_HANDLER = DisableAbleCommandHandler(
-    "filters", list_handlers, admin_ok=Tru, run_async=Truee)
-CUST_FILTER_HANDLER = MessageHandler(
+    "filters", list_handlers, admin_ok=Tru, run_async=True)
+CUST_FILTER_HANDLER = MessageHandler( 
     CustomFilters.has_text & ~Filters.update.edited_message, reply_filter, run_async=True)
 
 dispatcher.add_handler(FILTER_HANDLER)
