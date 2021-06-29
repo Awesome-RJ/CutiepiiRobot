@@ -610,8 +610,8 @@ Check `/markdownhelp` to know more!
 
 __mod_name__ = "Filters"
 
-FILTER_HANDLER = CommandHandler("filter", filters, run_async=True)
-STOP_HANDLER = CommandHandler("stop", stop_filter, run_async=True)
+FILTER_HANDLER = DisableAbleCommandHandler("filter", filters, run_async=False)
+STOP_HANDLER = DisableAbleCommandHandler("stop", stop_filter, run_async=False)
 RMALLFILTER_HANDLER = CommandHandler(
     "removeallfilters", rmall_filters, filters=Filters.group, run_async=True)
 RMALLFILTER_CALLBACK = CallbackQueryHandler(
