@@ -574,12 +574,6 @@ def __chat_settings__(chat_id, user_id):
     cust_filters = sql.get_chat_triggers(chat_id)
     return "There are `{}` custom filters here.".format(len(cust_filters))
 
-from Cutiepii_Robot.modules.language import gs
-
-def get_help(chat):
-    return gs(chat, "cust_filters_help")
-
-__mod_name__ = "Filters"
 
 FILTER_HANDLER = CommandHandler("filter", filters, run_async=False)
 STOP_HANDLER = CommandHandler("stop", stop_filter, run_async=False)
