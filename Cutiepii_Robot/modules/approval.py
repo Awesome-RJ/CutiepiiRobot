@@ -221,11 +221,11 @@ APPROVED_HANDLER = DisableAbleCommandHandler("approved", approved, filters=Filte
 UNAPPROVE_ALL_HANDLER = DisableAbleCommandHandler("unapproveall", unapproveall, filters=Filters.chat_type.groups, run_async=True)
 APPROVE_HANDLER = DisableAbleCommandHandler("approve", approve, pass_args=True, filters=Filters.chat_type.groups, run_async=True)
 UNAPPROVE_HANDLER = DisableAbleCommandHandler("unapprove", unapprove, pass_args=True, filters=Filters.chat_type.groups, run_async=True)
-APPROVEL_HANDLER = DisableAbleCommandHandler("approval", approval, pass_args=True, filters=Filters.chat_type.groups, run_async=True)
+APPROVAL_HANDLER = DisableAbleCommandHandler("approval", approval, pass_args=True, filters=Filters.chat_type.groups, run_async=True)
 
 
 dispatcher.add_handler(APPROVED_HANDLER)
 dispatcher.add_handler(UNAPPROVE_ALL_HANDLER)
 dispatcher.add_handler(APPROVE_HANDLER) 
 dispatcher.add_handler(UNAPPROVE_HANDLER) 
-dispatcher.add_handler(APPROVEL_HANDLER)
+dispatcher.add_handler(APPROVAL_HANDLER)
