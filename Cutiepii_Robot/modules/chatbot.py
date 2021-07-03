@@ -352,7 +352,7 @@ async def inuka(client, message):
 
 
 __help__ = """
- Chatbot utilizes the Brainshop's API and allows Eren to talk and provides a more interactive group chat experience.
+ Chatbot utilizes the Brainshop's API and allows Cutiepii to talk and provides a more interactive group chat experience.
  *Admins Only Commands*:
  • `/chatbot [ON/OFF]`: Enables and disables Chatbot mode in the chat.
  • `/chatbot EN` : Enables English only Chatbot mode in the chat.
