@@ -1,5 +1,5 @@
 from Cutiepii_Robot import pgram as Cutiepii
-from Cutiepii_Robot.unctions.rrors import capture_err
+from Cutiepii_Robot.functions.rrors import capture_err
 from Cutiepii_Robot.modules.mongo.karma_mongo import (update_karma, get_karma, get_karmas,
                                    int_to_alpha, alpha_to_int)
 from Cutiepii_Robot.utils.filter_groups import karma_positive_group, karma_negative_group
