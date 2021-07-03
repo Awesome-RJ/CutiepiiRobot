@@ -1,7 +1,7 @@
 import sys
 import traceback
 from functools import wraps
-from Cutiepii_Robot import pgram, SUPPORT_CHAT
+from Cutiepii_Robot import pgram, EVENT_LOGS
 from pyrogram.errors.exceptions.forbidden_403 import ChatWriteForbidden
 
 
@@ -47,7 +47,7 @@ def capture_err(func):
             )
             for x in error_feedback:
                 await pgram.send_message(
-                    SUPPORT_CHAT,
+                    EVENT_LOGS,
                     x
                 )
             raise err
