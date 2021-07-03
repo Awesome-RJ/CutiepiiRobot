@@ -10,8 +10,8 @@ import Cutiepii_Robot.modules.sql.global_bans_sql as sql
 from Cutiepii_Robot import (
     dispatcher,
     OWNER_ID,
-    SUDO_USERS,
-    SUPPORT_USERS,
+    DRAGONS,
+    DEMONS,
     STRICT_GBAN,
     GBAN_DUMP,
     ERROR_DUMP,
@@ -77,7 +77,6 @@ UNGBAN_ERRORS = {
 
 # Reworked @meanii <https://github.com/kirjga-74>  
 
-@run_async
 @typing_action
 def gban(update, context):
     message = update.effective_message
@@ -99,13 +98,13 @@ def gban(update, context):
         message.reply_text("Nice try -_- but I'm never gonna gban him.")
         return
 
-    if int(user_id) in SUDO_USERS:
+    if int(user_id) in DRAGONS:
         message.reply_text(
             "I spy, with my little eye... a sudo user war! Why are you guys turning on each other?"
         )
         return
 
-    if int(user_id) in SUPPORT_USERS:
+    if int(user_id) in DEMONS:
         message.reply_text(
             "OOOH someone's trying to gban a support user! *grabs popcorn*"
         )
@@ -279,7 +278,6 @@ def gban(update, context):
     
     
 
-@run_async
 @typing_action
 def ungban(update, context):
     message = update.effective_message
@@ -367,7 +365,6 @@ def ungban(update, context):
     
     
 
-@run_async
 @send_action(ChatAction.UPLOAD_DOCUMENT)
 def gbanlist(update, context):
     banned_users = sql.get_gban_list()
@@ -425,7 +422,6 @@ def check_and_ban(update, user_id, should_message=True):
             return
 
 
-@run_async
 def enforce_gban(update, context):
     # Not using @restrict handler to avoid spamming - just ignore if cant gban.
     if (
@@ -449,7 +445,6 @@ def enforce_gban(update, context):
             if user and not is_user_admin(chat, user.id):
                 check_and_ban(update, user.id, should_message=False)
 
-@run_async
 @user_admin
 @typing_action
 def gbanstat(update, context):
@@ -515,29 +510,25 @@ GBAN_HANDLER = CommandHandler(
     "gban",
     gban,
     pass_args=True,
-    filters=CustomFilters.sudo_filter | CustomFilters.support_filter,
-)
+    filters=CustomFilters.sudo_filter | CustomFilters.support_filter, run_async=True)
 UNGBAN_HANDLER = CommandHandler(
     "ungban",
     ungban,
     pass_args=True,
-    filters=CustomFilters.sudo_filter | CustomFilters.support_filter,
-)
+    filters=CustomFilters.sudo_filter | CustomFilters.support_filter, run_async=True)
 GBAN_LIST = CommandHandler(
     "gbanlist",
     gbanlist,
-    filters=CustomFilters.sudo_filter | CustomFilters.support_filter,
-)
+    filters=CustomFilters.sudo_filter | CustomFilters.support_filter, run_async=True)
 GBAN_STATUS = CommandHandler(
-    "antispam", gbanstat, pass_args=True, filters=Filters.chat_type.groups
-)
+    "antispam", gbanstat, pass_args=True, filters=Filters.chat_type.groups, run_async=True)
 
-GBAN_ENFORCER = MessageHandler(Filters.all & Filters.chat_type.groups, enforce_gban)
+GBAN_ENFORCER = MessageHandler(Filters.all & Filters.chat_type.groups, enforce_gban, run_async=True)
 
-dispatcher.add_handler(GBAN_HANDLER, run_async=True)
-dispatcher.add_handler(UNGBAN_HANDLER, run_async=True)
-dispatcher.add_handler(GBAN_LIST, run_async=True)
-dispatcher.add_handler(GBAN_STATUS, run_async=True)
+dispatcher.add_handler(GBAN_HANDLER)
+dispatcher.add_handler(UNGBAN_HANDLER)
+dispatcher.add_handler(GBAN_LIST)
+dispatcher.add_handler(GBAN_STATUS)
 
 if STRICT_GBAN:  # enforce GBANS if this is set
     dispatcher.add_handler(GBAN_ENFORCER, GBAN_ENFORCE_GROUP)
