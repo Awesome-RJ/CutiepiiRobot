@@ -700,7 +700,7 @@ def main():
             updater.bot.set_webhook(url=URL + TOKEN)
 
     else:
-        LOGGER.info("Cutiepii started, Using long polling. | BOT: [@{dispatcher.bot.username}]")
+        LOGGER.info("Cutiepii started, Using long polling. | BOT: [@Cutiepii_Robot]")
         updater.start_polling(timeout=15, read_latency=4, drop_pending_updates=True)
 
     if len(argv) not in (1, 3, 4):
