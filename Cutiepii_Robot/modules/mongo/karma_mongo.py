@@ -22,7 +22,7 @@ async def get_karmas_count() -> dict:
 
 
 async def get_karmas(chat_id: int) -> Dict[str, int]:
-    karma = karmadb.find_one({"chat_id": chat_id})
+    karma = await karmadb.find_one({"chat_id": chat_id})
     if karma:
         karma = karma['karma']
     else:
@@ -32,14 +32,14 @@ async def get_karmas(chat_id: int) -> Dict[str, int]:
 
 async def get_karma(chat_id: int, name: str) -> Union[bool, dict]:
     name = name.lower().strip()
-    karmas = get_karmas(chat_id)
+    karmas = await get_karmas(chat_id)
     if name in karmas:
         return karmas[name]
 
 
 async def update_karma(chat_id: int, name: str, karma: dict):
     name = name.lower().strip()
-    karmas = get_karmas(chat_id)
+    karmas = await get_karmas(chat_id)
     karmas[name] = karma
     await karmadb.update_one(
         {"chat_id": chat_id},
