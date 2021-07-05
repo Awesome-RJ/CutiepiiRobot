@@ -21,7 +21,7 @@ Thank you for contributing with me in this Project:
 + [TsunayoshiSawada](https://github.com/TsunayoshiSawada) : BASE
 + [Kittu](https://github.com/noob-kittu) : /START IMPROVE
 + [Pokurt](https://github.com/pokurt) : WHATANIME MODULE
-+ [Pranav ⁪⁬⁮⁮⁮⁮Ajay](https://github.com/Red-Aura) : POKEDEX, CHATBOT API ETC
++ [Pranav ⁪⁬⁮⁮⁮⁮Ajay](https://github.com/MoiZilla) : POKEDEX, CHATBOT API ETC
 + [Dank-del](https://github.com/Dank-del) : LEWD MODULE
 + [InukaAsith](https://github.com/InukaAsith) : MEMES, INLINE ETC MODULES 
 + [AyraHikari](https://github.com/AyraHikari): FED MODULE
