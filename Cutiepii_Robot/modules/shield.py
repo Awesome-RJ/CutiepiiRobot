@@ -17,7 +17,7 @@ from Cutiepii_Robot import MONGO_DB_URI, db, telethn as tbot
 
 
 # from Cutiepii_Robot.db.mongo_helpers.nsfw_guard import add_chat, get_all_nsfw_chats, is_chat_in_db, rm_chat
-from Cutiepii_Robot.functions.telethonbasics import is_admin
+from Cutiepii_Robot.functions.pluginhelpers import is_admin
 from Cutiepii_Robot.event import register
 from Cutiepii_Robot.modules.mongo.nsfw_watch_sql import (
     add_nsfwatch,
