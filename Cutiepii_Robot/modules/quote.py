@@ -63,8 +63,7 @@ async def process(msg, user, client, reply, replied=None):
                         width = mono.getsize(line)[0] + 30
                     else:
                         width = fallback.getsize(line)[0]
-                if maxlength < length:
-                    maxlength = length
+                maxlength = max(maxlength, length)
 
         title = ""
         try:
