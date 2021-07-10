@@ -15,7 +15,7 @@ This repo was just reamped to suit an Anime-centric community. All original cred
 
 Thank you for contributing with me in this Project:
 + [Rajkumar](https://github.com/Awesome-RJ) : OWNER
-+ [HuntingBots](https://github.com/HuntingBots) : ARQ MODULES
++ [AkshayRajput](https://github.com/TheHamkerCat) : ARQ MODULES
 + [TheRealPhoenix](https://github.com/rsktg) : BASE
 + [DragSama](https://github.com/DragSama) : ANIME
 + [TsunayoshiSawada](https://github.com/TsunayoshiSawada) : BASE
