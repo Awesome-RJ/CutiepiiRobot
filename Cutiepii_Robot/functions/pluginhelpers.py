@@ -4,17 +4,16 @@ import shlex
 import sys
 import time
 import traceback
+import aiohttp
+
 from functools import wraps
 from typing import Callable, Coroutine, Dict, List, Tuple, Union
-
-import aiohttp
 from PIL import Image
 from pyrogram import Client
 from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import Chat, Message, User
 
-from Cutiepii_Robot import OWNER_ID, SUPPORT_CHAT
-from Cutiepii_Robot import pgram
+from Cutiepii_Robot import OWNER_ID, SUPPORT_CHAT, pgram
 
 def get_user(message: Message, text: str) -> [int, str, None]:
     if text is None:
@@ -280,11 +279,12 @@ async def get_administrators(chat: Chat) -> List[User]:
 
     if _get:
         return _get
-    set(
-        chat.id,
-        [member.user for member in await chat.get_members(filter="administrators")],
-    )
-    return await get_administrators(chat)
+    else:
+        set(
+            chat.id,
+            [member.user for member in await chat.get_members(filter="administrators")],
+        )
+        return await get_administrators(chat)
 
 
 def admins_only(func: Callable) -> Coroutine:
@@ -321,7 +321,7 @@ def capture_err(func):
                 ),
             )
             for x in error_feedback:
-                await pgram.send_message(SUPPORT_CHAT, x)
+                await pbot.send_message(SUPPORT_CHAT, x)
             raise err
 
     return capture
@@ -332,7 +332,7 @@ def capture_err(func):
 
 async def member_permissions(chat_id, user_id):
     perms = []
-    member = await pgram.get_chat_member(chat_id, user_id)
+    member = await pbot.get_chat_member(chat_id, user_id)
     if member.can_post_messages:
         perms.append("can_post_messages")
     if member.can_edit_messages:
@@ -354,7 +354,7 @@ async def member_permissions(chat_id, user_id):
 
 async def current_chat_permissions(chat_id):
     perms = []
-    perm = (await pgram.get_chat(chat_id)).permissions
+    perm = (await pbot.get_chat(chat_id)).permissions
     if perm.can_send_messages:
         perms.append("can_send_messages")
     if perm.can_send_media_messages:
