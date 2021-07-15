@@ -542,6 +542,37 @@ def adminlist(update, context):
     except BadRequest:  # if original message is deleted
         return
 
+@connection_status
+def adminhelp(update, context):
+    help_text = '''
+
+ • `/admins`*:* list of admins in the chat
+
+*Admins only:*
+ • `/pin`*:* silently pins the message replied to - add `'loud'` or `'notify'` to give notifs to users
+ • `/unpin`*:* unpins the currently pinned message
+ • `/invitelink`*:* gets invitelink
+ • `/promote`*:* promotes the user replied to
+ • `/fullpromote`*:* promotes the user replied to with full rights
+ • `/demote`*:* demotes the user replied to
+ • `/title <title here>`*:* sets a custom title for an admin that the bot promoted
+ • `/admincache`*:* force refresh the admins list
+ • `/zombies` :- searches deleted accounts
+ • `/zombies clean` :- removes deleted accounts from the group.
+ 
+*Log Channel*:
+• `/logchannel`*:* get log channel info
+• `/setlog`*:* set the log channel.
+• `/unsetlog`*:* unset the log channel.
+
+*Setting the log channel is done by*:
+• adding the bot to the desired channel (as an admin!)
+• sending `/setlog` in the channel
+• forwarding the `/setlog` to the group
+'''
+    update.effective_message.reply_text(help_text, parse_mode=ParseMode.MARKDOWN)
+
+
 
 __help__ = """
  • `/admins`*:* list of admins in the chat
@@ -581,6 +612,7 @@ FULLPROMOTE_HANDLER = DisableAbleCommandHandler("fullpromote", fullpromote, run_
 DEMOTE_HANDLER = DisableAbleCommandHandler("demote", demote, run_async=True)
 
 SET_TITLE_HANDLER = CommandHandler("title", set_title, run_async=True)
+ADMINHELP_HANDLER = CommandHandler("adminhelp", adminhelp, run_async=True)
 ADMIN_REFRESH_HANDLER = CommandHandler("admincache", refresh_admin, filters=Filters.chat_type.groups, run_async=True)
 
 dispatcher.add_handler(ADMINLIST_HANDLER)
@@ -591,6 +623,7 @@ dispatcher.add_handler(PROMOTE_HANDLER)
 dispatcher.add_handler(FULLPROMOTE_HANDLER)
 dispatcher.add_handler(DEMOTE_HANDLER)
 dispatcher.add_handler(SET_TITLE_HANDLER)
+dispatcher.add_handler(ADMINHELP_HANDLER)
 dispatcher.add_handler(ADMIN_REFRESH_HANDLER)
 
 __mod_name__ = "Admin"
@@ -599,5 +632,5 @@ __command_list__ = [
 ]
 __handlers__ = [
     ADMINLIST_HANDLER, PIN_HANDLER, UNPIN_HANDLER, INVITE_HANDLER,
-    PROMOTE_HANDLER, FULLPROMOTE_HANDLER, DEMOTE_HANDLER, SET_TITLE_HANDLER, ADMIN_REFRESH_HANDLER
+    PROMOTE_HANDLER, FULLPROMOTE_HANDLER, DEMOTE_HANDLER, SET_TITLE_HANDLER, ADMIMHELP_HANDLER, ADMIN_REFRESH_HANDLER
 ]
