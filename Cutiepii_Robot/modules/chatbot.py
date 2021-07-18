@@ -1,18 +1,40 @@
+# Copyright (C) 2021 Red-Aura & TeamDaisyX & HamkerCat
+
+# This file is part of CutiepiiRobot (Telegram Bot)
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
+
 import emoji
+
+url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
 import re
+
 import aiohttp
 
 # from google_trans_new import google_translator
 from googletrans import Translator as google_translator
 from pyrogram import filters
 
+from Cutiepii_Robot import BOT_ID
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
+from Cutiepii_Robot import arq
 from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
-from Cutiepii_Robot import pgram as cutiepii, BOT_ID, arq
+from Cutiepii_Robot import pgram as Cutiepii
 
 translator = google_translator()
-url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
+
 
 async def lunaQuery(query: str, user_id: int):
     luna = await arq.luna(query, user_id)
@@ -38,16 +60,17 @@ async def fetch(url):
         return
 
 
-cutie_chats = []
+Cutiepii_chats = []
 en_chats = []
+# AI Chat (C) 2020-2021 by @InukaAsith
 
 
-@cutiepii.on_message(
+@Cutiepii.on_message(
     filters.command("chatbot") & ~filters.edited & ~filters.bot & ~filters.private
 )
 @admins_only
 async def hmm(_, message):
-    global cutie_chats
+    global Cutiepii_chats
     if len(message.command) != 2:
         await message.reply_text(
             "I only recognize `/chatbot on` and /chatbot `off only`"
@@ -59,20 +82,20 @@ async def hmm(_, message):
         lel = await edit_or_reply(message, "`Processing...`")
         lol = add_chat(int(message.chat.id))
         if not lol:
-            await lel.edit("cutie AI Already Activated In This Chat")
+            await lel.edit("Cutiepii AI Already Activated In This Chat")
             return
         await lel.edit(
-            f"cutie AI Successfully Added For Users In The Chat {message.chat.id}"
+            f"Asuna AI Successfully Added For Users In The Chat {message.chat.id}"
         )
 
     elif status == "OFF" or status == "off" or status == "Off":
         lel = await edit_or_reply(message, "`Processing...`")
         Escobar = remove_chat(int(message.chat.id))
         if not Escobar:
-            await lel.edit("cutie AI Was Not Activated In This Chat")
+            await lel.edit("Cutiepii AI Was Not Activated In This Chat")
             return
         await lel.edit(
-            f"cutie AI Successfully Deactivated For Users In The Chat {message.chat.id}"
+            f"Cutiepii AI Successfully Deactivated For Users In The Chat {message.chat.id}"
         )
 
     elif status == "EN" or status == "en" or status == "english":
@@ -88,7 +111,7 @@ async def hmm(_, message):
         )
 
 
-@cutiepii.on_message(
+@Cutiepii.on_message(
     filters.text
     & filters.reply
     & ~filters.bot
@@ -114,17 +137,17 @@ async def hmm(client, message):
         message.continue_propagation()
     if chat_id in en_chats:
         test = msg
-        test = test.replace("cutie", "Aco")
-        test = test.replace("cutie", "Aco")
+        test = test.replace("cutiepii", "Aco")
+        test = test.replace("Cutiepii", "Aco")
         response = await lunaQuery(
             test, message.from_user.id if message.from_user else 0
         )
-        response = response.replace("Aco", "cutie")
-        response = response.replace("aco", "cutie")
+        response = response.replace("Aco", "Cutiepii")
+        response = response.replace("aco", "Cutiepii")
 
         pro = response
         try:
-            await cutiepii.send_chat_action(message.chat.id, "typing")
+            await Cutiepii.send_chat_action(message.chat.id, "typing")
             await message.reply_text(pro)
         except CFError:
             return
@@ -172,15 +195,15 @@ async def hmm(client, message):
                 return
         # test = emoji.demojize(test.strip())
 
-        test = test.replace("cutie", "Aco")
-        test = test.replace("cutie", "Aco")
+        test = test.replace("cutiepii", "Aco")
+        test = test.replace("Cutiepii", "Aco")
         response = await lunaQuery(
             test, message.from_user.id if message.from_user else 0
         )
-        response = response.replace("Aco", "cutie")
-        response = response.replace("aco", "cutie")
-        response = response.replace("Luna", "cutie")
-        response = response.replace("luna", "cutie")
+        response = response.replace("Aco", "Cutiepii")
+        response = response.replace("aco", "Cutiepii")
+        response = response.replace("Luna", "Cutiepii")
+        response = response.replace("luna", "Cutiepii")
         pro = response
         if not "en" in lan and not lan == "":
             try:
@@ -189,13 +212,13 @@ async def hmm(client, message):
             except:
                 return
         try:
-            await cutiepii.send_chat_action(message.chat.id, "typing")
+            await Cutiepii.send_chat_action(message.chat.id, "typing")
             await message.reply_text(pro)
         except CFError:
             return
 
 
-@cutiepii.on_message(
+@Cutiepii.on_message(
     filters.text & filters.private & ~filters.edited & filters.reply & ~filters.bot
 )
 async def inuka(client, message):
@@ -246,26 +269,26 @@ async def inuka(client, message):
     # test = emoji.demojize(test.strip())
 
     # Kang with the credits bitches @InukaASiTH
-    test = test.replace("cutie", "Aco")
-    test = test.replace("cutie", "Aco")
+    test = test.replace("asuna", "Aco")
+    test = test.replace("Asuna", "Aco")
 
     response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
-    response = response.replace("Aco", "cutie")
-    response = response.replace("aco", "cutie")
+    response = response.replace("Aco", "Cutiepii")
+    response = response.replace("aco", "Cutiepii")
 
     pro = response
     if not "en" in lan and not lan == "":
         pro = translator.translate(pro, dest=lan)
         pro = pro.text
     try:
-        await cutiepii.send_chat_action(message.chat.id, "typing")
+        await Cutiepii.send_chat_action(message.chat.id, "typing")
         await message.reply_text(pro)
     except CFError:
         return
 
 
-@cutiepii.on_message(
-    filters.regex("cutie|cutie|cutiepii|cutiepii|cutiepii")
+@Cutiepii.on_message(
+    filters.regex("Cutiepii|cutiepii|cutiepii|Cutiepii|Cutiepii")
     & ~filters.bot
     & ~filters.via_bot
     & ~filters.forwarded
@@ -320,11 +343,11 @@ async def inuka(client, message):
 
     # test = emoji.demojize(test.strip())
 
-    test = test.replace("cutie", "Aco")
-    test = test.replace("cutie", "Aco")
+    test = test.replace("cutiepii", "Aco")
+    test = test.replace("Cutiepii", "Aco")
     response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
-    response = response.replace("Aco", "cutie")
-    response = response.replace("aco", "cutie")
+    response = response.replace("Aco", "Cutiepii")
+    response = response.replace("aco", "Cutiepii")
 
     pro = response
     if not "en" in lan and not lan == "":
@@ -334,18 +357,24 @@ async def inuka(client, message):
         except Exception:
             return
     try:
-        await cutiepii.send_chat_action(message.chat.id, "typing")
+        await Cutiepii.send_chat_action(message.chat.id, "typing")
         await message.reply_text(pro)
     except CFError:
         return
 
 
 __help__ = """
- Chatbot utilizes the Brainshop's API and allows Cutiepii to talk and provides a more interactive group chat experience.
- *Admins Only Commands*:
- • `/chatbot [ON/OFF]`: Enables and disables Chatbot mode in the chat.
- • `/chatbot EN` : Enables English only Chatbot mode in the chat.
- *Powered by Brainshop* (brainshop.ai)
+<b> AI Chatbot </b>
+Cutiepii AI 3.0 IS THE ONLY AI SYSTEM WHICH CAN DETECT & REPLY UPTO 200 LANGUAGES
+
+ - /chatbot [ON/OFF]: Enables and disables AI Chat mode (EXCLUSIVE)
+ - /chatbot EN : Enables English only chatbot
+ 
+ 
+<b> Chatbot </b>
+ - /ask [question]: Ask question from Cutiepii
+ - /ask [reply to voice note]: Get voice reply
+ 
 """
 
-__mod_name__ = "ChatBot"
+__mod_name__ = "Chatbot"
