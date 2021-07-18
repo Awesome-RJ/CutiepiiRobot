@@ -10,7 +10,6 @@ geopy
 git+https://github.com/starry69/python-markdown2.git
 googletrans==4.0.0-rc1
 google-trans-new==1.1.9
-googletrans
 humanize
 jikanpy
 lxml
