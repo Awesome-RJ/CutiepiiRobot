@@ -76,12 +76,19 @@ def get_readable_time(seconds: int) -> str:
     return ping_time
 
 
+CUTIEPII_IMG = "https://telegra.ph/file/57d1e105345723fea0edd.png"
+    
 PM_START_TEXT = """
 Hy my Darling, I am Your SweetHeart!
 
 I am an Anime themed advance group management bot with a lot of Sexy Features.
 
 Try the Help buttons below to know my abilities [^_^](https://telegra.ph/file/5058a17bd9447eb07a47f.png).
+"""
+
+GROUP_START_TEXT = """
+I'm awake already!
+Haven't slept since: {}
 """
 
 buttons = [
@@ -235,11 +242,9 @@ def start(update: Update, context: CallbackContext):
                 timeout=60,
             )
     else:
-        update.effective_message.reply_text(
-            "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>".format(
-                uptime
-            ),
-            parse_mode=ParseMode.HTML,
+        update.effective_message.reply_photo(
+            CUTIEPII_IMG,
+            GROUP_START_TEXT.format(uptime),
         )
 
 
