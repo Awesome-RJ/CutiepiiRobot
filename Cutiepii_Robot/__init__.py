@@ -216,17 +216,7 @@ if not SPAMWATCH_API:
     sw = None
            LOGGER.warning("Can't connect to SpamWatch!")
 else:
-
-updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
-telethn = TelegramClient("cutiepii", API_ID, API_HASH)
-pgram = Client("cutiepiipgram", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
-print("[INFO]: INITIALIZING AIOHTTP SESSION")
-aiohttpsession = ClientSession()
-# ARQ Client
-print("[INFO]: INITIALIZING ARQ CLIENT")
-arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
-dispatcher = updater.dispatcher
-
+    
     try:
         sw = spamwatch.Client(SPAMWATCH_API)
     except:
@@ -253,7 +243,9 @@ motor = motor_asyncio.AsyncIOMotorClient(MONGO_URI)
 db = motor[MONGO_DB]
 engine = AIOEngine(motor, MONGO_DB)
 print("[INFO]: INITIALZING AIOHTTP SESSION")
+aiohttpsession = ClientSession()
 print("[INFO]: INITIALIZING ARQ CLIENT")
+arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
 ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
 print("[CUTIEPII]: Connecting To Yūki • Cutiepii Userbot (t.me/Awesome_Cutiepii)")
