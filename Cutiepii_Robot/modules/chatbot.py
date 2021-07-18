@@ -8,9 +8,8 @@ from googletrans import Translator as google_translator
 from pyrogram import filters
 
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
-from Cutiepii_Robot.function.inlinehelper import arq
 from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
-from Cutiepii_Robot import pgram as cutiepii, BOT_ID
+from Cutiepii_Robot import pgram as cutiepii, BOT_ID, arq
 
 translator = google_translator()
 url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
