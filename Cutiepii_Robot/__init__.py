@@ -3,17 +3,20 @@ import os
 import sys
 import time
 import spamwatch
+from pyrogram import Client, errors
+import telegram.ext as tg
+from telethon import TelegramClient
+from telethon.sessions import StringSession
 from motor import motor_asyncio
 from odmantic import AIOEngine
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 from redis import StrictRedis
-
-import telegram.ext as tg
-from pyrogram import Client, errors
-from telethon import TelegramClient
-from aiohttp import ClientSession
 from Python_ARQ import ARQ
+import aiohttp
+from aiohttp import ClientSession
+from ptbcontrib.postgres_persistence import PostgresPersistence
+from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
 
 StartTime = time.time()
 
@@ -93,14 +96,12 @@ if ENV:
     MONGO_PORT = int(os.environ.get("MONGO_PORT", None))
     MONGO_DB = os.environ.get("MONGO_DB", None)
     REDIS_URL = os.environ.get("REDIS_URI", None)
-    ARQ_API_URL = "https://thearq.tech"
-    ARQ_API_KEY = "YIECCC-NAJARO-OLLREW-SJSRIP-ARQ"
     BOT_ID = int(os.environ.get("BOT_ID", None))
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None)
     SPAMWATCH_SUPPORT_CHAT = os.environ.get("SPAMWATCH_SUPPORT_CHAT", None)
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
     ARQ_API_URL =  "https://thearq.tech"
-    ARQ_API_KEY = ARQ_API
+    ARQ_API_KEY = "YIECCC-NAJARO-OLLREW-SJSRIP-ARQ"
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
     OPENWEATHERMAP_ID = os.environ.get("OPENWEATHERMAP_ID", "")
     BOT_USERNAME = os.environ.get("BOT_USERNAME", "")
@@ -214,9 +215,8 @@ finally:
 
 if not SPAMWATCH_API:
     sw = None
-           LOGGER.warning("Can't connect to SpamWatch!")
+    LOGGER.warning("[CUTIEPII ERROR]: SpamWatch API key Is Missing! Recheck Your Config.")
 else:
-    
     try:
         sw = spamwatch.Client(SPAMWATCH_API)
     except:
@@ -244,6 +244,7 @@ db = motor[MONGO_DB]
 engine = AIOEngine(motor, MONGO_DB)
 print("[INFO]: INITIALZING AIOHTTP SESSION")
 aiohttpsession = ClientSession()
+# ARQ Client
 print("[INFO]: INITIALIZING ARQ CLIENT")
 arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
