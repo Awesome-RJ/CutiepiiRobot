@@ -1,1 +1,1 @@
-Yuki: python -m Cutiepii_Robot
+Yūki DC: python -m Cutiepii_Robot
