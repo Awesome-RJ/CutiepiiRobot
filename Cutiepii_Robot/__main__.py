@@ -103,7 +103,7 @@ buttons = [
                     ],
                    [
                        InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
-                       InlineKeyboardButton(text="[► Music Commands ◄]", callback_data="MUSIC_HELP")
+                       InlineKeyboardButton(text="[► Music Commands ◄]", callback_data="MUSIC_HELP"),
                        InlineKeyboardButton(text="[► Inline ◄]", switch_inline_query_current_chat=""),
                      ],
                     [                  
