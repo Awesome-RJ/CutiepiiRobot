@@ -1,3 +1,5 @@
+
+__mod_name__ = "AutoFilters"
 __help__ = """
 
 **Auto Filters**
@@ -20,7 +22,3 @@ Currently support:
  • `/autofiltersettings`*:* Show settings panel about auto filtering channels
  
 """
-
-
-__mod_name__ = "AutoFilters"
-
