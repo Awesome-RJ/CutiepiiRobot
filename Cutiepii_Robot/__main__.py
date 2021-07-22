@@ -24,11 +24,11 @@ from SaitamaRobot import (
 
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
-from SaitamaRobot.modules import ALL_MODULES
-from SaitamaRobot.modules.helper_funcs.chat_status import is_user_admin
-from SaitamaRobot.modules.helper_funcs.alternate import typing_action
-from SaitamaRobot.modules.helper_funcs.misc import paginate_modules
-from SaitamaRobot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot.modules import ALL_MODULES
+from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
+from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
+from Cutiepii_Robot.modules.helper_funcs.misc import paginate_modules
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.error import (
     BadRequest,
@@ -113,7 +113,6 @@ buttons = [
                              url="https://t.me/Black_Knights_Union")
                      ], 
     ]
-] 
 
                     
 HELP_STRINGS = """
