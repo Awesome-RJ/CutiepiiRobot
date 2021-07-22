@@ -63,7 +63,7 @@ async def whatanime(c: Client, m: Message):
         await proc.communicate()
         await reply.edit_text('Uploading...')
         with open(new_path, 'rb') as file:
-            async with session.post('https://trace.moe/api/search', data={'image': file}) as resp:
+            async with session.post('https://api.trace.moe/search', data={'image': file}) as resp:
                 json = await resp.json()
     if isinstance(json, str):
         await reply.edit_text(html.escape(json))
