@@ -79,3 +79,4 @@ countryinfo
 faker
 PyDictionary==2.0.1
 ffmpeg
+multicolorcaptcha
