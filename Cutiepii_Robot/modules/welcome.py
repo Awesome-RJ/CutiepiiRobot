@@ -1082,7 +1082,7 @@ def user_button(update: Update, context: CallbackContext):
     else:
         query.answer(text="You're not allowed to do this!")
 
-   if join_user == user.id:
+    if join_user == user.id:
         c_captcha_ans = CAPTCHA_ANS_DICT.pop((join_chat, join_user))
         if c_captcha_ans == captcha_ans:
             sql.set_human_checks(user.id, chat.id)
