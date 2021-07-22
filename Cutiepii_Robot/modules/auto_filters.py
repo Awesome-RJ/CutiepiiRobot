@@ -1,6 +1,6 @@
 __help__ = """
 
-**AUTO FILTERS**
+**Auto Filters**
 Cutiepii Can filter content of a given channel automatically
 Currently support:
      - Videos
@@ -22,5 +22,5 @@ Currently support:
 """
 
 
-__mod_name__ = "Auto Filters"
+__mod_name__ = "AutoFilters"
 
