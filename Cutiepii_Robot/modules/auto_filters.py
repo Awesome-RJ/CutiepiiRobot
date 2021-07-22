@@ -13,9 +13,9 @@ Currently support:
 2) Go back to your group
 
 *Commands*
- • `/autofilter [Channel Username | Channel ID]`*:* Add given channel to autofiltering
- • `/autofilterdel [Channel Username | Channel ID]`*:* Remove given channel from auto filtering
- • `/autofilterdelall`*:* Remove all channels from automatic filtering
+ • `/add [Channel Username | Channel ID]`*:* Add given channel to autofiltering
+ • `/del [Channel Username | Channel ID]`*:* Remove given channel from auto filtering
+ • `/delall`*:* Remove all channels from automatic filtering
  • `/autofiltersettings`*:* Show settings panel about auto filtering channels
 """
 
