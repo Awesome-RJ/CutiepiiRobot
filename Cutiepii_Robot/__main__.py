@@ -329,7 +329,7 @@ def help_button(update, context):
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton(text="Back", callback_data="help_back")]]
+                    [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
                 ),
             )
 
@@ -339,7 +339,7 @@ def help_button(update, context):
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(curr_page - 1, HELPABLE, "help")
+                    paginate_modules(curr_page - 1, HELPABLE, "[► Back ◄]")
                 ),
             )
 
@@ -349,7 +349,7 @@ def help_button(update, context):
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(next_page + 1, HELPABLE, "help")
+                    paginate_modules(next_page + 1, HELPABLE, "[► Back ◄]")
                 ),
             )
 
@@ -358,7 +358,7 @@ def help_button(update, context):
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(0, HELPABLE, "help")
+                    paginate_modules(0, HELPABLE, "[► Back ◄]")
                 ),
             )
 
@@ -520,7 +520,7 @@ def settings_button(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                text="Back",
+                                text="[► Back ◄]",
                                 callback_data="stngs_back({})".format(chat_id),
                             )
                         ]
