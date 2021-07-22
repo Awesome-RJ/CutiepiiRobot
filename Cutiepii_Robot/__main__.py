@@ -110,7 +110,7 @@ buttons = [
                     [                  
                        InlineKeyboardButton(
                              text="❔ Chit Chat",
-                             url="https://t.me/Hindi_K_Drama_1"),
+                             url="https://t.me/HindiKDrama"),
                        InlineKeyboardButton(
                              text="📢 Updates",
                              url="https://t.me/Black_Knights_Union")
