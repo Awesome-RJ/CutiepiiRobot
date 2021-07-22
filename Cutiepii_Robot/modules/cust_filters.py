@@ -620,10 +620,10 @@ Check `/markdownhelp` to know more!
 *Auto Filters*
 Cutiepii Can filter content of a given channel automatically
 Currently support:
-- Videos
-- Media
-- Documents
-- Music
+) Videos
+) Media
+) Documents
+) Music
 
 *Setting up*
 1) Add @Cutiepii_Robot to your channel
