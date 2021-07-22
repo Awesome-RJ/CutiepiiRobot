@@ -52,8 +52,7 @@ async def download_coroutine(session, url, file_name, event, start, bot):
                     )
                     estimated_total_time = elapsed_time + time_to_completion
                     try:
-                        if total_length < downloaded:
-                            total_length = downloaded
+                        total_length = max(total_length, downloaded)
                         current_message = """Downloading : {}%
 URL: {}
 File Name: {}
