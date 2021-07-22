@@ -30,6 +30,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 from Cutiepii_Robot.modules.helper_funcs.misc import paginate_modules
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot.modules.music_help import MUSIC_HELP
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.error import (
     BadRequest,
@@ -98,14 +99,15 @@ buttons = [
                             url="t.me/Cutiepii_Robot?startgroup=true")
                     ],
                    [
-                       InlineKeyboardButton(text="❓ 𝙷𝚎𝚕𝚙 & 𝙲𝚘𝚖𝚖𝚊𝚗𝚍𝚜 ❓", callback_data="help_back")
+                       InlineKeyboardButton(text="Commands", callback_data="help_back"),
+                       InlineKeyboardButton(text="Music Commands", callback_data="MUSIC_HELP")
                      ],
                     [
                         InlineKeyboardButton(
-                                 text="⚙️ 𝙸𝚗𝚕𝚒𝚗𝚎 𝙼𝚘𝚍𝚎 ⚙️",
+                                 text="Inline",
                                  switch_inline_query_current_chat=""),                   
                        InlineKeyboardButton(
-                             text="👨‍❤️‍💋‍👨 𝙲𝚞𝚝𝚒𝚎𝚙𝚒𝚒 𝙻𝚘𝚟𝚎𝚛𝚜 👨‍❤️‍💋‍👨",
+                             text="Chit-Chat",
                              url="https://t.me/Hindi_K_Drama_1")
                      ],
                      [
