@@ -623,9 +623,9 @@ Cutiepii Can filter content of a given channel automatically
 *Currently support:* Videos, Media, Documents, Music
 
 *Setting up*
-1) Add @Cutiepii_Robot to your channel
-2) Make bot admin with full permissions
-2) Go back to your group
+- Add @Cutiepii_Robot to your channel
+- Make bot admin with full permissions
+- Go back to your group
 
 *Commands*
  • `/add {Channel Username / Channel ID}`*:* Add given channel to autofiltering
