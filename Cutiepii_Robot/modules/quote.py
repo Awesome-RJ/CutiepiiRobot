@@ -77,13 +77,10 @@ async def quotly_func(client, message: Message):
             count = arg[1]
             messages = await client.get_messages(
                 message.chat.id,
-                [
-                    i
-                    for i in range(
+                list(range(
                         message.reply_to_message.message_id,
                         message.reply_to_message.message_id + count,
-                    )
-                ],
+                    )),
                 replies=0,
             )
         else:
