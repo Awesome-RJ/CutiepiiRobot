@@ -11,7 +11,7 @@ from Cutiepii_Robot import telethn as bot
 from Cutiepii_Robot.modules.urluploader import download_file
 from Cutiepii_Robot.utils.pluginhelpers import humanbytes, progress
 
-DOWNLOADPATH = "./Downloads/"
+DOWNLOADPATH = "./Cutiepii_Robot/Downloads/"
 
 
 def get_date_in_two_weeks():
