@@ -528,7 +528,7 @@ def new_member(update: Update, context: CallbackContext):
                 if to_append:
                     btn.append(to_append)
 
-                message = msg.reply_photo(
+                message = message.reply_photo(
                     fileobj,
                     caption=f"Welcome [{escape_markdown(new_mem.first_name)}](tg://user?id={user.id}). Click the correct button to get unmuted!",
                     reply_markup=InlineKeyboardMarkup(btn),
