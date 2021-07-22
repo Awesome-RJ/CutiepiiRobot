@@ -6,6 +6,7 @@ from sys import argv
 import sys
 from typing import Optional
 
+import Cutiepii_Robot.modules.sql.users_sql as sql
 from Cutiepii_Robot import (
     ALLOW_EXCL,
     CERT_PATH,
