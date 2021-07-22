@@ -548,6 +548,7 @@ def new_member(update: Update, context: CallbackContext):
                         can_add_web_page_previews=False,
                     ),
                 )
+
         if welcome_bool:
             if media_wel:
                 if ENUM_FUNC_MAP[welc_type] == dispatcher.bot.send_sticker:
