@@ -21,5 +21,6 @@ Currently support:
  
 """
 
+
 __mod_name__ = "Auto Filters"
 
