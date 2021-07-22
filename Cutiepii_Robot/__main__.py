@@ -80,11 +80,14 @@ def get_readable_time(seconds: int) -> str:
 CUTIEPII_IMG = "https://telegra.ph/file/57d1e105345723fea0edd.png"
     
 PM_START_TEXT = """
-Hy my Darling, I am Your SweetHeart!
-
-I am an Anime themed advance group management bot with a lot of Sexy Features.
-
-Try the Help buttons below to know my abilities [^_^](https://telegra.ph/file/5058a17bd9447eb07a47f.png).
+──「 [Cutiepii](https://telegra.ph/file/5058a17bd9447eb07a47f.png) 」──
+*Hola! {},*
+*I am an Anime themed advance group management bot with a lot of Sexy Features.*
+➖➖➖➖➖➖➖➖➖➖➖➖➖
+• *Uptime:* `{}`
+• `{}` *users, across* `{}` *chats.*
+➖➖➖➖➖➖➖➖➖➖➖➖➖
+➛ Try The Help Buttons Below To Know My Abilities ××
 """
 
 GROUP_START_TEXT = """
@@ -95,29 +98,21 @@ Haven't slept since: {}
 buttons = [
     [
                         InlineKeyboardButton(
-                            text="👥 𝙰𝚍𝚍 𝙲𝚞𝚝𝚒𝚎𝚙𝚒𝚒 𝚃𝚘 𝚈𝚘𝚞𝚛 𝙶𝚛𝚘𝚞𝚙 👥",
+                            text="Add Cutiepii To Your Group",
                             url="t.me/Cutiepii_Robot?startgroup=true")
                     ],
                    [
-                       InlineKeyboardButton(text="Commands", callback_data="help_back"),
-                       InlineKeyboardButton(text="Music Commands", callback_data="MUSIC_HELP")
+                       InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
+                       InlineKeyboardButton(text="[► Music Commands ◄]", callback_data="MUSIC_HELP")
+                       InlineKeyboardButton(text="[► Inline ◄]", switch_inline_query_current_chat=""),
                      ],
-                    [
-                        InlineKeyboardButton(
-                                 text="Inline",
-                                 switch_inline_query_current_chat=""),                   
+                    [                  
                        InlineKeyboardButton(
-                             text="Chit-Chat",
-                             url="https://t.me/Hindi_K_Drama_1")
-                     ],
-                     [
-                         InlineKeyboardButton(
-                             text="🙋 𝚂𝚞𝚙𝚙𝚘𝚛𝚝 𝙲𝚑𝚊𝚝 🙋",
-                             url=f"https://t.me/{SUPPORT_CHAT}"),
-                         InlineKeyboardButton(
-                             text="📺 𝚄𝚙𝚍𝚊𝚝𝚎𝚜 📺",
+                             text="❔ Chit Chat",
+                             url="https://t.me/Hindi_K_Drama_1"),
+                       InlineKeyboardButton(
+                             text="📢 Updates",
                              url="https://t.me/Black_Knights_Union")
-                  
                      ], 
     ]
 
@@ -202,7 +197,7 @@ def test(update: Update, context: CallbackContext):
     print(update.effective_message)
 
 
-@typing_action
+@run_async
 def start(update: Update, context: CallbackContext):
     args = context.args
     uptime = get_readable_time((time.time() - StartTime))
@@ -218,7 +213,7 @@ def start(update: Update, context: CallbackContext):
                     update.effective_chat.id,
                     HELPABLE[mod].__help__,
                     InlineKeyboardMarkup(
-                        [[InlineKeyboardButton(text="Back", callback_data="help_back")]]
+                        [[InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back")]]
                     ),
                 )
 
@@ -237,8 +232,11 @@ def start(update: Update, context: CallbackContext):
         else:
             first_name = update.effective_user.first_name
             update.effective_message.reply_text(
-                PM_START_TEXT.format(
-                escape_markdown(first_name)),                
+                    PM_START_TEXT.format(
+                    escape_markdown(first_name),
+                    escape_markdown(uptime),
+                    sql.num_users(),
+                    sql.num_chats()),
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
@@ -413,7 +411,7 @@ def get_help(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                text="Help",
+                                text="[► Help ◄]",
                                 url="t.me/{}?start=ghelp_{}".format(
                                     context.bot.username, module
                                 ),
@@ -429,7 +427,7 @@ def get_help(update: Update, context: CallbackContext):
                 [
                     [
                         InlineKeyboardButton(
-                            text="Help",
+                            text="[► Help ◄]",
                             url="t.me/{}?start=help".format(context.bot.username),
                         )
                     ]
