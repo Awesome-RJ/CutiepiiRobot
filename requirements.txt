@@ -39,7 +39,7 @@ tgCrypto>=1.2.2
 youtube_dl
 youtube_search
 pytube
-youtube-search-python
+youtube_search_python
 pymongo
 motor
 dnspython
@@ -78,3 +78,4 @@ opencv-python-headless
 countryinfo
 faker
 PyDictionary==2.0.1
+ffmpeg
