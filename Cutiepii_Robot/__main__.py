@@ -30,7 +30,6 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 from Cutiepii_Robot.modules.helper_funcs.misc import paginate_modules
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot.modules.music_help import MUSIC_HELP
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.error import (
     BadRequest,
@@ -105,7 +104,7 @@ buttons = [
                     ],
                    [
                        InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
-                       InlineKeyboardButton(text="[► Music Commands ◄]", callback_data="MUSIC_HELP"),
+                       InlineKeyboardButton(text="[► Music ◄]", url="http://t.me/Group_Music_Probot?startgroup=true"),
                        InlineKeyboardButton(text="[► Inline ◄]", switch_inline_query_current_chat=""),
                      ],
                     [                  
