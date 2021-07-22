@@ -27,7 +27,7 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import (
     markdown_parser,
 )
 from Cutiepii_Robot.modules.log_channel import loggable
-from Cutiepii_Robot.modules.sql.antispam_sql import is_user_gbanned
+from Cutiepii_Robot.modules.sql.global_bans_sql import is_user_gbanned
 from telegram import (
     ChatPermissions,
     InlineKeyboardButton,
