@@ -1082,6 +1082,20 @@ def user_button(update: Update, context: CallbackContext):
     else:
         query.answer(text="You're not allowed to do this!")
 
+def user_captcha_button(update: Update, context: CallbackContext):
+    # sourcery no-metrics
+    chat = update.effective_chat
+    user = update.effective_user
+    query = update.callback_query
+    bot = context.bot
+    # print(query.data)
+    match = re.match(r"user_captchajoin_\(([\d\-]+),(\d+)\)_\((\d{4})\)", query.data)
+    message = update.effective_message
+    join_chat = int(match.group(1))
+    join_user = int(match.group(2))
+    captcha_ans = int(match.group(3))
+    join_usr_data = bot.getChat(join_user)
+
     if join_user == user.id:
         c_captcha_ans = CAPTCHA_ANS_DICT.pop((join_chat, join_user))
         if c_captcha_ans == captcha_ans:
