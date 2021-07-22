@@ -1,10 +1,11 @@
+  
 import importlib
 import time
 import re
 from sys import argv
 from typing import Optional
 
-from Cutiepii_Robot import (
+from SaitamaRobot import (
     ALLOW_EXCL,
     CERT_PATH,
     DONATION_LINK,
@@ -19,17 +20,15 @@ from Cutiepii_Robot import (
     StartTime,
     telethn,
     updater,
-    pgram,
-    ubot
-)
+    pgram)
 
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
-from Cutiepii_Robot.modules import ALL_MODULES
-from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
-from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
-from Cutiepii_Robot.modules.helper_funcs.misc import paginate_modules
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from SaitamaRobot.modules import ALL_MODULES
+from SaitamaRobot.modules.helper_funcs.chat_status import is_user_admin
+from SaitamaRobot.modules.helper_funcs.alternate import typing_action
+from SaitamaRobot.modules.helper_funcs.misc import paginate_modules
+from SaitamaRobot.modules.disable import DisableAbleCommandHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.error import (
     BadRequest,
@@ -49,8 +48,6 @@ from telegram.ext import (
 from telegram.ext.dispatcher import DispatcherHandlerStop, run_async
 from telegram.utils.helpers import escape_markdown
 from pyrogram import Client, idle
-
-import Cutiepii_Robot.modules.sql.users_sql as sql
 
 
 def get_readable_time(seconds: int) -> str:
@@ -116,9 +113,9 @@ buttons = [
                              url="https://t.me/Black_Knights_Union")
                      ], 
     ]
+] 
 
                     
-
 HELP_STRINGS = """
 *Main* commands available:
  ➛ /help: PM's you this message.
@@ -143,7 +140,7 @@ CHAT_SETTINGS = {}
 USER_SETTINGS = {}
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module("Cutiepii_Robot.modules." + module_name)
+    imported_module = importlib.import_module("SaitamaRobot.modules." + module_name)
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
@@ -237,15 +234,17 @@ def start(update: Update, context: CallbackContext):
                     escape_markdown(first_name),
                     escape_markdown(uptime),
                     sql.num_users(),
-                    sql.num_chats()),            
+                    sql.num_chats()),                        
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
             )
     else:
-        update.effective_message.reply_photo(
-            CUTIEPII_IMG,
-            GROUP_START_TEXT.format(uptime),
+        update.effective_message.reply_text(
+            "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>".format(
+                uptime
+            ),
+            parse_mode=ParseMode.HTML,
         )
 
 
@@ -330,7 +329,7 @@ def help_button(update, context):
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
+                    [[InlineKeyboardButton(text="Back", callback_data="help_back")]]
                 ),
             )
 
@@ -340,7 +339,7 @@ def help_button(update, context):
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(curr_page - 1, HELPABLE, "[► Back ◄]")
+                    paginate_modules(curr_page - 1, HELPABLE, "help")
                 ),
             )
 
@@ -350,7 +349,7 @@ def help_button(update, context):
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(next_page + 1, HELPABLE, "[► Back ◄]")
+                    paginate_modules(next_page + 1, HELPABLE, "help")
                 ),
             )
 
@@ -359,7 +358,7 @@ def help_button(update, context):
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(0, HELPABLE, "[► Back ◄]")
+                    paginate_modules(0, HELPABLE, "help")
                 ),
             )
 
@@ -381,7 +380,7 @@ def cutiepii_callback_data(update, context):
             reply_markup=InlineKeyboardMarkup(
                 [
                  [
-                    InlineKeyboardButton(text="[► Back ◄]", callback_data="cutiepii_back")
+                    InlineKeyboardButton(text="Back", callback_data="cutiepii_back")
                  ]
                 ]
             ),
@@ -393,7 +392,7 @@ def cutiepii_callback_data(update, context):
                     escape_markdown(first_name),
                     escape_markdown(uptime),
                     sql.num_users(),
-                    sql.num_chats()),  
+                    sql.num_chats()),
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
@@ -416,7 +415,7 @@ def get_help(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                text="[► Help ◄]",
+                                text="Help",
                                 url="t.me/{}?start=ghelp_{}".format(
                                     context.bot.username, module
                                 ),
@@ -432,7 +431,7 @@ def get_help(update: Update, context: CallbackContext):
                 [
                     [
                         InlineKeyboardButton(
-                            text="[► Help ◄]",
+                            text="Help",
                             url="t.me/{}?start=help".format(context.bot.username),
                         )
                     ]
@@ -525,7 +524,7 @@ def settings_button(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                text="[► Back ◄]",
+                                text="Back",
                                 callback_data="stngs_back({})".format(chat_id),
                             )
                         ]
@@ -669,7 +668,6 @@ def migrate_chats(update: Update, context: CallbackContext):
     raise DispatcherHandlerStop
 
 
-def main():
 
     test_handler = CommandHandler("test", test, run_async=True)
     start_handler = DisableAbleCommandHandler("start", start, run_async=True)
@@ -715,7 +713,7 @@ def main():
         telethn.run_until_disconnected()
 
     updater.idle()
-    
+
 try:
     ubot.start()
 except BaseException:
@@ -723,8 +721,7 @@ except BaseException:
     sys.exit(1)
 
 if __name__ == '__main__':
-    LOGGER.info("[YUKI] Successfully loaded modules: " + str(ALL_MODULES))
+    LOGGER.info("Successfully loaded modules: " + str(ALL_MODULES))
     telethn.start(bot_token=TOKEN)
-    pgram.start()
-    main()
+    pbot.start()
     idle()
