@@ -19,7 +19,6 @@ Thank you for contributing with me in this Project:
 + [TheRealPhoenix](https://github.com/rsktg) : BASE
 + [DragSama](https://github.com/DragSama) : ANIME
 + [TsunayoshiSawada](https://github.com/TsunayoshiSawada) : BASE
-+ [Kittu](https://github.com/noob-kittu) : /START IMPROVE
 + [Pokurt](https://github.com/pokurt) : WHATANIME MODULE
 + [Pranav ⁪⁬⁮⁮⁮⁮Ajay](https://github.com/MoeZilla) : POKEDEX, CHATBOT API ETC
 + [Dank-del](https://github.com/Dank-del) : LEWD MODULE
