@@ -75,84 +75,65 @@ from multicolorcaptcha import CaptchaGenerator
 # do not async
 def send(update, message, keyboard, backup_message):
     chat = update.effective_chat
-    cleanserv = sql.clean_service(chat.id)
     reply = None
-    # Clean service welcome
-    if cleanserv:
-        try:
-            dispatcher.bot.delete_message(chat.id, update.message.message_id)
-        except BadRequest:
-            pass
-        reply = False
+
     try:
-        msg = update.effective_message.reply_text(
+        msg = update.effective_chat.send_message(
             message,
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=keyboard,
             reply_to_message_id=reply,
         )
     except BadRequest as excp:
-        if excp.message == "Button_url_invalid":
-            msg = update.effective_chat.send_message(
-                markdown_parser(
-                    (
-                        backup_message
-                        + "\nNote: the current message has an invalid url in one of its buttons. Please update."
-                    )
-                ),
-                parse_mode=ParseMode.MARKDOWN,
-                reply_to_message_id=reply,
-            )
-
-        elif excp.message == "Have no rights to send a message":
-            return
-        elif excp.message == "Replied message not found":
+        if excp.message == "Replied message not found":
             msg = update.effective_chat.send_message(
                 message,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=keyboard,
                 quote=False,
             )
-
+        elif excp.message == "Button_url_invalid":
+            msg = update.effective_chat.send_message(
+                markdown_parser(
+                    backup_message + "\nNote: the current message has an invalid url "
+                                     "in one of its buttons. Please update.",
+                ),
+                parse_mode=ParseMode.MARKDOWN,
+                reply_to_message_id=reply,
+            )
         elif excp.message == "Unsupported url protocol":
             msg = update.effective_chat.send_message(
                 markdown_parser(
-                    (
-                        backup_message
-                        + "\nNote: the current message has buttons which use url protocols that are unsupported by telegram. Please update."
-                    )
+                    backup_message + "\nNote: the current message has buttons which "
+                                     "use url protocols that are unsupported by "
+                                     "telegram. Please update.",
                 ),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
-
         elif excp.message == "Wrong url host":
             msg = update.effective_chat.send_message(
                 markdown_parser(
-                    (
-                        backup_message
-                        + "\nNote: the current message has some bad urls. Please update."
-                    )
+                    backup_message + "\nNote: the current message has some bad urls. "
+                                     "Please update.",
                 ),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
-
             LOGGER.warning(message)
             LOGGER.warning(keyboard)
             LOGGER.exception("Could not parse! got invalid url host errors")
+        elif excp.message == "Have no rights to send a message":
+            return
         else:
             msg = update.effective_chat.send_message(
                 markdown_parser(
-                    (
-                        backup_message
-                        + "\nNote: An error occured when sending the custom message. Please update."
-                    )
+                    backup_message + "\nNote: An error occured when sending the "
+                                     "custom message. Please update.",
                 ),
                 parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
-
             LOGGER.exception()
     return msg
 
