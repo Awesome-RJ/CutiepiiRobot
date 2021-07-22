@@ -458,7 +458,8 @@ def new_member(update: Update, context: CallbackContext):
                         120,
                         name="welcomemute",
                     )
-                 if welc_mutes == "captcha":
+                    
+            if welc_mutes == "captcha":
                 btn = []
                 # Captcha image size number (2 -> 640x360)
                 CAPCTHA_SIZE_NUM = 2
