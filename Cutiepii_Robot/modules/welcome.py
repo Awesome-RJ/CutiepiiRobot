@@ -76,7 +76,7 @@ from multicolorcaptcha import CaptchaGenerator
 def send(update, message, keyboard, backup_message):
     chat = update.effective_chat
     cleanserv = sql.clean_service(chat.id)
-    reply = update.message.message_id
+    reply = None
     # Clean service welcome
     if cleanserv:
         try:
@@ -93,7 +93,7 @@ def send(update, message, keyboard, backup_message):
         )
     except BadRequest as excp:
         if excp.message == "Button_url_invalid":
-            msg = update.effective_message.reply_text(
+            msg = update.effective_chat.send_message(
                 markdown_parser(
                     (
                         backup_message
@@ -106,8 +106,8 @@ def send(update, message, keyboard, backup_message):
 
         elif excp.message == "Have no rights to send a message":
             return
-        elif excp.message == "Reply message not found":
-            msg = update.effective_message.reply_text(
+        elif excp.message == "Replied message not found":
+            msg = update.effective_chat.send_message(
                 message,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=keyboard,
@@ -115,7 +115,7 @@ def send(update, message, keyboard, backup_message):
             )
 
         elif excp.message == "Unsupported url protocol":
-            msg = update.effective_message.reply_text(
+            msg = update.effective_chat.send_message(
                 markdown_parser(
                     (
                         backup_message
@@ -127,7 +127,7 @@ def send(update, message, keyboard, backup_message):
             )
 
         elif excp.message == "Wrong url host":
-            msg = update.effective_message.reply_text(
+            msg = update.effective_chat.send_message(
                 markdown_parser(
                     (
                         backup_message
@@ -142,7 +142,7 @@ def send(update, message, keyboard, backup_message):
             LOGGER.warning(keyboard)
             LOGGER.exception("Could not parse! got invalid url host errors")
         else:
-            msg = update.effective_message.reply_text(
+            msg = update.effective_chat.send_message(
                 markdown_parser(
                     (
                         backup_message
