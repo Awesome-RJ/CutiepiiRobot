@@ -1,4 +1,3 @@
-  
 import io
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn
@@ -10,7 +9,7 @@ from telethon.tl.types import *
 MUSIC_HELP = """
 **Hey 👋 Welcome back to Cutiepii
 ⚪️ Cutiepii can play music in your group's voice chat as well as channel voice chats
-⚪️ Assistant name >> @Group_Music_Pro\n\nClick next for instructions**
+⚪️ Assistant name >> @Awesome_Cutiepii\n\nClick next for instructions**
 """
 
 btn =[
