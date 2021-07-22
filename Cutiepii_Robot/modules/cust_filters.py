@@ -628,8 +628,8 @@ Cutiepii Can filter content of a given channel automatically
 2) Go back to your group
 
 *Commands*
- • `/add [Channel Username | Channel ID]`*:* Add given channel to autofiltering
- • `/del [Channel Username | Channel ID]`*:* Remove given channel from auto filtering
+ • `/add {Channel Username / Channel ID}`*:* Add given channel to autofiltering
+ • `/del {Channel Username / Channel ID}`*:* Remove given channel from auto filtering
  • `/delall`*:* Remove all channels from automatic filtering
  • `/autofiltersettings`*:* Show settings panel about auto filtering channels
 """
