@@ -372,6 +372,7 @@ def help_button(update, context):
 
 def cutiepii_callback_data(update, context):
     query = update.callback_query
+    uptime = get_readable_time((time.time() - StartTime))
     if query.data == "cutiepii_":
         query.message.edit_text(
             text="""CallBackQueriesData Here""",
