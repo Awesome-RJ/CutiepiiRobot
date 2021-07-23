@@ -4,7 +4,7 @@ import os
 import requests
 from pyrogram import filters
 
-from Cutiepii_Robot.utils.pluginhelper import edit_or_reply, get_text
+from Cutiepii_Robot.utils.pluginhelpers import edit_or_reply, get_text
 from Cutiepii_Robot.utils.pyrogram import pgram 
 
 
