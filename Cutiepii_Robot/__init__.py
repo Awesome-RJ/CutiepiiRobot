@@ -109,8 +109,9 @@ if ENV:
     APP_ID = os.environ.get("APP_ID", None)
     APP_HASH = os.environ.get("APP_HASH", None)
     GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN", None)
+    HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", True)
+    HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", True)
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True)
-    
 
     try:
         BL_CHATS = set(int(x) for x in os.environ.get("BL_CHATS", "").split())
