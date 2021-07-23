@@ -4,7 +4,7 @@ import requests
 from pyrogram import filters
 
 from Cutiepii_Robot.utils.pluginhelpers import edit_or_reply, get_text
-from Cutiepii_Robot.utils.pyrogram import pgram 
+from Cutiepii_Robot import pgram 
 
 
 @pgram.on_message(filters.command("paste") & ~filters.edited & ~filters.bot)
