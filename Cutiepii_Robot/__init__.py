@@ -236,7 +236,13 @@ print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient("CUTIEPII", API_ID, API_HASH)
 dispatcher = updater.dispatcher
 print("[CUTIEPII]: PYROGRAM CLIENT STARTING")
-pgram = Client("CUTIEPIIPyro", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN)
+session_name = TOKEN.split(":")[0]
+pgram = Client(
+    session_name,
+    api_id=API_ID,
+    api_hash=API_HASH,
+    bot_token=TOKEN,
+)
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
 mongodb = MongoClient(MONGO_URI, MONGO_PORT)[MONGO_DB]
 motor = motor_asyncio.AsyncIOMotorClient(MONGO_URI)
