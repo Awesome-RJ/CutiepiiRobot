@@ -7,7 +7,6 @@ emoji
 feedparser
 future
 geopy
-
 googletrans==4.0.0-rc1
 google-trans-new==1.1.9
 humanize
@@ -70,7 +69,6 @@ opencv-python-headless
 aiofiles
 uvloop
 python-dotenv
-
 gpytranslate
 glitch_this
 NumPy
@@ -82,4 +80,5 @@ ffmpeg
 multicolorcaptcha
 python-rapidjson
 heroku3
-ptbcontrib
+git+https://github.com/python-telegram-bot/ptbcontrib.git
+git+https://github.com/starry69/python-markdown2.git
