@@ -82,3 +82,4 @@ ffmpeg
 multicolorcaptcha
 python-rapidjson
 heroku3
+ptbcontrib
