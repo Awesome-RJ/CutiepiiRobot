@@ -7,7 +7,7 @@ emoji
 feedparser
 future
 geopy
-git+https://github.com/starry69/python-markdown2.git
+
 googletrans==4.0.0-rc1
 google-trans-new==1.1.9
 humanize
@@ -70,7 +70,7 @@ opencv-python-headless
 aiofiles
 uvloop
 python-dotenv
-git+https://github.com/python-telegram-bot/ptbcontrib.git
+
 gpytranslate
 glitch_this
 NumPy
