@@ -151,7 +151,7 @@ async def inline_query_handler(client, query):
             answerss = await inline_help_func(__HELP__)
             await client.answer_inline_query(query.id, results=answerss, cache_time=10)
             return
-        elif text.split()[0] == "alive":
+        if text.split()[0] == "alive":
             answerss = await alive_function(answers)
             await client.answer_inline_query(query.id, results=answerss, cache_time=10)
         elif text.split()[0] == "tr":
@@ -318,7 +318,7 @@ async def inline_query_handler(client, query):
             image = reddit.url
             link = reddit.postLink
             caption = f"""**Title:** `{title}`
-            Subreddit: `{sreddit}`"""
+                    Subreddit: `{sreddit}`"""
             results.append(
                 InlineQueryResultPhoto(
                     photo_url=image,
@@ -605,40 +605,40 @@ async def inline_query_handler(client, query):
             wiki = a.get("wiki")
 
             caption = f"""<b><u>Information Gathered Successfully</b></u>
-        <b>
-        Country Name:- {name}
-        Alternative Spellings:- {hu}
-        Country Area:- {area} square kilometers
-        Borders:- {borders}
-        Calling Codes:- {call}
-        Country's Capital:- {capital}
-        Country's currency:- {currencies}
-        Demonym:- {HmM}
-        Country Type:- {EsCoBaR}
-        ISO Names:- {iso}
-        Languages:- {lMAO}
-        Native Name:- {nonive}
-        population:- {waste}
-        Region:- {reg}
-        Sub Region:- {sub}
-        Time Zones:- {tom}
-        Top Level Domain:- {lanester}
-        wikipedia:- {wiki}</b>
-        Gathered By Daisy X.</b>
-        """
+                <b>
+                Country Name:- {name}
+                Alternative Spellings:- {hu}
+                Country Area:- {area} square kilometers
+                Borders:- {borders}
+                Calling Codes:- {call}
+                Country's Capital:- {capital}
+                Country's currency:- {currencies}
+                Demonym:- {HmM}
+                Country Type:- {EsCoBaR}
+                ISO Names:- {iso}
+                Languages:- {lMAO}
+                Native Name:- {nonive}
+                population:- {waste}
+                Region:- {reg}
+                Sub Region:- {sub}
+                Time Zones:- {tom}
+                Top Level Domain:- {lanester}
+                wikipedia:- {wiki}</b>
+                Gathered By Daisy X.</b>
+                """
             results.append(
                 InlineQueryResultArticle(
                     title=f"Infomation of {name}",
                     description=f"""
-        Country Name:- {name}
-        Alternative Spellings:- {hu}
-        Country Area:- {area} square kilometers
-        Borders:- {borders}
-        Calling Codes:- {call}
-        Country's Capital:- {capital}
+                Country Name:- {name}
+                Alternative Spellings:- {hu}
+                Country Area:- {area} square kilometers
+                Borders:- {borders}
+                Calling Codes:- {call}
+                Country's Capital:- {capital}
         
-        Touch for more info
-        """,
+                Touch for more info
+                """,
                     input_message_content=InputTextMessageContent(
                         caption, parse_mode="HTML", disable_web_page_preview=True
                     ),
@@ -766,16 +766,16 @@ async def inline_query_handler(client, query):
                 sun_rise_time = int(response_api["sys"]["sunrise"]) + country_time_zone
                 sun_set_time = int(response_api["sys"]["sunset"]) + country_time_zone
                 lol = """ 
-        WEATHER INFO GATHERED
-        Location: {}
-        Temperature ☀️: {}°С
-            minimium: {}°С
-            maximum : {}°С
-        Humidity 🌤**: {}%
-        Wind 💨: {}m/s
-        Clouds ☁️: {}hpa
-        Sunrise 🌤: {} {}
-        Sunset 🌝: {} {}""".format(
+                WEATHER INFO GATHERED
+                Location: {}
+                Temperature ☀️: {}°С
+                    minimium: {}°С
+                    maximum : {}°С
+                Humidity 🌤**: {}%
+                Wind 💨: {}m/s
+                Clouds ☁️: {}hpa
+                Sunrise 🌤: {} {}
+                Sunset 🌝: {} {}""".format(
                     input_str,
                     response_api["main"]["temp"],
                     response_api["main"]["temp_min"],
