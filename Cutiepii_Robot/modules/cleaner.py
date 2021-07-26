@@ -32,7 +32,7 @@ command_list = [
     "unignoreblue",
     "listblue",
     "ungignoreblue",
-    "gignoreblue" "start",
+    "gignoreblue", "start",
     "help",
     "settings",
     "donate",
