@@ -156,8 +156,8 @@ def button_markdown_parser(
         else:
             note_data += markdown_note[prev:to_check]
             prev = match.start(1) - 1
-    else:
-        note_data += markdown_note[prev:]
+        
+    note_data += markdown_note[prev:]
 
     return note_data, buttons
 
