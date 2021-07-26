@@ -100,7 +100,7 @@ if ENV:
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None)
     SPAMWATCH_SUPPORT_CHAT = os.environ.get("SPAMWATCH_SUPPORT_CHAT", None)
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API", None)
-    ARQ_API_URL =  "https://thearq.tech"
+    ARQ_API_URL = "https://thearq.tech"
     ARQ_API_KEY = "YIECCC-NAJARO-OLLREW-SJSRIP-ARQ"
     REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
     OPENWEATHERMAP_ID = os.environ.get("OPENWEATHERMAP_ID", "")
