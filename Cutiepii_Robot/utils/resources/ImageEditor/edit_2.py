@@ -43,13 +43,12 @@ async def circle_with_bg(client, message):
         print("circle_with_bg-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        else:
-            try:
-                await message.reply_to_message.reply_text(
-                    "Something went wrong!", quote=True
-                )
-            except Exception:
-                return
+        try:
+            await message.reply_to_message.reply_text(
+                "Something went wrong!", quote=True
+            )
+        except Exception:
+            return
 
 
 async def circle_without_bg(client, message):
@@ -89,13 +88,12 @@ async def circle_without_bg(client, message):
         print("circle_without_bg-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        else:
-            try:
-                await message.reply_to_message.reply_text(
-                    "Something went wrong!", quote=True
-                )
-            except Exception:
-                return
+        try:
+            await message.reply_to_message.reply_text(
+                "Something went wrong!", quote=True
+            )
+        except Exception:
+            return
 
 
 async def sticker(client, message):
@@ -126,13 +124,12 @@ async def sticker(client, message):
         print("sticker-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        else:
-            try:
-                await message.reply_to_message.reply_text(
-                    "Something went wrong!", quote=True
-                )
-            except Exception:
-                return
+        try:
+            await message.reply_to_message.reply_text(
+                "Something went wrong!", quote=True
+            )
+        except Exception:
+            return
 
 
 def add_corners(im, rad):
@@ -180,13 +177,12 @@ async def edge_curved(client, message):
         print("edge_curved-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        else:
-            try:
-                await message.reply_to_message.reply_text(
-                    "Something went wrong!", quote=True
-                )
-            except Exception:
-                return
+        try:
+            await message.reply_to_message.reply_text(
+                "Something went wrong!", quote=True
+            )
+        except Exception:
+            return
 
 
 async def contrast(client, message):
@@ -220,13 +216,12 @@ async def contrast(client, message):
         print("contrast-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        else:
-            try:
-                await message.reply_to_message.reply_text(
-                    "Something went wrong!", quote=True
-                )
-            except Exception:
-                return
+        try:
+            await message.reply_to_message.reply_text(
+                "Something went wrong!", quote=True
+            )
+        except Exception:
+            return
 
 
 def sepia(img):
@@ -282,13 +277,12 @@ async def sepia_mode(client, message):
         print("sepia_mode-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        else:
-            try:
-                await message.reply_to_message.reply_text(
-                    "Something went wrong!", quote=True
-                )
-            except Exception:
-                return
+        try:
+            await message.reply_to_message.reply_text(
+                "Something went wrong!", quote=True
+            )
+        except Exception:
+            return
 
 
 def dodgeV2(x, y):
@@ -329,13 +323,12 @@ async def pencil(client, message):
         print("pencil-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        else:
-            try:
-                await message.reply_to_message.reply_text(
-                    "Something went wrong!", quote=True
-                )
-            except Exception:
-                return
+        try:
+            await message.reply_to_message.reply_text(
+                "Something went wrong!", quote=True
+            )
+        except Exception:
+            return
 
 
 def color_quantization(img, k):
@@ -389,10 +382,9 @@ async def cartoon(client, message):
         print("cartoon-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
-        else:
-            try:
-                await message.reply_to_message.reply_text(
-                    "Something went wrong!", quote=True
-                )
-            except Exception:
-                return
+        try:
+            await message.reply_to_message.reply_text(
+                "Something went wrong!", quote=True
+            )
+        except Exception:
+            return

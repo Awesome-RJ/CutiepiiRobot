@@ -85,12 +85,10 @@ class DownloadJob:
 
                 self.completed = True
                 return self
-
-            else:
-                raise aiohttp.errors.HttpProcessingError(
-                    message=f"There was a problem processing {self.file_url}",
-                    code=resp.status,
-                )
+            raise aiohttp.errors.HttpProcessingError(
+                message=f"There was a problem processing {self.file_url}",
+                code=resp.status,
+            )
 
 
 class Handler:
