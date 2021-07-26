@@ -5,6 +5,7 @@ from telethon import types
 
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn as client
+from telethon.tl import functions
 
 
 async def is_register_admin(chat, user):
