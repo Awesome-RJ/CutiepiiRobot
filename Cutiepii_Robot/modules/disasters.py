@@ -319,10 +319,8 @@ def removesudo(update: Update, context: CallbackContext) -> str:
             log_message = "<b>{}:</b>\n".format(html.escape(chat.title)) + log_message
 
         return log_message
-
-    else:
-        message.reply_text("This user is not a Titan Shifter!")
-        return ""
+    message.reply_text("This user is not a Titan Shifter!")
+    return ""
 
 
 @sudo_plus
@@ -361,10 +359,8 @@ def removesupport(update: Update, context: CallbackContext) -> str:
             log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
         return log_message
-
-    else:
-        message.reply_text("This user is not a Royal Blood!")
-        return ""
+    message.reply_text("This user is not a Royal Blood!")
+    return ""
 
 
 @sudo_plus
@@ -403,9 +399,8 @@ def removewhitelist(update: Update, context: CallbackContext) -> str:
             log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
         return log_message
-    else:
-        message.reply_text("This user is not a Garrison!")
-        return ""
+    message.reply_text("This user is not a Garrison!")
+    return ""
 
 
 @sudo_plus
@@ -444,9 +439,8 @@ def removetiger(update: Update, context: CallbackContext) -> str:
             log_message = f"<b>{html.escape(chat.title)}:</b>\n" + log_message
 
         return log_message
-    else:
-        message.reply_text("This user is not a Scout!")
-        return ""
+    message.reply_text("This user is not a Scout!")
+    return ""
 
 
 @whitelist_plus

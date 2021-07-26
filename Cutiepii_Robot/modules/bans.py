@@ -277,9 +277,7 @@ def kick(update: Update, context: CallbackContext) -> str:
             log += f"\n<b>Reason:</b> {reason}"
 
         return log
-
-    else:
-        message.reply_text("Well damn, I can't kick that user.")
+    message.reply_text("Well damn, I can't kick that user.")
 
     return log_message
 
@@ -375,8 +373,7 @@ def selfunban(context: CallbackContext, update: Update) -> str:
         if excp.message == "User not found":
             message.reply_text("I can't seem to find this user.")
             return
-        else:
-            raise
+        raise
 
     if is_user_in_chat(chat, user.id):
         message.reply_text("Aren't you already in the chat??")

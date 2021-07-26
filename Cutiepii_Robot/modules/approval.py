@@ -37,8 +37,7 @@ def approval(update: Update, context: CallbackContext) -> str:
         if excp.message == "User not found":
             message.reply_text("I can't seem to find this user")
             return 
-        else:
-            raise
+        raise
     if user_id == context.bot.id:
         message.reply_text("How I supposed to approve myself")
         return 
@@ -84,8 +83,7 @@ def approve(update: Update, context: CallbackContext) -> str:
         if excp.message == "User not found":
             message.reply_text("I can't seem to find this user")
             return 
-        else:
-            raise
+        raise
     if user_id == context.bot.id:
         message.reply_text("How I supposed to approve myself")
         return 
@@ -132,8 +130,7 @@ def unapprove(update: Update, context: CallbackContext) -> str:
         if excp.message == "User not found":
             message.reply_text("I can't seem to find this user")
             return 
-        else:
-            raise
+        raise
     if user_id == context.bot.id:
         message.reply_text("how I supposed to approve or unapprove myself")
         return 
