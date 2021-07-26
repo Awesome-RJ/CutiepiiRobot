@@ -18,7 +18,7 @@ async def paste(client, message):
             return
         if not message.reply_to_message.text:
             file = await message.reply_to_message.download()
-            m_list = with(file, "r").read()
+            m_list = open(file, "r").read()
             message_s = m_list
             print(message_s)
             os.remove(file)
