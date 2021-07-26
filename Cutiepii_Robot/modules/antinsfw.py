@@ -1,6 +1,6 @@
 from os import remove
 from pyrogram import filters
-from Cutiepii_Robot import DRAGONS, arq, pgram as app
+from Cutiepii_Robot import arq, pgram as app
 from Cutiepii_Robot.utils.permissions import adminsOnly
 from Cutiepii_Robot.modules.mongo.nsfw_mongo import is_nsfw_on, nsfw_off, nsfw_on
 
@@ -50,7 +50,6 @@ async def get_file_id_from_message(message):
     group=8,
 )
 async def detect_nsfw(_, message):
-    user = message.from_user
     if not await is_nsfw_on(message.chat.id):
         return
     if not message.from_user:
@@ -68,8 +67,6 @@ async def detect_nsfw(_, message):
     results = results.result
     remove(file)
     nsfw = results.is_nsfw
-    if user.id in DRAGONS:
-        return
     if not nsfw:
         return
     try:
@@ -141,7 +138,7 @@ async def nsfw_scan_command(_, message):
 async def nsfw_enable_disable(_, message):
     if len(message.command) != 2:
         await message.reply_text(
-            "Usage: /antinsfw (on/off)"
+            "Usage: /antinsfw <on/off>"
         )
         return
     status = message.text.split(None, 1)[1].strip()
@@ -157,7 +154,7 @@ async def nsfw_enable_disable(_, message):
         await message.reply_text("Disabled AntiNSFW System.")
     else:
         await message.reply_text(
-            "Unknown Suffix, Use /antinsfw (on/off)"
+            "Unknown Suffix, Use /antinsfw <on/off>"
         )
 
 
