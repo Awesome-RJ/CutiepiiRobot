@@ -330,7 +330,7 @@ def capture_err(func):
                 ),
             )
             for x in error_feedback:
-                await pbot.send_message(SUPPORT_CHAT, x)
+                await pgram.send_message(SUPPORT_CHAT, x)
             raise err
 
     return capture
@@ -341,7 +341,7 @@ def capture_err(func):
 
 async def member_permissions(chat_id, user_id):
     perms = []
-    member = await pbot.get_chat_member(chat_id, user_id)
+    member = await pgram.get_chat_member(chat_id, user_id)
     if member.can_post_messages:
         perms.append("can_post_messages")
     if member.can_edit_messages:
@@ -363,7 +363,7 @@ async def member_permissions(chat_id, user_id):
 
 async def current_chat_permissions(chat_id):
     perms = []
-    perm = (await pbot.get_chat(chat_id)).permissions
+    perm = (await pgram.get_chat(chat_id)).permissions
     if perm.can_send_messages:
         perms.append("can_send_messages")
     if perm.can_send_media_messages:
