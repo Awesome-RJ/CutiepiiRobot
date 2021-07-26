@@ -35,7 +35,7 @@ def song(client, message):
         thumbnail = results[0]["thumbnails"][0]
         thumb_name = f'thumb{title}.jpg'
         thumb = requests.get(thumbnail, allow_redirects=True)
-        with(thumb_name, 'wb').write(thumb.content)
+        open(thumb_name, 'wb').write(thumb.content)
 
 
         duration = results[0]["duration"]
