@@ -19,10 +19,7 @@ INSERTION_LOCK = threading.RLock()
 def is_nsfw(chat_id):
     try:
         chat = SESSION.query(NSFWChats).get(str(chat_id))
-        if chat:
-            return True
-        else:
-            return False
+        return bool(chat)
     finally:
         SESSION.close()
 
