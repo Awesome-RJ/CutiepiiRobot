@@ -15,8 +15,7 @@ async def get_couple(chat_id: int, date: str):
     lovers = await _get_lovers(chat_id)
     if date in lovers:
         return lovers[date]
-    else:
-        return False
+    return False
 
 
 async def save_couple(chat_id: int, date: str, couple: dict):
