@@ -80,13 +80,13 @@ async def alive(event):
             reply += f"Time: {time}\n"
             reply += f"Checked By **{fname}**"
         elif "Test" in response.text:
-            reply = f"SK Key : sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
+            reply = "SK Key : sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
             reply += "Result: Test mode Key\n"
             reply += "RESPONSE: ❌Test Mode Key❌\n"
             reply += f"Time: {time}\n"
             reply += f"Checked By **{fname}**"
         elif "Valid" in response.text:
-            reply = f"SK Key : sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
+            reply = "SK Key : sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
             reply += "Result: LIVE\n"
             reply += "RESPONSE: ✅Valid Key\n"
             reply += f"Time: {time}\n"
