@@ -483,9 +483,8 @@ def fban_user(fed_id, user_id, first_name, last_name, user_name, reason, time):
     with FEDS_LOCK:
         r = SESSION.query(BansF).all()
         for I in r:
-            if I.fed_id == fed_id:
-                if int(I.user_id) == int(user_id):
-                    SESSION.delete(I)
+            if I.fed_id == fed_id and int(I.user_id) == int(user_id):
+                SESSION.delete(I)
 
         r = BansF(
             str(fed_id), str(user_id), first_name, last_name, user_name, reason, time,
@@ -523,9 +522,8 @@ def multi_fban_user(
             reason = multi_reason[x]
             r = SESSION.query(BansF).all()
             for I in r:
-                if I.fed_id == fed_id:
-                    if int(I.user_id) == int(user_id):
-                        SESSION.delete(I)
+                if I.fed_id == fed_id and int(I.user_id) == int(user_id):
+                    SESSION.delete(I)
 
             r = BansF(
                 str(fed_id),
@@ -560,9 +558,8 @@ def un_fban_user(fed_id, user_id):
     with FEDS_LOCK:
         r = SESSION.query(BansF).all()
         for I in r:
-            if I.fed_id == fed_id:
-                if int(I.user_id) == int(user_id):
-                    SESSION.delete(I)
+            if I.fed_id == fed_id and int(I.user_id) == int(user_id):
+                SESSION.delete(I)
         try:
             SESSION.commit()
         except:
@@ -582,10 +579,9 @@ def get_fban_user(fed_id, user_id):
         r = SESSION.query(BansF).all()
         reason = None
         for I in r:
-            if I.fed_id == fed_id:
-                if int(I.user_id) == int(user_id):
-                    reason = I.reason
-                    time = I.time
+            if I.fed_id == fed_id and int(I.user_id) == int(user_id):
+                reason = I.reason
+                time = I.time
         return True, reason, time
     return False, None, None
 

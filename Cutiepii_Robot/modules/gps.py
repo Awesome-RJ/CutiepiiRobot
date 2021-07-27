@@ -34,12 +34,14 @@ async def is_register_admin(chat, user):
 async def _(event):
     if event.fwd_from:
         return
-    if event.is_group:
-        if not await is_register_admin(event.input_chat, event.message.sender_id):
-            await event.reply(
-                "You are not Admin. So, You can't use this. Try in my inbox"
-            )
-            return
+    if (
+        event.is_group
+        and not await is_register_admin(event.input_chat, event.message.sender_id)
+    ):
+        await event.reply(
+            "You are not Admin. So, You can't use this. Try in my inbox"
+        )
+        return
 
     args = event.pattern_match.group(1)
 
