@@ -3,8 +3,10 @@ import os
 import sys
 import time
 import spamwatch
+import httpx
+import aiohttp
+
 from pyrogram import Client, errors
-import telegram.ext as tg
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from motor import motor_asyncio
@@ -13,7 +15,6 @@ from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 from redis import StrictRedis
 from Python_ARQ import ARQ
-import aiohttp
 from aiohttp import ClientSession
 from ptbcontrib.postgres_persistence import PostgresPersistence
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
@@ -257,6 +258,8 @@ arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
 ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
 print("[CUTIEPII]: Connecting To Yūki • Cutiepii Userbot (t.me/Awesome_Cutiepii)")
+timeout = httpx.Timeout(40, pool=None)
+http = httpx.AsyncClient(http2=True, timeout=timeout)
 
 async def get_entity(client, entity):
     entity_client = client
