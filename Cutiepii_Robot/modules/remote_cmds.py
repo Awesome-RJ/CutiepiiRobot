@@ -10,6 +10,7 @@ from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
 from telegram import Update, ChatPermissions
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler, run_async
+from Cutiepii_Robot import LOGGER
 
 RBAN_ERRORS = {
     "User is an administrator of the chat",
