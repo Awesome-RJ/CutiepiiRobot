@@ -13,11 +13,10 @@ from Cutiepii_Robot import pgram as cutiepii, BOT_ID, arq
 from coffeehouse.exception import CoffeeHouseError as CFError
 
 translator = google_translator()
-url = "https://kukichatbot.herokuapp.com/kuki/chatbot?message=hello"
+url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
 
-async def lunaQuery(query: str, user_id: int):
-    luna = await arq.luna(query, user_id)
-    return luna.result
+translator = google_translator()
+import requests
 
 
 def extract_emojis(s):
@@ -27,16 +26,16 @@ def extract_emojis(s):
 async def fetch(url):
     try:
         async with aiohttp.Timeout(10.0):
-            async with aiohttp.ClientSession() as session, session.get(url) as resp:
-                try:
-                    data = await resp.json()
-                except:
-                    data = await resp.text()
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as resp:
+                    try:
+                        data = await resp.json()
+                    except:
+                        data = await resp.text()
             return data
     except:
         print("AI response Timeout")
         return
-
 
 cutie_chats = []
 en_chats = []
@@ -87,7 +86,6 @@ async def hmm(_, message):
             "I only recognize `/chatbot on` and /chatbot `off only`"
         )
 
-
 @cutiepii.on_message(
     filters.text
     & filters.reply
@@ -114,15 +112,21 @@ async def hmm(client, message):
         message.continue_propagation()
     if chat_id in en_chats:
         test = msg
-        test = test.replace("cutie", "Aco")
-        test = test.replace("cutie", "Aco")
-        response = await lunaQuery(
-            test, message.from_user.id if message.from_user else 0
-        )
-        response = response.replace("Aco", "cutie")
-        response = response.replace("aco", "cutie")
+        test = test.replace("cutiepii", "sawera")
+        test = test.replace("cutiepii", "sawera")
+        URL = "https://kukichatbot.herokuapp.com/kuki/chatbot?message={text}"
 
-        pro = response
+        try:
+            r = requests.request("GET", url=URL)
+        except:
+            return
+
+        try:
+            result = r.json()
+        except:
+            return
+
+        pro = result["reply"]
         try:
             await cutiepii.send_chat_action(message.chat.id, "typing")
             await message.reply_text(pro)
@@ -160,32 +164,33 @@ async def hmm(client, message):
             # print (rm)
         try:
             lan = translator.detect(rm)
-            lan = lan.lang
         except:
             return
         test = rm
         if not "en" in lan and not lan == "":
             try:
-                test = translator.translate(test, dest="en")
-                test = test.text
+                test = translator.translate(test, lang_tgt="en")
             except:
                 return
         # test = emoji.demojize(test.strip())
 
-        test = test.replace("cutie", "Aco")
-        test = test.replace("cutie", "Aco")
-        response = await lunaQuery(
-            test, message.from_user.id if message.from_user else 0
-        )
-        response = response.replace("Aco", "cutie")
-        response = response.replace("aco", "cutie")
-        response = response.replace("Luna", "cutie")
-        response = response.replace("luna", "cutie")
-        pro = response
+        # Kang with the credits bitches @InukaASiTH
+        test = test.replace("cutiepii", "sawera)
+        test = test.replace("cutiepii", "sawera")
+        URL = f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={text}"
+        try:
+            r = requests.request("GET", url=URL)
+        except:
+            return
+
+        try:
+            result = r.json()
+        except:
+            return
+        pro = result["reply"]
         if not "en" in lan and not lan == "":
             try:
-                pro = translator.translate(pro, dest=lan)
-                pro = pro.text
+                pro = translator.translate(pro, lang_tgt=lan[0])
             except:
                 return
         try:
@@ -232,31 +237,34 @@ async def inuka(client, message):
         # print (rm)
     try:
         lan = translator.detect(rm)
-        lan = lan.lang
     except:
         return
     test = rm
     if not "en" in lan and not lan == "":
         try:
-            test = translator.translate(test, dest="en")
-            test = test.text
+            test = translator.translate(test, lang_tgt="en")
         except:
             return
 
     # test = emoji.demojize(test.strip())
 
     # Kang with the credits bitches @InukaASiTH
-    test = test.replace("cutie", "Aco")
-    test = test.replace("cutie", "Aco")
+    test = test.replace("cutiepii", "sawera")
+    test = test.replace("cutiepii", "sawera")
+    URL = f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={text}"
+    try:
+        r = requests.request("GET", url=URL)
+    except:
+        return
 
-    response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
-    response = response.replace("Aco", "cutie")
-    response = response.replace("aco", "cutie")
+    try:
+        result = r.json()
+    except:
+        return
 
-    pro = response
+    pro = result["reply"]
     if not "en" in lan and not lan == "":
-        pro = translator.translate(pro, dest=lan)
-        pro = pro.text
+        pro = translator.translate(pro, lang_tgt=lan[0])
     try:
         await cutiepii.send_chat_action(message.chat.id, "typing")
         await message.reply_text(pro)
@@ -265,7 +273,7 @@ async def inuka(client, message):
 
 
 @cutiepii.on_message(
-    filters.regex("cutie|cutie|cutiepii|cutiepii|cutiepii")
+    filters.regex("cutiepii|cutiepii|Cutiepii|Cutiepii|Cutiepii")
     & ~filters.bot
     & ~filters.via_bot
     & ~filters.forwarded
@@ -307,30 +315,34 @@ async def inuka(client, message):
         # print (rm)
     try:
         lan = translator.detect(rm)
-        lan = lan.lang
     except:
         return
     test = rm
     if not "en" in lan and not lan == "":
         try:
-            test = translator.translate(test, dest="en")
-            test = test.text
+            test = translator.translate(test, lang_tgt="en")
         except:
             return
 
     # test = emoji.demojize(test.strip())
 
-    test = test.replace("cutie", "Aco")
-    test = test.replace("cutie", "Aco")
-    response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
-    response = response.replace("Aco", "cutie")
-    response = response.replace("aco", "cutie")
+    # Kang with the credits bitches @InukaASiTH
+    test = test.replace("cutiepii", "sawera")
+    test = test.replace("cutiepii", "sawera")
+    URL = f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={text}"
+    try:
+        r = requests.request("GET", url=URL)
+    except:
+        return
 
-    pro = response
+    try:
+        result = r.json()
+    except:
+        return
+    pro = result["reply"]
     if not "en" in lan and not lan == "":
         try:
-            pro = translator.translate(pro, dest=lan)
-            pro = pro.text
+            pro = translator.translate(pro, lang_tgt=lan[0])
         except Exception:
             return
     try:
