@@ -3,7 +3,7 @@ from telegram import Message
 from telegram.ext import MessageFilter
 
 
-class CustomFilters(object):
+class CustomFilters:
     class _Supporters(MessageFilter):
         def filter(self, message: Message):
             return bool(message.from_user and message.from_user.id in DEMONS)
