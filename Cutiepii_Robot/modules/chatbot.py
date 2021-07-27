@@ -1,3 +1,5 @@
+
+import requests
 import re
 import emoji
 import re
@@ -12,11 +14,10 @@ from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
 from Cutiepii_Robot import pgram as cutiepii, BOT_ID, arq 
 from coffeehouse.exception import CoffeeHouseError as CFError
 
-translator = google_translator()
+
 url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
 
-translator = google_translator()
-import requests
+
 
 
 def extract_emojis(s):
@@ -162,43 +163,6 @@ async def hmm(client, message):
         else:
             rm = msg
             # print (rm)
-        try:
-            lan = translator.detect(rm)
-        except:
-            return
-        test = rm
-        if not "en" in lan and not lan == "":
-            try:
-                test = translator.translate(test, lang_tgt="en")
-            except:
-                return
-        # test = emoji.demojize(test.strip())
-
-        # Kang with the credits bitches @InukaASiTH
-        test = test.replace("cutiepii", "sawera")
-        test = test.replace("cutiepii", "sawera")
-        URL = f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={text}"
-        try:
-            r = requests.request("GET", url=URL)
-        except:
-            return
-
-        try:
-            result = r.json()
-        except:
-            return
-        pro = result["reply"]
-        if not "en" in lan and not lan == "":
-            try:
-                pro = translator.translate(pro, lang_tgt=lan[0])
-            except:
-                return
-        try:
-            await cutiepii.send_chat_action(message.chat.id, "typing")
-            await message.reply_text(pro)
-        except CFError:
-            return
-
 
 @cutiepii.on_message(
     filters.text & filters.private & ~filters.edited & filters.reply & ~filters.bot
@@ -239,12 +203,6 @@ async def inuka(client, message):
         lan = translator.detect(rm)
     except:
         return
-    test = rm
-    if not "en" in lan and not lan == "":
-        try:
-            test = translator.translate(test, lang_tgt="en")
-        except:
-            return
 
     # test = emoji.demojize(test.strip())
 
@@ -261,16 +219,6 @@ async def inuka(client, message):
         result = r.json()
     except:
         return
-
-    pro = result["reply"]
-    if not "en" in lan and not lan == "":
-        pro = translator.translate(pro, lang_tgt=lan[0])
-    try:
-        await cutiepii.send_chat_action(message.chat.id, "typing")
-        await message.reply_text(pro)
-    except CFError:
-        return
-
 
 @cutiepii.on_message(
     filters.regex("cutiepii|cutiepii|Cutiepii|Cutiepii|Cutiepii")
@@ -317,12 +265,6 @@ async def inuka(client, message):
         lan = translator.detect(rm)
     except:
         return
-    test = rm
-    if not "en" in lan and not lan == "":
-        try:
-            test = translator.translate(test, lang_tgt="en")
-        except:
-            return
 
     # test = emoji.demojize(test.strip())
 
@@ -339,17 +281,7 @@ async def inuka(client, message):
         result = r.json()
     except:
         return
-    pro = result["reply"]
-    if not "en" in lan and not lan == "":
-        try:
-            pro = translator.translate(pro, lang_tgt=lan[0])
-        except Exception:
-            return
-    try:
-        await cutiepii.send_chat_action(message.chat.id, "typing")
-        await message.reply_text(pro)
-    except CFError:
-        return
+
 
 
 __help__ = """
