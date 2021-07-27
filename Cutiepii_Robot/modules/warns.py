@@ -153,8 +153,9 @@ def button(update: Update, context: CallbackContext) -> str:
                 f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
             )
-        update.effective_message.edit_text(
-            "User already has no warns.", parse_mode=ParseMode.HTML)
+        else:
+            update.effective_message.edit_text(
+                "User already has no warns.", parse_mode=ParseMode.HTML)
 
     return ""
 
@@ -171,13 +172,16 @@ def warn_user(update: Update, context: CallbackContext) -> str:
     user_id, reason = extract_user_and_text(message, args)
     if message.text.startswith('/d') and message.reply_to_message:
         message.reply_to_message.delete()
+        return warn(chat, reason, warner, message)           
     if user_id:
         if message.reply_to_message and message.reply_to_message.from_user.id == user_id:
             return warn(message.reply_to_message.from_user, chat, reason,
                         message.reply_to_message, warner)
-        return warn(
-            chat.get_member(user_id).user, chat, reason, message, warner)
-    message.reply_text("That looks like an invalid User ID to me.")
+        else:
+            return warn(
+                chat.get_member(user_id).user, chat, reason, message, warner)
+    else:
+        message.reply_text("That looks like an invalid User ID to me.")
     return ""
 
 
@@ -200,7 +204,8 @@ def reset_warns(update: Update, context: CallbackContext) -> str:
                 f"#RESETWARNS\n"
                 f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"<b>User:</b> {mention_html(warned.id, warned.first_name)}")
-    message.reply_text("No user has been designated!")
+    else:
+        message.reply_text("No user has been designated!")
     return ""
 
 
@@ -330,14 +335,13 @@ def reply_filter(update: Update, context: CallbackContext) -> str:
     chat: Optional[Chat] = update.effective_chat
     message: Optional[Message] = update.effective_message
     user: Optional[User] = update.effective_user
-      
-      
+            
     chat_id = str(chat.id)[1:] 
     approve_list = list(REDIS.sunion(f'approve_list_{chat_id}'))
-    target_user = mention_html(user.id, user.first_name)
-    if target_user in approve_list:
+    is_user_approved = mention_html(user.id, user.first_name)
+   
+    if is_user_approved in approve_list:
         return
-
 
     if not user:  #Ignore channel
         return
@@ -405,7 +409,7 @@ def set_warn_strength(update: Update, context: CallbackContext):
                 f"Has enabled strong warns. Users will be seriously punched.(banned)"
             )
 
-        if args[0].lower() in ("off", "no"):
+        elif args[0].lower() in ("off", "no"):
             sql.set_warn_strength(chat.id, True)
             msg.reply_text(
                 "Too many warns will now result in a normal punch! Users will be able to join again after."
@@ -415,7 +419,9 @@ def set_warn_strength(update: Update, context: CallbackContext):
                 f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"Has disabled strong punches. I will use normal punch on users."
             )
-        msg.reply_text("I only understand on/yes/no/off!")
+
+        else:
+            msg.reply_text("I only understand on/yes/no/off!")
     else:
         limit, soft_warn = sql.get_warn_setting(chat.id)
         if soft_warn:
@@ -458,7 +464,6 @@ def __chat_settings__(chat_id, user_id):
 __help__ = """
  • `/warns <userhandle>`*:* get a user's number, and reason, of warns.
  • `/warnlist`*:* list of all current warning filters
-
 *Admins only:*
  • `/warn <userhandle>`*:* warn a user. After 3 warns, the user will be banned from the group. Can also be used as a reply.
  • `/dwarn <userhandle>`*:* warn a user and delete the message. After 3 warns, the user will be banned from the group. Can also be used as a reply.
