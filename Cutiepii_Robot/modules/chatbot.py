@@ -3,6 +3,8 @@ import emoji
 import re
 import aiohttp
 
+# from google_trans_new import google_translator
+from googletrans import Translator as google_translator
 from pyrogram import filters
 
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
@@ -10,8 +12,10 @@ from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
 from Cutiepii_Robot import pgram as cutiepii, BOT_ID, arq 
 from coffeehouse.exception import CoffeeHouseError as CFError
 
-url = "https://kukichatbot.herokuapp.com/kuki/chatbot?message={text}"
+translator = google_translator()
+url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
 
+translator = google_translator()
 import requests
 
 
@@ -155,6 +159,20 @@ async def hmm(client, message):
             rm = " ".join(filter(lambda x: x[0] != "/", u))
         elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
             rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
+        else:
+            rm = msg
+            # print (rm)
+        try:
+            lan = translator.detect(rm)
+        except:
+            return
+        test = rm
+        if not "en" in lan and not lan == "":
+            try:
+                test = translator.translate(test, lang_tgt="en")
+            except:
+                return
+        # test = emoji.demojize(test.strip())
 
         # Kang with the credits bitches @InukaASiTH
         test = test.replace("cutiepii", "sawera")
@@ -170,6 +188,16 @@ async def hmm(client, message):
         except:
             return
         pro = result["reply"]
+        if not "en" in lan and not lan == "":
+            try:
+                pro = translator.translate(pro, lang_tgt=lan[0])
+            except:
+                return
+        try:
+            await cutiepii.send_chat_action(message.chat.id, "typing")
+            await message.reply_text(pro)
+        except CFError:
+            return
 
 
 @cutiepii.on_message(
@@ -204,7 +232,19 @@ async def inuka(client, message):
         rm = " ".join(filter(lambda x: x[0] != "/", u))
     elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
         rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
-
+    else:
+        rm = msg
+        # print (rm)
+    try:
+        lan = translator.detect(rm)
+    except:
+        return
+    test = rm
+    if not "en" in lan and not lan == "":
+        try:
+            test = translator.translate(test, lang_tgt="en")
+        except:
+            return
 
     # test = emoji.demojize(test.strip())
 
@@ -223,6 +263,13 @@ async def inuka(client, message):
         return
 
     pro = result["reply"]
+    if not "en" in lan and not lan == "":
+        pro = translator.translate(pro, lang_tgt=lan[0])
+    try:
+        await cutiepii.send_chat_action(message.chat.id, "typing")
+        await message.reply_text(pro)
+    except CFError:
+        return
 
 
 @cutiepii.on_message(
@@ -263,8 +310,19 @@ async def inuka(client, message):
         rm = " ".join(filter(lambda x: x[0] != "/", u))
     elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
         rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
-
-
+    else:
+        rm = msg
+        # print (rm)
+    try:
+        lan = translator.detect(rm)
+    except:
+        return
+    test = rm
+    if not "en" in lan and not lan == "":
+        try:
+            test = translator.translate(test, lang_tgt="en")
+        except:
+            return
 
     # test = emoji.demojize(test.strip())
 
@@ -282,6 +340,16 @@ async def inuka(client, message):
     except:
         return
     pro = result["reply"]
+    if not "en" in lan and not lan == "":
+        try:
+            pro = translator.translate(pro, lang_tgt=lan[0])
+        except Exception:
+            return
+    try:
+        await cutiepii.send_chat_action(message.chat.id, "typing")
+        await message.reply_text(pro)
+    except CFError:
+        return
 
 
 __help__ = """
