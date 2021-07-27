@@ -35,9 +35,8 @@ async def send_to_transfersh_async(file):
     url = "https://transfer.sh/"
 
     with open(file, "rb") as f:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(url, data={str(file): f}) as response:
-                download_link = await response.text()
+        async with aiohttp.ClientSession() as session, session.post(url, data={str(file): f}) as response:
+            download_link = await response.text()
 
     print(
         "Link to download file(will be saved till {}):\n{}".format(
