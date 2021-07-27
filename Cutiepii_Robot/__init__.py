@@ -259,7 +259,7 @@ arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
 ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
 print("[CUTIEPII]: Connecting To Yūki • Cutiepii Userbot (t.me/Awesome_Cutiepii)")
-timeout = httpx.Timeout(40, pool=None)
+timeout = httpx.Timeout(40)
 http = httpx.AsyncClient(http2=True, timeout=timeout)
 
 async def get_entity(client, entity):
