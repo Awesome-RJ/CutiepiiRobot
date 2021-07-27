@@ -1,36 +1,76 @@
-import os
+import httpx
 import requests
 
-from pyrogram import filters
+from telegram import ParseMode, Update
+from telegram.ext import CallbackContext, run_async
 
-from Cutiepii_Robot.utils.pluginhelpers import edit_or_reply, get_text
-from Cutiepii_Robot import pgram 
+from Cutiepii_Robot import pbot, http, dispatcher
+from Cutiepii_Robot import dispatcher
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
+def paste(update: Update, context: CallbackContext):
+    args = context.args
+    message = update.effective_message
 
-@pgram.on_message(filters.command("paste") & ~filters.edited & ~filters.bot)
-async def paste(client, message):
-    pablo = await edit_or_reply(message, "`Please Wait.....`")
-    tex_t = get_text(message)
-    message_s = tex_t
-    if not tex_t:
-        if not message.reply_to_message:
-            await pablo.edit("`Reply To File / Give Me Text To Paste!`")
-            return
-        if not message.reply_to_message.text:
-            file = await message.reply_to_message.download()
-            m_list = open(file, "r").read()
-            message_s = m_list
-            print(message_s)
-            os.remove(file)
-        elif message.reply_to_message.text:
-            message_s = message.reply_to_message.text
+    if message.reply_to_message:
+        pasting = message.reply_to_message.text    
+    
+    elif len(args) >= 1:
+        pasting = message.text.split(None, 1)[1]
+
+    else:
+        message.reply_text("What am I supposed to do with this?")
+        return
+   
+    TIMEOUT = 3
     key = (
-        requests.post("https://nekobin.com/api/documents", json={"content": message_s})
+        requests.post("https://nekobin.com/", data=pasting, timeout=TIMEOUT)
         .json()
         .get("result")
         .get("key")
     )
+
     url = f"https://nekobin.com/{key}"
-    raw = f"https://nekobin.com/raw/{key}"
-    reply_text = f"Pasted Text To [NekoBin]({url}) And For Raw [Click Here]({raw})"
-    await pablo.edit(reply_text)
+
+    reply_text = f"Pasted to *Nekobin* : {url}"
+
+    message.reply_text(
+        reply_text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True,
+    )
+
+
+def hastebin(update: Update, context: CallbackContext):
+    bot = context.bot
+    args = context.args
+    msg = update.effective_message  
+    
+    if msg.reply_to_message:        
+        mean = msg.reply_to_message.text
+               
+    elif len(args) >= 1:
+        mean = msg.text.split(None, 1)[1]
+   
+    else:
+    	msg.reply_text("reply to any message or just do /paste <what you want to paste>")  
+    	return
+                                                                              
+    url = "https://hastebin.com/documents"
+    key = (
+        requests.post(url, data=mean.encode("UTF-8"))
+        .json()       
+        .get('key')
+    )
+    pasted = f"Pasted to HasteBin: https://hastebin.com/{key}"
+    msg.reply_text(pasted, disable_web_page_preview=True)
+    
+    
+    
+
+NEKO_BIN_HANDLER = DisableAbleCommandHandler("npaste", paste, run_async=True)
+HASTE_BIN_HANDLER = DisableAbleCommandHandler("paste", hastebin, run_async=True)
+
+dispatcher.add_handler(NEKO_BIN_HANDLER)
+dispatcher.add_handler(HASTE_BIN_HANDLER)
+
+__command_list__ = ["npaste", "hpaste"]
+__handlers__ = [HASTE_BIN_HANDLER]
