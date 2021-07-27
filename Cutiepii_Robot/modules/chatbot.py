@@ -175,7 +175,7 @@ async def hmm(client, message):
         # test = emoji.demojize(test.strip())
 
         # Kang with the credits bitches @InukaASiTH
-        test = test.replace("cutiepii", "sawera)
+        test = test.replace("cutiepii", "sawera")
         test = test.replace("cutiepii", "sawera")
         URL = f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={text}"
         try:
