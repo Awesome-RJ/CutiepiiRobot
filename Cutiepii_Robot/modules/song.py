@@ -17,7 +17,6 @@ try:
 except:
 	os.system("pip install pip install youtube-search-python")
 	from youtubesearchpython import SearchVideos 
-	pass
 
 #@register(pattern="^/song (.*)")
 async def download_video(v_url):
