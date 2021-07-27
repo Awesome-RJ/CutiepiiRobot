@@ -178,8 +178,7 @@ def warn_user(update: Update, context: CallbackContext) -> str:
                         message.reply_to_message, warner)
         return warn(
             chat.get_member(user_id).user, chat, reason, message, warner)
-    else:
-        message.reply_text("That looks like an invalid User ID to me.")
+    message.reply_text("That looks like an invalid User ID to me.")
     return ""
 
 
