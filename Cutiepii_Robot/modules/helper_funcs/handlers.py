@@ -76,9 +76,8 @@ class CustomCommandHandler(CommandHandler):
             except:
                 user_id = None
 
-            if user_id:
-                if sql.is_user_blacklisted(user_id):
-                    return False
+            if user_id and sql.is_user_blacklisted(user_id):
+                return False
 
             if message.text and len(message.text) > 1:
                 fst_word = message.text.split(None, 1)[0]

@@ -32,10 +32,12 @@ async def is_register_admin(chat, user):
 
 @register(pattern=r"^/phone (.*)")
 async def phone(event):
-    if event.is_group:
-        if not await is_register_admin(event.input_chat, event.message.sender_id):
-            await event.reply("☎️ You are not admin 🚶‍♀️")
-            return
+    if (
+        event.is_group
+        and not await is_register_admin(event.input_chat, event.message.sender_id)
+    ):
+        await event.reply("☎️ You are not admin 🚶‍♀️")
+        return
     information = event.pattern_match.group(1)
     number = information
     key = "fe65b94e78fc2e3234c1c6ed1b771abd"
