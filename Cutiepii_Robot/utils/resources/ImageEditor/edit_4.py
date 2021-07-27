@@ -303,7 +303,7 @@ async def removebg_white(client, message):
                     "https://api.remove.bg/v1.0/removebg",
                     files={"image_file": open(download_location, "rb")},
                     data={"size": "auto"},
-                    headers={"X-Api-Key": Config.REM_BG_API_KEY},
+                    headers={"X-Api-Key": REM_BG_API_KEY},
                 )
                 if response.status_code == 200:
                     with open(f"{edit_img_loc}", "wb") as out:
