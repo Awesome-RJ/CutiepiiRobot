@@ -4,14 +4,15 @@ import re
 import aiohttp
 
 from pyrogram import filters
-
+from google_trans_new import google_translator
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
 from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
 from Cutiepii_Robot import pgram as cutiepii, BOT_ID, arq 
 from coffeehouse.exception import CoffeeHouseError as CFError
 
-url = "https://kukichatbot.herokuapp.com/kuki/chatbot?message={text}"
+url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
 
+translator = google_translator()
 import requests
 
 
