@@ -1,14 +1,15 @@
 import html
 import random
 import time
-from pathlib import Path
 import glob
 import requests as r
 import urllib.request
-
+import os
 import Cutiepii_Robot.modules.fun_strings as fun_strings
-from Cutiepii_Robot import dispatcher
-from Cutiepii_Robot import DEMONS, DRAGONS
+
+from pyrogram import filters
+from pathlib import Path
+from Cutiepii_Robot import DEMONS, DRAGONS, bot, dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
@@ -19,6 +20,29 @@ from telegram.ext import CallbackContext, run_async
 GIF_ID = "CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE"
 
 
+@bot.on_message(filters.command('meme'))
+def meme(_,message):
+	r = requests.get('https://nksamamemeapi.pythonanywhere.com').json()
+	pic = r['image']
+	title = r['title']
+	bot.send_photo(message.chat.id , pic , caption=title)
+
+    
+@bot.on_message(filters.command('hmeme') & filters.private)
+def hmeme(_,message):
+	r = requests.get('https://nksamamemeapi.pythonanywhere.com/get/hentaimemes').json()
+	pic = r['image']
+	title = r['title']
+	bot.send_photo(message.chat.id , pic , caption=title)
+
+    
+@bot.on_message(filters.command('anifact'))
+def anifact(_,message):
+	res = requests.get('https://nksamamemeapi.pythonanywhere.com/anifact')
+	fact = res.get('fact')
+	message.reply_text(f'<b>{fact}</b>' , parse_mode='html')
+
+    
 def runs(update: Update, context: CallbackContext):
     temp = random.choice(fun_strings.RUN_STRINGS)
     if update.effective_user.id == 1170714920:
