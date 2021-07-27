@@ -82,3 +82,4 @@ python-rapidjson
 heroku3
 git+https://github.com/python-telegram-bot/ptbcontrib.git
 git+https://github.com/starry69/python-markdown2.git
+coffeehouse
