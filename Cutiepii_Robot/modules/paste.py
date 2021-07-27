@@ -4,7 +4,7 @@ import requests
 from telegram import ParseMode, Update
 from telegram.ext import CallbackContext, run_async
 
-from Cutiepii_Robot import pbot, http, dispatcher
+from Cutiepii_Robot import pgram, http, dispatcher
 from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
