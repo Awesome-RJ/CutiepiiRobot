@@ -4,9 +4,10 @@ import time
 import re
 from sys import argv
 import sys
-from typing import Optional
-
 import Cutiepii_Robot.modules.sql.users_sql as sql
+import traceback
+
+from typing import Optional
 from Cutiepii_Robot import (
     ALLOW_EXCL,
     CERT_PATH,
