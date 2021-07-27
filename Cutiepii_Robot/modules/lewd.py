@@ -2,10 +2,12 @@ import os
 import html
 import nekos
 import requests
+import Cutiepii_Robot.modules.sql.nsfw_sql as sql
+
+from time import sleep
 from PIL import Image
 from telegram import ParseMode
 from Cutiepii_Robot import dispatcher, updater
-import Cutiepii_Robot.modules.sql.nsfw_sql as sql
 from Cutiepii_Robot.modules.log_channel import gloggable
 from telegram import Message, Chat, Update, Bot, MessageEntity
 from telegram.error import BadRequest, RetryAfter, Unauthorized
