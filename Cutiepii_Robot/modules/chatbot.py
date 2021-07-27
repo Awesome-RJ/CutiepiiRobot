@@ -114,7 +114,7 @@ async def hmm(client, message):
         Kuki = await fetch(f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={kukitext}")
         pro = Kuki["reply"]        
     except Exception as e:
-        await m.edit(str(e))
+        await message.edit(str(e))
         return
     try:
         await cutiepii.send_chat_action(message.chat.id, "typing")
@@ -149,7 +149,7 @@ async def inuka(client, message):
         Kuki = await fetch(f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={kukitext}")
         pro = Kuki["reply"]        
     except Exception as e:
-        await m.edit(str(e))
+        await message.edit(str(e))
         return
     try:
         await cutiepii.send_chat_action(message.chat.id, "typing")
@@ -191,7 +191,7 @@ async def inuka(client, message):
         Kuki = await fetch(f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={kukitext}")
         pro = Kuki["reply"]        
     except Exception as e:
-        await m.edit(str(e))
+        await message.edit(str(e))
         return
     try:
         await cutiepii.send_chat_action(message.chat.id, "typing")
