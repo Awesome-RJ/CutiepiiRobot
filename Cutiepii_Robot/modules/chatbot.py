@@ -1,12 +1,8 @@
-
-import requests
 import re
 import emoji
 import re
 import aiohttp
 
-# from google_trans_new import google_translator
-from googletrans import Translator as google_translator
 from pyrogram import filters
 
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
@@ -14,10 +10,9 @@ from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
 from Cutiepii_Robot import pgram as cutiepii, BOT_ID, arq 
 from coffeehouse.exception import CoffeeHouseError as CFError
 
+url = "https://kukichatbot.herokuapp.com/kuki/chatbot?message={text}"
 
-url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
-
-
+import requests
 
 
 def extract_emojis(s):
@@ -160,9 +155,22 @@ async def hmm(client, message):
             rm = " ".join(filter(lambda x: x[0] != "/", u))
         elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
             rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
-        else:
-            rm = msg
-            # print (rm)
+
+        # Kang with the credits bitches @InukaASiTH
+        test = test.replace("cutiepii", "sawera")
+        test = test.replace("cutiepii", "sawera")
+        URL = f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={text}"
+        try:
+            r = requests.request("GET", url=URL)
+        except:
+            return
+
+        try:
+            result = r.json()
+        except:
+            return
+        pro = result["reply"]
+
 
 @cutiepii.on_message(
     filters.text & filters.private & ~filters.edited & filters.reply & ~filters.bot
@@ -196,13 +204,7 @@ async def inuka(client, message):
         rm = " ".join(filter(lambda x: x[0] != "/", u))
     elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
         rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
-    else:
-        rm = msg
-        # print (rm)
-    try:
-        lan = translator.detect(rm)
-    except:
-        return
+
 
     # test = emoji.demojize(test.strip())
 
@@ -219,6 +221,9 @@ async def inuka(client, message):
         result = r.json()
     except:
         return
+
+    pro = result["reply"]
+
 
 @cutiepii.on_message(
     filters.regex("cutiepii|cutiepii|Cutiepii|Cutiepii|Cutiepii")
@@ -258,13 +263,8 @@ async def inuka(client, message):
         rm = " ".join(filter(lambda x: x[0] != "/", u))
     elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
         rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
-    else:
-        rm = msg
-        # print (rm)
-    try:
-        lan = translator.detect(rm)
-    except:
-        return
+
+
 
     # test = emoji.demojize(test.strip())
 
@@ -281,7 +281,7 @@ async def inuka(client, message):
         result = r.json()
     except:
         return
-
+    pro = result["reply"]
 
 
 __help__ = """
