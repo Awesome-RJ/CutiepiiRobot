@@ -8,7 +8,7 @@ import io
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import CallbackContext, CommandHandler
-from SaitamaRobot import dispatcher, DEV_USERS, OWNER_ID
+from Cutiepii_Robot import dispatcher, DEV_USERS, ERROR_LOGS
 
 pretty_errors.mono()
 
@@ -76,23 +76,23 @@ def error_callback(update: Update, context: CallbackContext):
         tb,
     )
     key = requests.post(
-        "https://hastebin.com/documents", data=pretty_message,
+        "https://hastebin.com/documents", data=pretty_message.encode("UTF-8"),
     ).json()
     e = html.escape(f"{context.error}")
     if not key.get('key'):
         with open("error.txt", "w+") as f:
             f.write(pretty_message)
         context.bot.send_document(
-            OWNER_ID,
+            ERROR_LOGS,
                 open("error.txt", "rb"),
                 caption=f"#{context.error.identifier}\n<b>An unknown error occured:</b>\n<code>{e}</code>",
                 parse_mode="html",
         )
         return
     key = key.get('key')
-    url = f"https://hastebin.com/{key}.py"
+    url = f"https://hastebin.com/{key}"
     context.bot.send_message(
-        OWNER_ID,
+        ERROR_LOGS,
             text=f"#{context.error.identifier}\n<b>An unknown error occured:</b>\n<code>{e}</code>",
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("HasteBin", url=url)]],
