@@ -113,6 +113,7 @@ if ENV:
     GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN", None)
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", True)
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", True)
+    ERROR_LOGS = os.environ.get("ERROR_LOGS", None)
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True)
 
     try:
