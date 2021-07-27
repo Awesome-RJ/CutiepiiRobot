@@ -13,7 +13,7 @@ from Cutiepii_Robot import pgram as cutiepii, BOT_ID, arq
 from coffeehouse.exception import CoffeeHouseError as CFError
 
 translator = google_translator()
-url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
+url = "https://kukichatbot.herokuapp.com/kuki/chatbot?message=hello"
 
 async def lunaQuery(query: str, user_id: int):
     luna = await arq.luna(query, user_id)
