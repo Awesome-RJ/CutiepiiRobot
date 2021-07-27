@@ -325,11 +325,10 @@ async def shortify(url):
     }
     payload = {"long_url": f"{url}"}
     payload = json.dumps(payload)
-    async with aiohttp.ClientSession() as session:
-        async with session.post(
-            "https://api-ssl.bitly.com/v4/shorten", headers=header, data=payload
-        ) as resp:
-            data = await resp.json()
+    async with aiohttp.ClientSession() as session, session.post(
+        "https://api-ssl.bitly.com/v4/shorten", headers=header, data=payload
+    ) as resp:
+        data = await resp.json()
     msg = data["link"]
     a = []
     b = InlineQueryResultArticle(

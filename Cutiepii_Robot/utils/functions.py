@@ -93,16 +93,14 @@ def test_speedtest():
 
 
 async def file_size_from_url(url: str) -> int:
-    async with aiohttp.ClientSession() as session:
-        async with session.head(url) as resp:
-            size = int(resp.headers["content-length"])
+    async with aiohttp.ClientSession() as session, session.head(url) as resp:
+        size = int(resp.headers["content-length"])
     return size
 
 
 async def get_http_status_code(url: str) -> int:
-    async with aiohttp.ClientSession() as session:
-        async with session.head(url) as resp:
-            return resp.status
+    async with aiohttp.ClientSession() as session, session.head(url) as resp:
+        return resp.status
 
 
 async def make_carbon(code):
@@ -114,9 +112,8 @@ async def make_carbon(code):
 async def transfer_sh(file):
     async with aiofiles.open(file, "rb") as f:
         params = {file: await f.read()}
-    async with aiohttp.ClientSession() as session:
-        async with session.post("https://transfer.sh/", data=params) as resp:
-            download_link = str(await resp.text()).strip()
+    async with aiohttp.ClientSession() as session, session.post("https://transfer.sh/", data=params) as resp:
+        download_link = str(await resp.text()).strip()
     return download_link
 
 

@@ -51,9 +51,8 @@ async def send_to_tmp_async(file):
     url = "https://tmp.ninja/api.php?d=upload-tool"
 
     with open(file, "rb") as f:
-        async with aiohttp.ClientSession() as session:
-            async with session.post(url, data={"file": f}) as response:
-                download_link = await response.text()
+        async with aiohttp.ClientSession() as session, session.post(url, data={"file": f}) as response:
+            download_link = await response.text()
 
     return download_link
 
