@@ -1,6 +1,4 @@
-import json
-import time
-import os
+import json, time, os
 from io import BytesIO
 
 from telegram import ParseMode, Message
@@ -13,15 +11,15 @@ from Cutiepii_Robot.__main__ import DATA_IMPORT
 from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 
-# from Cutiepii_Robot.modules.rules import get_rules
+from Cutiepii_Robot.modules.rules import get_rules
 import Cutiepii_Robot.modules.sql.rules_sql as rulessql
 
-# from Cutiepii_Robot.modules.sql import warns_sql as warnssql
+from Cutiepii_Robot.modules.sql import warns_sql as warnssql
 import Cutiepii_Robot.modules.sql.blacklist_sql as blacklistsql
 from Cutiepii_Robot.modules.sql import disable_sql as disabledsql
 
-# from Cutiepii_Robot.modules.sql import cust_filters_sql as filtersql
-# import Cutiepii_Robot.modules.sql.welcome_sql as welcsql
+from Cutiepii_Robot.modules.sql import cust_filters_sql as filtersql
+import Cutiepii_Robot.modules.sql.welcome_sql as welcsql
 import Cutiepii_Robot.modules.sql.locks_sql as locksql
 from Cutiepii_Robot.modules.connection import connected
 
@@ -140,7 +138,7 @@ def export_data(update, context):
             return ""
         chat = update.effective_chat
         chat_id = update.effective_chat.id
-        # chat_name = update.effective_message.chat.title
+        chat_name = update.effective_message.chat.title
 
     jam = time.time()
     new_jam = jam + 10800
@@ -157,15 +155,16 @@ def export_data(update, context):
                 parse_mode=ParseMode.MARKDOWN,
             )
             return
-        if user.id != OWNER_ID:
-            put_chat(chat_id, new_jam, chat_data)
+        else:
+            if user.id != OWNER_ID:
+                put_chat(chat_id, new_jam, chat_data)
     else:
         if user.id != OWNER_ID:
             put_chat(chat_id, new_jam, chat_data)
 
     note_list = sql.get_all_chat_notes(chat_id)
     backup = {}
-    # button = ""
+    button = ""
     buttonlist = []
     namacat = ""
     isicat = ""
@@ -175,11 +174,11 @@ def export_data(update, context):
     # Notes
     for note in note_list:
         count += 1
-        # getnote = sql.get_note(chat_id, note.name)
+        getnote = sql.get_note(chat_id, note.name)
         namacat += "{}<###splitter###>".format(note.name)
         if note.msgtype == 1:
             tombol = sql.get_buttons(chat_id, note.name)
-            # keyb = []
+            keyb = []
             for btn in tombol:
                 countbtn += 1
                 if btn.same_line:
@@ -234,41 +233,41 @@ def export_data(update, context):
     bl = list(blacklistsql.get_chat_blacklist(chat_id))
     # Disabled command
     disabledcmd = list(disabledsql.get_all_disabled(chat_id))
-    # Filters (TODO)
+    # Filters
     """
-	all_filters = list(filtersql.get_chat_triggers(chat_id))
-	export_filters = {}
-	for filters in all_filters:
-		filt = filtersql.get_filter(chat_id, filters)
-		# print(vars(filt))
-		if filt.is_sticker:
-			tipefilt = "sticker"
-		elif filt.is_document:
-			tipefilt = "doc"
-		elif filt.is_image:
-			tipefilt = "img"
-		elif filt.is_audio:
-			tipefilt = "audio"
-		elif filt.is_voice:
-			tipefilt = "voice"
-		elif filt.is_video:
-			tipefilt = "video"
-		elif filt.has_buttons:
-			tipefilt = "button"
-			buttons = filtersql.get_buttons(chat.id, filt.keyword)
-			print(vars(buttons))
-		elif filt.has_markdown:
-			tipefilt = "text"
-		if tipefilt == "button":
-			content = "{}#=#{}|btn|{}".format(tipefilt, filt.reply, buttons)
-		else:
-			content = "{}#=#{}".format(tipefilt, filt.reply)
-		print(content)
-		export_filters[filters] = content
-	print(export_filters)
-	"""
+     all_filters = list(filtersql.get_chat_triggers(chat_id))
+     export_filters = {}
+     for filters in all_filters:
+    	filt = filtersql.get_filter(chat_id, filters)
+    	if filt.is_sticker:
+    		typefilt = "sticker"
+    	elif filt.is_document:
+    		typefilt = "document"
+    	elif filt.is_image:
+    		typefilt = "image"
+    	elif filt.is_audio:
+    		typefilt = "audio"
+    	elif filt.is_video:
+    		typefilt = "video"
+    	elif filt.is_voice:
+    		typefilt = "voice"
+    	elif filt.has_buttons:
+    		typefilt = "buttons"
+    		buttons = filtersql.get_buttons(chat_id, filt.keyword)
+    	elif filt.has_markdown:
+    		typefilt = "text"
+    	if typefilt == "buttons":
+    		content = "{}#=#{}|btn|{}".format(typefilt, filt.reply, buttons)
+    	else:
+    		content = "{}#=#{}".format(typefilt, filt.reply)
+    		print(content)
+    		export_filters[filters] = content
+    #print(export_filters)
+              
+    """
+
     # Welcome (TODO)
-    # welc = welcsql.get_welc_pref(chat_id)
+    #welc = welcsql.get_welc_pref(chat_id)
     # Locked
     curr_locks = locksql.get_locks(chat_id)
     curr_restr = locksql.get_restr(chat_id)
@@ -322,11 +321,11 @@ def export_data(update, context):
             "extra": notes,
             "blacklist": bl,
             "disabled": disabledcmd,
-            "locks": locks,
+            "locks": locks,            
         },
     }
     baccinfo = json.dumps(backup, indent=4)
-    with open("Cutiepii_Robot{}.backup".format(chat_id), "w") as f:
+    with open("FoundingTitanRobot{}Backup".format(chat_id), "w") as f:
         f.write(str(baccinfo))
     context.bot.sendChatAction(current_chat_id, "upload_document")
     tgl = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime(time.time()))
@@ -342,7 +341,7 @@ def export_data(update, context):
         pass
     context.bot.sendDocument(
         current_chat_id,
-        document=open("Cutiepii_Robot{}.backup".format(chat_id), "rb"),
+        document=open("FoundingTitanRobot{}Backup".format(chat_id), "rb"),
         caption="*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `FoundingTitanRobot-Backup` was specially made for notes.".format(
             chat.title, chat_id, tgl,
         ),
@@ -350,18 +349,18 @@ def export_data(update, context):
         reply_to_message_id=msg.message_id,
         parse_mode=ParseMode.MARKDOWN,
     )
-    os.remove("Cutiepii_Robot{}.backup".format(chat_id))  # Cleaning file
+    os.remove("FoundingTitanRobot{}Backup".format(chat_id))  # Cleaning file
 
 
 # Temporary data
 def put_chat(chat_id, value, chat_data):
-    # print(chat_data)
+    print(chat_data)
     status = value is not False
     chat_data[chat_id] = {"backups": {"status": status, "value": value}}
 
 
 def get_chat(chat_id, chat_data):
-    # print(chat_data)
+    print(chat_data)
     try:
         return chat_data[chat_id]["backups"]
     except KeyError:
@@ -372,12 +371,9 @@ __mod_name__ = "Backups"
 
 __help__ = """
 *Only for group owner:*
-
  • /import: Reply to the backup file for the butler / emilia group to import as much as possible, making transfers very easy! \
  Note that files / photos cannot be imported due to telegram restrictions.
-
  • /export: Export group data, which will be exported are: rules, notes (documents, images, music, video, audio, voice, text, text buttons) \
-
 """
 
 IMPORT_HANDLER = CommandHandler("import", import_data, run_async=True)
