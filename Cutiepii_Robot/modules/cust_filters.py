@@ -386,7 +386,6 @@ def reply_filter(update, context):
                             except BadRequest as excp:
                                 LOGGER.exception("Failed to send message: " +
                                                  excp.message)
-                                pass
                 else:
                     if ENUM_FUNC_MAP[filt.file_type] == dispatcher.bot.send_sticker:
                         ENUM_FUNC_MAP[filt.file_type](
@@ -442,7 +441,6 @@ def reply_filter(update, context):
                         except BadRequest as excp:
                             LOGGER.exception("Error in filters: " +
                                              excp.message)
-                            pass
                     elif excp.message == "Reply message not found":
                         try:
                             context.bot.send_message(
@@ -455,7 +453,6 @@ def reply_filter(update, context):
                         except BadRequest as excp:
                             LOGGER.exception("Error in filters: " +
                                              excp.message)
-                            pass
                     else:
                         try:
                             send_message(
@@ -465,7 +462,6 @@ def reply_filter(update, context):
                         except BadRequest as excp:
                             LOGGER.exception("Error in filters: " +
                                              excp.message)
-                            pass
                         LOGGER.warning("Message %s could not be parsed",
                                        str(filt.reply))
                         LOGGER.exception(
@@ -480,7 +476,6 @@ def reply_filter(update, context):
                     send_message(update.effective_message, filt.reply)
                 except BadRequest as excp:
                     LOGGER.exception("Error in filters: " + excp.message)
-                    pass
             break
 
 
