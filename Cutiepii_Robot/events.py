@@ -4,7 +4,7 @@ from Cutiepii_Robot import telethn
 
 def register(**args):
     """ Registers a new message. """
-    pattern = args.get('pattern', None)
+    pattern = args.get('pattern')
 
     r_pattern = r'^[/!]'
 
@@ -40,7 +40,7 @@ def userupdate(**args):
 
 def inlinequery(**args):
     """ Registers inline query. """
-    pattern = args.get('pattern', None)
+    pattern = args.get('pattern')
 
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
