@@ -9,7 +9,7 @@ import Cutiepii_Robot.modules.fun_strings as fun_strings
 
 from pyrogram import filters
 from pathlib import Path
-from Cutiepii_Robot import DEMONS, DRAGONS, bot, dispatcher
+from Cutiepii_Robot import DEMONS, DRAGONS, pgram as bot, dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
