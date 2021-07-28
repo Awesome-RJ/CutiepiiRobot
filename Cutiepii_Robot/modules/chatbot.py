@@ -1,6 +1,5 @@
 import re
 import emoji
-import re
 import aiohttp
 
 # from google_trans_new import google_translator
@@ -9,7 +8,7 @@ from pyrogram import filters
 
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
 from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
-from Cutiepii_Robot import pgram as cutiepii, BOT_ID, arq 
+from Cutiepii_Robot import pgram as cutiepii, BOT_ID, BOT_USERNAME, arq 
 
 translator = google_translator()
 url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
@@ -43,7 +42,7 @@ en_chats = []
 
 
 @cutiepii.on_message(
-    filters.command("chatbot") & ~filters.edited & ~filters.bot & ~filters.private
+    filters.command(["chatbot", f"chatbot@{BOT_USERNAME}"]) & ~filters.edited & ~filters.bot & ~filters.private
 )
 @admins_only
 async def hmm(_, message):
@@ -121,6 +120,8 @@ async def hmm(client, message):
         )
         response = response.replace("Aco", "cutie")
         response = response.replace("aco", "cutie")
+        response = response.replace("Luna", "cutie")
+        response = response.replace("luna", "cutie")
 
         pro = response
         try:
@@ -252,6 +253,8 @@ async def inuka(client, message):
     response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
     response = response.replace("Aco", "cutie")
     response = response.replace("aco", "cutie")
+    response = response.replace("Luna", "cutie")
+    response = response.replace("luna", "cutie")
 
     pro = response
     if not "en" in lan and not lan == "":
@@ -325,6 +328,8 @@ async def inuka(client, message):
     response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
     response = response.replace("Aco", "cutie")
     response = response.replace("aco", "cutie")
+    response = response.replace("Luna", "cutie")
+    response = response.replace("luna", "cutie")
 
     pro = response
     if not "en" in lan and not lan == "":
