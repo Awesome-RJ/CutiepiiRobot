@@ -332,18 +332,6 @@ def weebify(update: Update, context: CallbackContext):
     else:
         message.reply_text(string)
 
-
-def meme(update: Update, context: CallbackContext):
-    msg = update.effective_message
-    meme = r.get("https://meme-api.herokuapp.com/gimme/Animemes/").json()
-    image = meme.get("url")
-    caption = meme.get("title")
-    if not image:
-        msg.reply_text("No URL was received from the API!")
-        return
-    msg.reply_photo(
-                photo=image, caption=caption)
-
 def gbun(update, context):
     user = update.effective_user
     chat = update.effective_chat
@@ -580,10 +568,9 @@ __help__ = """
   ➢ `/sanitize`*:* always use this before /pat or any contact
   ➢ `/pat`*:* pats a user, or get patted
   ➢ `/8ball`*:* predicts using 8ball method
-  ➢ `/meme`*:* sends random anime memes
   ➢ `/gbam`*:* troll somone with fake gbans, only Disaster People can do this
-  ➢ `/meme`*:* To Get Anime Meme
-  ➢ `/hmeme`*:* To Get Hentai Meme
+  ➢ `/meme`*:* sends random anime memes
+  ➢ `/hmeme`*:* sends random hentai memes
   ➢ `/cuddle`*:* cuddle someone by replying to his/her message or get cuddled
   ➢ `/hug`*:* hug someone or get hugged by Emilia
   ➢ `/love`*:* Checks Love in your heart weather it's true or fake
@@ -608,7 +595,6 @@ EIGHTBALL_HANDLER = DisableAbleCommandHandler("8ball", eightball, run_async=True
 TABLE_HANDLER = DisableAbleCommandHandler("table", table, run_async=True)
 SHOUT_HANDLER = DisableAbleCommandHandler("shout", shout, run_async=True)
 WEEBIFY_HANDLER = DisableAbleCommandHandler("weebify", weebify, run_async=True)
-MEME_HANDLER = DisableAbleCommandHandler(["meme", "memes"], meme, run_async=True)
 GBUN_HANDLER = DisableAbleCommandHandler("gbun", gbun, run_async=True)
 GBAM_HANDLER = DisableAbleCommandHandler("gbam", gbam, run_async=True)
 CUDDLE_HANDLER = DisableAbleCommandHandler("cuddle", cuddle, run_async=True)
@@ -619,7 +605,6 @@ OWO_HANDLER = DisableAbleCommandHandler("owo", owo, run_async=True)
 
 dispatcher.add_handler(GBAM_HANDLER)
 dispatcher.add_handler(GBUN_HANDLER)
-dispatcher.add_handler(MEME_HANDLER)
 dispatcher.add_handler(WEEBIFY_HANDLER)
 dispatcher.add_handler(SHOUT_HANDLER)
 dispatcher.add_handler(SANITIZE_HANDLER)
@@ -656,7 +641,6 @@ __command_list__ = [
     "shout",
     "weebify",
     "8ball",
-    "meme",
     "gbun",
     "gbam",
     "cuddle", 
@@ -680,7 +664,6 @@ __handlers__ = [
     SHOUT_HANDLER,
     WEEBIFY_HANDLER,
     EIGHTBALL_HANDLER,
-    MEME_HANDLER,
     GBUN_HANDLER,
     GBAM_HANDLER,
     CUDDLE_HANDLER,
