@@ -572,7 +572,7 @@ __help__ = """
   ➢ `/meme`*:* sends random anime memes
   ➢ `/hmeme`*:* sends random hentai memes
   ➢ `/cuddle`*:* cuddle someone by replying to his/her message or get cuddled
-  ➢ `/hug`*:* hug someone or get hugged by Emilia
+  ➢ `/hug`*:* hug someone or get hugged by Cutiepii
   ➢ `/love`*:* Checks Love in your heart weather it's true or fake
   ➢ `/kiss`*:* Kiss someone or get kissed 
   ➢ `/flirt`*:* Cutiepii will flirt to the replied person or with you
