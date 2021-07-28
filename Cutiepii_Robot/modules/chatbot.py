@@ -3,17 +3,20 @@ import emoji
 import re
 import aiohttp
 
+# from google_trans_new import google_translator
+from googletrans import Translator as google_translator
 from pyrogram import filters
-from google_trans_new import google_translator
+
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
 from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
 from Cutiepii_Robot import pgram as cutiepii, BOT_ID, arq 
-from coffeehouse.exception import CoffeeHouseError as CFError
-
-url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
 
 translator = google_translator()
-import requests
+url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
+
+async def lunaQuery(query: str, user_id: int):
+    luna = await arq.luna(query, user_id)
+    return luna.result
 
 
 def extract_emojis(s):
@@ -23,15 +26,17 @@ def extract_emojis(s):
 async def fetch(url):
     try:
         async with aiohttp.Timeout(10.0):
-            async with aiohttp.ClientSession() as session, session.get(url) as resp:
-                try:
-                    data = await resp.json()
-                except:
-                    data = await resp.text()
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as resp:
+                    try:
+                        data = await resp.json()
+                    except:
+                        data = await resp.text()
             return data
     except:
         print("AI response Timeout")
         return
+
 
 cutie_chats = []
 en_chats = []
@@ -82,6 +87,7 @@ async def hmm(_, message):
             "I only recognize `/chatbot on` and /chatbot `off only`"
         )
 
+
 @cutiepii.on_message(
     filters.text
     & filters.reply
@@ -95,70 +101,171 @@ async def hmm(client, message):
     if not get_session(int(message.chat.id)):
         return
     if not message.reply_to_message:
-        message.continue_propagation()
+        return
     try:
-        kukibot = message.reply_to_message.from_user.id
+        senderr = message.reply_to_message.from_user.id
     except:
         return
-    if kukibot != BOT_ID:
+    if senderr != BOT_ID:
+        return
+    msg = message.text
+    chat_id = message.chat.id
+    if msg.startswith("/") or msg.startswith("@"):
         message.continue_propagation()
-    text = message.text
+    if chat_id in en_chats:
+        test = msg
+        test = test.replace("cutie", "Aco")
+        test = test.replace("cutie", "Aco")
+        response = await lunaQuery(
+            test, message.from_user.id if message.from_user else 0
+        )
+        response = response.replace("Aco", "cutie")
+        response = response.replace("aco", "cutie")
 
-    if text.startswith("/") or text.startswith("@"):
-        message.continue_propagation()
-
-    test = text
-    
-    kukitext = test.replace(" ", "%20")
-    try:
-        Kuki = await fetch(f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={kukitext}")
-        pro = Kuki["reply"]        
-    except Exception:
+        pro = response
+        try:
+            await cutiepii.send_chat_action(message.chat.id, "typing")
+            await message.reply_text(pro)
+        except CFError:
             return
-    try:
-        await cutiepii.send_chat_action(message.chat.id, "typing")
-        await message.reply(pro)
-    except:
-        return
-    message.continue_propagation()
+
+    else:
+        u = msg.split()
+        emj = extract_emojis(msg)
+        msg = msg.replace(emj, "")
+        if (
+            [(k) for k in u if k.startswith("@")]
+            and [(k) for k in u if k.startswith("#")]
+            and [(k) for k in u if k.startswith("/")]
+            and re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []
+        ):
+
+            h = " ".join(filter(lambda x: x[0] != "@", u))
+            km = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", h)
+            tm = km.split()
+            jm = " ".join(filter(lambda x: x[0] != "#", tm))
+            hm = jm.split()
+            rm = " ".join(filter(lambda x: x[0] != "/", hm))
+        elif [(k) for k in u if k.startswith("@")]:
+
+            rm = " ".join(filter(lambda x: x[0] != "@", u))
+        elif [(k) for k in u if k.startswith("#")]:
+            rm = " ".join(filter(lambda x: x[0] != "#", u))
+        elif [(k) for k in u if k.startswith("/")]:
+            rm = " ".join(filter(lambda x: x[0] != "/", u))
+        elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
+            rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
+        else:
+            rm = msg
+            # print (rm)
+        try:
+            lan = translator.detect(rm)
+            lan = lan.lang
+        except:
+            return
+        test = rm
+        if not "en" in lan and not lan == "":
+            try:
+                test = translator.translate(test, dest="en")
+                test = test.text
+            except:
+                return
+        # test = emoji.demojize(test.strip())
+
+        test = test.replace("cutie", "Aco")
+        test = test.replace("cutie", "Aco")
+        response = await lunaQuery(
+            test, message.from_user.id if message.from_user else 0
+        )
+        response = response.replace("Aco", "cutie")
+        response = response.replace("aco", "cutie")
+        response = response.replace("Luna", "cutie")
+        response = response.replace("luna", "cutie")
+        pro = response
+        if not "en" in lan and not lan == "":
+            try:
+                pro = translator.translate(pro, dest=lan)
+                pro = pro.text
+            except:
+                return
+        try:
+            await cutiepii.send_chat_action(message.chat.id, "typing")
+            await message.reply_text(pro)
+        except CFError:
+            return
+
 
 @cutiepii.on_message(
     filters.text & filters.private & ~filters.edited & filters.reply & ~filters.bot
 )
 async def inuka(client, message):
-    if not get_session(int(message.chat.id)):
-        return
-    if not message.reply_to_message:
+    msg = message.text
+    if msg.startswith("/") or msg.startswith("@"):
         message.continue_propagation()
+    u = msg.split()
+    emj = extract_emojis(msg)
+    msg = msg.replace(emj, "")
+    if (
+        [(k) for k in u if k.startswith("@")]
+        and [(k) for k in u if k.startswith("#")]
+        and [(k) for k in u if k.startswith("/")]
+        and re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []
+    ):
+
+        h = " ".join(filter(lambda x: x[0] != "@", u))
+        km = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", h)
+        tm = km.split()
+        jm = " ".join(filter(lambda x: x[0] != "#", tm))
+        hm = jm.split()
+        rm = " ".join(filter(lambda x: x[0] != "/", hm))
+    elif [(k) for k in u if k.startswith("@")]:
+
+        rm = " ".join(filter(lambda x: x[0] != "@", u))
+    elif [(k) for k in u if k.startswith("#")]:
+        rm = " ".join(filter(lambda x: x[0] != "#", u))
+    elif [(k) for k in u if k.startswith("/")]:
+        rm = " ".join(filter(lambda x: x[0] != "/", u))
+    elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
+        rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
+    else:
+        rm = msg
+        # print (rm)
     try:
-        kukibot = message.reply_to_message.from_user.id
+        lan = translator.detect(rm)
+        lan = lan.lang
     except:
         return
-    if kukibot != BOT_ID:
-        message.continue_propagation()
-    text = message.text
-
-    if text.startswith("/") or text.startswith("@"):
-        message.continue_propagation()
-
-    test = text
-    
-    kukitext = test.replace(" ", "%20")
-    try:
-        Kuki = await fetch(f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={kukitext}")
-        pro = Kuki["reply"]        
-    except Exception:
+    test = rm
+    if not "en" in lan and not lan == "":
+        try:
+            test = translator.translate(test, dest="en")
+            test = test.text
+        except:
             return
+
+    # test = emoji.demojize(test.strip())
+
+    # Kang with the credits bitches @InukaASiTH
+    test = test.replace("cutie", "Aco")
+    test = test.replace("cutie", "Aco")
+
+    response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
+    response = response.replace("Aco", "cutie")
+    response = response.replace("aco", "cutie")
+
+    pro = response
+    if not "en" in lan and not lan == "":
+        pro = translator.translate(pro, dest=lan)
+        pro = pro.text
     try:
         await cutiepii.send_chat_action(message.chat.id, "typing")
-        await message.reply(pro)
-    except:
+        await message.reply_text(pro)
+    except CFError:
         return
-    message.continue_propagation()
 
 
 @cutiepii.on_message(
-    filters.regex("cutiepii|cutiepii|Cutiepii|Cutiepii|Cutiepii")
+    filters.regex("cutie|cutie|cutiepii|cutiepii|cutiepii")
     & ~filters.bot
     & ~filters.via_bot
     & ~filters.forwarded
@@ -167,36 +274,70 @@ async def inuka(client, message):
     & ~filters.edited
 )
 async def inuka(client, message):
-    if not get_session(int(message.chat.id)):
-        return
-    if not message.reply_to_message:
+    msg = message.text
+    if msg.startswith("/") or msg.startswith("@"):
         message.continue_propagation()
+    u = msg.split()
+    emj = extract_emojis(msg)
+    msg = msg.replace(emj, "")
+    if (
+        [(k) for k in u if k.startswith("@")]
+        and [(k) for k in u if k.startswith("#")]
+        and [(k) for k in u if k.startswith("/")]
+        and re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []
+    ):
+
+        h = " ".join(filter(lambda x: x[0] != "@", u))
+        km = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", h)
+        tm = km.split()
+        jm = " ".join(filter(lambda x: x[0] != "#", tm))
+        hm = jm.split()
+        rm = " ".join(filter(lambda x: x[0] != "/", hm))
+    elif [(k) for k in u if k.startswith("@")]:
+
+        rm = " ".join(filter(lambda x: x[0] != "@", u))
+    elif [(k) for k in u if k.startswith("#")]:
+        rm = " ".join(filter(lambda x: x[0] != "#", u))
+    elif [(k) for k in u if k.startswith("/")]:
+        rm = " ".join(filter(lambda x: x[0] != "/", u))
+    elif re.findall(r"\[([^]]+)]\(\s*([^)]+)\s*\)", msg) != []:
+        rm = re.sub(r"\[([^]]+)]\(\s*([^)]+)\s*\)", r"", msg)
+    else:
+        rm = msg
+        # print (rm)
     try:
-        kukibot = message.reply_to_message.from_user.id
+        lan = translator.detect(rm)
+        lan = lan.lang
     except:
         return
-    if kukibot != BOT_ID:
-        message.continue_propagation()
-    text = message.text
+    test = rm
+    if not "en" in lan and not lan == "":
+        try:
+            test = translator.translate(test, dest="en")
+            test = test.text
+        except:
+            return
 
-    if text.startswith("/") or text.startswith("@"):
-        message.continue_propagation()
+    # test = emoji.demojize(test.strip())
 
-    test = text
-    
-    kukitext = test.replace(" ", "%20")
-    try:
-        Kuki = await fetch(f"https://kukichatbot.herokuapp.com/kuki/chatbot?message={kukitext}")
-        pro = Kuki["reply"]        
-    except Exception:
+    test = test.replace("cutie", "Aco")
+    test = test.replace("cutie", "Aco")
+    response = await lunaQuery(test, message.from_user.id if message.from_user else 0)
+    response = response.replace("Aco", "cutie")
+    response = response.replace("aco", "cutie")
+
+    pro = response
+    if not "en" in lan and not lan == "":
+        try:
+            pro = translator.translate(pro, dest=lan)
+            pro = pro.text
+        except Exception:
             return
     try:
         await cutiepii.send_chat_action(message.chat.id, "typing")
-        await message.reply(pro)
-    except:
+        await message.reply_text(pro)
+    except CFError:
         return
-    message.continue_propagation()
-
 
 __help__ = """
  Chatbot utilizes the Brainshop's API and allows Cutiepii to talk and provides a more interactive group chat experience.
