@@ -2,6 +2,7 @@ import html
 import random
 import time
 import glob
+import requests
 import requests as r
 import urllib.request
 import os
