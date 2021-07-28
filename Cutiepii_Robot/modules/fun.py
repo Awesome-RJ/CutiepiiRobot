@@ -35,6 +35,16 @@ def hmeme(_,message):
 	title = r['title']
 	bot.send_photo(message.chat.id , pic , caption=title)
 
+def goodnight(update, context):
+    message = update.effective_message
+    reply = random.choice(fun_strings.GDNIGHT)
+    message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
+
+def goodmorning(update, context):
+    message = update.effective_message
+    reply = random.choice(fun_strings.GDMORNING)
+    message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
+	
 def runs(update: Update, context: CallbackContext):
     temp = random.choice(fun_strings.RUN_STRINGS)
     if update.effective_user.id == 1170714920:
@@ -419,6 +429,8 @@ WEEBIFY_HANDLER = DisableAbleCommandHandler("weebify", weebify, run_async=True)
 MEME_HANDLER = DisableAbleCommandHandler(["meme", "memes"], meme, run_async=True)
 GBUN_HANDLER = DisableAbleCommandHandler("gbun", gbun, run_async=True)
 GBAM_HANDLER = DisableAbleCommandHandler("gbam", gbam, run_async=True)
+GDMORNING_HANDLER = DisableAbleMessageHandler(Filters.regex(r"(?i)(good morning)"), goodmorning, friendly="goodmorning")
+GDNIGHT_HANDLER = DisableAbleMessageHandler(Filters.regex(r"(?i)(good night)"), goodnight, friendly="goodnight")
 
 dispatcher.add_handler(GBAM_HANDLER)
 dispatcher.add_handler(GBUN_HANDLER)
@@ -437,6 +449,8 @@ dispatcher.add_handler(RLG_HANDLER)
 dispatcher.add_handler(DECIDE_HANDLER)
 dispatcher.add_handler(EIGHTBALL_HANDLER)
 dispatcher.add_handler(TABLE_HANDLER)
+dispatcher.add_handler(GDMORNING_HANDLER)
+dispatcher.add_handler(GDNIGHT_HANDLER)
 
 __mod_name__ = "Fun"
 __command_list__ = [
@@ -476,4 +490,6 @@ __handlers__ = [
     MEME_HANDLER,
     GBUN_HANDLER,
     GBAM_HANDLER,
+    GDMORNING_HANDLER, 
+    GDNIGHT_HANDLER,
 ]
