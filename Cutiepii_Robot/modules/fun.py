@@ -28,7 +28,7 @@ def meme(_,message):
 	bot.send_photo(message.chat.id , pic , caption=title)
 
     
-@bot.on_message(filters.command('hmeme') & filters.private)
+@bot.on_message(filters.command('hmeme'))
 def hmeme(_,message):
 	r = requests.get('https://nksamamemeapi.pythonanywhere.com/get/hentaimemes').json()
 	pic = r['image']
