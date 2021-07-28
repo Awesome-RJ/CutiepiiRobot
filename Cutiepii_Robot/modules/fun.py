@@ -582,17 +582,16 @@ __help__ = """
   ➢ `/8ball`*:* predicts using 8ball method
   ➢ `/meme`*:* sends random anime memes
   ➢ `/gbam`*:* troll somone with fake gbans, only Disaster People can do this
-  ➢ `/couples`*:* To Choose Couple Of The Day
   ➢ `/meme`*:* To Get Anime Meme
   ➢ `/hmeme`*:* To Get Hentai Meme
   ➢ `/cuddle`*:* cuddle someone by replying to his/her message or get cuddled
   ➢ `/hug`*:* hug someone or get hugged by Emilia
   ➢ `/love`*:* Checks Love in your heart weather it's true or fake
   ➢ `/kiss`*:* Kiss someone or get kissed 
-  ➢ `/pat`*:* Pat someone or get patted by Cutiepii
   ➢ `/flirt`*:* Cutiepii will flirt to the replied person or with you
   ➢ `/lewd`*:* Cutiepii will act lewd with you or with the replied person
   ➢ `/romance`*:* Cutiepii will act all romantic with you or replied person
+  ➢ `/couples`*:* To Choose Couple Of The Day
 """
 
 SANITIZE_HANDLER = DisableAbleCommandHandler("sanitize", sanitize, run_async=True)
