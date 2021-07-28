@@ -579,6 +579,34 @@ __help__ = """
   ➢ `/lewd`*:* Cutiepii will act lewd with you or with the replied person
   ➢ `/romance`*:* Cutiepii will act all romantic with you or replied person
   ➢ `/couples`*:* To Choose Couple Of The Day
+  ➢ `/owo`*:* OWO de text
+  ➢ `/stretch`*:* STRETCH de text
+  ➢ `/clapmoji`*:* Type in reply to a message and see magic
+  ➢ `/bmoji`*:* Type in reply to a message and see magic
+  ➢ `/copypasta`*:* Type in reply to a message and see magic
+  ➢ `/vapor`*:* owo vapor dis
+  ➢ `/zalgofy`*:* reply to a message to glitch it out!
+  ➢ `/abuse`*:* Abuses the cunt
+  ➢ `/insult`*:* Insult the cunt
+  ➢ `/react`*:* Check on your own
+  ➢ `/rhappy`*:* Check on your own
+  ➢ `/rangry`*:* Check on your own
+  ➢ `/angrymoji`*:* Check on your own
+  ➢ `/crymoji`*:* Check on your own
+  ➢ `/cowsay, /tuxsay , /milksay , /kisssay , /wwwsay , /defaultsay , /bunnysay , /moosesay , /sheepsay , /rensay , /cheesesay , /ghostbusterssay , /skeletonsay <i>text</i>`*:* Returns a stylish art text from the given text
+  ➢ `/deepfry`*:* Type this in reply to an image/sticker to roast the image/sticker
+  ➢ `/figlet`*:* Another Style art
+  ➢ `/dice`*:* Roll A dice
+  ➢ `/dart`*:* Throw a dart and try your luck
+  ➢ `/basketball`*:* Try your luck if you can enter the ball in the ring
+  ➢ `/type <text>`*:* Make the bot type something for you in a professional way
+  ➢ `/carbon <text</i>`*:* Beautifies your text and enwraps inside a terminal image [ENGLISH ONLY]
+  ➢ `/sticklet <text>`*:* Turn a text into a sticker
+  ➢ `/fortune`*:* gets a random fortune quote
+  ➢ `/quotly`*:* Type /quotly in reply to a message to make a sticker of that
+  ➢ `/animate`*:* Enwrap your text in a beautiful anime
+  ➢ `/dare`*:* sends random dare
+  ➢ `/truth`*:* sends random truth
 """
 
 SANITIZE_HANDLER = DisableAbleCommandHandler("sanitize", sanitize, run_async=True)
