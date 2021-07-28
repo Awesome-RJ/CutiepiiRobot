@@ -380,6 +380,191 @@ def gbam(update, context):
         gbam = gbamm.format(user1=user1, user2=user2, chatid=chat.id, reason=reason)
         context.bot.sendMessage(chat.id, gbam, parse_mode=ParseMode.HTML)
 
+def cuddle(update: Update, context: CallbackContext):
+    bot = context.bot
+    args = context.args
+    message = update.effective_message
+
+    reply_to = message.reply_to_message if message.reply_to_message else message
+
+    curr_user = html.escape(message.from_user.first_name)
+    user_id = extract_user(message, args)
+
+    if user_id:
+        cuddled_user = bot.get_chat(user_id)
+        user1 = curr_user
+        user2 = html.escape(cuddled_user.first_name)
+
+    else:
+        user1 = bot.first_name
+        user2 = curr_user
+
+    cuddle_type = random.choice(("Text", "Gif"))
+    if cuddle_type == "Gif":
+        try:
+            temp = random.choice(fun_strings.CUDDLE_GIF)
+            reply_to.reply_animation(temp)
+        except BadRequest:
+            cuddle_type = "Text"
+
+    if cuddle_type == "Text":
+        temp = random.choice(fun_strings.CUDDLE_TEMPLATES)
+        reply = temp.format(user1=user1, user2=user2)
+        reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
+
+
+def flirt(update: Update, context: CallbackContext):
+    reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
+    reply_text(random.choice(fun_strings.FLIRT_TEXT))
+
+def lewd(update: Update, context: CallbackContext):
+    bot = context.bot
+    args = context.args
+    message = update.effective_message
+
+    reply_to = message.reply_to_message if message.reply_to_message else message
+
+    curr_user = html.escape(message.from_user.first_name)
+    user_id = extract_user(message, args)
+
+    if user_id:
+        lewd_user = bot.get_chat(user_id)
+        user1 = curr_user
+        user2 = html.escape(lewd_user.first_name)
+
+    else:
+        user1 = bot.first_name
+        user2 = curr_user
+
+    lewd_type = random.choice(("Text", "Gif", "Sticker"))
+    if lewd_type == "Gif":
+        try:
+            temp = random.choice(fun_strings.LEWD_GIFS)
+            reply_to.reply_animation(temp)
+        except BadRequest:
+            lewd_type = "Text"
+
+    if lewd_type == "Sticker":
+        try:
+            temp = random.choice(fun_strings.LEWD_STICKERS)
+            reply_to.reply_sticker(temp)
+        except BadRequest:
+            lewd_type = "Text"
+
+    if lewd_type == "Text":
+        temp = random.choice(fun_strings.LEWD_TEMPLATES)
+        reply = temp.format(user1=user1, user2=user2)
+        reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
+
+def romance(update: Update, context: CallbackContext):
+    bot = context.bot
+    args = context.args
+    message = update.effective_message
+
+    reply_to = message.reply_to_message if message.reply_to_message else message
+
+    curr_user = html.escape(message.from_user.first_name)
+    user_id = extract_user(message, args)
+
+    if user_id:
+        romantic_user = bot.get_chat(user_id)
+        user1 = curr_user
+        user2 = html.escape(romantic_user.first_name)
+
+    else:
+        user1 = bot.first_name
+        user2 = curr_user
+
+    romance_type = random.choice(("Text", "Gif", "Sticker"))
+    if romance_type == "Gif":
+        try:
+            temp = random.choice(fun_strings.ROMANCE_GIFS)
+            reply_to.reply_animation(temp)
+        except BadRequest:
+            romance_type = "Text"
+
+    if romance_type == "Sticker":
+        try:
+            temp = random.choice(fun_strings.ROMANCE_STICKERS)
+            reply_to.reply_sticker(temp)
+        except BadRequest:
+            romance_type = "Text"
+
+    if romance_type == "Text":
+        temp = random.choice(fun_strings.ROMANCE_TEMPLATES)
+        reply = temp.format(user1=user1, user2=user2)
+        reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
+
+
+def owo(update: Update, context: CallbackContext):
+    bot = context.bot
+    args = context.args
+    message = update.effective_message
+
+    reply_to = message.reply_to_message if message.reply_to_message else message
+
+    curr_user = html.escape(message.from_user.first_name)
+    user_id = extract_user(message, args)
+
+    if user_id:
+        owo_user = bot.get_chat(user_id)
+        user1 = curr_user
+        user2 = html.escape(owo_user.first_name)
+
+    else:
+        user1 = bot.first_name
+        user2 = curr_user
+
+    owo_type = random.choice(("Gif", "Sticker"))
+    if owo_type == "Gif":
+        try:
+            temp = random.choice(fun_strings.OWO_GIFS)
+            reply_to.reply_animation(temp)
+        except BadRequest:
+            owo_type = "Text"
+
+    if owo_type == "Sticker":
+        try:
+            temp = random.choice(fun_strings.OWO_STICKERS)
+            reply_to.reply_sticker(temp)
+        except BadRequest:
+            owo_type = "Text"
+
+
+def uwu(update: Update, context: CallbackContext):
+    bot = context.bot
+    args = context.args
+    message = update.effective_message
+
+    reply_to = message.reply_to_message if message.reply_to_message else message
+
+    curr_user = html.escape(message.from_user.first_name)
+    user_id = extract_user(message, args)
+
+    if user_id:
+        uwu_user = bot.get_chat(user_id)
+        user1 = curr_user
+        user2 = html.escape(uwu_user.first_name)
+
+    else:
+        user1 = bot.first_name
+        user2 = curr_user
+
+    uwu_type = random.choice(("Gif", "Sticker"))
+    if uwu_type == "Gif":
+        try:
+            temp = random.choice(fun_strings.UWU_GIFS)
+            reply_to.reply_animation(temp)
+        except BadRequest:
+            uwu_type = "Text"
+
+    if uwu_type == "Sticker":
+        try:
+            temp = random.choice(fun_strings.UWU_STICKERS)
+            reply_to.reply_sticker(temp)
+        except BadRequest:
+            uwu_type = "Text"
+	
 __help__ = """
   ➢ `/runs`*:* reply a random string from an array of replies
   ➢ `/slap`*:* slap a user, or get slapped if not a reply
@@ -400,6 +585,14 @@ __help__ = """
   ➢ `/couples`*:* To Choose Couple Of The Day
   ➢ `/meme`*:* To Get Anime Meme
   ➢ `/hmeme`*:* To Get Hentai Meme
+  ➢ `/cuddle`*:* cuddle someone by replying to his/her message or get cuddled
+  ➢ `/hug`*:* hug someone or get hugged by Emilia
+  ➢ `/love`*:* Checks Love in your heart weather it's true or fake
+  ➢ `/kiss`*:* Kiss someone or get kissed 
+  ➢ `/pat`*:* Pat someone or get patted by Cutiepii
+  ➢ `/flirt`*:* Cutiepii will flirt to the replied person or with you
+  ➢ `/lewd`*:* Cutiepii will act lewd with you or with the replied person
+  ➢ `/romance`*:* Cutiepii will act all romantic with you or replied person
 """
 
 SANITIZE_HANDLER = DisableAbleCommandHandler("sanitize", sanitize, run_async=True)
@@ -419,6 +612,11 @@ WEEBIFY_HANDLER = DisableAbleCommandHandler("weebify", weebify, run_async=True)
 MEME_HANDLER = DisableAbleCommandHandler(["meme", "memes"], meme, run_async=True)
 GBUN_HANDLER = DisableAbleCommandHandler("gbun", gbun, run_async=True)
 GBAM_HANDLER = DisableAbleCommandHandler("gbam", gbam, run_async=True)
+CUDDLE_HANDLER = DisableAbleCommandHandler("cuddle", cuddle, run_async=True)
+FLIRT_HANDLER = DisableAbleCommandHandler("flirt", flirt, run_async=True)   
+ROMANCE_HANDLER = DisableAbleCommandHandler("romance", romance, run_async=True) 
+UWU_HANDLER = DisableAbleCommandHandler("uwu", uwu, run_async=True)
+OWO_HANDLER = DisableAbleCommandHandler("owo", owo, run_async=True)
 
 dispatcher.add_handler(GBAM_HANDLER)
 dispatcher.add_handler(GBUN_HANDLER)
@@ -437,6 +635,11 @@ dispatcher.add_handler(RLG_HANDLER)
 dispatcher.add_handler(DECIDE_HANDLER)
 dispatcher.add_handler(EIGHTBALL_HANDLER)
 dispatcher.add_handler(TABLE_HANDLER)
+dispatcher.add_handler(CUDDLE_HANDLER)
+dispatcher.add_handler(FLIRT_HANDLER)
+dispatcher.add_handler(ROMANCE_HANDLER)    
+dispatcher.add_handler(UWU_HANDLER)
+dispatcher.add_handler(OWO_HANDLER)
 
 __mod_name__ = "Fun"
 __command_list__ = [
@@ -457,6 +660,11 @@ __command_list__ = [
     "meme",
     "gbun",
     "gbam",
+    "cuddle", 
+    "flirt", 
+    "romance", 
+    "uwu", 
+    "owo",
 ]
 __handlers__ = [
     RUNS_HANDLER,
@@ -476,4 +684,9 @@ __handlers__ = [
     MEME_HANDLER,
     GBUN_HANDLER,
     GBAM_HANDLER,
+    CUDDLE_HANDLER,
+    FLIRT_HANDLER,
+    ROMANCE_HANDLER,
+    UWU_HANDLER,
+    OWO_HANDLER,
 ]
