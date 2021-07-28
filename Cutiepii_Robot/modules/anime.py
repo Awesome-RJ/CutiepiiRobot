@@ -536,20 +536,20 @@ Get information about anime, manga or characters from [AniList](anilist.co) and 
 
 *AniList Commands:*
 
- • `/anime <anime>`*:* returns information about the anime from AniList
- • `/character <character>`*:* returns information about the character from AniList
- • `/manga <manga>`*:* returns information about the manga from AniList
- • `/upcoming`*:* returns a list of new anime in the upcoming seasons from AniList
- • `/airing <anime>`*:* returns anime airing info from AniList
+  ➢ `/anime <anime>`*:* returns information about the anime from AniList
+  ➢ `/character <character>`*:* returns information about the character from AniList
+  ➢ `/manga <manga>`*:* returns information about the manga from AniList
+  ➢ `/upcoming`*:* returns a list of new anime in the upcoming seasons from AniList
+  ➢ `/airing <anime>`*:* returns anime airing info from AniList
  
 *MyAnimelist Commands:*
 
- • `/manime <anime>`*:* returns information about the anime MAL.
- • `/mcharacter` <character>*:* returns information about the character from MAL.
- • `/mmanga <manga>`*:* returns information about the manga from MAL.
- • `/mupcoming`*:* returns a list of new anime in the upcoming seasons from MAL.
- • `/user <user>`*:* returns information about a MyAnimeList user
- • `/animequotes`*:* sends random anime quotes
+  ➢ `/manime <anime>`*:* returns information about the anime MAL.
+  ➢ `/mcharacter` <character>*:* returns information about the character from MAL.
+  ➢ `/mmanga <manga>`*:* returns information about the manga from MAL.
+  ➢ `/mupcoming`*:* returns a list of new anime in the upcoming seasons from MAL.
+  ➢ `/user <user>`*:* returns information about a MyAnimeList user
+  ➢ `/animequotes`*:* sends random anime quotes
 
 *Anime Search Commands:*
 

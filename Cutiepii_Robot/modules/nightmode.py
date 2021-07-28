@@ -147,5 +147,5 @@ The Night mode
 Close your group at 12.00 a.m. and open back at 6.00 a.m.(IST)
 Only available for asian countries (India Standard time)
 
-- /nightmode [ON/OFF]: Enable/Disable Night Mode.
+  ➢ `/nightmode [ON/OFF]`*:* Enable/Disable Night Mode.
 """

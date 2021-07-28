@@ -84,10 +84,10 @@ def markdown_help(update: Update, context: CallbackContext):
 __help__ = """
 Available commands:
 📐 Markdown:
- • `/markdownhelp`: quick summary of how markdown works in telegram - can only be called in private chats
+  ➢ `/markdownhelp`: quick summary of how markdown works in telegram - can only be called in private chats
 
 💴 Currency converter:
- • `/cash`: currency converter
+  ➢ `/cash`: currency converter
  Example:
  `/cash 1 USD INR`
       OR
@@ -95,58 +95,58 @@ Available commands:
  Output: `1.0 USD = 75.505 INR`
 
 🗣 Translator:
- • `/tr` or `/tl` (language code) as reply to a long message
+  ➢ `/tr` or `/tl` (language code) as reply to a long message
 Example:
   `/tr en`: translates something to english
   `/tr hi-en`: translates hindi to english.
- • `/langs` : lists all the language codes
+  ➢ `/langs` : lists all the language codes
 
 🕐 Timezones:
- • `/time <query>`: Gives information about a timezone.
+  ➢ `/time <query>`: Gives information about a timezone.
 Available queries: Country Code/Country Name/Timezone Name
  • [Timezones list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
 🖌️ Quotly:
- • `/q` : To quote a message.
- • `/q <Number>` : To quote more than 1 messages.
- • `/q r` : to quote a message with it's reply
+  ➢ `/q` : To quote a message.
+  ➢ `/q <Number>` : To quote more than 1 messages.
+  ➢ `/q r` : to quote a message with it's reply
 
 🗜️ Compress And Decompress: 
- • `/zip`*:* reply to a telegram file to compress it in .zip format
- • `/unzip`*:* reply to a telegram file to decompress it from the .zip format
+  ➢ `/zip`*:* reply to a telegram file to compress it in .zip format
+  ➢ `/unzip`*:* reply to a telegram file to decompress it from the .zip format
  
 CC Checker
- - /au [cc]: Stripe Auth given CC
- - /pp [cc]: Paypal 1$ Guest Charge
- - /ss [cc]: Speedy Stripe Auth
- - /ch [cc]: Check If CC is Live
- - /bin [bin]: Gather's Info About the bin
- - /gen [bin]: Generates CC with given bin
- - /key [sk]: Checks if Stripe key is Live
+   ➢ `/au [cc]`*:* Stripe Auth given CC
+   ➢ `/pp [cc]`*:* Paypal 1$ Guest Charge
+   ➢ `/ss [cc]`*:* Speedy Stripe Auth
+   ➢ `/ch [cc]`*:* Check If CC is Live
+   ➢ `/bin [bin]`*:* Gather's Info About the bin
+   ➢ `/gen [bin]`*:* Generates CC with given bin
+   ➢ `/key [sk]`*:* Checks if Stripe key is Live
 
 Fake Info
- - /fakegen : Generates Fake Information
- - /picgen : generate a fake pic
+   ➢ `/fakegen`*:* Generates Fake Information
+   ➢ `/picgen`*:* generate a fake pic
 
 🗳 Other Commands:
 Paste:
- • `/paste`: Saves replied content to nekobin.com and replies with a url
+  ➢ `/paste`*:* Saves replied content to nekobin.com and replies with a url
 React:
- • `/react`: Reacts with a random reaction
+  ➢ `/react`*:* Reacts with a random reaction
 Urban Dictonary:
- • `/ud <word>`: Type the word or expression you want to search use
+  ➢ `/ud <word>`*:* Type the word or expression you want to search use
 Wikipedia:
- • `/wiki <query>`: wikipedia your query
+  ➢ `/wiki <query>`*:* wikipedia your query
 Wallpapers:
- • `/wall <query>`: get a wallpaper from alphacoders
+  ➢ `/wall <query>`*:* get a wallpaper from alphacoders
 Text To Speech:
- • `/texttospeech <text>`*:* Converts a text message to a voice message.
+  ➢ `/texttospeech <text>`*:* Converts a text message to a voice message.
 Books:
- • `/book <book name>`*:* Gets Instant Download Link Of Given Book.
+  ➢ `/book <book name>`*:* Gets Instant Download Link Of Given Book.
 Cricket Score:
- • `/cs`*:* get a Cricket Score.
+  ➢ `/cs`*:* get a Cricket Score.
 Phone Info
- - /phone [phone no]: Gathers no info.
+   ➢ `/phone [phone no]`*:* Gathers no info.
 """
 
 ECHO_HANDLER = DisableAbleCommandHandler("echo", echo, filters=Filters.chat_type.groups, run_async=True)

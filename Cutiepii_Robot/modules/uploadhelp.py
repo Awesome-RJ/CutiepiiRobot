@@ -10,6 +10,6 @@ File To Link:
  ⦁ /tmpninja: reply to a telegram file to upload it on tmpninja and get direct download link
  
 Telegraph:
- • `/tgm`*:* Get Telegraph Link Of Replied Media
- • `/tgt`*:* Get Telegraph Link of Replied Text 
+  ➢ `/tgm`*:* Get Telegraph Link Of Replied Media
+  ➢ `/tgt`*:* Get Telegraph Link of Replied Text 
  """

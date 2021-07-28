@@ -261,10 +261,10 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
 __mod_name__ = "Google"
 
 __help__ = """
- • `/google <text>` :- Perform a google search
- • `/img <text>` :- Search Google for images and returns them\nFor greater no. of results specify lim, For eg: `/img hello lim=10`
- • `/app <appname>` :- Searches for an app in Play Store and returns its details.
- • `/reverse` :- reply to a sticker, or an image to search it!
+  ➢ `/google <text>` :- Perform a google search
+  ➢ `/img <text>` :- Search Google for images and returns them\nFor greater no. of results specify lim, For eg: `/img hello lim=10`
+  ➢ `/app <appname>` :- Searches for an app in Play Store and returns its details.
+  ➢ `/reverse` :- reply to a sticker, or an image to search it!
 Do you know that you can search an image with a link too? /reverse picturelink <amount>.
 • `/gitinfo <github username>` :- Get info of any github profile
 • `/ytdl <youtube video link` :- download any youtube video in every possible resolution.
