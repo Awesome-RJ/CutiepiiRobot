@@ -20,7 +20,6 @@ from telegram.ext import CallbackContext, run_async
 
 GIF_ID = "CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE"
 
-
 @bot.on_message(filters.command('meme'))
 def meme(_,message):
 	r = requests.get('https://nksamamemeapi.pythonanywhere.com').json()
@@ -36,14 +35,6 @@ def hmeme(_,message):
 	title = r['title']
 	bot.send_photo(message.chat.id , pic , caption=title)
 
-    
-@bot.on_message(filters.command('anifact'))
-def anifact(_,message):
-	res = requests.get('https://nksamamemeapi.pythonanywhere.com/anifact')
-	fact = res.get('fact')
-	message.reply_text(f'<b>{fact}</b>' , parse_mode='html')
-
-    
 def runs(update: Update, context: CallbackContext):
     temp = random.choice(fun_strings.RUN_STRINGS)
     if update.effective_user.id == 1170714920:
