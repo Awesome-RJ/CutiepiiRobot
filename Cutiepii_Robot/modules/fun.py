@@ -553,6 +553,14 @@ def uwu(update: Update, context: CallbackContext):
         except BadRequest:
             uwu_type = "Text"
 	
+def truth(update: Update, context: CallbackContext):
+    args = context.args
+    update.effective_message.reply_text(random.choice(fun_strings.TRUTH))
+
+def dare(update: Update, context: CallbackContext):
+    args = context.args
+    update.effective_message.reply_text(random.choice(fun_strings.DARE))
+	
 __help__ = """
   ➢ `/runs`*:* reply a random string from an array of replies
   ➢ `/slap`*:* slap a user, or get slapped if not a reply
@@ -602,6 +610,8 @@ FLIRT_HANDLER = DisableAbleCommandHandler("flirt", flirt, run_async=True)
 ROMANCE_HANDLER = DisableAbleCommandHandler("romance", romance, run_async=True) 
 UWU_HANDLER = DisableAbleCommandHandler("uwu", uwu, run_async=True)
 OWO_HANDLER = DisableAbleCommandHandler("owo", owo, run_async=True)
+TRUTH_HANDLER = DisableAbleCommandHandler("truth", truth, run_async=True)
+DARE_HANDLER = DisableAbleCommandHandler("dare", dare, run_async=True)
 
 dispatcher.add_handler(GBAM_HANDLER)
 dispatcher.add_handler(GBUN_HANDLER)
@@ -624,6 +634,8 @@ dispatcher.add_handler(FLIRT_HANDLER)
 dispatcher.add_handler(ROMANCE_HANDLER)    
 dispatcher.add_handler(UWU_HANDLER)
 dispatcher.add_handler(OWO_HANDLER)
+dispatcher.add_handler(TRUTH_HANDLER)
+dispatcher.add_handler(DARE_HANDLER)
 
 __mod_name__ = "Fun"
 __command_list__ = [
@@ -648,6 +660,8 @@ __command_list__ = [
     "romance", 
     "uwu", 
     "owo",
+    "truth",
+    "dare",
 ]
 __handlers__ = [
     RUNS_HANDLER,
@@ -671,4 +685,6 @@ __handlers__ = [
     ROMANCE_HANDLER,
     UWU_HANDLER,
     OWO_HANDLER,
+    TRUTH_HANDLER,
+    DARE_HANDLER,
 ]
