@@ -1,6 +1,7 @@
 from os import remove
 from pyrogram import filters
 from Cutiepii_Robot import arq, pgram as app
+from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.permissions import adminsOnly
 from Cutiepii_Robot.modules.mongo.nsfw_mongo import is_nsfw_on, nsfw_off, nsfw_on
 
@@ -49,6 +50,7 @@ async def get_file_id_from_message(message):
     & ~filters.private,
     group=8,
 )
+@capture_err
 async def detect_nsfw(_, message):
     if not await is_nsfw_on(message.chat.id):
         return
@@ -77,7 +79,7 @@ async def detect_nsfw(_, message):
         f"""
 **NSFW Image Detected & Deleted Successfully!
 ————————————————————**
-**User:** {message.from_user.mention}
+**User:** {message.from_user.mention} [`{message.from_user.id}`]
 **Safe:** `{results.neutral} %`
 **Porn:** `{results.porn} %`
 **Adult:** `{results.sexy} %`
@@ -90,6 +92,7 @@ __Use `/antinsfw off` to disable this.__
 
 
 @app.on_message(filters.command("nsfwscan"))
+@capture_err
 async def nsfw_scan_command(_, message):
     if not message.reply_to_message:
         await message.reply_text(
@@ -138,7 +141,7 @@ async def nsfw_scan_command(_, message):
 async def nsfw_enable_disable(_, message):
     if len(message.command) != 2:
         await message.reply_text(
-            "Usage: /antinsfw <on/off>"
+            "Usage: /antinsfw [on/off]"
         )
         return
     status = message.text.split(None, 1)[1].strip()
@@ -154,7 +157,7 @@ async def nsfw_enable_disable(_, message):
         await message.reply_text("Disabled AntiNSFW System.")
     else:
         await message.reply_text(
-            "Unknown Suffix, Use /antinsfw <on/off>"
+            "Unknown Suffix, Use /antinsfw [on/off]"
         )
 
 
@@ -162,4 +165,4 @@ __help__ = """
 • /antinsfw <on/off>*:* Turn This Module On/Off.
 • /nsfwscan*:* Manually Scan An Image/Sticker/Document.
 """
-__mod_name__ = "AntiNSFW"
+__mod_name__ = "Anti-NSFW"
