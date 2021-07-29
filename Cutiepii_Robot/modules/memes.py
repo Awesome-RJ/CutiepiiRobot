@@ -37,8 +37,8 @@ WIDE_MAP[0x20] = 0x3000
 @register(pattern="^/truth ?(.*)")
 async def _(td):
     try:
-        resp = requests.get("https://tede-api.herokuapp.com/api/truth-en").json()
-        results = f"{resp['message']}"
+        resp = requests.get("https://liones-api.herokuapp.com/games/truth").json()
+        results = f"{resp['truth']}"
         return await td.reply(results)
     except Exception:
         await td.reply("`Something went wrong LOL...`")
@@ -47,8 +47,8 @@ async def _(td):
 @register(pattern="^/dare ?(.*)")
 async def _(dr):
     try:
-        resp = requests.get("https://tede-api.herokuapp.com/api/dare-en").json()
-        results = f"{resp['message']}"
+        resp = requests.get("https://liones-api.herokuapp.com/games/dares").json()
+        results = f"{resp['dare']}"
         return await dr.reply(results)
     except Exception:
         await dr.reply("`Something went wrong LOL...`")
