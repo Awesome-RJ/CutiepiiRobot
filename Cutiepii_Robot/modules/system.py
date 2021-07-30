@@ -6,7 +6,7 @@ import Cutiepii_Robot.modules.helper_funcs.git_api as git
 from datetime import datetime
 from platform import python_version, uname
 from telegram import Update, Bot, ParseMode
-from telegram.ext import CommandHandler, run_async
+from telegram.ext import CommandHandler, run_async, CallbackContext
 
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from Cutiepii_Robot import dispatcher
