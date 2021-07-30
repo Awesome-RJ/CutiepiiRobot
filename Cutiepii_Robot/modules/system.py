@@ -13,7 +13,7 @@ from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
 
 @dev_plus
-def status(bot: Bot, update: Update):
+def status(bot: Bot, update: Update, context: CallbackContext):
 	chat = update.effective_chat
 	
 	stat = "--- System Status ---\n"
