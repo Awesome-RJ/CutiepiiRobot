@@ -58,6 +58,6 @@ def status(bot: Bot, update: Update):
 	bot.send_message(chat.id, reply, parse_mode=ParseMode.MARKDOWN)
 
 
-STATUS_HANDLER = CommandHandler("system", status, filters=CustomFilters.sudo_filter)
+STATUS_HANDLER = CommandHandler("system", status, filters=CustomFilters.sudo_filter, run_async=True)
 
 dispatcher.add_handler(STATUS_HANDLER)
