@@ -3,8 +3,8 @@ import time
 import re
 from sys import argv
 import sys
-import Cutiepii_Robot.modules.sql.users_sql as sql
 import traceback
+import Cutiepii_Robot.modules.sql.users_sql as sql
 
 from typing import Optional
 from Cutiepii_Robot import (
@@ -81,7 +81,7 @@ def get_readable_time(seconds: int) -> str:
 CUTIEPII_IMG = "https://telegra.ph/file/57d1e105345723fea0edd.png"
     
 PM_START_TEXT = """
-──「 [Cutiepii](https://telegra.ph/file/5058a17bd9447eb07a47f.png) 」──
+────「 [Cutiepii Robot](https://telegra.ph/file/5058a17bd9447eb07a47f.png) 」────
 *Hola! {},*
 *I am an Anime themed advance group management bot with a lot of Sexy Features.*
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
