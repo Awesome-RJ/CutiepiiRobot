@@ -4,10 +4,10 @@ from telegram import Update, Bot, ParseMode
 from telegram.ext import CommandHandler, MessageHandler, Filters
 from telegram.ext.dispatcher import run_async
 
-from CutiepiiRobot import dispatcher
-from CutiepiiRobot.modules.helper_funcs.chat_status import user_not_admin, user_admin, can_delete
-from CutiepiiRobot.modules.helper_funcs.extraction import extract_text
-from CutiepiiRobot.modules.sql import antiarabic_sql as sql
+from Cutiepii_Robot import dispatcher
+from Cutiepii_Robot.modules.helper_funcs.chat_status import user_not_admin, user_admin, can_delete
+from Cutiepii_Robot.modules.helper_funcs.extraction import extract_text
+from Cutiepii_Robot.modules.sql import antiarabic_sql as sql
 
 
 ANTIARABIC_GROUPS = 12
