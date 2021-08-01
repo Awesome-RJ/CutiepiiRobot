@@ -107,7 +107,7 @@ async def hmm(_, message):
     if senderr != BOT_ID:
         return
     msg = message.text
-    pro = await fetch(f"https://kukichatbot.up.railway.app/Kuki/chatbot?message={msg}")
+    pro = await fetch(f"https://yukicloud.tk/Kuki/chatbot?message={msg}")
     pro = pro['reply']
     await cutiepii.send_chat_action(message.chat.id, "typing")
     await message.reply_text(pro)
