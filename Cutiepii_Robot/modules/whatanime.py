@@ -11,7 +11,7 @@ from decimal import Decimal
 from datetime import timedelta
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from CutiepiiRobot import pgram as pbot
+from Cutiepii_Robot import pgram as pbot
 
 session = aiohttp.ClientSession()
 progress_callback_data = {}
