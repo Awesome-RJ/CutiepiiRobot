@@ -7,7 +7,7 @@ from pyrogram import filters
 
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
 from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
-from Cutiepii_Robot import pgram as cutiepii, BOT_ID
+from Cutiepii_Robot import pgram as cutiepii, BOT_ID, BOT_USERNAME
 
 
 cutie_chats = []
