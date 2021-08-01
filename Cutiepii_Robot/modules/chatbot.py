@@ -3,38 +3,11 @@ import emoji
 import aiohttp
 import requests
 
-# from google_trans_new import google_translator
-from googletrans import Translator as google_translator
 from pyrogram import filters
 
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
 from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
-from Cutiepii_Robot import pgram as cutiepii, BOT_ID, BOT_USERNAME, arq 
-
-translator = google_translator()
-url = "https://acobot-brainshop-ai-v1.p.rapidapi.com/get"
-
-async def lunaQuery(query: str, user_id: int):
-    luna = await arq.luna(query, user_id)
-    return luna.result
-
-
-def extract_emojis(s):
-    return "".join(c for c in s if c in emoji.UNICODE_EMOJI)
-
-
-async def fetch(url):
-    try:
-        async with aiohttp.Timeout(10.0):
-            async with aiohttp.ClientSession() as session, session.get(url) as resp:
-                try:
-                    data = await resp.json()
-                except:
-                    data = await resp.text()
-            return data
-    except:
-        print("AI response Timeout")
-        return
+from Cutiepii_Robot import pgram as cutiepii, BOT_ID
 
 
 cutie_chats = []
@@ -73,14 +46,6 @@ async def hmm(_, message):
         await lel.edit(
             f"cutie AI Successfully Deactivated For Users In The Chat {message.chat.id}"
         )
-
-    elif status == "EN" or status == "en" or status == "english":
-        if not chat_id in en_chats:
-            en_chats.append(chat_id)
-            await message.reply_text("English AI chat Enabled!")
-            return
-        await message.reply_text("AI Chat Is Already Disabled.")
-        message.continue_propagation()
     else:
         await message.reply_text(
             "I only recognize `/chatbot on` and /chatbot `off only`"
@@ -96,30 +61,30 @@ async def hmm(_, message):
     & ~filters.forwarded,
     group=2,
 )
-async def hmm(_, message):
+async def kuki(_, message):
     if not get_session(int(message.chat.id)):
         return
     if not message.reply_to_message:
         return
     try:
-        senderr = message.reply_to_message.from_user.id
+        moe = message.reply_to_message.from_user.id
     except:
         return
-    if senderr != BOT_ID:
+    if moe != BOT_ID:
         return
     msg = message.text
-    r = requests.get(f"https://kukiapihidden.herokuapp.com/kuki/chatbot?message={msg}").json()
-    pro = f"{r['reply']}"
+    Kuki = requests.get(f"https://kukiapihidden.herokuapp.com/kuki/chatbot?message={msg}").json()
+    moezilla = f"{Kuki['reply']}"
     await cutiepii.send_chat_action(message.chat.id, "typing")
-    await message.reply_text(pro)
+    await message.reply_text(moezilla)
 
 
 __help__ = """
- Chatbot utilizes the Brainshop's API and allows Cutiepii to talk and provides a more interactive group chat experience.
+ Chatbot utilizes the Kuki's API and allows Cutiepii to talk and provides a more interactive group chat experience.
  *Admins Only Commands*:
   ➢ `/chatbot [ON/OFF]`: Enables and disables Chatbot mode in the chat.
   ➢ `/chatbot EN` : Enables English only Chatbot mode in the chat.
- *Powered by Brainshop* (brainshop.ai)
+ *Powered by KukiChatBot* (@kukichatbot)
 """
 
 __mod_name__ = "ChatBot"
