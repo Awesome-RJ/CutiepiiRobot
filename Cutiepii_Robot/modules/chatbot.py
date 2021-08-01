@@ -1,6 +1,7 @@
 import re
 import emoji
 import aiohttp
+import requests
 
 # from google_trans_new import google_translator
 from googletrans import Translator as google_translator
@@ -23,13 +24,18 @@ def extract_emojis(s):
 
 
 async def fetch(url):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
-            try:
-                chat = await resp.json()
-            except:
-                chat = await resp.text()
-    return chat
+    try:
+        async with aiohttp.Timeout(10.0):
+            async with aiohttp.ClientSession() as session, session.get(url) as resp:
+                try:
+                    data = await resp.json()
+                except:
+                    data = await resp.text()
+            return data
+    except:
+        print("AI response Timeout")
+        return
+
 
 cutie_chats = []
 en_chats = []
@@ -102,10 +108,12 @@ async def hmm(_, message):
     if senderr != BOT_ID:
         return
     msg = message.text
-    pro = await fetch(f"https://yukicloud.tk/Kuki/chatbot?message={msg}")
-    pro = pro['reply']
+    r = requests.get(f"https://yukicloud.tk/Kuki/chatbot?message={msg}").json()
+    pro = f"{r['reply']}"
     await cutiepii.send_chat_action(message.chat.id, "typing")
     await message.reply_text(pro)
+
+
 __help__ = """
  Chatbot utilizes the Brainshop's API and allows Cutiepii to talk and provides a more interactive group chat experience.
  *Admins Only Commands*:
