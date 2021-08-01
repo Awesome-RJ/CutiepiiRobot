@@ -1,11 +1,17 @@
+import re
+import emoji
+import aiohttp
 import requests
+
 from pyrogram import filters
 
 from Cutiepii_Robot.modules.mongo.chatbot_mongo import add_chat, get_session, remove_chat
 from Cutiepii_Robot.utils.pluginhelp import admins_only, edit_or_reply
-from Cutiepii_Robot import pgram as cutiepii, BOT_ID, BOT_USERNAME
+from Cutiepii_Robot import pgram as cutiepii, BOT_ID
+
 
 cutie_chats = []
+en_chats = []
 
 
 @cutiepii.on_message(
@@ -25,20 +31,20 @@ async def hmm(_, message):
         lel = await edit_or_reply(message, "`Processing...`")
         lol = add_chat(int(message.chat.id))
         if not lol:
-            await lel.edit("Cutie AI Already Activated In This Chat")
+            await lel.edit("cutie AI Already Activated In This Chat")
             return
         await lel.edit(
-            f"Cutie AI Successfully Added For Users In The Chat {message.chat.id}"
+            f"cutie AI Successfully Added For Users In The Chat {message.chat.id}"
         )
 
     elif status == "OFF" or status == "off" or status == "Off":
         lel = await edit_or_reply(message, "`Processing...`")
         Escobar = remove_chat(int(message.chat.id))
         if not Escobar:
-            await lel.edit("Cutie AI Was Not Activated In This Chat")
+            await lel.edit("cutie AI Was Not Activated In This Chat")
             return
         await lel.edit(
-            f"Cutie AI Successfully Deactivated For Users In The Chat {message.chat.id}"
+            f"cutie AI Successfully Deactivated For Users In The Chat {message.chat.id}"
         )
     else:
         await message.reply_text(
@@ -67,7 +73,7 @@ async def kuki(_, message):
     if moe != BOT_ID:
         return
     msg = message.text
-    Kuki = requests.get(f"yukicloud.tk/Kuki/chatbot?message={msg}").json()
+    Kuki = requests.get(f"https://yukicloud.tk/Kuki/chatbot?message={msg}").json()
     moezilla = f"{Kuki['reply']}"
     await cutiepii.send_chat_action(message.chat.id, "typing")
     await message.reply_text(moezilla)
@@ -76,7 +82,8 @@ async def kuki(_, message):
 __help__ = """
  Chatbot utilizes the Kuki's API and allows Cutiepii to talk and provides a more interactive group chat experience.
  *Admins Only Commands*:
-  ➢ `/chatbot <on/off>`: Enables and disables Chatbot mode in the chat.
+  ➢ `/chatbot [ON/OFF]`: Enables and disables Chatbot mode in the chat.
+  ➢ `/chatbot EN` : Enables English only Chatbot mode in the chat.
  *Powered by KukiChatBot* (@kukichatbot)
 """
 
