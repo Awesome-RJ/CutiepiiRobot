@@ -67,7 +67,7 @@ async def kuki(_, message):
     if moe != BOT_ID:
         return
     msg = message.text
-    Kuki = requests.get(f"yukicloud.tk/kuki/chatbot?message={msg}").json()
+    Kuki = requests.get(f"yukicloud.tk/Kuki/chatbot?message={msg}").json()
     moezilla = f"{Kuki['reply']}"
     await cutiepii.send_chat_action(message.chat.id, "typing")
     await message.reply_text(moezilla)
