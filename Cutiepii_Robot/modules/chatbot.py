@@ -23,18 +23,13 @@ def extract_emojis(s):
 
 
 async def fetch(url):
-    try:
-        async with aiohttp.Timeout(10.0):
-            async with aiohttp.ClientSession() as session, session.get(url) as resp:
-                try:
-                    data = await resp.json()
-                except:
-                    data = await resp.text()
-            return data
-    except:
-        print("AI response Timeout")
-        return
-
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            try:
+                chat = await resp.json()
+            except:
+                chat = await resp.text()
+    return data
 
 cutie_chats = []
 en_chats = []
