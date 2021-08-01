@@ -29,7 +29,7 @@ async def fetch(url):
                 chat = await resp.json()
             except:
                 chat = await resp.text()
-    return data
+    return chat
 
 cutie_chats = []
 en_chats = []
