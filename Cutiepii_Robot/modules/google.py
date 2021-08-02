@@ -21,7 +21,7 @@ from datetime import datetime
 from requests import get, post
 
 from Cutiepii_Robot import telethn as client
-from Cutiepii_Robot import *
+
 from Cutiepii_Robot import telethn as tbot
 from Cutiepii_Robot.events import register
 

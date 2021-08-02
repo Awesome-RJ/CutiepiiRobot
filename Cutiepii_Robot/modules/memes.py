@@ -23,7 +23,7 @@ from telethon.tl import functions
 
 from zalgo_text import zalgo
 
-from Cutiepii_Robot import *
+
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn, ubot
 
