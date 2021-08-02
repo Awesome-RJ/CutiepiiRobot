@@ -203,7 +203,7 @@ def new_member(update: Update, context: CallbackContext):
                 update.effective_message.reply_text("This is a Blacklisted Group! Join @FoundingTitanSupport for Appeal.")
                 bot.leave_chat(BL_CHATS)
 
-        if new_mem.id == bot.id and not SaitamaRobot.ALLOW_CHATS:
+        if new_mem.id == bot.id and not Cutiepii_Robot.ALLOW_CHATS:
             with suppress(BadRequest):
                 update.effective_message.reply_text(f"Groups are disabled for {bot.first_name}, I'm outta here.")
             bot.leave_chat(update.effective_chat.id)
