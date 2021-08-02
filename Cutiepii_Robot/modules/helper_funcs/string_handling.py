@@ -226,7 +226,7 @@ def split_quotes(text: str) -> List:
 def remove_escapes(text: str) -> str:
     res = ""
     is_escaped = False
-    for counter in range(len(text)):
+    for counter in enumerate(text):
         if is_escaped:
             res += text[counter]
             is_escaped = False
