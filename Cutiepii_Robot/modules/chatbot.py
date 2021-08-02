@@ -73,11 +73,11 @@ def rem_chat(update: Update, context: CallbackContext):
     return message
 
 def kuki_message(context: CallbackContext, message):
-    reply_message = message.reply_to_message
+    reply_msg = message.reply_to_message
     if message.text.lower() == "cutiepii":
         return True
     if reply_msg:
-        if reply_message.from_user.id == context.bot.get_me().id:
+        if reply_msg.from_user.id == context.bot.get_me().id:
             return True
     else:
         return False
@@ -88,7 +88,7 @@ def chatbot(update: Update, context: CallbackContext):
         is_kuki = sql.is_kuki(chat_id)
         if not is_kuki:
             return
-    if message.text and not message.document:
+    if msg.text and not msg.document:
         if not kuki_message(context, message):
             return
     message = update.message.text
