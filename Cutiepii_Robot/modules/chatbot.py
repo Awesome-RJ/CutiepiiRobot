@@ -15,7 +15,7 @@ en_chats = []
 
 
 @cutiepii.on_message(
-    filters.command(["chatbot", f"chatbot@{BOT_USERNAME}"]) & ~filters.edited & ~filters.bot & ~filters.private
+    filters.command(["chatbot", f"chatbot@{BOT_USERNAME}"]) & ~filters.edited & ~filters.bot & filters.private
 )
 @admins_only
 async def hmm(_, message):
@@ -75,9 +75,9 @@ async def kuki(_, message):
     msg = message.text
     Kuki = requests.get(f"https://kuki-yukicloud.up.railway.app/Kuki/chatbot?message={msg}").json()
     moezilla = f"{Kuki['reply']}"
+    if "Cutiepii" in msg or "cutiepii" in msg or "CUTIEPII" in msg:
     await cutiepii.send_chat_action(message.chat.id, "typing")
-    await message.reply_text(moezilla)
-
+    await message.reply_text(moezilla) 
 
 __help__ = """
  Chatbot utilizes the Kuki's API and allows Cutiepii to talk and provides a more interactive group chat experience.
