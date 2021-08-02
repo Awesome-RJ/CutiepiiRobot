@@ -25,7 +25,7 @@ Thank you for contributing with me in this Project:
 + [InukaAsith](https://github.com/InukaAsith) : MEMES, INLINE ETC MODULES 
 + [AyraHikari](https://github.com/AyraHikari): FED MODULE
 + [Peaktogoo](https://github.com/peaktogoo) : FED MODULE
-+ [sasukeuchiha912](https://github.com/sasukeuchiha912) : PTB 13.6
++ [sasukeuchiha912](https://github.com/sasukeuchiha912) : PTB 13.7
 
 
 Any other authorship/credits can be seen through the commits.
