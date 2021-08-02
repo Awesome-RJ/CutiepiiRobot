@@ -45,7 +45,7 @@ def add_chat(update: Update, context: CallbackContext):
         msg.reply_text("Cutiepii AI successfully enabled for this chat!")
         message = (
             f"<b>{html.escape(chat.title)}:</b>\n"
-            f"AI_ENABLED\n"
+            f"Cutiepii_ENABLED\n"
             f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
         )
         return message
@@ -67,7 +67,7 @@ def rem_chat(update: Update, context: CallbackContext):
     msg.reply_text("Cutiepii AI disabled successfully!")
     message = (
         f"<b>{html.escape(chat.title)}:</b>\n"
-        f"AI_DISABLED\n"
+        f"Cutiepii_DISABLED\n"
         f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
     )
     return message
@@ -79,7 +79,7 @@ def chatbot(update: Update, context: CallbackContext):
         if not is_kuki:
             return
     message = update.message.text
-    kukiurl = requests.get('https://kuki-yukicloud.up.railway.app/Kuki/chatbot?message='+message)
+    kukiurl = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+message)
     Kuki = json.loads(kukiurl.text)
     kuki = Kuki['reply']
     update.message.reply_text(kuki)
