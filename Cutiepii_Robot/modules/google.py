@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from telethon import *
 from telethon.tl import functions, types
-from telethon.tl.types import *
+
 from asyncio import sleep
 from datetime import datetime
 from requests import get, post

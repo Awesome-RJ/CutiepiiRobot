@@ -2,7 +2,7 @@ import io
 
 from telethon import types
 from telethon.tl import functions, types
-from telethon.tl.types import *
+
 
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn as borg

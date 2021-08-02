@@ -20,7 +20,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from telethon import *
 from telethon.tl import functions
-from telethon.tl.types import *
+
 from zalgo_text import zalgo
 
 from Cutiepii_Robot import *
