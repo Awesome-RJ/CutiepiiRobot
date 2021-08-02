@@ -99,6 +99,20 @@ def list_all_chats(update: Update, context: CallbackContext):
         except RetryAfter as e:
             sleep(e.retry_after)
     update.effective_message.reply_text(text, parse_mode="HTML")
+    
+    
+__help__ = f"""
+Chatbot utilizes the cutiepii • YukiCloud API and allows Saitama to talk and provides a more interactive group chat experience.
+
+*Commands:* 
+*Admins only:*
+   ➢ `/addchat`*:* Enables Chatbot mode in the chat.
+   ➢ `/rmchat`*:* Disables Chatbot mode in the chat.
+
+Reports bugs at @{SUPPORT_CHAT}
+
+*Powered by cutiepii • YukiCloud API*
+"""
 
 ADD_CHAT_HANDLER = CommandHandler("addchat", add_chat, run_async=True)
 REMOVE_CHAT_HANDLER = CommandHandler("rmchat", rem_chat, run_async=True)
@@ -113,6 +127,7 @@ dispatcher.add_handler(REMOVE_CHAT_HANDLER)
 dispatcher.add_handler(LIST_ALL_CHATS_HANDLER)
 dispatcher.add_handler(CHATBOT_HANDLER)
 
+__mod_name__ = "Chatbot"
 __handlers__ = [
     ADD_CHAT_HANDLER,
     REMOVE_CHAT_HANDLER,
