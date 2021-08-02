@@ -101,7 +101,7 @@ def list_all_chats(update: Update, context: CallbackContext):
     update.effective_message.reply_text(text, parse_mode="HTML")
 
 ADD_CHAT_HANDLER = CommandHandler("addchat", add_chat, run_async=True)
-REMOVE_CHAR_HANDLER = CommandHandler("rmchat", rem_chat, run_async=True)
+REMOVE_CHAT_HANDLER = CommandHandler("rmchat", rem_chat, run_async=True)
 CHATBOT_HANDLER = MessageHandler(
     Filters.text & (~Filters.regex(r"^#[^\s]+") & ~Filters.regex(r"^!")
                     & ~Filters.regex(r"^\/")), chatbot)
@@ -109,7 +109,7 @@ LIST_ALL_CHATS_HANDLER = CommandHandler(
     "allchats", list_all_chats, filters=CustomFilters.dev_filter, run_async=True)
 
 dispatcher.add_handler(ADD_CHAT_HANDLER)
-dispatcher.add_handler(REMOVE_CHAR_HANDLER)
+dispatcher.add_handler(REMOVE_CHAT_HANDLER)
 dispatcher.add_handler(LIST_ALL_CHATS_HANDLER)
 dispatcher.add_handler(CHATBOT_HANDLER)
 
