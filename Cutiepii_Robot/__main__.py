@@ -1,11 +1,12 @@
+import html
 import importlib
 import time
 import re
-from sys import argv
 import sys
 import traceback
 import Cutiepii_Robot.modules.sql.users_sql as sql
 
+from sys import argv
 from typing import Optional
 from Cutiepii_Robot import (
     ALLOW_EXCL,
