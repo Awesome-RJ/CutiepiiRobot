@@ -411,7 +411,7 @@ def set_about_me(update: Update, context: CallbackContext):
 
 @sudo_plus
 def stats(update: Update, context: CallbackContext):
-    stats = "Maintained by @Awesome_RJ\nBuilt with 💜 using python-telegram-bot\n\nPython version: 3.8.5\nLibrary version: 13.1\n\nSRC: https://github.com/Rajkumar-27/Cutiepii-Robot \nSupport Group:- @Cutiepii_Support\nUpdate Channel:- @Techno_Ocean\n\n<b>📖 Bot statistics:</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
+    stats = "Maintained by @Awesome_RJ\nBuilt with 💜 using python-telegram-bot\n\nPython version: 3.8.5\nLibrary version: 13.1\n\nSRC: https://github.com/Rajkumar-27/Cutiepii-Robot \nSupport Group:- @Black_Knights_Union_Support\nUpdate Channel:- @Black_Knights_Union\n\n<b>📖 Bot statistics:</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
     result = re.sub(r"(\d+)", r"<code>\1</code>", stats)
     update.effective_message.reply_text(result, parse_mode=ParseMode.HTML)
 
