@@ -79,7 +79,7 @@ def chatbot(update: Update, context: CallbackContext):
         if not is_kuki:
             return
     message = update.message.text
-    kukiurl = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+message)
+    kukiurl = requests.get('https://yukicloud.tk/Kuki/chatbot?message='+message)
     Kuki = json.loads(kukiurl.text)
     kuki = Kuki['reply']
     update.message.reply_text(kuki)
