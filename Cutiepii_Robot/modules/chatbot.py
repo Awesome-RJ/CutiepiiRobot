@@ -72,11 +72,24 @@ def rem_chat(update: Update, context: CallbackContext):
     )
     return message
 
+def kuki_message(context: CallbackContext, message):
+    reply_message = message.reply_to_message
+    if message.text.lower() == "cutiepii":
+        return True
+    if reply_msg:
+        if reply_message.from_user.id == context.bot.get_me().id:
+            return True
+    else:
+        return False
+ 
 def chatbot(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     if not update.effective_message.chat.type == "private":
         is_kuki = sql.is_kuki(chat_id)
         if not is_kuki:
+            return
+    if message.text and not message.document:
+        if not kuki_message(context, message):
             return
     message = update.message.text
     kukiurl = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+message)
