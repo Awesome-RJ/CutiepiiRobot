@@ -13,7 +13,7 @@ def get_readable_time(seconds: int) -> str:
             break
         time_list.append(int(result))
         seconds = int(remainder)
-    for i in range(len(time_list)):
+    for i in enumerate(time_list):
         time_list[i] = str(time_list[i]) + time_suffix_list[i]
     if len(time_list) == 4:
         ping_time += time_list.pop() + ", "
