@@ -19,6 +19,7 @@ from Python_ARQ import ARQ
 from aiohttp import ClientSession
 from ptbcontrib.postgres_persistence import PostgresPersistence
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
+from telegram import Chat
 
 StartTime = time.time()
 
