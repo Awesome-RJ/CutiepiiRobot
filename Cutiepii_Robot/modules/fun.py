@@ -721,5 +721,5 @@ __handlers__ = [
     UWU_HANDLER,
     OWO_HANDLER,
     GDMORNING_HANDLER,
-    GDNIGHT_HANDLER.
+    GDNIGHT_HANDLER,
 ]
