@@ -349,7 +349,7 @@ def pin(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     chat = update.effective_chat
 
-    is_group = chat.type != "private" and chat.type != "channel"
+    is_group = chat.type not in ('private', 'channel')
     prev_message = update.effective_message.reply_to_message
 
     is_silent = True
