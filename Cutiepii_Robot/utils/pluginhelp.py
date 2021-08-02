@@ -14,6 +14,7 @@ from pyrogram.types import Chat, Message, User
 
 from Cutiepii_Robot import OWNER_ID, SUPPORT_CHAT
 from Cutiepii_Robot import pgram
+from Cutiepii_Robot.utils.errors import split_limits
 
 
 def get_user(message: Message, text: str) -> [int, str, None]:
