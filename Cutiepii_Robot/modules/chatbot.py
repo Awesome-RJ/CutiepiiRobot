@@ -24,7 +24,7 @@ import Cutiepii_Robot.modules.sql.kuki_sql as sql
 
 from time import sleep
 from telegram import ParseMode
-from Cutiepii_Robot import dispatcher, updater
+from Cutiepii_Robot import dispatcher, updater, SUPPORT_CHAT
 from Cutiepii_Robot.modules.log_channel import gloggable
 from telegram import Message, Chat, Update, Bot, MessageEntity
 from telegram.error import BadRequest, RetryAfter, Unauthorized
@@ -102,7 +102,7 @@ def list_all_chats(update: Update, context: CallbackContext):
     
     
 __help__ = f"""
-Chatbot utilizes the cutiepii • YukiCloud API and allows Saitama to talk and provides a more interactive group chat experience.
+Chatbot utilizes the cutiepii • YukiCloud API and allows Cutiepii to talk and provides a more interactive group chat experience.
 
 *Commands:* 
 *Admins only:*
