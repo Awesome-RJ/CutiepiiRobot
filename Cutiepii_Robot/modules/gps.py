@@ -1,5 +1,5 @@
 from geopy.geocoders import Nominatim
-from telethon import *
+
 from telethon.tl import *
 
 from Cutiepii_Robot.events import register

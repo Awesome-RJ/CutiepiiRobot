@@ -13,7 +13,7 @@ from bing_image_downloader import downloader
 import bs4
 from bs4 import BeautifulSoup
 from PIL import Image
-from telethon import *
+
 from telethon.tl import functions, types
 
 from asyncio import sleep
