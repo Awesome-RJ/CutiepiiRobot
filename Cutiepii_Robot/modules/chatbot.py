@@ -72,17 +72,49 @@ def rem_chat(update: Update, context: CallbackContext):
     )
     return message
  
+
+
+def kuki_message(context: CallbackContext, message):
+    reply_msg = message.reply_to_message
+    text = message.text
+    if re.search("[.|\n]{0,}[s|A][a|A][i|I][t|T][a|A][m|M][a|A][.|\n]{0,}", text):
+        return True
+    if reply_msg:
+        """
+        Thank You @zero_xyrz Fixxed
+        """
+        if reply_msg.from_user.id == context.bot.get_me().id:
+            return True
+    else:
+        return False
+
+
 def chatbot(update: Update, context: CallbackContext):
+    message = update.effective_message
     chat_id = update.effective_chat.id
     if not update.effective_message.chat.type == "private":
         is_kuki = sql.is_kuki(chat_id)
         if not is_kuki:
+            return
+     if messsage.text and not message.document:
+        if not check_message(context, msg):
             return
     message = update.message.text
     kukiurl = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+message)
     Kuki = json.loads(kukiurl.text)
     kuki = Kuki['reply']
     update.message.reply_text(kuki)
+
+        def kuki_message(context: CallbackContext, message):
+    reply_msg = message.reply_to_message
+    if message.text.lower() == "cutiepii":
+        return True
+    if reply_msg:
+        if reply_msg.from_user.id == context.bot.get_me().id:
+            return True
+    else:
+        return False
+        
 
 def list_all_chats(update: Update, context: CallbackContext):
     chats = sql.get_all_kuki_chats()
