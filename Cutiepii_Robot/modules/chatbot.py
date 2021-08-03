@@ -76,7 +76,7 @@ def rem_chat(update: Update, context: CallbackContext):
 
 
 def kuki_message(context: CallbackContext, message):
-    reply_messagw = message.reply_to_message
+    reply_message = message.reply_to_message
     if message.text.lower() == "cutiepii":
         return True
     if reply_message:
@@ -96,7 +96,7 @@ def chatbot(update: Update, context: CallbackContext):
             return
     	
     if message.text and not message.document:
-        if not check_message(context, message):
+        if not check_kuki(context, message):
             return
         message = message.text
         bot.send_chat_action(chat_id, action="typing")
