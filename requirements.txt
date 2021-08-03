@@ -31,7 +31,7 @@ ujson
 wikipedia
 zalgo-text
 fontTools
-Pyrogram
+pyrogram
 nekos.py
 telegraph
 tgCrypto>=1.2.2
@@ -77,7 +77,6 @@ countryinfo
 faker
 PyDictionary==2.0.1
 static-ffmpeg
-multicolorcaptcha
 python-rapidjson
 heroku3
 git+https://github.com/python-telegram-bot/ptbcontrib.git
