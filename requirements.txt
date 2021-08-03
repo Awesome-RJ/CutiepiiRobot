@@ -76,7 +76,7 @@ opencv-python-headless
 countryinfo
 faker
 PyDictionary==2.0.1
-static-ffmpeg
+ffmpeg
 python-rapidjson
 heroku3
 git+https://github.com/python-telegram-bot/ptbcontrib.git
