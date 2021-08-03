@@ -31,7 +31,7 @@ ujson
 wikipedia
 zalgo-text
 fontTools
-pyrogram
+Pyrogram
 nekos.py
 telegraph
 tgCrypto>=1.2.2
