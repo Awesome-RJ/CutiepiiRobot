@@ -88,6 +88,16 @@ def kuki_message(context: CallbackContext, message):
     else:
         return False
 
+def kuki_message(context: CallbackContext, message):
+    reply_messagw = message.reply_to_message
+    if message.text.lower() == "cutiepii":
+        return True
+    if reply_message:
+        if reply_message.from_user.id == context.bot.get_me().id:
+            return True
+    else:
+        return False
+        
 
 def chatbot(update: Update, context: CallbackContext):
     message = update.effective_message
@@ -97,24 +107,13 @@ def chatbot(update: Update, context: CallbackContext):
         if not is_kuki:
             return
      if messsage.text and not message.document:
-        if not check_message(context, msg):
+        if not kuki_message(context, message):
             return
     message = update.message.text
     kukiurl = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+message)
     Kuki = json.loads(kukiurl.text)
     kuki = Kuki['reply']
     update.message.reply_text(kuki)
-
-        def kuki_message(context: CallbackContext, message):
-    reply_msg = message.reply_to_message
-    if message.text.lower() == "cutiepii":
-        return True
-    if reply_msg:
-        if reply_msg.from_user.id == context.bot.get_me().id:
-            return True
-    else:
-        return False
-        
 
 def list_all_chats(update: Update, context: CallbackContext):
     chats = sql.get_all_kuki_chats()
