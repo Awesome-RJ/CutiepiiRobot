@@ -76,7 +76,7 @@ opencv-python-headless
 countryinfo
 faker
 PyDictionary==2.0.1
-ffmpeg
+static-ffmpeg
 multicolorcaptcha
 python-rapidjson
 heroku3
