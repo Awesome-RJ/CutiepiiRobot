@@ -1,5 +1,6 @@
 from geopy.geocoders import Nominatim
 from telethon import types
+from telethon.tl import functions, types
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn as client
 
