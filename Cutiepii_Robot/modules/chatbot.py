@@ -89,10 +89,11 @@ def kuki_message(context: CallbackContext, message):
 def chatbot(update: Update, context: CallbackContext):
     msg = update.effective_message
     chat_id = update.effective_chat.id
-    is_kuki = sql.is_kuki(chat.id)
     bot = context.bot
-    if not is_kuki:
-    	return
+    if not update.effective_message.chat.type == "private":
+        is_kuki = sql.is_kuki(chat_id)
+        if not is_kuki:
+            return
     	
     if message.text and not message.document:
         if not check_message(context, message):
