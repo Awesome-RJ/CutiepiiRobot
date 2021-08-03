@@ -89,19 +89,17 @@ def kuki_message(context: CallbackContext, message):
 def chatbot(update: Update, context: CallbackContext):
     message = update.effective_message
     chat_id = update.effective_chat.id
+    is_kuki = sql.is_kuki(chat.id)
     bot = context.bot
-    if not update.effective_message.chat.type == "private":
-        is_kuki = sql.is_kuki(chat_id)
-        if not is_kuki:
+    if not is_kuki:
+    	return
+    	
+    if message.text and not message.document:
+        if not check_message(context, message):
             return
-    if messsage.text and not message.document:
-        if not kuki_message(context, message):
-            return
-    message = update.message.text
-    bot.send_chat_action(chat_id, action="typing")
-    Kuki = message.text
+        message = message.text
         bot.send_chat_action(chat_id, action="typing")
-        kuki = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+Kuki)
+        kuki = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+message)
         sleep(0.3)
         msg.reply_text(kuki, timeout=60)
 
@@ -161,4 +159,3 @@ __handlers__ = [
     LIST_ALL_CHATS_HANDLER,
     CHATBOT_HANDLER,
 ]
-
