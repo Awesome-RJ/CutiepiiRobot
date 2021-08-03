@@ -87,7 +87,7 @@ def kuki_message(context: CallbackContext, message):
         
 
 def chatbot(update: Update, context: CallbackContext):
-    msg = update.effective_message
+    message = update.effective_message
     chat_id = update.effective_chat.id
     bot = context.bot
     if not update.effective_message.chat.type == "private":
