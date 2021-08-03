@@ -87,7 +87,7 @@ def kuki_message(context: CallbackContext, message):
         
 
 def chatbot(update: Update, context: CallbackContext):
-    message = update.effective_message
+    msg = update.effective_message
     chat_id = update.effective_chat.id
     is_kuki = sql.is_kuki(chat.id)
     bot = context.bot
