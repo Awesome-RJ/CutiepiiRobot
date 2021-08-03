@@ -102,6 +102,13 @@ def list_all_chats(update: Update, context: CallbackContext):
    
 
 __help__ = """
+
+"""
+
+__mod_name__ = "ChatBot"
+
+
+__help__ = """
 Chatbot utilizes the Kuki API and allows Cutiepii to talk and provides a more interactive group chat experience.
 
 *Commands:* 
@@ -110,7 +117,6 @@ Chatbot utilizes the Kuki API and allows Cutiepii to talk and provides a more in
    ➢ `rmchat`*:* Disables Chatbot mode in the chat.
    
 Reports bugs at @Black_Knights_Union_Support
-*Powered by Moezilla* (https://github/moezilla) from @Kukichatbot
 """
 
 __mod_name__ = "ChatBot"
