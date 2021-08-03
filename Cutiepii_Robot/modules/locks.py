@@ -1,5 +1,6 @@
 import Cutiepii_Robot.modules.sql.locks_sql as sql
 import html
+import ast
 
 from telegram import Message, Chat, ParseMode, MessageEntity
 from telegram import TelegramError, ChatPermissions
@@ -19,7 +20,6 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
 )
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.connection import connected
-
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
 
 ad = AlphabetDetector()
