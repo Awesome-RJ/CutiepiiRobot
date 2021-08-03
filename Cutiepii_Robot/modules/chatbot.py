@@ -99,10 +99,11 @@ def chatbot(update: Update, context: CallbackContext):
             return
     message = update.message.text
     bot.send_chat_action(chat_id, action="typing")
-    kukiurl = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+message)
-    Kuki = json.loads(kukiurl.text)
-    kuki = Kuki['reply']
-    update.message.reply_text(kuki)
+    Kuki = message.text
+        bot.send_chat_action(chat_id, action="typing")
+        kuki = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+Kuki)
+        sleep(0.3)
+        msg.reply_text(kuki, timeout=60)
 
 def list_all_chats(update: Update, context: CallbackContext):
     chats = sql.get_all_kuki_chats()
