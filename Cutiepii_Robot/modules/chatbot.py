@@ -40,10 +40,6 @@ def add_chat(update: Update, context: CallbackContext):
     msg = update.effective_message
     user = update.effective_user
     is_kuki = sql.is_kuki(chat.id)
-    if chat.type == "private":
-        msg.reply_text("You can't enable AI in PM.")
-        return
-
     if not is_kuki:
         sql.set_kuki(chat.id)
         msg.reply_text("Cutiepii AI successfully enabled for this chat!")
@@ -64,9 +60,6 @@ def rem_chat(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
     is_kuki = sql.is_kuki(chat.id)
-    if chat.type == "private":
-        msg.reply_text("You can't disabled AI in PM.")
-        return
     if not is_kuki:
         msg.reply_text("Cutiepii AI isn't enabled here in the first place!")
         return ""
@@ -97,11 +90,10 @@ def chatbot(update: Update, context: CallbackContext):
     message = update.effective_message
     chat_id = update.effective_chat.id
     bot = context.bot
-    if not update.effective_message.chat.type == "private":
-        is_kuki = sql.is_kuki(chat_id)
-        if not is_kuki:
-            return
-    	
+    is_kuki = sql.is_kuki(chat_id)
+    if not is_kuki:
+        return
+	
     if message.text and not message.document:
         if not kuki_message(context, message):
             return
