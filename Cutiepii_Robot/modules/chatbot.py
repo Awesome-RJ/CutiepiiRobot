@@ -96,7 +96,7 @@ def chatbot(update: Update, context: CallbackContext):
             return
     	
     if message.text and not message.document:
-        if not check_kuki(context, message):
+        if not kuki_message(context, message):
             return
         message = message.text
         bot.send_chat_action(chat_id, action="typing")
