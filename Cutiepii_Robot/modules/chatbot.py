@@ -98,9 +98,9 @@ def chatbot(update: Update, context: CallbackContext):
     if message.text and not message.document:
         if not kuki_message(context, message):
             return
-        message = message.text
+        Message = message.text
         bot.send_chat_action(chat_id, action="typing")
-        kuki = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+message)
+        kuki = requests.get('https://kuki.up.railway.app/Kuki/chatbot?message='+Message)
         sleep(0.3)
         message.reply_text(kuki, timeout=60)
 
