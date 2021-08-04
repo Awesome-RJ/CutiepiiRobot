@@ -272,6 +272,7 @@ def refresh_admin(update, _):
 
     update.effective_message.reply_text("Admins cache refreshed!")
 
+
 @connection_status
 @bot_admin
 @can_promote
@@ -401,6 +402,27 @@ def unpin(update: Update, context: CallbackContext) -> str:
     )
 
     return log_message
+
+
+@bot_admin
+def pinned(update: Update, context: CallbackContext) -> str:
+    bot = context.bot
+    msg = update.effective_message
+    msg_id = update.effective_message.reply_to_message.message_id if update.effective_message.reply_to_message else update.effective_message.message_id
+
+    chat = bot.getChat(chat_id=msg.chat.id)
+    if chat.pinned_message:
+        pinned_id = chat.pinned_message.message_id
+        if msg.chat.username:
+            link_chat_id = msg.chat.username
+            message_link = (f"https://t.me/{link_chat_id}/{pinned_id}")
+        elif (str(msg.chat.id)).startswith("-100"):
+            link_chat_id = (str(msg.chat.id)).replace("-100", "")
+            message_link = (f"https://t.me/c/{link_chat_id}/{pinned_id}")
+            
+        msg.reply_text(f'The pinned message of {html.escape(chat.title)} is <a href="{message_link}">here</a>.', reply_to_message_id=msg_id, parse_mode=ParseMode.HTML, disable_web_page_preview=True,)
+    else:
+        msg.reply_text(f'There is no pinned message in {html.escape(chat.title)}!')
 
 
 @bot_admin
@@ -542,6 +564,7 @@ def adminlist(update, context):
 __help__ = """
 *User Commands*:
   ➢ `/admins`*:* list of admins in the chat
+  ➢ `/pinned`*:* to get the current pinned message.
 
 *The Following Commands are Admins only:*
  
@@ -578,6 +601,7 @@ ADMINLIST_HANDLER = DisableAbleCommandHandler("admins", adminlist, run_async=Tru
 
 PIN_HANDLER = CommandHandler("pin", pin, filters=Filters.chat_type.groups, run_async=True)
 UNPIN_HANDLER = CommandHandler("unpin", unpin, filters=Filters.chat_type.groups, run_async=True)
+PINNED_HANDLER = CommandHandler("pinned", pinned, filters=Filters.chat_type.groups, run_async=True)
 
 INVITE_HANDLER = DisableAbleCommandHandler("invitelink", invite, run_async=True)
 
@@ -591,6 +615,7 @@ ADMIN_REFRESH_HANDLER = CommandHandler("admincache", refresh_admin, filters=Filt
 dispatcher.add_handler(ADMINLIST_HANDLER)
 dispatcher.add_handler(PIN_HANDLER)
 dispatcher.add_handler(UNPIN_HANDLER)
+dispatcher.add_handler(PINNED_HANDLER)
 dispatcher.add_handler(INVITE_HANDLER)
 dispatcher.add_handler(PROMOTE_HANDLER)
 dispatcher.add_handler(FULLPROMOTE_HANDLER)
@@ -600,9 +625,23 @@ dispatcher.add_handler(ADMIN_REFRESH_HANDLER)
 
 __mod_name__ = "Admins"
 __command_list__ = [
-    "adminlist", "admins", "invitelink", "promote", "fullpromote", "demote", "admincache"
+    "adminlist", 
+    "admins", 
+    "invitelink", 
+    "promote", 
+    "fullpromote", 
+    "demote", 
+    "admincache",
 ]
 __handlers__ = [
-    ADMINLIST_HANDLER, PIN_HANDLER, UNPIN_HANDLER, INVITE_HANDLER,
-    PROMOTE_HANDLER, FULLPROMOTE_HANDLER, DEMOTE_HANDLER, SET_TITLE_HANDLER, ADMIN_REFRESH_HANDLER
+    ADMINLIST_HANDLER,
+    PIN_HANDLER,
+    UNPIN_HANDLER,
+    PINNED_HANDLER,
+    INVITE_HANDLER,
+    PROMOTE_HANDLER,
+    FULLPROMOTE_HANDLER, 
+    DEMOTE_HANDLER,
+    SET_TITLE_HANDLER,
+    ADMIN_REFRESH_HANDLER,
 ]
