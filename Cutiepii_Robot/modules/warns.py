@@ -85,7 +85,7 @@ def warn(user: User,
         for warn_reason in reasons:
             reply += f"\n - {html.escape(warn_reason)}"
 
-        # message.bot.send_sticker(chat.id, BAN_STICKER)  # Cutiepii's sticker
+        # message.bot.send_sticker(chat.id, BAN_STICKER)  # Saitama's sticker
         keyboard = None
         log_reason = (f"<b>{html.escape(chat.title)}:</b>\n"
                       f"#WARN_BAN\n"
@@ -153,8 +153,9 @@ def button(update: Update, context: CallbackContext) -> str:
                 f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
             )
-        update.effective_message.edit_text(
-            "User already has no warns.", parse_mode=ParseMode.HTML)
+        else:
+            update.effective_message.edit_text(
+                "User already has no warns.", parse_mode=ParseMode.HTML)
 
     return ""
 
@@ -169,16 +170,20 @@ def warn_user(update: Update, context: CallbackContext) -> str:
     warner: Optional[User] = update.effective_user
     
     user_id, reason = extract_user_and_text(message, args)
-    if message.text.startswith('/d') and message.reply_to_message:
-        message.reply_to_message.delete()
-        return warn(chat, reason, warner, message)           
+    if message.text.startswith("/d") and message.reply_to_message:        
+        return warn(message.reply_to_message.from_user, chat, reason, warner, message) 
+        message.reply_to_message.delete()     
+    if not can_delete(chat, context.bot.id):
+        return ""                                      
     if user_id:
         if message.reply_to_message and message.reply_to_message.from_user.id == user_id:
             return warn(message.reply_to_message.from_user, chat, reason,
                         message.reply_to_message, warner)
-        return warn(
-            chat.get_member(user_id).user, chat, reason, message, warner)
-    message.reply_text("That looks like an invalid User ID to me.")
+        else:
+            return warn(
+                chat.get_member(user_id).user, chat, reason, message, warner)
+    else:
+        message.reply_text("That looks like an invalid User ID to me.")
     return ""
 
 
@@ -201,7 +206,8 @@ def reset_warns(update: Update, context: CallbackContext) -> str:
                 f"#RESETWARNS\n"
                 f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"<b>User:</b> {mention_html(warned.id, warned.first_name)}")
-    message.reply_text("No user has been designated!")
+    else:
+        message.reply_text("No user has been designated!")
     return ""
 
 
@@ -219,7 +225,7 @@ def warns(update: Update, context: CallbackContext):
         if reasons:
             text = f"This user has {num_warns}/{limit} warns, for the following reasons:"
             for reason in reasons:
-                text += f"\n ➩ {reason}"
+                text += f"\n • {reason}"
 
             msgs = split_message(text)
             for msg in msgs:
@@ -405,7 +411,7 @@ def set_warn_strength(update: Update, context: CallbackContext):
                 f"Has enabled strong warns. Users will be seriously punched.(banned)"
             )
 
-        if args[0].lower() in ("off", "no"):
+        elif args[0].lower() in ("off", "no"):
             sql.set_warn_strength(chat.id, True)
             msg.reply_text(
                 "Too many warns will now result in a normal punch! Users will be able to join again after."
@@ -415,7 +421,9 @@ def set_warn_strength(update: Update, context: CallbackContext):
                 f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"Has disabled strong punches. I will use normal punch on users."
             )
-        msg.reply_text("I only understand on/yes/no/off!")
+
+        else:
+            msg.reply_text("I only understand on/yes/no/off!")
     else:
         limit, soft_warn = sql.get_warn_setting(chat.id)
         if soft_warn:
