@@ -2,6 +2,7 @@ import html
 import random
 import re
 import time
+
 from functools import partial
 from contextlib import suppress
 from typing import Tuple, Optional
@@ -54,6 +55,7 @@ from telegram.ext import (
     ChatMemberHandler,
 )
 from telegram.utils.helpers import escape_markdown, mention_html, mention_markdown
+from telegram import Chat
 
 VALID_WELCOME_FORMATTERS = [
     "first",
