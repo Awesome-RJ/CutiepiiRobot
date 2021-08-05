@@ -283,7 +283,7 @@ async def get_administrators(chat: Chat) -> List[User]:
         return _get
     set(
         chat.id,
-        [member.user for member in await chat.get_members(filter="administrators")],
+        [member.user for member in await chat.get_member(filter="administrators")],
     )
     return await get_administrators(chat)
 
