@@ -32,7 +32,6 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import extract_time
 from Cutiepii_Robot.modules.log_channel import gloggable, loggable
 
 
-
 @connection_status
 @bot_admin
 @can_restrict
@@ -100,7 +99,7 @@ def ban(update: Update, context: CallbackContext) -> str:
         log += "\n<b>Reason:</b> {}".format(reason)
 
     try:
-        chat.kick_member(user_id)
+        chat.ban_member(user_id)
 
         if silent:
             if message.reply_to_message:
@@ -195,7 +194,7 @@ def temp_ban(update: Update, context: CallbackContext) -> str:
         log += "\n<b>Reason:</b> {}".format(reason)
 
     try:
-        chat.kick_member(user_id, until_date=bantime)
+        chat.ban_member(user_id, until_date=bantime)
         # bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
         bot.sendMessage(
             chat.id,
@@ -224,6 +223,7 @@ def temp_ban(update: Update, context: CallbackContext) -> str:
         message.reply_text("Well damn, I can't ban that user.")
 
     return log_message
+
 
 @connection_status
 @bot_admin
@@ -282,7 +282,6 @@ def kick(update: Update, context: CallbackContext) -> str:
     return log_message
 
 
-
 @bot_admin
 @can_restrict
 def kickme(update: Update, context: CallbackContext):
@@ -296,7 +295,6 @@ def kickme(update: Update, context: CallbackContext):
         update.effective_message.reply_text("*Kicks you out of the group*")
     else:
         update.effective_message.reply_text("Huh? I can't :/")
-
 
 
 @connection_status
@@ -345,7 +343,6 @@ def unban(update: Update, context: CallbackContext) -> str:
         log += f"\n<b>Reason:</b> {reason}"
 
     return log
-
 
 
 @connection_status
