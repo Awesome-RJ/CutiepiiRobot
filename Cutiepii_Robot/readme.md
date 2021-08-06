@@ -16,7 +16,7 @@ from Cutiepii_Robot import ubot
 from Cutiepii_Robot import arq
 ```
 
-# DB
+# DataBase
 ## Importing MongoDB
 ```python3
 from Cutiepii_Robot import mongodb
