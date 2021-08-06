@@ -21,7 +21,7 @@ __help__ = """
 ## Advanced: Telethon
 ```python3
 
-from Cutiepii_Robot import tbot
+from Cutiepii_Robot import telethn
 from Cutiepii_Robot.events import register
 
 @register(pattern="^/hi$")
