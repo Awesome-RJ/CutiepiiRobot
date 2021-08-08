@@ -4,9 +4,7 @@ import regex
 def regex_searcher(regex_string, string):
     try:
         search = regex.search(regex_string, string, timeout=6)
-    except TimeoutError:
-        return False
-    except Exception:
+    except (TimeoutError, Exception):
         return False
     return search
 

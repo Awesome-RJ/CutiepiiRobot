@@ -11,13 +11,10 @@ async def repo(_, message):
     users = await get(
         "https://api.github.com/repos/Awesome-RJ/CutiepiiRobot/contributors"
     )
-    list_of_users = ""
-    count = 1
-    for user in users:
-        list_of_users += (
-            f"**{count}.** [{user['login']}]({user['html_url']})\n"
-        )
-        count += 1
+    list_of_users = "".join(
+        f"**{count}.** [{user['login']}]({user['html_url']})\n"
+        for count, user in enumerate(users, start=1)
+    )
 
     text = f"""[Updates](https://t.me/Black_Knights_Union) | [Support](https://t.me/Black_Knights_Union_Support)
 ```----------------

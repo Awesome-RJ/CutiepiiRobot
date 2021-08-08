@@ -144,7 +144,6 @@ async def round_sticker(client, message):
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
-        edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "rounded.webp"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
                 "Downloading image", quote=True
@@ -162,6 +161,7 @@ async def round_sticker(client, message):
             draw.pieslice([0, 0, h, w], 0, 360, fill=255)
             npAlpha = np.array(alpha)
             npImage = np.dstack((npImage, npAlpha))
+            edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "rounded.webp"
             Image.fromarray(npImage).save(edit_img_loc)
             await message.reply_chat_action("upload_photo")
             await message.reply_to_message.reply_sticker(edit_img_loc, quote=True)
@@ -190,7 +190,6 @@ async def inverted(client, message):
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
-        edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "inverted.png"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
                 "Downloading image", quote=True
@@ -201,6 +200,7 @@ async def inverted(client, message):
             await msg.edit("Processing Image...")
             image = Image.open(a)
             inverted_image = ImageOps.invert(image)
+            edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "inverted.png"
             inverted_image.save(edit_img_loc)
             await message.reply_chat_action("upload_photo")
             await message.reply_to_message.reply_photo(edit_img_loc, quote=True)
@@ -225,7 +225,7 @@ async def inverted(client, message):
 
 async def removebg_plain(client, message):
     try:
-        if not REM_BG_API_KEY == "":
+        if REM_BG_API_KEY != "":
             userid = str(message.chat.id)
             if not os.path.isdir(f"./DOWNLOADS/{userid}"):
                 os.makedirs(f"./DOWNLOADS/{userid}")
@@ -284,7 +284,7 @@ async def removebg_plain(client, message):
 
 async def removebg_white(client, message):
     try:
-        if not REM_BG_API_KEY == "":
+        if REM_BG_API_KEY != "":
             userid = str(message.chat.id)
             if not os.path.isdir(f"./DOWNLOADS/{userid}"):
                 os.makedirs(f"./DOWNLOADS/{userid}")
@@ -343,7 +343,7 @@ async def removebg_white(client, message):
 
 async def removebg_sticker(client, message):
     try:
-        if not REM_BG_API_KEY == "":
+        if REM_BG_API_KEY != "":
             userid = str(message.chat.id)
             if not os.path.isdir(f"./DOWNLOADS/{userid}"):
                 os.makedirs(f"./DOWNLOADS/{userid}")

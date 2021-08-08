@@ -15,9 +15,7 @@ Heroku = heroku3.from_key(HEROKU_API_KEY)
 async def variable(var):
     if var.fwd_from:
         return
-    if var.sender_id == OWNER_ID:
-        pass
-    else:
+    if var.sender_id != OWNER_ID:
         return
     """
     Manage most of ConfigVars setting, set new var, get current var,
@@ -92,20 +90,18 @@ async def variable(var):
         except IndexError:
             return await m.edit("`Please specify ConfigVars you want to delete`")
         await asyncio.sleep(1.5)
-        if variable in heroku_var:
-            await m.edit(f"**{variable}**  `successfully deleted`")
-            del heroku_var[variable]
-        else:
+        if variable not in heroku_var:
             return await m.edit(f"**{variable}**  `is not exists`")
+
+        await m.edit(f"**{variable}**  `successfully deleted`")
+        del heroku_var[variable]
 
 
 @register(pattern="^/usage(?: |$)")
 async def dyno_usage(dyno):
     if dyno.fwd_from:
         return
-    if dyno.sender_id == OWNER_ID:
-        pass
-    else:
+    if dyno.sender_id != OWNER_ID:
         return
     """
     Get your account Dyno Usage

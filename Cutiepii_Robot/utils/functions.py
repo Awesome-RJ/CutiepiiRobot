@@ -43,10 +43,7 @@ def generate_captcha():
 
     # Generate a 4 letter word
     def gen_wrong_answer():
-        word = ""
-        for _ in range(4):
-            word += gen_letter()
-        return word
+        return "".join(gen_letter() for _ in range(4))
 
     # Generate 8 wrong captcha answers
     wrong_answers = []
@@ -120,13 +117,11 @@ async def transfer_sh(file):
 def obj_to_str(object):
     if not object:
         return False
-    string = codecs.encode(pickle.dumps(object), "base64").decode()
-    return string
+    return codecs.encode(pickle.dumps(object), "base64").decode()
 
 
 def str_to_obj(string: str):
-    object = pickle.loads(codecs.decode(string.encode(), "base64"))
-    return object
+    return pickle.loads(codecs.decode(string.encode(), "base64"))
 
 
 async def calc_distance_from_ip(ip1: str, ip2: str) -> float:
@@ -142,5 +137,4 @@ async def calc_distance_from_ip(ip1: str, ip2: str) -> float:
     dlat = lat2 - lat1
     a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    distance = Radius_Earth * c
-    return distance
+    return Radius_Earth * c

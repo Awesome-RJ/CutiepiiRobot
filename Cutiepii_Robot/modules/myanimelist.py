@@ -39,14 +39,10 @@ def anime(update: Update, context: CallbackContext):
         score = anime.get("score")
         rating = anime.get("rating")
         genre_lst = anime.get("genres")
-        genres = ""
-        for genre in genre_lst:
-            genres += genre.get("name") + ", "
+        genres = "".join(genre.get("name") + ", " for genre in genre_lst)
         genres = genres[:-2]
-        studios = ""
         studio_lst = anime.get("studios")
-        for studio in studio_lst:
-            studios += studio.get("name") + ", "
+        studios = "".join(studio.get("name") + ", " for studio in studio_lst)
         studios = studios[:-2]
         duration = anime.get("duration")
         premiered = anime.get("premiered")
@@ -78,8 +74,8 @@ def anime(update: Update, context: CallbackContext):
         keyb = [
              [InlineKeyboardButton("More Information", url=url)]
          ]
-    
-    
+
+
     msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
     
 
@@ -156,9 +152,7 @@ def manga(update: Update, context: CallbackContext):
         volumes = manga.get("volumes")
         chapters = manga.get("chapters")
         genre_lst = manga.get("genres")
-        genres = ""
-        for genre in genre_lst:
-            genres += genre.get("name") + ", "
+        genres = "".join(genre.get("name") + ", " for genre in genre_lst)
         genres = genres[:-2]
         synopsis = manga.get("synopsis")
         image = manga.get("image_url")
@@ -175,7 +169,7 @@ def manga(update: Update, context: CallbackContext):
         keyb = [
             [InlineKeyboardButton("More Information", url=url)]
         ]
-        
+
         msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
         
         

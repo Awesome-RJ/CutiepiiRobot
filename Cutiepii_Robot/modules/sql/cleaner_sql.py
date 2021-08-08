@@ -161,8 +161,7 @@ def is_command_ignored(chat_id, command):
 
 def is_enabled(chat_id):
     if str(chat_id) in CLEANER_CHATS:
-        settings = CLEANER_CHATS.get(str(chat_id)).get("setting")
-        return settings
+        return CLEANER_CHATS.get(str(chat_id)).get("setting")
 
     return False
 

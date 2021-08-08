@@ -12,7 +12,6 @@ async def circle_with_bg(client, message):
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
-        edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "circle.png"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
                 "Downloading image", quote=True
@@ -29,6 +28,7 @@ async def circle_with_bg(client, message):
             draw.pieslice([0, 0, h, w], 0, 360, fill=255)
             npAlpha = np.array(alpha)
             npImage = np.dstack((npImage, npAlpha))
+            edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "circle.png"
             Image.fromarray(npImage).save(edit_img_loc)
             await message.reply_chat_action("upload_photo")
             await message.reply_to_message.reply_photo(edit_img_loc, quote=True)
@@ -57,7 +57,6 @@ async def circle_without_bg(client, message):
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
-        edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "circle.png"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
                 "Downloading image", quote=True
@@ -74,6 +73,7 @@ async def circle_without_bg(client, message):
             draw.pieslice([0, 0, h, w], 0, 360, fill=255)
             npAlpha = np.array(alpha)
             npImage = np.dstack((npImage, npAlpha))
+            edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "circle.png"
             Image.fromarray(npImage).save(edit_img_loc)
             await message.reply_chat_action("upload_document")
             await message.reply_to_message.reply_document(edit_img_loc, quote=True)
@@ -152,7 +152,6 @@ async def edge_curved(client, message):
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
-        edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "edge_curved.webp"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
                 "Downloading image", quote=True
@@ -163,6 +162,7 @@ async def edge_curved(client, message):
             await msg.edit("Processing Image...")
             im = Image.open(a)
             im = add_corners(im, 100)
+            edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "edge_curved.webp"
             im.save(edit_img_loc)
             await message.reply_chat_action("upload_photo")
             await message.reply_to_message.reply_sticker(edit_img_loc, quote=True)
@@ -191,7 +191,6 @@ async def contrast(client, message):
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
-        edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "contrast.jpg"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
                 "Downloading image", quote=True
@@ -202,6 +201,7 @@ async def contrast(client, message):
             await msg.edit("Processing Image...")
             image = Image.open(a)
             contrast = ImageEnhance.Contrast(image)
+            edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "contrast.jpg"
             contrast.enhance(1.5).save(edit_img_loc)
             await message.reply_chat_action("upload_photo")
             await message.reply_to_message.reply_photo(edit_img_loc, quote=True)
@@ -249,7 +249,6 @@ async def sepia_mode(client, message):
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
-        edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "sepia.jpg"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
                 "Downloading image", quote=True
@@ -260,6 +259,7 @@ async def sepia_mode(client, message):
             await msg.edit("Processing Image...")
             image = Image.open(a)
             new_img = sepia(image)
+            edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "sepia.jpg"
             new_img.save(edit_img_loc)
             await message.reply_chat_action("upload_photo")
             await message.reply_to_message.reply_photo(edit_img_loc, quote=True)

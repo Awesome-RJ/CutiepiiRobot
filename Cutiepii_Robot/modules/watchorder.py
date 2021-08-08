@@ -5,7 +5,6 @@ from pyrogram import filters
 from bs4 import BeautifulSoup
 
 @pgram.on_message(filters.command("watchorder", f"watchorder@{BOT_USERNAME}"))
-
 def watchorderx(_,message):
 
 	anime = message.text.replace(message.text.split(' ')[0], '')
@@ -24,12 +23,5 @@ def watchorderx(_,message):
 
 	for x in anime_names:
 
-		if data:
-
-			data = f"{data}\n{x.text}"
-
-		else:
-
-			data = x.text
-
+		data = f"{data}\n{x.text}" if data else x.text
 	message.reply_text(f'Watchorder of {anime}: \n```{data}```')

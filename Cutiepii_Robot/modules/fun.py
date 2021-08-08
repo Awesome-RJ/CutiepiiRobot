@@ -149,43 +149,43 @@ def slap(update: Update, context: CallbackContext):
 
 
 def pat(update: Update, context: CallbackContext):
-    bot = context.bot
-    args = context.args
-    message = update.effective_message
+	bot = context.bot
+	args = context.args
+	message = update.effective_message
 
-    reply_to = message.reply_to_message if message.reply_to_message else message
+	reply_to = message.reply_to_message or message
 
-    curr_user = html.escape(message.from_user.first_name)
-    user_id = extract_user(message, args)
+	curr_user = html.escape(message.from_user.first_name)
+	user_id = extract_user(message, args)
 
-    if user_id:
-        patted_user = bot.get_chat(user_id)
-        user1 = curr_user
-        user2 = html.escape(patted_user.first_name)
+	if user_id:
+	    patted_user = bot.get_chat(user_id)
+	    user1 = curr_user
+	    user2 = html.escape(patted_user.first_name)
 
-    else:
-        user1 = bot.first_name
-        user2 = curr_user
+	else:
+	    user1 = bot.first_name
+	    user2 = curr_user
 
-    pat_type = random.choice(("Text", "Gif", "Sticker"))
-    if pat_type == "Gif":
-        try:
-            temp = random.choice(fun_strings.PAT_GIFS)
-            reply_to.reply_animation(temp)
-        except BadRequest:
-            pat_type = "Text"
+	pat_type = random.choice(("Text", "Gif", "Sticker"))
+	if pat_type == "Gif":
+	    try:
+	        temp = random.choice(fun_strings.PAT_GIFS)
+	        reply_to.reply_animation(temp)
+	    except BadRequest:
+	        pat_type = "Text"
 
-    if pat_type == "Sticker":
-        try:
-            temp = random.choice(fun_strings.PAT_STICKERS)
-            reply_to.reply_sticker(temp)
-        except BadRequest:
-            pat_type = "Text"
+	if pat_type == "Sticker":
+	    try:
+	        temp = random.choice(fun_strings.PAT_STICKERS)
+	        reply_to.reply_sticker(temp)
+	    except BadRequest:
+	        pat_type = "Text"
 
-    if pat_type == "Text":
-        temp = random.choice(fun_strings.PAT_TEMPLATES)
-        reply = temp.format(user1=user1, user2=user2)
-        reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
+	if pat_type == "Text":
+	    temp = random.choice(fun_strings.PAT_TEMPLATES)
+	    reply = temp.format(user1=user1, user2=user2)
+	    reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
 def roll(update: Update, context: CallbackContext):
@@ -193,17 +193,16 @@ def roll(update: Update, context: CallbackContext):
 
 
 def shout(update: Update, context: CallbackContext):
-    args = context.args
-    text = " ".join(args)
-    result = []
-    result.append(" ".join(list(text)))
-    for pos, symbol in enumerate(text[1:]):
-        result.append(symbol + " " + "  " * pos + symbol)
-    result = list("\n".join(result))
-    result[0] = text[0]
-    result = "".join(result)
-    msg = "```\n" + result + "```"
-    return update.effective_message.reply_text(msg, parse_mode="MARKDOWN")
+	args = context.args
+	text = " ".join(args)
+	result = [" ".join(list(text))]
+	for pos, symbol in enumerate(text[1:]):
+	    result.append(symbol + " " + "  " * pos + symbol)
+	result = list("\n".join(result))
+	result[0] = text[0]
+	result = "".join(result)
+	msg = "```\n" + result + "```"
+	return update.effective_message.reply_text(msg, parse_mode="MARKDOWN")
 
 
 def toss(update: Update, context: CallbackContext):
@@ -387,36 +386,36 @@ def gbam(update, context):
         context.bot.sendMessage(chat.id, gbam, parse_mode=ParseMode.HTML)
 
 def cuddle(update: Update, context: CallbackContext):
-    bot = context.bot
-    args = context.args
-    message = update.effective_message
+	bot = context.bot
+	args = context.args
+	message = update.effective_message
 
-    reply_to = message.reply_to_message if message.reply_to_message else message
+	reply_to = message.reply_to_message or message
 
-    curr_user = html.escape(message.from_user.first_name)
-    user_id = extract_user(message, args)
+	curr_user = html.escape(message.from_user.first_name)
+	user_id = extract_user(message, args)
 
-    if user_id:
-        cuddled_user = bot.get_chat(user_id)
-        user1 = curr_user
-        user2 = html.escape(cuddled_user.first_name)
+	if user_id:
+	    cuddled_user = bot.get_chat(user_id)
+	    user1 = curr_user
+	    user2 = html.escape(cuddled_user.first_name)
 
-    else:
-        user1 = bot.first_name
-        user2 = curr_user
+	else:
+	    user1 = bot.first_name
+	    user2 = curr_user
 
-    cuddle_type = random.choice(("Text", "Gif"))
-    if cuddle_type == "Gif":
-        try:
-            temp = random.choice(fun_strings.CUDDLE_GIF)
-            reply_to.reply_animation(temp)
-        except BadRequest:
-            cuddle_type = "Text"
+	cuddle_type = random.choice(("Text", "Gif"))
+	if cuddle_type == "Gif":
+	    try:
+	        temp = random.choice(fun_strings.CUDDLE_GIF)
+	        reply_to.reply_animation(temp)
+	    except BadRequest:
+	        cuddle_type = "Text"
 
-    if cuddle_type == "Text":
-        temp = random.choice(fun_strings.CUDDLE_TEMPLATES)
-        reply = temp.format(user1=user1, user2=user2)
-        reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
+	if cuddle_type == "Text":
+	    temp = random.choice(fun_strings.CUDDLE_TEMPLATES)
+	    reply = temp.format(user1=user1, user2=user2)
+	    reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
 def flirt(update: Update, context: CallbackContext):
@@ -424,152 +423,152 @@ def flirt(update: Update, context: CallbackContext):
     reply_text(random.choice(fun_strings.FLIRT_TEXT))
 
 def lewd(update: Update, context: CallbackContext):
-    bot = context.bot
-    args = context.args
-    message = update.effective_message
+	bot = context.bot
+	args = context.args
+	message = update.effective_message
 
-    reply_to = message.reply_to_message if message.reply_to_message else message
+	reply_to = message.reply_to_message or message
 
-    curr_user = html.escape(message.from_user.first_name)
-    user_id = extract_user(message, args)
+	curr_user = html.escape(message.from_user.first_name)
+	user_id = extract_user(message, args)
 
-    if user_id:
-        lewd_user = bot.get_chat(user_id)
-        user1 = curr_user
-        user2 = html.escape(lewd_user.first_name)
+	if user_id:
+	    lewd_user = bot.get_chat(user_id)
+	    user1 = curr_user
+	    user2 = html.escape(lewd_user.first_name)
 
-    else:
-        user1 = bot.first_name
-        user2 = curr_user
+	else:
+	    user1 = bot.first_name
+	    user2 = curr_user
 
-    lewd_type = random.choice(("Text", "Gif", "Sticker"))
-    if lewd_type == "Gif":
-        try:
-            temp = random.choice(fun_strings.LEWD_GIFS)
-            reply_to.reply_animation(temp)
-        except BadRequest:
-            lewd_type = "Text"
+	lewd_type = random.choice(("Text", "Gif", "Sticker"))
+	if lewd_type == "Gif":
+	    try:
+	        temp = random.choice(fun_strings.LEWD_GIFS)
+	        reply_to.reply_animation(temp)
+	    except BadRequest:
+	        lewd_type = "Text"
 
-    if lewd_type == "Sticker":
-        try:
-            temp = random.choice(fun_strings.LEWD_STICKERS)
-            reply_to.reply_sticker(temp)
-        except BadRequest:
-            lewd_type = "Text"
+	if lewd_type == "Sticker":
+	    try:
+	        temp = random.choice(fun_strings.LEWD_STICKERS)
+	        reply_to.reply_sticker(temp)
+	    except BadRequest:
+	        lewd_type = "Text"
 
-    if lewd_type == "Text":
-        temp = random.choice(fun_strings.LEWD_TEMPLATES)
-        reply = temp.format(user1=user1, user2=user2)
-        reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
+	if lewd_type == "Text":
+	    temp = random.choice(fun_strings.LEWD_TEMPLATES)
+	    reply = temp.format(user1=user1, user2=user2)
+	    reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 def romance(update: Update, context: CallbackContext):
-    bot = context.bot
-    args = context.args
-    message = update.effective_message
+	bot = context.bot
+	args = context.args
+	message = update.effective_message
 
-    reply_to = message.reply_to_message if message.reply_to_message else message
+	reply_to = message.reply_to_message or message
 
-    curr_user = html.escape(message.from_user.first_name)
-    user_id = extract_user(message, args)
+	curr_user = html.escape(message.from_user.first_name)
+	user_id = extract_user(message, args)
 
-    if user_id:
-        romantic_user = bot.get_chat(user_id)
-        user1 = curr_user
-        user2 = html.escape(romantic_user.first_name)
+	if user_id:
+	    romantic_user = bot.get_chat(user_id)
+	    user1 = curr_user
+	    user2 = html.escape(romantic_user.first_name)
 
-    else:
-        user1 = bot.first_name
-        user2 = curr_user
+	else:
+	    user1 = bot.first_name
+	    user2 = curr_user
 
-    romance_type = random.choice(("Text", "Gif", "Sticker"))
-    if romance_type == "Gif":
-        try:
-            temp = random.choice(fun_strings.ROMANCE_GIFS)
-            reply_to.reply_animation(temp)
-        except BadRequest:
-            romance_type = "Text"
+	romance_type = random.choice(("Text", "Gif", "Sticker"))
+	if romance_type == "Gif":
+	    try:
+	        temp = random.choice(fun_strings.ROMANCE_GIFS)
+	        reply_to.reply_animation(temp)
+	    except BadRequest:
+	        romance_type = "Text"
 
-    if romance_type == "Sticker":
-        try:
-            temp = random.choice(fun_strings.ROMANCE_STICKERS)
-            reply_to.reply_sticker(temp)
-        except BadRequest:
-            romance_type = "Text"
+	if romance_type == "Sticker":
+	    try:
+	        temp = random.choice(fun_strings.ROMANCE_STICKERS)
+	        reply_to.reply_sticker(temp)
+	    except BadRequest:
+	        romance_type = "Text"
 
-    if romance_type == "Text":
-        temp = random.choice(fun_strings.ROMANCE_TEMPLATES)
-        reply = temp.format(user1=user1, user2=user2)
-        reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
+	if romance_type == "Text":
+	    temp = random.choice(fun_strings.ROMANCE_TEMPLATES)
+	    reply = temp.format(user1=user1, user2=user2)
+	    reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
 def owo(update: Update, context: CallbackContext):
-    bot = context.bot
-    args = context.args
-    message = update.effective_message
+	bot = context.bot
+	args = context.args
+	message = update.effective_message
 
-    reply_to = message.reply_to_message if message.reply_to_message else message
+	reply_to = message.reply_to_message or message
 
-    curr_user = html.escape(message.from_user.first_name)
-    user_id = extract_user(message, args)
+	curr_user = html.escape(message.from_user.first_name)
+	user_id = extract_user(message, args)
 
-    if user_id:
-        owo_user = bot.get_chat(user_id)
-        user1 = curr_user
-        user2 = html.escape(owo_user.first_name)
+	if user_id:
+	    owo_user = bot.get_chat(user_id)
+	    user1 = curr_user
+	    user2 = html.escape(owo_user.first_name)
 
-    else:
-        user1 = bot.first_name
-        user2 = curr_user
+	else:
+	    user1 = bot.first_name
+	    user2 = curr_user
 
-    owo_type = random.choice(("Gif", "Sticker"))
-    if owo_type == "Gif":
-        try:
-            temp = random.choice(fun_strings.OWO_GIFS)
-            reply_to.reply_animation(temp)
-        except BadRequest:
-            owo_type = "Text"
+	owo_type = random.choice(("Gif", "Sticker"))
+	if owo_type == "Gif":
+	    try:
+	        temp = random.choice(fun_strings.OWO_GIFS)
+	        reply_to.reply_animation(temp)
+	    except BadRequest:
+	        owo_type = "Text"
 
-    if owo_type == "Sticker":
-        try:
-            temp = random.choice(fun_strings.OWO_STICKERS)
-            reply_to.reply_sticker(temp)
-        except BadRequest:
-            owo_type = "Text"
+	if owo_type == "Sticker":
+	    try:
+	        temp = random.choice(fun_strings.OWO_STICKERS)
+	        reply_to.reply_sticker(temp)
+	    except BadRequest:
+	        owo_type = "Text"
 
 
 def uwu(update: Update, context: CallbackContext):
-    bot = context.bot
-    args = context.args
-    message = update.effective_message
+	bot = context.bot
+	args = context.args
+	message = update.effective_message
 
-    reply_to = message.reply_to_message if message.reply_to_message else message
+	reply_to = message.reply_to_message or message
 
-    curr_user = html.escape(message.from_user.first_name)
-    user_id = extract_user(message, args)
+	curr_user = html.escape(message.from_user.first_name)
+	user_id = extract_user(message, args)
 
-    if user_id:
-        uwu_user = bot.get_chat(user_id)
-        user1 = curr_user
-        user2 = html.escape(uwu_user.first_name)
+	if user_id:
+	    uwu_user = bot.get_chat(user_id)
+	    user1 = curr_user
+	    user2 = html.escape(uwu_user.first_name)
 
-    else:
-        user1 = bot.first_name
-        user2 = curr_user
+	else:
+	    user1 = bot.first_name
+	    user2 = curr_user
 
-    uwu_type = random.choice(("Gif", "Sticker"))
-    if uwu_type == "Gif":
-        try:
-            temp = random.choice(fun_strings.UWU_GIFS)
-            reply_to.reply_animation(temp)
-        except BadRequest:
-            uwu_type = "Text"
+	uwu_type = random.choice(("Gif", "Sticker"))
+	if uwu_type == "Gif":
+	    try:
+	        temp = random.choice(fun_strings.UWU_GIFS)
+	        reply_to.reply_animation(temp)
+	    except BadRequest:
+	        uwu_type = "Text"
 
-    if uwu_type == "Sticker":
-        try:
-            temp = random.choice(fun_strings.UWU_STICKERS)
-            reply_to.reply_sticker(temp)
-        except BadRequest:
-            uwu_type = "Text"
+	if uwu_type == "Sticker":
+	    try:
+	        temp = random.choice(fun_strings.UWU_STICKERS)
+	        reply_to.reply_sticker(temp)
+	    except BadRequest:
+	        uwu_type = "Text"
 	
 __help__ = """
   ➢ `/runs`*:* reply a random string from an array of replies
