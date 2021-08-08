@@ -50,7 +50,7 @@ def reverse(update: Update, context:CallbackContext):
                 lim = 2
         else:
             lim = 2
-    elif args and not reply:
+    elif args:
         splatargs = msg.text.split(" ")
         if len(splatargs) == 3:                
             img_link = splatargs[1]

@@ -143,10 +143,7 @@ async def msg(event):
         elif c.lower() == b_char:
             reply_text += "🅱️"
         else:
-            if bool(random.getrandbits(1)):
-                reply_text += c.upper()
-            else:
-                reply_text += c.lower()
+            reply_text += c.upper() if bool(random.getrandbits(1)) else c.lower()
     reply_text += random.choice(emojis)
     await event.reply(reply_text)
 
@@ -196,10 +193,7 @@ async def msg(event):
 
     rtex = await event.get_reply_message()
     rtext = rtex.text
-    if rtext:
-        data = rtext
-    else:
-        data = event.pattern_match.group(1)
+    data = rtext or event.pattern_match.group(1)
     if data is None:
         await event.reply("Either provide some input or reply to a message.")
         return
@@ -256,10 +250,7 @@ async def msg(event):
         return
     reply_text = "😡 "
     for i in rtext:
-        if i == " ":
-            reply_text += " 😡 "
-        else:
-            reply_text += i
+        reply_text += " 😡 " if i == " " else i
     reply_text += " 😡"
     await event.reply(reply_text)
 
@@ -274,10 +265,7 @@ async def msg(event):
         return
     reply_text = "😭 "
     for i in rtext:
-        if i == " ":
-            reply_text += " 😭 "
-        else:
-            reply_text += i
+        reply_text += " 😭 " if i == " " else i
     reply_text += " 😭"
     await event.reply(reply_text)
 
@@ -402,25 +390,24 @@ async def deepfry(img: Image) -> Image:
 
 
 async def check_media(reply_message):
-    if reply_message and reply_message.media:
-        if reply_message.photo:
-            data = reply_message.photo
-        elif reply_message.document:
-            if (
-                DocumentAttributeFilename(file_name="AnimatedSticker.tgs")
-                in reply_message.media.document.attributes
-            ):
-                return False
-            if (
-                reply_message.gif
-                or reply_message.video
-                or reply_message.audio
-                or reply_message.voice
-            ):
-                return False
-            data = reply_message.media.document
-        else:
+    if not reply_message or not reply_message.media:
+        return False
+    if reply_message.photo:
+        data = reply_message.photo
+    elif reply_message.document:
+        if (
+            DocumentAttributeFilename(file_name="AnimatedSticker.tgs")
+            in reply_message.media.document.attributes
+        ):
             return False
+        if (
+            reply_message.gif
+            or reply_message.video
+            or reply_message.audio
+            or reply_message.voice
+        ):
+            return False
+        data = reply_message.media.document
     else:
         return False
     if not data or data is None:
@@ -432,9 +419,7 @@ async def check_media(reply_message):
 async def typewriter(typew):
 
     message = typew.pattern_match.group(1)
-    if message:
-        pass
-    else:
+    if not message:
         await typew.reply("`Give a text to type!`")
         return
     typing_symbol = "|"
@@ -523,18 +508,20 @@ async def get_font_file(client, channel_id):
 async def univsaye(cowmsg):
 
     """For .cowsay module, uniborg wrapper for cow which says things."""
-    if not cowmsg.text[0].isalpha() and cowmsg.text[0] not in ("#", "@"):
-        arg = cowmsg.pattern_match.group(1).lower()
-        text = cowmsg.pattern_match.group(2)
+    if cowmsg.text[0].isalpha() or cowmsg.text[0] in ("#", "@"):
+        return
 
-        if arg == "cow":
-            arg = "default"
-        if arg not in cow.COWACTERS:
-            return
-        cheese = cow.get_cow(arg)
-        cheese = cheese()
+    arg = cowmsg.pattern_match.group(1).lower()
+    text = cowmsg.pattern_match.group(2)
 
-        await cowmsg.reply(f"`{cheese.milk(text).replace('`', '´')}`")
+    if arg == "cow":
+        arg = "default"
+    if arg not in cow.COWACTERS:
+        return
+    cheese = cow.get_cow(arg)
+    cheese = cheese()
+
+    await cowmsg.reply(f"`{cheese.milk(text).replace('`', '´')}`")
 
 
 @register(pattern="^/basketball$")
@@ -547,7 +534,7 @@ async def _(event):
     if input_str:
         try:
             required_number = int(input_str)
-            while not r.media.value == required_number:
+            while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice("🏀"))
         except BaseException:
@@ -572,7 +559,7 @@ async def _(event):
     if input_str:
         try:
             required_number = int(input_str)
-            while not r.media.value == required_number:
+            while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice("🎯"))
         except BaseException:
@@ -643,7 +630,7 @@ async def _(event):
     if input_str:
         try:
             required_number = int(input_str)
-            while not r.media.value == required_number:
+            while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice(""))
         except BaseException:

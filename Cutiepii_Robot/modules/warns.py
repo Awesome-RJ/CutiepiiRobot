@@ -168,13 +168,12 @@ def warn_user(update: Update, context: CallbackContext) -> str:
     message: Optional[Message] = update.effective_message
     chat: Optional[Chat] = update.effective_chat
     warner: Optional[User] = update.effective_user
-    
+
     user_id, reason = extract_user_and_text(message, args)
-    if message.text.startswith("/d") and message.reply_to_message:        
-        return warn(message.reply_to_message.from_user, chat, reason, warner, message) 
-        message.reply_to_message.delete()     
+    if message.text.startswith("/d") and message.reply_to_message:    
+        return warn(message.reply_to_message.from_user, chat, reason, warner, message)
     if not can_delete(chat, context.bot.id):
-        return ""                                      
+        return ""
     if user_id:
         if message.reply_to_message and message.reply_to_message.from_user.id == user_id:
             return warn(message.reply_to_message.from_user, chat, reason,
@@ -253,13 +252,12 @@ def add_warn_filter(update: Update, context: CallbackContext):
 
     extracted = split_quotes(args[1])
 
-    if len(extracted) >= 2:
-        # set trigger -> lower, so as to avoid adding duplicate filters with different cases
-        keyword = extracted[0].lower()
-        content = extracted[1]
-
-    else:
+    if len(extracted) < 2:
         return
+
+    # set trigger -> lower, so as to avoid adding duplicate filters with different cases
+    keyword = extracted[0].lower()
+    content = extracted[1]
 
     # Note: perhaps handlers can be removed somehow using sql.get_chat_filters
     for handler in dispatcher.handlers.get(WARN_HANDLER_GROUP, []):
@@ -446,7 +444,7 @@ def __stats__():
 
 def __import_data__(chat_id, data):
     for user_id, count in data.get('warns', {}).items():
-        for x in range(int(count)):
+        for _ in range(int(count)):
             sql.warn_user(user_id, chat_id)
 
 

@@ -60,9 +60,7 @@ async def update_karma(chat_id: int, name: str, karma: dict):
 
 async def is_karma_on(chat_id: int) -> bool:
     chat = await karmaonoffdb.find_one({"chat_id_toggle": chat_id})
-    if not chat:
-        return True
-    return False
+    return not chat
 
 
 async def karma_on(chat_id: int):
@@ -80,11 +78,8 @@ async def karma_off(chat_id: int):
 
 async def int_to_alpha(user_id: int) -> str:
     alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
-    text = ""
     user_id = str(user_id)
-    for i in user_id:
-        text += alphabet[int(i)]
-    return text
+    return "".join(alphabet[int(i)] for i in user_id)
 
 
 async def alpha_to_int(user_id_alphabet: str) -> int:

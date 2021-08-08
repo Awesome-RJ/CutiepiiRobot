@@ -66,10 +66,7 @@ ETA: {}""".format(
                             humanbytes(downloaded),
                             time_formatter(estimated_total_time),
                         )
-                        if (
-                            current_message != display_message
-                            and current_message != "empty"
-                        ):
+                        if current_message not in [display_message, "empty"]:
                             print(current_message)
                             await event.edit(current_message, parse_mode="html")
 

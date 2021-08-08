@@ -39,25 +39,25 @@ def is_user_admin(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
         or user_id in DRAGONS
         or user_id in DEV_USERS
         or chat.all_members_are_administrators
-        or user_id in [777000, 1087968824]
+        or user_id in {777000, 1087968824}
     ):  # Count telegram and Group Anonymous as admin
         return True
-    if not member:
-        with THREAD_LOCK:
-            # try to fetch from cache first.
-            try:
-                return user_id in ADMIN_CACHE[chat.id]
-            except KeyError:
-                # keyerror happend means cache is deleted,
-                # so query bot api again and return user status
-                # while saving it in cache for future useage...
-                chat_admins = dispatcher.bot.getChatAdministrators(chat.id)
-                admin_list = [x.user.id for x in chat_admins]
-                ADMIN_CACHE[chat.id] = admin_list
-
-                return user_id in admin_list
-    else:
+    if member:
         return member.status in ("administrator", "creator")
+
+    with THREAD_LOCK:
+        # try to fetch from cache first.
+        try:
+            return user_id in ADMIN_CACHE[chat.id]
+        except KeyError:
+            # keyerror happend means cache is deleted,
+            # so query bot api again and return user status
+            # while saving it in cache for future useage...
+            chat_admins = dispatcher.bot.getChatAdministrators(chat.id)
+            admin_list = [x.user.id for x in chat_admins]
+            ADMIN_CACHE[chat.id] = admin_list
+
+            return user_id in admin_list
 
 
 def is_bot_admin(chat: Chat, bot_id: int, bot_member: ChatMember = None) -> bool:
@@ -82,7 +82,7 @@ def is_user_ban_protected(chat: Chat, user_id: int, member: ChatMember = None) -
         or user_id in WOLVES
         or user_id in TIGERS
         or chat.all_members_are_administrators
-        or user_id in [777000, 1087968824]
+        or user_id in {777000, 1087968824}
     ):  # Count telegram and Group Anonymous as admin
         return True
 
@@ -237,8 +237,6 @@ def user_not_admin(func):
 
         if user and not is_user_admin(chat, user.id):
             return func(update, context, *args, **kwargs)
-        elif not user:
-            pass
 
     return is_not_admin
 
@@ -362,7 +360,8 @@ def user_can_ban(func):
         user = update.effective_user.id
         member = update.effective_chat.get_member(user)
         if (
-            not (member.can_restrict_members or member.status == "creator")
+            not member.can_restrict_members
+            and member.status != "creator"
             and user not in DRAGONS
             and user not in [777000, 1087968824]
         ):
@@ -389,15 +388,13 @@ def connection_status(func):
         if conn:
             chat = dispatcher.bot.getChat(conn)
             update.__setattr__("_effective_chat", chat)
-            return func(update, context, *args, **kwargs)
-        else:
-            if update.effective_message.chat.type == "private":
-                update.effective_message.reply_text(
-                    "Send /connect in a group that you and I have in common first.",
-                )
-                return connected_status
+        elif update.effective_message.chat.type == "private":
+            update.effective_message.reply_text(
+                "Send /connect in a group that you and I have in common first.",
+            )
+            return connected_status
 
-            return func(update, context, *args, **kwargs)
+        return func(update, context, *args, **kwargs)
 
     return connected_status
 

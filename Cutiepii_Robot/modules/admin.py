@@ -365,9 +365,7 @@ def pin(update: Update, context: CallbackContext) -> str:
                 disable_notification=is_silent,
             )
         except BadRequest as excp:
-            if excp.message == "Chat_not_modified":
-                pass
-            else:
+            if excp.message != "Chat_not_modified":
                 raise
         log_message = (
             f"<b>{html.escape(chat.title)}:</b>\n"

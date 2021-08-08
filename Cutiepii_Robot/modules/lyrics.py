@@ -214,9 +214,7 @@ async def lyrics_func(_, message):
 @pgram.on_message(filters.command(["glyrics", f"glyrics@{BOT_USERNAME}"]))
 async def lyrics(client, message):
 
-    if r"-" in message.text:
-        pass
-    else:
+    if r"-" not in message.text:
         await message.reply(
             "`Error: please use '-' as divider for <artist> and <song>`\n"
             "eg: `/glyrics Nicki Minaj - Super Bass`"

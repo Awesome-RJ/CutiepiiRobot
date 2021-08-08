@@ -140,5 +140,4 @@ class Handler:
         await task
         file_name = url.split("/")[-1]
         file_name = file_name[0:230] if len(file_name) > 230 else file_name
-        path = os.getcwd() + "/" + file_name if not save_path else save_path
-        return path
+        return os.getcwd() + "/" + file_name if not save_path else save_path

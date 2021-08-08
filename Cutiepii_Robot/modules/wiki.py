@@ -7,11 +7,7 @@ from wikipedia.exceptions import DisambiguationError, PageError
 
 
 def wiki(update: Update, context: CallbackContext):
-    msg = (
-        update.effective_message.reply_to_message
-        if update.effective_message.reply_to_message
-        else update.effective_message
-    )
+    msg = update.effective_message.reply_to_message or update.effective_message
     res = ""
     if msg == update.effective_message:
         search = msg.text.split(" ", maxsplit=1)[1]

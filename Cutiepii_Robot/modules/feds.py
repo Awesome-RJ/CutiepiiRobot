@@ -87,7 +87,7 @@ def new_fed(update: Update, context: CallbackContext):
         )
         return
     fednam = message.text.split(None, 1)[1]
-    if not fednam == "":
+    if fednam != "":
         fed_id = str(uuid.uuid4())
         fed_name = fednam
         LOGGER.info(fed_id)
@@ -235,19 +235,14 @@ def join_fed(update: Update, context: CallbackContext):
     administrators = chat.get_administrators()
     fed_id = sql.get_fed_id(chat.id)
 
-    if user.id in DRAGONS:
-        pass
-    else:
+    if user.id not in DRAGONS:
         for admin in administrators:
             status = admin.status
-            if status == "creator":
-                if str(admin.user.id) == str(user.id):
-                    pass
-                else:
-                    update.effective_message.reply_text(
-                        "Only group creators can use this command!",
-                    )
-                    return
+            if status == "creator" and str(admin.user.id) != str(user.id):
+                update.effective_message.reply_text(
+                    "Only group creators can use this command!",
+                )
+                return
     if fed_id:
         message.reply_text("You cannot join two federations from one chat")
         return
@@ -448,7 +443,6 @@ def fed_info(update: Update, context: CallbackContext):
     user = update.effective_user
     if args:
         fed_id = args[0]
-        info = sql.get_fed_info(fed_id)
     else:
         if chat.type == 'private':
             send_message(
@@ -461,8 +455,7 @@ def fed_info(update: Update, context: CallbackContext):
                 update.effective_message, "This group is not in any federation!",
             )
             return
-        info = sql.get_fed_info(fed_id)
-
+    info = sql.get_fed_info(fed_id)
     if is_user_fed_admin(fed_id, user.id) is False:
         update.effective_message.reply_text("Only a federation admin can do this!")
         return
@@ -1353,23 +1346,19 @@ def fed_ban_list(update: Update, context: CallbackContext):
             jam = time.time()
             new_jam = jam + 1800
             cek = get_chat(chat.id, chat_data)
-            if cek.get("status"):
-                if jam <= int(cek.get("value")):
-                    waktu = time.strftime(
-                        "%H:%M:%S %d/%m/%Y", time.localtime(cek.get("value")),
-                    )
-                    update.effective_message.reply_text(
-                        "You can backup your data once every 30 minutes!\nYou can back up data again at `{}`".format(
-                            waktu,
-                        ),
-                        parse_mode=ParseMode.MARKDOWN,
-                    )
-                    return
-                if user.id not in DRAGONS:
-                    put_chat(chat.id, new_jam, chat_data)
-            else:
-                if user.id not in DRAGONS:
-                    put_chat(chat.id, new_jam, chat_data)
+            if cek.get("status") and jam <= int(cek.get("value")):
+                waktu = time.strftime(
+                    "%H:%M:%S %d/%m/%Y", time.localtime(cek.get("value")),
+                )
+                update.effective_message.reply_text(
+                    "You can backup your data once every 30 minutes!\nYou can back up data again at `{}`".format(
+                        waktu,
+                    ),
+                    parse_mode=ParseMode.MARKDOWN,
+                )
+                return
+            if user.id not in DRAGONS:
+                put_chat(chat.id, new_jam, chat_data)
             backups = ""
             for users in getfban:
                 getuserinfo = sql.get_all_fban_users_target(fed_id, users)
@@ -1396,23 +1385,19 @@ def fed_ban_list(update: Update, context: CallbackContext):
             jam = time.time()
             new_jam = jam + 1800
             cek = get_chat(chat.id, chat_data)
-            if cek.get("status"):
-                if jam <= int(cek.get("value")):
-                    waktu = time.strftime(
-                        "%H:%M:%S %d/%m/%Y", time.localtime(cek.get("value")),
-                    )
-                    update.effective_message.reply_text(
-                        "You can back up data once every 30 minutes!\nYou can back up data again at `{}`".format(
-                            waktu,
-                        ),
-                        parse_mode=ParseMode.MARKDOWN,
-                    )
-                    return
-                if user.id not in DRAGONS:
-                    put_chat(chat.id, new_jam, chat_data)
-            else:
-                if user.id not in DRAGONS:
-                    put_chat(chat.id, new_jam, chat_data)
+            if cek.get("status") and jam <= int(cek.get("value")):
+                waktu = time.strftime(
+                    "%H:%M:%S %d/%m/%Y", time.localtime(cek.get("value")),
+                )
+                update.effective_message.reply_text(
+                    "You can back up data once every 30 minutes!\nYou can back up data again at `{}`".format(
+                        waktu,
+                    ),
+                    parse_mode=ParseMode.MARKDOWN,
+                )
+                return
+            if user.id not in DRAGONS:
+                put_chat(chat.id, new_jam, chat_data)
             backups = "id,firstname,lastname,username,reason\n"
             for users in getfban:
                 getuserinfo = sql.get_all_fban_users_target(fed_id, users)
@@ -1460,23 +1445,19 @@ def fed_ban_list(update: Update, context: CallbackContext):
         jam = time.time()
         new_jam = jam + 1800
         cek = get_chat(chat.id, chat_data)
-        if cek.get("status"):
-            if jam <= int(cek.get("value")):
-                waktu = time.strftime(
-                    "%H:%M:%S %d/%m/%Y", time.localtime(cek.get("value")),
-                )
-                update.effective_message.reply_text(
-                    "You can back up data once every 30 minutes!\nYou can back up data again at `{}`".format(
-                        waktu,
-                    ),
-                    parse_mode=ParseMode.MARKDOWN,
-                )
-                return
-            if user.id not in DRAGONS:
-                put_chat(chat.id, new_jam, chat_data)
-        else:
-            if user.id not in DRAGONS:
-                put_chat(chat.id, new_jam, chat_data)
+        if cek.get("status") and jam <= int(cek.get("value")):
+            waktu = time.strftime(
+                "%H:%M:%S %d/%m/%Y", time.localtime(cek.get("value")),
+            )
+            update.effective_message.reply_text(
+                "You can back up data once every 30 minutes!\nYou can back up data again at `{}`".format(
+                    waktu,
+                ),
+                parse_mode=ParseMode.MARKDOWN,
+            )
+            return
+        if user.id not in DRAGONS:
+            put_chat(chat.id, new_jam, chat_data)
         cleanr = re.compile("<.*?>")
         cleantext = re.sub(cleanr, "", text)
         with BytesIO(str.encode(cleantext)) as output:
@@ -1618,23 +1599,19 @@ def fed_import_bans(update: Update, context: CallbackContext):
         jam = time.time()
         new_jam = jam + 1800
         cek = get_chat(chat.id, chat_data)
-        if cek.get("status"):
-            if jam <= int(cek.get("value")):
-                waktu = time.strftime(
-                    "%H:%M:%S %d/%m/%Y", time.localtime(cek.get("value")),
-                )
-                update.effective_message.reply_text(
-                    "You can get your data once every 30 minutes!\nYou can get data again at `{}`".format(
-                        waktu,
-                    ),
-                    parse_mode=ParseMode.MARKDOWN,
-                )
-                return
-            if user.id not in DRAGONS:
-                put_chat(chat.id, new_jam, chat_data)
-        else:
-            if user.id not in DRAGONS:
-                put_chat(chat.id, new_jam, chat_data)
+        if cek.get("status") and jam <= int(cek.get("value")):
+            waktu = time.strftime(
+                "%H:%M:%S %d/%m/%Y", time.localtime(cek.get("value")),
+            )
+            update.effective_message.reply_text(
+                "You can get your data once every 30 minutes!\nYou can get data again at `{}`".format(
+                    waktu,
+                ),
+                parse_mode=ParseMode.MARKDOWN,
+            )
+            return
+        if user.id not in DRAGONS:
+            put_chat(chat.id, new_jam, chat_data)
         # if int(int(msg.reply_to_message.document.file_size)/1024) >= 200:
         # 	msg.reply_text("This file is too big!")
         # 	return
@@ -1838,14 +1815,10 @@ def fed_stat_user(update: Update, context: CallbackContext):
     user = update.effective_user
     msg = update.effective_message
 
-    if args:
-        if args[0].isdigit():
-            user_id = args[0]
-        else:
-            user_id = extract_user(msg, args)
+    if args and args[0].isdigit():
+        user_id = args[0]
     else:
         user_id = extract_user(msg, args)
-
     if user_id:
         if len(args) == 2 and args[0].isdigit():
             fed_id = args[1]
@@ -2174,7 +2147,7 @@ def get_myfedsubs(update: Update, context: CallbackContext):
     except:
         getmy = []
 
-    if len(getmy) == 0:
+    if not getmy:
         send_message(
             update.effective_message,
             "Federation `{}` is not subscribing any federation.".format(
@@ -2226,9 +2199,7 @@ def is_user_fed_owner(fed_id, user_id):
     if getfedowner is None or getfedowner is False:
         return False
     getfedowner = getfedowner["owner"]
-    if str(user_id) == getfedowner or int(user_id) == OWNER_ID:
-        return True
-    return False
+    return str(user_id) == getfedowner or int(user_id) == OWNER_ID
 
 
 # There's no handler for this yet, but updating for v12 in case its used
@@ -2280,18 +2251,14 @@ def __user_info__(user_id, chat_id):
 # Temporary data
 def put_chat(chat_id, value, chat_data):
     # print(chat_data)
-    if value is False:
-        status = False
-    else:
-        status = True
+    status = value is not False
     chat_data[chat_id] = {"federation": {"status": status, "value": value}}
 
 
 def get_chat(chat_id, chat_data):
     # print(chat_data)
     try:
-        value = chat_data[chat_id]["federation"]
-        return value
+        return chat_data[chat_id]["federation"]
     except KeyError:
         return {"status": False, "value": False}
 

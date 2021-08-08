@@ -17,13 +17,11 @@ def time_to_seconds(time):
 @pgram.on_message(filters.command(["song", f"song@{BOT_USERNAME}"]))
 def song(client, message):
 
-    user_id = message.from_user.id 
-    user_name = message.from_user.first_name 
+    user_id = message.from_user.id
+    user_name = message.from_user.first_name
     rpk = "["+user_name+"](tg://user?id="+str(user_id)+")"
 
-    query = ''
-    for i in message.command[1:]:
-        query += ' ' + str(i)
+    query = ''.join(' ' + str(i) for i in message.command[1:])
     print(query)
     m = message.reply('🔎 Finding the song...')
     ydl_opts = {"format": "bestaudio[ext=m4a]"}

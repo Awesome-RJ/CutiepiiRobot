@@ -31,10 +31,7 @@ def afk(update, context):
     if user.id == 777000:
         return
     start_afk_time = time.time()
-    if len(args) >= 2:
-        reason = args[1]
-    else:
-        reason = "none"
+    reason = args[1] if len(args) >= 2 else "none"
     start_afk(update.effective_user.id, reason)
     REDIS.set(f'afk_time_{update.effective_user.id}', start_afk_time)
     fname = update.effective_user.first_name
@@ -136,16 +133,14 @@ def check_afk(update, context, user_id, fst_name, userc_id):
     if is_user_afk(user_id):
         reason = afk_reason(user_id)
         since_afk = get_readable_time((time.time() - float(REDIS.get(f'afk_time_{user_id}'))))
+        if int(userc_id) == int(user_id):
+            return
         if reason == "none":
-            if int(userc_id) == int(user_id):
-                return
             res = "{} is Dead!\nLast Liveliness: {} Ago.".format(fst_name, since_afk)
-            update.effective_message.reply_text(res)
         else:
-            if int(userc_id) == int(user_id):
-                return
             res = "{} is afk!\nReason: {}\nLast seen: {} Ago.".format(fst_name, reason, since_afk)
-            update.effective_message.reply_text(res)
+
+        update.effective_message.reply_text(res)
 
 
 def __user_info__(user_id):

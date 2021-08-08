@@ -358,20 +358,16 @@ async def inline_query_handler(client, query):
             else:
                 mov_details = ""
             credits = soup.findAll("div", "credit_summary_item")
+            director = credits[0].a.text
             if len(credits) == 1:
-                director = credits[0].a.text
                 writer = "Not available"
                 stars = "Not available"
             elif len(credits) > 2:
-                director = credits[0].a.text
                 writer = credits[1].a.text
-                actors = []
-                for x in credits[2].findAll("a"):
-                    actors.append(x.text)
+                actors = [x.text for x in credits[2].findAll("a")]
                 actors.pop()
                 stars = actors[0] + "," + actors[1] + "," + actors[2]
             else:
-                director = credits[0].a.text
                 writer = "Not available"
                 actors = []
                 for x in credits[1].findAll("a"):
