@@ -15,25 +15,25 @@ from telegram.ext import (
 )
 from telegram.utils.helpers import mention_html, escape_markdown
 
-from SaitamaRobot import dispatcher, LOGGER, DRAGONS
-from SaitamaRobot.modules.disable import DisableAbleCommandHandler
-from SaitamaRobot.modules.helper_funcs.handlers import MessageHandlerChecker
-from SaitamaRobot.modules.helper_funcs.chat_status import user_admin
-from SaitamaRobot.modules.helper_funcs.extraction import extract_text
-from SaitamaRobot.modules.helper_funcs.filters import CustomFilters
-from SaitamaRobot.modules.helper_funcs.misc import build_keyboard_parser
-from SaitamaRobot.modules.helper_funcs.msg_types import get_filter_type
-from SaitamaRobot.modules.helper_funcs.string_handling import (
+from Cutiepii_Robot import dispatcher, LOGGER, DRAGONS
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot.modules.helper_funcs.handlers import MessageHandlerChecker
+from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
+from Cutiepii_Robot.modules.helper_funcs.extraction import extract_text
+from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
+from Cutiepii_Robot.modules.helper_funcs.misc import build_keyboard_parser
+from Cutiepii_Robot.modules.helper_funcs.msg_types import get_filter_type
+from Cutiepii_Robot.modules.helper_funcs.string_handling import (
     split_quotes,
     button_markdown_parser,
     escape_invalid_curly_brackets,
     markdown_to_html,
 )
-from SaitamaRobot.modules.sql import cust_filters_sql as sql
+from Cutiepii_Robot.modules.sql import cust_filters_sql as sql
 
-from SaitamaRobot.modules.connection import connected
+from Cutiepii_Robot.modules.connection import connected
 
-from SaitamaRobot.modules.helper_funcs.alternate import send_message, typing_action
+from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
 
 HANDLER_GROUP = 10
 
@@ -595,7 +595,6 @@ def __chat_settings__(chat_id, user_id):
 
 __help__ = """
   ➢ `/filters`*:* List all active filters saved in the chat.
-  
 *Admin only:*
   ➢ `/filter <keyword> <reply message>`*:* Add a filter to this chat. The bot will now reply that message whenever 'keyword'\
 is mentioned. If you reply to a sticker with a keyword, the bot will reply with that sticker. NOTE: all filter \
@@ -610,13 +609,10 @@ doin?
  %%%
  Reply 3`
   ➢ `/stop <filter keyword>`*:* Stop that filter.
-  
 *Chat creator only:*
   ➢ `/removeallfilters`*:* Remove all chat filters at once.
-  
 *Note*: Filters also support markdown formatters like: {first}, {last} etc.. and buttons.
 Check `/markdownhelp` to know more!
-
 """
 
 __mod_name__ = "Filters"
