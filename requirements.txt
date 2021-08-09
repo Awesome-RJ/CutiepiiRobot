@@ -34,7 +34,7 @@ fontTools
 pyrogram
 nekos.py
 telegraph
-tgCrypto>=1.2.2
+tgCrypto
 youtube_dl
 youtube_search
 pytube
@@ -86,4 +86,3 @@ cowpy
 selenium
 httpx[http2]>=0.18.1,<1.0.0
 hiredis
-multicolorcaptcha
