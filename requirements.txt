@@ -79,8 +79,7 @@ PyDictionary==2.0.1
 ffmpeg
 python-rapidjson
 heroku3
-git+https://github.com/python-telegram-bot/ptbcontrib.git
-git+https://github.com/starry69/python-markdown2.git
+markdown2>=2.4.0
 coffeehouse
 cowpy
 selenium
