@@ -81,7 +81,6 @@ python-rapidjson
 heroku3
 git+https://github.com/python-telegram-bot/ptbcontrib.git
 markdown2>=2.4.0
-coffeehouse
 cowpy
 selenium
 httpx[http2]>=0.18.1,<1.0.0
