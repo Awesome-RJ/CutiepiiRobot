@@ -200,12 +200,12 @@ def new_member(update: Update, context: CallbackContext):
         new_mem = update.chat_member.new_chat_member.user
 
         if new_mem.id and user.id == bot.id and chat.id in BL_CHATS:                
-                update.effective_message.reply_text(f"This is a Blacklisted Group! Join @FoundingTitanSupport for Appeal.")
+                update.effective_message.reply_text(f"This is a Blacklisted Group! Join @Black_Knights_Union_Support for Appeal.")
                 bot.leave_chat(BL_CHATS)
 
         if new_mem.id == bot.id and not Cutiepii_Robot.ALLOW_CHATS:
             with suppress(BadRequest):
-                update.effective_message.reply_text(f"Groups are disabled for {bot.first_name}, I'm outta here.")
+                update.effective_message.send_message(f"Groups are disabled for {bot.first_name}, I'm outta here.")
             bot.leave_chat(update.effective_chat.id)
             return
 
@@ -231,7 +231,7 @@ def new_member(update: Update, context: CallbackContext):
             # Give the owner a special welcome
             if new_mem.id == OWNER_ID:
                 bot.send_message(chat.id,
-                               text=f"Founding Titan? THE RUMBLER JUST JOINED THE GROUP!!",
+                               text=f"OwO My Darling Just Joind This Sexy Chat!",
                                reply_to_message_id=reply,
                                )
                 welcome_log = (
@@ -243,7 +243,7 @@ def new_member(update: Update, context: CallbackContext):
             # Welcome Devs
             elif new_mem.id in DEV_USERS:
                 bot.send_message(chat.id,
-                               text=f"Be Cool! A Ackerman just Joined the Group",
+                               text=f"Oh My, Heart Doctor Joind This Group.",
                                reply_to_message_id=reply,
                                )
                 welcome_log = (
@@ -255,7 +255,7 @@ def new_member(update: Update, context: CallbackContext):
             # Welcome Sudos
             elif new_mem.id in DRAGONS:
                 bot.send_message(chat.id,
-                                text=f"Beware! A Titan Shifter just Joined the group!!",
+                                text=f"Beware! A Dragons just Joined the group!!",
                                 reply_to_message_id=reply,
                                )
                 welcome_log = (
@@ -280,7 +280,7 @@ def new_member(update: Update, context: CallbackContext):
             # Welcome Whitelisted
             elif new_mem.id in WOLVES:
                 bot.send_message(chat.id,
-                                text=f"Oof! A Garrison from the garrison regiment just joined the group",
+                                text=f"Oof! A Demons just joined the group",
                                 reply_to_message_id=reply,
                                )
                 welcome_log = (
@@ -293,7 +293,7 @@ def new_member(update: Update, context: CallbackContext):
             # Welcome Tigers
             elif new_mem.id in TIGERS:
                 bot.send_message(chat.id,
-                               text=f"Shinzou Sasageyo! A Scout just joined the group!",
+                               text=f"Shinzou Sasageyo! A Tigers just joined the group!",
                                reply_to_message_id=reply,
                                )
                 welcome_log = (
