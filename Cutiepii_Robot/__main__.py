@@ -7,6 +7,7 @@ import sys
 import traceback
 import Cutiepii_Robot.modules.sql.users_sql as sql
 
+
 from sys import argv
 from typing import Optional
 from Cutiepii_Robot import (
@@ -676,11 +677,11 @@ def main():
     help_handler = DisableAbleCommandHandler("help", get_help, run_async=True)
     help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_.*", run_async=True)
 
-    settings_handler = CommandHandler("settings", get_settings)
+    settings_handler = DisableAbleCommandHandler("settings", get_settings)
     settings_callback_handler = CallbackQueryHandler(settings_button, pattern=r"stngs_", run_async=True)
 
     data_callback_handler = CallbackQueryHandler(cutiepii_callback_data, pattern=r"cutiepii_", run_async=True)
-    donate_handler = CommandHandler("donate", donate, run_async=True)
+    donate_handler = DisableAbleCommandHandler("donate", donate, run_async=True)
     migrate_handler = MessageHandler(Filters.status_update.migrate, migrate_chats, run_async=True)
 
     # dispatcher.add_handler(test_handler)
