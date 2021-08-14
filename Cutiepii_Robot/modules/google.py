@@ -4,29 +4,64 @@ import os
 import re
 import urllib
 import urllib.request
+import bs4
+import requests
+
 from search_engine_parser import GoogleSearch
-import urllib
 from urllib.parse import urlencode
 from urllib.error import URLError, HTTPError
 from bs4 import BeautifulSoup
-import requests
 from bing_image_downloader import downloader
-import bs4
 from bs4 import BeautifulSoup
 from PIL import Image
-
 from telethon.tl import functions, types
 from telethon import *
 from telethon.tl.types import *
-
 from asyncio import sleep
 from datetime import datetime
 from requests import get, post
+from geopy.geocoders import Nominatim
 
 from Cutiepii_Robot import telethn as client
 from Cutiepii_Robot import *
 from Cutiepii_Robot import telethn as tbot
 from Cutiepii_Robot.events import register
+
+@register(pattern="^/gps (.*)")
+async def _(event):
+    if event.fwd_from:
+        return
+    if (
+        event.is_group
+        and not await is_register_admin(event.input_chat, event.message.sender_id)
+    ):
+        await event.reply(
+            "You are not Admin. So, You can't use this. Try in my inbox"
+        )
+        return
+
+    args = event.pattern_match.group(1)
+
+    try:
+        geolocator = Nominatim(user_agent="SkittBot")
+        location = args
+        geoloc = geolocator.geocode(location)
+        longitude = geoloc.longitude
+        latitude = geoloc.latitude
+        gm = "https://www.google.com/maps/search/{},{}".format(latitude, longitude)
+        await client.send_file(
+            event.chat_id,
+            file=types.InputMediaGeoPoint(
+                types.InputGeoPoint(float(latitude), float(longitude))
+            ),
+        )
+        await event.reply(
+            "Open with: [Google Maps]({})".format(gm),
+            link_preview=False,
+        )
+    except Exception as e:
+        print(e)
+        await event.reply("I can't find that")
 
 @register(pattern="^/google (.*)")
 async def _(event):
