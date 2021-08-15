@@ -10,7 +10,6 @@ from Cutiepii_Robot import pgram as app, BOT_USERNAME
 
 
 
-
 async def quotify(messages: list):
     response = await arq.quotly(messages)
     if not response.ok:
@@ -22,7 +21,8 @@ async def quotify(messages: list):
 
 
 def getArg(message: Message) -> str:
-    return message.text.strip().split(None, 1)[1].strip()
+    arg = message.text.strip().split(None, 1)[1].strip()
+    return arg
 
 
 def isArgInt(message: Message) -> bool:
@@ -34,7 +34,7 @@ def isArgInt(message: Message) -> bool:
         return [False, 0]
 
 
-@app.on_message(filters.command("q", f"q@{BOT_USERNAME}"))
+@app.on_message(filters.command("q"))
 @capture_err
 async def quotly_func(client, message: Message):
     if not message.reply_to_message:
@@ -57,10 +57,13 @@ async def quotly_func(client, message: Message):
             count = arg[1]
             messages = await client.get_messages(
                 message.chat.id,
-                list(range(
+                [
+                    i
+                    for i in range(
                         message.reply_to_message.message_id,
                         message.reply_to_message.message_id + count,
-                    )),
+                    )
+                ],
                 replies=0,
             )
         else:
