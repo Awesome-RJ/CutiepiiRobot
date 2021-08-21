@@ -8,8 +8,6 @@ from requests import get
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
 
-
-@run_async
 def feedback(bot: Bot, update: Update):
   name = update.effective_message.from_user.first_name
   message = update.effective_message
