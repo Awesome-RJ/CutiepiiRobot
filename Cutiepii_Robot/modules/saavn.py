@@ -10,8 +10,6 @@ from Cutiepii_Robot.utils.saavnhelp import get_arg
 
 @Jebot.on_message(filters.command("saavn", f"saavn@{BOT_USERNAME}"))
 async def song(client, message):
-    message.chat.id
-    message.from_user["id"]
     args = get_arg(message) + " " + "song"
     if args.startswith(" "):
         await message.reply("<b> Song name required!! </b>")

@@ -133,7 +133,6 @@ async def ytmusic(client, message: Message):
     mi = search.result()
     mio = mi["search_result"]
     mo = mio[0]["link"]
-    mio[0]["duration"]
     thum = mio[0]["title"]
     fridayz = mio[0]["id"]
     thums = mio[0]["channel"]
