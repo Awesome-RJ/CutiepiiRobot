@@ -1,4 +1,6 @@
 from telegram.ext import run_async
+from telegram import Bot, Chat, ParseMode, Update
+
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot import dispatcher
 from requests import get
