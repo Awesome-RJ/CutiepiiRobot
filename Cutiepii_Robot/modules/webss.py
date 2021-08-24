@@ -3,7 +3,7 @@ from pyrogram import filters
 from Cutiepii_Robot import pgram as app, BOT_USERNAME
 from Cutiepii_Robot.utils.errors import capture_err
 
-@app.on_message(filters.command("webss", f"webss@{BOT_USERNAME}"))
+@app.on_message(filters.command("webss"))
 @capture_err
 async def take_ss(_, message):
     try:
