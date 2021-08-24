@@ -1,51 +1,52 @@
-import aiohttp
-
-from pyrogram import filters
-from Cutiepii_Robot import pgram as pbot, BOT_USERNAME
-from Cutiepii_Robot.utils.errors import capture_err
-
-
-__mod_name__ = "Github"
+from telegram.ext import run_async
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot import dispatcher
+from requests import get
 
 
-@pbot.on_message(filters.command('gitinfo'))
-@capture_err
-async def github(_, message):
-    if len(message.command) != 2:
-        await message.reply_text("/git Username")
-        return
-    username = message.text.split(None, 1)[1]
-    URL = f'https://api.github.com/users/{username}'
-    async with aiohttp.ClientSession() as session:
-        async with session.get(URL) as request:
-            if request.status == 404:
-                return await message.reply_text("404")
+def github(bot: Bot, update: Update):
+    message = update.effective_message
+    text = message.text[len('/git '):]
+    usr = get(f'https://api.github.com/users/{text}').json()
+    if usr.get('login'):
+        reply_text = f"""*Name:* `{usr['name']}`
+*👨‍💼Username:* `{usr['login']}`
+*🔖Account ID:* `{usr['id']}`
+*📝Account type:* `{usr['type']}`
+*📍Location:* `{usr['location']}`
+*✍️Bio:* `{usr['bio']}`
+*➡️Followers:* `{usr['followers']}`
+*⬅️Following:* `{usr['following']}`
+*🌚Hireable:* `{usr['hireable']}`
+*⛵️Public Repos:* `{usr['public_repos']}`
+*🚁Public Gists:* `{usr['public_gists']}`
+*📨Email:* `{usr['email']}`
+*🏢Company:* `{usr['company']}`
+*🌍Website:* `{usr['blog']}`
+*♻️Last updated:* `{usr['updated_at']}`
+*📒Account created at:* `{usr['created_at']}`
+"""
+    else:
+        reply_text = "User not found. Make sure you entered valid username!"
+    message.reply_text(reply_text, parse_mode=ParseMode.MARKDOWN)
 
-            result = await request.json()
-            try:
-                url = result['html_url']
-                name = result['name']
-                company = result['company']
-                bio = result['bio']
-                created_at = result['created_at']
-                avatar_url = result['avatar_url']
-                blog = result['blog']
-                location = result['location']
-                repositories = result['public_repos']
-                followers = result['followers']
-                following = result['following']
-                caption = f"""**Info Of {name}**
-**Username:** `{username}`
-**Bio:** `{bio}`
-**Profile Link:** [Here]({url})
-**Company:** `{company}`
-**Created On:** `{created_at}`
-**Repositories:** `{repositories}`
-**Blog:** `{blog}`
-**Location:** `{location}`
-**Followers:** `{followers}`
-**Following:** `{following}`"""
-            except Exception as e:
-                print(str(e))
-                pass
-    await message.reply_photo(photo=avatar_url, caption=caption)
+
+
+def repo(bot: Bot, update: Update, args: [str]):
+    message = update.effective_message
+    text = message.text[len('/repo '):]
+    usr = get(f'https://api.github.com/users/{text}/repos?per_page=40').json()
+    reply_text = "*Repo*\n"
+    for i in range(len(usr)):
+        reply_text += f"[{usr[i]['name']}]({usr[i]['html_url']})\n"
+    message.reply_text(reply_text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
+    
+
+__mod_name__ = "GITHUB"
+
+github_handle = DisableAbleCommandHandler("git", github, run_async=True)
+REPO_HANDLER = DisableAbleCommandHandler("repo", repo, pass_args=True, admin_ok=True, run_async=True)
+
+dispatcher.add_handler(github_handle)
+dispatcher.add_handler(REPO_HANDLER)
+
