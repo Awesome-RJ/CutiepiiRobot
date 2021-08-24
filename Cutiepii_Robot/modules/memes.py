@@ -31,7 +31,36 @@ nltk.download("averaged_perceptron_tagger")
 WIDE_MAP = {i: i + 0xFEE0 for i in range(0x21, 0x7F)}
 WIDE_MAP[0x20] = 0x3000
 
+@register(pattern="^/asupan ?(.*)")
+async def asupan(event):
+    try:
+        resp = requests.get("https://tede-api.herokuapp.com/api/asupan/ptl").json()
+        asupannya = f"{resp['url']}"
+        return await telethn.send_file(event.chat_id, asupannya)
+    except Exception:
+        await event.reply("`Something went wrong LOL...`")
 
+
+@register(pattern="^/wibu ?(.*)")
+async def wibu(event):
+    try:
+        resp = requests.get("https://tede-api.herokuapp.com/api/asupan/wibu").json()
+        wibunya = f"{resp['url']}"
+        return await telethn.send_file(event.chat_id, wibunya)
+    except Exception:
+        await event.reply("`Something went wrong LOL...`")
+
+
+@register(pattern="^/chika ?(.*)")
+async def chika(event):
+    try:
+        resp = requests.get("https://tede-api.herokuapp.com/api/chika").json()
+        chikanya = f"{resp['url']}"
+        return await telethn.send_file(event.chat_id, chikanya)
+    except Exception:
+        await event.reply("`Something went wrong LOL...`")
+
+        
 @register(pattern="^/truth ?(.*)")
 async def _(td):
     try:
