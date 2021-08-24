@@ -2,7 +2,7 @@ import aiohttp
 
 from pyrogram import filters
 from Cutiepii_Robot import pgram as pbot
-from Cutiepii_Robot.pyrogramee.errors import capture_err
+from Cutiepii_Robot.utils.errors import capture_err
 
 
 __mod_name__ = "Github"
