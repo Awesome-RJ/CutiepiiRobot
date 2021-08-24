@@ -877,6 +877,7 @@ __help__ = """
   ➢ `/figlet`*:* Another Style art
   ➢ `/dice`*:* Roll A dice
   ➢ `/dart`*:* Throw a dart and try your luck
+  ➢ `/ball`*:* 1 to 5 any value
   ➢ `/basketball`*:* Try your luck if you can enter the ball in the ring
   ➢ `/type <text>`*:* Make the bot type something for you in a professional way
   ➢ `/carbon <text</i>`*:* Beautifies your text and enwraps inside a terminal image [ENGLISH ONLY]
