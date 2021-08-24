@@ -31,6 +31,25 @@ nltk.download("averaged_perceptron_tagger")
 WIDE_MAP = {i: i + 0xFEE0 for i in range(0x21, 0x7F)}
 WIDE_MAP[0x20] = 0x3000
 
+@register(pattern="^/ball(?: |$)(.*)")
+async def _(event):
+    if event.fwd_from:
+        return
+    input_str = event.pattern_match.group(1)
+    r = await event.reply(file=InputMediaDice("🏀"))
+    input_int = int(input_str)
+    if input_int > 5:
+        await event.reply("hey nigga use number 1 to 6 only")
+    
+    else:
+        try:
+            required_number = input_int
+            while r.media.value != required_number:
+                await r.delete()
+                r = await event.reply(file=InputMediaDice("🏀"))
+        except BaseException:
+            pass
+
 @register(pattern="^/asupan ?(.*)")
 async def asupan(event):
     try:
@@ -578,16 +597,19 @@ async def _(event):
     await event.reply(file=InputMediaDice("🎰"))
 
 
-@register(pattern="^/dart$")
+@register(pattern="^/dart(?: |$)(.*)")
 async def _(event):
     if event.fwd_from:
         return
-
-    input_str = print(randrange(7))
+    input_str = event.pattern_match.group(1)
     r = await event.reply(file=InputMediaDice("🎯"))
-    if input_str:
+    input_int = int(input_str)
+    if input_int > 6:
+        await event.reply("hey nigga use number 1 to 6 only")
+    
+    else:
         try:
-            required_number = int(input_str)
+            required_number = input_int
             while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice("🎯"))
@@ -649,16 +671,19 @@ async def stickerizer(event):
     os.remove(bara)
 
 
-@register(pattern="^/dice$")
+@register(pattern="^/dice(?: |$)(.*)")
 async def _(event):
     if event.fwd_from:
         return
-
-    input_str = print(randrange(7))
+    input_str = event.pattern_match.group(1)
     r = await event.reply(file=InputMediaDice(""))
-    if input_str:
+    input_int = int(input_str)
+    if input_int > 6:
+        await event.reply("hey nigga use number 1 to 6 only")
+    
+    else:
         try:
-            required_number = int(input_str)
+            required_number = input_int
             while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice(""))
