@@ -7,7 +7,7 @@ from pykeyboard import InlineKeyboard
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton
 
-from Cutiepii_Robot import pgram, arq, BOT_USERNAME
+from Cutiepii_Robot import pgram, arq
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.formatter import convert_seconds_to_minutes as timeFormat
 from Cutiepii_Robot.utils.functions import downloader
@@ -17,7 +17,7 @@ from Cutiepii_Robot.utils.functions import downloader
 VIDEO_DATA = {}
 
 
-@pgram.on_message(filters.command("ytdl", f"ytdl@{BOT_USERNAME}"))
+@pgram.on_message(filters.command("ytdl"))
 @capture_err
 async def ytdl_func(_, message):
     if len(message.command) != 2:
