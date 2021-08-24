@@ -1,5 +1,4 @@
-from sqlalchemy import Column, String
-
+from sqlalchemy import Boolean, Column, Integer, String, UnicodeText
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
 
