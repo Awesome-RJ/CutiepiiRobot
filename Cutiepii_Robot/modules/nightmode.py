@@ -1,10 +1,10 @@
 import os
 
-from innexiaBot.modules.sql_extended.night_mode_sql import add_nightmode, rmnightmode, get_all_chat_id, is_nightmode_indb
+from CutiepiiRobot.modules.sql_extended.night_mode_sql import add_nightmode, rmnightmode, get_all_chat_id, is_nightmode_indb
 from telethon.tl.types import ChatBannedRights
 from apscheduler.schedulers.asyncio import AsyncIOScheduler 
 from telethon import functions
-from innexiaBot.events import register
+from CutiepiiRobot.events import register
 from CutiepiiRobot import OWNER_ID, telethn as tbot
 from telethon import *
 from telethon import Button, custom, events
