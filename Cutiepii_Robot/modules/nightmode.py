@@ -1,11 +1,11 @@
 import os
 
-from CutiepiiRobot.modules.sql.night_mode_sql import add_nightmode, rmnightmode, get_all_chat_id, is_nightmode_indb
+from Cutiepii_Robot.modules.sql.night_mode_sql import add_nightmode, rmnightmode, get_all_chat_id, is_nightmode_indb
 from telethon.tl.types import ChatBannedRights
 from apscheduler.schedulers.asyncio import AsyncIOScheduler 
 from telethon import functions
-from CutiepiiRobot.events import register
-from CutiepiiRobot import OWNER_ID, telethn as tbot
+from Cutiepii_Robot.events import register
+from Cutiepii_Robot import OWNER_ID, telethn as tbot
 from telethon import *
 from telethon import Button, custom, events
 
