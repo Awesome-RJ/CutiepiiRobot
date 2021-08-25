@@ -1,6 +1,6 @@
 from os import remove
 from pyrogram import filters
-from Cutiepii_Robot import arq, pgram as app
+from Cutiepii_Robot import DRAGONS, BOT_USERNAME, arq, pgram as app
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.permissions import adminsOnly
 from Cutiepii_Robot.modules.mongo.nsfw_mongo import is_nsfw_on, nsfw_off, nsfw_on
@@ -38,6 +38,7 @@ async def get_file_id_from_message(message):
         file_id = message.video.thumbs[0].file_id
     return file_id
 
+
 @app.on_message(
     (
         filters.document
@@ -68,6 +69,8 @@ async def detect_nsfw(_, message):
     results = results.result
     remove(file)
     nsfw = results.is_nsfw
+    if message.from_user.id in DRAGONS:
+        return
     if not nsfw:
         return
     try:
@@ -90,7 +93,7 @@ __Powered by__@Yuki_Network.
     )
 
 
-@app.on_message(filters.command("nsfwscan"))
+@app.on_message(filters.command(["nsfwscan", f"nsfwscan@{BOT_USERNAME}"]))
 @capture_err
 async def nsfw_scan_command(_, message):
     if not message.reply_to_message:
@@ -135,7 +138,7 @@ async def nsfw_scan_command(_, message):
     )
 
 
-@app.on_message(filters.command("antinsfw") & ~filters.private)
+@app.on_message(filters.command(["antinsfw", f"antinsfw@{BOT_USERNAME}"]) & ~filters.private)
 @adminsOnly("can_change_info")
 async def nsfw_enable_disable(_, message):
     if len(message.command) != 2:
