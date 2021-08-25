@@ -34,7 +34,7 @@ fontTools
 pyrogram
 nekos.py
 telegraph
-tgCrypto
+tgcrypto
 youtube_dl
 youtube_search
 pytube
@@ -54,7 +54,7 @@ cryptography
 python-arq
 aioredis
 odmantic
-aiohttp
+aiohttp[speedups]
 pykeyboard
 aiofiles
 hachoir
@@ -66,13 +66,10 @@ html2text
 glitch_this
 NumPy
 opencv-python-headless
-aiofiles
 uvloop
 python-dotenv
 gpytranslate
 glitch_this
-NumPy
-opencv-python-headless
 countryinfo
 faker
 PyDictionary==2.0.1
