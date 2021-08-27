@@ -5,7 +5,7 @@ from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.http import get
 
 
-@app.on_message(filters.command("repo", f"repo@{BOT_USERNAME}") & ~filters.edited)
+@app.on_message(filters.command("repo") & ~filters.edited)
 @capture_err
 async def repo(_, message):
     users = await get(
