@@ -1,10 +1,12 @@
 import time
 import re
-import Cutiepii_Robot.modules.sql.connection_sql as sql
 
 from telegram import ParseMode, InlineKeyboardMarkup, InlineKeyboardButton, Update, Bot
 from telegram.error import BadRequest, Unauthorized
 from telegram.ext import CommandHandler, CallbackQueryHandler, run_async
+
+import Cutiepii_Robot.modules.sql.connection_sql as sql
+
 from Cutiepii_Robot import dispatcher, DRAGONS, DEV_USERS
 from Cutiepii_Robot.modules.helper_funcs import chat_status
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
@@ -19,45 +21,45 @@ def allow_connections(update, context) -> str:
     chat = update.effective_chat
     args = context.args
 
-    if chat.type == chat.PRIVATE:
+    if chat.type != chat.PRIVATE:
+        if len(args) >= 1:
+            var = args[0]
+            if var == "no":
+                sql.set_allow_connect_to_chat(chat.id, False)
+                send_message(
+                    update.effective_message,
+                    "Connection has been disabled for this chat",
+                )
+            elif var == "yes":
+                sql.set_allow_connect_to_chat(chat.id, True)
+                send_message(
+                    update.effective_message,
+                    "Connection has been enabled for this chat",
+                )
+            else:
+                send_message(
+                    update.effective_message,
+                    "Please enter `yes` or `no`!",
+                    parse_mode=ParseMode.MARKDOWN,
+                )
+        else:
+            get_settings = sql.allow_connect_to_chat(chat.id)
+            if get_settings:
+                send_message(
+                    update.effective_message,
+                    "Connections to this group are *Allowed* for members!",
+                    parse_mode=ParseMode.MARKDOWN,
+                )
+            else:
+                send_message(
+                    update.effective_message,
+                    "Connection to this group are *Not Allowed* for members!",
+                    parse_mode=ParseMode.MARKDOWN,
+                )
+    else:
         send_message(
             update.effective_message, "This command is for group only. Not in PM!",
         )
-
-    elif len(args) >= 1:
-        var = args[0]
-        if var == "no":
-            sql.set_allow_connect_to_chat(chat.id, False)
-            send_message(
-                update.effective_message,
-                "Connection has been disabled for this chat",
-            )
-        elif var == "yes":
-            sql.set_allow_connect_to_chat(chat.id, True)
-            send_message(
-                update.effective_message,
-                "Connection has been enabled for this chat",
-            )
-        else:
-            send_message(
-                update.effective_message,
-                "Please enter `yes` or `no`!",
-                parse_mode=ParseMode.MARKDOWN,
-            )
-    else:
-        get_settings = sql.allow_connect_to_chat(chat.id)
-        if get_settings:
-            send_message(
-                update.effective_message,
-                "Connections to this group are *Allowed* for members!",
-                parse_mode=ParseMode.MARKDOWN,
-            )
-        else:
-            send_message(
-                update.effective_message,
-                "Connection to this group are *Not Allowed* for members!",
-                parse_mode=ParseMode.MARKDOWN,
-            )
 
 
 
@@ -234,7 +236,9 @@ def connect_chat(update, context):
                         ),
                         parse_mode="markdown",
                     )
-                except (BadRequest, Unauthorized):
+                except BadRequest:
+                    pass
+                except Unauthorized:
                     pass
             else:
                 send_message(update.effective_message, "Connection failed!")
@@ -277,18 +281,20 @@ def connected(bot: Bot, update: Update, chat, user_id, need_admin=True):
             or (user.id in DRAGONS)
             or (user.id in DEV_USERS)
         ):
-            if need_admin is not True:
+            if need_admin is True:
+                if (
+                    getstatusadmin.status in ("administrator", "creator")
+                    or user_id in DRAGONS
+                    or user.id in DEV_USERS
+                ):
+                    return conn_id
+                else:
+                    send_message(
+                        update.effective_message,
+                        "You must be an admin in the connected group!",
+                    )
+            else:
                 return conn_id
-            if (
-                getstatusadmin.status in ("administrator", "creator")
-                or user_id in DRAGONS
-                or user.id in DEV_USERS
-            ):
-                return conn_id
-            send_message(
-                update.effective_message,
-                "You must be an admin in the connected group!",
-            )
         else:
             send_message(
                 update.effective_message,
@@ -300,16 +306,25 @@ def connected(bot: Bot, update: Update, chat, user_id, need_admin=True):
 
 
 CONN_HELP = """
- Actions are available with connected groups:
- ➩ View and edit Notes.
- ➩ View and edit Filters.
- ➩ Get invite link of chat.
- ➩ Set and control AntiFlood settings.
- ➩ Set and control Blacklist settings.
- ➩ Set Locks and Unlocks in chat.
- ➩ Enable and Disable commands in chat.
- ➩ Export and Imports of chat backup.
- ➩ More in future!"""
+Actions which are available with connected groups:-
+*User Actions:*
+• View Notes
+• View Filters
+• View Blacklist
+• View AntiFlood settings
+• View Disabled Commands
+• Many More in future!
+*Admin Actions:*
+ • View and edit Notes
+ • View and edit Filters.
+ • Get invite link of chat.
+ • Set and control AntiFlood settings. 
+ • Set and control Blacklist settings.
+ • Set Locks and Unlocks in chat.
+ • Enable and Disable commands in chat.
+ • Export and Imports of chat backup.
+ • More in future!
+"""
 
 
 
@@ -320,7 +335,8 @@ def help_connect_chat(update, context):
     if update.effective_message.chat.type != "private":
         send_message(update.effective_message, "PM me with that command to get help.")
         return
-    send_message(update.effective_message, CONN_HELP, parse_mode="markdown")
+    else:
+        send_message(update.effective_message, CONN_HELP, parse_mode="markdown")
 
 
 
@@ -385,14 +401,12 @@ __mod_name__ = "Connection"
 __help__ = """
 Sometimes, you just want to add some notes and filters to a group chat, but you don't want everyone to see; This is where connections come in...
 This allows you to connect to a chat's database, and add things to it without the commands appearing in chat! For obvious reasons, you need to be an admin to add things; but any member in the group can view your data.
-
-   ➢ `/connect`*:* Connects to chat (Can be done in a group by /connect or /connect <chat id> in PM)
-   ➢ `/connection`*:* List connected chats
-   ➢ `/disconnect`*:* Disconnect from a chat
-   ➢ `/helpconnect`*:* List available commands that can be used remotely
-
+ • /connect: Connects to chat (Can be done in a group by /connect or /connect <chat id> in PM)
+ • /connection: List connected chats
+ • /disconnect: Disconnect from a chat
+ • /helpconnect: List available commands that can be used remotely
 *Admin only:*
-   ➢ `/allowconnect <yes/no>`*:* allow a user to connect to a chat
+ • /allowconnect <yes/no>: allow an user to connect to a chat
 """
 
 CONNECT_CHAT_HANDLER = CommandHandler("connect", connect_chat, pass_args=True, run_async=True)
