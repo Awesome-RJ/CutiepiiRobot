@@ -85,4 +85,4 @@ hiredis
 pendulum
 img2pdf
 nhentai
-googleapiclient
+google-api-python-client
