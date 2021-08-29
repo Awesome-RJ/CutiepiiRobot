@@ -115,6 +115,7 @@ if ENV:
     APP_HASH = os.environ.get("APP_HASH", None) # 2nd ID
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", True) # Heroku App Name 
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", True) # Heroku API [From https://dashboard.heroku.com/account]
+    YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", True)
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True) # Don't Change
 
     try:
@@ -192,6 +193,7 @@ else:
     STRING_SESSION = Config.STRING_SESSION
     GENIUS_API_TOKEN = Config.GENIUS_API_TOKEN
     HEROKU_APP_NAME = Config.HEROKU_APP_NAME
+    YOUTUBE_API_KEY = Config.YOUTUBE_API_KEY
     HEROKU_API_KEY = Config.HEROKU_API_KEY
 
     try:
