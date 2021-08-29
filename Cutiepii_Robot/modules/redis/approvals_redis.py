@@ -1,4 +1,4 @@
-from SaitamaRobot import REDIS
+from Cutiepii_Robot import REDIS
 
 try:
     eval(REDIS.get("Approvals"))
