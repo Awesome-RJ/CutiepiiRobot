@@ -27,7 +27,7 @@ def hentai(_,message):
                 filepath = os.path.join(root, filename)
                 file_paths.append(filepath)
 
-        file_paths.sort(key=lambda f: int(re.sub('\D', '', f)))
+        file_paths.sort(key=lambda f: int(re.sub(r'\D', '', f)))
         with open(f"{hmm}.pdf" ,"wb") as f:
             f.write(img2pdf.convert(file_paths)) 
        
