@@ -1,10 +1,12 @@
 import os
 import subprocess
 import sys
-import Cutiepii_Robot
 
 from contextlib import suppress
 from time import sleep
+
+import Cutiepii_Robot
+
 from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from telegram import TelegramError, Update
@@ -15,13 +17,13 @@ from telegram.ext import CallbackContext, CommandHandler, run_async
 def allow_groups(update: Update, context: CallbackContext):
     args = context.args
     if not args:
-        state = "Lockdown is " + "on" if not Cutiepii_Robot.ALLOW_CHATS else "off"
+        state = "Lockdown is " + "on" if not SaitamaRobot.ALLOW_CHATS else "off"
         update.effective_message.reply_text(f"Current state: {state}")
         return
     if args[0].lower() in ["off", "no"]:
-        Cutiepii_Robot.ALLOW_CHATS = True
+        SaitamaRobot.ALLOW_CHATS = True
     elif args[0].lower() in ["yes", "on"]:
-        Cutiepii_Robot.ALLOW_CHATS = False
+        SaitamaRobot.ALLOW_CHATS = False
     else:
         update.effective_message.reply_text("Format: /lockdown Yes/No or Off/On")
         return
@@ -68,12 +70,10 @@ def gitpull(update: Update, context: CallbackContext):
 @dev_plus
 def restart(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
-        "Starting a new instance and shutting down this one",
+	"Exiting all Processes and starting a new Instance!"
     )
-
-    os.system("restart.bat")
-    os.execv("start.bat", sys.argv)
-
+    process = subprocess.run("pkill python3 && python3 -m SaitamaRobot", shell=True)
+    process.communicate()
 
 LEAVE_HANDLER = CommandHandler("leave", leave, run_async=True)
 GITPULL_HANDLER = CommandHandler("gitpull", gitpull, run_async=True)
@@ -86,5 +86,4 @@ dispatcher.add_handler(GITPULL_HANDLER)
 dispatcher.add_handler(RESTART_HANDLER)
 
 __mod_name__ = "Dev"
-
 __handlers__ = [LEAVE_HANDLER, GITPULL_HANDLER, RESTART_HANDLER, ALLOWGROUPS_HANDLER]
