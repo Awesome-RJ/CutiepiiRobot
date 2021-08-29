@@ -3,7 +3,7 @@ import re
 from typing import Optional
 
 import telegram
-from Cutiepii_Robot import BAN_STICKER, TIGERS, WOLVES, dispatcher, REDIS
+from Cutiepii_Robot import BAN_STICKER, TIGERS, WOLVES, dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (bot_admin,
                                                            can_restrict,
@@ -19,6 +19,7 @@ from Cutiepii_Robot.modules.helper_funcs.misc import split_message
 from Cutiepii_Robot.modules.helper_funcs.string_handling import split_quotes
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql import warns_sql as sql
+from Cutiepii_Robot.modules.redis.approvals_redis import is_approved
 from telegram import (CallbackQuery, Chat, InlineKeyboardButton,
                       InlineKeyboardMarkup, Message, ParseMode, Update, User)
 from telegram.error import BadRequest
@@ -36,10 +37,18 @@ def warn(user: User,
          chat: Chat,
          reason: str,
          message: Message,
-         warner: User = None) -> str:
+         warner: User = None) -> str: 
+                               
     if is_user_admin(chat, user.id):
         # message.reply_text("Damn admins, They are too far to be One Punched!")
         return
+
+    if is_approved(chat.id, user.id):
+        if warner:
+            message.reply_text("This user is approved in this chat and Approved users can't be warned!")
+        else:
+            message.reply_text("Approved user triggered an auto filter! But they can't be warned.")
+        return 
 
     if user.id in TIGERS:
         if warner:
@@ -71,7 +80,7 @@ def warn(user: User,
         if soft_warn:  # punch
             chat.unban_member(user.id)
             reply = (
-                f"<code>❕</code><b>Punch Event</b>\n"
+                f"<code>❕</code><b>kick Event</b>\n"
                 f"<code> </code><b>•  User:</b> {mention_html(user.id, user.first_name)}\n"
                 f"<code> </code><b>•  Count:</b> {limit}")
 
@@ -168,12 +177,11 @@ def warn_user(update: Update, context: CallbackContext) -> str:
     message: Optional[Message] = update.effective_message
     chat: Optional[Chat] = update.effective_chat
     warner: Optional[User] = update.effective_user
-
+    
     user_id, reason = extract_user_and_text(message, args)
-    if message.text.startswith("/d") and message.reply_to_message:    
-        return warn(message.reply_to_message.from_user, chat, reason, warner, message)
-    if not can_delete(chat, context.bot.id):
-        return ""
+    if message.text.startswith('/d') and message.reply_to_message:
+        message.reply_to_message.delete()
+        return warn(chat, reason, warner, message)           
     if user_id:
         if message.reply_to_message and message.reply_to_message.from_user.id == user_id:
             return warn(message.reply_to_message.from_user, chat, reason,
@@ -252,12 +260,13 @@ def add_warn_filter(update: Update, context: CallbackContext):
 
     extracted = split_quotes(args[1])
 
-    if len(extracted) < 2:
-        return
+    if len(extracted) >= 2:
+        # set trigger -> lower, so as to avoid adding duplicate filters with different cases
+        keyword = extracted[0].lower()
+        content = extracted[1]
 
-    # set trigger -> lower, so as to avoid adding duplicate filters with different cases
-    keyword = extracted[0].lower()
-    content = extracted[1]
+    else:
+        return
 
     # Note: perhaps handlers can be removed somehow using sql.get_chat_filters
     for handler in dispatcher.handlers.get(WARN_HANDLER_GROUP, []):
@@ -335,14 +344,7 @@ def reply_filter(update: Update, context: CallbackContext) -> str:
     chat: Optional[Chat] = update.effective_chat
     message: Optional[Message] = update.effective_message
     user: Optional[User] = update.effective_user
-            
-    chat_id = str(chat.id)[1:] 
-    approve_list = list(REDIS.sunion(f'approve_list_{chat_id}'))
-    is_user_approved = mention_html(user.id, user.first_name)
-   
-    if is_user_approved in approve_list:
-        return
-
+                
     if not user:  #Ignore channel
         return
 
@@ -444,7 +446,7 @@ def __stats__():
 
 def __import_data__(chat_id, data):
     for user_id, count in data.get('warns', {}).items():
-        for _ in range(int(count)):
+        for x in range(int(count)):
             sql.warn_user(user_id, chat_id)
 
 
@@ -462,17 +464,17 @@ def __chat_settings__(chat_id, user_id):
 
 
 __help__ = """
-  ➢ `/warns <userhandle>`*:* get a user's number, and reason, of warns.
-  ➢ `/warnlist`*:* list of all current warning filters
+ • `/warns <userhandle>`*:* get a user's number, and reason, of warns.
+ • `/warnlist`*:* list of all current warning filters
 *Admins only:*
-  ➢ `/warn <userhandle>`*:* warn a user. After 3 warns, the user will be banned from the group. Can also be used as a reply.
-  ➢ `/dwarn <userhandle>`*:* warn a user and delete the message. After 3 warns, the user will be banned from the group. Can also be used as a reply.
-  ➢ `/resetwarn <userhandle>`*:* reset the warns for a user. Can also be used as a reply.
-  ➢ `/addwarn <keyword> <reply message>`*:* set a warning filter on a certain keyword. If you want your keyword to \
+ • `/warn <userhandle>`*:* warn a user. After 3 warns, the user will be banned from the group. Can also be used as a reply.
+ • `/dwarn <userhandle>`*:* warn a user and delete the message. After 3 warns, the user will be banned from the group. Can also be used as a reply.
+ • `/resetwarn <userhandle>`*:* reset the warns for a user. Can also be used as a reply.
+ • `/addwarn <keyword> <reply message>`*:* set a warning filter on a certain keyword. If you want your keyword to \
 be a sentence, encompass it with quotes, as such: `/addwarn "very angry" This is an angry user`. 
-  ➢ `/nowarn <keyword>`*:* stop a warning filter
-  ➢ `/warnlimit <num>`*:* set the warning limit
-  ➢ `/strongwarn <on/yes/off/no>`*:* If set to on, exceeding the warn limit will result in a ban. Else, will just kick.
+ • `/nowarn <keyword>`*:* stop a warning filter
+ • `/warnlimit <num>`*:* set the warning limit
+ • `/strongwarn <on/yes/off/no>`*:* If set to on, exceeding the warn limit will result in a ban. Else, will just kick.
 """
 
 __mod_name__ = "Warnings"
