@@ -4,8 +4,8 @@ from jikanpy.exceptions import APIException
 from telegram import Message, Chat, User, ParseMode, Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import CallbackContext, CommandHandler, Filters, CallbackQueryHandler, run_async
 
-from SaitamaRobot import dispatcher, REDIS
-from SaitamaRobot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot import dispatcher, REDIS
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 jikan = Jikan()
 
