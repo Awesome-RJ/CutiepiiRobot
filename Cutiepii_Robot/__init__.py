@@ -242,7 +242,7 @@ print("[CUTIEPII] Cutie Cutie! Successfully Connected With A  Yūki • Data Cen
 print("[CUTIEPII] Project Maintained By: github.com/Awesome-RJ (t.me/Awesome_Rj)")
 
 
-updater = tg.Updater(TOKEN, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True, persistence=PostgresPersistence(SESSION))
+updater = tg.Updater(TOKEN, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)
 print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient("CUTIEPII", API_ID, API_HASH)
 dispatcher = updater.dispatcher
