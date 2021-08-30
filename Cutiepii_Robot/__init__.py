@@ -79,7 +79,7 @@ if ENV:
     ERROR_LOGS = os.environ.get("ERROR_LOGS", None) # Error Logs (Channel Ya Group Choice Is Yours) (-100)
     WEBHOOK = bool(os.environ.get("WEBHOOK", False))
     URL = os.environ.get("URL", "")  # If You Deploy On Heraku. [URL PERTEN:- https://{App Name}.herokuapp.com/ || EXP:- https://yuki-cutiepii-robot.herokuapp.com/]
-    PORT = int(os.environ.get("PORT", 8443)) 
+    PORT = int(os.environ.get("PORT", 5000)) 
     CERT_PATH = os.environ.get("CERT_PATH")
     API_ID = os.environ.get("API_ID", None) # Bot Owner's API_ID (From:- https://my.telegram.org/auth)
     API_HASH = os.environ.get("API_HASH", None) # Bot Owner's API_HASH (From:- https://my.telegram.org/auth)
@@ -115,7 +115,6 @@ if ENV:
     APP_HASH = os.environ.get("APP_HASH", None) # 2nd ID
     HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME", True) # Heroku App Name 
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", True) # Heroku API [From https://dashboard.heroku.com/account]
-    YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", True)
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True) # Don't Change
 
     try:
@@ -193,7 +192,6 @@ else:
     STRING_SESSION = Config.STRING_SESSION
     GENIUS_API_TOKEN = Config.GENIUS_API_TOKEN
     HEROKU_APP_NAME = Config.HEROKU_APP_NAME
-    YOUTUBE_API_KEY = Config.YOUTUBE_API_KEY
     HEROKU_API_KEY = Config.HEROKU_API_KEY
 
     try:
@@ -242,7 +240,7 @@ print("[CUTIEPII] Cutie Cutie! Successfully Connected With A  Yūki • Data Cen
 print("[CUTIEPII] Project Maintained By: github.com/Awesome-RJ (t.me/Awesome_Rj)")
 
 
-updater = tg.Updater(TOKEN, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)
+updater = tg.Updater(TOKEN, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True, persistence=PostgresPersistence(SESSION))
 print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient("CUTIEPII", API_ID, API_HASH)
 dispatcher = updater.dispatcher

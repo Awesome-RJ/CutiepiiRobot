@@ -1,144 +1,125 @@
-import os
-import time
-import math
-import asyncio
-import shutil
-import requests
+import traceback
+from asyncio import gather
+from os import remove
+from random import randint
 
-from youtube_dl import YoutubeDL
-from youtube_dl.utils import (DownloadError, ContentTooShortError,
-                              ExtractorError, GeoRestrictedError,
-                              MaxDownloadsReached, PostProcessingError,
-                              UnavailableVideoError, XAttrMetadataError)
-from asyncio import sleep
-from telethon.tl.types import DocumentAttributeAudio
-from collections import deque
-from googleapiclient.discovery import build
-from html import unescape
+from pykeyboard import InlineKeyboard
+from pyrogram import filters
+from pyrogram.types import InlineKeyboardButton
 
-from Cutiepii_Robot.events import register as Cutiepii_Robot
-from Cutiepii_Robot import YOUTUBE_API_KEY
+from Cutiepii_Robot import pgram, arq
+from Cutiepii_Robot.utils.errors import capture_err
+from Cutiepii_Robot.utils.formatter import convert_seconds_to_minutes as timeFormat
+from Cutiepii_Robot.utils.functions import downloader
 
 
 
-@Cutiepii_Robot(pattern="^/yt(audio|video) (.*)")
-async def download_video(v_url):
-    """ For .ytdl command, download media from YouTube and many other sites. """
-    url = v_url.pattern_match.group(2)
-    type = v_url.pattern_match.group(1).lower()
-    lmao = await v_url.reply("`Preparing to download...`")
-    if type == "audio":
-        opts = {
-            'format':
-            'bestaudio',
-            'addmetadata':
-            True,
-            'key':
-            'FFmpegMetadata',
-            'writethumbnail':
-            True,
-            'prefer_ffmpeg':
-            True,
-            'geo_bypass':
-            True,
-            'nocheckcertificate':
-            True,
-            'postprocessors': [{
-                'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
-                'preferredquality': '256',
-            }],
-            'outtmpl':
-            '%(id)s.mp3',
-            'quiet':
-            True,
-            'logtostderr':
-            False
+VIDEO_DATA = {}
+
+
+@pgram.on_message(filters.command("ytdl"))
+@capture_err
+async def ytdl_func(_, message):
+    if len(message.command) != 2:
+        return await message.reply_text("please do like this `/ytdl (VIDEO_LINK)`")
+    m = await message.reply_text("Processing")
+    url = message.text.split(None, 1)[1]
+    results = await arq.ytdl(url)
+    if not results.ok:
+        return await m.edit(results.result)
+    result = results.result
+    title = result.title
+    thumbnail = result.thumbnail
+    duration = result.duration
+    video = result.video
+    buttons = InlineKeyboard(row_width=3)
+    keyboard = []
+    for media in video:
+        quality = media.quality
+        size = media.size
+        url = media.url
+        format = media.format
+        data = str(randint(999, 9999999))
+        VIDEO_DATA[data] = {
+            "url": url,
+            "title": title,
+            "size": size,
+            "quality": quality,
+            "duration": duration,
+            "format": format,
+            "thumbnail": thumbnail,
+            "cc": message.from_user.mention if message.from_user else "Anon",
         }
-        video = False
-        song = True
-    elif type == "video":
-        opts = {
-            'format':
-            'best',
-            'addmetadata':
-            True,
-            'key':
-            'FFmpegMetadata',
-            'prefer_ffmpeg':
-            True,
-            'geo_bypass':
-            True,
-            'nocheckcertificate':
-            True,
-            'postprocessors': [{
-                'key': 'FFmpegVideoConvertor',
-                'preferedformat': 'mp4'
-            }],
-            'outtmpl':
-            '%(id)s.mp4',
-            'logtostderr':
-            False,
-            'quiet':
-            True
-        }
-        song = False
-        video = True
-    try:
-        await lmao.edit("`Fetching data, please wait..`")
-        with YoutubeDL(opts) as ytdl:
-            ytdl_data = ytdl.extract_info(url)
-    except DownloadError as DE:
-        await lmao.edit(f"`{str(DE)}`")
-        return
-    except ContentTooShortError:
-        await lmao.edit("`The download content was too short.`")
-        return
-    except GeoRestrictedError:
-        await lmao.edit(
-            "`Video is not available from your geographic location due to geographic restrictions imposed by a website.`"
+        keyboard.append(
+            InlineKeyboardButton(
+                text=f"{quality} | {size}", callback_data=f"ytdl {data}"
+            )
         )
-        return
-    except MaxDownloadsReached:
-        await lmao.edit("`Max-downloads limit has been reached.`")
-        return
-    except PostProcessingError:
-        await lmao.edit("`There was an error during post processing.`")
-        return
-    except UnavailableVideoError:
-        await lmao.edit("`Media is not available in the requested format.`")
-        return
-    except XAttrMetadataError as XAME:
-        await lmao.edit(f"`{XAME.code}: {XAME.msg}\n{XAME.reason}`")
-        return
-    except ExtractorError:
-        await lmao.edit("`There was an error during info extraction.`")
-        return
+    buttons.add(*keyboard)
+    caption = f"""
+**Title:** {title}
+**Duration:** {await timeFormat(duration)}
+"""
+    await message.reply_photo(thumbnail, caption=caption, reply_markup=buttons)
+    await m.delete()
+
+
+@pgram.on_callback_query(filters.regex(r"^ytdl"))
+async def ytdlCallback(_, cq):
+    await cq.message.edit("Downloading")
+    data_ = cq.data.split()[1]
+    try:
+        data = VIDEO_DATA[data_]
+        url = data["url"]
+        title = data["title"]
+        duration = data["duration"]
+        format = data["format"]
+        size = data["size"]
+        thumbnail = data["thumbnail"]
+        cc = data["cc"]
+        caption = f"""
+**Title:** {title}
+**Size:** {size}
+**Format:** {format}
+**Duration:** {await timeFormat(duration)}
+**CC:** {cc}
+        """
+        media, thumb = await gather(
+            downloader.download(url), downloader.download(thumbnail)
+        )
+        await cq.message.edit("Uploading")
+        if format == "mp3":
+            await cq.message.reply_audio(
+                media,
+                quote=False,
+                caption=caption,
+                duration=duration,
+                thumb=thumb,
+                title=title,
+            )
+        else:
+            await cq.message.reply_video(
+                media,
+                caption=caption,
+                quote=False,
+                duration=duration,
+                supports_streaming=True,
+            )
+        del VIDEO_DATA[data_]
+        remove(thumb)
+        remove(media)
+        await cq.message.delete()
     except Exception as e:
-        await lmao.edit(f"{str(type(e)): {str(e)}}")
-        return
-    c_time = time.time()
-    if song:
-        await lmao.edit(f"`Preparing to upload song:`\
-        \n**{ytdl_data['title']}**\
-        \nby *{ytdl_data['uploader']}*")
-        await v_url.client.send_file(
-            v_url.chat_id,
-            f"{ytdl_data['id']}.mp3",
-            supports_streaming=True,
-            attributes=[
-                DocumentAttributeAudio(duration=int(ytdl_data['duration']),
-                                       title=str(ytdl_data['title']),
-                                       performer=str(ytdl_data['uploader']))
-            ])
-        os.remove(f"{ytdl_data['id']}.mp3")
-    elif video:
-        await lmao.edit(f"`Preparing to upload video:`\
-        \n**{ytdl_data['title']}**\
-        \nby *{ytdl_data['uploader']}*")
-        await v_url.client.send_file(
-            v_url.chat_id,
-            f"{ytdl_data['id']}.mp4",
-            supports_streaming=True,
-            caption=ytdl_data['title'])
-        os.remove(f"{ytdl_data['id']}.mp4")
+        e = traceback.format_exc()
+        print(e)
+        del VIDEO_DATA[data_]
+        await cq.message.delete()
+
+
+
+
+        
+__mod_name__ = "YoutubeDL"
+
+
+

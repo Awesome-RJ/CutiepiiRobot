@@ -1,3 +1,4 @@
+
 # Copyright (C) 2021 MoeZilla
 
 # This file is part of Cutiepii (Telegram Bot)
@@ -15,7 +16,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 import json
 import os
 import html
@@ -32,7 +32,6 @@ from telegram.ext import CommandHandler, run_async, CallbackContext, MessageHand
 from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
 from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
 from telegram.utils.helpers import mention_html, mention_markdown, escape_markdown
-
 
 @user_admin
 @gloggable
@@ -74,6 +73,8 @@ def rem_chat(update: Update, context: CallbackContext):
     return message
  
 
+
+
 def kuki_message(context: CallbackContext, message):
     reply_message = message.reply_to_message
     if message.text.lower() == "cutiepii":
@@ -104,8 +105,6 @@ def chatbot(update: Update, context: CallbackContext):
         sleep(0.3)
         message.reply_text(kuki, timeout=60)
 
-
-
 def list_all_chats(update: Update, context: CallbackContext):
     chats = sql.get_all_kuki_chats()
     text = "<b>KUKI-Enabled Chats</b>\n"
@@ -119,9 +118,14 @@ def list_all_chats(update: Update, context: CallbackContext):
         except RetryAfter as e:
             sleep(e.retry_after)
     update.effective_message.reply_text(text, parse_mode="HTML")
+   
 
+__help__ = """
+
+"""
 
 __mod_name__ = "ChatBot"
+
 
 __help__ = """
 Chatbot utilizes the Kuki API and allows Cutiepii to talk and provides a more interactive group chat experience.
@@ -133,6 +137,8 @@ Chatbot utilizes the Kuki API and allows Cutiepii to talk and provides a more in
    
 Reports bugs at @Black_Knights_Union_Support
 """
+
+__mod_name__ = "ChatBot"
 
 ADD_CHAT_HANDLER = CommandHandler("addchat", add_chat, run_async=True)
 REMOVE_CHAT_HANDLER = CommandHandler("rmchat", rem_chat, run_async=True)
