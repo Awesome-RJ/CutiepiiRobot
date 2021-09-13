@@ -31,7 +31,7 @@ logofonts = [
 	
  "./Cutiepii_Robot/utils/Logo/beyond-wonderland.regular.ttf",
 	
- "./Cutiepii_Robot/utils/Logo/Respective-VP6y.ttf"
+ "./Cutiepii_Robot/utils/Logo/Respective-VP6y.ttf",
 
  "./Cutiepii_Robot/utils/Logo/Maghrib.ttf",
 	
