@@ -49,7 +49,7 @@ async def _(event):
         f.close()
         caption = f"A collabration with Friday.\n Join Support @{SUPPORT_CHAT}"
 
-        await tbot.send_file(
+        await telethn.send_file(
             event.chat_id,
             "book.txt",
             caption=f"**BOOKS GATHERED SUCCESSFULLY!\n\nBY DAISYX. JOIN THE SUPPORT @{SUPPORT_CHAT}.**",
