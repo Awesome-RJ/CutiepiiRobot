@@ -97,7 +97,7 @@ async def _(dr):
         results = f"{resp['dare']}"
         return await dr.reply(results)
     except Exception:
-        await dr.reply("`Something went wrong LOL...`")
+        await dr.reply("`Error Report @Black_Knights_Union_Support`")
 
 
 @register(pattern="^/owu$")
