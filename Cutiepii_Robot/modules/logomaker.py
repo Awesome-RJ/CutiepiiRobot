@@ -3,7 +3,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import OWNER_ID, telethn, BOT_USERNAME
+from Cutiepii_Robot import OWNER_ID, telethn, BOT_USERNAME, SUPPORT_CHAT
 
 
 @register(pattern="^/logo ?(.*)")
