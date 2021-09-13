@@ -31,7 +31,7 @@ async def lego(event):
     draw.text((x, y), text, font=font, fill="black", stroke_width=25, stroke_fill="yellow")
     fname2 = "LogoByCutiepii.png"
     img.save(fname2, "png")
-    await tbot.send_file(event.chat_id, fname2, caption="Made By @Cutiepii_Robot")
+    await tbot.send_file(event.chat_id, fname2, caption=f"Made By @Cutiepii_Robot")
     if os.path.exists(fname2):
             os.remove(fname2)
  except Exception as e:
