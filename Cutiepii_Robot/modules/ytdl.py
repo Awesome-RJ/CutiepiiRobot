@@ -16,7 +16,7 @@ from collections import deque
 from googleapiclient.discovery import build
 from html import unescape
 
-from Cutiepii_Robot.events import 
+from Cutiepii_Robot.events import register
 from Cutiepii_Robot import YOUTUBE_API_KEY
 
 
