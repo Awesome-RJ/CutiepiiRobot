@@ -87,7 +87,7 @@ async def _(td):
         results = f"{resp['truth']}"
         return await td.reply(results)
     except Exception:
-        await td.reply("`Error Report @Black_Knights_Union_Support`")
+        await td.reply(f"`Error Report @{SUPPORT_CHAT}`")
 
 
 @register(pattern="^/dare ?(.*)")
