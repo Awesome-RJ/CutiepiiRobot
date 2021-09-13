@@ -1,24 +1,19 @@
 import requests
 import asyncio
 import io
-import json
 import os
 import random
 import re
 import string
 import subprocess
 import textwrap
-import urllib.request
-import emoji
 import nltk
 
 from random import randint, randrange, uniform
 from cowpy import cow
-from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageEnhance, ImageFont, ImageOps
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from telethon.tl import functions
 from zalgo_text import zalgo
 
 
