@@ -200,7 +200,7 @@ def new_member(update: Update, context: CallbackContext):
         new_mem = update.chat_member.new_chat_member.user
 
         if new_mem.id and user.id == bot.id and chat.id in BL_CHATS:                
-                update.effective_message.reply_text(f"This is a Blacklisted Group! Join @Black_Knights_Union_Support for Appeal.")
+                update.effective_message.reply_text(f"This is a Blacklisted Group! Join @{SUPPORT_CHAT} for Appeal.")
                 bot.leave_chat(BL_CHATS)
 
         if new_mem.id == bot.id and not Cutiepii_Robot.ALLOW_CHATS:
