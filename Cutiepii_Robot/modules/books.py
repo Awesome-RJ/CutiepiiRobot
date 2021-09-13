@@ -47,7 +47,7 @@ async def _(event):
 
         f.write("By @Cutiepii_Robot.")
         f.close()
-        caption = f"A collabration with Friday.\n Join Support @Black_Knights_Union_Support"
+        caption = f"A collabration with Friday.\n Join Support @{SUPPORT_CHAT}"
 
         await tbot.send_file(
             event.chat_id,
