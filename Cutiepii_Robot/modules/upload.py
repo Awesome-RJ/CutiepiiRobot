@@ -7,12 +7,9 @@ import traceback
 import aiohttp
 from telethon import events
 
-from Cutiepii_Robot import telethn as bot
+from Cutiepii_Robot import telethn as bot, TEMP_DOWNLOAD_DIRECTORY
 from Cutiepii_Robot.modules.urluploader import download_file
 from Cutiepii_Robot.utils.pluginhelpers import humanbytes, progress
-
-DOWNLOADPATH = "./Cutiepii_Robot/Downloads/"
-
 
 def get_date_in_two_weeks():
     """
@@ -56,7 +53,7 @@ async def send_to_tmp_async(file):
     return download_link
 
 
-@bot.on(events.NewMessage(pattern="/transfersh"))
+@telethn.on(events.NewMessage(pattern="/transfersh"))
 async def tsh(event):
     if event.reply_to_msg_id:
         start = time.time()
@@ -91,7 +88,7 @@ async def tsh(event):
     raise events.StopPropagation
 
 
-@bot.on(events.NewMessage(pattern="/tmpninja"))
+@telethn.on(events.NewMessage(pattern="/tmpninja"))
 async def tmp(event):
     if event.reply_to_msg_id:
         start = time.time()
@@ -126,7 +123,7 @@ async def tmp(event):
     raise events.StopPropagation
 
 
-@bot.on(events.NewMessage(pattern="/up"))
+@telethn.on(events.NewMessage(pattern="/up"))
 async def up(event):
     if event.reply_to_msg_id:
         start = time.time()
@@ -134,7 +131,7 @@ async def up(event):
         ilk = await event.respond("Downloading...")
 
         try:
-            filename = os.path.join(DOWNLOADPATH, os.path.basename(url.text))
+            filename = os.path.join(TEMP_DOWNLOAD_DIRECTORY, os.path.basename(url.text))
             await download_file(url.text, filename, ilk, start, bot)
         except Exception as e:
             print(e)
@@ -145,7 +142,7 @@ async def up(event):
         try:
             orta = await event.respond("Uploading to Telegram...")
 
-            dosya = await bot.upload_file(
+            dosya = await telethn.upload_file(
                 filename,
                 progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
                     progress(d, t, orta, start, "Uploading to Telegram...")
@@ -153,11 +150,11 @@ async def up(event):
             )
 
             str(time.time() - start)
-            await bot.send_file(
+            await telethn.send_file(
                 event.chat.id,
                 dosya,
                 force_document=True,
-                caption="Uploaded By *AsunaRobot*",
+                caption="Uploaded By *Cutiepii_Robot*",
             )
         except Exception as e:
             traceback.print_exc()
@@ -171,8 +168,8 @@ async def up(event):
 
 
 def main():
-    if not os.path.isdir(DOWNLOADPATH):
-        os.mkdir(DOWNLOADPATH)
+    if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
+        os.mkdir(TEMP_DOWNLOAD_DIRECTORY)
 
 
 if __name__ == "__main__":
