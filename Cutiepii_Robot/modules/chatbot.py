@@ -123,7 +123,7 @@ def list_all_chats(update: Update, context: CallbackContext):
 
 __mod_name__ = "ChatBot"
 
-__help__ = """
+__help__ = f"""
 Chatbot utilizes the Kuki API and allows Cutiepii to talk and provides a more interactive group chat experience.
 
 *Commands:* 
