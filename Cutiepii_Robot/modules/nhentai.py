@@ -2,6 +2,7 @@ import os
 import requests
 import re
 import img2pdf
+import subprocess
 
 from Cutiepii_Robot import pgram
 from pyrogram import filters
