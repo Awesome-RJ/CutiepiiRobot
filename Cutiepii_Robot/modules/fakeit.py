@@ -36,7 +36,7 @@ async def hi(event):
     )
 
 
-@.on(events.NewMessage(pattern="/picgen$"))
+@telethn.on(events.NewMessage(pattern="/picgen$"))
 async def _(event):
     if event.fwd_from:
         return
