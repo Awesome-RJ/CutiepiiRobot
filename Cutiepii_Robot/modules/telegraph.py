@@ -1,7 +1,7 @@
 import os
 
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import telethn as tbot
+from Cutiepii_Robot import telethn
 from telethon import events
 from PIL import Image
 from datetime import datetime
@@ -24,7 +24,7 @@ async def _(event):
         r_message = await event.get_reply_message()
         input_str = event.pattern_match.group(1)
         if input_str == "gm":
-            downloaded_file_name = await tbot.download_media(
+            downloaded_file_name = await telethn.download_media(
                 r_message,
                 TMP_DOWNLOAD_DIRECTORY
             )
@@ -45,7 +45,7 @@ async def _(event):
                 os.remove(downloaded_file_name)
                 await h.edit("Uploaded to [Telegraph](https://telegra.ph{}) in {} seconds.".format(media_urls[0], (ms + ms_two)), link_preview=True)
         elif input_str == "gt":
-            user_object = await tbot.get_entity(r_message.sender_id)
+            user_object = await telethn.get_entity(r_message.sender_id)
             title_of_page = user_object.first_name # + " " + user_object.last_name
             # apparently, all Users do not have last_name field
             if optional_title:
@@ -54,7 +54,7 @@ async def _(event):
             if r_message.media:
                 if page_content != "":
                     title_of_page = page_content
-                downloaded_file_name = await tbot.download_media(
+                downloaded_file_name = await telethn.download_media(
                     r_message,
                     TMP_DOWNLOAD_DIRECTORY
                 )
