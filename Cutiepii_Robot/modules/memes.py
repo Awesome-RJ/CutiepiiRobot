@@ -83,7 +83,7 @@ async def chika(event):
 @register(pattern="^/truth ?(.*)")
 async def _(td):
     try:
-        resp = requests.get("https://liones-api.herokuapp.com/games/truth").json()
+        resp = requests.get("https://tede-api.herokuapp.com/api/truth").json()
         results = f"{resp['truth']}"
         return await td.reply(results)
     except Exception:
