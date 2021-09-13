@@ -21,7 +21,7 @@ logopics = [
 	
  "./Cutiepii_Robot/utils/Logo/ebd7de41ff63c46ad9742b53f3a16d7b.jpg",
 	
- ".hblackbg.jpg",
+ "./Cutiepii_Robot/utils/Logo/blackbg.jpg",
  
 ]
 
