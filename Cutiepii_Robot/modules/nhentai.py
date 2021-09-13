@@ -1,4 +1,3 @@
-import nhentai
 import os
 import requests
 import re
@@ -7,6 +6,14 @@ import img2pdf
 from Cutiepii_Robot import pgram
 from pyrogram import filters
 
+try:
+  from NHentai.nhentai import NHentai
+except ImportError:
+  subprocess.check_call([sys.executable, "-m", "pip", "install", "NHentai-API"])
+  from NHentai.nhentai import NHentai
+
+#Loading NHentai-API
+nhentai = NHentai()
 
 @pgram.on_message(filters.command("nhentai"))
 def hentai(_,message):
