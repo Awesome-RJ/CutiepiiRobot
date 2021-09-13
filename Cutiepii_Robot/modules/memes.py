@@ -52,7 +52,7 @@ async def asupan(event):
         asupannya = f"{resp['url']}"
         return await telethn.send_file(event.chat_id, asupannya)
     except Exception:
-        await event.reply(f"`Error Report @{SUPPORT_CHAT}`")
+        await event.reply(f"Error Report @{SUPPORT_CHAT}")
 
 
 @register(pattern="^/wibu ?(.*)")
@@ -62,7 +62,7 @@ async def wibu(event):
         wibunya = f"{resp['url']}"
         return await telethn.send_file(event.chat_id, wibunya)
     except Exception:
-        await event.reply(f"`Error Report @{SUPPORT_CHAT}`")
+        await event.reply(f"Error Report @{SUPPORT_CHAT}")
 
 
 @register(pattern="^/chika ?(.*)")
@@ -72,17 +72,17 @@ async def chika(event):
         chikanya = f"{resp['url']}"
         return await telethn.send_file(event.chat_id, chikanya)
     except Exception:
-        await event.reply(f"`Error Report @{SUPPORT_CHAT}`")
+        await event.reply(f"Error Report @{SUPPORT_CHAT}")
 
         
 @register(pattern="^/truth ?(.*)")
 async def _(td):
     try:
         resp = requests.get("https://tede-api.herokuapp.com/api/truth").json()
-        results = f"{resp['truth']}"
+        results = f"{resp['message']}"
         return await td.reply(results)
     except Exception:
-        await td.reply(f"`Error Report @{SUPPORT_CHAT}`")
+        await td.reply(f"Error Report @{SUPPORT_CHAT}")
 
 
 @register(pattern="^/dare ?(.*)")
@@ -92,7 +92,7 @@ async def _(dr):
         results = f"{resp['dare']}"
         return await dr.reply(results)
     except Exception:
-        await dr.reply(f"`Error Report @{SUPPORT_CHAT}`")
+        await dr.reply(f"Error Report @{SUPPORT_CHAT}")
 
 
 @register(pattern="^/owu$")
