@@ -32,6 +32,6 @@ def hentai(_,message):
             f.write(img2pdf.convert(file_paths)) 
        
 
-    pbot.send_document(message.chat.id , f"{hmm}.pdf")
+    pgram.send_document(message.chat.id , f"{hmm}.pdf")
     os.remove(f"{hmm}.pdf")
     os.system(f"rm -rf {hmm}")
