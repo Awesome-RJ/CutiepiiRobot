@@ -25,7 +25,7 @@ async def download_coroutine(session, url, file_name, event, start, bot):
         if "text" in content_type and total_length < 500:
             return await response.release()
         await event.edit(
-            f"""**Initiating Download**
+            """**Initiating Download**
 **URL:** {}
 **File Name:** {}
 **File Size:** {}
