@@ -36,7 +36,7 @@ async def hi(event):
     )
 
 
-@tbot.on(events.NewMessage(pattern="/picgen$"))
+@.on(events.NewMessage(pattern="/picgen$"))
 async def _(event):
     if event.fwd_from:
         return
