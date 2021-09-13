@@ -5,7 +5,7 @@ from pyrogram import filters
 from json import JSONDecodeError
 
 from Cutiepii_Robot.utils.pluginhelpers import admins_only, edit_or_reply, fetch_audio
-from Cutiepii_Robot import pgram, BOT_USERNAME
+from Cutiepii_Robot import pgram, BOT_USERNAME, SUPPORT_CHAT
 
 
 @pgram.on_message(filters.command(["identify", "shazam", f"shazam@{BOT_USERNAME}"]))
