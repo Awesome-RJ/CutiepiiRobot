@@ -134,6 +134,10 @@ Available queries: Country Code/Country Name/Timezone Name
   ➢ `/fakegen`*:* Generates Fake Information
   ➢ `/picgen`*:* generate a fake pic
 
+🎛️ Encryprion:
+  ➢ `/encrypt`*:* Encrypts The Given Text
+  ➢ `/decrypt`*:* Decrypts Previously Ecrypted Text
+
 🗳  Other Commands:
 Paste:
   ➢ `/paste`*:* Saves replied content to nekobin.com and replies with a url

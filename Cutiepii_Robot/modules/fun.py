@@ -787,7 +787,6 @@ def earthanimation(bot: Bot, update: Update):
 
 
 
-@run_async
 def moonanimation(bot: Bot, update: Update):
     msg = update.effective_message.reply_text('🌚') 
     for x in range(EDIT_TIMES):
@@ -806,7 +805,6 @@ def bombs(bot: Bot, update: Update):
 
 
 
-@run_async
 def hack(bot: Bot, update: Update):
     msg = update.effective_message.reply_text('Target selected') 
     for x in range(EDIT_TIMES):
