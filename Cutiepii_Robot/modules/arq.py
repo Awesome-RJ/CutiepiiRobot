@@ -1,6 +1,6 @@
 from pyrogram import filters
 
-from Cutiepii_Robot import pgram as app, arq
+from Cutiepii_Robot import pgram as app, arq, BOT_USERNAME
 
 
 @app.on_message(filters.command("arq"))
