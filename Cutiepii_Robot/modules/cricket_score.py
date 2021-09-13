@@ -3,7 +3,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 from telethon import events
 from telethon.tl import functions, types
-from Cutiepii_Robot import telethn as tbot
+from Cutiepii_Robot import telethn
 
 
 async def is_register_admin(chat, user):
@@ -12,15 +12,15 @@ async def is_register_admin(chat, user):
 
         return isinstance(
             (
-                await tbot(functions.channels.GetParticipantRequest(chat, user))
+                await telethn(functions.channels.GetParticipantRequest(chat, user))
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
-        ui = await tbot.get_peer_id(user)
+        ui = await telethn.get_peer_id(user)
         ps = (
-            await tbot(functions.messages.GetFullChatRequest(chat.chat_id))
+            await telethn(functions.messages.GetFullChatRequest(chat.chat_id))
         ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
@@ -29,7 +29,7 @@ async def is_register_admin(chat, user):
     return None
 
 
-@tbot.on(events.NewMessage(pattern="/cs$"))
+@telethn.on(events.NewMessage(pattern="/cs$"))
 async def _(event):
     if event.fwd_from:
         return
