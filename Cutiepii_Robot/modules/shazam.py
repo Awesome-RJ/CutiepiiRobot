@@ -8,7 +8,7 @@ from Cutiepii_Robot.utils.pluginhelpers import admins_only, edit_or_reply, fetch
 from Cutiepii_Robot import pgram, BOT_USERNAME
 
 
-@pbot.on_message(filters.command(["identify", "shazam", f"shazam@{BOT_USERNAME}"]))
+@pgram.on_message(filters.command(["identify", "shazam", f"shazam@{BOT_USERNAME}"]))
 @admins_only
 async def shazamm(client, message):
     kek = await edit_or_reply(message, "`Shazaming In Progress!`")
