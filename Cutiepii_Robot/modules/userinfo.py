@@ -2,17 +2,22 @@ import html
 import re
 import os
 import requests
+import datetime
+import platform
+
+from psutil import cpu_percent, virtual_memory, disk_usage, boot_time
+from platform import python_version
 
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 from telethon import events
 
-from telegram import MAX_MESSAGE_LENGTH, ParseMode, Update, MessageEntity
+from telegram import MAX_MESSAGE_LENGTH, ParseMode, Update, MessageEntity, __version__
 from telegram.ext import CallbackContext, CommandHandler
 from telegram.ext.dispatcher import run_async
 from telegram.error import BadRequest
 from telegram.utils.helpers import escape_markdown, mention_html
-
+    
 from Cutiepii_Robot import (
     DEV_USERS,
     OWNER_ID,
@@ -32,7 +37,7 @@ from Cutiepii_Robot.modules.redis.afk_redis import is_user_afk, afk_reason
 from Cutiepii_Robot.modules.sql.users_sql import get_user_num_chats
 from Cutiepii_Robot.modules.helper_funcs.chat_status import sudo_plus
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
-from Cutiepii_Robot import telethn as CutiepiiTelethonClient
+from Cutiepii_Robot import telethn as SaitamaTelethonClient
 
 
 def no_by_per(totalhp, percentage):
@@ -83,11 +88,24 @@ def hpmanager(user):
             afkst = afk_reason(user.id)
             # if user is afk and no reason then decrease 7%
             # else if reason exist decrease 5%
-            new_hp -= no_by_per(total_hp, 7) if not afkst else no_by_per(total_hp, 5)
-            # fbanned users will have (2*number of fbans) less from max HP
-            # Example: if HP is 100 but user has 5 diff fbans
-            # Available HP is (2*5) = 10% less than Max HP
-            # So.. 10% of 100HP = 90HP
+            if not afkst:
+                new_hp -= no_by_per(total_hp, 7)
+            else:
+                new_hp -= no_by_per(total_hp, 5)
+
+        # fbanned users will have (2*number of fbans) less from max HP
+        # Example: if HP is 100 but user has 5 diff fbans
+        # Available HP is (2*5) = 10% less than Max HP
+        # So.. 10% of 100HP = 90HP
+
+    # Commenting out fban health decrease cause it wasnt working and isnt needed ig.
+    # _, fbanlist = get_user_fbanlist(user.id)
+    # new_hp -= no_by_per(total_hp, 2 * len(fbanlist))
+
+    # Bad status effects:
+    # gbanned users will always have 5% HP from max HP
+    # Example: If HP is 100 but gbanned
+    # Available HP is 5% of 100 = 5HP
 
     else:
         new_hp = no_by_per(total_hp, 5)
@@ -133,18 +151,20 @@ def get_id(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.HTML,
             )
 
-    elif chat.type == "private":
-        msg.reply_text(
-            f"Your id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML,
-        )
-
     else:
-        msg.reply_text(
-            f"This group's id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML,
-        )
+
+        if chat.type == "private":
+            msg.reply_text(
+                f"Your id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML,
+            )
+
+        else:
+            msg.reply_text(
+                f"This group's id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML,
+            )
 
 
-@CutiepiiTelethonClient.on(
+@SaitamaTelethonClient.on(
     events.NewMessage(
         pattern="/ginfo ", from_users=(TIGERS or []) + (DRAGONS or []) + (DEMONS or []),
     ),
@@ -254,7 +274,7 @@ def info(update: Update, context: CallbackContext):
                     text += _stext.format("Admin")
     if user_id not in [bot.id, 777000, 1087968824]:
         userhp = hpmanager(user)
-        text += f"\n\n<b>Health:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[<i>{make_bar(int(userhp['percentage']))} </i>{userhp['percentage']}%]"
+        text += f"\n\n<b>Health:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[<i>{make_bar(int(userhp['percentage']))} </i>{userhp['percentage']}%]. [<a href='https://t.me/Black_Knights_Union/33'>?</a>]"
 
     try:
         spamwtc = sw.get_ban(int(user.id))
@@ -262,10 +282,13 @@ def info(update: Update, context: CallbackContext):
             text += "\n\n<b>This person is Spamwatched!</b>"
             text += f"\nReason: <pre>{spamwtc.reason}</pre>"
             text += "\nAppeal at @SpamWatchSupport"
+        else:
+            pass
     except:
         pass  # don't crash if api is down somehow...
 
     disaster_level_present = False
+    
     if user.id == OWNER_ID:
         text += "\n\nThe Disaster level of this person is 'God'."
         disaster_level_present = True
@@ -337,7 +360,11 @@ def about_me(update: Update, context: CallbackContext):
     message = update.effective_message
     user_id = extract_user(message, args)
 
-    user = bot.get_chat(user_id) if user_id else message.from_user
+    if user_id:
+        user = bot.get_chat(user_id)
+    else:
+        user = message.from_user
+
     info = sql.get_user_me_info(user.id)
 
     if info:
@@ -390,12 +417,29 @@ def set_about_me(update: Update, context: CallbackContext):
 
 @sudo_plus
 def stats(update: Update, context: CallbackContext):
-    stats = (
-        "Maintained by @Awesome_RJ\nBuilt with 💜 using python-telegram-bot\n\nPython version: 3.8.5\nLibrary version: 13.1\n\nSRC: https://github.com/Rajkumar-27/Cutiepii-Robot \nSupport Group:- @Black_Knights_Union_Support\nUpdate Channel:- @Black_Knights_Union\n\n<b>📖 Bot statistics:</b>\n"
-        + "\n".join(mod.__stats__() for mod in STATS)
-    )
+    uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
+    status = "<b>System Statistics:</b>\n\n"
+    status += "<b>System uptime:</b> <code>" + str(uptime) + "</code>\n"
 
-    result = re.sub(r"(\d+)", r"<code>\1</code>", stats)
+    uname = platform.uname()
+    status += "<b>System:</b> <code>" + str(uname.system) + "</code>\n"
+    status += "<b>Node name:</b> <code>" + str(uname.node) + "</code>\n"
+    status += "<b>Release:</b> <code>" + str(uname.release) + "</code>\n"
+    status += "<b>Version:</b> <code>" + str(uname.version) + "</code>\n"
+    status += "<b>Machine:</b> <code>" + str(uname.machine) + "</code>\n"
+    status += "<b>Processor:</b> <code>" + str(uname.processor) + "</code>\n\n"
+
+    mem = virtual_memory()
+    cpu = cpu_percent()
+    disk = disk_usage("/")
+    status += "<b>CPU usage:</b> <code>" + str(cpu) + " %</code>\n"
+    status += "<b>Ram usage:</b> <code>" + str(mem[2]) + " %</code>\n"
+    status += "<b>Storage used:</b> <code>" + str(disk[3]) + " %</code>\n\n"
+    status += "<b>Python version:</b> <code>" + python_version() + "</code>\n"
+    status += "<b>Library version:</b> <code>" + str(__version__) + "</code>\n"
+    
+    status += "<b>\nBot Statistics:</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
+    result = re.sub(r"(\d+)", r"<code>\1</code>", status)
     update.effective_message.reply_text(result, parse_mode=ParseMode.HTML)
 
 
@@ -404,7 +448,11 @@ def about_bio(update: Update, context: CallbackContext):
     message = update.effective_message
 
     user_id = extract_user(message, args)
-    user = bot.get_chat(user_id) if user_id else message.from_user
+    if user_id:
+        user = bot.get_chat(user_id)
+    else:
+        user = message.from_user
+
     info = sql.get_user_bio(user.id)
 
     if info:
@@ -483,49 +531,36 @@ def __user_info__(user_id):
 
 
 __help__ = """
+*AFK:*
+When marked as AFK, any mentions will be replied to with a message to say you're not available!
+This also sends your last seen based on when you ran afk!
+  ➢ `/afk`*:* <reason>: mark yourself as AFK (away from keyboard).
+ • `brb` <reason>: same as the afk command - but not a command.
 *ID:*
   ➢ `/id`*:* get the current group id. If used by replying to a message, gets that user's id.
   ➢ `/gifid`*:* reply to a gif to me to tell you its file ID.
- 
-*Self addded information:* 
+*Self addded information:*
   ➢ `/setme <text>`*:* will set your info
   ➢ `/me`*:* will get your or another user's info.
 Examples:
- `/setme I am a wolf.`
+ `/setme I am a garrison.`
  `/me @username(defaults to yours if no user specified)`
- 
-*Information others add on you:* 
+*Information others add on you:*
   ➢ `/bio`*:* will get your or another user's bio. This cannot be set by yourself.
-   ➢ `/setbio <text>`*:* while replying, will save another user's bio 
+• `/setbio <text>`*:* while replying, will save another user's bio
 Examples:
  `/bio @username(defaults to yours if not specified).`
  `/setbio This user is a wolf` (reply to the user)
- 
 *Overall Information about you:*
-  ➢ `/info`*:* get information about a user. 
- 
-*◢ Intellivoid SpamProtection:*
-  ➢ `/spwinfo`*:* SpamProtection Info
- 
-*json Detailed info:*
-  ➢ `/json`*:* Get Detailed info about any message.
- 
-*Covid info:*
-  ➢ `/covid`*:* Get Detailed info about Covid.
- 
-*AFk:*
-When marked as AFK, any mentions will be replied to with a message stating that you're not available!
-  ➢ `/afk <reason>`*:* Mark yourself as AFK.
-  - brb <reason>: Same as the afk command, but not a command.\n 
-  
+  ➢ `/info`*:* get information about a user.
 *What is that health thingy?*
- Come and see [HP System explained](https://t.me/Black_Knights_Union/33)
+ Come and see [HP System explained](https://t.me/foundingtitanupdates/19)
 """
 
 SET_BIO_HANDLER = DisableAbleCommandHandler("setbio", set_about_bio, run_async=True)
 GET_BIO_HANDLER = DisableAbleCommandHandler("bio", about_bio, run_async=True)
 
-STATS_HANDLER = CommandHandler("stats", stats, run_async=True)
+STATS_HANDLER = CommandHandler(["stats", "statistics"], stats, run_async=True)
 ID_HANDLER = DisableAbleCommandHandler("id", get_id, run_async=True)
 GIFID_HANDLER = DisableAbleCommandHandler("gifid", gifid, run_async=True)
 INFO_HANDLER = DisableAbleCommandHandler("info", info, run_async=True)
