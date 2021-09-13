@@ -58,7 +58,7 @@ from Cutiepii_Robot import pgram
 lel = 00000000
 # pylint:disable=import-error
 @pgram.on_message(filters.command(["edit", "editor"]))
-async def photo(client: Client, message: Message):
+async def photo(client: pgram, message: Message):
     try:
         if not message.reply_to_message.photo:
             await client.send_message(message.chat.id, "Reply to an image man!ㅤㅤ")
@@ -123,7 +123,7 @@ async def photo(client: Client, message: Message):
 
 
 @pgram.on_callback_query()
-async def cb_handler(client: Client, query: CallbackQuery):
+async def cb_handler(client: pgram, query: CallbackQuery):
     user_id = query.from_user.id
     if lel == user_id:
         if query.data == "removebg":
