@@ -53,7 +53,7 @@ async def _(event):
 @register(pattern="^/asupan ?(.*)")
 async def asupan(event):
     try:
-        resp = requests.get("https://api-tede.herokuapp.com/api/asupan/ptl").json()
+        resp = requests.get("https://tede-api.herokuapp.com/api/asupan/ptl").json()
         asupannya = f"{resp['url']}"
         return await telethn.send_file(event.chat_id, asupannya)
     except Exception:
