@@ -131,7 +131,7 @@ Chatbot utilizes the Kuki API and allows Cutiepii to talk and provides a more in
    ➢ `addchat`*:* Enables Chatbot mode in the chat.
    ➢ `rmchat`*:* Disables Chatbot mode in the chat.
    
-Reports bugs at @Black_Knights_Union_Support
+Reports bugs at @{SUPPORT_CHAT}
 """
 
 ADD_CHAT_HANDLER = CommandHandler("addchat", add_chat, run_async=True)
