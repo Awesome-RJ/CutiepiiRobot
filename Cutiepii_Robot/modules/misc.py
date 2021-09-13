@@ -114,21 +114,27 @@ Available queries: Country Code/Country Name/Timezone Name
 🗜️ Compress And Decompress: 
   ➢ `/zip`*:* reply to a telegram file to compress it in .zip format
   ➢ `/unzip`*:* reply to a telegram file to decompress it from the .zip format
+
+📙 English:
+  ➢ `/define <text>`*:* Type the word or expression you want to search\nFor example /define kill
+  ➢ `/spell`*:* while replying to a message, will reply with a grammar corrected version
+  ➢ `/synonyms <word>`*:* Find the synonyms of a word
+  ➢ `/antonyms <word>`*:* Find the antonyms of a word
  
-CC Checker
-   ➢ `/au [cc]`*:* Stripe Auth given CC
-   ➢ `/pp [cc]`*:* Paypal 1$ Guest Charge
-   ➢ `/ss [cc]`*:* Speedy Stripe Auth
-   ➢ `/ch [cc]`*:* Check If CC is Live
-   ➢ `/bin [bin]`*:* Gather's Info About the bin
-   ➢ `/gen [bin]`*:* Generates CC with given bin
-   ➢ `/key [sk]`*:* Checks if Stripe key is Live
+💳 CC Checker:
+  ➢ `/au [cc]`*:* Stripe Auth given CC
+  ➢ `/pp [cc]`*:* Paypal 1$ Guest Charge
+  ➢ `/ss [cc]`*:* Speedy Stripe Auth
+  ➢ `/ch [cc]`*:* Check If CC is Live
+  ➢ `/bin [bin]`*:* Gather's Info About the bin
+  ➢ `/gen [bin]`*:* Generates CC with given bin
+  ➢ `/key [sk]`*:* Checks if Stripe key is Live
 
-Fake Info
-   ➢ `/fakegen`*:* Generates Fake Information
-   ➢ `/picgen`*:* generate a fake pic
+👤 Fake Info:
+  ➢ `/fakegen`*:* Generates Fake Information
+  ➢ `/picgen`*:* generate a fake pic
 
-🗳 Other Commands:
+🗳  Other Commands:
 Paste:
   ➢ `/paste`*:* Saves replied content to nekobin.com and replies with a url
 React:
@@ -146,7 +152,7 @@ Books:
 Cricket Score:
   ➢ `/cs`*:* get a Cricket Score.
 Phone Info
-   ➢ `/phone [phone no]`*:* Gathers no info.
+  ➢ `/phone [phone no]`*:* Gathers no info.
 """
 
 ECHO_HANDLER = DisableAbleCommandHandler("echo", echo, filters=Filters.chat_type.groups, run_async=True)
