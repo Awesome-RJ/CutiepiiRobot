@@ -30,7 +30,7 @@ async def shazamm(client, message):
         )
         return
     if xo.get("success") is False:
-        await kek.edit("`Song Not Found IN Database. Please Try Again.`")
+        await kek.edit("`Song Not Found In Database. Please Try Again.`")
         os.remove(downloaded_file_name)
         return
     xoo = xo.get("response")
