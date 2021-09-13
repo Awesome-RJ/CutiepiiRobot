@@ -51,4 +51,4 @@ async def _(event):
         fole = "FRIDAYOT.jpg"
         await telethn.send_file(event.chat_id, fole, caption=captin)
         await event.delete()
-        os.system("rm ./FRIDAYOT.jpg ")
+        os.system("rm ./cutiepii_picgen.jpg ")
