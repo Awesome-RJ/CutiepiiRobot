@@ -19,6 +19,7 @@ async def arq_stats(_, message):
     python_version = data.python
     users = data.users
     statistics = f"""
+**>-< System >-<**
 **Uptime:** `{uptime}`
 **Requests Since Uptime:** `{requests}`
 **CPU:** `{cpu}`
