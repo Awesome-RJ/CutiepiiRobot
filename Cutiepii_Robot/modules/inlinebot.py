@@ -26,7 +26,7 @@ from youtubesearchpython import VideosSearch
 
 from Cutiepii_Robot.utils.inlinehelper import *
 from Cutiepii_Robot.utils.pluginhelpers import fetch, json_prettify
-from Cutiepii_Robot import pgram, OPENWEATHERMAP_ID, TIME_API_KEY
+from Cutiepii_Robot import pgram, OPENWEATHERMAP_ID, TIME_API_KEY, BOT_USERNAME
 
 dictionary = PyDictionary()
 
@@ -49,12 +49,12 @@ class AioHttp:
 
 
 __mod_name__ = "Inline"
-__help__ = """
-INLINE BOT SERVICE OF @CUTIEPII_ROBOT
+__help__ = f"""
+INLINE BOT SERVICE OF @{BOT_USERNAME}
 I'm more efficient when added as group admin. By the way these commands can be used by anyone in a group via inline.
 
 ──「 Syntax 」──
-   @Cutiepii_Robot [command] [query]
+   @{BOT_USERNAME} [command] [query]
 
 ──「 Commands Available 」──
 ➩ alive - Check Bot's Stats.
@@ -93,11 +93,11 @@ I'm more efficient when added as group admin. By the way these commands can be u
 """
 
 __MODULE__ = "Inline"
-__HELP__ = """
- ==>> **INLINE BOT SERVICE OF @CUTIEPII_ROBOT** <<==
+__HELP__ = f"""
+ ==>> **INLINE BOT SERVICE OF @{BOT_USERNAME}** <<==
 `I'm more efficient when added as group admin. By the way these commands can be used by anyone in a group via inline.`
    >> Syntax <<
-@Cutiepii_Robot [command] [query]
+@{BOT_USERNAME} [command] [query]
    >> Commands Available <<
 - **alive** - __Check Bot's Stats.__
 - **yt [query]** - __Youtube Search.__

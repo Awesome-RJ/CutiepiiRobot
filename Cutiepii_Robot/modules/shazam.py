@@ -44,7 +44,7 @@ async def shazamm(client, message):
     messageo = f"""<b>Song Shazamed.</b>
 <b>Song Name : </b>{title}
 <b>Song By : </b>{by}
-<u><b>Identified Using @Cutiepii_Robot - Join our support @{SUPPORT_CHAT}</b></u>
+<u><b>Identified Using @{BOT_USERNAME} - Join our support @{SUPPORT_CHAT}</b></u>
 <i>Powered by @Yuki_Netowrk</i>
 """
     await client.send_photo(message.chat.id, image, messageo, parse_mode="HTML")

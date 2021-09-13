@@ -6,7 +6,7 @@ from pyrogram.types import Message
 
 from Cutiepii_Robot import arq
 from Cutiepii_Robot.utils.errors import capture_err
-from Cutiepii_Robot import pgram as app, BOT_USERNAME
+from Cutiepii_Robot import pgram, BOT_USERNAME
 
 
 
@@ -34,7 +34,7 @@ def isArgInt(message: Message) -> bool:
         return [False, 0]
 
 
-@app.on_message(filters.command("q"))
+@pgram.on_message(filters.command("q"))
 @capture_err
 async def quotly_func(client, message: Message):
     if not message.reply_to_message:

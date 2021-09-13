@@ -4,6 +4,8 @@ import aiohttp
 
 from Cutiepii_Robot.utils.pluginhelpers import humanbytes, time_formatter
 
+from Cutiepii_Robot import BOT_USERNAME
+
 
 async def download_file(url, file_name, message, start_time, bot):
     async with aiohttp.ClientSession() as session:
@@ -23,11 +25,11 @@ async def download_coroutine(session, url, file_name, event, start, bot):
         if "text" in content_type and total_length < 500:
             return await response.release()
         await event.edit(
-            """**Initiating Download**
+            f"""**Initiating Download**
 **URL:** {}
 **File Name:** {}
 **File Size:** {}
-**© @Cutiepii_Robot**""".format(
+**© @{BOT_USERNAME}**""".format(
                 url,
                 os.path.basename(file_name).replace("%20", " "),
                 humanbytes(total_length),

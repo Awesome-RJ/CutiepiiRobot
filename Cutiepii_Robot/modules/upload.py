@@ -7,7 +7,7 @@ import traceback
 import aiohttp
 from telethon import events
 
-from Cutiepii_Robot import telethn as bot, TEMP_DOWNLOAD_DIRECTORY
+from Cutiepii_Robot import telethn, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT
 from Cutiepii_Robot.modules.urluploader import download_file
 from Cutiepii_Robot.utils.pluginhelpers import humanbytes, progress
 
@@ -78,7 +78,7 @@ async def tsh(event):
 
             str(time.time() - start)
             await orta.edit(
-                f"File Successfully Uploaded to TransferSh.\n\nLink 👉 {download_link}\nExpired Date 👉 {final_date}\n\nUploaded by *Cutiepii Robot*"
+                f"File Successfully Uploaded to TransferSh.\n\nLink 👉 {download_link}\nExpired Date 👉 {final_date}\n\nUploaded by *@{SUPPORT_CHAT}*"
             )
         except Exception as e:
             traceback.print_exc()

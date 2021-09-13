@@ -53,11 +53,11 @@ from Cutiepii_Robot.utils.resources.ImageEditor.edit_5 import (  # pylint:disabl
     scanlineglitch_4,
     scanlineglitch_5,
 )
-from Cutiepii_Robot import pgram as Client
+from Cutiepii_Robot import pgram
 
 lel = 00000000
 # pylint:disable=import-error
-@Client.on_message(filters.command(["edit", "editor"]))
+@pgram.on_message(filters.command(["edit", "editor"]))
 async def photo(client: Client, message: Message):
     try:
         if not message.reply_to_message.photo:
@@ -122,7 +122,7 @@ async def photo(client: Client, message: Message):
             return
 
 
-@Client.on_callback_query()
+@pgram.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
     user_id = query.from_user.id
     if lel == user_id:

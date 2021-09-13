@@ -26,7 +26,9 @@ from Cutiepii_Robot import (
     telethn,
     updater,
     pgram, 
-    ubot)
+    ubot,
+    BOT_USERNAME
+    )
 
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
@@ -104,7 +106,7 @@ buttons = [
     [
                         InlineKeyboardButton(
                             text="Add Cutiepii To Your Group",
-                            url="t.me/Cutiepii_Robot?startgroup=true")
+                            url=f"t.me/{BOT_USERNAME}?startgroup=true")
                     ],
                    [
                        InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
@@ -706,7 +708,7 @@ def main():
             updater.bot.set_webhook(url=URL + TOKEN)
 
     else:
-        LOGGER.info("Cutiepii started, Using long polling. | BOT: [@Cutiepii_Robot]")
+        LOGGER.info(f"Cutiepii started, Using long polling. | BOT: [@{BOT_USERNAME}]")
         updater.start_polling(timeout=15, read_latency=4, drop_pending_updates=True, allowed_updates=Update.ALL_TYPES)
 
     if len(argv) not in (1, 3, 4):

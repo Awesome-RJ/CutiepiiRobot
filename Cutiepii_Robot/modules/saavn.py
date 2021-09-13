@@ -4,11 +4,11 @@ import requests
 import wget
 from pyrogram import filters
 
-from Cutiepii_Robot import pgram as Jebot, BOT_USERNAME
+from Cutiepii_Robot import pgram, BOT_USERNAME
 from Cutiepii_Robot.utils.saavnhelp import get_arg
 
 
-@Jebot.on_message(filters.command("saavn", f"saavn@{BOT_USERNAME}"))
+@pgram.on_message(filters.command("saavn", f"saavn@{BOT_USERNAME}"))
 async def song(client, message):
     args = get_arg(message) + " " + "song"
     if args.startswith(" "):
