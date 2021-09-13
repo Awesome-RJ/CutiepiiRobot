@@ -1,6 +1,6 @@
 from os import remove
 from pyrogram import filters
-from Cutiepii_Robot import DRAGONS, BOT_USERNAME, arq, pgram as app
+from Cutiepii_Robot import DRAGONS, BOT_USERNAME, arq, pgram
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.permissions import adminsOnly
 from Cutiepii_Robot.modules.mongo.nsfw_mongo import is_nsfw_on, nsfw_off, nsfw_on
@@ -39,7 +39,7 @@ async def get_file_id_from_message(message):
     return file_id
 
 
-@app.on_message(
+@pgram.on_message(
     (
         filters.document
         | filters.photo
@@ -59,7 +59,7 @@ async def detect_nsfw(_, message):
     file_id = await get_file_id_from_message(message)
     if not file_id:
         return
-    file = await app.download_media(file_id)
+    file = await pgram.download_media(file_id)
     try:
         results = await arq.nsfw_scan(file=file)
     except Exception:
@@ -93,7 +93,7 @@ __Powered by__@Yuki_Network.
     )
 
 
-@app.on_message(filters.command(["nsfwscan", f"nsfwscan@{BOT_USERNAME}"]))
+@pgram.on_message(filters.command(["nsfwscan", f"nsfwscan@{BOT_USERNAME}"]))
 @capture_err
 async def nsfw_scan_command(_, message):
     if not message.reply_to_message:
@@ -117,7 +117,7 @@ async def nsfw_scan_command(_, message):
     file_id = await get_file_id_from_message(reply)
     if not file_id:
         return await m.edit("Something wrong happened.")
-    file = await app.download_media(file_id)
+    file = await pgram.download_media(file_id)
     try:
         results = await arq.nsfw_scan(file=file)
     except Exception:
@@ -138,7 +138,7 @@ async def nsfw_scan_command(_, message):
     )
 
 
-@app.on_message(filters.command(["antinsfw", f"antinsfw@{BOT_USERNAME}"]) & ~filters.private)
+@pgram.on_message(filters.command(["antinsfw", f"antinsfw@{BOT_USERNAME}"]) & ~filters.private)
 @adminsOnly("can_change_info")
 async def nsfw_enable_disable(_, message):
     if len(message.command) != 2:
