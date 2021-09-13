@@ -7,7 +7,7 @@ from telethon.errors import (
 from telethon.tl.functions.channels import GetFullChannelRequest
 
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import telethn as tbot
+from Cutiepii_Robot import telethn
 
 async def get_chatinfo(event):
     chat = event.pattern_match.group(1)
@@ -49,28 +49,28 @@ async def get_users(event):
     sender = await event.get_sender()
     me = await event.client.get_me()
     if not sender.id == me.id:
-        tbot = await event.reply("`proses...`")
+        telethn = await event.reply("`proses...`")
     else:
-        tbot = await event.edit("`proses...`")
-    tbottes = await get_chatinfo(event)
+        telethn = await event.edit("`proses...`")
+    telethntes = await get_chatinfo(event)
     chat = await event.get_chat()
     if event.is_private:
-        return await tbot.edit("`Sorry, Please add a user here`")
+        return await telethn.edit("`Sorry, Please add a user here`")
     s = 0
     f = 0
     error = 'None'
 
-    await tbot.edit("**Terminal Status**\n\n`Member Collection.......`")
-    async for user in event.client.iter_participants(tbottes.full_chat.id):
+    await telethn.edit("**Terminal Status**\n\n`Member Collection.......`")
+    async for user in event.client.iter_participants(telethntes.full_chat.id):
         try:
             if error.startswith("Too"):
-                return await tbot.edit(f"**Terminal Completed with error**\n(`May got limit error from telethon please try again later`)\n**Error** : \n`{error}`\n\n• Invited `{s}` Member \n• Failed to Add `{f}` Member")
+                return await telethn.edit(f"**Terminal Completed with error**\n(`May got limit error from telethon please try again later`)\n**Error** : \n`{error}`\n\n• Invited `{s}` Member \n• Failed to Add `{f}` Member")
             await event.client(functions.channels.InviteToChannelRequest(channel=chat, users=[user.id]))
             s = s + 1
-            await tbot.edit(f"**Terminal Running...**\n\n• Invited `{s}` Member \n• Failed to Add `{f}` Member\n\n**× LastError:** `{error}`")
+            await telethn.edit(f"**Terminal Running...**\n\n• Invited `{s}` Member \n• Failed to Add `{f}` Member\n\n**× LastError:** `{error}`")
         except Exception as e:
             error = str(e)
             f = f + 1
-    return await tbot.edit(f"**Terminal Finished** \n\n• Successfully Adding `{s}` Member \n• Failed to Add `{f}` Member")
+    return await telethn.edit(f"**Terminal Finished** \n\n• Successfully Adding `{s}` Member \n• Failed to Add `{f}` Member")
 
 __mod_name__ = "INVITE ALL"
