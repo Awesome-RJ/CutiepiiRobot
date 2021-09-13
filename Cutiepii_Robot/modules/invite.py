@@ -49,9 +49,9 @@ async def get_users(event):
     sender = await event.get_sender()
     me = await event.client.get_me()
     if not sender.id == me.id:
-        telethn = await event.reply("`proses...`")
+        telethn = await event.reply("`Processing..`")
     else:
-        telethn = await event.edit("`proses...`")
+        telethn = await event.edit("`Processing..`")
     telethntes = await get_chatinfo(event)
     chat = await event.get_chat()
     if event.is_private:
