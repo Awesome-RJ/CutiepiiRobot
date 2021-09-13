@@ -6,13 +6,13 @@ from datetime import datetime
 from telethon import types
 from telethon.tl import functions
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import TEMP_DOWNLOAD_DIRECTORY, REM_BG_API_KEY, telethn as tbot
+from Cutiepii_Robot import TEMP_DOWNLOAD_DIRECTORY, REM_BG_API_KEY, telethn
 
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
             (
-                await tbot(functions.channels.GetParticipantRequest(chat, user))
+                await telethn(functions.channels.GetParticipantRequest(chat, user))
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
@@ -38,7 +38,7 @@ async def _(event):
         reply_message = await event.get_reply_message()
         await event.reply("Processing...")
         try:
-            downloaded_file_name = await tbot.download_media(
+            downloaded_file_name = await telethn.download_media(
                 reply_message, TEMP_DOWNLOAD_DIRECTORY
             )
         except Exception as e:
@@ -55,7 +55,7 @@ async def _(event):
     if "image" in contentType:
         with io.BytesIO(output_file_name.content) as remove_bg_image:
             remove_bg_image.name = "rmbg.png"
-            await tbot.send_file(
+            await telethn.send_file(
                 event.chat_id,
                 remove_bg_image,
                 force_document=True,
