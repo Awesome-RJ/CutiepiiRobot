@@ -28,6 +28,8 @@ async def arq_stats(_, message):
 **Disk:** `{disk}`
 **Platform:** `{platform}`
 **Python:** `{python_version}`
+
+**ARQ Statistics:**
 **Users:** `{users}`
 """
     await message.reply_text(
