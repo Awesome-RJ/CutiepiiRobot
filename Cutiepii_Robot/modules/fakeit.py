@@ -6,7 +6,7 @@ from faker.providers import internet
 from telethon import events
 
 from Cutiepii_Robot.utils.pluginhelpers import is_admin
-from Cutiepii_Robot import telethn
+from Cutiepii_Robot import telethn, SUPPORT_CHAT
 
 
 @telethn.on(events.NewMessage(pattern="/fakegen$"))
