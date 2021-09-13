@@ -8,7 +8,7 @@ from telethon import events
 from Cutiepii_Robot import telethn
 
 
-@tbot.on(events.NewMessage(pattern="^/book (.*)"))
+@telethn.on(events.NewMessage(pattern="^/book (.*)"))
 async def _(event):
     if event.fwd_from:
         return
