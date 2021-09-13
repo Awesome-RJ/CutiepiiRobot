@@ -29,7 +29,6 @@ async def arq_stats(_, message):
 **Platform:** `{platform}`
 **Python:** `{python_version}`
 **Users:** `{users}`
-**Bot:** {bot}
 """
     await message.reply_text(
         statistics, disable_web_page_preview=True
