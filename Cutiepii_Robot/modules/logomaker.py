@@ -15,10 +15,6 @@ logopics = [
 	
  "./Cutiepii_Robot/utils/Logo/6aaf0d7f5db3dce7595b27635645efc6.jpg",
 	
- "./Cutiepii_Robot/utils/Logo/73b69af0502031831c904fc536118ce1.jpg"
-
- "./Cutiepii_Robot/utils/Logo/90681adbbef50d4fba1d6cc261d62cd9.jpg",
-	
  "./Cutiepii_Robot/utils/Logo/ebd7de41ff63c46ad9742b53f3a16d7b.jpg",
 	
  "./Cutiepii_Robot/utils/Logo/blackbg.jpg",
