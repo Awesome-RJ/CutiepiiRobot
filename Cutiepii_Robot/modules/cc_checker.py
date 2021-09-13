@@ -3,14 +3,14 @@ import datetime
 
 from telethon.tl import functions, types
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import ubot, telethn as tbot
+from Cutiepii_Robot import ubot, telethn
 
 
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
             (
-                await tbot(functions.channels.GetParticipantRequest(chat, user))
+                await telethn(functions.channels.GetParticipantRequest(chat, user))
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )

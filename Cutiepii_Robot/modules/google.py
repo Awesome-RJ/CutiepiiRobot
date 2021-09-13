@@ -24,7 +24,7 @@ from geopy.geocoders import Nominatim
 
 from Cutiepii_Robot import telethn as client
 from Cutiepii_Robot import *
-from Cutiepii_Robot import telethn as tbot
+from Cutiepii_Robot import telethn
 from Cutiepii_Robot.events import register
 
 @register(pattern="^/gps (.*)")
@@ -113,7 +113,7 @@ async def img_sampler(event):
     files_grabbed = []
     for files in types:
         files_grabbed.extend(glob.glob(files))
-    await tbot.send_file(event.chat_id, files_grabbed, reply_to=event.id)
+    await telethn.send_file(event.chat_id, files_grabbed, reply_to=event.id)
     os.chdir("/app")
     os.system("rm -rf store")
 
