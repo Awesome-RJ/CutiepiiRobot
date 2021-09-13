@@ -67,7 +67,7 @@ async def wibu(event):
         wibunya = f"{resp['url']}"
         return await telethn.send_file(event.chat_id, wibunya)
     except Exception:
-        await event.reply(f"`Error Report @Black_Knights_Union_Support`")
+        await event.reply(f"`Error Report @{SUPPORT_CHAT}`")
 
 
 @register(pattern="^/chika ?(.*)")
