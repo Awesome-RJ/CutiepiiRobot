@@ -47,7 +47,7 @@ async def _(event):
             with open("FRIDAYOT.jpg", "wb") as f:
                 f.write(response.content)
 
-        captin = f"Fake Image powered by @Black_Knights_Union_Support."
+        captin = f"Fake Image powered by @{SUPPORT_CHAT}."
         fole = "FRIDAYOT.jpg"
         await telethn.send_file(event.chat_id, fole, caption=captin)
         await event.delete()
