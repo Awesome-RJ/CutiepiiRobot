@@ -9,7 +9,7 @@ from Cutiepii_Robot.utils.pluginhelpers import is_admin
 from Cutiepii_Robot import telethn
 
 
-@.on(events.NewMessage(pattern="/fakegen$"))
+@telethn.on(events.NewMessage(pattern="/fakegen$"))
 async def hi(event):
     if event.fwd_from:
         return
