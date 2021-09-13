@@ -57,7 +57,7 @@ async def asupan(event):
         asupannya = f"{resp['url']}"
         return await telethn.send_file(event.chat_id, asupannya)
     except Exception:
-        await event.reply("`Error Report @Black_Knights_Union_Support`")
+        await event.reply(f"`Error Report @{SUPPORT_CHAT}`")
 
 
 @register(pattern="^/wibu ?(.*)")
