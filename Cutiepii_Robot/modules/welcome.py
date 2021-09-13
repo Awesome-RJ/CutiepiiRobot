@@ -21,6 +21,7 @@ from Cutiepii_Robot import (
     JOIN_LOGGER,
     telethn,
     BL_CHATS,
+    SUPPORT_CHAT
 )
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_user_ban_protected,
