@@ -1,9 +1,9 @@
 from pyrogram import filters
 
-from Cutiepii_Robot import pgram as app, arq, BOT_USERNAME
+from Cutiepii_Robot import pgram, arq, BOT_USERNAME
 
 
-@app.on_message(filters.command("arq"))
+@pgram.on_message(filters.command("arq"))
 async def arq_stats(_, message):
     data = await arq.stats()
     if not data.ok:

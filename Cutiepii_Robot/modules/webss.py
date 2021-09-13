@@ -1,9 +1,9 @@
 from pyrogram import filters
 
-from Cutiepii_Robot import pgram as app, BOT_USERNAME
+from Cutiepii_Robot import pgram
 from Cutiepii_Robot.utils.errors import capture_err
 
-@app.on_message(filters.command("webss"))
+@pgram.on_message(filters.command("webss"))
 @capture_err
 async def take_ss(_, message):
     try:
@@ -14,7 +14,7 @@ async def take_ss(_, message):
         m = await message.reply_text("**Taking Screenshot**")
         await m.edit("**Uploading**")
         try:
-            await app.send_photo(
+            await pgram.send_photo(
                 message.chat.id,
                 photo=f"https://webshot.amanoteam.com/print?q={url}",
             )

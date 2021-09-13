@@ -26,7 +26,7 @@ from youtubesearchpython import VideosSearch
 
 from Cutiepii_Robot.utils.inlinehelper import *
 from Cutiepii_Robot.utils.pluginhelpers import fetch, json_prettify
-from Cutiepii_Robot import pgram as app, OPENWEATHERMAP_ID, TIME_API_KEY
+from Cutiepii_Robot import pgram, OPENWEATHERMAP_ID, TIME_API_KEY
 
 dictionary = PyDictionary()
 
@@ -135,12 +135,12 @@ __HELP__ = """
 """
 
 
-@app.on_message(filters.command("inline"))
+@pgram.on_message(filters.command("inline"))
 async def inline_help(_, message):
-    await app.send_message(message.chat.id, text=__HELP__)
+    await pgram.send_message(message.chat.id, text=__HELP__)
 
 
-@app.on_inline_query()
+@pgram.on_inline_query()
 async def inline_query_handler(client, query):
     try:
         text = query.query.lower()

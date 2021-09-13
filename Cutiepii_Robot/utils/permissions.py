@@ -5,19 +5,19 @@ from pyrogram.types import Message
 
 from Cutiepii_Robot import DRAGONS
 from Cutiepii_Robot.utils.pluginhelp import member_permissions
-from Cutiepii_Robot import pgram as app
+from Cutiepii_Robot import pgram
 
 async def authorised(func, subFunc2, client, message, *args, **kwargs):
     chatID = message.chat.id
     try:
         await func(client, message, *args, **kwargs)
     except ChatWriteForbidden:
-        await app.leave_chat(chatID)
+        await pgram.leave_chat(chatID)
     except Exception as e:
         try:
             await message.reply_text(str(e))
         except ChatWriteForbidden:
-            await app.leave_chat(chatID)
+            await pgram.leave_chat(chatID)
     return subFunc2
 
 
@@ -30,7 +30,7 @@ async def unauthorised(message: Message, permission, subFunc2):
     try:
         await message.reply_text(text)
     except ChatWriteForbidden:
-        await app.leave_chat(chatID)
+        await pgram.leave_chat(chatID)
     return subFunc2
 
 

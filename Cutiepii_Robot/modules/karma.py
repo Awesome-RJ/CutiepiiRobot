@@ -2,7 +2,7 @@ from pyrogram import filters
 import asyncio 
 import re
 
-from Cutiepii_Robot import pgram as app, BOT_USERNAME
+from Cutiepii_Robot import pgram, BOT_USERNAME
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.permissions import adminsOnly
 from Cutiepii_Robot.modules.mongo.karma_mongo import (alpha_to_int, get_karma,
@@ -16,7 +16,7 @@ karma_negative_group = 4
 regex_upvote = r"^((?i)\+|\+\+|\+1|👍)$"
 regex_downvote = r"^(\-|\-\-|\-1|👎)$"
 
-@app.on_message(
+@pgram.on_message(
     filters.text
     & filters.group
     & filters.incoming
@@ -57,7 +57,7 @@ async def upvote(_, message):
     )
 
 
-@app.on_message(
+@pgram.on_message(
     filters.text
     & filters.group
     & filters.incoming
@@ -99,7 +99,7 @@ async def downvote(_, message):
     )
 
 
-@app.on_message(filters.command("karma", f"karma@{BOT_USERNAME}") & filters.group)
+@pgram.on_message(filters.command("karma", f"karma@{BOT_USERNAME}") & filters.group)
 @capture_err
 async def command_karma(_, message):
     chat_id = message.chat.id
@@ -132,7 +132,7 @@ async def command_karma(_, message):
             if limit > 9:
                 break
             try:
-                user = await app.get_users(int(user_idd))
+                user = await pgram.get_users(int(user_idd))
                 await asyncio.sleep(0.8)
             except Exception:
                 continue
@@ -150,7 +150,7 @@ async def command_karma(_, message):
         await message.reply_text(f"**Total Points**: __{karma}__")
 
 
-@app.on_message(filters.command("karmas") & ~filters.private)
+@pgram.on_message(filters.command("karmas") & ~filters.private)
 @adminsOnly("can_change_info")
 async def captcha_state(_, message):
     usage = "**Usage:**\n/karmas [on|off]"
