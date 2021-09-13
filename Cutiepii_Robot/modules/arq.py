@@ -1,6 +1,6 @@
 from pyrogram import filters
 
-from Cutiepii_Robot import ARQ_API_URL, pgram as app, arq
+from Cutiepii_Robot import pgram as app, arq
 
 
 @app.on_message(filters.command("arq"))
@@ -18,7 +18,6 @@ async def arq_stats(_, message):
     platform = data.platform
     python_version = data.python
     users = data.users
-    bot = data.bot
     statistics = f"""
 **Uptime:** `{uptime}`
 **Requests Since Uptime:** `{requests}`
@@ -31,7 +30,6 @@ async def arq_stats(_, message):
 **Python:** `{python_version}`
 **Users:** `{users}`
 **Bot:** {bot}
-**Address:** {ARQ_API_URL}
 """
     await message.reply_text(
         statistics, disable_web_page_preview=True
