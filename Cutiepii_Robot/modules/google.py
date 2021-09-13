@@ -22,9 +22,8 @@ from datetime import datetime
 from requests import get, post
 from geopy.geocoders import Nominatim
 
-from Cutiepii_Robot import telethn as client
-from Cutiepii_Robot import *
 from Cutiepii_Robot import telethn
+from Cutiepii_Robot import *
 from Cutiepii_Robot.events import register
 
 @register(pattern="^/gps (.*)")
@@ -49,7 +48,7 @@ async def _(event):
         longitude = geoloc.longitude
         latitude = geoloc.latitude
         gm = "https://www.google.com/maps/search/{},{}".format(latitude, longitude)
-        await client.send_file(
+        await telethn.send_file(
             event.chat_id,
             file=types.InputMediaGeoPoint(
                 types.InputGeoPoint(float(latitude), float(longitude))
@@ -250,15 +249,15 @@ async def is_register_admin(chat, user):
 
         return isinstance(
             (
-                await client(functions.channels.GetParticipantRequest(chat, user))
+                await telethn(functions.channels.GetParticipantRequest(chat, user))
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
-        ui = await client.get_peer_id(user)
+        ui = await telethn.get_peer_id(user)
         ps = (
-            await client(functions.messages.GetFullChatRequest(chat.chat_id))
+            await telethn(functions.messages.GetFullChatRequest(chat.chat_id))
         ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
@@ -273,7 +272,7 @@ async def parseqr(qr_e):
     if qr_e.fwd_from:
         return
     start = datetime.now()
-    downloaded_file_name = await qr_e.client.download_media(
+    downloaded_file_name = await qr_e.telethn.download_media(
         await qr_e.get_reply_message(), progress_callback=progress
     )
     url = "https://api.qrserver.com/v1/read-qr-code/?outputformat=json"
@@ -304,7 +303,7 @@ async def make_qr(qrcode):
         previous_message = await qrcode.get_reply_message()
         reply_msg_id = previous_message.id
         if previous_message.media:
-            downloaded_file_name = await qrcode.client.download_media(
+            downloaded_file_name = await qrcode.telethn.download_media(
                 previous_message, progress_callback=progress
             )
             m_list = None
@@ -325,7 +324,7 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
     with open(required_file_name, "w+b") as file:
         for chunk in resp.iter_content(chunk_size=128):
             file.write(chunk)
-    await qrcode.client.send_file(
+    await qrcode.telethn.send_file(
         qrcode.chat_id,
         required_file_name,
         reply_to=reply_msg_id,

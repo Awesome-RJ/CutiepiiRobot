@@ -5,7 +5,7 @@ from telethon.tl import functions, types
 
 
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import telethn as borg
+from Cutiepii_Robot import telethn
 
 
 async def is_register_admin(chat, user):
@@ -13,15 +13,15 @@ async def is_register_admin(chat, user):
 
         return isinstance(
             (
-                await borg(functions.channels.GetParticipantRequest(chat, user))
+                await telethn(functions.channels.GetParticipantRequest(chat, user))
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
-        ui = await borg.get_peer_id(user)
+        ui = await telethn.get_peer_id(user)
         ps = (
-            await borg(functions.messages.GetFullChatRequest(chat.chat_id))
+            await telethn(functions.messages.GetFullChatRequest(chat.chat_id))
         ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
@@ -51,7 +51,7 @@ async def _(event):
     if len(the_real_message) > 4095:
         with io.BytesIO(str.encode(the_real_message)) as out_file:
             out_file.name = "json.text"
-            await borg.send_file(
+            await telethn.send_file(
                 event.chat_id,
                 out_file,
                 force_document=True,

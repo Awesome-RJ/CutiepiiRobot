@@ -1,7 +1,7 @@
 import aiohttp
 
 from pyrogram import filters
-from Cutiepii_Robot import pgram as pgram
+from Cutiepii_Robot import pgram
 from Cutiepii_Robot.utils.errors import capture_err
 
 

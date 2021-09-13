@@ -4,7 +4,7 @@ import os
 import heroku3
 import requests
 
-from Cutiepii_Robot import telethn as borg, HEROKU_APP_NAME, HEROKU_API_KEY, OWNER_ID
+from Cutiepii_Robot import telethn, HEROKU_APP_NAME, HEROKU_API_KEY, OWNER_ID
 from Cutiepii_Robot.events import register
 
 heroku_api = "https://api.heroku.com"
@@ -24,7 +24,7 @@ async def variable(var):
     if HEROKU_APP_NAME is not None:
         app = Heroku.app(HEROKU_APP_NAME)
     else:
-        return await var.reply("`[HEROKU]:" "\nPlease setup your` **HEROKU_APP_NAME**")
+        return await var.reply("`[HEROKU]:" f"\nPlease setup your` **{HEROKU_APP_NAME}**")
     exe = var.pattern_match.group(1)
     heroku_var = app.config()
     if exe == "see":
