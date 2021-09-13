@@ -1,14 +1,14 @@
 import aiohttp
 
 from pyrogram import filters
-from Cutiepii_Robot import pgram as pbot
+from Cutiepii_Robot import pgram as pgram
 from Cutiepii_Robot.utils.errors import capture_err
 
 
 __mod_name__ = "Github"
 
 
-@pbot.on_message(filters.command('github'))
+@pgram.on_message(filters.command('github'))
 @capture_err
 async def github(_, message):
     if len(message.command) != 2:
