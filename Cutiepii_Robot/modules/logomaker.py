@@ -4,7 +4,7 @@ import random
 from PIL import Image, ImageDraw, ImageFont
 
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import OWNER_ID, telethn
+from Cutiepii_Robot import OWNER_ID, telethn, SUPPORT_CHAT, BOT_USERNAME
 
 
 logopics = [
