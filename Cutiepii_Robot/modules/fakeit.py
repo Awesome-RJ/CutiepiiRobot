@@ -49,6 +49,6 @@ async def _(event):
 
         captin = "Fake Image powered by @Black_Knights_Union_Support."
         fole = "FRIDAYOT.jpg"
-        await tbot.send_file(event.chat_id, fole, caption=captin)
+        await .send_file(event.chat_id, fole, caption=captin)
         await event.delete()
         os.system("rm ./FRIDAYOT.jpg ")
