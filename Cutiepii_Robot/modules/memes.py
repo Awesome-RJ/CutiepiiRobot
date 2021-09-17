@@ -18,7 +18,7 @@ from zalgo_text import zalgo
 
 
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import telethn, ubot, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT
+from Cutiepii_Robot import telethn, ubot, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT, GOOGLE_CHROME_BIN
 
 nltk.download("punkt")
 nltk.download("averaged_perceptron_tagger")
