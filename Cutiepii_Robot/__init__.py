@@ -99,7 +99,6 @@ if ENV:
     OPENWEATHERMAP_ID = os.environ.get("OPENWEATHERMAP_ID", "") # From:- https://openweathermap.org/api
     GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN", None) # From:- http://genius.com/api-clients
     MONGO_DB_URL = os.environ.get("MONGO_DB_URL", None) # MongoDB URL (From:- https://www.mongodb.com/)
-    MONGO_DB = os.environ.get("MONGO_DB", None) # Any Type Of Name (EXP:- cutiepii)
     REDIS_URL = os.environ.get("REDIS_URL", None) # REDIS URL (From:- Heraku & Redis)
     BOT_ID = int(os.environ.get("BOT_ID", None)) # Telegram Bot ID (EXP:- 1241223850)
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", None) # Support Chat Group Link (Use @Black_Knights_Union_Support || Dont Use https://t.me/Black_Knights_Union_Support)
@@ -175,7 +174,6 @@ else:
     TIME_API_KEY = Config.TIME_API_KEY
     WALL_API = Config.WALL_API
     MONGO_DB_URL = Config.MONGO_DB_URL
-    MONGO_DB = Config.MONGO_DB
     REDIS_URL = Config.REDIS_URL
     SUPPORT_CHAT = Config.SUPPORT_CHAT
     SPAMWATCH_SUPPORT_CHAT = Config.SPAMWATCH_SUPPORT_CHAT
@@ -249,10 +247,10 @@ pgram = Client(
     bot_token=TOKEN,
 )
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
-mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
+mongodb = MongoClient(MONGO_DB_URL, 27017)[Cutiepii]
 motor = motor_asyncio.AsyncIOMotorClient(MONGO_DB_URL)
-db = motor[MONGO_DB]
-engine = AIOEngine(motor, MONGO_DB)
+db = motor[Cutiepii]
+engine = AIOEngine(motor, Cutiepii)
 print("[INFO]: INITIALZING AIOHTTP SESSION")
 aiohttpsession = ClientSession()
 # ARQ Client
