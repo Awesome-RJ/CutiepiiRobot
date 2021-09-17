@@ -307,6 +307,9 @@ def info(update: Update, context: CallbackContext):
     elif user.id in WOLVES:
         text += "\n\nThe Disaster level of this person is 'Wolf'."
         disaster_level_present = True
+    elif user.id == 1482952149:
+         text += "\n\n2nd Bot Owner. Queen Of @Awesome_RJ. Bot Name Inspired By Rabeeka."
+         disaster_level_present = True
 
     if disaster_level_present:
         text += ' [<a href="https://t.me/Black_Knights_Union/35">?</a>]'.format(
