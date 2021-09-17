@@ -13,7 +13,8 @@ from telethon import events
 from telethon.tl.types import ChatBannedRights
 
 # from DaisyX.db.mongo_helpers.nsfw_guard import add_chat, get_all_nsfw_chats, is_chat_in_db, rm_chat
-from Cutiepii_Robot.utils.pluginhelpers import telethn, BOT_ID, is_admin, mongodb as db
+from Cutiepii_Robot.utils.pluginhelpers import telethn, BOT_ID, mongodb as db
+from Cutiepii_Robot.utils.pluginhelpers import is_admin
 from Cutiepii_Robot.events import register
 
 translator = google_translator()
