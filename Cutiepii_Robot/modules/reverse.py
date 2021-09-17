@@ -16,7 +16,7 @@ from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 opener = urllib.request.build_opener()
-useragent = 'Mozilla/5.0 (Linux; Android 6.0.1; SM-G920V Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36'
+useragent = 'Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0'
 opener.addheaders = [('User-agent', useragent)]
 
 def reverse(update: Update, context:CallbackContext):
