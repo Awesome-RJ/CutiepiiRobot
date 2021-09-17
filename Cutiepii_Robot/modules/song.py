@@ -5,7 +5,7 @@ import json
 
 from telethon.tl.types import DocumentAttributeAudio
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot.utils import progress
+from Cutiepii_Robot.utils.progress import progress
 from youtube_dl import YoutubeDL
 from youtube_dl.utils import (DownloadError, ContentTooShortError,
 
