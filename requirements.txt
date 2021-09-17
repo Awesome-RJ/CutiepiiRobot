@@ -88,3 +88,4 @@ secureme
 git+https://github.com/Awesome-RJ/gogoanimeapi.git
 Markdown>=3.3.4
 better_profanity
+pydub
