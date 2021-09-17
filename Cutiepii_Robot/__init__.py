@@ -114,8 +114,8 @@ if ENV:
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True) # Don't Change
     MONGO_DB = "Cutiepii"
     ARQ_API_URL = "https://thearq.tech"
-    GOOGLE_CHROME_BIN = "/usr/bin/google-chrome"
-    CHROME_DRIVER = "/usr/bin/chromedriver"
+    GOOGLE_CHROME_BIN = "/app/.apt/usr/bin/google-chrome"
+    CHROME_DRIVER = "/app/.apt/usr/bin/chromedriver"
     
     try:
         BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
