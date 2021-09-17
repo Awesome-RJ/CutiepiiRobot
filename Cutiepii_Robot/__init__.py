@@ -112,6 +112,7 @@ if ENV:
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", True) # Heroku API [From https://dashboard.heroku.com/account]
     YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", True)
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True) # Don't Change
+    MONGO_DB = "Cutiepii"
     ARQ_API_URL = "https://thearq.tech"
 
     try:
@@ -247,10 +248,10 @@ pgram = Client(
     bot_token=TOKEN,
 )
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
-mongodb = MongoClient(MONGO_DB_URL, 27017)[Cutiepii]
+mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
 motor = motor_asyncio.AsyncIOMotorClient(MONGO_DB_URL)
-db = motor[Cutiepii]
-engine = AIOEngine(motor, Cutiepii)
+db = motor[MONGO_DB]
+engine = AIOEngine(motor, MONGO_DB)
 print("[INFO]: INITIALZING AIOHTTP SESSION")
 aiohttpsession = ClientSession()
 # ARQ Client
