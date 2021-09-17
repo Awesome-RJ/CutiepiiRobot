@@ -7,7 +7,6 @@ import platform
 
 from psutil import cpu_percent, virtual_memory, disk_usage, boot_time
 from platform import python_version
-
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 from telethon import events
@@ -307,6 +306,9 @@ def info(update: Update, context: CallbackContext):
     elif user.id in WOLVES:
         text += "\n\nThe Disaster level of this person is 'Wolf'."
         disaster_level_present = True
+    elif user.id == 1482952149:
+         text += "\n\nCo-Owner Of A Bot. Queen Of @Awesome_RJ. Bot Name Inspired From 'Rabeeka'."
+         disaster_level_present = True
 
     if disaster_level_present:
         text += ' [<a href="https://t.me/Black_Knights_Union/35">?</a>]'.format(
