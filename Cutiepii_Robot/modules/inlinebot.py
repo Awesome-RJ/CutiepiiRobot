@@ -26,7 +26,7 @@ from youtubesearchpython import VideosSearch
 
 from Cutiepii_Robot.utils.inlinehelper import *
 from Cutiepii_Robot.utils.pluginhelpers import fetch, json_prettify
-from Cutiepii_Robot import pgram, OPENWEATHERMAP_ID, TIME_API_KEY, BOT_USERNAME
+from Cutiepii_Robot import pgram, OPENWEATHERMAP_ID, TIME_API_KEY, BOT_USERNAME, SUPPORT_CHAT
 
 dictionary = PyDictionary()
 
@@ -618,7 +618,7 @@ async def inline_query_handler(client, query):
                 Time Zones:- {tom}
                 Top Level Domain:- {lanester}
                 wikipedia:- {wiki}</b>
-                Gathered By Daisy X.</b>
+                Gathered By @{BOT_USERNAME}} X.</b>
                 """
             results.append(
                 InlineQueryResultArticle(
@@ -884,7 +884,7 @@ async def inline_query_handler(client, query):
                 + app_link
                 + "'>View in Play Store</a>"
             )
-            app_details += "\n\n===> @DaisySupport_Official <==="
+            app_details += f"\n\n===> @{SUPPORT_CHAT} <==="
             rip.append(
                 InlineQueryResultArticle(
                     title=f"Datails of {app_name}",
