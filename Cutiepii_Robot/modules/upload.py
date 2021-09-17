@@ -7,7 +7,7 @@ import traceback
 import aiohttp
 from telethon import events
 
-from Cutiepii_Robot import telethn, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT
+from Cutiepii_Robot import BOT_USERNAME, telethn, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT
 from Cutiepii_Robot.modules.urluploader import download_file
 from Cutiepii_Robot.utils.pluginhelpers import humanbytes, progress
 
@@ -113,7 +113,7 @@ async def tmp(event):
 
             str(time.time() - start)
             await orta.edit(
-                f"File Successfully Uploaded to TmpNinja.\n\nLink 👉 {download_link}\n\nUploaded by *Cutiepii Robot*"
+                f"File Successfully Uploaded to TmpNinja.\n\nLink 👉 {download_link}\n\nUploaded by *@{BOT_USERNAME}*"
             )
         except Exception as e:
             traceback.print_exc()
