@@ -114,7 +114,8 @@ if ENV:
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True) # Don't Change
     MONGO_DB = "Cutiepii"
     ARQ_API_URL = "https://thearq.tech"
-
+    GOOGLE_CHROME_BIN = "/usr/bin/google-chrome"
+    
     try:
         BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
     except ValueError:
