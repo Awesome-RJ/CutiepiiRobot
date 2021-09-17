@@ -50,7 +50,7 @@ async def couple(_, message):
             c2_mention = (await pgram.get_users(c2_id)).mention
 
             couple_selection_message = f"""**Couple of the day:**
-{c1_mention} + {c2_mention} = ❤️
+{c1_mention} + {c2_mention} = 💜
 __New couple of the day may be chosen at 12AM {tomorrow}__"""
             await pgram.send_message(
                 message.chat.id,
@@ -68,7 +68,7 @@ __New couple of the day may be chosen at 12AM {tomorrow}__"""
             c1_name = (await pgram.get_users(c1_id)).first_name
             c2_name = (await pgram.get_users(c2_id)).first_name
             couple_selection_message = f"""Couple of the day:
-[{c1_name}](tg://openmessage?user_id={c1_id}) + [{c2_name}](tg://openmessage?user_id={c2_id}) = ❤️
+[{c1_name}](tg://openmessage?user_id={c1_id}) + [{c2_name}](tg://openmessage?user_id={c2_id}) = 💜
 __New couple of the day may be chosen at 12AM {tomorrow}__"""
             await pgram.send_message(
                 message.chat.id,
@@ -76,7 +76,7 @@ __New couple of the day may be chosen at 12AM {tomorrow}__"""
             )
     except Exception as e:
         print(e)
-        message.reply_text(e)
+        await message.reply_text(e)
 
 
 __mod_name__ = "Couples"
