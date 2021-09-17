@@ -25,7 +25,7 @@ def getArg(message: Message) -> str:
     return arg
 
 
-def isArgInt(message: Message) -> bool:
+def isArgInt(message: Message) -> list:
     count = getArg(message)
     try:
         count = int(count)
@@ -38,9 +38,7 @@ def isArgInt(message: Message) -> bool:
 @capture_err
 async def quotly_func(client, message: Message):
     if not message.reply_to_message:
-        return await message.reply_text(
-            "Reply to a message to quote it."
-        )
+        return await message.reply_text("Reply to a message to quote it.")
     if not message.reply_to_message.text:
         return await message.reply_text(
             "Replied message has no text, can't quote it."
@@ -61,7 +59,7 @@ async def quotly_func(client, message: Message):
                     i
                     for i in range(
                         message.reply_to_message.message_id,
-                        message.reply_to_message.message_id + count,
+                        message.reply_to_message.message_id + (count + 5),
                     )
                 ],
                 replies=0,
@@ -78,10 +76,9 @@ async def quotly_func(client, message: Message):
             )
             messages = [reply_message]
     else:
-        await m.edit(
+        return await m.edit(
             "Incorrect argument, check quotly module in help section."
         )
-        return
     try:
         sticker = await quotify(messages)
         if not sticker[0]:
