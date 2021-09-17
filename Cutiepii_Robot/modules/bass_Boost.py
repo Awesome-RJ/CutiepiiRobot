@@ -8,8 +8,9 @@ from pydub import AudioSegment
 from telethon import events
 
 from Cutiepii_Robot.utils.pluginhelpers import is_admin
-from Cutiepii_Robot import telethn, TMP_DOWNLOAD_DIRECTORY, BOT_ID, OWNER_ID, SUPPORT_CHAT
+from Cutiepii_Robot import telethn, BOT_ID, OWNER_ID, SUPPORT_CHAT
 
+TMP_DOWNLOAD_DIRECTORY = "./"
 
 @telethn.on(events.NewMessage(pattern="/bassboost (.*)"))
 async def __(event):
