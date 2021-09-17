@@ -6,7 +6,7 @@ from datetime import datetime
 from telethon import types
 from telethon.tl import functions
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import TEMP_DOWNLOAD_DIRECTORY, REM_BG_API_KEY, telethn
+from Cutiepii_Robot import TEMP_DOWNLOAD_DIRECTORY, REM_BG_API_KEY, telethn, SUPPORT_CHAT
 
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
@@ -68,7 +68,7 @@ async def _(event):
         await event.reply("Background Removed in {} seconds".format(ms))
     else:
         await event.reply(
-            "remove.bg API returned Errors. Please report to @DaisySupport_Official\n`{}".format(
+            f"remove.bg API returned Errors. Please report to @{SUPPORT_CHAT}\n`{}".format(
                 output_file_name.content.decode("UTF-8")
             )
         )
