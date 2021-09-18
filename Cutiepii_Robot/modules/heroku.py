@@ -174,3 +174,19 @@ def prettyjson(obj, indent=2, maxlinelength=80):
         indent=indent,
     )
     return indentitems(items, indent, level=0)
+
+def indentitems(items, indent, level):
+    """Recursively traverses the list of json lines, adds indentation based on the current depth"""
+    res = ""
+    indentstr = " " * (indent * level)
+    for (i, item) in enumerate(items):
+        if isinstance(item, list):
+            res += indentitems(item, indent, level + 1)
+        else:
+            islast = (i == len(items) - 1)
+            # no new line character after the last rendered line
+            if level == 0 and islast:
+                res += indentstr + item
+            else:
+                res += indentstr + item + "\n"
+    return res
