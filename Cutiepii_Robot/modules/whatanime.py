@@ -11,7 +11,6 @@ from decimal import Decimal
 from datetime import timedelta
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
-
 from Cutiepii_Robot import pgram
 
 session = aiohttp.ClientSession()
@@ -97,7 +96,7 @@ async def whatanime(c: Client, m: Message):
                 text += f"\n<b>Related:</b> {syn}"
 
             if is_adult:
-                text += "\n<b>NSFW:</b> True"
+                text += f"\n<b>NSFW:</b> True"
             text += f'\n<b>Similarity:</b> {(Decimal(similarity) * 100).quantize(Decimal(".01"))}%\n'
             if episode:
                 text += f"<b>Episode:</b> {episode}"
