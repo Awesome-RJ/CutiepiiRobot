@@ -1,13 +1,14 @@
 import os
 
-from Cutiepii_Robot.modules.sql.night_mode_sql import add_nightmode, rmnightmode, get_all_chat_id, is_nightmode_indb
 from telethon.tl.types import ChatBannedRights
 from apscheduler.schedulers.asyncio import AsyncIOScheduler 
 from telethon import functions
-from Cutiepii_Robot.events import register
-from Cutiepii_Robot import OWNER_ID, telethn
 from telethon import *
 from telethon import Button, custom, events
+
+from Cutiepii_Robot.modules.sql.night_mode_sql import add_nightmode, rmnightmode, get_all_chat_id, is_nightmode_indb
+from Cutiepii_Robot.events import register
+from Cutiepii_Robot import OWNER_ID, telethn, LOGGER
 
 hehes = ChatBannedRights(
     until_date=None,
@@ -136,7 +137,7 @@ async def job_close():
             )
             )
         except Exception as e:
-            logger.info(f"Unable To Close Group {chat} - {e}")
+            LOGGER.info(f"Unable To Close Group {chat} - {e}")
 
 #Run everyday at 12am
 scheduler = AsyncIOScheduler(timezone="Asia/Kolkata")
