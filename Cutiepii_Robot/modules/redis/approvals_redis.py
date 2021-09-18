@@ -1,13 +1,14 @@
+import ast
 from Cutiepii_Robot import REDIS
 
 try:
-    eval(REDIS.get("Approvals"))
+    ast.literal_eval(REDIS.get("Approvals"))
 except BaseException:
     REDIS.set("Approvals", "{}")
 
 
 def approve(chat_id, user_id):
-    approved = eval(REDIS.get("Approvals"))
+    approved = ast.literal_eval(REDIS.get("Approvals"))
     try:
         list = approved[chat_id]
         if user_id not in list:
@@ -19,7 +20,7 @@ def approve(chat_id, user_id):
 
 
 def disapprove(chat_id, user_id):
-    approved = eval(REDIS.get("Approvals"))
+    approved = ast.literal_eval(REDIS.get("Approvals"))
     try:
         list = approved[chat_id]
         if user_id in list:
@@ -31,7 +32,7 @@ def disapprove(chat_id, user_id):
 
 
 def is_approved(chat_id, user_id):
-    approved = eval(REDIS.get("Approvals"))
+    approved = ast.literal_eval(REDIS.get("Approvals"))
     try:
         list = approved[chat_id]
         if user_id in list:
@@ -42,7 +43,7 @@ def is_approved(chat_id, user_id):
 
 
 def list_approved(chat_id):
-    approved = eval(REDIS.get("Approvals"))
+    approved = ast.literal_eval(REDIS.get("Approvals"))
     try:
         list = approved[chat_id]
         return list
