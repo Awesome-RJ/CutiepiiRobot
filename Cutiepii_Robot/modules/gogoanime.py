@@ -23,7 +23,7 @@ async def gogo(event):
     await event.reply("search", buttons=buttons)
 
 
-@telethn.on(events.CallbackQuery(pattern="search(\_(.*))"))
+@telethn.on(events.CallbackQuery(pattern=r"search(\_(.*))"))
 async def search(event):
     tata = event.pattern_match.group(1)
     data = tata.decode()
@@ -56,7 +56,7 @@ Summary: {}
     )
 
 
-@telethn.on(events.CallbackQuery(pattern="episode(\_(.*))"))
+@telethn.on(events.CallbackQuery(pattern=r"episode(\_(.*))"))
 async def episode(event):
     tata = event.pattern_match.group(1)
     data = tata.decode()
@@ -77,7 +77,7 @@ async def episode(event):
     await event.edit(text, buttons=cbutton)
 
 
-@telethn.on(events.CallbackQuery(pattern="download(\_(.*))"))
+@telethn.on(events.CallbackQuery(pattern=r"download(\_(.*))"))
 async def episode(event):
     tata = event.pattern_match.group(1)
     data = tata.decode()
