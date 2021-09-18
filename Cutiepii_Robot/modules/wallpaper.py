@@ -1,10 +1,12 @@
-from random import randint
-
 import requests as r
-from Cutiepii_Robot import SUPPORT_CHAT, WALL_API, dispatcher
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+
+from random import randint
 from telegram import Update
 from telegram.ext import CallbackContext, run_async
+
+from Cutiepii_Robot import SUPPORT_CHAT, WALL_API, dispatcher
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot.modules.helper_funcs.alternate import send_action
 
 # Wallpaper module powered by wall.alphacoders.com
 
