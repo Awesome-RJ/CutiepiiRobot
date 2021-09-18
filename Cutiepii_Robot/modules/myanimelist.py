@@ -1,6 +1,7 @@
+import re
+
 from jikanpy import Jikan
 from jikanpy.exceptions import APIException
-
 from telegram import Message, Chat, User, ParseMode, Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import CallbackContext, CommandHandler, Filters, CallbackQueryHandler, run_async
 
@@ -104,13 +105,15 @@ def character(update: Update, context: CallbackContext):
         name = res.get("name")
         kanji = res.get("name_kanji")
         about = res.get("about")
+        about = re.sub(r"\\n", r"\n", about)
+        about = re.sub(r"\r\n", r"", about)
         if len(about) > 4096:
             about = about[:4000] + "..."
         image = res.get("image_url")
         url = res.get("url")
         rep = f"<b>{name} ({kanji})</b>\n\n"
         rep += f"<a href='{image}'>\u200c</a>"
-        rep += f"<i>{about}</i>\n"
+        rep += f"<i>{about}</i>"
         keyb = [
             [InlineKeyboardButton("More Information", url=url),
            InlineKeyboardButton("Add to favorite character", callback_data=f"xanime_fvrtchar={name}")]]
@@ -130,7 +133,7 @@ def upcoming(update: Update, context: CallbackContext):
         rep += f"• <a href='{url}'>{name}</a>\n"
         if len(rep) > 2000:
             break
-    msg.reply_text(rep, parse_mode=ParseMode.HTML)
+    msg.reply_text(rep, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     
   
 def manga(update: Update, context: CallbackContext):
