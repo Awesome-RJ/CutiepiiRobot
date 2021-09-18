@@ -34,7 +34,7 @@ logofonts = [
  "./Cutiepii_Robot/utils/Logo/Chopsic.otf",
  
 ]
-
+random.randint(0, len(TELEGRAPH_MEDIA_LINKS) - 1)
 
 @register(pattern="^/logo ?(.*)")
 async def lego(event):
@@ -50,7 +50,7 @@ async def lego(event):
  await event.reply('Creating your logo...wait!')
  try:
     text = event.pattern_match.group(1)
-    img = Image.open(random.choice(logopics))
+    img = random.randint(0, len(TELEGRAPH_MEDIA_LINKS) - 1)
     draw = ImageDraw.Draw(img)
     image_widthz, image_heightz = img.size
     pointsize = 500
