@@ -211,7 +211,7 @@ async def del_profanity(event):
         return
     msg = str(event.text)
     sender = await event.get_sender()
-    let = sender.username
+    # let = sender.username
     if event.is_group:
         if (await is_register_admin(event.input_chat, event.message.sender_id)):
             return
@@ -252,7 +252,7 @@ async def del_profanity(event):
         return
     msg = str(event.text)
     sender = await event.get_sender()
-    let = sender.username
+    # let = sender.username
     if event.is_group:
         if (await is_register_admin(event.input_chat, event.message.sender_id)):
             return
