@@ -57,165 +57,13 @@ async def is_register_admin(chat, user):
         )
     return None
 
-
-@register(pattern="^/cleanbluetext ?(.*)")
-async def _(event):
-    if event.is_group:
-        if not await can_change_info(message=event):
-            return
-    else:
-        return
-    args = event.pattern_match.group(1)
-    if args:
-        val = args
-        if val in ("off", "no"):
-            sql.set_cleanbt(event.chat_id, False)
-            reply = "Bluetext cleaning has been disabled for <b>{}</b>".format(
-                html.escape(event.chat.title)
-            )
-            await event.reply(reply, parse_mode="html")
-
-        elif val in ("yes", "on"):
-            sql.set_cleanbt(event.chat_id, True)
-            reply = "Bluetext cleaning has been enabled for <b>{}</b>".format(
-                html.escape(event.chat.title)
-            )
-            await event.reply(reply, parse_mode="html")
-
-        else:
-            reply = "Invalid argument.Accepted values are 'yes', 'on', 'no', 'off'"
-            await event.reply(reply, parse_mode="html")
-    else:
-        clean_status = sql.is_enabled(event.chat_id)
-        clean_status = "Enabled" if clean_status else "Disabled"
-        reply = "Bluetext cleaning for <b>{}</b> : <b>{}</b>".format(
-            event.chat.title, clean_status
-        )
-        await event.reply(reply, parse_mode="html")
-
-
-@register(pattern="^/ignorecleanbluetext ?(.*)")
-async def _(event):
-    if event.is_group:
-        if not await can_change_info(message=event):
-            return
-    else:
-        return
-    args = event.pattern_match.group(1)
-    chat = event.chat
-
-    if args is not None:
-        val = args
-        added = sql.chat_ignore_command(chat.id, val)
-        if added:
-            reply = "<b>{}</b> has been added to bluetext cleaner ignore list.".format(
-                args)
-        else:
-            reply = "Command is already ignored."
-        await event.reply(reply, parse_mode="html")
-
-    else:
-        reply = "No command supplied to be ignored."
-        await event.reply(reply)
-
-
-@register(pattern="^/unignorecleanbluetext ?(.*)")
-async def _(event):
-    if event.is_group:
-        if not await can_change_info(message=event):
-            return
-    else:
-        return
-    args = event.pattern_match.group(1)
-    chat = event.chat
-
-    if args is not None:
-        val = args
-        added = sql.chat_unignore_command(chat.id, val)
-        if added:
-            reply = "<b>{}</b> has been added to bluetext cleaner ignore list.".format(
-                args)
-        else:
-            reply = "Command isn't ignored currently."
-        await event.reply(reply, parse_mode="html")
-
-    else:
-        reply = "No command supplied to be unignored."
-        await event.reply(reply)
-
-
-@register(pattern="^/listcleanbluetext$")
-async def _(event):
-
-    if event.is_group:
-        if not await can_change_info(message=event):
-            return
-    else:
-        return
-
-    chat = event.chat
-
-    global_ignored_list, local_ignore_list = sql.get_all_ignored(chat.id)
-    text = ""
-
-    if global_ignored_list:
-        text = "The following commands are currently ignored globally from bluetext cleaning :\n"
-
-        for x in global_ignored_list:
-            text += f" - <code>{x}</code>\n"
-
-    if local_ignore_list:
-        text += "\nThe following commands are currently ignored locally from bluetext cleaning :\n"
-
-        for x in local_ignore_list:
-            text += f" - <code>{x}</code>\n"
-
-    if text == "":
-        text = "No commands are currently ignored from bluetext cleaning."
-        await event.reply(text)
-        return
-
-    await event.reply(text, parse_mode="html")
-    return
-
-
-@tbot.on(events.NewMessage(pattern=None))
-async def _(event):
-    approved_userss = approved_users.find({})
-    for ch in approved_userss:
-        iid = ch['id']
-        userss = ch['user']
-    if event.is_group:
-        if (await is_register_admin(event.input_chat, event.message.sender_id)):
-            return
-        if str(event.sender_id) in str(userss) and str(event.chat_id) in str(iid):
-            return
-        pass
-    else:
-        return
-    if str(event.sender_id) == str(BOT_ID):
-        return
-    if event.sender_id == OWNER_ID:
-        return
-
-    if sql.is_enabled(event.chat_id):
-        fst_word = event.text.strip().split(None, 1)[0]
-        command = fst_word[1:].split('@')
-        if len(fst_word) > 1 and any(fst_word.startswith(start)
-                                     for start in CMD_STARTERS):
-
-            ignored = sql.is_command_ignored(event.chat_id, command[0])
-            if ignored:
-                return
-            await event.delete()
-
 @register(pattern="^/profanity(?: |$)(.*)")
 async def profanity(event):
     if event.fwd_from:
         return
     if event.is_private:
         return
-    if MONGO_DB_URI is None:
+    if MONGO_DB_URL is None:
         return
     if not await can_change_info(message=event):
         return
@@ -263,7 +111,7 @@ async def profanity(event):
         return
     if event.is_private:
         return
-    if MONGO_DB_URI is None:
+    if MONGO_DB_URL is None:
         return
     if not await can_change_info(message=event):
         return
@@ -312,7 +160,7 @@ async def cleanservice(event):
         return
     if event.is_private:
         return
-    if MONGO_DB_URI is None:
+    if MONGO_DB_URL is None:
         return
     if not await can_change_info(message=event):
         return
@@ -359,7 +207,7 @@ async def cleanservice(event):
 async def del_profanity(event):
     if event.is_private:
         return
-    if MONGO_DB_URI is None:
+    if MONGO_DB_URL is None:
         return
     msg = str(event.text)
     sender = await event.get_sender()
@@ -400,7 +248,7 @@ async def del_profanity(event):
 async def del_profanity(event):
     if event.is_private:
         return
-    if MONGO_DB_URI is None:
+    if MONGO_DB_URL is None:
         return
     msg = str(event.text)
     sender = await event.get_sender()
@@ -440,10 +288,6 @@ file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")
 
 __help__ = """
- - /cleanbluetext <on/off/yes/no>: clean commands from non-admins after sending
- - /ignorecleanbluetext <word>: prevent auto cleaning of the command
- - /unignorecleanbluetext <word>: remove prevent auto cleaning of the command
- - /listcleanbluetext: list currently whitelisted commands
  - /profanity on/off: filters all explict/abusive words sent by non admins also filters explicit/porn images
  - /cleanservice on/off: cleans all service messages from telegram
  - /globalmode: let users only speak in english in your group (automatically deletes messages in other languages)
