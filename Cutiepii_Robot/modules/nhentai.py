@@ -8,7 +8,6 @@ from pyrogram.types import (InlineKeyboardMarkup,
                             )
 
 from Cutiepii_Robot import pgram, telegraph
-
 from Cutiepii_Robot.utils.errors import capture_err
 
 
@@ -60,8 +59,8 @@ def nhentai_data(noombers):
             tag = tag.split(" ")
             tag = "_".join(tag)
             tags+=f"#{tag} "
-        if i["type"]=="artist":
-            artist=f"{i['name']} "
+        if i["type"] == "artist":
+            artist = f"{i['name']} "
 
     post_content = "".join(f"<img src={link}><br>" for link in links)
 
