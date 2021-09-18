@@ -1,10 +1,10 @@
 import datetime
 import html
 import textwrap
-
 import bs4
 import jikanpy
 import requests
+
 from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update, Message
