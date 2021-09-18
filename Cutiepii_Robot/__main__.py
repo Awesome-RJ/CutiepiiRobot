@@ -10,6 +10,7 @@ import Cutiepii_Robot.modules.sql.users_sql as sql
 
 from sys import argv
 from typing import Optional
+from CutiepiiRobot.modules.nhentai import Nhentai
 from Cutiepii_Robot import (
     ALLOW_EXCL,
     CERT_PATH,
@@ -731,5 +732,6 @@ if __name__ == '__main__':
     LOGGER.info("Successfully loaded modules: " + str(ALL_MODULES))
     telethn.start(bot_token=TOKEN)
     pgram.start()
+    Nhentai()
     main()
     idle()
