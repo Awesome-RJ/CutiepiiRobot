@@ -23,7 +23,7 @@ from telegram.ext import (
 
 import Cutiepii_Robot.modules.redis.chatbot_redis as redis
 
-from Cutiepii_Robot import dispatcher, SUPPORT_CHAT
+from Cutiepii_Robot import dispatcher, SUPPORT_CHAT, BOT_NAME
 from Cutiepii_Robot.modules.log_channel import gloggable
 from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
 from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin, sudo_plus
@@ -40,14 +40,14 @@ def add_chat(update: Update, context: CallbackContext):
         return
     if not is_enabled:
         redis.set_chatbot(chat.id)
-        msg.reply_text("Cutiepii successfully enabled for this chat!")
+        msg.reply_text(f"{BOT_NAME} successfully enabled for this chat!")
         message = (
             f"<b>{html.escape(chat.title)}:</b>\n"
             f"AI_ENABLED\n"
             f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
         )
         return message
-    msg.reply_text("Cutiepii is already enabled for this chat!")
+    msg.reply_text(f"{BOT_NAME} is already enabled for this chat!")
     return ""
 
 @user_admin
@@ -61,7 +61,7 @@ def rem_chat(update: Update, context: CallbackContext):
         msg.reply_text("You can't enable/disable AI in PM.")
         return
     if not is_enabled:
-        msg.reply_text("Cutiepii isn't enabled here in the first place!")
+        msg.reply_text(f"{BOT_NAME} isn't enabled here in the first place!")
         return ""
     redis.rem_chatbot(chat.id)
     msg.reply_text("ChatBot disabled successfully!")
