@@ -132,7 +132,7 @@ async def up(event):
 
         try:
             filename = os.path.join(TEMP_DOWNLOAD_DIRECTORY, os.path.basename(url.text))
-            await download_file(url.text, filename, ilk, start, bot)
+            await download_file(url.text, filename, ilk, start, telethn)
         except Exception as e:
             print(e)
             await event.respond(f"Downloading Failed\n\n**Error:** {e}")
