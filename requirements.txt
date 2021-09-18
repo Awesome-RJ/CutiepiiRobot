@@ -90,3 +90,4 @@ Markdown>=3.3.4
 better_profanity
 pydub
 nudepy
+textblob
