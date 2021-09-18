@@ -6,6 +6,8 @@ from pyrogram.types import (
     Message,
 )
 
+from Cutiepii_Robot import BOT_NAME
+
 # By @TroJanzHEX
 from Cutiepii_Robot.utils.resources.ImageEditor.edit_1 import (  # pylint:disable=import-error
     black_white,
@@ -447,8 +449,8 @@ async def cb_handler(client: pgram, query: CallbackQuery):
 
 
 __mod_name__ = "Image Editor"
-__help__ = """
-Cutiepii have some advanced image editing tools inbuilt
+__help__ = f"""
+{BOT_NAME} have some advanced image editing tools inbuilt
 Bright, Circle, RemBG, Blur, Border, Flip, Glitch, Sticker maker and more
   ➢ `/edit [reply to image]`*:* Open the image editor
   ➢ `/rmbg [REPLY]`*:* Revove BG of replied image/sticker.
