@@ -13,6 +13,55 @@ from telegram.ext import (
     run_async,
 )
 
+def get_muted_chats(bot: Bot, update: Update, leave: bool = False):
+    chat_id = update.effective_chat.id
+    chats = user_sql.get_all_chats()
+    muted_chats, progress = 0, 0
+    chat_list = []
+    progress_message = None
+
+    for chat in chats:
+
+        if ((100 * chats.index(chat)) / len(chats)) > progress:
+            progress_bar = f"{progress}% completed in getting muted chats."
+            if progress_message:
+                try:
+                    bot.editMessageText(
+                        progress_bar, chat_id, progress_message.message_id
+                    )
+                except:
+                    pass
+            else:
+                progress_message = bot.sendMessage(chat_id, progress_bar)
+            progress += 5
+
+        cid = chat.chat_id
+        sleep(0.1)
+
+        try:
+            bot.send_chat_action(cid, "TYPING", timeout=120)
+        except (BadRequest, Unauthorized):
+            muted_chats += +1
+            chat_list.append(cid)
+        except:
+            pass
+
+    try:
+        progress_message.delete()
+    except:
+        pass
+
+    if not leave:
+        return muted_chats
+    else:
+        for muted_chat in chat_list:
+            sleep(0.1)
+            try:
+                bot.leaveChat(muted_chat, timeout=120)
+            except:
+                pass
+            user_sql.rem_chat(muted_chat)
+        return muted_chats
 
 def get_invalid_chats(update: Update, context: CallbackContext, remove: bool = False):
     bot = context.bot
