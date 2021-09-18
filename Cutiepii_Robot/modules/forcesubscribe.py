@@ -12,7 +12,7 @@ from pyrogram.errors.exceptions.bad_request_400 import (
 )
 from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
 
-from Cutiepii_Robot import BOT_ID, BOT_USERNAME
+from Cutiepii_Robot import BOT_ID, BOT_USERNAME, BOT_NAME
 
 # from Cutiepii_Robot import OWNER_ID as SUDO_USERS
 from Cutiepii_Robot import pgram
@@ -122,7 +122,7 @@ def _check_member(client, message):
                         )
                     except ChatAdminRequired:
                         sent_message.edit(
-                            "❗ **Cutiepii is not an admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
+                            f"❗ **{BOT_NAME} is not an admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
                         )
                     except RPCError:
                         return
@@ -195,9 +195,9 @@ def config(client, message):
         )
 
 
-__help__ = """
+__help__ = f"""
 *Force Subscribe*:
-- Cutiepii can mute members who are not subscribed your channel until they subscribe
+- {BOT_NAME} can mute members who are not subscribed your channel until they subscribe
 - When enabled I will mute unsubscribed members and show them a unmute button. When they pressed the button I will unmute them
 
 *Setup*
