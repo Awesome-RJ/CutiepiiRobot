@@ -92,3 +92,4 @@ pydub
 nudepy
 textblob
 requests_html
+bs4
