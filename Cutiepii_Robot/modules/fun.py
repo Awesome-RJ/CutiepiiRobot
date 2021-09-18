@@ -11,7 +11,7 @@ import Cutiepii_Robot.modules.fun_strings as fun_strings
 
 from pyrogram import filters
 from pathlib import Path
-from Cutiepii_Robot import DEMONS, DRAGONS, pgram as bot, dispatcher, BOT_USERNAME
+from Cutiepii_Robot import DEMONS, DRAGONS, pgram as bot, dispatcher, BOT_USERNAME, BOT_NAME
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler, DisableAbleMessageHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
@@ -830,7 +830,7 @@ def kill(bot: Bot, update: Update):
     msg.edit_text('⚰')
 
 
-__help__ = """
+__help__ = f"""
   ➢ `/runs`*:* reply a random string from an array of replies
   ➢ `/slap`*:* slap a user, or get slapped if not a reply
   ➢ `/shrug`*:* get shrug XD
@@ -849,12 +849,12 @@ __help__ = """
   ➢ `/meme`*:* sends random anime memes
   ➢ `/hmeme`*:* sends random hentai memes
   ➢ `/cuddle`*:* cuddle someone by replying to his/her message or get cuddled
-  ➢ `/hug`*:* hug someone or get hugged by Cutiepii
+  ➢ `/hug`*:* hug someone or get hugged by {BOT_NAME}
   ➢ `/love`*:* Checks Love in your heart weather it's true or fake
   ➢ `/kiss`*:* Kiss someone or get kissed 
-  ➢ `/flirt`*:* Cutiepii will flirt to the replied person or with you
-  ➢ `/lewd`*:* Cutiepii will act lewd with you or with the replied person
-  ➢ `/romance`*:* Cutiepii will act all romantic with you or replied person
+  ➢ `/flirt`*:* {BOT_NAME} will flirt to the replied person or with you
+  ➢ `/lewd`*:* {BOT_NAME} will act lewd with you or with the replied person
+  ➢ `/romance`*:* {BOT_NAME} will act all romantic with you or replied person
   ➢ `/couples`*:* To Choose Couple Of The Day
   ➢ `/owo`*:* OWO de text
   ➢ `/stretch`*:* STRETCH de text
