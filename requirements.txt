@@ -26,7 +26,7 @@ spamwatch
 speedtest-cli
 spongemock
 sqlalchemy
-telethon==1.16.4
+telethon
 ujson
 wikipedia
 zalgo-text
