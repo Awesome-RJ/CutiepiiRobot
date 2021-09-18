@@ -7,7 +7,7 @@ import wget
 from bs4 import BeautifulSoup
 from pyrogram import filters
 
-from Cutiepii_Robot.utils.pluginhelpers import admins_only, progress
+from Cutiepii_Robot.utils.pluginhelpers import admins_only
 from Cutiepii_Robot.utils.progress import progress
 from Cutiepii_Robot import pgram
 
