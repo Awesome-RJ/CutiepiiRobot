@@ -19,6 +19,7 @@ from redis import StrictRedis
 from Python_ARQ import ARQ
 from aiohttp import ClientSession
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
+from telegraph import Telegraph
 from telegram import Chat
 
 StartTime = time.time()
@@ -238,6 +239,8 @@ print("[CUTIEPII] Cutie Cutie! Successfully Connected With A  Yūki • Data Cen
 print("[CUTIEPII] Project Maintained By: github.com/Awesome-RJ (t.me/Awesome_Rj)")
 
 
+telegraph = Telegraph()
+telegraph.create_account(short_name='dank')
 updater = tg.Updater(TOKEN, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)
 print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
