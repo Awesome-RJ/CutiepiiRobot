@@ -6,9 +6,9 @@ import better_profanity
 
 from Cutiepii_Robot.modules.sql import cleaner_sql as sql
 from Cutiepii_Robot.events import register
+
+from telethon.tl import functions
 from telethon import types, events
-from telethon.tl import *
-from telethon.tl.types import *
 from better_profanity import profanity
 from textblob import TextBlob
 
