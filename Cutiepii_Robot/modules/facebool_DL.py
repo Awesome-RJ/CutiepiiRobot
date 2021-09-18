@@ -55,7 +55,7 @@ async def _(event):
         list = []
         _thelist = [_qualityhd, _qualitysd, _hd, _sd]
         for id, val in enumerate(_thelist):
-            if val != None:
+            if val is not None:
                 list.append(id)
         filename = datetime.strftime(datetime.now(), "%Y-%m-%d-%H-%M-%S")
 
