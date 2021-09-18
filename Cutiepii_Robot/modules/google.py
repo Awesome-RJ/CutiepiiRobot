@@ -22,8 +22,7 @@ from datetime import datetime
 from requests import get, post
 from geopy.geocoders import Nominatim
 
-from Cutiepii_Robot import telethn
-from Cutiepii_Robot import *
+from Cutiepii_Robot import telethn, BOT_NAME
 from Cutiepii_Robot.events import register
 
 @register(pattern="^/gps (.*)")
@@ -227,7 +226,7 @@ async def apk(e):
             + app_link
             + "'>View in Play Store</a>"
         )
-        app_details += "\n\n===> *Cutiepii* <==="
+        app_details += f"\n\n===> *{BOT_NAME}* <==="
         await e.reply(app_details, link_preview=True, parse_mode="HTML")
     except IndexError:
         await e.reply("No result found in search. Please enter **Valid app name**")
