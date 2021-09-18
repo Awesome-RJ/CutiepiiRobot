@@ -14,7 +14,7 @@ from cowpy import cow
 from PIL import Image, ImageDraw, ImageEnhance, ImageFont, ImageOps
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from telethon.tl.types import DocumentAttributeFilename
+from telethon.tl.types import DocumentAttributeFilename, InputMessagesFilterDocument
 from zalgo_text import zalgo
 
 
