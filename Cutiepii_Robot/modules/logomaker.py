@@ -43,11 +43,10 @@ async def lego(event):
      pass
  else:
 
-    if not quew:
-       await event.reply('Provide Some Text To Draw!')
-       return
-    else:
-       pass
+  if not quew:
+     await event.reply('Provide Some Text To Draw!')
+     return
+  pass
  await event.reply('Creating your logo...wait!')
  try:
     text = event.pattern_match.group(1)
