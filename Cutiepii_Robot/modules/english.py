@@ -10,6 +10,7 @@ from typing import Optional
 from PyDictionary import PyDictionary
 from telethon.tl import types
 from telethon.tl.types import *
+from telegram import Message
 
 from Cutiepii_Robot import telethn
 from Cutiepii_Robot.events import register
