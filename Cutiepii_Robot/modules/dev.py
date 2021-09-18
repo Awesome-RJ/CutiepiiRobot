@@ -17,13 +17,13 @@ from telegram.ext import CallbackContext, CommandHandler, run_async
 def allow_groups(update: Update, context: CallbackContext):
     args = context.args
     if not args:
-        state = "Lockdown is " + "on" if not SaitamaRobot.ALLOW_CHATS else "off"
+        state = "Lockdown is " + "on" if not Cutiepii_Robot.ALLOW_CHATS else "off"
         update.effective_message.reply_text(f"Current state: {state}")
         return
     if args[0].lower() in ["off", "no"]:
-        SaitamaRobot.ALLOW_CHATS = True
+        Cutiepii_Robot.ALLOW_CHATS = True
     elif args[0].lower() in ["yes", "on"]:
-        SaitamaRobot.ALLOW_CHATS = False
+        Cutiepii_Robot.ALLOW_CHATS = False
     else:
         update.effective_message.reply_text("Format: /lockdown Yes/No or Off/On")
         return
@@ -72,7 +72,7 @@ def restart(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
 	"Exiting all Processes and starting a new Instance!"
     )
-    process = subprocess.run("pkill python3 && python3 -m SaitamaRobot", shell=True)
+    process = subprocess.run("pkill python3 && python3 -m Cutiepii_Robot", shell=True)
     process.communicate()
 
 LEAVE_HANDLER = CommandHandler("leave", leave, run_async=True)
