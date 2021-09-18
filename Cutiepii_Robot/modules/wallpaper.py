@@ -1,7 +1,7 @@
 import requests as r
 
 from random import randint
-from telegram import Update
+from telegram import Update, ChatAction
 from telegram.ext import CallbackContext, run_async
 
 from Cutiepii_Robot import SUPPORT_CHAT, WALL_API, dispatcher
