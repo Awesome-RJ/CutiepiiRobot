@@ -112,6 +112,7 @@ if ENV:
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY", True) # Heroku API [From https://dashboard.heroku.com/account]
     YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", True)
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True) # Don't Change
+    BOT_NAME = os.environ.get("BOT_NAME", True) # Name Of your Bot.4
     MONGO_DB = "Cutiepii"
     ARQ_API_URL = "https://thearq.tech"
     GOOGLE_CHROME_BIN = "/usr/bin/google-chrome"
