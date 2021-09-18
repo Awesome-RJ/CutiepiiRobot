@@ -8,7 +8,7 @@ from telegram.ext import CallbackContext, run_async
 
 # Wallpaper module powered by wall.alphacoders.com
 
-
+@send_action(ChatAction.UPLOAD_PHOTO)
 def wall(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     msg = update.effective_message
@@ -19,6 +19,7 @@ def wall(update: Update, context: CallbackContext):
     if not query:
         msg.reply_text("Please enter a query!")
         return
+    else:
         caption = query
         term = query.replace(" ", "%20")
         json_rep = r.get(
