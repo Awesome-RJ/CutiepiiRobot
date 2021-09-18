@@ -72,7 +72,7 @@ def restart(update: Update, context: CallbackContext):
     update.effective_message.reply_text(
 	"Exiting all Processes and starting a new Instance!"
     )
-    process = subprocess.run("pkill python3 && python3 -m Cutiepii_Robot", shell=True)
+    process = subprocess.run("pkill python3 && python3 -m Cutiepii_Robot", shell=True, check=True)
     process.communicate()
 
 LEAVE_HANDLER = CommandHandler("leave", leave, run_async=True)
