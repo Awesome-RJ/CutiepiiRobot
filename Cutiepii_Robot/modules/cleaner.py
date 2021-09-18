@@ -1,6 +1,6 @@
 import html
 
-from Cutiepii_Robot import ALLOW_EXCL, CustomCommandHandler, dispatcher
+from Cutiepii_Robot import ALLOW_EXCL, CustomCommandHandler, dispatcher, BOT_NAME
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_can_delete,
@@ -249,13 +249,13 @@ __handlers__ = [
     (CLEAN_BLUE_TEXT_HANDLER, BLUE_TEXT_CLEAN_GROUP),
 ]
 
-__help__ = """
+__help__ = f"""
 Blue text cleaner removed any made up commands that people send in your chat.
   ➢ `/cleanblue <on/off/yes/no>`*:* clean commands after sending
   ➢ `/ignoreblue <word>`*:* prevent auto cleaning of the command
   ➢ `/unignoreblue <word>`*:* remove prevent auto cleaning of the command
   ➢ `/listblue`*:* list currently whitelisted commands
  *Following are Disasters only commands, admins cannot use these:*
-  ➢ `/gignoreblue <word>`*:* globally ignorea bluetext cleaning of saved word across Cutiepii.
+  ➢ `/gignoreblue <word>`*:* globally ignorea bluetext cleaning of saved word across {BOT_NAME}.
   ➢ `/ungignoreblue <word>`*:* remove said command from global cleaning list
 """
