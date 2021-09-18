@@ -27,7 +27,8 @@ from Cutiepii_Robot import (
     updater,
     pgram, 
     ubot,
-    BOT_USERNAME
+    BOT_USERNAME,
+    BOT_NAME
     )
 
 # needed to dynamically load modules
@@ -87,7 +88,7 @@ def get_readable_time(seconds: int) -> str:
 CUTIEPII_IMG = "https://telegra.ph/file/57d1e105345723fea0edd.png"
     
 PM_START_TEXT = """
-────「 [Cutiepii Robot](https://telegra.ph/file/b516332637b848ec0dfe5.jpg) 」────
+────「 {} [:)](https://telegra.ph/file/b516332637b848ec0dfe5.jpg) 」────
 *Hola! {},*
 *I am an Anime themed advance group management bot with a lot of Sexy Features.*
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
@@ -105,18 +106,18 @@ Haven't slept since: {}
 buttons = [
     [
                         InlineKeyboardButton(
-                            text="Add Cutiepii To Your Group",
+                            text=f"Add {BOT_NAME} To Your Group",
                             url=f"t.me/{BOT_USERNAME}?startgroup=true")
                     ],
                    [
                        InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
-                       InlineKeyboardButton(text="[► Music ◄]", url="http://t.me/Group_Music_Probot?startgroup=true"),
+                       InlineKeyboardButton(text="❔ Chit Chat", url="https://t.me/HindiKDrama"),
                        InlineKeyboardButton(text="[► Inline ◄]", switch_inline_query_current_chat=""),
                      ],
                     [                  
                        InlineKeyboardButton(
-                             text="❔ Chit Chat",
-                             url="https://t.me/HindiKDrama"),
+                             text="🚑 Support",
+                             url=f"https://t.me/{SUPPORT_CHAT}"),
                        InlineKeyboardButton(
                              text="📢 Updates",
                              url="https://t.me/Black_Knights_Union")
@@ -238,6 +239,7 @@ def start(update: Update, context: CallbackContext):
             first_name = update.effective_user.first_name
             update.effective_message.reply_text(
                 PM_START_TEXT.format(
+                    escape_markdown(context.bot.first_name)
                     escape_markdown(first_name),
                     escape_markdown(uptime),
                     sql.num_users(),
