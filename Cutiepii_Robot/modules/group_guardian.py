@@ -12,7 +12,7 @@ from telethon.tl.types import *
 from better_profanity import profanity
 from textblob import TextBlob
 
-from Cutiepii_Robot import BOT_ID, mongodb as db
+from Cutiepii_Robot import BOT_ID, mongodb as db, telethn as tbot
 
 CMD_HELP = {}
 
