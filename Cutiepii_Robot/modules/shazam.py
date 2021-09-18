@@ -5,7 +5,7 @@ from pyrogram import filters
 from json import JSONDecodeError
 
 from Cutiepii_Robot.utils.pluginhelpers import admins_only, edit_or_reply, fetch_audio
-from Cutiepii_Robot import pgram, BOT_USERNAME, SUPPORT_CHAT
+from Cutiepii_Robot import pgram, BOT_USERNAME, SUPPORT_CHAT, BOT_NAME
 
 
 @pgram.on_message(filters.command(["identify", "shazam", f"shazam@{BOT_USERNAME}"]))
@@ -20,7 +20,7 @@ async def shazamm(client, message):
     kkk = await fetch_audio(client, message)
     downloaded_file_name = kkk
     f = {"file": (downloaded_file_name, open(downloaded_file_name, "rb"))}
-    await kek.edit("**Searching For This Song In Cutiepii's DataBase.**")
+    await kek.edit(f"**Searching For This Song In {BOT_NAME}'s DataBase.**")
     r = requests.post("https://starkapi.herokuapp.com/shazam/", files=f)
     try:
         xo = r.json()
