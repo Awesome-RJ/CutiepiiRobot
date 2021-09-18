@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from telethon import events
 
-from Cutiepii_Robot import telethn, SUPPORT_CHAT
+from Cutiepii_Robot import telethn, SUPPORT_CHAT, BOT_USERNAME
 
 
 @telethn.on(events.NewMessage(pattern="^/book (.*)"))
