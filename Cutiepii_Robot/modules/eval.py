@@ -1,3 +1,4 @@
+import ast
 import io
 import os
 
@@ -103,7 +104,7 @@ def do(func, bot, update):
                 result = f"{value}"
             else:
                 try:
-                    result = f"{repr(eval(body, env))}"
+                    result = f"{repr(ast.literal_eval(body, env))}"
                 except:
                     pass
         else:
