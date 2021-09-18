@@ -91,3 +91,5 @@ better_profanity
 pydub
 nudepy
 textblob
+requests_html
+bs4
