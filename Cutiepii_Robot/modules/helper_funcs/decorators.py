@@ -14,7 +14,7 @@ from Cutiepii_Robot.modules.disable import (
 )
 
 
-class :
+class Cutiepii_Handler:
     def __init__(self, k):
         self._dispatcher = k
 
@@ -173,7 +173,7 @@ class :
         return _inlinequery
 
 
-cutiepii_cmd = cutiepii_Handler(k).command
-cutiepii_msg = cutiepii_Handler(k).message
-cutiepii_callback = cutiepii_Handler(k).callbackquery
-cutiepii_inline = cutiepii_Handler(k).inlinequery
+cutiepii_cmd = Cutiepii_Handler(k).command
+cutiepii_msg = Cutiepii_Handler(k).message
+cutiepii_callback = Cutiepii_Handler(k).callbackquery
+cutiepii_inline = Cutiepii_Handler(k).inlinequery
