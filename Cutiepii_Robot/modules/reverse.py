@@ -11,14 +11,14 @@ from bs4 import BeautifulSoup
 from telegram import Update, InputMediaPhoto, TelegramError
 from telegram.ext import CallbackContext
 
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepiicmd
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 
 opener = urllib.request.build_opener()
 useragent = "Mozilla/5.0 (Linux; Android 6.0.1; SM-G920V Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36"
 opener.addheaders = [("User-agent", useragent)]
 
 
-@cutiepiicmd(command=["grs", "reverse"], pass_args=True)
+@cutiepii_cmd(command=["grs", "reverse"], pass_args=True)
 def reverse(update: Update, context: CallbackContext):
     if os.path.isfile("okgoogle.png"):
         os.remove("okgoogle.png")
