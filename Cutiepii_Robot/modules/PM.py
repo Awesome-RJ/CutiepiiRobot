@@ -3,7 +3,7 @@
 
 from telethon import events, Button, custom
 import re, os, random, asyncio
-from Shoko import client as bot
+from Cutiepii_Robot import pgram as bot
 from telethon import TelegramClient
 
 # Start Text 
