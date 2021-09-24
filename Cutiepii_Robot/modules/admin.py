@@ -344,7 +344,7 @@ def set_title(update: Update, context: CallbackContext):
     )
     
 
-@kaicmd(command="pin", filters=Filters.chat_type.groups, can_disable=False)
+@cutiepii_cmd(command="pin", filters=Filters.chat_type.groups, can_disable=False)
 @bot_admin
 @can_pin
 @user_admin
@@ -382,7 +382,7 @@ def pin(update: Update, context: CallbackContext) -> str:
         return log_message
 
     
-@kaicmd(command="unpin", filters=Filters.chat_type.groups, can_disable=False)
+@cutiepii_cmd(command="unpin", filters=Filters.chat_type.groups, can_disable=False)
 @bot_admin
 @can_pin
 @user_admin
