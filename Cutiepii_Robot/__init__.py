@@ -120,7 +120,7 @@ if ENV:
     CHROME_DRIVER = "/usr/bin/chromedriver"
     
     try:
-        BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
+        BL_CHATS = set(int(x) for x in os.environ.get("BL_CHATS", "").split()}
     except ValueError:
         raise Exception("Your blacklisted chats list does not contain valid integers.")
 
@@ -138,23 +138,23 @@ else:
     OWNER_USERNAME = Config.OWNER_USERNAME
     ALLOW_CHATS = Config.ALLOW_CHATS
     try:
-        DRAGONS = {int(x) for x in Config.DRAGONS or []}
-        DEV_USERS = {int(x) for x in Config.DEV_USERS or []}
+        DRAGONS = set(int(x) for x in Config.DRAGONS or []}
+        DEV_USERS = set(int(x) for x in Config.DEV_USERS or []}
     except ValueError:
         raise Exception("Your sudo or dev users list does not contain valid integers.")
 
     try:
-        DEMONS = {int(x) for x in Config.DEMONS or []}
+        DEMONS = set(int(x) for x in Config.DEMONS or []}
     except ValueError:
         raise Exception("Your support users list does not contain valid integers.")
 
     try:
-        WOLVES = {int(x) for x in Config.WOLVES or []}
+        WOLVES = set(int(x) for x in Config.WOLVES or []}
     except ValueError:
         raise Exception("Your whitelisted users list does not contain valid integers.")
 
     try:
-        TIGERS = {int(x) for x in Config.TIGERS or []}
+        TIGERS = set(int(x) for x in Config.TIGERS or []}
     except ValueError:
         raise Exception("Your tiger users list does not contain valid integers.")
 
@@ -194,7 +194,7 @@ else:
     YOUTUBE_API_KEY = Config.YOUTUBE_API_KEY
 
     try:
-        BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
+        BL_CHATS = set(int(x) for x in Config.BL_CHATS or []}
     except ValueError:
         raise Exception("Your blacklisted chats list does not contain valid integers.")
         
