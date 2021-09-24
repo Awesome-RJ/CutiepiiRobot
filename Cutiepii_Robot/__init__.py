@@ -19,6 +19,7 @@ from redis import StrictRedis
 from Python_ARQ import ARQ
 from aiohttp import ClientSession
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
+from ptbcontrib.postgres_persistence import PostgresPersistence
 from telegraph import Telegraph
 from telegram import Chat
 
@@ -138,23 +139,23 @@ else:
     OWNER_USERNAME = Config.OWNER_USERNAME
     ALLOW_CHATS = Config.ALLOW_CHATS
     try:
-        DRAGONS = set(int(x) for x in Config.DRAGONS or []}
-        DEV_USERS = set(int(x) for x in Config.DEV_USERS or []}
+        DRAGONS = set(int(x) for x in Config.DRAGONS or [])
+        DEV_USERS = set(int(x) for x in Config.DEV_USERS or [])
     except ValueError:
         raise Exception("Your sudo or dev users list does not contain valid integers.")
 
     try:
-        DEMONS = set(int(x) for x in Config.DEMONS or []}
+        DEMONS = set(int(x) for x in Config.DEMONS or [])
     except ValueError:
         raise Exception("Your support users list does not contain valid integers.")
 
     try:
-        WOLVES = set(int(x) for x in Config.WOLVES or []}
+        WOLVES = set(int(x) for x in Config.WOLVES or [])
     except ValueError:
         raise Exception("Your whitelisted users list does not contain valid integers.")
 
     try:
-        TIGERS = set(int(x) for x in Config.TIGERS or []}
+        TIGERS = set(int(x) for x in Config.TIGERS or [])
     except ValueError:
         raise Exception("Your tiger users list does not contain valid integers.")
 
@@ -194,7 +195,7 @@ else:
     YOUTUBE_API_KEY = Config.YOUTUBE_API_KEY
 
     try:
-        BL_CHATS = set(int(x) for x in Config.BL_CHATS or []}
+        BL_CHATS = set(int(x) for x in Config.BL_CHATS or [])
     except ValueError:
         raise Exception("Your blacklisted chats list does not contain valid integers.")
         
@@ -202,7 +203,7 @@ else:
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
 
-REDIS = StrictRedis.from_url(REDIS_URL,decode_responses=True)
+REDIS = StrictRedis.from_url(REDIS_URL, decode_responses=True)
 
 try:
 
@@ -243,7 +244,14 @@ print("[CUTIEPII]: Telegraph Installing")
 telegraph = Telegraph()
 print("[CUTIEPII]: Telegraph Account Creating")
 telegraph.create_account(short_name='Cutiepii')
-updater = tg.Updater(TOKEN, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)
+# updater = tg.Updater(TOKEN, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)
+updater = tg.Updater(
+    TOKEN,
+    workers=min(32, os.cpu_count() + 4),
+    request_kwargs={"read_timeout": 10, "connect_timeout": 10},
+    persistence=PostgresPersistence(session=SESSION),
+)
+                       
 print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 dispatcher = updater.dispatcher
