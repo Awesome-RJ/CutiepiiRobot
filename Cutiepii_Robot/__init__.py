@@ -245,14 +245,7 @@ print("[CUTIEPII]: Telegraph Installing")
 telegraph = Telegraph()
 print("[CUTIEPII]: Telegraph Account Creating")
 telegraph.create_account(short_name='Cutiepii')
-# updater = tg.Updater(TOKEN, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)
-updater = tg.Updater(
-    TOKEN,
-    workers=min(32, os.cpu_count() + 4),
-    request_kwargs={"read_timeout": 10, "connect_timeout": 10},
-    persistence=PostgresPersistence(session=SESSION),
-)
-                       
+updater = tg.Updater(TOKEN, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True, persistence=PostgresPersistence(session=SESSION))           
 print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 dispatcher = updater.dispatcher
