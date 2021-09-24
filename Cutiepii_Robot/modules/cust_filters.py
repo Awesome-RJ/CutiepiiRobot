@@ -1,4 +1,3 @@
-
 import re
 import random
 from html import escape
@@ -25,7 +24,7 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import (
 from Cutiepii_Robot.modules.sql import cust_filters_sql as sql
 from Cutiepii_Robot.modules.connection import connected
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
-from Cutiepii_Robot.modules.helper_funcs.decorators import kaicmd, kaimsg, kaicallback
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_msg, cutiepii_callback
 
 HANDLER_GROUP = 10
 
@@ -43,7 +42,7 @@ ENUM_FUNC_MAP = {
 
 
 @typing_action
-@kaicmd(command="filters", admin_ok=True)
+@cutiepii_cmd(command="filters", admin_ok=True)
 def list_handlers(update, context):
     chat = update.effective_chat
     user = update.effective_user
@@ -90,7 +89,7 @@ def list_handlers(update, context):
 
 
 # NOT ASYNC BECAUSE DISPATCHER HANDLER RAISED
-@kaicmd(command="filter", run_async=False)
+@cutiepii_cmd(command="filter", run_async=False)
 @user_admin
 @typing_action
 def filters(update, context):
@@ -213,7 +212,7 @@ def filters(update, context):
 
 
 # NOT ASYNC BECAUSE DISPATCHER HANDLER RAISED
-@kaicmd(command="stop", run_async=False)
+@cutiepii_cmd(command="stop", run_async=False)
 @user_admin
 @typing_action
 def stop_filter(update, context):
@@ -254,7 +253,7 @@ def stop_filter(update, context):
     )
 
 
-@kaimsg((CustomFilters.has_text & ~Filters.update.edited_message))
+@cutiepii_msg((CustomFilters.has_text & ~Filters.update.edited_message))
 def reply_filter(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
@@ -470,7 +469,7 @@ def reply_filter(update, context):
             break
 
 
-@kaicmd(command="removeallfilters", filters=Filters.chat_type.groups)
+@cutiepii_cmd(command="removeallfilters", filters=Filters.chat_type.groups)
 def rmall_filters(update, context):
     chat = update.effective_chat
     user = update.effective_user
@@ -497,7 +496,7 @@ def rmall_filters(update, context):
         )
 
 
-@kaicallback(pattern=r"filters_.*")
+@cutiepii_callback(pattern=r"filters_.*")
 def rmall_callback(update, context):
     query = update.callback_query
     chat = update.effective_chat
