@@ -5,8 +5,7 @@ from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler, Filters, run_async
 from telegram.utils.helpers import mention_html
 
-from Cutiepii_Robot import DRAGONS, dispatcher
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot import DRAGONS
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_admin,
     can_pin,
