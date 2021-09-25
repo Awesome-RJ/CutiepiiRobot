@@ -418,33 +418,59 @@ def set_about_me(update: Update, context: CallbackContext):
 
 
 @sudo_plus
-def stats(update: Update, context: CallbackContext):
+def stats(update, context):
+    db_size = SESSION.execute(
+        "SELECT pg_size_pretty(pg_database_size(current_database()))"
+    ).scalar_one_or_none()
     uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
-    status = "<b>System Statistics:</b>\n\n"
-    status += "<b>System uptime:</b> <code>" + str(uptime) + "</code>\n"
-
+    botuptime = get_readable_time((time.time() - StartTime))
+    status = "*╒═══「 System statistics 」*\n\n"
+    status += "*• System Start time:* " + str(uptime) + "\n"
     uname = platform.uname()
-    status += "<b>System:</b> <code>" + str(uname.system) + "</code>\n"
-    status += "<b>Node name:</b> <code>" + str(uname.node) + "</code>\n"
-    status += "<b>Release:</b> <code>" + str(uname.release) + "</code>\n"
-    status += "<b>Version:</b> <code>" + str(uname.version) + "</code>\n"
-    status += "<b>Machine:</b> <code>" + str(uname.machine) + "</code>\n"
-    status += "<b>Processor:</b> <code>" + str(uname.processor) + "</code>\n\n"
-
+    status += "*• System:* " + str(uname.system) + "\n"
+    status += "*• Node name:* " + escape_markdown(str(uname.node)) + "\n"
+    status += "*• Release:* " + escape_markdown(str(uname.release)) + "\n"
+    status += "*• Machine:* " + escape_markdown(str(uname.machine)) + "\n"
     mem = virtual_memory()
     cpu = cpu_percent()
     disk = disk_usage("/")
-    status += "<b>CPU usage:</b> <code>" + str(cpu) + " %</code>\n"
-    status += "<b>Ram usage:</b> <code>" + str(mem[2]) + " %</code>\n"
-    status += "<b>Storage used:</b> <code>" + str(disk[3]) + " %</code>\n\n"
-    status += "<b>Python version:</b> <code>" + python_version() + "</code>\n"
-    status += "<b>Library version:</b> <code>" + str(__version__) + "</code>\n"
-    
-    status += "<b>\nBot Statistics:</b>\n" + "\n".join([mod.__stats__() for mod in STATS])
-    result = re.sub(r"(\d+)", r"<code>\1</code>", status)
-    update.effective_message.reply_text(result, parse_mode=ParseMode.HTML)
-
-
+    status += "*• CPU:* " + str(cpu) + " %\n"
+    status += "*• RAM:* " + str(mem[2]) + " %\n"
+    status += "*• Storage:* " + str(disk[3]) + " %\n\n"
+    status += "*• Python Version:* " + python_version() + "\n"
+    status += "*• python-Telegram-Bot:* " + str(ptbver) + "\n"
+    status += "*• Uptime:* " + str(botuptime) + "\n"
+    status += "*• Database size:* " + str(db_size) + "\n"
+    kb = [[InlineKeyboardButton("Ping", callback_data="pingCB")]]
+    try:
+        update.effective_message.reply_text(
+            status
+            + "\n*Bot statistics*:\n"
+            + "\n".join([mod.__stats__() for mod in STATS])
+            + "\n\n[⍙ GitHub](https://github.com/Ryomen-Sukuna/Kai) | [⍚ GitLab](https://gitlab.com/Ryomen-Sukuna/Kai)\n\n"
+            + "╘══「 by [Ryomen-Sukuna](github.com/Ryomen-Sukuna) 」\n",
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=InlineKeyboardMarkup(kb),
+            disable_web_page_preview=True,
+        )
+    except BaseException:
+        update.effective_message.reply_text(
+            (
+                (
+                    (
+                        "\n*Bot statistics*:\n"
+                        + "\n".join(mod.__stats__() for mod in STATS)
+                    )
+                    + "\n\n⍙ [GitHub](https://github.com/Ryomen-Sukuna/Kai) | ⍚ [GitLab](https://gitlab.com/Ryomen-Sukuna/Kai)\n\n"
+                )
+                + "╘══「 by [Ryomen-Sukuna](github.com/Ryomen-Sukuna) 」\n"
+            ),
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=InlineKeyboardMarkup(kb),
+            disable_web_page_preview=True,
+        )
+        
+        
 def about_bio(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     message = update.effective_message
@@ -605,5 +631,5 @@ __handlers__ = [
     GET_BIO_HANDLER,
     SET_ABOUT_HANDLER,
     GET_ABOUT_HANDLER,
-    STATS_HANDLER,
+    s_HANDLER,
 ]
