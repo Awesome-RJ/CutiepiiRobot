@@ -24,14 +24,14 @@ def add_chat(update: Update, context: CallbackContext):
     is_kuki = sql.is_kuki(chat.id)
     if not is_kuki:
         sql.set_kuki(chat.id)
-        msg.reply_text("Genshin AI successfully enabled for this chat!")
+        msg.reply_text("Cutiepii AI successfully enabled for this chat!")
         message = (
             f"<b>{html.escape(chat.title)}:</b>\n"
             f"AI_ENABLED\n"
             f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
         )
         return message
-    msg.reply_text("Genshin AI is already enabled for this chat!")
+    msg.reply_text("Cutiepii AI is already enabled for this chat!")
     return ""
 
 
@@ -43,10 +43,10 @@ def rem_chat(update: Update, context: CallbackContext):
     user = update.effective_user
     is_kuki = sql.is_kuki(chat.id)
     if not is_kuki:
-        msg.reply_text("Genshin AI isn't enabled here in the first place!")
+        msg.reply_text("Cutiepii AI isn't enabled here in the first place!")
         return ""
     sql.rem_kuki(chat.id)
-    msg.reply_text("Genshin AI disabled successfully!")
+    msg.reply_text("Cutiepi AI disabled successfully!")
     message = (
         f"<b>{html.escape(chat.title)}:</b>\n"
         f"AI_DISABLED\n"
@@ -81,7 +81,7 @@ def chatbot(update: Update, context: CallbackContext):
             return
         Message = message.text
         bot.send_chat_action(chat_id, action="typing")
-        kukiurl = requests.get('https://kukichatai.vercel.app/message='+Message)
+        kukiurl = requests.get('https://www.kuki-api.tk/api/Cutiepii/Rajkumar/message='+Message)
         Kuki = json.loads(kukiurl.text)
         kuki = Kuki['reply']
         sleep(0.3)
