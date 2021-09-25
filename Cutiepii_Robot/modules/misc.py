@@ -114,13 +114,27 @@ Available queries: Country Code/Country Name/Timezone Name
 🗜️ Compress And Decompress: 
   ➢ `/zip`*:* reply to a telegram file to compress it in .zip format
   ➢ `/unzip`*:* reply to a telegram file to decompress it from the .zip format
+  
+👤 Fake Info:
+  ➢ `/fakegen`*:* Generates Fake Information
+  ➢ `/picgen  ➢ `/ generate a fake pic
+
+🎛️ Encryprion:
+  ➢ `/encrypt`*:* Encrypts The Given Text
+  ➢ `/decrypt`*:* Decrypts Previously Ecrypted Text
 
 📙 English:
   ➢ `/define <text>`*:* Type the word or expression you want to search\nFor example /define kill
   ➢ `/spell`*:* while replying to a message, will reply with a grammar corrected version
   ➢ `/synonyms <word>`*:* Find the synonyms of a word
   ➢ `/antonyms <word>`*:* Find the antonyms of a word
- 
+  
+📙 Encryprion:
+  ➢ `/antonyms <Word>`*:* Get antonyms from Dictionary.
+  ➢ `/synonyms <Word>`*:* Get synonyms from Dictionary.
+  ➢ `/define <Word>`*:* Get definition from Dictionary.
+  ➢ `/spell <Word>`*:* Get definition from Dictionary.
+  
 💳 CC Checker:
   ➢ `/au [cc]`*:* Stripe Auth given CC
   ➢ `/pp [cc]`*:* Paypal 1$ Guest Charge
@@ -130,13 +144,6 @@ Available queries: Country Code/Country Name/Timezone Name
   ➢ `/gen [bin]`*:* Generates CC with given bin
   ➢ `/key [sk]`*:* Checks if Stripe key is Live
 
-👤 Fake Info:
-  ➢ `/fakegen`*:* Generates Fake Information
-  ➢ `/picgen`*:* generate a fake pic
-
-🎛️ Encryprion:
-  ➢ `/encrypt`*:* Encrypts The Given Text
-  ➢ `/decrypt`*:* Decrypts Previously Ecrypted Text
 
 🗳  Other Commands:
 Paste:
@@ -157,6 +164,9 @@ Cricket Score:
   ➢ `/cs`*:* get a Cricket Score.
 Phone Info
   ➢ `/phone [phone no]`*:* Gathers no info.
+
+Bass Boosting
+  ➢ `/bassboost`*:* Reply To Music Bass Boost.
 """
 
 ECHO_HANDLER = DisableAbleCommandHandler("echo", echo, filters=Filters.chat_type.groups, run_async=True)
