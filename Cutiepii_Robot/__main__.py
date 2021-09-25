@@ -299,32 +299,29 @@ def error_handler(update, context):
 
 
 # for test purposes
-def error_callback(update: Update, context: CallbackContext):
-    error = context.error
-    try:
-        raise error
-    except Unauthorized:
-        print("no nono1")
-        print(error)
-        # remove update.message.chat_id from conversation list
-    except BadRequest:
-        print("no nono2")
-        print("BadRequest caught")
-        print(error)
+def error_callback(update, context):
+    """#TODO
+    Params:
+        update  -
+        context -
+    """
 
-        # handle malformed requests - read more below!
+    try:
+        raise context.error
+    except (Unauthorized, BadRequest):
+        pass
+        # remove update.message.chat_id from conversation list
     except TimedOut:
-        print("no nono3")
+        pass
         # handle slow connection problems
     except NetworkError:
-        print("no nono4")
+        pass
         # handle other connection problems
-    except ChatMigrated as err:
-        print("no nono5")
-        print(err)
+    except ChatMigrated as e:
+        pass
         # the chat_id of a group has changed, use e.new_chat_id instead
     except TelegramError:
-        print(error)
+        pass
         # handle all other telegram related errors
 
 
