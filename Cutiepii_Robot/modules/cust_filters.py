@@ -5,10 +5,18 @@ from html import escape
 import telegram
 from telegram import ParseMode, InlineKeyboardMarkup, Message, InlineKeyboardButton
 from telegram.error import BadRequest
-from telegram.ext import DispatcherHandlerStop, Filters
+from telegram.ext import (
+    CommandHandler,
+    MessageHandler,
+    DispatcherHandlerStop,
+    CallbackQueryHandler,
+    run_async,
+    Filters,
+)
 from telegram.utils.helpers import mention_html, escape_markdown
 
 from Cutiepii_Robot import dispatcher, LOGGER, DRAGONS
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.handlers import MessageHandlerChecker
 from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_text
@@ -22,9 +30,10 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import (
     markdown_to_html,
 )
 from Cutiepii_Robot.modules.sql import cust_filters_sql as sql
+
 from Cutiepii_Robot.modules.connection import connected
+
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_msg, cutiepii_callback
 
 HANDLER_GROUP = 10
 
@@ -41,14 +50,14 @@ ENUM_FUNC_MAP = {
 }
 
 
+
 @typing_action
-@cutiepii_cmd(command="filters", admin_ok=True)
 def list_handlers(update, context):
     chat = update.effective_chat
     user = update.effective_user
 
     conn = connected(context.bot, update, chat, user.id, need_admin=False)
-    if conn is not False:
+    if not conn is False:
         chat_id = conn
         chat_name = dispatcher.bot.getChat(conn).title
         filter_list = "*Filter in {}:*\n"
@@ -64,9 +73,8 @@ def list_handlers(update, context):
     all_handlers = sql.get_chat_triggers(chat_id)
 
     if not all_handlers:
-        send_message(
-            update.effective_message, "No filters saved in {}!".format(chat_name)
-        )
+        send_message(update.effective_message,
+                     "No filters saved in {}!".format(chat_name))
         return
 
     for keyword in all_handlers:
@@ -89,7 +97,6 @@ def list_handlers(update, context):
 
 
 # NOT ASYNC BECAUSE DISPATCHER HANDLER RAISED
-@cutiepii_cmd(command="filter", run_async=False)
 @user_admin
 @typing_action
 def filters(update, context):
@@ -97,16 +104,20 @@ def filters(update, context):
     user = update.effective_user
     msg = update.effective_message
     args = msg.text.split(
-        None, 1
-    )  # use python's maxsplit to separate Cmd, keyword, and reply_text
+        None,
+        1)  # use python's maxsplit to separate Cmd, keyword, and reply_text
 
     conn = connected(context.bot, update, chat, user.id)
-    if conn is not False:
+    if not conn is False:
         chat_id = conn
         chat_name = dispatcher.bot.getChat(conn).title
     else:
         chat_id = update.effective_chat.id
-        chat_name = "local filters" if chat.type == "private" else chat.title
+        if chat.type == "private":
+            chat_name = "local filters"
+        else:
+            chat_name = chat.title
+
     if not msg.reply_to_message and len(args) < 2:
         send_message(
             update.effective_message,
@@ -121,7 +132,8 @@ def filters(update, context):
                 "Please provide keyword for this filter to reply with!",
             )
             return
-        keyword = args[1]
+        else:
+            keyword = args[1]
     else:
         extracted = split_quotes(args[1])
         if len(extracted) < 1:
@@ -138,11 +150,9 @@ def filters(update, context):
     text, file_type, file_id = get_filter_type(msg)
     if not msg.reply_to_message and len(extracted) >= 2:
         offset = len(extracted[1]) - len(
-            msg.text
-        )  # set correct offset relative to command + notename
+            msg.text)  # set correct offset relative to command + notename
         text, buttons = button_markdown_parser(
-            extracted[1], entities=msg.parse_entities(), offset=offset
-        )
+            extracted[1], entities=msg.parse_entities(), offset=offset)
         text = text.strip()
         if not text:
             send_message(
@@ -158,12 +168,10 @@ def filters(update, context):
             text_to_parsing = msg.reply_to_message.caption
         else:
             text_to_parsing = ""
-        offset = len(
-            text_to_parsing
-        )  # set correct offset relative to command + notename
+        offset = len(text_to_parsing
+                    )  # set correct offset relative to command + notename
         text, buttons = button_markdown_parser(
-            text_to_parsing, entities=msg.parse_entities(), offset=offset
-        )
+            text_to_parsing, entities=msg.parse_entities(), offset=offset)
         text = text.strip()
 
     elif not text and not file_type:
@@ -180,14 +188,13 @@ def filters(update, context):
             text_to_parsing = msg.reply_to_message.caption
         else:
             text_to_parsing = ""
-        offset = len(
-            text_to_parsing
-        )  # set correct offset relative to command + notename
+        offset = len(text_to_parsing
+                    )  # set correct offset relative to command + notename
         text, buttons = button_markdown_parser(
-            text_to_parsing, entities=msg.parse_entities(), offset=offset
-        )
+            text_to_parsing, entities=msg.parse_entities(), offset=offset)
         text = text.strip()
-        if (msg.reply_to_message.text or msg.reply_to_message.caption) and not text:
+        if (msg.reply_to_message.text or
+                msg.reply_to_message.caption) and not text:
             send_message(
                 update.effective_message,
                 "There is no note message - You can't JUST have buttons, you need a message to go with it!",
@@ -198,7 +205,8 @@ def filters(update, context):
         send_message(update.effective_message, "Invalid filter!")
         return
 
-    add = addnew_filter(update, chat_id, keyword, text, file_type, file_id, buttons)
+    add = addnew_filter(update, chat_id, keyword, text, file_type, file_id,
+                        buttons)
     # This is an old method
     # sql.add_filter(chat_id, keyword, content, is_sticker, is_document, is_image, is_audio, is_voice, is_video, buttons)
 
@@ -212,7 +220,6 @@ def filters(update, context):
 
 
 # NOT ASYNC BECAUSE DISPATCHER HANDLER RAISED
-@cutiepii_cmd(command="stop", run_async=False)
 @user_admin
 @typing_action
 def stop_filter(update, context):
@@ -221,12 +228,16 @@ def stop_filter(update, context):
     args = update.effective_message.text.split(None, 1)
 
     conn = connected(context.bot, update, chat, user.id)
-    if conn is not False:
+    if not conn is False:
         chat_id = conn
         chat_name = dispatcher.bot.getChat(conn).title
     else:
         chat_id = update.effective_chat.id
-        chat_name = "Local filters" if chat.type == "private" else chat.title
+        if chat.type == "private":
+            chat_name = "Local filters"
+        else:
+            chat_name = chat.title
+
     if len(args) < 2:
         send_message(update.effective_message, "What should i stop?")
         return
@@ -242,7 +253,8 @@ def stop_filter(update, context):
             sql.remove_filter(chat_id, args[1])
             send_message(
                 update.effective_message,
-                "Okay, I'll stop replying to that filter in *{}*.".format(chat_name),
+                "Okay, I'll stop replying to that filter in *{}*.".format(
+                    chat_name),
                 parse_mode=telegram.ParseMode.MARKDOWN,
             )
             raise DispatcherHandlerStop
@@ -252,8 +264,6 @@ def stop_filter(update, context):
         "That's not a filter - Click: /filters to get currently active filters.",
     )
 
-
-@cutiepii_msg((CustomFilters.has_text & ~Filters.update.edited_message))
 def reply_filter(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
@@ -469,40 +479,33 @@ def reply_filter(update, context):
             break
 
 
-@cutiepii_cmd(command="removeallfilters", filters=Filters.chat_type.groups)
 def rmall_filters(update, context):
     chat = update.effective_chat
     user = update.effective_user
     member = chat.get_member(user.id)
     if member.status != "creator" and user.id not in DRAGONS:
         update.effective_message.reply_text(
-            "Only the chat owner can clear all notes at once."
-        )
+            "Only the chat owner can clear all notes at once.")
     else:
-        buttons = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        text="Stop all filters", callback_data="filters_rmall"
-                    )
-                ],
-                [InlineKeyboardButton(text="Cancel", callback_data="filters_cancel")],
-            ]
-        )
+        buttons = InlineKeyboardMarkup([[
+            InlineKeyboardButton(
+                text="Stop all filters", callback_data="filters_rmall")
+        ], [
+            InlineKeyboardButton(text="Cancel", callback_data="filters_cancel")
+        ]])
         update.effective_message.reply_text(
             f"Are you sure you would like to stop ALL filters in {chat.title}? This action cannot be undone.",
             reply_markup=buttons,
-            parse_mode=ParseMode.MARKDOWN,
-        )
+            parse_mode=ParseMode.MARKDOWN)
 
 
-@cutiepii_callback(pattern=r"filters_.*")
+
 def rmall_callback(update, context):
     query = update.callback_query
     chat = update.effective_chat
     msg = update.effective_message
     member = chat.get_member(query.from_user.id)
-    if query.data == "filters_rmall":
+    if query.data == 'filters_rmall':
         if member.status == "creator" or query.from_user.id in DRAGONS:
             allfilters = sql.get_chat_triggers(chat.id)
             if not allfilters:
@@ -525,7 +528,7 @@ def rmall_callback(update, context):
 
         if member.status == "member":
             query.answer("You need to be admin to do this.")
-    elif query.data == "filters_cancel":
+    elif query.data == 'filters_cancel':
         if member.status == "creator" or query.from_user.id in DRAGONS:
             msg.edit_text("Clearing of all filters has been cancelled.")
             return
@@ -539,13 +542,13 @@ def rmall_callback(update, context):
 def get_exception(excp, filt, chat):
     if excp.message == "Unsupported url protocol":
         return "You seem to be trying to use the URL protocol which is not supported. Telegram does not support key for multiple protocols, such as tg: //. Please try again!"
-    if excp.message == "Reply message not found":
+    elif excp.message == "Reply message not found":
         return "noreply"
-    LOGGER.warning("Message %s could not be parsed", str(filt.reply))
-    LOGGER.exception(
-        "Could not parse filter %s in chat %s", str(filt.keyword), str(chat.id)
-    )
-    return "This data could not be sent because it is incorrectly formatted."
+    else:
+        LOGGER.warning("Message %s could not be parsed", str(filt.reply))
+        LOGGER.exception("Could not parse filter %s in chat %s",
+                         str(filt.keyword), str(chat.id))
+        return "This data could not be sent because it is incorrectly formatted."
 
 
 # NOT ASYNC NOT A HANDLER
@@ -555,26 +558,28 @@ def addnew_filter(update, chat_id, keyword, text, file_type, file_id, buttons):
     if len(totalfilt) >= 150:  # Idk why i made this like function....
         msg.reply_text("This group has reached its max filters limit of 150.")
         return False
-    sql.new_add_filter(chat_id, keyword, text, file_type, file_id, buttons)
-    return True
+    else:
+        sql.new_add_filter(chat_id, keyword, text, file_type, file_id, buttons)
+        return True
 
 
 def __stats__():
-    return "• {} filters, across {} chats.".format(sql.num_filters(), sql.num_chats())
+    return "• {} filters, across {} chats.".format(sql.num_filters(),
+                                                   sql.num_chats())
 
 
 def __import_data__(chat_id, data):
     # set chat filters
     filters = data.get("filters", {})
     for trigger in filters:
-        sql.add_to_blacklist(chat_id, trigger)
+        sql.add_filter(chat_id, trigger, text, file_type, file_id, buttons)
 
 
 def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
 
 
-def __chat_settings__(chat_id, _):
+def __chat_settings__(chat_id, user_id):
     cust_filters = sql.get_chat_triggers(chat_id)
     return "There are `{}` custom filters here.".format(len(cust_filters))
 
@@ -602,3 +607,26 @@ Check `/markdownhelp` to know more!
 """
 
 __mod_name__ = "Filters"
+
+FILTER_HANDLER = DisableAbleCommandHandler("filter", filters)
+STOP_HANDLER = DisableAbleCommandHandler("stop", stop_filter)
+RMALLFILTER_HANDLER = DisableAbleCommandHandler(
+    "removeallfilters", rmall_filters, filters=Filters.chat_type.groups, run_async=True)
+RMALLFILTER_CALLBACK = CallbackQueryHandler(
+    rmall_callback, pattern=r"filters_.*", run_async=True)
+LIST_HANDLER = DisableAbleCommandHandler(
+    "filters", list_handlers, admin_ok=True, run_async=True)
+CUST_FILTER_HANDLER = MessageHandler(
+    CustomFilters.has_text & ~Filters.update.edited_message, reply_filter, run_async=True)
+
+dispatcher.add_handler(FILTER_HANDLER)
+dispatcher.add_handler(STOP_HANDLER)
+dispatcher.add_handler(LIST_HANDLER)
+dispatcher.add_handler(CUST_FILTER_HANDLER, HANDLER_GROUP)
+dispatcher.add_handler(RMALLFILTER_HANDLER)
+dispatcher.add_handler(RMALLFILTER_CALLBACK)
+
+__handlers__ = [
+    FILTER_HANDLER, STOP_HANDLER, LIST_HANDLER,
+    (CUST_FILTER_HANDLER, HANDLER_GROUP, RMALLFILTER_HANDLER)
+]
