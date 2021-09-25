@@ -639,5 +639,5 @@ __handlers__ = [
     GET_BIO_HANDLER,
     SET_ABOUT_HANDLER,
     GET_ABOUT_HANDLER,
-    s_HANDLER,
+    STATS_HANDLER,
 ]
