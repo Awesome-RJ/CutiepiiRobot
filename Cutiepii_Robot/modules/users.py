@@ -167,7 +167,4 @@ def __stats__():
 def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
 
-
-__help__ = ""  # no help string
-
 __mod_name__ = "Users"
