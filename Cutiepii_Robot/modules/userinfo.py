@@ -29,6 +29,7 @@ from Cutiepii_Robot import (
     sw,
 )
 from Cutiepii_Robot.__main__ import STATS, TOKEN, USER_INFO
+from Cutiepii_Robot.modules.sql import SESSION
 import Cutiepii_Robot.modules.sql.userinfo_sql as sql
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.sql.global_bans_sql import is_user_gbanned
