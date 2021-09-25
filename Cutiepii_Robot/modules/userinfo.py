@@ -36,8 +36,8 @@ from Cutiepii_Robot.modules.redis.afk_redis import is_user_afk, afk_reason
 from Cutiepii_Robot.modules.sql.users_sql import get_user_num_chats
 from Cutiepii_Robot.modules.helper_funcs.chat_status import sudo_plus
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_callback
 from Cutiepii_Robot import telethn
-
 
 def no_by_per(totalhp, percentage):
     """
@@ -416,6 +416,14 @@ def set_about_me(update: Update, context: CallbackContext):
                 ),
             )
 
+@cutiepii_callback(pattern=r"^pingCB")
+def pingCallback(update: Update, _):
+    query = update.callback_query
+    start_time = time.time()
+    requests.get("https://api.telegram.org")
+    end_time = time.time()
+    ping_time = round((end_time - start_time) * 1000, 3)
+    query.answer("Pong! {}ms".format(ping_time))
 
 @sudo_plus
 def stats(update, context):
@@ -447,8 +455,8 @@ def stats(update, context):
             status
             + "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS])
-            + "\n\n[⍙ GitHub](https://github.com/Ryomen-Sukuna/Kai) | [⍚ GitLab](https://gitlab.com/Ryomen-Sukuna/Kai)\n\n"
-            + "╘══「 by [Ryomen-Sukuna](github.com/Ryomen-Sukuna) 」\n",
+            + "\n\n[⍙ GitHub](https://github.com/Awesome-RJ/Cutiepii-Robot) | [⍚ Owner](t.me/Awesome_Rj)\n\n"
+            + "╘══「 by [Awesome RJ](https://github.com/Awesome-RJ) 」\n",
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=InlineKeyboardMarkup(kb),
             disable_web_page_preview=True,
