@@ -252,7 +252,7 @@ def start(update: Update, context: CallbackContext):
                 timeout=60,
             )
     else:
-        update.effective_message.reply_photo(
+        update.effective_message.reply_animation(
             START_IMG, caption= "<code>Cutiepii is Here For You💜\nI am Awake Since</code>: <code>{}</code>".format(
                 uptime
             ),
