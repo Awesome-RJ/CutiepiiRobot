@@ -222,7 +222,7 @@ def start(update: Update, context: CallbackContext):
                     update.effective_chat.id,
                     HELPABLE[mod].__help__,
                     InlineKeyboardMarkup(
-                        [[InlineKeyboardButton(text="Back", callback_data="help_back")]]
+                        [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
                     ),
                 )
 
@@ -252,10 +252,21 @@ def start(update: Update, context: CallbackContext):
                 timeout=60,
             )
     else:
-        update.effective_message.reply_animation(START_IMG, START_MSG.format(
+        update.effective_message.reply_photo(
+            START_IMG, caption= "<code>Cutiepii is Here For You💜\nI am Awake Since</code>: <code>{}</code>".format(
                 uptime
             ),
             parse_mode=ParseMode.HTML,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                  [
+                  InlineKeyboardButton(text="Support", url="https://telegram.dog/Black_Knights_Union_Support")
+                  ],
+                  [
+                  InlineKeyboardButton(text="Updates", url="https://telegram.dog/Black_Knights_Union")
+                  ]
+                ]
+            ),
         )
 
 
@@ -420,7 +431,7 @@ def get_help(update, context):
     # ONLY send help in PM
     if chat.type != chat.PRIVATE:
 
-        update.effective_message.reply_animation(
+        update.effective_message.reply_photo(
             HELP_IMG, HELP_MSG,
             reply_markup=InlineKeyboardMarkup(
                 [
