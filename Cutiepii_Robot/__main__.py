@@ -252,7 +252,7 @@ def start(update: Update, context: CallbackContext):
                 timeout=60,
             )
     else:
-        update.effective_message.reply_photo(START_IMG, START_MSG.format(
+        update.effective_message.reply_animation(START_IMG, START_MSG.format(
                 uptime
             ),
             parse_mode=ParseMode.HTML,
@@ -340,7 +340,7 @@ def help_button(update, context):
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton(text="Back", callback_data="help_back")]]
+                    [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
                 ),
             )
 
@@ -391,7 +391,7 @@ def cutiepii_callback_data(update, context):
             reply_markup=InlineKeyboardMarkup(
                 [
                  [
-                    InlineKeyboardButton(text="Back", callback_data="cutiepii_back")
+                    InlineKeyboardButton(text="[► Back ◄]", callback_data="cutiepii_back")
                  ]
                 ]
             ),
@@ -420,7 +420,7 @@ def get_help(update, context):
     # ONLY send help in PM
     if chat.type != chat.PRIVATE:
 
-        update.effective_message.reply_photo(
+        update.effective_message.reply_animation(
             HELP_IMG, HELP_MSG,
             reply_markup=InlineKeyboardMarkup(
                 [
@@ -447,7 +447,7 @@ def get_help(update, context):
             chat.id,
             text,
             InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text="《Back》", callback_data="help_back")]]
+                [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
             ),
         )
 
