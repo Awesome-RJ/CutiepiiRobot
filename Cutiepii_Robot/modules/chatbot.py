@@ -26,7 +26,7 @@ def add_chat(update: Update, context: CallbackContext):
         sql.set_kuki(chat.id)
         msg.reply_text("Cutiepii AI successfully enabled for this chat!")
         message = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
+            f"<b>{chat.title}:</b>\n"
             f"AI_ENABLED\n"
             f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
         )
