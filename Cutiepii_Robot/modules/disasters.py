@@ -32,11 +32,9 @@ def check_user_id(user_id: int, context: CallbackContext) -> Optional[str]:
     if not user_id:
         return "That...is a chat! baka ka omae?"
 
-    elif user_id == bot.id:
+    if user_id == bot.id:
         return "This does not work that way."
-
-    else:
-        return None
+    return None
 
 @dev_plus
 @gloggable
