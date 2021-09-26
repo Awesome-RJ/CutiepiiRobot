@@ -7,6 +7,7 @@ from telegram.ext import (
     CallbackContext,
     Filters,
     MessageHandler,
+    CommandHandler,
 )
 
 import Cutiepii_Robot.modules.sql.users_sql as sql
