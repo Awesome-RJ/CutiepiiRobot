@@ -12,7 +12,7 @@ from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 from telethon import events
 
-from telegram import MAX_MESSAGE_LENGTH, ParseMode, Update, MessageEntity, __version__ as ptbver
+from telegram import MAX_MESSAGE_LENGTH, ParseMode, Update, MessageEntity, __version__ as ptbver, InlineKeyboardButton
 from telegram.ext import CallbackContext, CommandHandler
 from telegram.ext.dispatcher import run_async
 from telegram.error import BadRequest
@@ -459,7 +459,7 @@ def stats(update, context):
             status
             + "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS])
-            + "\n\n[⍙ GitHub](https://github.com/Awesome-RJ/Cutiepii-Robot) | [⍚ Owner](t.me/Awesome_Rj)\n\n"
+            + "\n\n[✦ Support](https://t.me/Black_Knights_Union_Support) | [✦ Updates](https://t.me/Black_Knights_Union)\n\n"
             + "╘══「 by [Awesome RJ](https://github.com/Awesome-RJ) 」\n",
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=InlineKeyboardMarkup(kb),
@@ -473,9 +473,9 @@ def stats(update, context):
                         "\n*Bot statistics*:\n"
                         + "\n".join(mod.__stats__() for mod in STATS)
                     )
-                    + "\n\n⍙ [GitHub](https://github.com/Ryomen-Sukuna/Kai) | ⍚ [GitLab](https://gitlab.com/Ryomen-Sukuna/Kai)\n\n"
+                    + "\n\n✦ [Support](https://t.me/Black_Knights_Union_Support) | ✦ [Updates](https://t.me/Black_Knights_Union)\n\n"
                 )
-                + "╘══「 by [Ryomen-Sukuna](github.com/Ryomen-Sukuna) 」\n"
+                + "╘══「 by [Awesome-RJ](https://github.com/Awesome-RJ) 」\n"
             ),
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=InlineKeyboardMarkup(kb),
