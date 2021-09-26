@@ -54,11 +54,11 @@ def nhentai_data(noombers):
         links.append(link)
 
     for i in info:
-        if i["type"]=="tag":
+        if i["type"] == "tag":
             tag = i['name']
             tag = tag.split(" ")
             tag = "_".join(tag)
-            tags+=f"#{tag} "
+            tags += f"#{tag} "
         if i["type"] == "artist":
             artist = f"{i['name']} "
 
