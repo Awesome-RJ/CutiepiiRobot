@@ -396,14 +396,22 @@ def reply_filter(update, context):
                                     "Failed to send message: " + excp.message
                                 )
                 else:
-                    ENUM_FUNC_MAP[filt.file_type](
-                        chat.id,
-                        filt.file_id,
-                        caption=filtext,
-                        reply_to_message_id=message.message_id,
-                        parse_mode=ParseMode.HTML,
-                        reply_markup=keyboard,
-                    )
+                    if ENUM_FUNC_MAP[filt.file_type] == dispatcher.bot.send_sticker:
+                        ENUM_FUNC_MAP[filt.file_type](
+                            chat.id,
+                            filt.file_id,
+                            reply_to_message_id=message.message_id,
+                            reply_markup=keyboard,
+                        )
+                    else:
+                        ENUM_FUNC_MAP[filt.file_type](
+                            chat.id,
+                            filt.file_id,
+                            caption=markdown_to_html(filtext),
+                            reply_to_message_id=message.message_id,
+                            parse_mode=ParseMode.HTML,
+                            reply_markup=keyboard,
+                        )
                 break
             if filt.is_sticker:
                 message.reply_sticker(filt.reply)
