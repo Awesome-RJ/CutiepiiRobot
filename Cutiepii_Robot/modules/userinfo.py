@@ -444,15 +444,6 @@ def set_about_me(update: Update, context: CallbackContext):
                 ),
             )
 
-@cutiepii_callback(pattern=r"^pingCB")
-def pingCallback(update: Update, _):
-    query = update.callback_query
-    start_time = time.time()
-    requests.get("https://api.telegram.org")
-    end_time = time.time()
-    ping_time = round((end_time - start_time) * 1000, 3)
-    query.answer("Pong! {}ms".format(ping_time))
-
 @sudo_plus
 def stats(update, context):
     db_size = SESSION.execute(
@@ -477,7 +468,6 @@ def stats(update, context):
     status += "*• python-Telegram-Bot:* " + str(ptbver) + "\n"
     status += "*• Uptime:* " + str(botuptime) + "\n"
     status += "*• Database size:* " + str(db_size) + "\n"
-    kb = [[InlineKeyboardButton("Ping", callback_data="pingCB")]]
     try:
         update.effective_message.reply_text(
             status
@@ -486,7 +476,6 @@ def stats(update, context):
             + "\n\n[✦ Support](https://t.me/Black_Knights_Union_Support) | [✦ Updates](https://t.me/Black_Knights_Union)\n\n"
             + "╘══「 by [Awesome RJ](https://github.com/Awesome-RJ) 」\n",
             parse_mode=ParseMode.MARKDOWN,
-            reply_markup=InlineKeyboardMarkup(kb),
             disable_web_page_preview=True,
         )
     except BaseException:
