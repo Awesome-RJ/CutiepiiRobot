@@ -105,7 +105,7 @@ def dev_plus(func):
 
         if user.id in DEV_USERS:
             return func(update, context, *args, **kwargs)
-        elif not user:
+        if not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
             try:
@@ -130,7 +130,7 @@ def sudo_plus(func):
 
         if user and is_sudo_plus(chat, user.id):
             return func(update, context, *args, **kwargs)
-        elif not user:
+        if not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
             try:
@@ -154,7 +154,7 @@ def support_plus(func):
 
         if user and is_support_plus(chat, user.id):
             return func(update, context, *args, **kwargs)
-        elif DEL_CMDS and " " not in update.effective_message.text:
+        if DEL_CMDS and " " not in update.effective_message.text:
             try:
                 update.effective_message.delete()
             except:
@@ -174,10 +174,9 @@ def whitelist_plus(func):
 
         if user and is_whitelist_plus(chat, user.id):
             return func(update, context, *args, **kwargs)
-        else:
-            update.effective_message.reply_text(
-                f"You don't have access to use this.\nVisit @{SUPPORT_CHAT}",
-            )
+        update.effective_message.reply_text(
+            f"You don't have access to use this.\nVisit @{SUPPORT_CHAT}",
+        )
 
     return is_whitelist_plus_func
 
@@ -191,7 +190,7 @@ def user_admin(func):
 
         if user and is_user_admin(chat, user.id):
             return func(update, context, *args, **kwargs)
-        elif not user:
+        if not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
             try:
@@ -217,7 +216,7 @@ def user_admin_no_reply(func):
 
         if user and is_user_admin(chat, user.id):
             return func(update, context, *args, **kwargs)
-        elif not user:
+        if not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
             try:
@@ -256,8 +255,7 @@ def bot_admin(func):
 
         if is_bot_admin(chat, bot.id):
             return func(update, context, *args, **kwargs)
-        else:
-            update.effective_message.reply_text(not_admin, parse_mode=ParseMode.HTML)
+        update.effective_message.reply_text(not_admin, parse_mode=ParseMode.HTML)
 
     return is_admin
 
@@ -277,8 +275,7 @@ def bot_can_delete(func):
 
         if can_delete(chat, bot.id):
             return func(update, context, *args, **kwargs)
-        else:
-            update.effective_message.reply_text(cant_delete, parse_mode=ParseMode.HTML)
+        update.effective_message.reply_text(cant_delete, parse_mode=ParseMode.HTML)
 
     return delete_rights
 
@@ -300,8 +297,7 @@ def can_pin(func):
 
         if chat.get_member(bot.id).can_pin_messages:
             return func(update, context, *args, **kwargs)
-        else:
-            update.effective_message.reply_text(cant_pin, parse_mode=ParseMode.HTML)
+        update.effective_message.reply_text(cant_pin, parse_mode=ParseMode.HTML)
 
     return pin_rights
 
@@ -324,8 +320,7 @@ def can_promote(func):
 
         if chat.get_member(bot.id).can_promote_members:
             return func(update, context, *args, **kwargs)
-        else:
-            update.effective_message.reply_text(cant_promote, parse_mode=ParseMode.HTML)
+        update.effective_message.reply_text(cant_promote, parse_mode=ParseMode.HTML)
 
     return promote_rights
 
@@ -345,10 +340,9 @@ def can_restrict(func):
 
         if chat.get_member(bot.id).can_restrict_members:
             return func(update, context, *args, **kwargs)
-        else:
-            update.effective_message.reply_text(
-                cant_restrict, parse_mode=ParseMode.HTML,
-            )
+        update.effective_message.reply_text(
+            cant_restrict, parse_mode=ParseMode.HTML,
+        )
 
     return restrict_rights
 

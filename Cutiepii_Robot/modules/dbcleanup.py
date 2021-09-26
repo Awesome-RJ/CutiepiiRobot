@@ -54,15 +54,14 @@ def get_muted_chats(bot: Bot, update: Update, leave: bool = False):
 
     if not leave:
         return muted_chats
-    else:
-        for muted_chat in chat_list:
-            sleep(0.1)
-            try:
-                bot.leaveChat(muted_chat, timeout=120)
-            except:
-                pass
-            user_sql.rem_chat(muted_chat)
-        return muted_chats
+    for muted_chat in chat_list:
+        sleep(0.1)
+        try:
+            bot.leaveChat(muted_chat, timeout=120)
+        except:
+            pass
+        user_sql.rem_chat(muted_chat)
+    return muted_chats
 
 def get_invalid_chats(update: Update, context: CallbackContext, remove: bool = False):
     bot = context.bot
