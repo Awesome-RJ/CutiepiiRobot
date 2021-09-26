@@ -92,3 +92,4 @@ nudepy
 textblob
 requests_html
 bs4
+multicolorcaptcha
