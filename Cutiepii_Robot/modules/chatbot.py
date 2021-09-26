@@ -81,7 +81,7 @@ def chatbot(update: Update, context: CallbackContext):
             return
         Message = message.text
         bot.send_chat_action(chat_id, action="typing")
-        kukiurl = requests.get('https://www.kuki-api.tk/api/Cutiepii/Rajkumar/message='+Message)
+        kukiurl = requests.get('https://kukichatai-kukichat.vercel.app/api/Cutiepii/Rajkumar/message='+Message)
         Kuki = json.loads(kukiurl.text)
         kuki = Kuki['reply']
         sleep(0.3)
