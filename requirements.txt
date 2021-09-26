@@ -86,7 +86,6 @@ img2pdf
 google-api-python-client
 secureme
 git+https://github.com/Awesome-RJ/gogoanimeapi.git
-git+https://github.com/python-telegram-bot/ptbcontrib.git
 better_profanity
 pydub
 nudepy
