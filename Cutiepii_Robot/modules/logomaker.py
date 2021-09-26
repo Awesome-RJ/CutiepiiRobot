@@ -2,7 +2,8 @@ import os
 import io
 import requests
 import shutil 
-import random, re
+import random
+import re
 import glob
 import time
 
