@@ -142,12 +142,10 @@ def chats(update: Update, context: CallbackContext):
 
 def chat_checker(update: Update, context: CallbackContext):
     bot = context.bot
-    try:
-        if update.effective_message.chat.get_member(bot.id).can_send_messages is False:
-            bot.leaveChat(update.effective_message.chat.id)
-    except Unauthorized:
-        pass
+    if update.effective_message.chat.get_member(bot.id).can_send_messages is False:
+        bot.leaveChat(update.effective_message.chat.id)
 
+        
 
 def __user_info__(user_id):
     if user_id in [777000, 1087968824]:
