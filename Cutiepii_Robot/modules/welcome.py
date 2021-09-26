@@ -15,7 +15,7 @@ from Cutiepii_Robot import (
     LOGGER,
     dispatcher,
 )
-from SaitamaRobot.modules.helper_funcs.chat_status import (
+from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_user_ban_protected,
     user_admin,
 )
