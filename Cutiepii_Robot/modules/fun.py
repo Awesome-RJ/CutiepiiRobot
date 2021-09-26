@@ -337,45 +337,16 @@ def slap(update: Update, context: CallbackContext):
     reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-def pat(update: Update, context: CallbackContext):
-	bot = context.bot
-	args = context.args
-	message = update.effective_message
+def pat(update: Update, _):
+    msg = update.effective_message
+    pat = requests.get("https://some-random-api.ml/animu/pat").json()
+    link = pat.get("link")
+    if not link:
+        msg.reply_text("No URL was received from the API!")
+        return
+    msg.reply_video(link)
 
-	reply_to = message.reply_to_message or message
-
-	curr_user = html.escape(message.from_user.first_name)
-	user_id = extract_user(message, args)
-
-	if user_id:
-	    patted_user = bot.get_chat(user_id)
-	    user1 = curr_user
-	    user2 = html.escape(patted_user.first_name)
-
-	else:
-	    user1 = bot.first_name
-	    user2 = curr_user
-
-	pat_type = random.choice(("Text", "Gif", "Sticker"))
-	if pat_type == "Gif":
-	    try:
-	        temp = random.choice(fun_strings.PAT_GIFS)
-	        reply_to.reply_animation(temp)
-	    except BadRequest:
-	        pat_type = "Text"
-
-	if pat_type == "Sticker":
-	    try:
-	        temp = random.choice(fun_strings.PAT_STICKERS)
-	        reply_to.reply_sticker(temp)
-	    except BadRequest:
-	        pat_type = "Text"
-
-	if pat_type == "Text":
-	    temp = random.choice(fun_strings.PAT_TEMPLATES)
-	    reply = temp.format(user1=user1, user2=user2)
-	    reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
-
+	
 
 def roll(update: Update, context: CallbackContext):
     update.message.reply_text(random.choice(range(1, 7)))
