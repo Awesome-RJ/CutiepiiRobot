@@ -403,7 +403,6 @@ def reply_filter(update, context):
                         parse_mode=ParseMode.HTML,
                         reply_markup=keyboard,
                     )
-                    )
                 break
             if filt.is_sticker:
                 message.reply_sticker(filt.reply)
