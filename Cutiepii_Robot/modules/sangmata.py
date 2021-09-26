@@ -63,7 +63,6 @@ async def _(event):
 
     chat = "Sangmatainfo_bot"
     uid = reply_message.sender_id
-    reply_message.sender
 
     if reply_message.sender.bot:
 
