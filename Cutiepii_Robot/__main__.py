@@ -87,11 +87,11 @@ def get_readable_time(seconds: int) -> str:
 HELP_MSG = "Click the button below to get help manu in your pm."
 START_MSG = "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>"
 
-HELP_IMG = "https://telegra.ph/file/57d1e105345723fea0edd.png"
-START_IMG = "https://telegra.ph/file/de87fe239ccbd521da0fb.gif"
+HELP_IMG = "https://telegra.ph/file/5fd61a85efb861ee09e27.jpg"
+START_IMG = "https://telegra.ph/file/45209991717c356767ab8.gif"
     
 PM_START_TEXT = """
-────「 {} [:)](https://telegra.ph/file/b516332637b848ec0dfe5.jpg) 」────
+────「 [{}](https://telegra.ph/file/3067d3fed3808949a337c.jpg) 」────
 *Hola! {},*
 *I am an Anime themed advance group management bot with a lot of Sexy Features.*
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
