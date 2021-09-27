@@ -79,8 +79,8 @@ async def chika(event):
 @register(pattern="^/truth ?(.*)")
 async def _(td):
     try:
-        resp = requests.get("https://liones-api.herokuapp.com/games/truth").json()
-        results = f"{resp['truth']}"
+        resp = requests.get("https://api-tede.herokuapp.com/api/truth-en").json()
+        results = f"{resp['message']}"
         return await td.reply(results)
     except Exception:
         await td.reply(f"Error Report @{SUPPORT_CHAT}")
@@ -89,8 +89,8 @@ async def _(td):
 @register(pattern="^/dare ?(.*)")
 async def _(dr):
     try:
-        resp = requests.get("https://liones-api.herokuapp.com/games/dares").json()
-        results = f"{resp['dare']}"
+        resp = requests.get("https://api-tede.herokuapp.com/api/dare-en").json()
+        results = f"{resp['message']}"
         return await dr.reply(results)
     except Exception:
         await dr.reply(f"Error Report @{SUPPORT_CHAT}")
