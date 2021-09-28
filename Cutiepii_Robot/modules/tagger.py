@@ -39,5 +39,9 @@ async def _(event):
 
 __mod_name__ = "Tagger"
 __help__ = """
-  ➢ `/tagall : Tag everyone in a chat
+  ➢ `/tagall` : Tag everyone in a chat.
+  ➢ `/tagall` : Mention All Members
+Exp:- /all <Text> or <reply>
+
+Note:- This `/tagall` Command can mention members upto 10,000 in groups and can mention members upto 200 in channels !
 """
