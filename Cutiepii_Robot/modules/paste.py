@@ -1,71 +1,73 @@
-import requests
+import asyncio
+import os
+import re
 
-from telegram import ParseMode, Update
-from telegram.ext import CallbackContext, run_async
+import aiofiles
+from pykeyboard import InlineKeyboard
+from pyrogram import filters
+from pyrogram.types import InlineKeyboardButton
 
-from Cutiepii_Robot import dispatcher
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot import pbot as app, aiohttpsession as session
+from Cutiepii_Robot.utils.errors import capture_err
+from Cutiepii_Robot.utils.pastebin import paste
 
-def paste(update: Update, context: CallbackContext):
-    args = context.args
-    message = update.effective_message
-
-    if message.reply_to_message:
-        pasting = message.reply_to_message.text    
-    
-    elif len(args) >= 1:
-        pasting = message.text.split(None, 1)[1]
-
-    else:
-        message.reply_text("What am I supposed to do with this?")
-        return
-   
-    TIMEOUT = 3
-    key = (
-        requests.post("https://nekobin.com/", data={"content": pasting}, timeout=TIMEOUT)
-        .json()
-        .get("result")
-        .get("key")
-    )
-
-    url = f"https://nekobin.com/{key}"
-
-    reply_text = f"Pasted to *Nekobin* : {url}"
-
-    message.reply_text(
-        reply_text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True,
-    )
+pattern = re.compile(
+    r"^text/|json$|yaml$|xml$|toml$|x-sh$|x-shellscript$"
+)
 
 
-def hastebin(update: Update, context: CallbackContext):
-    args = context.args
-    msg = update.effective_message  
-    
-    if msg.reply_to_message:        
-        mean = msg.reply_to_message.text
-               
-    elif len(args) >= 1:
-        mean = msg.text.split(None, 1)[1]
-   
-    else:
-    	msg.reply_text("reply to any message or just do /paste <what you want to paste>")  
-    	return
-                                                                              
-    url = "https://hastebin.com/documents"
-    key = (
-        requests.post(url, data=mean.encode("UTF-8"))
-        .json()       
-        .get('key')
-    )
-    pasted = f"Pasted to HasteBin: https://hastebin.com/{key}"
-    msg.reply_text(pasted, disable_web_page_preview=True)
-    
-   
-NEKO_BIN_HANDLER = DisableAbleCommandHandler("npaste", paste, run_async=True)
-HASTE_BIN_HANDLER = DisableAbleCommandHandler("paste", hastebin, run_async=True)
+async def isPreviewUp(preview: str) -> bool:
+    for _ in range(7):
+        try:
+            async with session.head(preview, timeout=2) as resp:
+                status = resp.status
+                size = resp.content_length
+        except asyncio.exceptions.TimeoutError:
+            return False
+        if status == 404 or (status == 200 and size == 0):
+            await asyncio.sleep(0.4)
+        else:
+            return True if status == 200 else False
+    return False
 
-dispatcher.add_handler(NEKO_BIN_HANDLER)
-dispatcher.add_handler(HASTE_BIN_HANDLER)
 
-__command_list__ = ["npaste", "hpaste"]
-__handlers__ = [HASTE_BIN_HANDLER]
+@app.on_message(filters.command("paste") & ~filters.edited)
+@capture_err
+async def paste_func(_, message):
+    if not message.reply_to_message:
+        return await message.reply_text(
+            "Reply To A Message With /paste"
+        )
+    m = await message.reply_text("Pasting...")
+    if message.reply_to_message.text:
+        content = str(message.reply_to_message.text)
+    elif message.reply_to_message.document:
+        document = message.reply_to_message.document
+        if document.file_size > 1048576:
+            return await m.edit(
+                "You can only paste files smaller than 1MB."
+            )
+        if not pattern.search(document.mime_type):
+            return await m.edit("Only text files can be pasted.")
+        doc = await message.reply_to_message.download()
+        async with aiofiles.open(doc, mode="r") as f:
+            content = await f.read()
+        os.remove(doc)
+    link = await paste(content)
+    preview = link + "/preview.png"
+    button = InlineKeyboard(row_width=1)
+    button.add(InlineKeyboardButton(text="Paste Link", url=link))
+
+    if await isPreviewUp(preview):
+        try:
+            await message.reply_photo(
+                photo=preview, quote=False, reply_markup=button
+            )
+            return await m.delete()
+        except Exception:
+            pass
+    return await m.edit(link)
+
+
+
+__mod_name__ = "Paste"
