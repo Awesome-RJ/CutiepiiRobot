@@ -14,6 +14,7 @@ from Cutiepii_Robot import (
     sw,
     LOGGER,
     dispatcher,
+    SUPPORT_CHAT,
 )
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_user_ban_protected,
@@ -241,7 +242,7 @@ def new_member(update: Update, context: CallbackContext):  # sourcery no-metrics
             # Welcome yourself
             if new_mem.id == bot.id:
                 update.effective_message.reply_text(
-                    "Thanks for adding me! Join @noha_bot_support for support.",
+                    f"Thanks for adding me! Join @{SUPPORT_CHAT} for support.",
                     reply_to_message_id=reply,
                 )
                 continue
