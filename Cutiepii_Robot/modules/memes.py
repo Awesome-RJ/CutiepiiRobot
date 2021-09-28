@@ -17,9 +17,12 @@ from selenium.webdriver.chrome.options import Options
 from telethon.tl.types import DocumentAttributeFilename, InputMessagesFilterDocument, InputMediaDice
 from zalgo_text import zalgo
 
+from pyrogram import filters
 
+from Cutiepii_Robot.utils.errors import capture_err
+from Cutiepii_Robot.utils.carbon import make_carbon
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import telethn, ubot, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT, GOOGLE_CHROME_BIN, CHROME_DRIVER
+from Cutiepii_Robot import telethn, ubot, pgram, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT, GOOGLE_CHROME_BIN, CHROME_DRIVER
 
 nltk.download("punkt")
 nltk.download("averaged_perceptron_tagger")
@@ -313,61 +316,24 @@ async def msg(event):
     reply_text += " 😭"
     await event.reply(reply_text)
 
-
-CARBONLANG = "en"
-
-
-@register(pattern="^/carbon (.*)")
-async def carbon_api(e):
-
-    jj = "`Processing..`"
-    gg = await e.reply(jj)
-    CARBON = "https://carbon.now.sh/?bg=rgba(239%2C40%2C44%2C1)&t=one-light&wt=none&l=application%2Ftypescript&ds=true&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fl=1&fm=Hack&fs=14px&lh=143%25&si=false&es=2x&wm=false&code={code}"
-    global CARBONLANG
-    code = e.pattern_match.group(1)
-    await gg.edit("`Processing..\n25%`")
-    os.chdir("./")
-    if os.path.isfile("./carbon.png"):
-        os.remove("./carbon.png")
-    url = CARBON.format(code=code, lang=CARBONLANG)
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.binary_location = GOOGLE_CHROME_BIN
-    chrome_options.add_argument("--window-size=1920x1080")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-gpu")
-    prefs = {"download.default_directory": "./"}
-    chrome_options.add_experimental_option("prefs", prefs)
-    driver = webdriver.Chrome(executable_path=CHROME_DRIVER, options=chrome_options)
-    driver.get(url)
-    await gg.edit("`Processing..\n50%`")
-    download_path = "./"
-    driver.command_executor._commands["send_command"] = (
-        "POST",
-        "/session/$sessionId/chromium/send_command",
-    )
-    params = {
-        "cmd": "Page.setDownloadBehavior",
-        "params": {"behavior": "allow", "downloadPath": download_path},
-    }
-    driver.execute("send_command", params)
-    driver.find_element_by_xpath("//button[contains(text(),'Export')]").click()
-    await gg.edit("`Processing..\n75%`")
-    while not os.path.isfile("./carbon.png"):
-        await asyncio.sleep(1)
-    await gg.edit("`Processing..\n100%`")
-    file = "./carbon.png"
-    await e.edit("`Uploading..`")
-    await telethn.send_file(
-        e.chat_id,
-        file,
-        caption="Made using [Carbon](https://carbon.now.sh/about/),\
-        \na project by [Dawn Labs](https://dawnlabs.io/)",
-        force_document=True,
-    )
-    os.remove("./carbon.png")
-    driver.quit()
+    
+@pgram.on_message(filters.command("carbon"))
+@capture_err
+async def carbon_func(_, message):
+    if not message.reply_to_message:
+        return await message.reply_text(
+            "Reply to a text message to make carbon."
+        )
+    if not message.reply_to_message.text:
+        return await message.reply_text(
+            "Reply to a text message to make carbon."
+        )
+    m = await message.reply_text("Preparing Carbon.")
+    carbon = await make_carbon(message.reply_to_message.text)
+    await m.edit("Uploading")
+    await pbot.send_document(message.chat.id, carbon)
+    await m.delete()
+    carbon.close()
 
 
 @register(pattern="^/deepfry(?: |$)(.*)")
