@@ -7,7 +7,7 @@ from pykeyboard import InlineKeyboard
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton
 
-from Cutiepii_Robot import pbot as app, aiohttpsession as session
+from Cutiepii_Robot import pgram, aiohttpsession
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.pastebin import paste
 
@@ -19,7 +19,7 @@ pattern = re.compile(
 async def isPreviewUp(preview: str) -> bool:
     for _ in range(7):
         try:
-            async with session.head(preview, timeout=2) as resp:
+            async with aiohttpsession.head(preview, timeout=2) as resp:
                 status = resp.status
                 size = resp.content_length
         except asyncio.exceptions.TimeoutError:
@@ -31,7 +31,7 @@ async def isPreviewUp(preview: str) -> bool:
     return False
 
 
-@app.on_message(filters.command("paste") & ~filters.edited)
+@pgram.on_message(filters.command("paste") & ~filters.edited)
 @capture_err
 async def paste_func(_, message):
     if not message.reply_to_message:
