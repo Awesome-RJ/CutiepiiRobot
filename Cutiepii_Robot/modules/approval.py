@@ -1,15 +1,16 @@
 import html
-from KanekiRobot.modules.disable import DisableAbleCommandHandler
-from KanekiRobot import dispatcher, DRAGONS
-from KanekiRobot.modules.helper_funsc.extraction import extract_user
+import Cutiepii_Robot.modules.sql.approve_sql as sql
+
 from telegram.ext import CallbackContext, CallbackQueryHandler, Filters
-import KanekiRobot.modules.sql.approve_sql as sql
-from KanekiRobot.modules.helper_funsc.chat_status import user_admin
-from KanekiRobot.modules.log_channel import loggable
 from telegram import ParseMode, InlineKeyboardMarkup, InlineKeyboardButton, Update
 from telegram.utils.helpers import mention_html
 from telegram.error import BadRequest
 
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot import dispatcher, DRAGONS
+from Cutiepii_Robot.modules.helper_funsc.extraction import extract_user
+from Cutiepii_Robot.modules.log_channel import loggable
+from Cutiepii_Robot.modules.helper_funsc.chat_status import user_admin
 
 @loggable
 @user_admin
