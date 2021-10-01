@@ -1,20 +1,19 @@
 import html
-import Cutiepii_Robot.modules.sql.approve_sql as sql
-
-from telegram.ext import CallbackContext, CallbackQueryHandler, Filters
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot import dispatcher, DRAGONS
+from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
+from telegram.ext import CallbackContext, run_async, CallbackQueryHandler
+import Cutiepii_Robot.modules.redis.approvals_redis as redis
+from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
+from Cutiepii_Robot.modules.log_channel import loggable
 from telegram import ParseMode, InlineKeyboardMarkup, InlineKeyboardButton, Update
 from telegram.utils.helpers import mention_html
 from telegram.error import BadRequest
 
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot import dispatcher, DRAGONS
-from Cutiepii_Robot.modules.helper_funsc.extraction import extract_user
-from Cutiepii_Robot.modules.log_channel import loggable
-from Cutiepii_Robot.modules.helper_funsc.chat_status import user_admin
 
 @loggable
 @user_admin
-def approve(update: Update, context: CallbackContext):
+def approve(update, context):
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -30,20 +29,20 @@ def approve(update: Update, context: CallbackContext):
         member = chat.get_member(user_id)
     except BadRequest:
         return ""
-    if member.status in ("administrator", "creator"):
+    if member.status == "administrator" or member.status == "creator":
         message.reply_text(
-            "User is already admin - locks, blocklists, and antiflood already don't apply to them."
+            "No need to approve an Admin!"
         )
         return ""
-    if sql.is_approved(message.chat_id, user_id):
+    if redis.is_approved(message.chat_id, user_id):
         message.reply_text(
             f"[{member.user['first_name']}](tg://user?id={member.user['id']}) is already approved in {chat_title}",
             parse_mode=ParseMode.MARKDOWN,
         )
         return ""
-    sql.approve(message.chat_id, user_id)
+    redis.approve(message.chat_id, user_id)
     message.reply_text(
-        f"[{member.user['first_name']}](tg://user?id={member.user['id']}) has been approved in {chat_title}! They will now be ignored by automated admin actions like locks, blocklists, and antiflood.",
+        f"[{member.user['first_name']}](tg://user?id={member.user['id']}) has been approved in {chat_title}! They will now be ignored by admin actions like locks, blacklists, warns, bans, mutes, kicks and antiflood",
         parse_mode=ParseMode.MARKDOWN,
     )
     log_message = (
@@ -58,7 +57,7 @@ def approve(update: Update, context: CallbackContext):
 
 @loggable
 @user_admin
-def disapprove(update: Update, context: CallbackContext):
+def disapprove(update, context):
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -74,13 +73,13 @@ def disapprove(update: Update, context: CallbackContext):
         member = chat.get_member(user_id)
     except BadRequest:
         return ""
-    if member.status in ("administrator", "creator"):
+    if member.status == "administrator" or member.status == "creator":
         message.reply_text("This user is an admin, they can't be unapproved.")
         return ""
-    if not sql.is_approved(message.chat_id, user_id):
+    if not redis.is_approved(message.chat_id, user_id):
         message.reply_text(f"{member.user['first_name']} isn't approved yet!")
         return ""
-    sql.disapprove(message.chat_id, user_id)
+    redis.disapprove(message.chat_id, user_id)
     message.reply_text(
         f"{member.user['first_name']} is no longer approved in {chat_title}."
     )
@@ -95,15 +94,15 @@ def disapprove(update: Update, context: CallbackContext):
 
 
 @user_admin
-def approved(update: Update, context: CallbackContext):
+def approved(update, context):
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
     msg = "The following users are approved.\n"
-    approved_users = sql.list_approved(message.chat_id)
+    approved_users = redis.list_approved(message.chat_id)
     for i in approved_users:
-        member = chat.get_member(int(i.user_id))
-        msg += f"- `{i.user_id}`: {member.user['first_name']}\n"
+        member = chat.get_member(int(i))
+        msg += f"- `{i}`: {member.user['first_name']}\n"
     if msg.endswith("approved.\n"):
         message.reply_text(f"No users are approved in {chat_title}.")
         return ""
@@ -111,8 +110,7 @@ def approved(update: Update, context: CallbackContext):
         message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
-@user_admin
-def approval(update: Update, context: CallbackContext):
+def approval(update, context):
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -123,9 +121,9 @@ def approval(update: Update, context: CallbackContext):
             "I don't know who you're talking about, you're going to need to specify a user!"
         )
         return ""
-    if sql.is_approved(message.chat_id, user_id):
+    if redis.is_approved(message.chat_id, user_id):
         message.reply_text(
-            f"{member.user['first_name']} is an approved user. Locks, antiflood, and blocklists won't apply to them."
+            f"{member.user['first_name']} is an approved user. Locks, antiflood, warns, bans, mutes, kicks and blacklists won't apply to them."
         )
     else:
         message.reply_text(
@@ -139,24 +137,22 @@ def unapproveall(update: Update, context: CallbackContext):
     member = chat.get_member(user.id)
     if member.status != "creator" and user.id not in DRAGONS:
         update.effective_message.reply_text(
-            "Only the chat owner can unapprove all users at once.",
+            "Only the chat owner can unapprove all users at once."
         )
     else:
         buttons = InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
-                        text="Unapprove all users",
-                        callback_data="unapproveall_user",
-                    ),
+                        text="Unapprove all users", callback_data="unapproveall_user"
+                    )
                 ],
                 [
                     InlineKeyboardButton(
-                        text="Cancel",
-                        callback_data="unapproveall_cancel",
-                    ),
+                        text="Cancel", callback_data="unapproveall_cancel"
+                    )
                 ],
-            ],
+            ]
         )
         update.effective_message.reply_text(
             f"Are you sure you would like to unapprove ALL users in {chat.title}? This action cannot be undone.",
@@ -172,10 +168,10 @@ def unapproveall_btn(update: Update, context: CallbackContext):
     member = chat.get_member(query.from_user.id)
     if query.data == "unapproveall_user":
         if member.status == "creator" or query.from_user.id in DRAGONS:
-            approved_users = sql.list_approved(chat.id)
-            users = [int(i.user_id) for i in approved_users]
+            approved_users = redis.list_approved(chat.id)
+            users = [int(i) for i in approved_users]
             for user_id in users:
-                sql.disapprove(chat.id, user_id)
+                redis.disapprove(chat.id, user_id)
             message.edit_text("Successfully Unapproved all user in this Chat.")
             return
 
@@ -202,7 +198,6 @@ That's what approvals are for - approve of trustworthy users to allow them to se
   ➢ `/approval`*:* Check a user's approval status in this chat.
 
 *Admins commands*:
-  ➢ `/approval`*:* Check a user's approval status in this chat.
   ➢ `/approve`*:* Approve of a user. Locks, blacklists, and antiflood won't apply to them anymore.
   ➢ `/unapprove`*:* Unapprove of a user. They will now be subject to locks, blacklists, and antiflood again.
   ➢ `/approved`*:* List all approved users.
@@ -212,13 +207,11 @@ That's what approvals are for - approve of trustworthy users to allow them to se
 """
 
 APPROVE = DisableAbleCommandHandler("approve", approve, run_async=True)
-DISAPPROVE = DisableAbleCommandHandler("unapprove", disapprove, run_async=True)
+DISAPPROVE = DisableAbleCommandHandler(["unapprove", "disapprove"], disapprove, run_async=True)
 APPROVED = DisableAbleCommandHandler("approved", approved, run_async=True)
 APPROVAL = DisableAbleCommandHandler("approval", approval, run_async=True)
 UNAPPROVEALL = DisableAbleCommandHandler("unapproveall", unapproveall, run_async=True)
-UNAPPROVEALL_BTN = CallbackQueryHandler(
-    unapproveall_btn, pattern=r"unapproveall_.*", run_async=True
-)
+UNAPPROVEALL_BTN = CallbackQueryHandler(unapproveall_btn, pattern=r"unapproveall_.*", run_async=True)
 
 dispatcher.add_handler(APPROVE)
 dispatcher.add_handler(DISAPPROVE)
