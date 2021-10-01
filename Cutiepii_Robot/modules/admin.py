@@ -26,29 +26,6 @@ from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 
 @bot_admin
 @user_admin
-def set_desc(update: Update, context: CallbackContext):
-    msg = update.effective_message
-    chat = update.effective_chat
-    user = update.effective_user
-
-    if user_can_changeinfo(chat, user, context.bot.id) is False:
-        return msg.reply_text("You're missing rights to change chat info!")
-
-    tesc = msg.text.split(None, 1)
-    if len(tesc) >= 2:
-        desc = tesc[1]
-    else:
-        return msg.reply_text("Setting empty description won't do anything!")
-    try:
-        if len(desc) > 255:
-            return msg.reply_text("Description must needs to be under 255 characters!")
-        context.bot.set_chat_description(chat.id, desc)
-        msg.reply_text(f"Successfully updated chat description in {chat.title}!")
-    except BadRequest as excp:
-        msg.reply_text(f"Error! {excp.message}.")
-
-@bot_admin
-@user_admin
 def set_sticker(update: Update, context: CallbackContext):
     msg = update.effective_message
     chat = update.effective_chat
@@ -127,7 +104,29 @@ def rmchatpic(update: Update, context: CallbackContext):
     except BadRequest as excp:
         msg.reply_text(f"Error! {excp.message}.")
         return
-        
+    
+@bot_admin
+@user_admin
+def set_desc(update: Update, context: CallbackContext):
+    msg = update.effective_message
+    chat = update.effective_chat
+    user = update.effective_user
+
+    if user_can_changeinfo(chat, user, context.bot.id) is False:
+        return msg.reply_text("You're missing rights to change chat info!")
+
+    tesc = msg.text.split(None, 1)
+    if len(tesc) >= 2:
+        desc = tesc[1]
+    else:
+        return msg.reply_text("Setting empty description won't do anything!")
+    try:
+        if len(desc) > 255:
+            return msg.reply_text("Description must needs to be under 255 characters!")
+        context.bot.set_chat_description(chat.id, desc)
+        msg.reply_text(f"Successfully updated chat description in {chat.title}!")
+    except BadRequest as excp:
+        msg.reply_text(f"Error! {excp.message}.")        
         
 @bot_admin
 @user_admin
@@ -726,7 +725,7 @@ __help__ = """
   ➢ `/setrules <your rules here>`*:* set the rules for this chat.
   ➢ `/clearrules`*:* clear the rules for this chat.
 """
-SET_DESC_HANDLER = CommandHandler("setdesc", setdesc, filters=Filters.chat_type.groups, run_async=True)
+SET_DESC_HANDLER = CommandHandler("setdesc", set_desc, filters=Filters.chat_type.groups, run_async=True)
 SET_STICKER_HANDLER = CommandHandler("setsticker", set_sticker, filters=Filters.chat_type.groups, run_async=True)
 SETCHATPIC_HANDLER = CommandHandler("setgpic", setchatpic, filters=Filters.chat_type.groups, run_async=True)
 RMCHATPIC_HANDLER = CommandHandler("delgpic", rmchatpic, filters=Filters.chat_type.groups, run_async=True)
