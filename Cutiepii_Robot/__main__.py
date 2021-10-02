@@ -674,7 +674,7 @@ def main():
 
     if EVENT_LOGS is not None and isinstance(EVENT_LOGS, str):
         try:
-            dispatcher.bot.sendMessage("New instance has been deployed successfully...")
+            dispatcher.bot.send_message("New instance has been deployed successfully...")
         except Unauthorized:
             LOGGER.warning(
                 "Bot isnt able to send message to channel, go and check!",
