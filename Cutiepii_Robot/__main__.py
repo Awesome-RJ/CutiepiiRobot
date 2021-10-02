@@ -25,10 +25,11 @@ from Cutiepii_Robot import (
     StartTime,
     telethn,
     updater,
-    pgram, 
+    pgram,
     ubot,
     BOT_USERNAME,
-    BOT_NAME
+    BOT_NAME,
+    EVENT_LOGS,
     )
 
 # needed to dynamically load modules
@@ -670,6 +671,17 @@ def migrate_chats(update: Update, context: CallbackContext):
     raise DispatcherHandlerStop
     
 def main():
+
+    if EVENT_LOGS is not None and isinstance(EVENT_LOGS, str):
+        try:
+            dispatcher.bot.sendMessage("New instance has been deployed successfully...")
+        except Unauthorized:
+            LOGGER.warning(
+                "Bot isnt able to send message to channel, go and check!",
+            )
+        except BadRequest as e:
+            LOGGER.warning(e.message)
+            
     test_handler = DisableAbleCommandHandler("test", test, run_async=True)
     start_handler = DisableAbleCommandHandler("start", start, run_async=True)
 
