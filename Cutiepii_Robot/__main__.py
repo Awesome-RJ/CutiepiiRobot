@@ -671,7 +671,6 @@ def migrate_chats(update: Update, context: CallbackContext):
     raise DispatcherHandlerStop
     
 def main():
-    
     test_handler = DisableAbleCommandHandler("test", test, run_async=True)
     start_handler = DisableAbleCommandHandler("start", start, run_async=True)
 
