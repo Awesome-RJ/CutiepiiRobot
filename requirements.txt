@@ -1,7 +1,7 @@
 alphabet_detector
-beautifulsoup4
+beautifulsoup4==4.9.1
 bleach
-cachetools
+cachetools==4.2.2
 CurrencyConverter
 emoji
 feedparser
@@ -40,7 +40,7 @@ youtube_search
 pytube
 youtube_search_python
 pymongo
-motor
+motor<2.4.0,>=2.1.0
 dnspython
 redis
 gtts
@@ -93,3 +93,4 @@ textblob
 requests_html
 bs4
 multicolorcaptcha
+launchpadlib==1.10.13
