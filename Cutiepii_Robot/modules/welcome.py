@@ -1321,7 +1321,7 @@ dispatcher.add_handler(WELCOME_MUTE_HELP)
 dispatcher.add_handler(CAPTCHA_BUTTON_VERIFY_HANDLER)
 
 __mod_name__ = "Greetings"
-__command_list__ 
+__command_list__ = []
 __handlers__ = [
     NEW_MEM_HANDLER,
     LEFT_MEM_HANDLER,
