@@ -5,9 +5,8 @@ import zipfile
 from telethon import types
 from telethon.tl import functions
 
-from Cutiepii_Robot import TEMP_DOWNLOAD_DIRECTORY
+from Cutiepii_Robot import TEMP_DOWNLOAD_DIRECTORY, telethn
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import telethn
 
 
 async def is_register_admin(chat, user):
@@ -40,16 +39,14 @@ async def _(event):
     if not event.is_reply:
         await event.reply("Reply to a file to compress it.")
         return
-    if (
-        event.is_group
-        and not await is_register_admin(event.input_chat, event.message.sender_id)
-    ):
-        await event.reply(
-            "Hai.. You are not admin.. You can't use this command.. But you can use in my pm"
-        )
-        return
+    if event.is_group:
+        if not (await is_register_admin(event.input_chat, event.message.sender_id)):
+            await event.reply(
+                "Hey, You are not admin. You can't use this command, But you can use in my pm 🙂"
+            )
+            return
 
-    mone = await event.reply("`⏳️ Please wait...`")
+    mone = await event.reply("⏳️ Please wait...")
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -72,6 +69,7 @@ async def _(event):
         allow_cache=False,
         reply_to=event.message.id,
     )
+    await mone.delete()
 
 
 def zipdir(path, ziph):
@@ -115,6 +113,7 @@ async def is_register_admin(chat, user):
         )
     return None
 
+
 @register(pattern="^/unzip")
 async def _(event):
     if event.fwd_from:
@@ -123,16 +122,14 @@ async def _(event):
     if not event.is_reply:
         await event.reply("Reply to a zip file.")
         return
-    if (
-        event.is_group
-        and not await is_register_admin(event.input_chat, event.message.sender_id)
-    ):
-        await event.reply(
-            " Hai.. You are not admin.. You can't use this command.. But you can use in my pm🙈"
-        )
-        return
+    if event.is_group:
+        if not (await is_register_admin(event.input_chat, event.message.sender_id)):
+            await event.reply(
+                "Hey, You are not admin. You can't use this command, But you can use in my pm 🙂"
+            )
+            return
 
-    mone = await event.reply("Processing ...")
+    mone = await event.reply("Processing...")
     if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
@@ -152,7 +149,7 @@ async def _(event):
         with zipfile.ZipFile(downloaded_file_name, "r") as zip_ref:
             zip_ref.extractall(extracted)
         filename = sorted(get_lst_of_files(extracted, []))
-        await event.reply("Unzipping now")
+        await mone.edit("Unzipping now 😌")
         for single_file in filename:
             if os.path.exists(single_file):
                 caption_rts = os.path.basename(single_file)
@@ -161,9 +158,11 @@ async def _(event):
                 document_attributes = []
                 if single_file.endswith((".mp4", ".mp3", ".flac", ".webm")):
                     metadata = extractMetadata(createParser(single_file))
+                    duration = 0
                     width = 0
                     height = 0
-                    duration = metadata.get("duration").seconds if metadata.has("duration") else 0
+                    if metadata.has("duration"):
+                        duration = metadata.get("duration").seconds
                     if os.path.exists(thumb_image_path):
                         metadata = extractMetadata(createParser(thumb_image_path))
                         if metadata.has("width"):
@@ -196,6 +195,7 @@ async def _(event):
                         reply_to=event.message.id,
                     )
                     continue
+                await mone.delete()
                 os.remove(single_file)
         os.remove(downloaded_file_name)
 
@@ -208,3 +208,6 @@ def get_lst_of_files(input_directory, output_lst):
             return get_lst_of_files(current_file_name, output_lst)
         output_lst.append(current_file_name)
     return output_lst
+
+
+__mod_name__ = "Zipper"
