@@ -16,7 +16,7 @@ from typing import Optional, List
 from telegram import TelegramError
 
 import Cutiepii_Robot.modules.sql.users_sql as sql
-from Cutiepii_Robot.modules.helper_funsc.filters import CustomFilters
+from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
 from Cutiepii_Robot import (
     DEV_USERS,
     LOGGER,
@@ -28,7 +28,7 @@ from Cutiepii_Robot import (
     dispatcher,
     LOGGER,
 )
-from Cutiepii_Robot.modules.helper_funsc.chat_status import (
+from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_admin,
     can_restrict,
     connection_status,
@@ -40,8 +40,8 @@ from Cutiepii_Robot.modules.helper_funsc.chat_status import (
     can_delete,
     dev_plus,
 )
-from Cutiepii_Robot.modules.helper_funsc.extraction import extract_user_and_text
-from Cutiepii_Robot.modules.helper_funsc.string_handling import extract_time
+from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user_and_text
+from Cutiepii_Robot.modules.helper_funcs.string_handling import extract_time
 from Cutiepii_Robot.modules.log_channel import gloggable, loggable
 
 
