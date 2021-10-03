@@ -4,8 +4,8 @@ import re
 import time
 from functools import partial
 from io import BytesIO
-import SaitamaRobot.modules.sql.welcome_sql as sql
-from SaitamaRobot import (
+import Cutiepii_Robot.modules.sql.welcome_sql as sql
+from Cutiepii_Robot import (
     DEV_USERS,
     OWNER_ID,
     DRAGONS,
@@ -15,19 +15,19 @@ from SaitamaRobot import (
     LOGGER,
     dispatcher,
 )
-from SaitamaRobot.modules.helper_funcs.chat_status import (
+from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_user_ban_protected,
     user_admin,
 )
-from SaitamaRobot.modules.helper_funcs.misc import build_keyboard, revert_buttons
-from SaitamaRobot.modules.helper_funcs.msg_types import get_welcome_type
-from SaitamaRobot.modules.helper_funcs.handlers import MessageHandlerChecker
-from SaitamaRobot.modules.helper_funcs.string_handling import (
+from Cutiepii_Robot.modules.helper_funcs.misc import build_keyboard, revert_buttons
+from Cutiepii_Robot.modules.helper_funcs.msg_types import get_welcome_type
+from Cutiepii_Robot.modules.helper_funcs.handlers import MessageHandlerChecker
+from Cutiepii_Robot.modules.helper_funcs.string_handling import (
     escape_invalid_curly_brackets,
     markdown_parser,
 )
-from SaitamaRobot.modules.log_channel import loggable
-from SaitamaRobot.modules.sql.global_bans_sql import is_user_gbanned
+from Cutiepii_Robot.modules.log_channel import loggable
+from Cutiepii_Robot.modules.sql.global_bans_sql import is_user_gbanned
 from telegram import (
     ChatPermissions,
     InlineKeyboardButton,
@@ -241,7 +241,7 @@ def new_member(update: Update, context: CallbackContext):  # sourcery no-metrics
             # Welcome yourself
             if new_mem.id == bot.id:
                 update.effective_message.reply_text(
-                    "Thanks for adding me! Join @noha_bot_support for support.",
+                    "Thanks for adding me! Join @Black_Knights_Union_Support for support.",
                     reply_to_message_id=reply,
                 )
                 continue
@@ -1156,7 +1156,11 @@ def user_captcha_button(update: Update, context: CallbackContext):
             kicked_msg = f"""
             ❌ [{escape_markdown(join_usr_data.first_name)}](tg://user?id={join_user}) failed the captcha and was kicked.
             """
-            query.answer(text="Wrong answer")e_mode=ParseMode.MARKDOWN
+            query.answer(text="Wrong answer")
+            res = chat.unban_member(join_user)
+            if res:
+                bot.sendMessage(
+                    chat_id=chat.id, text=kicked_msg, parse_mode=ParseMode.MARKDOWN
                 )
 
     else:
@@ -1316,12 +1320,8 @@ dispatcher.add_handler(BUTTON_VERIFY_HANDLER)
 dispatcher.add_handler(WELCOME_MUTE_HELP)
 dispatcher.add_handler(CAPTCHA_BUTTON_VERIFY_HANDLER)
 
-            res = chat.unban_member(join_user)
-            if res:
-                bot.sendMessage(
-                    chat_id=chat.id, text=kicked_msg, pars
 __mod_name__ = "Greetings"
-__command_list__ = []
+__command_list__ 
 __handlers__ = [
     NEW_MEM_HANDLER,
     LEFT_MEM_HANDLER,
