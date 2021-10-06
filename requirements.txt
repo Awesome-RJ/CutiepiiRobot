@@ -13,7 +13,7 @@ humanize
 jikanpy
 lxml
 nltk
-Pillow
+pillow>=4.2.0
 pretty_errors
 psutil
 psycopg2-binary
@@ -54,7 +54,7 @@ cryptography
 python-arq
 aioredis
 odmantic
-aiohttp[speedups]
+aiohttp>=2.2.5
 pykeyboard
 aiofiles
 hachoir
