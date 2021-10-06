@@ -17,6 +17,9 @@ prequel_btn = "⬅️ Prequel"
 sequel_btn = "Sequel ➡️"
 close_btn = "Close ❌"
 
+ANIME_IMG = "https://telegra.ph/file/56b16e6599af473d692f9.gif"
+MANGA_IMG = "https://telegra.ph/file/e6b1c11a9cd09a9c0e223.gif"
+CHARACTER_IMG = "https://telegra.ph/file/a355b31aa5dfe112605d2.gif"
 
 def shorten(description, info="anilist.co"):
     msg = ""
@@ -196,7 +199,7 @@ def anime(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
     if not search:
-        update.effective_message.reply_text("Format : /anime < anime name >")
+        update.effective_message.reply_animation(ANIME_IMG, caption=f"""Format : /anime < anime name >""", parse_mode="markdown")
         return
     variables = {"search": search}
     json = requests.post(
@@ -268,7 +271,7 @@ def character(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
     if not search:
-        update.effective_message.reply_text("Format : /character < character name >")
+        update.effective_message.reply_animation(CHARACTER_IMG, caption=f"""Format : /character < character name >""", parse_mode="markdown")
         return
     variables = {"query": search}
     json = requests.post(
@@ -302,7 +305,7 @@ def manga(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
     if not search:
-        update.effective_message.reply_text("Format : /manga < manga name >")
+        update.effective_message.reply_animation(MANGA_IMG, caption=f"""Format : /manga < manga name >""", parse_mode="markdown")
         return
     variables = {"search": search}
     json = requests.post(
