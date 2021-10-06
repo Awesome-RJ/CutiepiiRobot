@@ -27,7 +27,7 @@ def add_nsfw(update: Update, context: CallbackContext):
         sql.set_nsfw(chat.id)
         msg.reply_text("Activated NSFW Mode!")
         message = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
+            f"<b>{chat.title}:</b>\n"
             f"ACTIVATED_NSFW\n"
             f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
         )
@@ -49,7 +49,7 @@ def rem_nsfw(update: Update, context: CallbackContext):
     sql.rem_nsfw(chat.id)
     msg.reply_text("Rolled Back to SFW Mode!")
     message = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
+        f"<b>{chat.title}:</b>\n"
         f"DEACTIVATED_NSFW\n"
         f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
     )
