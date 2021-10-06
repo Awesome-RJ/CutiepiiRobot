@@ -42,13 +42,13 @@ def allow_groups(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Format: /lockdown Yes/No or Off/On")
         return
     update.effective_message.reply_text("Done! Lockdown value toggled.")
-
+	
 @dev_plus
 def leave(update: Update, context: CallbackContext):
     bot = context.bot
     args = context.args
     if args:
-        chat_id = str(args[0])
+	chat_id = str(args[0])
 	leave_msg = " ".join(args[1:])
         try:
 	    context.bot.send_message(chat_id, leave_msg)
