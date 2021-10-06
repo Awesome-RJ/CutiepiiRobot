@@ -48,18 +48,14 @@ def leave(update: Update, context: CallbackContext):
     bot = context.bot
     args = context.args
     if args:
-	chat_id = str(args[0])
-	leave_msg = " ".join(args[1:])
+        chat_id = str(args[0])
+        leave_msg = " ".join(args[1:])
         try:
-	    context.bot.send_message(chat_id, leave_msg)
+            context.bot.send_message(chat_id, leave_msg)
             bot.leave_chat(int(chat_id))
+            update.effective_message.reply_text("Left chat.")
         except TelegramError:
-            update.effective_message.reply_text(
-                "Beep boop, I could not leave that group(dunno why tho).",
-            )
-            return
-        with suppress(Unauthorized):
-            update.effective_message.reply_text("Beep boop, I left that soup!.")
+            update.effective_message.reply_text("Failed to leave chat for some reason.")
     else:
         chat = update.effective_chat
         # user = update.effective_user
@@ -67,8 +63,8 @@ def leave(update: Update, context: CallbackContext):
             InlineKeyboardButton(text="I am sure of this action.", callback_data="leavechat_cb_({})".format(chat.id))
         ]]
         update.effective_message.reply_text("I'm going to leave {}, press the button below to confirm".format(chat.title), reply_markup=InlineKeyboardMarkup(cutiepii_leave_bt))
-	
 
+	
 @dev_plus
 def gitpull(update: Update, context: CallbackContext):
     sent_msg = update.effective_message.reply_text(
