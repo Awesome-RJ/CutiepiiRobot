@@ -8,7 +8,7 @@ from telethon.tl.types import ChannelParticipantsAdmins
 
 from Cutiepii_Robot import telethn
 
-@telethn.on(events.NewMessage(pattern="^/all ?(.*)"))
+@telethn.on(events.NewMessage(pattern="^/mentionall ?(.*)"))
 async def mentionall(event):
   if event.is_private:
     return await event.respond("__This command can be use in groups and channels!__")
@@ -17,7 +17,7 @@ async def mentionall(event):
   async for admin in telethn.iter_participants(event.chat_id, filter=ChannelParticipantsAdmins):
     admins.append(admin.id)
   if not event.sender_id in admins:
-    return await event.respond("__Only admins can mention all!__")
+    return await event.respond("Only admins can mention all!")
   
   if event.pattern_match.group(1):
     mode = "text_on_cmd"
