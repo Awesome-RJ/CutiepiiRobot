@@ -118,6 +118,7 @@ if ENV:
     ARQ_API_URL = "https://thearq.tech"
     GOOGLE_CHROME_BIN = "/usr/bin/google-chrome"
     CHROME_DRIVER = "/usr/bin/chromedriver"
+    BOT_API_URL = os.environ.get('BOT_API_URL', "https://api.telegram.org/bot")
     
     try:
         BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
@@ -193,6 +194,7 @@ else:
     STRING_SESSION = Config.STRING_SESSION
     GENIUS_API_TOKEN = Config.GENIUS_API_TOKEN
     YOUTUBE_API_KEY = Config.YOUTUBE_API_KEY
+    YOUTUBE_API_KEY = Config.BOT_API_URL
 
     try:
         BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
@@ -243,7 +245,7 @@ print("[CUTIEPII]: Telegraph Installing")
 telegraph = Telegraph()
 print("[CUTIEPII]: Telegraph Account Creating")
 telegraph.create_account(short_name='Cutiepii')
-updater = tg.Updater(TOKEN, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)           
+updater = tg.Updater(token=TOKEN, base_url=BOT_API_URL workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)           
 print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 dispatcher = updater.dispatcher
