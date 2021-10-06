@@ -245,7 +245,7 @@ print("[CUTIEPII]: Telegraph Installing")
 telegraph = Telegraph()
 print("[CUTIEPII]: Telegraph Account Creating")
 telegraph.create_account(short_name='Cutiepii')
-updater = tg.Updater(token=TOKEN, base_url=BOT_API_URL workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)           
+updater = tg.Updater(token=TOKEN, base_url=BOT_API_URL, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)           
 print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 dispatcher = updater.dispatcher
