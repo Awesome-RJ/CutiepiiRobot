@@ -178,7 +178,7 @@ def new_member(update: Update, context: CallbackContext):  # sourcery no-metrics
         welcome_bool = True
         media_wel = False
 
-        if sw is not None:
+        if sw != None:
             sw_ban = sw.get_ban(new_mem.id)
             if sw_ban:
                 return
