@@ -130,10 +130,10 @@ def unmute(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     message = update.effective_message
 
-    user_id = extract_user(message, args)
+    user_id, reason = extract_user_and_text(message, args)
     if not user_id:
         message.reply_text(
-            "You'll need to either give me a username to unmute, or reply to someone to be unmuted.",
+            "You'll need to either give me a username to unmute, or reply to someone to be unmuted."
         )
         return ""
 
