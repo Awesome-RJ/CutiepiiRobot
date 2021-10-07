@@ -8,19 +8,19 @@ import bs4
 import requests
 
 from search_engine_parser import GoogleSearch
-from urllib.parse import urlencode
-from urllib.error import URLError, HTTPError
-from bs4 import BeautifulSoup
-from bing_image_downloader import downloader
-from bs4 import BeautifulSoup
-from PIL import Image
-from telethon.tl import functions, types
-from telethon import *
-from telethon.tl.types import *
 from asyncio import sleep
 from datetime import datetime
 from requests import get, post
+from bs4 import BeautifulSoup
+from bing_image_downloader import downloader
+from PIL import Image
 from geopy.geocoders import Nominatim
+from urllib.parse import urlencode
+from urllib.error import URLError, HTTPError
+from telethon.tl import functions, types
+from telethon import *
+from telethon.tl.types import *
+
 
 from Cutiepii_Robot import telethn, BOT_NAME
 from Cutiepii_Robot.events import register
