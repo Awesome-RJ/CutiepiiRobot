@@ -199,7 +199,7 @@ def anime(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
     if not search:
-        update.effective_message.reply_animation(ANIME_IMG, caption=f"""Format : /anime < anime name >""", parse_mode="markdown")
+        update.effective_message.reply_animation(ANIME_IMG, caption="""Format : /anime < anime name >""", parse_mode="markdown")
         return
     variables = {"search": search}
     json = requests.post(
@@ -271,7 +271,7 @@ def character(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
     if not search:
-        update.effective_message.reply_animation(CHARACTER_IMG, caption=f"""Format : /character < character name >""", parse_mode="markdown")
+        update.effective_message.reply_animation(CHARACTER_IMG, caption="""Format : /character < character name >""", parse_mode="markdown")
         return
     variables = {"query": search}
     json = requests.post(
@@ -305,7 +305,7 @@ def manga(update: Update, context: CallbackContext):
     message = update.effective_message
     search = extract_arg(message)
     if not search:
-        update.effective_message.reply_animation(MANGA_IMG, caption=f"""Format : /manga < manga name >""", parse_mode="markdown")
+        update.effective_message.reply_animation(MANGA_IMG, caption="""Format : /manga < manga name >""", parse_mode="markdown")
         return
     variables = {"search": search}
     json = requests.post(
