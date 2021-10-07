@@ -2,14 +2,12 @@ import re
 import os
 import subprocess
 import sys
-import time
-
-from contextlib import suppress
-from time import sleep
 
 from Cutiepii_Robot import dispatcher, DEV_USERS, telethn
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
-
+from time import monotonic as time
+from time import sleep
+from contextlib import suppress
 from telegram.ext.callbackqueryhandler import CallbackQueryHandler
 from telegram import TelegramError, Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.error import Unauthorized
