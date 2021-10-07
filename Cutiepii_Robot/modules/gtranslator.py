@@ -1,29 +1,18 @@
-from gpytranslate import Translator
-from telegram.ext import CommandHandler, CallbackContext
-from telegram import (
-    Message,
-    Chat,
-    User,
-    ParseMode,
-    Update,
-    InlineKeyboardMarkup,
-    InlineKeyboardButton,
-)
+from gpytranslate import SyncTranslator
+from telegram import ParseMode, Update
+from telegram.ext import CallbackContext
+
 from Cutiepii_Robot import dispatcher
-from Cutiepii_Robot import pgram, BOT_USERNAME
-from pyrogram import filters
-from pyrogram.types import Message
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
+trans = SyncTranslator()
 
-trans = Translator()
-
-
-@pgram.on_message(filters.command(["tr", f"tr@{BOT_USERNAME}"]))
-async def translate(_, message: Message) -> None:
+def translate(update: Update, context: CallbackContext) -> None:
+    bot = context.bot
+    message = update.effective_message
     reply_msg = message.reply_to_message
     if not reply_msg:
-        await message.reply_text("Reply to a message to translate it!")
+        message.reply_text("Reply to a message to translate it!")
         return
     if reply_msg.caption:
         to_translate = reply_msg.caption
@@ -35,29 +24,46 @@ async def translate(_, message: Message) -> None:
             source = args.split("//")[0]
             dest = args.split("//")[1]
         else:
-            source = await trans.detect(to_translate)
+            source = trans.detect(to_translate)
             dest = args
     except IndexError:
-        source = await trans.detect(to_translate)
+        source = trans.detect(to_translate)
         dest = "en"
-    translation = await trans(to_translate, sourcelang=source, targetlang=dest)
-    reply = (
-        f"<b>Translated from {source} to {dest}</b>:\n"
+    translation = trans(to_translate,
+                        sourcelang=source, targetlang=dest)
+    reply = f"<b>Translated from {source} to {dest}</b>:\n" \
         f"<code>{translation.text}</code>"
-    )
 
-    await message.reply_text(reply, parse_mode="html")
+    bot.send_message(text=reply, chat_id=message.chat.id, parse_mode=ParseMode.HTML)
+
+
+def languages(update: Update, context: CallbackContext) -> None:
+    message = update.effective_message
+    bot = context.bot
+    bot.send_message(
+        text="Click [here](https://telegra.ph/Lang-Codes-03-19-3) to see the list of supported language codes!",
+        chat_id=message.chat.id, disable_web_page_preview=True, parse_mode=ParseMode.MARKDOWN)
 
 __help__ = """ 
 Use this module to translate stuff!
+
 *Commands:*
    ➢ `/tl` (or `/tr`): as a reply to a message, translates it to English.
    ➢ `/tl <lang>`: translates to <lang>
 eg: `/tl ja`: translates to Japanese.
+
    ➢ `/tl <source>//<dest>`: translates from <source> to <lang>.
 eg: `/tl ja//en`: translates from Japanese to English.
+
 • [List of supported languages for translation](https://telegra.ph/Lang-Codes-03-19-3)
 """
 
+TRANSLATE_HANDLER = DisableAbleCommandHandler(["tr", "tl"], translate, run_async=True)
+TRANSLATE_LANG_HANDLER = DisableAbleCommandHandler(["lang", "languages"], languages, run_async=True)
+
+dispatcher.add_handler(TRANSLATE_HANDLER)
+dispatcher.add_handler(TRANSLATE_LANG_HANDLER)
+
 __mod_name__ = "Translator"
-__command_list__ = ["tr", "tl"]
+__command_list__ = ["tr", "tl", "lang", "languages"]
+__handlers__ = [TRANSLATE_HANDLER, TRANSLATE_LANG_HANDLER]
