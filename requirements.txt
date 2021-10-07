@@ -86,7 +86,6 @@ img2pdf
 google-api-python-client
 secureme
 git+https://github.com/Awesome-RJ/GoGoAnimeAPI.git
-git+https://github.com/sasukeuchiha912/heroku-buildpack-neofetch.git
 better_profanity
 pydub
 nudepy
