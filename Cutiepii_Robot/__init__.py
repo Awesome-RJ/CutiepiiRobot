@@ -8,6 +8,7 @@ import aiohttp
 import telegram.ext as tg
 
 from pyrogram import Client, errors
+from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
 from telethon import TelegramClient
 from telethon.sessions import MemorySession
 from telethon.sessions import StringSession
@@ -18,7 +19,6 @@ from pymongo.errors import ServerSelectionTimeoutError
 from redis import StrictRedis
 from Python_ARQ import ARQ
 from aiohttp import ClientSession
-from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
 from telegraph import Telegraph
 from telegram import Chat
 
