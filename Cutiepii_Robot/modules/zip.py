@@ -2,8 +2,13 @@ import os
 import time
 import zipfile
 
+from datetime import datetime
 from telethon import types
 from telethon.tl import functions
+from telethon.tl.types import DocumentAttributeVideo
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
+
 
 from Cutiepii_Robot import TEMP_DOWNLOAD_DIRECTORY, telethn
 from Cutiepii_Robot.events import register
@@ -78,13 +83,6 @@ def zipdir(path, ziph):
         for file in files:
             ziph.write(os.path.join(root, file))
             os.remove(os.path.join(root, file))
-
-
-from datetime import datetime
-
-from hachoir.metadata import extractMetadata
-from hachoir.parser import createParser
-from telethon.tl.types import DocumentAttributeVideo
 
 extracted = TEMP_DOWNLOAD_DIRECTORY + "extracted/"
 thumb_image_path = TEMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
