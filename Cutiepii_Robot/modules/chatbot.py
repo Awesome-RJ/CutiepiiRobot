@@ -6,7 +6,7 @@ import requests
 import Cutiepii_Robot.modules.sql.chatbot_sql as sql
 
 from time import sleep
-from telegram import ParseMode`f-string` used without any expression
+from telegram import ParseMode
 from telegram import (CallbackQuery, Chat, MessageEntity, InlineKeyboardButton,
                       InlineKeyboardMarkup, Message, ParseMode, Update, Bot, User)
 from telegram.ext import (CallbackContext, CallbackQueryHandler, CommandHandler,
