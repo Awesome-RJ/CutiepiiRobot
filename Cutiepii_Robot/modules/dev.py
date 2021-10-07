@@ -2,6 +2,7 @@ import re
 import os
 import subprocess
 import sys
+import time
 
 from contextlib import suppress
 from time import sleep
