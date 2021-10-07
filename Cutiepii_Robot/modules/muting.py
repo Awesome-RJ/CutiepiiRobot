@@ -163,9 +163,11 @@ def unmute(update: Update, context: CallbackContext) -> str:
             except BadRequest:
                 pass
             bot.sendMessage(
-                chat.id,
-                f"I shall allow <b>{html.escape(member.user.first_name)}</b> to text!",
-                parse_mode=ParseMode.HTML,
+            chat.id,
+            "{} was unmuted by {} in <b>{}</b>\n<b>Reason</b>: <code>{}</code>".format(
+                mention_html(member.user.id, member.user.first_name), mention_html(user.id, user.first_name), message.chat.title, reason
+            ),
+            parse_mode=ParseMode.HTML,
             )
             return (
                 f"<b>{html.escape(chat.title)}:</b>\n"
