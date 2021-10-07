@@ -2,16 +2,21 @@ import re
 import os
 import subprocess
 import sys
+import asyncio
 
 from Cutiepii_Robot import dispatcher, DEV_USERS, telethn
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
+
+from contextlib import suppress
+from statistics import mean
 from time import monotonic as time
 from time import sleep
-from contextlib import suppress
-from telegram.ext.callbackqueryhandler import CallbackQueryHandler
 from telegram import TelegramError, Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telethon import events
 from telegram.error import Unauthorized
 from telegram.ext import CallbackContext, CommandHandler, run_async
+from telegram.ext.callbackqueryhandler import CallbackQueryHandler
+
 
 def leave_cb(update: Update, context: CallbackContext):
     bot = context.bot
