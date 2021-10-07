@@ -7,12 +7,11 @@ import requests
 import wget
 
 from pyrogram import filters
-from pyrogram.types import Message
+from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent, Message
 from tswift import Song
 from youtube_dl import YoutubeDL
 from youtubesearchpython import SearchVideos
 from telegram import Message
-from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent)
 
 from Cutiepii_Robot.utils.pluginhelp import get_text, progress
 from Cutiepii_Robot import pgram, GENIUS_API_TOKEN, BOT_USERNAME, arq
