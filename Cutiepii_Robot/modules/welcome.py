@@ -107,7 +107,7 @@ def send(update, message, keyboard, backup_message):
         elif excp.message == "Have no rights to send a message":
             return
         elif excp.message == "Replied message not found":
-            msg = update.effective_chat.send_message(
+            msg = update.effective_message.reply_text(
                 message,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=keyboard,
