@@ -139,7 +139,7 @@ def unmute(update: Update, context: CallbackContext) -> str:
 
     member = chat.get_member(int(user_id))
 
-    if member.status != "kicked" and member.status != "left":
+    if member.status not in ("kicked", "left"):
         if (
             member.can_send_messages
             and member.can_send_media_messages
