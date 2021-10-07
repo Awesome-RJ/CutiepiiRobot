@@ -4,7 +4,7 @@ import subprocess
 import sys
 import asyncio
 
-from Cutiepii_Robot import dispatcher, DEV_USERS, telethn
+from Cutiepii_Robot import dispatcher, DEV_USERS, telethn, OWNER_ID
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 
 from contextlib import suppress
