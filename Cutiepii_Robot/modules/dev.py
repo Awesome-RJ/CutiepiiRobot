@@ -68,7 +68,7 @@ def leave(update: Update, context: CallbackContext):
 @dev_plus
 def gitpull(update: Update, context: CallbackContext):
     sent_msg = update.effective_message.reply_text(
-        "Pulling all changes from remote and then attempting to restart.",
+        "Pulling all changes from remote and then attempting to restart."
     )
     subprocess.Popen("git pull", stdout=subprocess.PIPE, shell=True)
 
