@@ -12,7 +12,7 @@ async def get_file_id_from_message(message):
         if int(message.document.file_size) > 3145728:
             return
         mime_type = message.document.mime_type
-        if mime_type != "image/png" and mime_type != "image/jpeg":
+        if mime_type not in ("image/png", "image/jpeg"):
             return
         file_id = message.document.file_id
 
