@@ -5,7 +5,6 @@ cachetools==4.2.2
 CurrencyConverter
 emoji
 feedparser
-cryptography
 geopy
 googletrans==4.0.0-rc1
 humanize
