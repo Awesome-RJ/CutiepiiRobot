@@ -93,3 +93,4 @@ requests_html
 bs4
 multicolorcaptcha
 launchpadlib==1.10.13
+google-trans-new==1.1.9
