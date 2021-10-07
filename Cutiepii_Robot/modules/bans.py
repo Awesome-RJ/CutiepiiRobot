@@ -30,6 +30,7 @@ from Cutiepii_Robot import (
     LOGGER,
 )
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
+    user_admin_no_reply,
     bot_admin,
     can_restrict,
     connection_status,
@@ -277,6 +278,9 @@ def temp_ban(update: Update, context: CallbackContext) -> str:
 
 @connection_status
 @bot_admin
+@can_restrict
+@user_admin_no_reply
+@user_can_ban
 @loggable
 def unbanb_btn(update: Update, context: CallbackContext) -> str:
     bot = context.bot
