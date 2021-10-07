@@ -4,12 +4,11 @@ import os
 import urllib.request
 
 from telethon import *
-from telethon.tl import functions
+from telethon.tl import functions, types
+
 from typing import List
 from typing import Optional
 from PyDictionary import PyDictionary
-from telethon.tl import types
-from telethon.tl.types import *
 from telegram import Message
 
 from Cutiepii_Robot import telethn
