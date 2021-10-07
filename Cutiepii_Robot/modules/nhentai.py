@@ -14,6 +14,12 @@ from Cutiepii_Robot.utils.errors import capture_err
 @pgram.on_message(~filters.me & filters.command('nhentai', prefixes='/'), group=8)
 @capture_err
 async def nhentai(client, message):
+        if '/nhentai' == event.raw_text:
+            await pgram.send_message(
+                event.chat_id,
+                'Command must be used like this\n/nh <hentai code\nexample: /nh 339989',
+                file='https://media1.tenor.com/images/eaac56a1d02536ed416b5a080fdf73ba/tenor.gif?itemid=15075442'
+            )
     query = message.text.split(" ")[1]
     title, tags, artist, total_pages, post_url, cover_image = nhentai_data(query)
     await message.reply_text(
