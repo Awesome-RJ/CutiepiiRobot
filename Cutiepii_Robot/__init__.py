@@ -89,7 +89,7 @@ if ENV:
     NO_LOAD = os.environ.get("NO_LOAD", "translation").split() # Don't Change
     DEL_CMDS = bool(os.environ.get("DEL_CMDS", False)) # Don't Change
     STRICT_GBAN = bool(os.environ.get("STRICT_GBAN", False)) # Use `True` Value
-    WORKERS = int(os.environ.get("WORKERS", 8)) # Don't Change
+    WORKERS = int(os.environ.get("WORKERS", 5)) # Don't Change
     BAN_STICKER = os.environ.get("BAN_STICKER", "CAADAgADOwADPPEcAXkko5EB3YGYAg") # Don't Change
     ALLOW_EXCL = os.environ.get("ALLOW_EXCL", False) # Don't Change
     TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./") # Don't Change
