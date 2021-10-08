@@ -32,6 +32,9 @@ def is_support_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool
 def is_sudo_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
     return user_id in DRAGONS or user_id in DEV_USERS
 
+def is_stats_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
+    return user_id in DEV_USERS
+
 
 def is_user_admin(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
     if (
@@ -140,6 +143,29 @@ def sudo_plus(func):
         else:
             update.effective_message.reply_text(
                 "At Least be an Admin to use these all Commands",
+            )
+
+    return is_sudo_plus_func
+
+def stats_plus(func):
+    @wraps(func)
+    def is_stats_plus_func(update: Update, context: CallbackContext, *args, **kwargs):
+        bot = context.bot
+        user = update.effective_user
+        chat = update.effective_chat
+
+        if user and is_stats_plus(chat, user.id):
+            return func(update, context, *args, **kwargs)
+        if not user:
+            pass
+        elif DEL_CMDS and " " not in update.effective_message.text:
+            try:
+                update.effective_message.delete()
+            except:
+                pass
+        else:
+            update.effective_message.reply_text(
+                "Yuzuki stats is just for Dev User",
             )
 
     return is_sudo_plus_func
