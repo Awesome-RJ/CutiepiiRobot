@@ -92,4 +92,4 @@ bs4
 multicolorcaptcha
 launchpadlib==1.10.13
 google-trans-new==1.1.9
-GIT+https://github.com/Awesome-RJ/Python_ARQ
+git+https://github.com/Awesome-RJ/Python_ARQ.git
