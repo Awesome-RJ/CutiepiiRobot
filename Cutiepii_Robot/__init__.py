@@ -144,6 +144,8 @@ if ENV:
     GOOGLE_CHROME_BIN = "/usr/bin/google-chrome"
     CHROME_DRIVER = "/usr/bin/chromedriver"
     BOT_API_URL = os.environ.get('BOT_API_URL', "https://api.telegram.org/bot")
+    HELP_IMG = os.environ.get("HELP_IMG", True)
+    START_IMG = os.environ.get("START_IMG", True)
     
     try:
         BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
@@ -220,6 +222,8 @@ else:
     GENIUS_API_TOKEN = Config.GENIUS_API_TOKEN
     YOUTUBE_API_KEY = Config.YOUTUBE_API_KEY
     YOUTUBE_API_KEY = Config.BOT_API_URL
+    HELP_IMG = Config.HELP_IMG
+    START_IMG = Config.START_IMG
 
     try:
         BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
