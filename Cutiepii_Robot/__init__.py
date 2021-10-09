@@ -231,7 +231,6 @@ else:
     BOT_API_URL = Config.BOT_API_URL
     MONGO_DB_URL = Config.MONGO_DB_URL
     MONGO_DB = Config.MONGO_DB
-    YOUTUBE_API_KEY = Config.BOT_API_URL
     HELP_IMG = Config.HELP_IMG
     START_IMG = Config.START_IMG
 
