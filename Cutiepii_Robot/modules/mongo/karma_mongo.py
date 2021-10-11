@@ -27,10 +27,7 @@ SOFTWARE.
 from Cutiepii_Robot import db
 from typing import Dict, List, Union
 
-
 karmadb = db.karma
-karmaonoffdb = db.karmaonoff
-
 
 async def get_karmas_count() -> dict:
     chats = karmadb.find({"chat_id": {"$lt": 0}})
@@ -40,32 +37,21 @@ async def get_karmas_count() -> dict:
     karmas_count = 0
     for chat in await chats.to_list(length=1000000):
         for i in chat['karma']:
-            karma_ = chat['karma'][i]['karma']
-            if karma_ > 0:
-                karmas_count += karma_
+            karmas_count += chat['karma'][i]['karma']
         chats_count += 1
-    return {"chats_count": chats_count, "karmas_count": karmas_count}
-
-
-async def user_global_karma(user_id) -> int:
-    chats = karmadb.find({"chat_id": {"$lt": 0}})
-    if not chats:
-        return 0
-    total_karma = 0
-    for chat in await chats.to_list(length=1000000):
-        karma = await get_karma(
-            chat["chat_id"], await int_to_alpha(user_id)
-        )
-        if karma and int(karma['karma']) > 0:
-            total_karma += int(karma['karma'])
-    return total_karma
+    return {
+        "chats_count": chats_count,
+        "karmas_count": karmas_count
+    }
 
 
 async def get_karmas(chat_id: int) -> Dict[str, int]:
     karma = await karmadb.find_one({"chat_id": chat_id})
-    if not karma:
-        return {}
-    return karma['karma']
+    if karma:
+        karma = karma['karma']
+    else:
+        karma = {}
+    return karma
 
 
 async def get_karma(chat_id: int, name: str) -> Union[bool, dict]:
@@ -80,32 +66,44 @@ async def update_karma(chat_id: int, name: str, karma: dict):
     karmas = await get_karmas(chat_id)
     karmas[name] = karma
     await karmadb.update_one(
-        {"chat_id": chat_id}, {"$set": {"karma": karmas}}, upsert=True
+        {"chat_id": chat_id},
+        {
+            "$set": {
+                "karma": karmas
+            }
+        },
+        upsert=True
     )
 
 
+
 async def is_karma_on(chat_id: int) -> bool:
-    chat = await karmaonoffdb.find_one({"chat_id_toggle": chat_id})
-    return not chat
+    chat = await karmadb.find_one({"chat_id_toggle": chat_id})
+    if not chat:
+        return True
+    return False
 
 
 async def karma_on(chat_id: int):
     is_karma = await is_karma_on(chat_id)
     if is_karma:
         return
-    return await karmaonoffdb.delete_one({"chat_id_toggle": chat_id})
+    return await karmadb.delete_one({"chat_id_toggle": chat_id})
 
 
 async def karma_off(chat_id: int):
     is_karma = await is_karma_on(chat_id)
     if not is_karma:
         return
-    return await karmaonoffdb.insert_one({"chat_id_toggle": chat_id})
+    return await karmadb.insert_one({"chat_id_toggle": chat_id})
 
 async def int_to_alpha(user_id: int) -> str:
     alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+    text = ""
     user_id = str(user_id)
-    return "".join(alphabet[int(i)] for i in user_id)
+    for i in user_id:
+        text += alphabet[int(i)]
+    return text
 
 
 async def alpha_to_int(user_id_alphabet: str) -> int:
