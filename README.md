@@ -24,17 +24,17 @@ This repo was just reamped to suit an Anime-centric community. All original cred
 
 ### ╒═══「 Creator Info/Credits 」
 
-➢ [Rajkumar](https://github.com/Awesome-RJ) : OWNER | DEV
-➢ [AkshayRajput](https://github.com/TheHamkerCat) : ARQ MODULES
-➢ [TheRealPhoenix](https://github.com/rsktg) : BASE
-➢ [DragSama](https://github.com/DragSama) : ANIME
-➢ [TsunayoshiSawada](https://github.com/TsunayoshiSawada) : BASE
-➢ [Pokurt](https://github.com/pokurt) : WHATANIME MODULE API
-➢ [Pranav ⁪⁬⁮⁮⁮⁮Ajay](https://github.com/MoeZilla) : POKEDEX, CHATBOT MODULE & API ETC
-➢ [Dank-del](https://github.com/Dank-del) : LEWD MODULE
-➢ [InukaAsith](https://github.com/InukaAsith) : MEMES, INLINE ETC MODULES 
-➢ [AyraHikari](https://github.com/AyraHikari): FED MODULE
-➢ [Peaktogoo](https://github.com/peaktogoo) : FED MODULE
++➢ [Rajkumar](https://github.com/Awesome-RJ) : OWNER | DEV
++➢ [AkshayRajput](https://github.com/TheHamkerCat) : ARQ MODULES
++➢ [TheRealPhoenix](https://github.com/rsktg) : BASE
++➢ [DragSama](https://github.com/DragSama) : ANIME
++➢ [TsunayoshiSawada](https://github.com/TsunayoshiSawada) : BASE
++➢ [Pokurt](https://github.com/pokurt) : WHATANIME MODULE API
++➢ [Pranav ⁪⁬⁮⁮⁮⁮Ajay](https://github.com/MoeZilla) : POKEDEX, CHATBOT MODULE & API ETC
++➢ [Dank-del](https://github.com/Dank-del) : LEWD MODULE
++➢ [InukaAsith](https://github.com/InukaAsith) : MEMES, INLINE ETC MODULES 
++➢ [AyraHikari](https://github.com/AyraHikari): FED MODULE
++➢ [Peaktogoo](https://github.com/peaktogoo) : FED MODULE
 
 ╘══「 Any other authorship/credits can be seen through the commits. 」
 
