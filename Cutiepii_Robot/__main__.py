@@ -119,7 +119,6 @@ PM_START_TEXT = """
 ────「 [{}] 」────
 *Hola! {},*
 *I am an Anime themed advance group management bot with a lot of Sexy Features.*
-*I Am Fork Of A @Cutiepii_Robot. She Is My Sister.*
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
 • *Uptime:* `{}`
 • `{}` *users, across* `{}` *chats.*
