@@ -5,7 +5,7 @@
 
 A modular telegram Python bot running on python3 with an sqlalchemy, Redis, mongodb database.
 
-### Status
+###  ╒═══「 Status 」
 
 + [x] Maintained
 + [x] Support Group Included
@@ -16,9 +16,9 @@ A modular telegram Python bot running on python3 with an sqlalchemy, Redis, mong
 + [x] Heroku Deploy
 + [x] Docker/Local Machine
 
-Can be found on telegram as [Cutiepii Robot](https://t.me/Cutiepii_Robot).
+╘══「 Can be found on telegram as [Cutiepii Robot](https://t.me/Cutiepii_Robot) 」
 
-## Credits
+## ╒═══「 Credits 」
 The bot is based of on the original work done by [PaulSonOfLars](https://github.com/PaulSonOfLars)
 This repo was just reamped to suit an Anime-centric community. All original credits go to Paul and his dedication, Without his efforts, this fork would not have been possible!
 
