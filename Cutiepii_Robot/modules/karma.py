@@ -25,6 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import re
 from pyrogram import filters
 from Cutiepii_Robot import pgram, BOT_USERNAME
 from Cutiepii_Robot.utils.errors import capture_err
