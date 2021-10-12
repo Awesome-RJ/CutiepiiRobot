@@ -24,6 +24,7 @@ SOFTWARE.
 """
 
 import html
+import os
 import json
 import importlib
 import time
@@ -57,10 +58,12 @@ from Cutiepii_Robot import (
     EVENT_LOGS,
     HELP_IMG,
     START_IMG,
+    CUTIEPII_PHOTO,
     )
 
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
+from Cutiepii_Robot.events import register
 from Cutiepii_Robot.modules import ALL_MODULES
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
@@ -86,8 +89,30 @@ from telegram.ext import (
 from telegram.ext.dispatcher import DispatcherHandlerStop, run_async
 from telegram.utils.helpers import escape_markdown
 from pyrogram import Client, idle
+from telethon import Button
 
+@register(pattern=("/alive"))
+async def awake(event):
+  CUTIEPII = event.sender.first_name
+  CUTIEPII = f"**♡ I,m Cutiepii Robot 愛💕** \n\n"
+  CUTIEPII += "**♡ I'm Working With Awesome Speed**\n\n"
+  CUTIEPII += "**♡ Cutiepii: LATEST Version**\n\n"
+  CUTIEPII += "**♡ My Creator:** [Rajkumar](t.me/Awesome_RJ)\n\n"
+  CUTIEPII += "**♡ python-Telegram-Bot: 13.7**\n\n"
+  CUTIEPII_BUTTON = [
+      [
+          Button.url("🚑 Support", "https://t.me/Black_Knights_Union_Support"),
+          Button.url("📢 Updates", "https://t.me/Black_Knights_Union")
+      ]
+  ]
+  await telethn.send_file(
+      event.chat_id,
+      CUTIEPII_PHOTO,
+      caption = CUTIEPII,
+      buttons = CUTIEPII_BUTTON,
+  )
 
+    
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -116,7 +141,7 @@ HELP_MSG = "Click the button below to get help manu in your pm."
 START_MSG = "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>"
     
 PM_START_TEXT = """
-────「 [{}] 」────
+────「 [{}](https://telegra.ph/file/3067d3fed3808949a337c.jpg) 」────
 *Hola! {},*
 *I am an Anime themed advance group management bot with a lot of Sexy Features.*
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
