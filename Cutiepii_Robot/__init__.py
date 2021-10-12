@@ -146,6 +146,7 @@ if ENV:
     BOT_API_URL = os.environ.get('BOT_API_URL', "https://api.telegram.org/bot")
     HELP_IMG = os.environ.get("HELP_IMG", True)
     START_IMG = os.environ.get("START_IMG", True)
+    CUTIEPII_PHOTO = os.environ.get("CUTIEPII_PHOTO", True)
     
     try:
         BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
@@ -233,6 +234,7 @@ else:
     MONGO_DB = Config.MONGO_DB
     HELP_IMG = Config.HELP_IMG
     START_IMG = Config.START_IMG
+    CUTIEPII_PHOTO = Config.CUTIEPII_PHOTO
 
     try:
         BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
