@@ -71,7 +71,6 @@ def is_approved(chat_id, user_id):
 def list_approved(chat_id):
     approved = ast.literal_eval(REDIS.get("Approvals"))
     try:
-        list = approved[chat_id]
-        return list
+        return approved[chat_id]
     except BaseException:
         return

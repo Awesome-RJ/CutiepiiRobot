@@ -100,12 +100,12 @@ async def download_video(v_url):
        video = False
        song = True
    try:
-       await rkp.edit("`Fetching data, please wait..`")
-       with YoutubeDL(opts) as rip:
-           rip_data = rip.extract_info(url)
+      await rkp.edit("`Fetching data, please wait..`")
+      with YoutubeDL(opts) as rip:
+          rip_data = rip.extract_info(url)
    except DownloadError as DE:
-       await rkp.edit(f"`{str(DE)}`")
-       return
+      await rkp.edit(f'`{DE}`')
+      return
    except ContentTooShortError:
        await rkp.edit("`The download content was too short.`")
        return
@@ -130,8 +130,8 @@ async def download_video(v_url):
        await rkp.edit("`There was an error during info extraction.`")
        return
    except Exception as e:
-       await rkp.edit(f"{str(type(e)): {str(e)}}")
-       return
+      await rkp.edit(f'{str(type(e)): {e}}')
+      return
    c_time = time.time()
    if song:
        await rkp.edit(f"`Preparing to upload song:`\

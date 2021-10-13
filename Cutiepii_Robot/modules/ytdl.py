@@ -115,7 +115,7 @@ async def download_video(v_url):
         with YoutubeDL(opts) as ytdl:
             ytdl_data = ytdl.extract_info(url)
     except DownloadError as DE:
-        await lmao.edit(f"`{str(DE)}`")
+        await lmao.edit(f'`{DE}`')
         return
     except ContentTooShortError:
         await lmao.edit("`The download content was too short.`")
@@ -141,7 +141,7 @@ async def download_video(v_url):
         await lmao.edit("`There was an error during info extraction.`")
         return
     except Exception as e:
-        await lmao.edit(f"{str(type(e)): {str(e)}}")
+        await lmao.edit(f'{str(type(e)): {e}}')
         return
     c_time = time.time()
     if song:

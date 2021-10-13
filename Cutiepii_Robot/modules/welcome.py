@@ -565,7 +565,7 @@ def new_member(update: Update, context: CallbackContext):  # sourcery no-metrics
                 f"<b>User</b>: {mention_html(user.id, user.first_name)}\n"
                 f"<b>ID</b>: <code>{user.id}</code>"
             )
-        elif new_mem.is_bot and user.id != new_mem.id:
+        elif new_mem.is_bot:
             welcome_log = (
                 f"{html.escape(chat.title)}\n"
                 f"#BOT_ADDED\n"

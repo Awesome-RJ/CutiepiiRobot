@@ -78,11 +78,8 @@ async def _(event):
         _hd = re.search("hd_src:null", html)
         _sd = re.search("sd_src:null", html)
 
-        list = []
         _thelist = [_qualityhd, _qualitysd, _hd, _sd]
-        for id, val in enumerate(_thelist):
-            if val is not None:
-                list.append(id)
+        list = [id for id, val in enumerate(_thelist) if val is not None]
         filename = datetime.strftime(datetime.now(), "%Y-%m-%d-%H-%M-%S")
 
         main(url, filename)

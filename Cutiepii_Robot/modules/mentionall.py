@@ -38,13 +38,13 @@ from Cutiepii_Robot import telethn
 async def mentionall(event):
   if event.is_private:
     return await event.respond("__This command can be use in groups and channels!__")
-  
+
   admins = []
   async for admin in telethn.iter_participants(event.chat_id, filter=ChannelParticipantsAdmins):
     admins.append(admin.id)
-  if not event.sender_id in admins:
+  if event.sender_id not in admins:
     return await event.respond("Only admins can mention all!")
-  
+
   if event.pattern_match.group(1):
     mode = "text_on_cmd"
     msg = event.pattern_match.group(1)
@@ -57,7 +57,7 @@ async def mentionall(event):
     return await event.respond("__Give me one argument!__")
   else:
     return await event.respond("__Reply to a message or give me some text to mention others!__")
-  
+
   if mode == "text_on_cmd":
     usrnum = 0
     usrtxt = ""
@@ -69,8 +69,8 @@ async def mentionall(event):
         await asyncio.sleep(2)
         usrnum = 0
         usrtxt = ""
-        
-  if mode == "text_on_reply":
+
+  elif mode == "text_on_reply":
     usrnum = 0
     usrtxt = ""
     async for usr in telethn.iter_participants(event.chat_id):
