@@ -38,10 +38,10 @@ from statistics import mean
 from time import monotonic as time
 from time import sleep
 from telegram import TelegramError, Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telethon import events
 from telegram.error import Unauthorized
 from telegram.ext import CallbackContext, CommandHandler, run_async
 from telegram.ext.callbackqueryhandler import CallbackQueryHandler
+from telethon import events
 
 
 def leave_cb(update: Update, context: CallbackContext):
