@@ -95,7 +95,7 @@ from telethon import Button
 @register(pattern=("/alive"))
 async def awake(event):
   CUTIEPII = event.sender.first_name
-  CUTIEPII = f"**♡ I,m Cutiepii Robot 愛💕** \n\n"
+  CUTIEPII = "**♡ I,m Cutiepii Robot 愛💕** \n\n"
   CUTIEPII += "**♡ I'm Working With Awesome Speed**\n\n"
   CUTIEPII += "**♡ Cutiepii: LATEST Version**\n\n"
   CUTIEPII += "**♡ My Creator:** [Rajkumar](t.me/Awesome_RJ)\n\n"
