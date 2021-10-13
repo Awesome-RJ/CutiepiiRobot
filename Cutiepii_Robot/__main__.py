@@ -102,7 +102,7 @@ async def awake(event):
   CUTIEPII += "**♡ python-Telegram-Bot: 13.7**\n\n"
   CUTIEPII_BUTTON = [
       [
-          Button.url("🚑 Support", "https://t.me/Black_Knights_Union_Support"),
+          Button.url("🚑 Support", f"https://t.me/{SUPPORT_CHAT}"),
           Button.url("📢 Updates", "https://t.me/Black_Knights_Union")
       ]
   ]
