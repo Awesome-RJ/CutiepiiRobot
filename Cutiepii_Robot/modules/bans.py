@@ -36,7 +36,6 @@ from telegram import (
 )
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, Filters, CommandHandler, run_async, CallbackQueryHandler
-from telegram.ext.dispatcher import CallbackContext
 from telegram.utils.helpers import mention_html
 from typing import Optional, List
 from telegram import TelegramError
