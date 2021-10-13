@@ -11,7 +11,7 @@ lxml==4.6.3
 nltk==3.6.5
 pillow>=4.2.0
 pretty-errors==1.2.17
-psutil==5.7.2
+psutil==5.8.0
 pynewtonmath==1.0.1
 python-telegram-bot==13.7
 regex==2020.7.14
