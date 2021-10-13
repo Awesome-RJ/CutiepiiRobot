@@ -132,11 +132,17 @@ def markdown_parser(
                         ent_text
                     )
 
-            end += 1
+            # code handling
+            elif ent.type == "code":
+                res += _selective_escape(txt[prev:start]) + "`" + ent_text + "`"
 
-        # anything else
-        else:
-            continue
+            # handle markdown/html links
+            elif ent.type == "text_link":
+                res += _selective_escape(txt[prev:start]) + "[{}]({})".format(
+                    ent_text, ent.url
+                )
+
+            end += 1
 
         # anything else
         else:
