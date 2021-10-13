@@ -86,7 +86,7 @@ __New couple of the day may be chosen at 12AM {tomorrow}__"""
             }
             await save_couple(chat_id, today, couple)
 
-        else:
+        elif is_selected:
             c1_id = int(is_selected['c1_id'])
             c2_id = int(is_selected['c2_id'])
             c1_name = (await pgram.get_users(c1_id)).first_name
