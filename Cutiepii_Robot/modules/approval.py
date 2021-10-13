@@ -58,7 +58,7 @@ def approve(update, context):
         member = chat.get_member(user_id)
     except BadRequest:
         return ""
-    if member.status == "administrator" or member.status == "creator":
+    if member.status in ("administrator", "creator"):
         message.reply_text(
             "No need to approve an Admin!"
         )
