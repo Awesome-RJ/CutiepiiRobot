@@ -492,7 +492,7 @@ def stats(update, context):
             status
             + "\n*Bot statistics*:\n"
             + "\n".join([mod.__stats__() for mod in STATS])
-            + "\n\n[✦ Support](https://t.me/Black_Knights_Union_Support) | [✦ Updates](https://t.me/Black_Knights_Union)\n\n"
+            + f"\n\n[✦ Support](https://t.me/{SUPPORT_CHAT}) | [✦ Updates](https://t.me/Black_Knights_Union)\n\n"
             + "╘══「 by [Awesome RJ](https://github.com/Awesome-RJ) 」\n",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
@@ -505,7 +505,7 @@ def stats(update, context):
                         "\n*Bot statistics*:\n"
                         + "\n".join(mod.__stats__() for mod in STATS)
                     )
-                    + "\n\n✦ [Support](https://t.me/Black_Knights_Union_Support) | ✦ [Updates](https://t.me/Black_Knights_Union)\n\n"
+                    + f"\n\n✦ [Support](https://t.me/{SUPPORT_CHAT}) | ✦ [Updates](https://t.me/Black_Knights_Union)\n\n"
                 )
                 + "╘══「 by [Awesome-RJ](https://github.com/Awesome-RJ) 」\n"
             ),
