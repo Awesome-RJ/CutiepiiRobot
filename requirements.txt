@@ -5,11 +5,11 @@ cachetools==4.2.2
 CurrencyConverter
 emoji==1.4.2
 feedparser==6.0.0b3
-lxml==4.5.2
+lxml==4.6.3
 googletrans==4.0.0-rc1
-lxml==4.5.2
-lxml==4.5.2
-lxml==4.5.2
+lxml==4.6.3
+lxml==4.6.3
+lxml==4.6.3
 nltk==3.5
 pillow>=4.2.0
 pretty-errors==1.2.17
