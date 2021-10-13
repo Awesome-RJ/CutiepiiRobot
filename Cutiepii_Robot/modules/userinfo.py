@@ -55,6 +55,7 @@ from Cutiepii_Robot import (
     dispatcher,
     sw,
     StartTime,
+    SUPPORT_CHAT,
 )
 from Cutiepii_Robot.__main__ import STATS, TOKEN, USER_INFO
 from Cutiepii_Robot.modules.sql import SESSION
