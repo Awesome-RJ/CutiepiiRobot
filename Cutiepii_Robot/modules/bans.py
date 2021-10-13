@@ -52,7 +52,6 @@ from Cutiepii_Robot import (
     TIGERS,
     WOLVES,
     dispatcher,
-    LOGGER,
 )
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     user_admin_no_reply,
