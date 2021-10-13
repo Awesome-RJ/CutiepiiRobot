@@ -91,3 +91,4 @@ future==0.18.2
 psycopg2-binary
 geopy
 humanize
+heroku3
