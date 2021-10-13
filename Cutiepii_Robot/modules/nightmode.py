@@ -26,10 +26,11 @@ SOFTWARE.
 
 import os
 
+from telethon.tl.types import ChatBannedRights
+from apscheduler.schedulers.asyncio import AsyncIOScheduler 
+from telethon import functions
 from telethon import *
-from telethon.tl.types import ChannelParticipantsAdmins, ChatAdminRights, ChatBannedRights, MessageEntityMentionName, MessageMediaPhoto
-from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest, EditPhotoRequest
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from telethon import Button, custom, events
 
 from Cutiepii_Robot.modules.sql.night_mode_sql import add_nightmode, rmnightmode, get_all_chat_id, is_nightmode_indb
 from Cutiepii_Robot.events import register
@@ -63,6 +64,19 @@ openhehe = ChatBannedRights(
     change_info=True,
 )
 
+from telethon.tl.types import (
+    ChannelParticipantsAdmins,
+    ChatAdminRights,
+    MessageEntityMentionName,
+    MessageMediaPhoto,
+)
+
+from telethon.tl.functions.channels import (
+    EditAdminRequest,
+    EditBannedRequest,
+    EditPhotoRequest,
+)
+
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
@@ -93,13 +107,14 @@ async def profanity(event):
     if event.is_private:
         return
     input = event.pattern_match.group(2)
-    if event.sender_id != OWNER_ID:
+    if not event.sender_id == OWNER_ID:
         if not await is_register_admin(event.input_chat, event.sender_id):
            await event.reply("Only admins can execute this command!")
            return
-        if not await can_change_info(message=event):
-          await event.reply("You are missing the following rights to use this command:CanChangeinfo")
-          return
+        else:
+          if not await can_change_info(message=event):
+            await event.reply("You are missing the following rights to use this command:CanChangeinfo")
+            return
     if not input:
         if is_nightmode_indb(str(event.chat_id)):
                 await event.reply(
@@ -110,26 +125,25 @@ async def profanity(event):
             "Currently NightMode is Disabled for this Chat"
         )
         return
-    if "on" in input and event.is_group:
-        if is_nightmode_indb(str(event.chat_id)):
-                await event.reply(
-                    "Night Mode is Already Turned ON for this Chat"
-                )
-                return
-        add_nightmode(str(event.chat_id))
-        await event.reply("NightMode turned on for this chat.")
+    if "on" in input:
+        if event.is_group:
+            if is_nightmode_indb(str(event.chat_id)):
+                    await event.reply(
+                        "Night Mode is Already Turned ON for this Chat"
+                    )
+                    return
+            add_nightmode(str(event.chat_id))
+            await event.reply("NightMode turned on for this chat.")
     if "off" in input:
-        if (
-            event.is_group
-            and not is_nightmode_indb(str(event.chat_id))
-        ):
-                await event.reply(
-                    "Night Mode is Already Off for this Chat"
-                )
-                return
+        if event.is_group:
+            if not is_nightmode_indb(str(event.chat_id)):
+                    await event.reply(
+                        "Night Mode is Already Off for this Chat"
+                    )
+                    return
         rmnightmode(str(event.chat_id))
         await event.reply("NightMode Disabled!")
-    if "off" not in input and "on" not in input:
+    if not "off" in input and not "on" in input:
         await event.reply("Please Specify On or Off!")
         return
 
