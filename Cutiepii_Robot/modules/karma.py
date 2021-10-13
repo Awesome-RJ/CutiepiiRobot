@@ -144,10 +144,15 @@ async def downvote(_, message):
 @capture_err
 async def karma(_, message):
     chat_id = message.chat.id
-
     if not message.reply_to_message:
+        m = await message.reply_text(
+            "Getting Karma list of top 10 users wait..."
+        )
         karma = await get_karmas(chat_id)
-        msg = f"**Karma list of {message.chat.title}:- **\n"
+        if not karma:
+            await m.edit("No karma in DB for this chat.")
+            return
+        msg = f"🏆 Top list of Karma owners in the {message.chat.title}»: \n"
         limit = 0
         karma_dicc = {}
         for i in karma:
