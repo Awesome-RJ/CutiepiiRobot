@@ -118,7 +118,7 @@ async def episode(event):
     butons = []
     cbutton = []
     for i in result:
-        if i != "title":
+        if not i == "title":
             k = Button.url(f"{i}", f"{result[i]}")
             butons.append(k)
             if len(butons) == 1:
