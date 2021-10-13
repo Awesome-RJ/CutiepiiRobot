@@ -1,4 +1,4 @@
-alphabet-detector==0.0.7
+humanizealphabet-detector==0.0.7
 beautifulsoup4==4.10.0
 bleach==3.3.0
 cachetools==4.2.2
@@ -90,3 +90,4 @@ google-trans-new==1.1.9
 future==0.18.2
 psycopg2-binary
 geopy
+humanize
