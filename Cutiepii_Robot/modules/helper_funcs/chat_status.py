@@ -38,7 +38,7 @@ from Cutiepii_Robot import (
     WOLVES,
     dispatcher,
 )
-
+from Cutiepii_Robot.modules import connection
 from telegram import Chat, ChatMember, ParseMode, Update
 from telegram.ext import CallbackContext
 
@@ -444,8 +444,5 @@ def connection_status(func):
 
     return connected_status
 
-
-# Workaround for circular import with connection.py
-from Cutiepii_Robot.modules import connection
 
 connected = connection.connected
