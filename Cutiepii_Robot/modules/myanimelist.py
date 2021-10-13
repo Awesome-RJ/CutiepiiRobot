@@ -1,20 +1,15 @@
 """
 MIT License
-
 Copyright (C) 2021 Awesome-RJ
-
 This file is part of @Cutiepii_Robot (Telegram Bot)
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -65,10 +60,14 @@ def anime(update: Update, context: CallbackContext):
         score = anime.get("score")
         rating = anime.get("rating")
         genre_lst = anime.get("genres")
-        genres = "".join(genre.get("name") + ", " for genre in genre_lst)
+        genres = ""
+        for genre in genre_lst:
+            genres += genre.get("name") + ", "
         genres = genres[:-2]
+        studios = ""
         studio_lst = anime.get("studios")
-        studios = "".join(studio.get("name") + ", " for studio in studio_lst)
+        for studio in studio_lst:
+            studios += studio.get("name") + ", "
         studios = studios[:-2]
         duration = anime.get("duration")
         premiered = anime.get("premiered")
@@ -101,9 +100,9 @@ def anime(update: Update, context: CallbackContext):
         keyb = [
              [InlineKeyboardButton("More Information", url=url),
             InlineKeyboardButton("Add to Watchlist", callback_data=f"xanime_watchlist={title}")]]
-
-
-
+         
+    
+    
     msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
     
 
@@ -183,7 +182,9 @@ def manga(update: Update, context: CallbackContext):
         volumes = manga.get("volumes")
         chapters = manga.get("chapters")
         genre_lst = manga.get("genres")
-        genres = "".join(genre.get("name") + ", " for genre in genre_lst)
+        genres = ""
+        for genre in genre_lst:
+            genres += genre.get("name") + ", "
         genres = genres[:-2]
         synopsis = manga.get("synopsis")
         image = manga.get("image_url")
@@ -200,8 +201,8 @@ def manga(update: Update, context: CallbackContext):
         keyb = [
             [InlineKeyboardButton("More Information", url=url),
            InlineKeyboardButton("Add to Read list", callback_data=f"xanime_manga={title}")]]
-
-
+        
+        
         msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
         
         
@@ -210,10 +211,10 @@ def animestuffs(update, context):
     user = update.effective_user
     splitter = query.data.split('=')
     query_match = splitter[0]
-    callback_anime_data = splitter[1]
+    callback_anime_data = splitter[1] 
     if query_match == "xanime_watchlist":
         watchlist = list(REDIS.sunion(f'anime_watch_list{user.id}'))
-        if callback_anime_data not in watchlist:
+        if not callback_anime_data in watchlist:
             REDIS.sadd(f'anime_watch_list{user.id}', callback_anime_data)
             context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} is successfully added to your watch list.",
@@ -222,10 +223,10 @@ def animestuffs(update, context):
             context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} already exists in your watch list!",
                                                 show_alert=True)
-
+            
     elif query_match == "xanime_fvrtchar":   
         fvrt_char = list(REDIS.sunion(f'anime_fvrtchar{user.id}'))
-        if callback_anime_data not in fvrt_char:
+        if not callback_anime_data in fvrt_char:
             REDIS.sadd(f'anime_fvrtchar{user.id}', callback_anime_data)
             context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} is successfully added to your favorite character.",
@@ -236,7 +237,7 @@ def animestuffs(update, context):
                                                 show_alert=True)
     elif query_match == "xanime_manga":   
         fvrt_char = list(REDIS.sunion(f'anime_mangaread{user.id}'))
-        if callback_anime_data not in fvrt_char:
+        if not callback_anime_data in fvrt_char:
             REDIS.sadd(f'anime_mangaread{user.id}', callback_anime_data)
             context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} is successfully added to your read list.",
