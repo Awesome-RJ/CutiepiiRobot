@@ -155,17 +155,30 @@ async def karma(_, message):
             user_karma = karma[i]['karma']
             karma_dicc[str(user_id)] = user_karma
             karma_arranged = dict(
-                sorted(karma_dicc.items(), key=lambda item: item[1], reverse=True))
+                sorted(
+                    karma_dicc.items(),
+                    key=lambda item: item[1],
+                    reverse=True,
+                )
+            )
+        if not karma_dicc:
+            await m.edit("No karma in DB for this chat.")
+            return
         for user_idd, karma_count in karma_arranged.items():
             if limit > 9:
                 break
             try:
-                user_name = (await pgram.get_users(int(user_idd))).username
+                user = await pgram.get_users(int(user_idd))
+                await asyncio.sleep(0.8)
             except Exception:
                 continue
-            msg += f"{user_name} : `{karma_count}`\n"
+            first_name = user.first_name
+            if not first_name:
+                continue
+            username = user.username
+            msg += f"\n[{first_name}](https://t.me/{username}) — {karma_count}"
             limit += 1
-        await message.reply_text(msg)
+        await m.edit(msg, disable_web_page_preview=True)
     else:
         user_id = message.reply_to_message.from_user.id
         karma = await get_karma(chat_id, await int_to_alpha(user_id))
