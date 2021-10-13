@@ -90,7 +90,7 @@ textblob
 requests_html
 bs4
 multicolorcaptcha
-launchpadlib==1.10.13
+launchpadlib==1.10.14
 google-trans-new==1.1.9
 git+https://github.com/Awesome-RJ/Python_ARQ.git
 future
