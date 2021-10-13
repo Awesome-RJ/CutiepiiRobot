@@ -1,5 +1,5 @@
 alphabet_detector
-beautifulsoup4==4.9.1
+beautifulsoup4==4.10.0
 bleach
 cachetools==4.2.2
 CurrencyConverter
