@@ -165,48 +165,47 @@ def unmute(update: Update, context: CallbackContext) -> str:
 
     member = chat.get_member(int(user_id))
 
-    if member.status not in ("kicked", "left"):
-        if (
-            member.can_send_messages
-            and member.can_send_media_messages
-            and member.can_send_other_messages
-            and member.can_add_web_page_previews
-        ):
-            message.reply_text("This user already has the right to speak.")
-        else:
-            chat_permissions = ChatPermissions(
-                can_send_messages=True,
-                can_invite_users=True,
-                can_pin_messages=True,
-                can_send_polls=True,
-                can_change_info=True,
-                can_send_media_messages=True,
-                can_send_other_messages=True,
-                can_add_web_page_previews=True,
-            )
-            try:
-                bot.restrict_chat_member(chat.id, int(user_id), chat_permissions)
-            except BadRequest:
-                pass
-            bot.sendMessage(
-            chat.id,
-            "{} was unmuted by {} in <b>{}</b>\n<b>Reason</b>: <code>{}</code>".format(
-                mention_html(member.user.id, member.user.first_name), mention_html(user.id, user.first_name), message.chat.title, reason
-            ),
-            parse_mode=ParseMode.HTML,
-            )
-            return (
-                f"<b>{html.escape(chat.title)}:</b>\n"
-                f"#UNMUTE\n"
-                f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-                f"<b>User:</b> {mention_html(member.user.id, member.user.first_name)}"
-            )
-    else:
+    if member.status in ("kicked", "left"):
         message.reply_text(
             "This user isn't even in the chat, unmuting them won't make them talk more than they "
             "already do!",
         )
 
+    elif (
+            member.can_send_messages
+            and member.can_send_media_messages
+            and member.can_send_other_messages
+            and member.can_add_web_page_previews
+        ):
+        message.reply_text("This user already has the right to speak.")
+    else:
+        chat_permissions = ChatPermissions(
+            can_send_messages=True,
+            can_invite_users=True,
+            can_pin_messages=True,
+            can_send_polls=True,
+            can_change_info=True,
+            can_send_media_messages=True,
+            can_send_other_messages=True,
+            can_add_web_page_previews=True,
+        )
+        try:
+            bot.restrict_chat_member(chat.id, int(user_id), chat_permissions)
+        except BadRequest:
+            pass
+        bot.sendMessage(
+        chat.id,
+        "{} was unmuted by {} in <b>{}</b>\n<b>Reason</b>: <code>{}</code>".format(
+            mention_html(member.user.id, member.user.first_name), mention_html(user.id, user.first_name), message.chat.title, reason
+        ),
+        parse_mode=ParseMode.HTML,
+        )
+        return (
+            f"<b>{html.escape(chat.title)}:</b>\n"
+            f"#UNMUTE\n"
+            f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
+            f"<b>User:</b> {mention_html(member.user.id, member.user.first_name)}"
+        )
     return ""
 
 
@@ -220,10 +219,10 @@ def temp_mute(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
     message = update.effective_message
-   
+
     user_id, reason = extract_user_and_text(message, args)
     reply = check_user(user_id, bot, chat)
-    
+
 
     if reply:
         message.reply_text(reply)
@@ -238,11 +237,7 @@ def temp_mute(update: Update, context: CallbackContext) -> str:
     split_reason = reason.split(None, 1)
 
     time_val = split_reason[0].lower()
-    if len(split_reason) > 1:
-        reason = split_reason[1]
-    else:
-        reason = ""
-
+    reason = split_reason[1] if len(split_reason) > 1 else ""
     mutetime = extract_time(message, time_val)
 
     if not mutetime:
@@ -275,7 +270,7 @@ def temp_mute(update: Update, context: CallbackContext) -> str:
                     "Unmute", callback_data="unmute_({})".format(member.user.id))
             ]])
             bot.sendMessage(chat.id, msg, reply_markup=keyboard, parse_mode=ParseMode.HTML)
-  
+
             return log
         message.reply_text("This user is already muted.")
 

@@ -359,10 +359,10 @@ def del_blacklist(update, context):
     user = update.effective_user
     bot = context.bot
     to_match = extract_text(message)
-    
+
     if not to_match:
         return
-    
+
     if is_approved(chat.id, user.id):
         return 
 
@@ -440,9 +440,7 @@ def del_blacklist(update, context):
                     )
                     return
             except BadRequest as excp:
-                if excp.message == "Message to delete not found":
-                    pass
-                else:
+                if excp.message != "Message to delete not found":
                     LOGGER.exception("Error while deleting blacklist message.")
             break
 

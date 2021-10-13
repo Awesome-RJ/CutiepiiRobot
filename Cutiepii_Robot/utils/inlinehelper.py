@@ -444,7 +444,7 @@ async def ping_func(answers):
     ping = Ping(ping_id=randint(696969, 6969696))
     await app.send(ping)
     t2 = time()
-    ping = f"{str(round((t2 - t1), 2))} Seconds"
+    ping = f'{round(t2 - t1, 2)} Seconds'
     answers.append(
         InlineQueryResultArticle(
             title=ping, input_message_content=InputTextMessageContent(f"__**{ping}**__")
