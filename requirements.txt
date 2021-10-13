@@ -17,9 +17,9 @@ psutil==5.7.2
 pynewtonmath==1.0.1
 pyrate-limiter==2.0.3
 python-telegram-bot==13.7
-regex
+regex==2020.7.14
 requests==2.24.0
-spamwatch
+spamwatch==0.3.0
 speedtest-cli==2.1.2
 spongemock==0.3.4
 sqlalchemy==1.4.25
@@ -32,7 +32,7 @@ pyrogram
 nekos.py==1.0.3
 telegraph==1.4.1
 tgcrypto==1.2.2
-youtube_dl
+youtube_dl==2021.6.6
 youtube_search==2.1.0
 pytube==11.0.1
 youtube_search_python==1.4.9
@@ -46,7 +46,7 @@ wget==3.2
 tswift==0.7.0
 lyricsgenius==3.0.1
 envparse==0.2.0
-cryptg
+cryptg==0.2.post4
 python-arq==6.0.3
 aioredis==2.0.0
 odmantic==0.3.5
@@ -58,7 +58,7 @@ carbonnow==0.0.1
 bing_image_downloader==1.1.1
 search_engine_parser==0.6.6
 pytz==2021.3
-html2text
+html2text==0.0.2.dev0
 NumPy==1.21.2
 opencv-python-headless==4.5.3.56
 uvloop==0.16.0
