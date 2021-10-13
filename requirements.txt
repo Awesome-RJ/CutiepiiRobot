@@ -38,7 +38,7 @@ youtube_search
 pytube
 youtube_search_python
 pymongo
-motor<2.4.0,>=2.1.0
+motor>=2.1.0,<2.6.0
 dnspython
 redis
 gtts
