@@ -48,18 +48,18 @@ from Cutiepii_Robot import (
     URL,
     WEBHOOK,
     SUPPORT_CHAT,
+    BOT_USERNAME,
+    BOT_NAME,
+    EVENT_LOGS,
+    HELP_IMG,
+    GROUP_START_IMG,
+    CUTIEPII_PHOTO,
     dispatcher,
     StartTime,
     telethn,
     updater,
     pgram,
     ubot,
-    BOT_USERNAME,
-    BOT_NAME,
-    EVENT_LOGS,
-    HELP_IMG,
-    START_IMG,
-    CUTIEPII_PHOTO,
     )
 
 # needed to dynamically load modules
@@ -95,7 +95,7 @@ from telethon import Button
 @register(pattern=("/alive"))
 async def awake(event):
   CUTIEPII = event.sender.first_name
-  CUTIEPII = "**♡ I,m Cutiepii Robot 愛💕** \n\n"
+  CUTIEPII = "**♡ I,m Cutiepii Robot 愛** \n\n"
   CUTIEPII += "**♡ I'm Working With Awesome Speed**\n\n"
   CUTIEPII += "**♡ Cutiepii: LATEST Version**\n\n"
   CUTIEPII += "**♡ My Creator:** [Rajkumar](t.me/Awesome_RJ)\n\n"
@@ -304,14 +304,14 @@ def start(update: Update, context: CallbackContext):
             )
     else:
         update.effective_message.reply_animation(
-            START_IMG, caption= "<code>Cutiepii is Here For You💜\nI am Awake Since</code>: <code>{}</code>".format(
+            GROUP_START_IMG, caption= "<code>Cutiepii is Here For You💜\nI am Awake Since</code>: <code>{}</code>".format(
                 uptime
             ),
             parse_mode=ParseMode.HTML,
             reply_markup=InlineKeyboardMarkup(
                 [
                   [
-                  InlineKeyboardButton(text="Support", url="https://telegram.dog/Black_Knights_Union_Support")
+                  InlineKeyboardButton(text="Support", url=f"https://telegram.dog/{SUPPORT_CHAT}")
                   ],
                   [
                   InlineKeyboardButton(text="Updates", url="https://telegram.dog/Black_Knights_Union")
@@ -769,7 +769,7 @@ def main():
 try:
     ubot.start()
 except BaseException:
-    print("Userbot Error ! Have you added a STRING_SESSION in deploying??")
+    print("Userbot Error! Have you added a STRING_SESSION in deploying??")
     sys.exit(1)
 
 if __name__ == '__main__':
