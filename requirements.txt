@@ -21,7 +21,7 @@ speedtest-cli==2.1.3
 spongemock==0.3.4
 sqlalchemy==1.4.25
 telethon==1.23.0
-ujson==3.0.0
+ujson==4.2.0
 wikipedia==1.4.0
 zalgo-text==0.6
 fontTools==4.27.1
