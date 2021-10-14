@@ -14,7 +14,7 @@ pretty-errors==1.2.17
 psutil==5.8.0
 pynewtonmath==1.0.1
 python-telegram-bot==13.7
-regex==2020.7.14
+regex==2021.10.8
 requests==2.24.0
 spamwatch==0.3.0
 speedtest-cli==2.1.2
