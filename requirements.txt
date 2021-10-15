@@ -6,7 +6,7 @@ CurrencyConverter
 emoji==1.4.2
 feedparser==6.0.8
 googletrans==4.0.0-rc1
-pyrate-limiter==2.0.3
+pyrate-limiter==2.4.7
 lxml==4.6.3
 nltk==3.6.5
 pillow>=4.2.0
