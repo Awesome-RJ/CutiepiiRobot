@@ -34,10 +34,10 @@ from telethon.tl.types import ChannelParticipantsAdmins
 
 from Cutiepii_Robot import telethn
 
-@telethn.on(events.NewMessage(pattern="^/mentionall ?(.*)"))
+@telethn.on(events.NewMessage(pattern="^/tagall|/call|/tall|/all|/mentionall|#all|@all?(.*)"))
 async def mentionall(event):
   if event.is_private:
-    return await event.respond("__This command can be use in groups and channels!__")
+    return await event.respond("Use This In Channel or Group!")
 
   admins = []
   async for admin in telethn.iter_participants(event.chat_id, filter=ChannelParticipantsAdmins):
