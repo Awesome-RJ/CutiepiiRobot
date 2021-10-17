@@ -37,6 +37,7 @@ from Cutiepii_Robot import (
     DRAGONS,
     DEMONS,
     WOLVES,
+    SUPPORT_CHAT,
     sw,
     LOGGER,
     dispatcher,
@@ -267,7 +268,7 @@ def new_member(update: Update, context: CallbackContext):  # sourcery no-metrics
             # Welcome yourself
             if new_mem.id == bot.id:
                 update.effective_message.reply_text(
-                    "Thanks for adding me! Join @Black_Knights_Union_Support for support.",
+                    f"Thanks for adding me! Join @{SUPPORT_CHAT} for support.",
                     reply_to_message_id=reply,
                 )
                 continue
