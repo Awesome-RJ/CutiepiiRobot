@@ -144,7 +144,6 @@ def chatbot(update: Update, context: CallbackContext):
         kukiurl = requests.get('https://cutiepii-ai.vercel.app/api/Cutiepii/Rajkumar/message='+Message)
         Kuki = json.loads(kukiurl.text)
         kuki = Kuki['reply']
-        sleep(0.3)
         message.reply_text(kuki)
 
 def list_all_chats(update: Update, context: CallbackContext):
