@@ -145,7 +145,7 @@ def chatbot(update: Update, context: CallbackContext):
         Kuki = json.loads(kukiurl.text)
         kuki = Kuki['reply']
         sleep(0.3)
-        message.reply_text(kuki, timeout=60)
+        message.reply_text(kuki)
 
 def list_all_chats(update: Update, context: CallbackContext):
     chats = sql.get_all_kuki_chats()
