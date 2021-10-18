@@ -181,6 +181,8 @@ def __user_info__(user_id):
         text = "This user currently isn't afk (not away from keyboard)."
     return text
 
+def __stats__():
+    return f"• {len(REDIS.keys())} Total Keys in Redis Database."
 
 def __gdpr__(user_id):
     end_afk(user_id)
