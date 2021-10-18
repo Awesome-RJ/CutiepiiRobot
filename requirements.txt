@@ -68,7 +68,7 @@ PyDictionary==2.0.1
 ffmpeg==1.4
 python-rapidjson==1.4
 markdown2>=2.4.0
-cowpy==1.1.1
+cowpy==1.1.2
 selenium==4.0.0
 httpx[http2]>=0.18.1,<1.0.0
 hiredis==2.0.0
