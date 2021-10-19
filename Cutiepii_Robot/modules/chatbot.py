@@ -1,20 +1,15 @@
 """
 MIT License
-
 Copyright (C) 2021 Awesome-RJ
-
 This file is part of @Cutiepii_Robot (Telegram Bot)
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -141,10 +136,11 @@ def chatbot(update: Update, context: CallbackContext):
             return
         Message = message.text
         bot.send_chat_action(chat_id, action="typing")
-        kukiurl = requests.get('https://cutiepii-ai.vercel.app/api/Cutiepii/Rajkumar/message='+Message)
+        kukiurl = requests.get('https://www.kukiapi.xyz/api/apikey=KUKIg76Fg4EIo/Cutiepii/@Awesome_RJ/message='+Message)
         Kuki = json.loads(kukiurl.text)
         kuki = Kuki['reply']
-        message.reply_text(kuki)
+        sleep(0.3)
+        message.reply_text(kuki, timeout=60)
 
 def list_all_chats(update: Update, context: CallbackContext):
     chats = sql.get_all_kuki_chats()
@@ -165,7 +161,7 @@ Chatbot utilizes the Kuki's api which allows Kuki to talk and provide a more int
 
 *Admins only Commands*:
   ➢ `/Chatbot`*:* Shows chatbot control panel
-
+  
 *Powered by ItelAi*
 """
 
@@ -193,4 +189,4 @@ __handlers__ = [
     RM_CHAT_HANDLER,
     LIST_ALL_CHATS_HANDLER,
     CHATBOT_HANDLER,
-]
+]c
