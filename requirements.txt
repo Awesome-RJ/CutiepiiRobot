@@ -92,4 +92,4 @@ geopy
 humanize
 heroku3
 jikanpy==4.3.2
-futures==3.3.0
+futures==3.1.1
