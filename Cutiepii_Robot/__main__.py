@@ -311,10 +311,10 @@ def start(update: Update, context: CallbackContext):
             reply_markup=InlineKeyboardMarkup(
                 [
                   [
-                  InlineKeyboardButton(text="Support", url=f"https://telegram.dog/{SUPPORT_CHAT}")
+                  InlineKeyboardButton(text="🚑 Support", url=f"https://telegram.dog/{SUPPORT_CHAT}")
                   ],
                   [
-                  InlineKeyboardButton(text="Updates", url="https://telegram.dog/Black_Knights_Union")
+                  InlineKeyboardButton(text="📢 Updates", url="https://telegram.dog/Black_Knights_Union")
                   ]
                 ]
             ),
