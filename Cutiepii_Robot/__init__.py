@@ -300,9 +300,9 @@ pgram = Client(
 )
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
 mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
-motor = motor_asyncio.AsyncIOMotorClient(MONGO_DB_URL)
-db = motor[MONGO_DB]
-engine = AIOEngine(motor, MONGO_DB)
+# motor = motor_asyncio.AsyncIOMotorClient(MONGO_DB_URL)
+# db = motor[MONGO_DB]
+# engine = AIOEngine(motor, MONGO_DB)
 print("[INFO]: INITIALZING AIOHTTP SESSION")
 aiohttpsession = ClientSession()
 # ARQ Client
