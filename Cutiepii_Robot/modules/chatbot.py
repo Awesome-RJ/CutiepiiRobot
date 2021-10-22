@@ -189,4 +189,4 @@ __handlers__ = [
     RM_CHAT_HANDLER,
     LIST_ALL_CHATS_HANDLER,
     CHATBOT_HANDLER,
-]c
+]
