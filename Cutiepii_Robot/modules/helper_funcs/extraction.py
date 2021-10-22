@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from Cutiepii_Robot import LOGGER
 from Cutiepii_Robot.modules.users import get_user_id
