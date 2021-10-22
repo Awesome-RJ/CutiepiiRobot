@@ -24,12 +24,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
-from Cutiepii_Robot import LOGGER
-from Cutiepii_Robot.modules.users import get_user_id
 from telegram import Message, MessageEntity
 from telegram.error import BadRequest
+
+from zeldris import LOGGER
+from zeldris.modules.users import get_user_id
 
 
 def id_from_reply(message):
@@ -47,8 +48,9 @@ def extract_user(message: Message, args: List[str]) -> Optional[int]:
     return extract_user_and_text(message, args)[0]
 
 
-def extract_user_and_text(message: Message,
-                          args: List[str]) -> tuple(Optional[int], Optional[str]):
+def extract_user_and_text(
+    message: Message, args: List[str]
+) -> (Optional[int], Optional[str]):
     prev_message = message.reply_to_message
     split_text = message.text.split(None, 1)
 
@@ -60,33 +62,25 @@ def extract_user_and_text(message: Message,
     text = ""
 
     entities = list(message.parse_entities([MessageEntity.TEXT_MENTION]))
-    if len(entities) > 0:
-        ent = entities[0]
-    else:
-        ent = None
-
+    ent = entities[0] if entities else None
     # if entity offset matches (command end/text start) then all good
-    if entities and ent and ent.offset == len(
-            message.text) - len(text_to_parse):
+    if entities and ent and ent.offset == len(message.text) - len(text_to_parse):
         ent = entities[0]
         user_id = ent.user.id
-        text = message.text[ent.offset + ent.length:]
+        text = message.text[ent.offset + ent.length :]
 
-    elif len(args) >= 1 and args[0][0] == '@':
+    elif len(args) >= 1 and args[0][0] == "@":
         user = args[0]
         user_id = get_user_id(user)
         if not user_id:
             message.reply_text(
-                "No idea who this user is. You'll be able to interact with them if "
+                "I don't have that user in my db. You'll be able to interact with them if "
                 "you reply to that person's message instead, or forward one of that user's messages."
             )
             return None, None
-
-        else:
-            user_id = user_id
-            res = message.text.split(None, 2)
-            if len(res) >= 3:
-                text = res[2]
+        res = message.text.split(None, 2)
+        if len(res) >= 3:
+            text = res[2]
 
     elif len(args) >= 1 and args[0].isdigit():
         user_id = int(args[0])
@@ -107,7 +101,8 @@ def extract_user_and_text(message: Message,
             message.reply_text(
                 "I don't seem to have interacted with this user before - please forward a message from "
                 "them to give me control! (like a voodoo doll, I need a piece of them to be able "
-                "to execute certain commands...)")
+                "to execute certain commands...)"
+            )
         else:
             LOGGER.exception("Exception %s on user %s", excp.message, user_id)
 
@@ -124,8 +119,9 @@ def extract_text(message) -> str:
     )
 
 
-def extract_unt_fedban(message: Message,
-                       args: List[str]) -> tuple(Optional[int], Optional[str]):
+def extract_unt_fedban(
+    message: Message, args: List[str]
+) -> (Optional[int], Optional[str]):
     prev_message = message.reply_to_message
     split_text = message.text.split(None, 1)
 
@@ -137,33 +133,25 @@ def extract_unt_fedban(message: Message,
     text = ""
 
     entities = list(message.parse_entities([MessageEntity.TEXT_MENTION]))
-    if len(entities) > 0:
-        ent = entities[0]
-    else:
-        ent = None
-
+    ent = entities[0] if entities else None
     # if entity offset matches (command end/text start) then all good
-    if entities and ent and ent.offset == len(
-            message.text) - len(text_to_parse):
+    if entities and ent and ent.offset == len(message.text) - len(text_to_parse):
         ent = entities[0]
         user_id = ent.user.id
-        text = message.text[ent.offset + ent.length:]
+        text = message.text[ent.offset + ent.length :]
 
-    elif len(args) >= 1 and args[0][0] == '@':
+    elif len(args) >= 1 and args[0][0] == "@":
         user = args[0]
         user_id = get_user_id(user)
-        if not user_id and not isinstance(user_id, int):
+        if not user_id and not str(user_id).isdigit():
             message.reply_text(
-                "I don't have that user in my db.  "
-                "You'll be able to interact with them if you reply to that person's message instead, or forward one of that user's messages."
+                "I don't have this user's information in my database so, you'll not be able to interact with them"
+                "Try replying to that person's msg or forward their message so i can act upon them"
             )
             return None, None
-
-        else:
-            user_id = user_id
-            res = message.text.split(None, 2)
-            if len(res) >= 3:
-                text = res[2]
+        res = message.text.split(None, 2)
+        if len(res) >= 3:
+            text = res[2]
 
     elif len(args) >= 1 and args[0].isdigit():
         user_id = int(args[0])
@@ -180,18 +168,20 @@ def extract_unt_fedban(message: Message,
     try:
         message.bot.get_chat(user_id)
     except BadRequest as excp:
-        if excp.message in ("User_id_invalid",
-                            "Chat not found") and not isinstance(user_id, int):
+        if (
+            excp.message in ("User_id_invalid", "Chat not found")
+            and not str(user_id).isdigit()
+        ):
             message.reply_text(
-                "I don't seem to have interacted with this user before "
-                "please forward a message from them to give me control! "
-                "(like a voodoo doll, I need a piece of them to be able to execute certain commands...)"
+                "I don't seem to have interacted with this user before - please forward a message from "
+                "them to give me control! (like a voodoo doll, I need a piece of them to be able "
+                "to execute certain commands...)"
             )
             return None, None
-        elif excp.message != "Chat not found":
+        if excp.message != "Chat not found":
             LOGGER.exception("Exception %s on user %s", excp.message, user_id)
             return None, None
-        elif not isinstance(user_id, int):
+        if not str(user_id).isdigit():
             return None, None
 
     return user_id, text
