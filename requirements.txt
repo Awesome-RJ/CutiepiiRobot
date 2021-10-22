@@ -80,7 +80,7 @@ git+https://github.com/Awesome-RJ/GoGoAnimeAPI.git
 better_profanity==0.7.0
 pydub==0.25.1
 nudepy==0.5.1
-textblob==0.15.3
+textblob==0.17.1
 requests_html==0.10.0
 bs4==0.0.1
 multicolorcaptcha==1.1.3
