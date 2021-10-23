@@ -28,7 +28,7 @@ import re
 import time
 
 from telegram import Update
-from telegram.ext import CommandHandler
+from telegram.ext import CommandHandler, run_async
 from telegram.ext.callbackcontext import CallbackContext
 from telegram.ext.filters import Filters
 from telegram.parsemode import ParseMode
@@ -221,27 +221,30 @@ def clear_all_my_reminders(update: Update, context: CallbackContext):
 
 __mod_name__ = "Reminders"
 __help__ = """
- • `/reminders`*:* get a list of *TimeStamps* of your reminders. 
- • `/setreminder <time> <remind message>`*:* Set a reminder after the mentioned time.
- • `/clearreminder <timestamp>`*:* clears the reminder with that timestamp if the time to remind is not yet completed.
- • `/clearmyreminders`*:* clears all the reminders of the user.
+  ➢ `/reminders`*:* get a list of *TimeStamps* of your reminders. 
+  ➢ `/setreminder <time> <remind message>`*:* Set a reminder after the mentioned time.
+  ➢ `/clearreminder <timestamp>`*:* clears the reminder with that timestamp if the time to remind is not yet completed.
+  ➢ `/clearmyreminders`*:* clears all the reminders of the user.
+  
 *Owner Only:*
- • `/warns <userhandle>`*:* get a user's number, and reason, of warns.
+  ➢ `/warns <userhandle>`*:* get a user's number, and reason, of warns.
+  
 *Similar Commands:*
- • `/reminders`, `/myreminders`
- • `/clearmyreminders`, `/clearallmyreminders`
+  ➢ `/reminders`, `/myreminders`
+  ➢ `/clearmyreminders`, `/clearallmyreminders`
+  
 *Usage:*
- • `/setreminder 30s reminder`*:* Here the time format is same as the time format in muting but with extra seconds(s)
- • `/clearreminder 1234567890123456789`
+  ➢ `/setreminder 30s reminder`*:* Here the time format is same as the time format in muting but with extra seconds(s)
+  ➢ `/clearreminder 1234567890123456789`
 """
 
-RemindersHandler = CommandHandler(['reminders', 'myreminders'], reminders, filters = Filters.chat_type.private)
-SetReminderHandler = DisableAbleCommandHandler('setreminder', set_reminder)
-ClearReminderHandler = DisableAbleCommandHandler('clearreminder', clear_reminder)
+RemindersHandler = CommandHandler(['reminders', 'myreminders'], reminders, filters = Filters.chat_type.private, run_async=True)
+SetReminderHandler = DisableAbleCommandHandler('setreminder', set_reminder, run_async=True)
+ClearReminderHandler = DisableAbleCommandHandler('clearreminder', clear_reminder, run_async=True)
 ClearAllRemindersHandler = CommandHandler(
-    'clearallreminders', clear_all_reminders, filters = Filters.chat(OWNER_ID))
+    'clearallreminders', clear_all_reminders, filters = Filters.chat(OWNER_ID), run_async=True)
 ClearALLMyRemindersHandler = CommandHandler(
-    ['clearmyreminders', 'clearallmyreminders'], clear_all_my_reminders, filters = Filters.chat_type.private)
+    ['clearmyreminders', 'clearallmyreminders'], clear_all_my_reminders, filters = Filters.chat_type.private, run_async=True)
 
 dispatcher.add_handler(RemindersHandler)
 dispatcher.add_handler(SetReminderHandler)
