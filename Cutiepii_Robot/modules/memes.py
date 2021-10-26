@@ -57,7 +57,7 @@ WIDE_MAP = {i: i + 0xFEE0 for i in range(0x21, 0x7F)}
 WIDE_MAP[0x20] = 0x3000
 
 
-@pgram.on(events.NewMessage(pattern="^/news ?(.*)"))
+@telethn.on(events.NewMessage(pattern="^/news ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
