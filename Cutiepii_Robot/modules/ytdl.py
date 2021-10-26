@@ -39,7 +39,6 @@ from youtube_dl.utils import (DownloadError, ContentTooShortError,
 from asyncio import sleep
 from telethon.tl.types import DocumentAttributeAudio
 from collections import deque
-from googleapiclient.discovery import build
 from html import unescape
 
 from Cutiepii_Robot.events import register
