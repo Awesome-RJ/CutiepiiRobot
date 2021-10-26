@@ -73,7 +73,7 @@ selenium==4.0.0
 httpx[http2]>=0.18.1,<1.0.0
 hiredis==2.0.0
 pendulum==2.1.2
-img2pdf==0.4.2
+img2pdf==0.4.3
 google-api-python-client==2.27.0
 secureme==0.0.4
 git+https://github.com/Awesome-RJ/GoGoAnimeAPI.git
