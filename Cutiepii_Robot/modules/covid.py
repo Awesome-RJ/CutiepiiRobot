@@ -57,9 +57,7 @@ def covid(update: Update, context: CallbackContext):
            reply_text = f"**Cases for {r['country']} 🦠**\nCases: {r['cases']:,}\nCases Today: {r['todayCases']:,}\nDeaths: {r['deaths']:,}\nDeaths Today: {r['todayDeaths']:,}\nRecovered: {r['recovered']:,}\nActive: {r['active']:,}\nCritical: {r['critical']:,}\nCases/Mil: {r['casesPerOneMillion']}\nDeaths/Mil: {r['deathsPerOneMillion']}"
        message.reply_text(reply_text, parse_mode=ParseMode.MARKDOWN)
     except Exception:
-        return
-    await
-    message.reply_text("Not found!")
+        return msg.reply_text("There was a problem while importing the data!")
 
 
 COVID_HANDLER = DisableAbleCommandHandler(["covid", "corona"], covid, run_async = True)
