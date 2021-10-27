@@ -145,7 +145,7 @@ if ENV:
     GOOGLE_CHROME_BIN = "/usr/bin/google-chrome"
     CHROME_DRIVER = "/usr/bin/chromedriver"
     BOT_API_URL = os.environ.get('BOT_API_URL', "https://api.telegram.org/bot")
-    BOT_API_FILE_URL = os.environ.get('BOT_API_URL', "https://api.telegram.org/file/bot")
+
     HELP_IMG = os.environ.get("HELP_IMG", True)
     GROUP_START_IMG = os.environ.get("GROUP_START_IMG", True)
     CUTIEPII_PHOTO = os.environ.get("CUTIEPII_PHOTO", True)
@@ -232,7 +232,6 @@ else:
     BOT_NAME = Config.BOT_NAME
     DEL_CMDS = Config.DEL_CMDS
     BOT_API_URL = Config.BOT_API_URL
-    BOT_API_URL = Config.BOT_API_FILE_URL  
     MONGO_DB_URL = Config.MONGO_DB_URL
     MONGO_DB = Config.MONGO_DB
     HELP_IMG = Config.HELP_IMG
@@ -288,7 +287,7 @@ print("[CUTIEPII]: Telegraph Installing")
 telegraph = Telegraph()
 print("[CUTIEPII]: Telegraph Account Creating")
 telegraph.create_account(short_name='Cutiepii')
-updater = tg.Updater(token=TOKEN, base_url=BOT_API_URL,base_file_url=BOT_API_FILE_URL, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)           
+updater = tg.Updater(token=TOKEN, base_url=BOT_API_URL, workers=WORKERS, request_kwargs={"read_timeout": 10, "connect_timeout": 10}, use_context=True)           
 print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 dispatcher = updater.dispatcher
