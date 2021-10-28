@@ -90,9 +90,9 @@ from telegram.ext import (
 from telegram.ext.dispatcher import DispatcherHandlerStop, run_async
 from telegram.utils.helpers import escape_markdown
 from pyrogram import Client, idle
-from telethon import Button
+from telethon import Button, events
 
-@register(pattern=("/alive"))
+@telethn.on(events.NewMessage(pattern="("/alive"))
 async def awake(event):
   CUTIEPII = event.sender.first_name
   CUTIEPII = "**♡ I,m Cutiepii Robot 愛** \n\n"
