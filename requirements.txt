@@ -84,7 +84,7 @@ textblob==0.17.1
 requests_html==0.10.0
 bs4==0.0.1
 multicolorcaptcha==1.1.3
-launchpadlib==1.10.14
+launchpadlib==1.10.15.1
 google-trans-new==1.1.9
 future
 psycopg2-binary
