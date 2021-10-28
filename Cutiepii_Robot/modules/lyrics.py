@@ -35,7 +35,7 @@ import wget
 from pyrogram import filters
 from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent, Message
 from tswift import Song
-from youtube_dl import yt-dlp
+from yt_dlp import YoutubeDL
 from youtubesearchpython import SearchVideos
 from telegram import Message
 
@@ -112,7 +112,7 @@ async def ytmusic(client, message: Message):
         "quiet": True,
     }
     try:
-        with yt-dlp(opts) as ytdl:
+        with YoutubeDL(opts) as ytdl:
             ytdl_data = ytdl.extract_info(url, download=True)
     except Exception as e:
         await event.edit(event, f'**Failed To Download** \n**Error :** `{e}`')
@@ -184,7 +184,7 @@ async def ytmusic(client, message: Message):
         "logtostderr": False,
     }
     try:
-        with yt-dlp(opts) as ytdl:
+        with YoutubeDL(opts) as ytdl:
             ytdl_data = ytdl.extract_info(mo, download=True)
     except Exception as e:
         await pablo.edit(f'**Failed To Download** \n**Error :** `{e}`')
