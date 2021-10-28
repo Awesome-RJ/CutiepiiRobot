@@ -32,7 +32,7 @@ import json
 from telethon.tl.types import DocumentAttributeAudio
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot.utils.progress import progress
-from youtube_dl import YoutubeDL
+from youtube_dl import yt-dlp
 from youtube_dl.utils import (DownloadError, ContentTooShortError,
 
                               ExtractorError, GeoRestrictedError,
@@ -101,7 +101,7 @@ async def download_video(v_url):
        song = True
    try:
       await rkp.edit("`Fetching data, please wait..`")
-      with YoutubeDL(opts) as rip:
+      with yt-dlp(opts) as rip:
           rip_data = rip.extract_info(url)
    except DownloadError as DE:
       await rkp.edit(f'`{DE}`')

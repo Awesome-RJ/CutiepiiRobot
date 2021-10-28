@@ -31,7 +31,7 @@ import asyncio
 import shutil
 import requests
 
-from youtube_dl import YoutubeDL
+from youtube_dl import yt-dlp
 from youtube_dl.utils import (DownloadError, ContentTooShortError,
                               ExtractorError, GeoRestrictedError,
                               MaxDownloadsReached, PostProcessingError,
@@ -111,7 +111,7 @@ async def download_video(v_url):
         video = True
     try:
         await lmao.edit("`Fetching data, please wait..`")
-        with YoutubeDL(opts) as ytdl:
+        with yt-dlp(opts) as ytdl:
             ytdl_data = ytdl.extract_info(url)
     except DownloadError as DE:
         await lmao.edit(f'`{DE}`')
