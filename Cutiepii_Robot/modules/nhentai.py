@@ -55,8 +55,6 @@ async def nhentai(client, message):
             ]
         )
     )
-    except Exception:
-      return msg.reply_text("There was a problem while importing the data!")
 
 
 def nhentai_data(noombers):
