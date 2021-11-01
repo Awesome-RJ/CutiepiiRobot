@@ -24,14 +24,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import traceback
-import requests
 import html
+import io
 import random
 import sys
-import pretty_errors
-import io
+import traceback
 
+import pretty_errors
+import requests
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import CallbackContext, CommandHandler
 from Cutiepii_Robot import dispatcher, DEV_USERS, ERROR_LOGS
@@ -40,7 +40,7 @@ pretty_errors.mono()
 
 
 class ErrorsDict(dict):
-    "A custom dict to store errors and their count"
+    """A custom dict to store errors and their count"""
 
     def __init__(self, *args, **kwargs):
         self.raw = []
@@ -102,7 +102,8 @@ def error_callback(update: Update, context: CallbackContext):
         tb,
     )
     key = requests.post(
-        "https://hastebin.com/documents", data=pretty_message.encode("UTF-8"),
+        "https://www.toptal.com/developers/hastebin/documents",
+        data=pretty_message.encode("UTF-8"),
     ).json()
     e = html.escape(f"{context.error}")
     if not key.get('key'):
@@ -115,8 +116,8 @@ def error_callback(update: Update, context: CallbackContext):
                 parse_mode="html",
         )
         return
-    key = key.get('key')
-    url = f"https://hastebin.com/{key}"
+    key = key.get("key")
+    url = f"https://www.toptal.com/developers/hastebin/{key}"
     context.bot.send_message(
         ERROR_LOGS,
             text=f"#{context.error.identifier}\n<b>An unknown error occured:</b>\n<code>{e}</code>",
