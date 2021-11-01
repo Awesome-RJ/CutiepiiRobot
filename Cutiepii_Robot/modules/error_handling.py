@@ -102,7 +102,7 @@ def error_callback(update: Update, context: CallbackContext):
         tb,
     )
     key = requests.post(
-        "https://www.toptal.com/developers/hastebin/documents", 
+        "https://www.toptal.com/developers/hastebin/documents",
         data=pretty_message.encode("UTF-8"),
     ).json()
     e = html.escape(f"{context.error}")
