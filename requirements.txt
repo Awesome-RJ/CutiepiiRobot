@@ -4,7 +4,6 @@ cachetools==4.2.2
 CurrencyConverter
 emoji==1.6.1
 feedparser==6.0.8
-googletrans==4.0.0-rc1
 pyrate-limiter==2.4.7
 lxml==4.6.3
 nltk==3.6.5
@@ -29,7 +28,6 @@ telegraph==2.0.0
 tgcrypto==1.2.2
 youtube_search==2.1.0
 pytube==11.0.1
-youtube_search_python==1.4.9
 pymongo==3.12.1
 motor>=2.1.0,<2.6.0
 dnspython==2.1.0
@@ -63,7 +61,6 @@ python-rapidjson==1.5
 markdown2>=2.4.0
 cowpy==1.1.1
 selenium==4.0.0
-httpx[http2]>=0.18.1,<1.0.0
 hiredis==2.0.0
 pendulum==2.1.2
 img2pdf==0.4.3
@@ -93,3 +90,6 @@ python-arq
 aiohttp
 carbonnow
 search_engine_parser
+googletrans
+youtube_search_python
+httpx
