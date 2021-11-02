@@ -41,7 +41,6 @@ tswift==0.7.0
 lyricsgenius==3.0.1
 envparse==0.2.0
 cryptg==0.2.post4
-python-arq==6.0.3
 aioredis==2.0.0
 odmantic==0.3.5
 pykeyboard==0.1.2
@@ -92,3 +91,5 @@ heroku3
 beautifulsoup4
 pyrogram
 yt-dlp
+python-arq
+aiohttp
