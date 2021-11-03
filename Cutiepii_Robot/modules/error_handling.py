@@ -37,7 +37,7 @@ import requests
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import CallbackContext, CommandHandler
 
-from zeldris import dispatcher, DEV_USERS, ERROR_LOGS
+from Cutiepii_Robot import dispatcher, DEV_USERS, ERROR_LOGS
 
 pretty_errors.mono()
 
