@@ -407,9 +407,9 @@ def fullpromote(update: Update, context: CallbackContext) -> str:
             message.reply_text("An error occured while promoting.")
         return
 
-    bot.sendMessage(
-        chat.id,
-        f"Sucessfully promoted <b>{user_member.user.first_name or user_id}</b> with full rights!",
+    message.reply_text(
+        f"Fully Promoted <b>{user_member.user.first_name or user_id}</b>"
+        + f" with title <code>{title[:16]}</code>!",
         parse_mode=ParseMode.HTML,
     )
 
@@ -474,10 +474,8 @@ def demote(update: Update, context: CallbackContext) -> str:
             can_promote_members=False,
             can_manage_voice_chats=False,
         )
-
-        bot.sendMessage(
-            chat.id,
-            f"Sucessfully demoted <b>{user_member.user.first_name or user_id}</b>!",
+        message.reply_text(
+            f"Successfully demoted <b>{user_member.user.first_name or user_id}</b>!",
             parse_mode=ParseMode.HTML,
         )
 
@@ -599,7 +597,13 @@ def pin(update: Update, context: CallbackContext) -> str:
                 disable_notification=is_silent,
             )
         except BadRequest as excp:
-            if excp.message != "Chat_not_modified":
+        if excp.message == "Chat_not_modified":
+            pass
+        elif excp.message == "Message to unpin not found":
+            message.reply_text(
+                "I can't see pinned message, Maybe already unpinned, or pin message to old!"
+            )
+        else:
                 raise
         log_message = (
             f"<b>{html.escape(chat.title)}:</b>\n"
