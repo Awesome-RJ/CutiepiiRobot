@@ -81,6 +81,15 @@ def speedtestxyz_callback(update: Update, context: CallbackContext):
             update.effective_message.edit_text(replymsg, parse_mode=ParseMode.MARKDOWN)
     else:
         query.answer("You are required to join Heroes Association to use this command.")
+        
+        
+@typing_action
+def get_bot_ip(update, _):
+    """Sends the bot's IP address, so as to be able to ssh in if necessary.
+    OWNER ONLY.
+    """
+    res = requests.get("http://ipinfo.io/ip")
+    update.message.reply_text(res.text)
 
 
 SPEED_TEST_HANDLER = DisableAbleCommandHandler("speedtest", speedtestxyz, run_async=True)
