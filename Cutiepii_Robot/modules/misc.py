@@ -31,8 +31,7 @@ from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action, send_action
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram import ParseMode, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update, ChatAction
 from telegram.ext.dispatcher import run_async
 from telegram.ext import CallbackContext, Filters, CommandHandler
 
