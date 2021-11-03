@@ -98,8 +98,8 @@ def gtts(update, context):
             reply = reply.replace(x, "")
     try:
         tts = gTTS(reply)
-        tts.save("zeldris.mp3")
-        with open("zeldris.mp3", "rb") as speech:
+        tts.save("Cutiepii.mp3")
+        with open("Cutiepii.mp3", "rb") as speech:
             msg.reply_audio(speech)
     finally:
         if os.path.isfile("zeldris.mp3"):
