@@ -34,6 +34,7 @@ import speedtest
 from Cutiepii_Robot import DEV_USERS, dispatcher, OWNER_ID
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
+from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action, send_action
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler, run_async, Filters, CommandHandler
