@@ -24,13 +24,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import datetime
+import time
+import requests
 import speedtest
 
-from Cutiepii_Robot import DEV_USERS, dispatcher
+from Cutiepii_Robot import DEV_USERS, dispatcher, OWNER_ID
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
-from telegram.ext import CallbackContext, CallbackQueryHandler, run_async
+from telegram.ext import CallbackContext, CallbackQueryHandler, run_async, Filters, CommandHandler
 
 
 def convert(speed):
@@ -49,7 +53,7 @@ def speedtestxyz(update: Update, context: CallbackContext):
         "Select SpeedTest Mode", reply_markup=InlineKeyboardMarkup(buttons),
     )
 
-
+        
 
 def speedtestxyz_callback(update: Update, context: CallbackContext):
     query = update.callback_query
@@ -78,13 +82,13 @@ def speedtestxyz_callback(update: Update, context: CallbackContext):
 
 
 SPEED_TEST_HANDLER = DisableAbleCommandHandler("speedtest", speedtestxyz, run_async=True)
-SPEED_TEST_CALLBACKHANDLER = CallbackQueryHandler(
-    speedtestxyz_callback, pattern="speedtest_.*", run_async=True,
-)
+SPEED_TEST_CALLBACKHANDLER = CallbackQueryHandler(speedtestxyz_callback, pattern="speedtest_.*", run_async=True)
+IP_HANDLER = CommandHandler("ip", get_bot_ip, filters=Filters.chat(OWNER_ID), run_async=True)
 
 dispatcher.add_handler(SPEED_TEST_HANDLER)
 dispatcher.add_handler(SPEED_TEST_CALLBACKHANDLER)
-
+dispatcher.add_handler(IP_HANDLER)
+                       
 __mod_name__ = "SpeedTest"
-__command_list__ = ["speedtest"]
-__handlers__ = [SPEED_TEST_HANDLER, SPEED_TEST_CALLBACKHANDLER]
+__command_list__ = ["speedtest", "ip"]
+__handlers__ = [SPEED_TEST_HANDLER, SPEED_TEST_CALLBACKHANDLER, IP_HANDLER]
