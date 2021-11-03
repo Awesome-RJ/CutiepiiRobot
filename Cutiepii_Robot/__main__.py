@@ -304,22 +304,25 @@ def start(update: Update, context: CallbackContext):
             )
     else:
         update.effective_message.reply_animation(
-            GROUP_START_IMG, caption= "<code>Cutiepii is Here For You💜\nI am Awake Since</code>: <code>{}</code>".format(
+            GROUP_START_IMG, caption= "<b>Yes, Darling I'm alive!\nHaven't sleep since</b>: <code>{}</code>".format(
                 uptime
             ),
             parse_mode=ParseMode.HTML,
             reply_markup=InlineKeyboardMarkup(
                 [
-                  [
-                  InlineKeyboardButton(text="🚑 Support", url=f"https://telegram.dog/{SUPPORT_CHAT}")
-                  ],
-                  [
-                  InlineKeyboardButton(text="📢 Updates", url="https://telegram.dog/Black_Knights_Union")
-                  ]
+                    [
+                        InlineKeyboardButton(
+                            text="🚑 Support",
+                            url=f"https://telegram.dog/{SUPPORT_CHAT}",
+                        ),
+                        InlineKeyboardButton(
+                            text="📢 Updates",
+                            url="https://telegram.dog/Black_Knights_Union",
+                        ),
+                    ]
                 ]
             ),
         )
-
 
 def error_handler(update, context):
     """Log the error and send a telegram message to notify the developer."""
@@ -715,7 +718,10 @@ def migrate_chats(update: Update, context: CallbackContext):
 
     LOGGER.info("Migrating from %s, to %s", str(old_chat), str(new_chat))
     for mod in MIGRATEABLE:
-        mod.__migrate__(old_chat, new_chat)
+        try:
+            mod.__migrate__(old_chat, new_chat)
+        except BaseException:
+            pass  # Some sql modules make errors.
 
     LOGGER.info("Successfully migrated!")
     raise DispatcherHandlerStop
