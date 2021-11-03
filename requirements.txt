@@ -24,7 +24,7 @@ wikipedia==1.4.0
 zalgo-text==0.6
 fontTools==4.27.1
 nekos.py==1.0.3
-telegraph==2.0.0
+telegraph==2.0.1
 tgcrypto==1.2.2
 youtube_search==2.1.0
 pytube==11.0.1
