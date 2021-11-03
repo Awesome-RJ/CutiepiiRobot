@@ -577,28 +577,68 @@ def set_title(update: Update, context: CallbackContext):
 @can_pin
 @user_admin
 @loggable
-def pin(update: Update, context: CallbackContext) -> str:
-    bot = context.bot
-    args = context.args
-
+def pin(update, context):
+    bot, args = context.bot, context.args
     user = update.effective_user
     chat = update.effective_chat
+    message = update.effective_message
 
-    is_group = chat.type not in ('private', 'channel')
+    is_group = chat.type not in ["private", "channel"]
+
     prev_message = update.effective_message.reply_to_message
+
+    if user_can_pin(chat, user, bot.id) is False:
+        message.reply_text("You are missing rights to pin a message!")
+        return ""
+
+    if not prev_message:
+        message.reply_text("Reply to the message you want to pin!")
+        return
 
     is_silent = True
     if len(args) >= 1:
-        is_silent = args[0].lower() in ('notify', 'loud', 'violent')
+        is_silent = (
+            args[0].lower() != "notify"
+            or args[0].lower() == "loud"
+            or args[0].lower() == "violent"
+        )
 
     if prev_message and is_group:
         try:
             bot.pinChatMessage(
-                chat.id,
-                prev_message.message_id,
-                disable_notification=is_silent,
+                chat.id, prev_message.message_id, disable_notification=is_silent
             )
         except BadRequest as excp:
+            if excp.message != "Chat_not_modified":
+                raise
+        return (
+            "<b>{}:</b>"
+            "\n#PINNED"
+            "\n<b>Admin:</b> {}".format(
+                html.escape(chat.title), mention_html(user.id, user.first_name)
+            )
+        )
+
+    return ""
+
+
+@bot_admin
+@can_pin
+@user_admin
+@loggable
+def unpin(update, context):
+    bot = context.bot
+    chat = update.effective_chat
+    user = update.effective_user
+    message = update.effective_message
+
+    if user_can_pin(chat, user, bot.id) is False:
+        message.reply_text("You are missing rights to unpin a message!")
+        return ""
+
+    try:
+        bot.unpinChatMessage(chat.id)
+    except BadRequest as excp:
         if excp.message == "Chat_not_modified":
             pass
         elif excp.message == "Message to unpin not found":
@@ -606,40 +646,15 @@ def pin(update: Update, context: CallbackContext) -> str:
                 "I can't see pinned message, Maybe already unpinned, or pin message to old!"
             )
         else:
-                raise
-        log_message = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"#PINNED\n"
-            f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}"
-        )
-
-        return log_message
-
-
-@bot_admin
-@can_pin
-@user_admin
-@loggable
-def unpin(update: Update, context: CallbackContext) -> str:
-    bot = context.bot
-    chat = update.effective_chat
-    user = update.effective_user
-
-    try:
-        bot.unpinChatMessage(chat.id)
-    except BadRequest as excp:
-        if excp.message == "Chat_not_modified":
-            pass
-        else:
             raise
 
-    log_message = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#UNPINNED\n"
-        f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}"
+    return (
+        "<b>{}:</b>"
+        "\n#UNPINNED"
+        "\n<b>Admin:</b> {}".format(
+            html.escape(chat.title), mention_html(user.id, user.first_name)
+        )
     )
-
-    return log_message
 
 
 @bot_admin
