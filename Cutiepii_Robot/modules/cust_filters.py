@@ -173,6 +173,7 @@ def filters(update, context):
 
     text, file_type, file_id = get_filter_type(msg)
     if not msg.reply_to_message and len(extracted) >= 2:
+        offset = len(extracted[1]) - len(
             msg.text
         )  # set correct offset relative to command + notename
         text, buttons = button_markdown_parser(
