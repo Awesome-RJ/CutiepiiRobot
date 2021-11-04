@@ -1062,7 +1062,7 @@ SETCHATPIC_HANDLER = CommandHandler("setgpic", setchatpic, filters=Filters.chat_
 RMCHATPIC_HANDLER = CommandHandler("delgpic", rmchatpic, filters=Filters.chat_type.groups, run_async=True)
 SETCHAT_TITLE_HANDLER = CommandHandler("setgtitle", setchat_title, filters=Filters.chat_type.groups, run_async=True)
 
-ADMINLIST_HANDLER = DisableAbleCommandHandler("admins", adminlist, run_async=True)
+ADMINLIST_HANDLER = DisableAbleCommandHandler(["admins", "adminlist"], adminlist, run_async=True)
 
 PIN_HANDLER = CommandHandler("pin", pin, filters=Filters.chat_type.groups, run_async=True)
 UNPIN_HANDLER = CommandHandler("unpin", unpin, filters=Filters.chat_type.groups, run_async=True)
