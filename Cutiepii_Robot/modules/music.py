@@ -37,6 +37,7 @@ from pyrogram.types import Message
 from Cutiepii_Robot import pgram, BOT_USERNAME
 from Cutiepii_Robot.utils.pluginhelp import get_text
 from youtube_search import YoutubeSearch
+from youtubesearchpython import SearchVideos
 
 
 
@@ -48,12 +49,12 @@ def time_to_seconds(time):
 async def ytmusic(client, message: Message):
     urlissed = get_text(message)
     pablo = await client.send_message(
-        message.chat.id, f"`Getting {urlissed} From Youtube Servers. Please Wait.`"
+        message.chat.id, f"Name ➛ {urlissed} 🔎 Finding the song..."
     )
     if not urlissed:
-        await pablo.edit("Invalid Command Syntax, Please Check Help Menu To Know More!")
+        await pablo.edit("Invalid Command Syntax")
         return
-    search = YoutubeSearch(f"{urlissed}", offset=1, mode="dict", max_results=1)
+    search = SearchVideos(f"{urlissed}", offset=1, mode="dict", max_results=1)
     mi = search.result()
     mio = mi["search_result"]
     mo = mio[0]["link"]
