@@ -37,7 +37,7 @@ import requests
 from pyrogram import filters
 from pyrogram.types import Message
 from Cutiepii_Robot import pgram, BOT_USERNAME
-from Cutiepii_Robot.utils.pluginhelp import get_text
+from Cutiepii_Robot.utils.pluginhelp import get_text, progress
 from youtube_search import YoutubeSearch
 from youtubesearchpython import SearchVideos
 
