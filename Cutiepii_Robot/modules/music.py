@@ -33,6 +33,7 @@ import yt_dlp
 import wget
 
 from pyrogram import filters
+from pyrogram.types import Message
 from Cutiepii_Robot import pgram, BOT_USERNAME
 from youtube_search import YoutubeSearch
 
