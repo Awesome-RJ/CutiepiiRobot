@@ -1,7 +1,9 @@
 """
 MIT License
 
+Copyright (C) 2017-2019, Paul Larsen
 Copyright (C) 2021 Awesome-RJ
+Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 This file is part of @Cutiepii_Robot (Telegram Bot)
 
@@ -10,8 +12,8 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
+furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
@@ -277,9 +279,13 @@ LOGO_LINKS            = ["https://telegra.ph/file/d1838efdafce9fe611d0c.jpg",
 @register(pattern="^/logo ?(.*)")
 async def lego(event):
  quew = event.pattern_match.group(1)
- if event.sender_id != OWNER_ID and not quew:
-  await event.reply('Please Gimmie A Text For The Logo.')
-  return
+ if event.sender_id == OWNER_ID:
+     pass
+ else:
+
+  if not quew:
+     await event.reply('Please Gimmie A Text For The Logo.')
+     return
  pesan = await event.reply('Logo In A Process. Please Wait.')
  try:
     text = event.pattern_match.group(1)

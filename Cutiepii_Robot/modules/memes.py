@@ -1,7 +1,9 @@
 """
 MIT License
 
+Copyright (C) 2017-2019, Paul Larsen
 Copyright (C) 2021 Awesome-RJ
+Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 This file is part of @Cutiepii_Robot (Telegram Bot)
 
@@ -10,8 +12,8 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
+furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
@@ -41,6 +43,7 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageFont, ImageOps
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from telethon.tl.types import DocumentAttributeFilename, InputMessagesFilterDocument, InputMediaDice
+from telethon import events
 from zalgo_text import zalgo
 
 from pyrogram import filters
@@ -55,6 +58,30 @@ nltk.download("averaged_perceptron_tagger")
 
 WIDE_MAP = {i: i + 0xFEE0 for i in range(0x21, 0x7F)}
 WIDE_MAP[0x20] = 0x3000
+
+
+@telethn.on(events.NewMessage(pattern="^/news ?(.*)"))
+async def _(event):
+    if event.fwd_from:
+        return
+    infintyvar = event.pattern_match.group(1)
+    main_url = f"https://inshortsapi.vercel.app/news?category={infintyvar}"
+    stuber = await event.reply(
+        f"Ok ! Fectching {infintyvar} From inshortsapi Server And Sending To News Channel",
+    )
+    await stuber.edit("All News Has Been Sucessfully fetched, sendning to you.")
+    starknews = requests.get(main_url).json()
+    for item in starknews["data"]:
+        sedlyf = item["content"]
+        img = item["imageUrl"]
+        writter = item["author"]
+        dateis = item["date"]
+        readthis = item["readMoreUrl"]
+        titles = item["title"]
+        sed1 = img
+        sedm = f"**Title : {titles}** \n{sedlyf} \nDate : {dateis} \nAuthor : {writter} \nReadMore : {readthis}"
+        await pgram.send_photo(event.chat_id, sed1, caption=sedm)
+        
 
 @register(pattern="^/ball(?: |$)(.*)")
 async def _(event):

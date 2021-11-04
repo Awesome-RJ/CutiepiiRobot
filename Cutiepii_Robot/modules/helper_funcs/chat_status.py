@@ -1,7 +1,9 @@
 """
 MIT License
 
+Copyright (C) 2017-2019, Paul Larsen
 Copyright (C) 2021 Awesome-RJ
+Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 This file is part of @Cutiepii_Robot (Telegram Bot)
 
@@ -10,8 +12,8 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
+furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
@@ -39,7 +41,7 @@ from Cutiepii_Robot import (
     dispatcher,
 )
 
-from telegram import Chat, ChatMember, ParseMode, Update
+from telegram import Chat, ChatMember, ParseMode, Update, User
 from telegram.ext import CallbackContext
 
 # stores admemes in memory for 10 min.
@@ -61,6 +63,14 @@ def is_sudo_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
 def is_stats_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
     return user_id in DEV_USERS
 
+def user_can_changeinfo(chat: Chat, user: User, bot_id: int) -> bool:
+    return chat.get_member(user.id).can_change_info
+
+def user_can_promote(chat: Chat, user: User, bot_id: int) -> bool:
+    return chat.get_member(user.id).can_promote_members
+
+def user_can_pin(chat: Chat, user: User, bot_id: int) -> bool:
+    return chat.get_member(user.id).can_pin_messages
 
 def is_user_admin(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
     if (

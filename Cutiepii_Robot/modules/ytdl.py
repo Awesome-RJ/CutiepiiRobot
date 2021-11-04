@@ -1,7 +1,9 @@
 """
 MIT License
 
+Copyright (C) 2017-2019, Paul Larsen
 Copyright (C) 2021 Awesome-RJ
+Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 This file is part of @Cutiepii_Robot (Telegram Bot)
 
@@ -10,8 +12,8 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
+furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
@@ -31,15 +33,14 @@ import asyncio
 import shutil
 import requests
 
-from youtube_dl import YoutubeDL
-from youtube_dl.utils import (DownloadError, ContentTooShortError,
+from yt_dlp import YoutubeDL
+from yt_dlp.utils import (DownloadError, ContentTooShortError,
                               ExtractorError, GeoRestrictedError,
                               MaxDownloadsReached, PostProcessingError,
                               UnavailableVideoError, XAttrMetadataError)
 from asyncio import sleep
 from telethon.tl.types import DocumentAttributeAudio
 from collections import deque
-from googleapiclient.discovery import build
 from html import unescape
 
 from Cutiepii_Robot.events import register

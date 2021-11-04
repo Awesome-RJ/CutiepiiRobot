@@ -1,7 +1,9 @@
 """
 MIT License
 
+Copyright (C) 2017-2019, Paul Larsen
 Copyright (C) 2021 Awesome-RJ
+Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 This file is part of @Cutiepii_Robot (Telegram Bot)
 
@@ -10,8 +12,8 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
+furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
@@ -88,7 +90,7 @@ def ban(update: Update, context: CallbackContext) -> str:
     user_id, reason = extract_user_and_text(message, args)
 
     if not user_id:
-        message.reply_text("I doubt that's a user.")
+        message.reply_text("Dude at least refer some user to ban!")
         return log_message
     try:
         member = chat.get_member(user_id)
@@ -208,7 +210,7 @@ def temp_ban(update: Update, context: CallbackContext) -> str:
     user_id, reason = extract_user_and_text(message, args)
 
     if not user_id:
-        message.reply_text("I doubt that's a user.")
+        message.reply_text("Dude! at least refer some user to ban...")
         return log_message
 
     try:
@@ -569,22 +571,22 @@ def snipe(update: Update, context: CallbackContext):
 __mod_name__ = "Bans/Mutes"
 
 __help__ = """
-*User Commands:*
+*User Commands*:
   ➢ `/kickme`*:* kicks the user who issued the command
-  
-*Admins only:*
+  ➢ `/banme`*:*  Bot Will Bans you from the group.
+  ➢ `/roar`*:*  Self Unban
+
+*Ban Commands are Admins only*:
   ➢ `/ban <userhandle>`*:* bans a user. (via handle, or reply)
-  banme
   ➢ `/sban <userhandle>`*:* Silently ban a user. Deletes command, Replied message and doesn't reply. (via handle, or reply)
   ➢ `/tban <userhandle> x(m/h/d)`*:* bans a user for `x` time. (via handle, or reply). `m` = `minutes`, `h` = `hours`, `d` = `days`.
   ➢ `/unban <userhandle>`*:* unbans a user. (via handle, or reply)
   ➢ `/kick <userhandle>`*:* kicks a user out of the group, (via handle, or reply)
+  
+*Mute Commands are Admins only*:
   ➢ `/mute <userhandle>`*:* silences a user. Can also be used as a reply, muting the replied to user.
   ➢ `/tmute <userhandle> x(m/h/d)`*:* mutes a user for x time. (via handle, or reply). `m` = `minutes`, `h` = `hours`, `d` = `days`.
   ➢ `/unmute <userhandle>`*:* unmutes a user. Can also be used as a reply, muting the replied to user.
-  ➢ `/zombies`*:* searches deleted accounts
-  ➢ `/zombies clean`*:* removes deleted accounts from the group.
-  ➢ `/snipe <chatid> <string>`*:* Make me send a message to a specific chat.
 """
 
 

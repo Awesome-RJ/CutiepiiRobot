@@ -1,7 +1,9 @@
 """
 MIT License
 
+Copyright (C) 2017-2019, Paul Larsen
 Copyright (C) 2021 Awesome-RJ
+Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 This file is part of @Cutiepii_Robot (Telegram Bot)
 
@@ -10,8 +12,8 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
+furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
@@ -26,10 +28,11 @@ SOFTWARE.
 
 from typing import List, Optional
 
-from Cutiepii_Robot import LOGGER
-from Cutiepii_Robot.modules.users import get_user_id
 from telegram import Message, MessageEntity
 from telegram.error import BadRequest
+
+from Cutiepii_Robot import LOGGER
+from Cutiepii_Robot.modules.users import get_user_id
 
 
 def id_from_reply(message):
@@ -48,7 +51,7 @@ def extract_user(message: Message, args: List[str]) -> Optional[int]:
 
 
 def extract_user_and_text(
-    message: Message, args: List[str],
+    message: Message, args: List[str]
 ) -> (Optional[int], Optional[str]):
     prev_message = message.reply_to_message
     split_text = message.text.split(None, 1)
@@ -73,8 +76,8 @@ def extract_user_and_text(
         user_id = get_user_id(user)
         if not user_id:
             message.reply_text(
-                "No idea who this user is. You'll be able to interact with them if "
-                "you reply to that person's message instead, or forward one of that user's messages.",
+                "I don't have that user in my db. You'll be able to interact with them if "
+                "you reply to that person's message instead, or forward one of that user's messages."
             )
             return None, None
         res = message.text.split(None, 2)
@@ -100,7 +103,7 @@ def extract_user_and_text(
             message.reply_text(
                 "I don't seem to have interacted with this user before - please forward a message from "
                 "them to give me control! (like a voodoo doll, I need a piece of them to be able "
-                "to execute certain commands...)",
+                "to execute certain commands...)"
             )
         else:
             LOGGER.exception("Exception %s on user %s", excp.message, user_id)
@@ -119,7 +122,7 @@ def extract_text(message) -> str:
 
 
 def extract_unt_fedban(
-    message: Message, args: List[str],
+    message: Message, args: List[str]
 ) -> (Optional[int], Optional[str]):
     prev_message = message.reply_to_message
     split_text = message.text.split(None, 1)
@@ -142,10 +145,10 @@ def extract_unt_fedban(
     elif len(args) >= 1 and args[0][0] == "@":
         user = args[0]
         user_id = get_user_id(user)
-        if not user_id and not isinstance(user_id, int):
+        if not user_id and not str(user_id).isdigit():
             message.reply_text(
-                "I don't have that user in my db.  "
-                "You'll be able to interact with them if you reply to that person's message instead, or forward one of that user's messages.",
+                "I don't have this user's information in my database so, you'll not be able to interact with them"
+                "Try replying to that person's msg or forward their message so i can act upon them"
             )
             return None, None
         res = message.text.split(None, 2)
@@ -167,19 +170,20 @@ def extract_unt_fedban(
     try:
         message.bot.get_chat(user_id)
     except BadRequest as excp:
-        if excp.message in ("User_id_invalid", "Chat not found") and not isinstance(
-            user_id, int,
+        if (
+            excp.message in ("User_id_invalid", "Chat not found")
+            and not str(user_id).isdigit()
         ):
             message.reply_text(
-                "I don't seem to have interacted with this user before "
-                "please forward a message from them to give me control! "
-                "(like a voodoo doll, I need a piece of them to be able to execute certain commands...)",
+                "I don't seem to have interacted with this user before - please forward a message from "
+                "them to give me control! (like a voodoo doll, I need a piece of them to be able "
+                "to execute certain commands...)"
             )
             return None, None
         if excp.message != "Chat not found":
             LOGGER.exception("Exception %s on user %s", excp.message, user_id)
             return None, None
-        if not isinstance(user_id, int):
+        if not str(user_id).isdigit():
             return None, None
 
     return user_id, text

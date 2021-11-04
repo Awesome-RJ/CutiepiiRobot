@@ -1,7 +1,9 @@
 """
 MIT License
 
+Copyright (C) 2017-2019, Paul Larsen
 Copyright (C) 2021 Awesome-RJ
+Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 This file is part of @Cutiepii_Robot (Telegram Bot)
 
@@ -10,8 +12,8 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
+furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
@@ -90,9 +92,9 @@ from telegram.ext import (
 from telegram.ext.dispatcher import DispatcherHandlerStop, run_async
 from telegram.utils.helpers import escape_markdown
 from pyrogram import Client, idle
-from telethon import Button
+from telethon import Button, events
 
-@register(pattern=("/alive"))
+@telethn.on(events.NewMessage(pattern="/alive"))
 async def awake(event):
   CUTIEPII = event.sender.first_name
   CUTIEPII = "**♡ I,m Cutiepii Robot 愛** \n\n"
@@ -142,7 +144,7 @@ HELP_MSG = "Click the button below to get help manu in your pm."
 START_MSG = "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>"
     
 PM_START_TEXT = """
-────「 [{}](https://telegra.ph/file/3067d3fed3808949a337c.jpg) 」────
+────「 [{}](https://telegra.ph/file/2909a312d9438798d237a.png) 」────
 *Hola! {},*
 *I am an Anime themed advance group management bot with a lot of Sexy Features.*
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
@@ -304,22 +306,25 @@ def start(update: Update, context: CallbackContext):
             )
     else:
         update.effective_message.reply_animation(
-            GROUP_START_IMG, caption= "<code>Cutiepii is Here For You💜\nI am Awake Since</code>: <code>{}</code>".format(
+            GROUP_START_IMG, caption= "<b>Yes, Darling I'm alive!\nHaven't sleep since</b>: <code>{}</code>".format(
                 uptime
             ),
             parse_mode=ParseMode.HTML,
             reply_markup=InlineKeyboardMarkup(
                 [
-                  [
-                  InlineKeyboardButton(text="Support", url=f"https://telegram.dog/{SUPPORT_CHAT}")
-                  ],
-                  [
-                  InlineKeyboardButton(text="Updates", url="https://telegram.dog/Black_Knights_Union")
-                  ]
+                    [
+                        InlineKeyboardButton(
+                            text="🚑 Support",
+                            url=f"https://telegram.dog/{SUPPORT_CHAT}",
+                        ),
+                        InlineKeyboardButton(
+                            text="📢 Updates",
+                            url="https://telegram.dog/Black_Knights_Union",
+                        ),
+                    ]
                 ]
             ),
         )
-
 
 def error_handler(update, context):
     """Log the error and send a telegram message to notify the developer."""
@@ -715,7 +720,10 @@ def migrate_chats(update: Update, context: CallbackContext):
 
     LOGGER.info("Migrating from %s, to %s", str(old_chat), str(new_chat))
     for mod in MIGRATEABLE:
-        mod.__migrate__(old_chat, new_chat)
+        try:
+            mod.__migrate__(old_chat, new_chat)
+        except BaseException:
+            pass  # Some sql modules make errors.
 
     LOGGER.info("Successfully migrated!")
     raise DispatcherHandlerStop

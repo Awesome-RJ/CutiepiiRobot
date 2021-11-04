@@ -10,8 +10,8 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
 
+furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
@@ -28,9 +28,13 @@ import html
 import random
 import re
 import time
+
+from multicolorcaptcha import CaptchaGenerator
 from functools import partial
 from io import BytesIO
+
 import Cutiepii_Robot.modules.sql.welcome_sql as sql
+
 from Cutiepii_Robot import (
     DEV_USERS,
     OWNER_ID,
@@ -55,6 +59,7 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import (
 )
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql.global_bans_sql import is_user_gbanned
+
 from telegram import (
     ChatPermissions,
     InlineKeyboardButton,
@@ -97,7 +102,6 @@ ENUM_FUNC_MAP = {
 VERIFIED_USER_WAITLIST = {}
 CAPTCHA_ANS_DICT = {}
 
-from multicolorcaptcha import CaptchaGenerator
 
 # do not async
 def send(update, message, keyboard, backup_message):
@@ -120,7 +124,7 @@ def send(update, message, keyboard, backup_message):
         )
     except BadRequest as excp:
         if excp.message == "Button_url_invalid":
-            msg = update.effective_chat.send_message(
+            msg = update.effective_message.reply_text(
                 markdown_parser(
                     (
                         backup_message
@@ -142,7 +146,7 @@ def send(update, message, keyboard, backup_message):
             )
 
         elif excp.message == "Unsupported url protocol":
-            msg = update.effective_chat.send_message(
+            msg = update.effective_message.reply_text(
                 markdown_parser(
                     (
                         backup_message
@@ -154,7 +158,7 @@ def send(update, message, keyboard, backup_message):
             )
 
         elif excp.message == "Wrong url host":
-            msg = update.effective_chat.send_message(
+            msg = update.effective_message.reply_text(
                 markdown_parser(
                     (
                         backup_message
@@ -169,7 +173,7 @@ def send(update, message, keyboard, backup_message):
             LOGGER.warning(keyboard)
             LOGGER.exception("Could not parse! got invalid url host errors")
         else:
-            msg = update.effective_chat.send_message(
+            msg = update.effective_message.reply_text(
                 markdown_parser(
                     (
                         backup_message
@@ -268,8 +272,23 @@ def new_member(update: Update, context: CallbackContext):  # sourcery no-metrics
             # Welcome yourself
             if new_mem.id == bot.id:
                 update.effective_message.reply_text(
-                    f"Thanks for adding me! Join @{SUPPORT_CHAT} for support.",
+                    "Hey {}, I'm {}! Thank you for adding me to {}\n"
+                    "Join support and channel update with clicking button below!".format(
+                        user.first_name, context.bot.first_name, chat.title
+                    ),
                     reply_to_message_id=reply,
+                    reply_markup=InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton(
+                                    text="🚑 Support", url=f"https://t.me/{SUPPORT_CHAT}"
+                                ),
+                                InlineKeyboardButton(
+                                    text="📢 Updates", url="https://t.me/Black_Knights_Union"
+                                ),
+                            ]
+                        ],
+                    ),
                 )
                 continue
             buttons = sql.get_welc_buttons(chat.id)
@@ -506,7 +525,8 @@ def new_member(update: Update, context: CallbackContext):  # sourcery no-metrics
 
                 message = msg.reply_photo(
                     fileobj,
-                    caption=f"Welcome [{escape_markdown(new_mem.first_name)}](tg://user?id={user.id}). Click the correct button to get unmuted!",
+                    caption=f"Welcome [{escape_markdown(new_mem.first_name)}](tg://user?id={user.id}). "
+                    f"Click the correct button to get unmuted!",
                     reply_markup=InlineKeyboardMarkup(btn),
                     parse_mode=ParseMode.MARKDOWN,
                     reply_to_message_id=reply,
@@ -826,7 +846,7 @@ def goodbye(update: Update, context: CallbackContext):
 
 @user_admin
 @loggable
-def set_welcome(update: Update, context: CallbackContext) -> str:
+def set_welcome(update: Update, _) -> str:
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
@@ -850,7 +870,7 @@ def set_welcome(update: Update, context: CallbackContext) -> str:
 
 @user_admin
 @loggable
-def reset_welcome(update: Update, context: CallbackContext) -> str:
+def reset_welcome(update: Update, _) -> str:
     chat = update.effective_chat
     user = update.effective_user
 
@@ -869,7 +889,7 @@ def reset_welcome(update: Update, context: CallbackContext) -> str:
 
 @user_admin
 @loggable
-def set_goodbye(update: Update, context: CallbackContext) -> str:
+def set_goodbye(update: Update, _) -> str:
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
@@ -891,7 +911,7 @@ def set_goodbye(update: Update, context: CallbackContext) -> str:
 
 @user_admin
 @loggable
-def reset_goodbye(update: Update, context: CallbackContext) -> str:
+def reset_goodbye(update: Update, _) -> str:
     chat = update.effective_chat
     user = update.effective_user
 
@@ -1283,6 +1303,7 @@ __help__ = """
   ➢ `/cleanservice <on/off`*:* deletes telegrams welcome/left service messages.
  *Example:*
 user joined chat, user left chat.
+
 *Welcome markdown:*
   ➢ `/welcomehelp`*:* view more formatting information for custom welcome/goodbye messages.
 """
