@@ -84,6 +84,33 @@ def _calc_emoji_offset(to_calc) -> int:
     return sum(len(e.group(0).encode("utf-16-le")) // 2 - 1 for e in emoticons)
 
 
+def extract_time_seconds(message, time_val):
+    if any(time_val.endswith(unit) for unit in ('m', 'h', 'd', 'w', 's')):
+        unit = time_val[-1]
+        time_num = time_val[:-1]  # type: str
+        if not time_num.isdigit():
+            message.reply_text("Invalid time amount specified.")
+            return ""
+
+        if unit == 's':
+            bantime = int(time_num)
+        elif unit == 'm':
+            bantime = int(int(time_num) * 60)
+        elif unit == 'h':
+            bantime = int(int(time_num) * 60 * 60)
+        elif unit == 'd':
+            bantime = int(int(time_num) * 24 * 60 * 60)
+        elif unit == 'w':
+            bantime = int(int(time_num) * 24 * 60 * 60 * 7)
+        else:
+            # how even...?
+            return ""
+        return bantime
+    else:
+        message.reply_text(f"That isn't a valid time - {time_val[-1]} is not a valid number")
+        return ""
+
+    
 def markdown_parser(
     txt: str, entities: Dict[MessageEntity, str] = None, offset: int = 0
 ) -> str:
