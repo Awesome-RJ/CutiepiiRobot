@@ -4,7 +4,7 @@ from pyrogram import filters
 from pyrogram.errors import ChatAdminRequired, RightForbidden, RPCError
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
-from Cutiepii_Robot.pyrogramee.pluginshelper import member_permissions
+from Cutiepii_Robot.utils.pluginhelp import member_permissions
 from Cutiepii_Robot import pgram, db
 
 BTN_URL_REGEX = compile(r"(\[([^\[]+?)\]\(buttonurl:(?:/{0,2})(.+?)(:same)?\))")
