@@ -53,25 +53,25 @@ from telegram.ext import (
 from telegram.utils.helpers import escape_markdown, mention_html, mention_markdown
 
 import Cutiepii_Robot.modules.sql.welcome_sql as sql
-from zeldris import (
+from Cutiepii_Robot import (
     DEV_USERS,
     LOGGER,
-    Cutiepii_Robot,
-    spamwtc,
+    OWNER_ID,
+    sw,
     dispatcher,
 )
-from zeldris.modules.helper_funcs.chat_status import (
+from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_user_ban_protected,
     user_admin,
 )
-from zeldris.modules.helper_funcs.misc import build_keyboard, revert_buttons
-from zeldris.modules.helper_funcs.msg_types import get_welcome_type
-from zeldris.modules.helper_funcs.string_handling import (
+from Cutiepii_Robot.modules.helper_funcs.misc import build_keyboard, revert_buttons
+from Cutiepii_Robot.modules.helper_funcs.msg_types import get_welcome_type
+from Cutiepii_Robot.modules.helper_funcs.string_handling import (
     escape_invalid_curly_brackets,
     markdown_parser,
 )
-from zeldris.modules.log_channel import loggable
-from zeldris.modules.sql.global_bans_sql import is_user_gbanned
+from Cutiepii_Robot.modules.log_channel import loggable
+from Cutiepii_Robot.modules.sql.global_bans_sql import is_user_gbanned
 
 VALID_WELCOME_FORMATTERS = [
     "first",
@@ -207,8 +207,8 @@ def new_member(update: Update, context: CallbackContext):  # sourcery no-metrics
         welcome_bool = True
         media_wel = False
 
-        if spamwtc is not None:
-            sw_ban = spamwtc.get_ban(new_mem.id)
+        if sw is not None:
+            sw_ban = sw.get_ban(new_mem.id)
             if sw_ban:
                 return
 
@@ -601,8 +601,8 @@ def left_member(update: Update, context: CallbackContext):  # sourcery no-metric
         if left_mem:
 
             # Thingy for spamwatched users
-            if spamwtc is not None:
-                sw_ban = spamwtc.get_ban(left_mem.id)
+            if sw is not None:
+                sw_ban = sw.get_ban(left_mem.id)
                 if sw_ban:
                     return
 
@@ -615,7 +615,7 @@ def left_member(update: Update, context: CallbackContext):  # sourcery no-metric
                 return
 
             # Give the owner a special goodbye
-            if left_mem.id == Cutiepii_Robot:
+            if left_mem.id == OWNER_ID:
                 update.effective_message.reply_text(
                     "See you later at Demon clan!", reply_to_message_id=reply
                 )
