@@ -26,6 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 import os
+import gTTS
 
 from gpytranslate import SyncTranslator
 from telegram import Update, ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
