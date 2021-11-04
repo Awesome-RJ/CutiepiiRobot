@@ -28,6 +28,7 @@ SOFTWARE.
 
 import os
 import wget
+import time
 import yt_dlp
 import asyncio
 import aiohttp
