@@ -577,8 +577,8 @@ def get_exception(excp, filt, chat):
 def addnew_filter(update, chat_id, keyword, text, file_type, file_id, buttons):
     msg = update.effective_message
     totalfilt = sql.get_chat_triggers(chat_id)
-    if len(totalfilt) >= 150:  # Idk why i made this like function....
-        msg.reply_text("This group has reached its max filters limit of 150.")
+    if len(totalfilt) >= 900:  # Idk why i made this like function....
+        msg.reply_text("This group has reached its max filters limit of 900.")
         return False
     sql.new_add_filter(chat_id, keyword, text, file_type, file_id, buttons)
     return True
