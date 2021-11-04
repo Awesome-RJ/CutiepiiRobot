@@ -80,7 +80,7 @@ async def ytmusic(client, message: Message):
         "quiet": True,
     }
     try:
-        with YoutubeDL(opts) as ytdl:
+        with yt_dlp.YoutubeDL(opts) as ytdl:
             ytdl_data = ytdl.extract_info(url, download=True)
     except Exception as e:
         await event.edit(event, f"**Failed To Download** \n**Error :** `{str(e)}`")
