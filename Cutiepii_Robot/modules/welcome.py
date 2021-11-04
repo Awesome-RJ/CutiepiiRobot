@@ -1250,12 +1250,12 @@ WELC_MUTE_HELP_TXT = (
 
 
 @user_admin
-def welcome_help(update: Update, context: CallbackContext):
+def welcome_help(update: Update, _):
     update.effective_message.reply_text(WELC_HELP_TXT, parse_mode=ParseMode.MARKDOWN)
 
 
 @user_admin
-def welcome_mute_help(update: Update, context: CallbackContext):
+def welcome_mute_help(update: Update, _):
     update.effective_message.reply_text(
         WELC_MUTE_HELP_TXT, parse_mode=ParseMode.MARKDOWN
     )
@@ -1303,7 +1303,9 @@ __help__ = """
 user joined chat, user left chat.
 *Welcome markdown:*
   ➢ `/welcomehelp`*:* view more formatting information for custom welcome/goodbye messages.
-"""
+""".format(
+    WELC_HELP_TXT
+)
 
 NEW_MEM_HANDLER = MessageHandler(
     Filters.status_update.new_chat_members, new_member, run_async=True
