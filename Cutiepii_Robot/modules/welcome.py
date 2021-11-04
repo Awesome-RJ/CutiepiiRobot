@@ -1,15 +1,20 @@
 """
 MIT License
+
 Copyright (C) 2021 Awesome-RJ
+
 This file is part of @Cutiepii_Robot (Telegram Bot)
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
+
 furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,9 +28,13 @@ import html
 import random
 import re
 import time
+
+from multicolorcaptcha import CaptchaGenerator
 from functools import partial
 from io import BytesIO
+
 import Cutiepii_Robot.modules.sql.welcome_sql as sql
+
 from Cutiepii_Robot import (
     DEV_USERS,
     OWNER_ID,
@@ -50,6 +59,7 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import (
 )
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql.global_bans_sql import is_user_gbanned
+
 from telegram import (
     ChatPermissions,
     InlineKeyboardButton,
@@ -92,7 +102,6 @@ ENUM_FUNC_MAP = {
 VERIFIED_USER_WAITLIST = {}
 CAPTCHA_ANS_DICT = {}
 
-from multicolorcaptcha import CaptchaGenerator
 
 # do not async
 def send(update, message, keyboard, backup_message):
@@ -115,7 +124,7 @@ def send(update, message, keyboard, backup_message):
         )
     except BadRequest as excp:
         if excp.message == "Button_url_invalid":
-            msg = update.effective_chat.send_message(
+            msg = update.effective_message.reply_text(
                 markdown_parser(
                     (
                         backup_message
@@ -137,7 +146,7 @@ def send(update, message, keyboard, backup_message):
             )
 
         elif excp.message == "Unsupported url protocol":
-            msg = update.effective_chat.send_message(
+            msg = update.effective_message.reply_text(
                 markdown_parser(
                     (
                         backup_message
@@ -149,7 +158,7 @@ def send(update, message, keyboard, backup_message):
             )
 
         elif excp.message == "Wrong url host":
-            msg = update.effective_chat.send_message(
+            msg = update.effective_message.reply_text(
                 markdown_parser(
                     (
                         backup_message
@@ -164,7 +173,7 @@ def send(update, message, keyboard, backup_message):
             LOGGER.warning(keyboard)
             LOGGER.exception("Could not parse! got invalid url host errors")
         else:
-            msg = update.effective_chat.send_message(
+            msg = update.effective_message.reply_text(
                 markdown_parser(
                     (
                         backup_message
