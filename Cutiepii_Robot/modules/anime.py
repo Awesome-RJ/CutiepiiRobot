@@ -37,11 +37,12 @@ import json
 from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update)
 from telegram.ext import CallbackQueryHandler, CommandHandler, run_async, CallbackContext
 from telegram.utils.helpers import mention_html
+from pyrogram import filters
+from bs4 import BeautifulSoup
 
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
-from Cutiepii_Robot import dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot import OWNER_ID, REDIS, dispatcher
+from Cutiepii_Robot import OWNER_ID, REDIS, dispatcher, pgram
 
 
 kaizoku_btn = "Kaizoku ☠️"
@@ -890,33 +891,50 @@ def animequotes(update: Update, context: CallbackContext):
     reply_photo = message.reply_to_message.reply_photo if message.reply_to_message else message.reply_photo
     reply_photo(
         random.choice(QUOTES_IMG))
+      
+@pgram.on_message(filters.command('watchorder'))
+def watchorderx(_,message):
+	anime =  message.text.replace(message.text.split(' ')[0], '')
+	res = requests.get(f'https://chiaki.site/?/tools/autocomplete_series&term={anime}').json()
+	data = None
+	id_ = res[0]['id']
+	res_ = requests.get(f'https://chiaki.site/?/tools/watch_order/id/{id_}').text
+	soup = BeautifulSoup(res_ , 'html.parser')
+	anime_names = soup.find_all('span' , class_='wo_title')
+	for x in anime_names:
+		data = f"{data}\n{x.text}" if data else x.text
+	message.reply_text(f'Watchorder of {anime}: \n```{data}```')
 
 __help__ = """
-Get information about anime, manga or characters from [AniList](anilist.co) and [MAL](https://myanimelist.net/)
+Get information about anime, manga or characters from [AniList](anilist.co)
 *AniList Commands:*
-  ➢ `/anime <anime>`*:* returns information about the anime from AniList
-  ➢ `/character <character>`*:* returns information about the character from AniList
-  ➢ `/manga <manga>`*:* returns information about the manga from AniList
-  ➢ `/upcoming`*:* returns a list of new anime in the upcoming seasons from AniList
-  ➢ `/airing <anime>`*:* returns anime airing info from AniList
+  ➢ `/anime <anime>`*:* returns information about the anime from AniList.
+  ➢ `/character <character>`*:* returns information about the character from AniList.
+  ➢ `/manga <manga>`*:* returns information about the manga from AniList.
+  ➢ `/upcoming`*:* returns a list of new anime in the upcoming seasons from AniList.
+  ➢ `/airing <anime>`*:* returns anime airing info from AniList.
  
+Get information about anime, manga or characters from [MAL](https://myanimelist.net/)
 *My Anime list Commands:*
   ➢ `/manime <anime>`*:* returns information about the anime MAL.
   ➢ `/mcharacter` <character>*:* returns information about the character from MAL.
   ➢ `/mmanga <manga>`*:* returns information about the manga from MAL.
   ➢ `/mupcoming`*:* returns a list of new anime in the upcoming seasons from MAL.
-  ➢ `/user <user>`*:* returns information about a MyAnimeList user
-  ➢ `/animequotes`*:* sends random anime quotes
+  ➢ `/user <user>`*:* returns information about a MyAnimeList user.
+  ➢ `/animequotes`*:* sends random anime quotes.
 
 *Anime Search Commands:*
-   ➢ `/kayo`*:* search an Anime on AnimeKayo website
-   ➢ `/kaizoku`*:* search an Anime on AnimeKaizoku website
-   ➢ `/whatanime`*:* Please reply to a Gif or Photo or Video,
+   ➢ `/kayo`*:* search an Anime on AnimeKayo website.
+   ➢ `/kaizoku`*:* search an Anime on AnimeKaizoku website.
+   ➢ `/whatanime`*:* Please reply to a Gif or Photo or Video, then bot gives information about the anime.
    
 *Anime Search Commands:*
-  ➢ `/meme`*:* sends Anime Memes
-  ➢ `/hmeme`*:* sends Hentai Memes
-  ➢ `/rmeme`*:* sends Reddit Memes
+  ➢ `/meme`*:* sends Anime Memes.
+  ➢ `/hmeme`*:* sends Hentai Memes.
+  ➢ `/rmeme`*:* sends Reddit Memes.
+  
+*Anime Search Commands:*
+  ➢ `/watchorder <anime>`*:* send watch Order of anime.
   
 You saw a good anime video, photo, gif but dont know what is that anime's name?
 This is where whatanime comes in, just reply to that media with /whatanime and it will search the anime name for you from anilist.                             
