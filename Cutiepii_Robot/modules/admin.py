@@ -1115,6 +1115,7 @@ INVITE_HANDLER = DisableAbleCommandHandler("invitelink", invite, run_async=True)
 PROMOTE_HANDLER = DisableAbleCommandHandler("promote", promote, run_async=True)
 FULLPROMOTE_HANDLER = DisableAbleCommandHandler("fullpromote", fullpromote, run_async=True)
 LOW_PROMOTE_HANDLER = DisableAbleCommandHandler("lowpromote", lowpromote, run_async=True)
+MID_PROMOTE_HANDLER = DisableAbleCommandHandler("midpromote", midpromote, run_async=True)
 DEMOTE_HANDLER = DisableAbleCommandHandler("demote", demote, run_async=True)
 
 SET_TITLE_HANDLER = CommandHandler("title", set_title, run_async=True)
@@ -1133,6 +1134,7 @@ dispatcher.add_handler(INVITE_HANDLER)
 dispatcher.add_handler(PROMOTE_HANDLER)
 dispatcher.add_handler(FULLPROMOTE_HANDLER)
 dispatcher.add_handler(LOW_PROMOTE_HANDLER)
+dispatcher.add_handler(MID_PROMOTE_HANDLER)
 dispatcher.add_handler(DEMOTE_HANDLER)
 dispatcher.add_handler(SET_TITLE_HANDLER)
 dispatcher.add_handler(ADMIN_REFRESH_HANDLER)
@@ -1150,6 +1152,7 @@ __command_list__ = [
     "promote", 
     "fullpromote",
     "lowpromote",
+    "midpromote",
     "demote", 
     "admincache"
 ]
@@ -1167,6 +1170,7 @@ __handlers__ = [
     PROMOTE_HANDLER,
     FULLPROMOTE_HANDLER,
     LOW_PROMOTE_HANDLER,
+    MID_PROMOTE_HANDLER,
     DEMOTE_HANDLER,
     SET_TITLE_HANDLER,
     ADMIN_REFRESH_HANDLER,
