@@ -3,7 +3,6 @@ import io
 import os
 import time
 import aiohttp
-import BytesIO
 
 from telethon.tl import functions
 from telethon.tl import types
