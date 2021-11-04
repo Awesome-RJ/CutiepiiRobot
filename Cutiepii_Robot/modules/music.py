@@ -27,10 +27,11 @@ SOFTWARE.
 """
 
 import os
-import requests
-import aiohttp
-import yt_dlp
 import wget
+import yt_dlp
+import asyncio
+import aiohttp
+import requests
 
 from pyrogram import filters
 from pyrogram.types import Message
