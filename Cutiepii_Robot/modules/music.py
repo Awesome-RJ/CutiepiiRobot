@@ -35,6 +35,7 @@ import wget
 from pyrogram import filters
 from pyrogram.types import Message
 from Cutiepii_Robot import pgram, BOT_USERNAME
+from Cutiepii_Robot.utils.pluginhelp import get_text
 from youtube_search import YoutubeSearch
 
 
