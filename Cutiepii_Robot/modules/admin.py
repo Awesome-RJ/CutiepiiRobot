@@ -33,7 +33,7 @@ from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler, Filters, run_async
 from telegram.utils.helpers import mention_html
 
-from Cutiepii_Robot import DRAGONS, dispatcher
+from Cutiepii_Robot import DRAGONS, dispatcher, telethn as bot
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_admin,
@@ -42,6 +42,8 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     connection_status,
     user_admin,
     user_can_changeinfo,
+    user_can_pin,
+    user_can_promote,
     ADMIN_CACHE,
 )
 
@@ -51,6 +53,33 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import (
 )
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
+
+
+@bot.on(events.NewMessage(pattern="/users$"))
+async def get_users(show):
+    if not show.is_group:
+        return
+    if show.is_group:
+        if not await is_register_admin(show.input_chat, show.sender_id):
+            return
+    info = await bot.get_entity(show.chat_id)
+    title = info.title if info.title else "this chat"
+    mentions = "Users in {}: \n".format(title)
+    async for user in bot.iter_participants(show.chat_id):
+        if not user.deleted:
+            mentions += f"\n[{user.first_name}](tg://user?id={user.id}) {user.id}"
+        else:
+            mentions += f"\nDeleted Account {user.id}"
+    file = open("userslist.txt", "w+")
+    file.write(mentions)
+    file.close()
+    await bot.send_file(
+        show.chat_id,
+        "userslist.txt",
+        caption="Users in {}".format(title),
+        reply_to=show.id,
+    )
+    os.remove("userslist.txt")
 
 
 @bot_admin
@@ -271,7 +300,7 @@ def promote(update: Update, context: CallbackContext) -> str:
 @can_promote
 @user_admin
 @loggable
-def lowpromote(update: Update, context: CallbackContext) -> str:
+def midpromote(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
 
@@ -329,7 +358,82 @@ def lowpromote(update: Update, context: CallbackContext) -> str:
 
     bot.sendMessage(
         chat.id,
-        f"Sucessfully promoted <b>{user_member.user.first_name or user_id}</b> with low rights!",
+        f"Sucessfully Mid Promoted <b>{user_member.user.first_name or user_id}</b> with low rights!",
+        parse_mode=ParseMode.HTML,
+    )
+
+    log_message = (
+        f"<b>{html.escape(chat.title)}:</b>\n"
+        f"#MIDPROMOTED\n"
+        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
+        f"<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
+    )
+
+    return log_message
+
+@connection_status
+@bot_admin
+@can_promote
+@user_admin
+@loggable
+def lowpromote(update: Update, context: CallbackContext) -> str:
+    bot = context.bot
+    args = context.args
+
+    message = update.effective_message
+    chat = update.effective_chat
+    user = update.effective_user
+
+    promoter = chat.get_member(user.id)
+
+    if (
+        not (promoter.can_promote_members or promoter.status == "creator")
+        and user.id not in DRAGONS
+    ):
+        message.reply_text("You don't have the necessary rights to do that!")
+        return
+
+    user_id = extract_user(message, args)
+
+    if not user_id:
+        message.reply_text(
+            "You don't seem to be referring to a user or the ID specified is incorrect..",
+        )
+        return
+
+    try:
+        user_member = chat.get_member(user_id)
+    except:
+        return
+
+    if user_member.status in ('administrator', 'creator'):
+        message.reply_text("How am I meant to promote someone that's already an admin?")
+        return
+
+    if user_id == bot.id:
+        message.reply_text("I can't promote myself! Get an admin to do it for me.")
+        return
+
+    # set same perms as bot - bot can't assign higher perms than itself!
+    bot_member = chat.get_member(bot.id)
+
+    try:
+        bot.promoteChatMember(
+            chat.id,
+            user_id,
+            can_delete_messages=bot_member.can_delete_messages,
+            can_invite_users=bot_member.can_invite_users,
+        )
+    except BadRequest as err:
+        if err.message == "User_not_mutual_contact":
+            message.reply_text("I can't promote someone who isn't in the group.")
+        else:
+            message.reply_text("An error occured while promoting.")
+        return
+
+    bot.sendMessage(
+        chat.id,
+        f"Sucessfully Low Promoted <b>{user_member.user.first_name or user_id}</b> with low rights!",
         parse_mode=ParseMode.HTML,
     )
 
@@ -425,7 +529,90 @@ def fullpromote(update: Update, context: CallbackContext) -> str:
 
     return log_message
 
+@bot.on(events.NewMessage(pattern="/middemote(?: |$)(.*)"))
+async def middemote(dmod):
+    if dmod.is_group:
+        if not await can_promote_users(message=dmod):
+            return
+    else:
+        return
 
+    user = await get_user_from_event(dmod)
+    if dmod.is_group:
+        if not await is_register_admin(dmod.input_chat, user.id):
+            await dmod.reply("**Darling, i cant demote non-admin**")
+            return
+    else:
+        return
+
+    if user:
+        pass
+    else:
+        return
+
+    # New rights after demotion
+    newrights = ChatAdminRights(
+        add_admins=False,
+        invite_users=True,
+        change_info=True,
+        ban_users=False,
+        delete_messages=True,
+        pin_messages=True,
+    )
+    # Edit Admin Permission
+    try:
+        await bot(EditAdminRequest(dmod.chat_id, user.id, newrights, "Admin"))
+        await dmod.reply("**Mid Demoted Successfully!**")
+
+    # If we catch BadRequestError from Telethon
+    # Assume we don't have permission to demote
+    except Exception:
+        await dmod.reply("**Failed to demote.**")
+        return
+
+    
+@bot.on(events.NewMessage(pattern="/lowdemote(?: |$)(.*)"))
+async def lowdemote(dmod):
+    if dmod.is_group:
+        if not await can_promote_users(message=dmod):
+            return
+    else:
+        return
+
+    user = await get_user_from_event(dmod)
+    if dmod.is_group:
+        if not await is_register_admin(dmod.input_chat, user.id):
+            await dmod.reply("**Darling, i cant demote non-admin**")
+            return
+    else:
+        return
+
+    if user:
+        pass
+    else:
+        return
+
+    # New rights after demotion
+    newrights = ChatAdminRights(
+        add_admins=False,
+        invite_users=True,
+        change_info=False,
+        ban_users=False,
+        delete_messages=True,
+        pin_messages=False,
+    )
+    # Edit Admin Permission
+    try:
+        await bot(EditAdminRequest(dmod.chat_id, user.id, newrights, "Admin"))
+        await dmod.reply("**Demoted Successfully!**")
+
+    # If we catch BadRequestError from Telethon
+    # Assume we don't have permission to demote
+    except Exception:
+        await dmod.reply("**Failed to demote.**")
+        return
+
+    
 @connection_status
 @bot_admin
 @can_promote
@@ -588,7 +775,7 @@ def pin(update, context):
 
     prev_message = update.effective_message.reply_to_message
 
-    if can_pin(chat, user, bot.id) is False:
+    if user_can_pin(chat, user, bot.id) is False:
         message.reply_text("You are missing rights to pin a message!")
         return ""
 
@@ -633,7 +820,7 @@ def unpin(update, context):
     user = update.effective_user
     message = update.effective_message
 
-    if can_pin(chat, user, bot.id) is False:
+    if user_can_pin(chat, user, bot.id) is False:
         message.reply_text("You are missing rights to unpin a message!")
         return ""
 
@@ -819,24 +1006,32 @@ __help__ = """
 *User Commands*:
   ➢ `/admins`*:* list of admins in the chat
   ➢ `/pinned`*:* to get the current pinned message.
-*The Following Commands are Admins only:* 
-  ➢ `/pin`*:* silently pins the message replied to - add `'loud'` or `'notify'` to give notifs to users
-  ➢ `/unpin`*:* unpins the currently pinned message
-  ➢ `/invitelink`*:* gets invitelink
-  ➢ `/promote`*:* promotes the user replied to
-  ➢ `/fullpromote`*:* promotes the user replied to with full rights
-  ➢ `/demote`*:* demotes the user replied to
-  ➢ `/title <title here>`*:* sets a custom title for an admin that the bot promoted
-  ➢ `/admincache`*:* force refresh the admins list
+
+*Promote & Demote Commands are Admins only*:
+  ➢ `/promote (user) (?admin's title)`*:* Promotes the user to admin.
+  ➢ `/demote (user)`*:* Demotes the user from admin.
+  ➢ `/lowpromote`*:* Promote a member with low rights
+  ➢ `/midpromote`*:* Promote a member with mid rights
+  ➢ `/highpromote`*:* Promote a member with max rights
+  ➢ `/lowdemote`*:* Demote an admin to low permissions
+  ➢ `/middemote`*:* Demote an admin to mid permissions
+ 
+*Cleaner & Purge Commands are Admins only*:
   ➢ `/del`*:* deletes the message you replied to
   ➢ `/purge`*:* deletes all messages between this and the replied to message.
   ➢ `/purge <integer X>`*:* deletes the replied message, and X messages following it if replied to a message.
-  ➢ `/setgtitle <text>`*:* set group title
-  ➢ `/setgpic`*:* reply to an image to set as group photo
-  ➢ `/setdesc`*:* Set group description
-  ➢ `/setsticker`*:* Set group sticker
-
-*Log Channel*:
+  ➢ `/zombies`*:* counts the number of deleted account in your group
+  ➢ `/kickthefools`*:* Kick inactive members from group (one week)
+  
+*Pin & Unpin Commands are Admins only*:
+  ➢ `/pin`*:* silently pins the message replied to - add 'loud' or 'notify' to give notifs to users.
+  ➢ `/unpin`*:* unpins the currently pinned message - add 'all' to unpin all pinned messages.
+  ➢ `/permapin`*:* Pin a custom message through the bot. This message can contain markdown, buttons, and all the other cool features.
+  ➢ `/unpinall`*:* Unpins all pinned messages.
+  ➢ `/antichannelpin <yes/no/on/off>`*:* Don't let telegram auto-pin linked channels. If no arguments are given, shows current setting.
+  ➢ `/cleanlinked <yes/no/on/off>`*:* Delete messages sent by the linked channel.
+  
+*Log Channel are Admins only*:
   ➢ `/logchannel`*:* get log channel info
   ➢ `/setlog`*:* set the log channel.
   ➢ `/unsetlog`*:* unset the log channel.
@@ -849,6 +1044,15 @@ __help__ = """
   ➢ `/rules`*:* get the rules for this chat.
   ➢ `/setrules <your rules here>`*:* set the rules for this chat.
   ➢ `/clearrules`*:* clear the rules for this chat.
+
+*The Others Commands are Admins only*:
+  ➢ `/invitelink`*:* gets invitelink
+  ➢ `/title <title here>`*:* sets a custom title for an admin that the bot promoted
+  ➢ `/admincache`*:* force refresh the admins list
+  ➢ `/setgtitle <text>`*:* set group title
+  ➢ `/setgpic`*:* reply to an image to set as group photo
+  ➢ `/setdesc`*:* Set group description
+  ➢ `/setsticker`*:* Set group sticker
 """
 
 SET_DESC_HANDLER = CommandHandler("setdesc", set_desc, filters=Filters.chat_type.groups, run_async=True)
