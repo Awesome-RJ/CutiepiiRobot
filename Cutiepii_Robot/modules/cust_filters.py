@@ -133,16 +133,20 @@ def filters(update, context):
     user = update.effective_user
     msg = update.effective_message
     args = msg.text.split(
-        None, 1
+        None, 1,
     )  # use python's maxsplit to separate Cmd, keyword, and reply_text
 
     conn = connected(context.bot, update, chat, user.id)
-    if conn is not False:
+    if not conn is False:
         chat_id = conn
         chat_name = dispatcher.bot.getChat(conn).title
     else:
         chat_id = update.effective_chat.id
-        chat_name = "local filters" if chat.type == "private" else chat.title
+        if chat.type == "private":
+            chat_name = "local filters"
+        else:
+            chat_name = chat.title
+
     if not msg.reply_to_message and len(args) < 2:
         send_message(
             update.effective_message,
@@ -157,7 +161,8 @@ def filters(update, context):
                 "Please provide keyword for this filter to reply with!",
             )
             return
-        keyword = args[1]
+        else:
+            keyword = args[1]
     else:
         extracted = split_quotes(args[1])
         if len(extracted) < 1:
@@ -174,10 +179,10 @@ def filters(update, context):
     text, file_type, file_id = get_filter_type(msg)
     if not msg.reply_to_message and len(extracted) >= 2:
         offset = len(extracted[1]) - len(
-            msg.text
+            msg.text,
         )  # set correct offset relative to command + notename
         text, buttons = button_markdown_parser(
-            extracted[1], entities=msg.parse_entities(), offset=offset
+            extracted[1], entities=msg.parse_entities(), offset=offset,
         )
         text = text.strip()
         if not text:
@@ -195,10 +200,10 @@ def filters(update, context):
         else:
             text_to_parsing = ""
         offset = len(
-            text_to_parsing
+            text_to_parsing,
         )  # set correct offset relative to command + notename
         text, buttons = button_markdown_parser(
-            text_to_parsing, entities=msg.parse_entities(), offset=offset
+            text_to_parsing, entities=msg.parse_entities(), offset=offset,
         )
         text = text.strip()
 
@@ -217,10 +222,10 @@ def filters(update, context):
         else:
             text_to_parsing = ""
         offset = len(
-            text_to_parsing
+            text_to_parsing,
         )  # set correct offset relative to command + notename
         text, buttons = button_markdown_parser(
-            text_to_parsing, entities=msg.parse_entities(), offset=offset
+            text_to_parsing, entities=msg.parse_entities(), offset=offset,
         )
         text = text.strip()
         if (msg.reply_to_message.text or msg.reply_to_message.caption) and not text:
@@ -241,7 +246,7 @@ def filters(update, context):
     if add is True:
         send_message(
             update.effective_message,
-            "Saved filter '{}' in *{}*!".format(keyword, chat_name),
+            f"Saved filter '{keyword}' in *{chat_name}*!",
             parse_mode=telegram.ParseMode.MARKDOWN,
         )
     raise DispatcherHandlerStop
