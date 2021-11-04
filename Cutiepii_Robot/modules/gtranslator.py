@@ -28,7 +28,7 @@ SOFTWARE.
 import os
 
 from gpytranslate import SyncTranslator
-from telegram import Update,ChatAction, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from telegram.ext import CallbackContext
 
 from Cutiepii_Robot import dispatcher
