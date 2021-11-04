@@ -41,6 +41,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     can_promote,
     connection_status,
     user_admin,
+    can_changeinfo,
     ADMIN_CACHE,
 )
 
@@ -587,7 +588,7 @@ def pin(update, context):
 
     prev_message = update.effective_message.reply_to_message
 
-    if user_can_pin(chat, user, bot.id) is False:
+    if can_pin(chat, user, bot.id) is False:
         message.reply_text("You are missing rights to pin a message!")
         return ""
 
@@ -632,7 +633,7 @@ def unpin(update, context):
     user = update.effective_user
     message = update.effective_message
 
-    if user_can_pin(chat, user, bot.id) is False:
+    if can_pin(chat, user, bot.id) is False:
         message.reply_text("You are missing rights to unpin a message!")
         return ""
 
