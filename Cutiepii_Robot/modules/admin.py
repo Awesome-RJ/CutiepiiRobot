@@ -1006,6 +1006,7 @@ __help__ = """
 *User Commands*:
   ➢ `/admins`*:* list of admins in the chat
   ➢ `/pinned`*:* to get the current pinned message.
+  ➢ `/rules`*:* get the rules for this chat.
 
 *Promote & Demote Commands are Admins only*:
   ➢ `/promote (user) (?admin's title)`*:* Promotes the user to admin.
@@ -1041,7 +1042,6 @@ __help__ = """
  ➩ forwarding the `/setlog` to the group
  
 *Rules*:
-  ➢ `/rules`*:* get the rules for this chat.
   ➢ `/setrules <your rules here>`*:* set the rules for this chat.
   ➢ `/clearrules`*:* clear the rules for this chat.
 
