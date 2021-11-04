@@ -147,6 +147,7 @@ if ENV:
     GOOGLE_CHROME_BIN = "/usr/bin/google-chrome"
     CHROME_DRIVER = "/usr/bin/chromedriver"
     BOT_API_URL = os.environ.get('BOT_API_URL', "https://api.telegram.org/bot")
+    REMINDER_LIMIT = os.environ.get("REMINDER_LIMIT", True)
 
     HELP_IMG = os.environ.get("HELP_IMG", True)
     GROUP_START_IMG = os.environ.get("GROUP_START_IMG", True)
@@ -239,6 +240,7 @@ else:
     HELP_IMG = Config.HELP_IMG
     START_IMG = Config.START_IMG
     CUTIEPII_PHOTO = Config.CUTIEPII_PHOTO
+    REMINDER_LIMIT = Config.REMINDER_LIMIT
 
     try:
         BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
