@@ -1,5 +1,5 @@
 import threading, time
-from SaitamaRobot.modules.sql import BASE, SESSION
+from Cutiepii_Robot.modules.sql import BASE, SESSION
 from sqlalchemy import Column, Integer, String, UnicodeText
 
 
