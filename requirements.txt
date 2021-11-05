@@ -22,7 +22,7 @@ telethon==1.23.0
 ujson==4.2.0
 wikipedia==1.4.0
 zalgo-text==0.6
-fontTools==4.27.1
+fontTools==4.28.0
 nekos.py==1.0.3
 telegraph==2.0.1
 tgcrypto==1.2.2
