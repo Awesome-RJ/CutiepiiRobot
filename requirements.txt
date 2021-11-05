@@ -1,6 +1,6 @@
 alphabet-detector==0.0.7
 bleach==4.1.0
-cachetools==4.2.2
+cachetools==4.2.4
 CurrencyConverter
 emoji==1.6.1
 feedparser==6.0.8
