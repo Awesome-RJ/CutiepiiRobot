@@ -47,7 +47,7 @@ hachoir==3.1.2
 bing_image_downloader==1.1.1
 pytz==2021.3
 html2text==2020.1.16
-NumPy==1.21.3
+NumPy==1.21.4
 opencv-python-headless==4.5.4.58
 uvloop==0.16.0
 python-dotenv==0.19.1
