@@ -154,7 +154,7 @@ def upcoming(update: Update, context: CallbackContext):
     for new in anime:
         name = new.get("title")
         url = new.get("url")
-        rep += f"• <a href='{url}'>{name}</a>\n"
+        rep += f"➢ <a href='{url}'>{name}</a>\n"
         if len(rep) > 2000:
             break
     msg.reply_text(rep, parse_mode=ParseMode.HTML, disable_web_page_preview=True)

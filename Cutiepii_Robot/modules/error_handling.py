@@ -141,7 +141,7 @@ def list_errors(update: Update, context: CallbackContext):
     e = dict(sorted(errors.items(), key=lambda item: item[1], reverse=True))
     msg = "<b>Errors List:</b>\n"
     for x, value in e.items():
-        msg += f"• <code>{x}:</code> <b>{value}</b> #{x.identifier}\n"
+        msg += f"➢ <code>{x}:</code> <b>{value}</b> #{x.identifier}\n"
     msg += f"{len(errors)} have occurred since startup."
     if len(msg) > 4096:
         with open("errors_msg.txt", "w+") as f:

@@ -238,10 +238,10 @@ This module lets you setup upto 20 reminders per group/pm.
 The usage is as follows
 
 *Commands*:
- • `/remind <time> <text>`*:* Sets a reminder for given time, usage is same like a mute command
- • `/reminders`*:* Lists all the reminders for current chat
- • `/clearreminder <timestampID>`*:* Removes the reminder of the given timestamp ID from the list
- • `/clearallreminders`*:* Cleans all saved reminders (owner only)
+  ➢ `/remind <time> <text>`*:* Sets a reminder for given time, usage is same like a mute command
+  ➢ `/reminders`*:* Lists all the reminders for current chat
+  ➢ `/clearreminder <timestampID>`*:* Removes the reminder of the given timestamp ID from the list
+  ➢ `/clearallreminders`*:* Cleans all saved reminders (owner only)
 
 *TimestampID:* An ID number listed under each reminder, used to remove a reminder
 *Time:* 1d or 1h or 1m or 30s

@@ -178,8 +178,8 @@ def get_id(update: Update, context: CallbackContext):
 
             msg.reply_text(
                 f"<b>Telegram ID:</b>,"
-                f"• {html.escape(user2.first_name)} - <code>{user2.id}</code>.\n"
-                f"• {html.escape(user1.first_name)} - <code>{user1.id}</code>.",
+                f"➢ {html.escape(user2.first_name)} - <code>{user2.id}</code>.\n"
+                f"➢ {html.escape(user1.first_name)} - <code>{user1.id}</code>.",
                 parse_mode=ParseMode.HTML,
             )
 
@@ -581,42 +581,42 @@ def __user_info__(user_id):
 
 __help__ = """
 *ID:*
- • `/id`*:* get the current group id. If used by replying to a message, gets that user's id.
- • `/gifid`*:* reply to a gif to me to tell you its file ID.
+  ➢ `/id`*:* get the current group id. If used by replying to a message, gets that user's id.
+  ➢ `/gifid`*:* reply to a gif to me to tell you its file ID.
  
 *Self addded information:* 
- • `/setme <text>`*:* will set your info
- • `/me`*:* will get your or another user's info.
+  ➢ `/setme <text>`*:* will set your info
+  ➢ `/me`*:* will get your or another user's info.
 Examples:
  `/setme I am a wolf.`
  `/me @username(defaults to yours if no user specified)`
  
 *Information others add on you:* 
- • `/bio`*:* will get your or another user's bio. This cannot be set by yourself.
-• `/setbio <text>`*:* while replying, will save another user's bio 
+  ➢ `/bio`*:* will get your or another user's bio. This cannot be set by yourself.
+  ➢ `/setbio <text>`*:* while replying, will save another user's bio 
 Examples:
  `/bio @username(defaults to yours if not specified).`
  `/setbio This user is a wolf` (reply to the user)
  
 *Overall Information about you:*
- • `/info`*:* get information about a user. 
+  ➢ `/info`*:* get information about a user. 
  
 *◢ Intellivoid SpamProtection:*
- • `/spwinfo`*:* SpamProtection Info
+  ➢ `/spwinfo`*:* SpamProtection Info
  
 *json Detailed info:*
- • `/json`*:* Get Detailed info about any message.
+  ➢ `/json`*:* Get Detailed info about any message.
  
 *Covid info:*
- • `/covid`*:* Get Detailed info about Covid.
+  ➢ `/covid`*:* Get Detailed info about Covid.
  
 *ARQ Statistics:*
- /arq : ARQ API Stats.
+  ➢ `/arq`*:* ARQ API Stats.
  
 *AFk:*
 When marked as AFK, any mentions will be replied to with a message stating that you're not available!
- • `/afk <reason>`*:* Mark yourself as AFK.
-  - brb <reason>: Same as the afk command, but not a command.\n 
+  ➢ `/afk <reason>`*:* Mark yourself as AFK.
+ - brb <reason>: Same as the afk command, but not a command.\n 
   
 *What is that health thingy?*
  Come and see [HP System explained](https://t.me/Black_Knights_Union/33)

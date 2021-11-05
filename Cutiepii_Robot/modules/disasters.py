@@ -467,7 +467,7 @@ def whitelistlist(update: Update, context: CallbackContext):
         try:
             user = bot.get_chat(user_id)
 
-            reply += f"• {mention_html(user_id, html.escape(user.first_name))}\n"
+            reply += f"➢ {mention_html(user_id, html.escape(user.first_name))}\n"
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
@@ -485,7 +485,7 @@ def tigerlist(update: Update, context: CallbackContext):
         user_id = int(each_user)
         try:
             user = bot.get_chat(user_id)
-            reply += f"• {mention_html(user_id, html.escape(user.first_name))}\n"
+            reply += f"➢ {mention_html(user_id, html.escape(user.first_name))}\n"
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
@@ -502,7 +502,7 @@ def supportlist(update: Update, context: CallbackContext):
         user_id = int(each_user)
         try:
             user = bot.get_chat(user_id)
-            reply += f"• {mention_html(user_id, html.escape(user.first_name))}\n"
+            reply += f"➢ {mention_html(user_id, html.escape(user.first_name))}\n"
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
@@ -520,7 +520,7 @@ def sudolist(update: Update, context: CallbackContext):
         user_id = int(each_user)
         try:
             user = bot.get_chat(user_id)
-            reply += f"• {mention_html(user_id, html.escape(user.first_name))}\n"
+            reply += f"➢ {mention_html(user_id, html.escape(user.first_name))}\n"
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)
@@ -538,7 +538,7 @@ def devlist(update: Update, context: CallbackContext):
         user_id = int(each_user)
         try:
             user = bot.get_chat(user_id)
-            reply += f"• {mention_html(user_id, html.escape(user.first_name))}\n"
+            reply += f"➢ {mention_html(user_id, html.escape(user.first_name))}\n"
         except TelegramError:
             pass
     m.edit_text(reply, parse_mode=ParseMode.HTML)

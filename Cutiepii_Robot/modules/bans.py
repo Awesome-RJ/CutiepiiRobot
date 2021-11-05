@@ -39,6 +39,9 @@ from telegram import (
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, Filters, CommandHandler, run_async, CallbackQueryHandler
 from telegram.utils.helpers import mention_html
+from telethon.errors import *
+from telethon.tl import *
+from telethon import *
 from typing import Optional, List
 from telegram import TelegramError
 
@@ -71,6 +74,179 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user_and_text
 from Cutiepii_Robot.modules.helper_funcs.string_handling import extract_time
 from Cutiepii_Robot.modules.log_channel import gloggable, loggable
+
+@bot.on(events.NewMessage(pattern="/kickthefools$"))
+async def _(event):
+    if event.fwd_from:
+        return
+
+    if event.is_group:
+        if not await can_ban_users(message=event):
+            return
+    else:
+        return
+
+    # Here laying the sanity check
+    chat = await event.get_chat()
+    admin = chat.admin_rights.ban_users
+    creator = chat.creator
+
+    # Well
+    if not admin and not creator:
+        await event.reply("`I don't have enough permissions!`")
+        return
+
+    c = 0
+    KICK_RIGHTS = ChatBannedRights(until_date=None, view_messages=True)
+    done = await event.reply("Working ...")
+    async for i in bot.iter_participants(event.chat_id):
+
+        if isinstance(i.status, UserStatusLastMonth):
+            status = await tbot(EditBannedRequest(event.chat_id, i, KICK_RIGHTS))
+            if not status:
+                return
+            c = c + 1
+
+        if isinstance(i.status, UserStatusLastWeek):
+            status = await tbot(EditBannedRequest(event.chat_id, i, KICK_RIGHTS))
+            if not status:
+                return
+            c = c + 1
+
+    if c == 0:
+        await done.edit("Got no one to kick 😔")
+        return
+
+    required_string = "Successfully Kicked **{}** users"
+    await event.reply(required_string.format(c))
+    
+
+@bot.on(events.NewMessage(pattern="/unbanall$"))
+async def _(event):
+    if not event.is_group:
+        return
+
+    if event.is_group:
+        if not await can_ban_users(message=event):
+            return
+
+    # Here laying the sanity check
+    chat = await event.get_chat()
+    admin = chat.admin_rights.ban_users
+    creator = chat.creator
+
+    # Well
+    if not admin and not creator:
+        await event.reply("`I don't have enough permissions!`")
+        return
+
+    done = await event.reply("Searching Participant Lists.")
+    p = 0
+    async for i in bot.iter_participants(
+        event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
+    ):
+        rights = ChatBannedRights(until_date=0, view_messages=False)
+        try:
+            await bot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
+        except FloodWaitError as ex:
+            logger.warn("sleeping for {} seconds".format(ex.seconds))
+            sleep(ex.seconds)
+        except Exception as ex:
+            await event.reply(str(ex))
+        else:
+            p += 1
+
+    if p == 0:
+        await done.edit("No one is banned in this chat")
+        return
+    required_string = "Successfully unbanned **{}** users"
+    await event.reply(required_string.format(p))
+
+
+@bot.on(events.NewMessage(pattern="/unbanall$"))
+async def _(event):
+    if not event.is_group:
+        return
+
+    if event.is_group:
+        if not await can_ban_users(message=event):
+            return
+
+    # Here laying the sanity check
+    chat = await event.get_chat()
+    admin = chat.admin_rights.ban_users
+    creator = chat.creator
+
+    # Well
+    if not admin and not creator:
+        await event.reply("`I don't have enough permissions!`")
+        return
+
+    done = await event.reply("Searching Participant Lists.")
+    p = 0
+    async for i in bot.iter_participants(
+        event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
+    ):
+        rights = ChatBannedRights(until_date=0, view_messages=False)
+        try:
+            await bot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
+        except FloodWaitError as ex:
+            logger.warn("sleeping for {} seconds".format(ex.seconds))
+            sleep(ex.seconds)
+        except Exception as ex:
+            await event.reply(str(ex))
+        else:
+            p += 1
+
+    if p == 0:
+        await done.edit("No one is banned in this chat")
+        return
+    required_string = "Successfully unbanned **{}** users"
+    await event.reply(required_string.format(p))
+
+
+@telethn.on(events.NewMessage(pattern="/unmuteall$"))
+async def _(event):
+    if not event.is_group:
+        return
+    if event.is_group:
+        if not await can_ban_users(message=event):
+            return
+
+    # Here laying the sanity check
+    chat = await event.get_chat()
+    admin = chat.admin_rights.ban_users
+    creator = chat.creator
+
+    # Well
+    if not admin and not creator:
+        await event.reply("`I don't have enough permissions!`")
+        return
+
+    done = await event.reply("Working ...")
+    p = 0
+    async for i in telethn.iter_participants(
+        event.chat_id, filter=ChannelParticipantsBanned, aggressive=True
+    ):
+        rights = ChatBannedRights(
+            until_date=0,
+            send_messages=False,
+        )
+        try:
+            await telethn(functions.channels.EditBannedRequest(event.chat_id, i, rights))
+        except FloodWaitError as ex:
+            logger.warn("sleeping for {} seconds".format(ex.seconds))
+            sleep(ex.seconds)
+        except Exception as ex:
+            await event.reply(str(ex))
+        else:
+            p += 1
+
+    if p == 0:
+        await done.edit("No one is muted in this chat")
+        return
+    required_string = "Successfully unmuted **{}** users"
+    await event.reply(required_string.format(p))
 
 
 

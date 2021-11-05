@@ -55,7 +55,7 @@ def get_user_common_chats(update: Update, context: CallbackContext):
         try:
             chat_name = bot.get_chat(chat).title
             sleep(0.3)
-            text += f"• <code>{chat_name}</code>\n"
+            text += f"➢ <code>{chat_name}</code>\n"
         except (BadRequest, Unauthorized):
             pass
         except RetryAfter as e:

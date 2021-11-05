@@ -838,7 +838,7 @@ def site_search(update: Update, context: CallbackContext, site: str):
             for entry in search_result:
                 post_link = "https://animekaizoku.com/" + entry.a["href"]
                 post_name = html.escape(entry.text)
-                result += f"• <a href='{post_link}'>{post_name}</a>\n"
+                result += f"➢ <a href='{post_link}'>{post_name}</a>\n"
         else:
             more_results = False
             result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> @KaizokuAnime"
@@ -859,7 +859,7 @@ def site_search(update: Update, context: CallbackContext, site: str):
 
             post_link = entry.a["href"]
             post_name = html.escape(entry.text.strip())
-            result += f"• <a href='{post_link}'>{post_name}</a>\n"
+            result += f"➢ <a href='{post_link}'>{post_name}</a>\n"
 
     buttons = [[InlineKeyboardButton("See all results", url=search_url)]]
 

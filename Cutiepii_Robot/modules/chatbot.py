@@ -156,7 +156,7 @@ def list_all_chats(update: Update, context: CallbackContext):
         try:
             x = context.bot.get_chat(int(*chat))
             name = x.title or x.first_name
-            text += f"• <code>{name}</code>\n"
+            text += f"➢ <code>{name}</code>\n"
         except (BadRequest, Unauthorized):
             sql.rem_kuki(*chat)
         except RetryAfter as e:
