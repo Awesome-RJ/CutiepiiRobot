@@ -206,7 +206,7 @@ async def _(event):
     await event.reply(required_string.format(p))
 
 
-@telethn.on(events.NewMessage(pattern="/unmuteall$"))
+@bot.on(events.NewMessage(pattern="/unmuteall$"))
 async def _(event):
     if not event.is_group:
         return
@@ -226,7 +226,7 @@ async def _(event):
 
     done = await event.reply("Working ...")
     p = 0
-    async for i in telethn.iter_participants(
+    async for i in bot.iter_participants(
         event.chat_id, filter=ChannelParticipantsBanned, aggressive=True
     ):
         rights = ChatBannedRights(
@@ -234,7 +234,7 @@ async def _(event):
             send_messages=False,
         )
         try:
-            await telethn(functions.channels.EditBannedRequest(event.chat_id, i, rights))
+            await bot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
             logger.warn("sleeping for {} seconds".format(ex.seconds))
             sleep(ex.seconds)
