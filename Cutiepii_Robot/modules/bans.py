@@ -57,6 +57,7 @@ from Cutiepii_Robot import (
     TIGERS,
     WOLVES,
     dispatcher,
+    telethn as bot,
 )
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     user_admin_no_reply,
