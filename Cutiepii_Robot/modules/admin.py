@@ -52,6 +52,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     user_can_pin,
     user_can_promote,
     ADMIN_CACHE,
+    can_manage_voice_chats,
 )
 
 from Cutiepii_Robot.modules.helper_funcs.extraction import (
