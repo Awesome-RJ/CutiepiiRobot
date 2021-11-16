@@ -7,7 +7,7 @@ A modular telegram Python bot running on python3 with an sqlalchemy, Redis, mong
 
 ###  ╒═══「 Status 」
 
-+ [] Maintained
++ [ ] Maintained
 + [x] Support Group Included
 + [x] Free
 + [x] OpenSourced
