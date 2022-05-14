@@ -221,6 +221,7 @@ def send_help(chat_id, text, keyboard=None):
     )
 
 
+@Cutiepii_cmd(command="test")
 async def test(update: Update, _: CallbackContext):
     # pprint(eval(str(update)))
     # await update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
