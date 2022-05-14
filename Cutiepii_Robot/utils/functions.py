@@ -7,7 +7,6 @@ from random import randint
 
 import aiofiles
 import aiohttp
-import speedtest
 from carbonnow import Carbon
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from wget import download
@@ -71,22 +70,6 @@ def generate_captcha():
     image.save(file, "jpeg")
     return [file, correct_answer, wrong_answers]
 
-
-def test_speedtest():
-    def speed_convert(size):
-        power = 2 ** 10
-        zero = 0
-        units = {0: "", 1: "Kb/s", 2: "Mb/s", 3: "Gb/s", 4: "Tb/s"}
-        while size > power:
-            size /= power
-            zero += 1
-        return f"{round(size, 2)} {units[zero]}"
-
-    speed = speedtest.Speedtest()
-    info = speed.get_best_server()
-    download = speed.download()
-    upload = speed.upload()
-    return [speed_convert(download), speed_convert(upload), info]
 
 
 async def file_size_from_url(url: str) -> int:

@@ -1,7 +1,5 @@
-Cutiepii_Robot/config.py
 Cutiepii_Robot/*.session
 Cutiepii_Robot/*.session-journal
-Cutiepii_Robot/config.ini
 log.txt
 *.pyc
 .idea/

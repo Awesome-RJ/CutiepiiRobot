@@ -1,0 +1,20 @@
+{
+      "name": "cutiepii",
+      "description": "An Anime themed Telegram group management bot.",
+      "logo": "https://telegra.ph/file/bc219808c6d888fc72260.jpg",
+      "keywords": [
+         "telegram",
+         "anime",
+         "group",
+         "manager",
+         "Miku"
+      ],   
+   "repository": "https://github.com/Awesome-Tofu/CutiepiiRobotV2-new",
+   "addons": [
+      {
+         "options": {
+            "version": "12"
+         },
+         "plan": "heroku-postgresql"
+      }
+   ],

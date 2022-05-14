@@ -1,3 +1,34 @@
+"""
+BSD 2-Clause License
+
+Copyright (C) 2017-2019, Paul Larsen
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
+
 from re import compile
 
 from pyrogram import filters
@@ -115,41 +146,6 @@ def __connect_first():
 
 
 __connect_first()
-
-
-@pgram.on_message(filters.command("unpinall") & ~filters.private)
-async def unpinall_message(_, m: Message):
-    try:
-        chat_id = m.chat.id
-        user_id = m.from_user.id
-        permissions = await member_permissions(chat_id, user_id)
-        if "can_change_info" not in permissions:
-            await m.reply_text("You Don't Have Enough Permissions.")
-            return
-        if "can_pin_messages" not in permissions:
-            await m.reply_text("You Don't Have Enough Permissions.")
-            return
-        if "can_restrict_members" not in permissions:
-            await m.reply_text("You Don't Have Enough Permissions.")
-            return
-        if "can_promote_members" not in permissions:
-            await m.reply_text("You Don't Have Enough Permissions.")
-            return
-        try:
-            await _.unpin_all_chat_messages(m.chat.id)
-            await m.reply("I have unpinned all messages")
-        except ChatAdminRequired:
-            await m.reply("I'm not admin here")
-        except RightForbidden:
-            await m.reply("I don't have enough rights to unpin here")
-        except RPCError as ef:
-            await m.reply_text(ef)
-            return
-
-    except Exception as e:
-        print(e)
-        await m.reply_text(e)
-        return
 
 
 from threading import RLock
@@ -295,79 +291,6 @@ async def anti_channel_pin(_, m: Message):
 
     await m.reply_text(msg)
     return
-
-
-@pgram.on_message(filters.command("cleanlinked") & ~filters.private)
-async def clean_linked(_, m: Message):
-    chat_id = m.chat.id
-    user_id = m.from_user.id
-    permissions = await member_permissions(chat_id, user_id)
-    if "can_change_info" not in permissions:
-        await m.reply_text("You Don't Have Enough Permissions.")
-        return
-    if "can_pin_messages" not in permissions:
-        await m.reply_text("You Don't Have Enough Permissions.")
-        return
-    if "can_restrict_members" not in permissions:
-        await m.reply_text("You Don't Have Enough Permissions.")
-        return
-    if "can_promote_members" not in permissions:
-        await m.reply_text("You Don't Have Enough Permissions.")
-        return
-    pinsdb = Pins(m.chat.id)
-
-    if len(m.text.split()) == 1:
-        status = pinsdb.get_settings()["cleanlinked"]
-        await m.reply_text(f"Cleanlinked pins currently: {status}")
-        return
-
-    if len(m.text.split()) == 2:
-        if m.command[1] in ("yes", "on", "true"):
-            pinsdb.cleanlinked_on()
-            msg = "Turned on CleanLinked! Now all the messages from linked channel will be deleted!"
-        elif m.command[1] in ("no", "off", "false"):
-            pinsdb.cleanlinked_off()
-            msg = "Turned off CleanLinked! Messages from linked channel will not be deleted!"
-        else:
-            await m.reply("Invalid syntax")
-            return
-
-    await m.reply(msg)
-    return
-
-
-@pgram.on_message(filters.command("permapin") & ~filters.private)
-async def perma_pin(_, m: Message):
-    chat_id = m.chat.id
-    user_id = m.from_user.id
-    permissions = await member_permissions(chat_id, user_id)
-    if "can_change_info" not in permissions:
-        await m.reply_text("You Don't Have Enough Permissions.")
-        return
-    if "can_pin_messages" not in permissions:
-        await m.reply_text("You Don't Have Enough Permissions.")
-        return
-    if "can_restrict_members" not in permissions:
-        await m.reply_text("You Don't Have Enough Permissions.")
-        return
-    if "can_promote_members" not in permissions:
-        await m.reply_text("You Don't Have Enough Permissions.")
-        return
-    if m.reply_to_message or len(m.text.split()) > 1:
-        if m.reply_to_message:
-            text = m.reply_to_message.text
-        elif len(m.text.split()) > 1:
-            text = m.text.split(None, 1)[1]
-        teks, button = await parse_button(text)
-        button = await build_keyboard(button)
-        button = InlineKeyboardMarkup(button) if button else None
-        z = await m.reply_text(teks, reply_markup=button)
-        await z.pin()
-    else:
-        await m.reply_text("Reply to a message or enter text to pin it.")
-    await m.delete()
-    return
-
 
 @pgram.on_message(filters.linked_channel)
 async def antichanpin_cleanlinked(c, m: Message):

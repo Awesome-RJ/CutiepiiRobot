@@ -1,39 +1,43 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import time
 import requests
 
 from typing import List
-from telegram import ParseMode, Update
-from telegram.ext import CallbackContext, run_async
+from telegram import Update
+from telegram.constants import ParseMode
+from telegram.ext import CallbackContext
 
-from Cutiepii_Robot import StartTime, dispatcher
+from Cutiepii_Robot import StartTime, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.chat_status import sudo_plus
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
@@ -42,8 +46,7 @@ sites_list = {
     "Kaizoku": "https://animekaizoku.com",
     "Kayo": "https://animekayo.com",
     "Jikan": "https://api.jikan.moe/v3",
-    "Kuki Chatbot": "https://kuki-yukicloud.up.railway.app/",
-    "liones API": "https://liones-api.herokuapp.com/",
+    "Kuki Chatbot": "https://www.kukiapi.xyz/",
 }
 
 
@@ -85,8 +88,8 @@ def ping_func(to_ping: List[str]) -> List[str]:
 
         pinged_site = f"<b>{each_ping}</b>"
 
-        if each_ping in ('Kaizoku', 'Kayo'):
-            pinged_site = f'<a href="{sites_list[each_ping]}">{each_ping}</a>'
+        if each_ping in ("Kaizoku", "Kayo"):
+            pinged_site = f"<a href='{sites_list[each_ping]}'>{each_ping}</a>"
             ping_time = f"<code>{ping_time} (Status: {r.status_code})</code>"
 
         ping_text = f"{pinged_site}: <code>{ping_time}</code>"
@@ -95,16 +98,16 @@ def ping_func(to_ping: List[str]) -> List[str]:
     return ping_result
 
 @sudo_plus
-def ping(update: Update, context: CallbackContext):
+async def ping(update: Update, context: CallbackContext):
     msg = update.effective_message
 
     start_time = time.time()
-    message = msg.reply_text("Pinging...")
+    message = await msg.reply_text("Pinging...")
     end_time = time.time()
     telegram_ping = str(round((end_time - start_time) * 1000, 3)) + " ms"
     uptime = get_readable_time((time.time() - StartTime))
 
-    message.edit_text(
+    await message.edit_text(
         "PONG!!\n"
         "<b>Time Taken:</b> <code>{}</code>\n"
         "<b>Service uptime:</b> <code>{}</code>".format(telegram_ping, uptime),
@@ -113,8 +116,8 @@ def ping(update: Update, context: CallbackContext):
 
 
 @sudo_plus
-def pingall(update: Update, context: CallbackContext):
-    to_ping = ["Kaizoku", "Kayo", "Telegram", "Jikan", "Kuki Chatbot", "liones API"]
+async def pingall(update: Update, context: CallbackContext):
+    to_ping = ["Kaizoku", "Kayo", "Telegram", "Jikan", "Kuki Chatbot"]
     pinged_list = ping_func(to_ping)
     pinged_list.insert(2, "")
     uptime = get_readable_time((time.time() - StartTime))
@@ -123,16 +126,16 @@ def pingall(update: Update, context: CallbackContext):
     reply_msg += "\n".join(pinged_list)
     reply_msg += "\n<b>Service uptime:</b> <code>{}</code>".format(uptime)
 
-    update.effective_message.reply_text(
+    await update.effective_message.reply_text(
         reply_msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True,
     )
 
 
-PING_HANDLER = DisableAbleCommandHandler("ping", ping, run_async=True)
-PINGALL_HANDLER = DisableAbleCommandHandler("pingall", pingall, run_async=True)
+PING_HANDLER = DisableAbleCommandHandler("ping", ping)
+PINGALL_HANDLER = DisableAbleCommandHandler("pingall", pingall)
 
-dispatcher.add_handler(PING_HANDLER)
-dispatcher.add_handler(PINGALL_HANDLER)
+CUTIEPII_PTB.add_handler(PING_HANDLER)
+CUTIEPII_PTB.add_handler(PINGALL_HANDLER)
 
 __command_list__ = ["ping", "pingall"]
 __handlers__ = [PING_HANDLER, PINGALL_HANDLER]

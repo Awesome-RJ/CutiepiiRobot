@@ -1,29 +1,32 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import logging
@@ -40,10 +43,7 @@ from pyrogram.errors.exceptions.bad_request_400 import (
 )
 from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
 
-from Cutiepii_Robot import BOT_ID, BOT_USERNAME, BOT_NAME
-
-# from Cutiepii_Robot import OWNER_ID as SUDO_USERS
-from Cutiepii_Robot import pgram
+from Cutiepii_Robot import BOT_ID, OWNER_ID as SUDO_USERS, pgram, CUTIEPII_PTB
 from Cutiepii_Robot.modules.sql import forceSubscribe_sql as sql
 
 logging.basicConfig(level=logging.INFO)
@@ -60,8 +60,7 @@ def _onUnMuteRequest(client, cb):
         chat_id = cb.message.chat.id
     except:
         return
-    chat_db = sql.fs_settings(chat_id)
-    if chat_db:
+    if chat_db := sql.fs_settings(chat_id):
         channel = chat_db.channel
         try:
             chat_member = client.get_chat_member(chat_id, user_id)
@@ -108,8 +107,7 @@ def _onUnMuteRequest(client, cb):
 @pgram.on_message(filters.text & ~filters.private & ~filters.edited, group=1)
 def _check_member(client, message):
     chat_id = message.chat.id
-    chat_db = sql.fs_settings(chat_id)
-    if chat_db:
+    if chat_db := sql.fs_settings(chat_id):
         try:
             user_id = message.from_user.id
         except:
@@ -125,7 +123,7 @@ def _check_member(client, message):
                 except UserNotParticipant:
                     try:
                         sent_message = message.reply_text(
-                            "Welcome {} 🙏 \n **You havent joined our @{} Channel yet** 😭 \n \nPlease Join [Our Channel](https://t.me/{}) and hit the **UNMUTE ME** Button. \n \n ".format(
+                            "Welcome {} 🙏 \n **You havent joined our @{} Channel yet** 😭 \n \nPlease Join [Our Channel](https://telegram.dog/{}) and hit the **UNMUTE ME** Button. \n \n ".format(
                                 message.from_user.mention, channel, channel
                             ),
                             disable_web_page_preview=True,
@@ -134,7 +132,7 @@ def _check_member(client, message):
                                     [
                                         InlineKeyboardButton(
                                             "Join Channel",
-                                            url="https://t.me/{}".format(channel),
+                                            url="https://telegram.dog/{}".format(channel),
                                         )
                                     ],
                                     [
@@ -150,7 +148,7 @@ def _check_member(client, message):
                         )
                     except ChatAdminRequired:
                         sent_message.edit(
-                            f"❗ **{BOT_NAME} is not an admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
+                            f"❗ **{CUTIEPII_PTB.bot.first_name} is not an admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
                         )
                     except RPCError:
                         return
@@ -166,10 +164,10 @@ def _check_member(client, message):
             return
 
 
-@pgram.on_message(filters.command(["forcesubscribe", "forcesub", f"forcesub@{BOT_USERNAME}", f"forcesubscribe@{BOT_USERNAME}"]) & ~filters.private)
+@pgram.on_message(filters.command(["forcesubscribe", "forcesub", f"forcesub@Cutiepii_Robot", f"forcesubscribe@Cutiepii_Robot"]) & ~filters.private)
 def config(client, message):
     user = client.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status == "creator":
+    if user.status == "creator" or user.user.id in SUDO_USERS:
         chat_id = message.chat.id
         if len(message.command) > 1:
             input_str = message.command[1]
@@ -198,12 +196,12 @@ def config(client, message):
                     client.get_chat_member(input_str, "me")
                     sql.add_channel(chat_id, input_str)
                     message.reply_text(
-                        f"✅ **Force Subscribe is Enabled**\n__Force Subscribe is enabled, all the group members have to subscribe this [channel](https://t.me/{input_str}) in order to send messages in this group.__",
+                        f"✅ **Force Subscribe is Enabled**\n__Force Subscribe is enabled, all the group members have to subscribe this [channel](https://telegram.dog/{input_str}) in order to send messages in this group.__",
                         disable_web_page_preview=True,
                     )
                 except UserNotParticipant:
                     message.reply_text(
-                        f"❗ **Not an Admin in the Channel**\n__I am not an admin in the [channel](https://t.me/{input_str}). Add me as a admin in order to enable ForceSubscribe.__",
+                        f"❗ **Not an Admin in the Channel**\n__I am not an admin in the [channel](https://telegram.dog/{input_str}). Add me as a admin in order to enable ForceSubscribe.__",
                         disable_web_page_preview=True,
                     )
                 except (UsernameNotOccupied, PeerIdInvalid):
@@ -212,7 +210,7 @@ def config(client, message):
                     message.reply_text(f"❗ **ERROR:** ```{err}```")
         elif sql.fs_settings(chat_id):
             message.reply_text(
-                f"✅ **Force Subscribe is enabled in this chat.**\n__For this [Channel](https://t.me/{sql.fs_settings(chat_id).channel})__",
+                f"✅ **Force Subscribe is enabled in this chat.**\n__For this [Channel](https://telegram.dog/{sql.fs_settings(chat_id).channel})__",
                 disable_web_page_preview=True,
             )
         else:
@@ -225,7 +223,7 @@ def config(client, message):
 
 __help__ = f"""
 *Force Subscribe*:
-- {BOT_NAME} can mute members who are not subscribed your channel until they subscribe
+- {CUTIEPII_PTB.bot.first_name} can mute members who are not subscribed your channel until they subscribe
 - When enabled I will mute unsubscribed members and show them a unmute button. When they pressed the button I will unmute them
 
 *Setup*
@@ -233,10 +231,10 @@ __help__ = f"""
 Note: Only creator of the group can setup me and i will not allow force subscribe again if not done so.
  
 *Commmands*:
-   ➢ `/forcesubscribe`*:* To get the current settings.
-   ➢ `/forcesubscribe <no/off/disable>`*:* To turn of ForceSubscribe.
-   ➢ `/forcesubscribe <channel username>`*:* To turn on and setup the channel.
-   ➢ `/forcesubscribe clear`*:* To unmute all members who muted by me.
+➛ /forcesubscribe*:* To get the current settings.
+➛ /forcesubscribe <no/off/disable>*:* To turn of ForceSubscribe.
+➛ /forcesubscribe <channel username>*:* To turn on and setup the channel.
+➛ /forcesubscribe clear*:* To unmute all members who muted by me.
 Note: /forcesub is an alias of /forcesubscribe
  
 """

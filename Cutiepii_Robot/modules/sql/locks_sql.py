@@ -1,29 +1,32 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 # New chat added -> setup permissions
@@ -55,6 +58,15 @@ class Permissions(BASE):
     button = Column(Boolean, default=False)
     egame = Column(Boolean, default=False)
     inline = Column(Boolean, default=False)
+    apk = Column(Boolean, default=False)
+    doc = Column(Boolean, default=False)
+    exe = Column(Boolean, default=False)
+    jpg = Column(Boolean, default=False)
+    mp3 = Column(Boolean, default=False)
+    pdf = Column(Boolean, default=False)
+    txt = Column(Boolean, default=False)
+    xml = Column(Boolean, default=False)
+    zip = Column(Boolean, default=False)
 
     def __init__(self, chat_id):
         self.chat_id = str(chat_id)  # ensure string
@@ -75,6 +87,15 @@ class Permissions(BASE):
         self.button = False
         self.egame = False
         self.inline = False
+        self.apk = False
+        self.doc = False
+        self.exe = False
+        self.jpg = False
+        self.mp3 = False
+        self.pdf = False
+        self.txt = False
+        self.xml = False
+        self.zip = False
 
     def __repr__(self):
         return "<Permissions for %s>" % self.chat_id
@@ -139,40 +160,59 @@ def update_lock(chat_id, lock_type, locked):
         if not curr_perm:
             curr_perm = init_permissions(chat_id)
 
-        if lock_type == "audio":
-            curr_perm.audio = locked
-        elif lock_type == "voice":
-            curr_perm.voice = locked
-        elif lock_type == "contact":
-            curr_perm.contact = locked
-        elif lock_type == "video":
-            curr_perm.video = locked
-        elif lock_type == "document":
-            curr_perm.document = locked
-        elif lock_type == "photo":
-            curr_perm.photo = locked
-        elif lock_type == "sticker":
-            curr_perm.sticker = locked
-        elif lock_type == "gif":
-            curr_perm.gif = locked
-        elif lock_type == "url":
-            curr_perm.url = locked
-        elif lock_type == "bots":
-            curr_perm.bots = locked
-        elif lock_type == "forward":
-            curr_perm.forward = locked
-        elif lock_type == "game":
-            curr_perm.game = locked
-        elif lock_type == "location":
-            curr_perm.location = locked
-        elif lock_type == "rtl":
-            curr_perm.rtl = locked
-        elif lock_type == "button":
-            curr_perm.button = locked
-        elif lock_type == "egame":
-            curr_perm.egame = locked
-        elif lock_type == "inline":
-            curr_perm.inline = locked
+        match lock_type:
+            case "audio":
+                curr_perm.audio = locked
+            case "voice":
+                curr_perm.voice = locked
+            case "contact":
+                curr_perm.contact = locked
+            case "video":
+                curr_perm.video = locked
+            case "document":
+                curr_perm.document = locked
+            case "photo":
+                curr_perm.photo = locked
+            case "sticker":
+                curr_perm.sticker = locked
+            case "gif":
+                curr_perm.gif = locked
+            case "url":
+                curr_perm.url = locked
+            case "bots":
+                curr_perm.bots = locked
+            case "forward":
+                curr_perm.forward = locked
+            case "game":
+                curr_perm.game = locked
+            case "location":
+                curr_perm.location = locked
+            case "rtl":
+                curr_perm.rtl = locked
+            case "button":
+                curr_perm.button = locked
+            case "egame":
+                curr_perm.egame = locked
+            case "inline":
+                curr_perm.inline = locked
+            case "apk":
+                curr_perm.apk = locked
+            case "doc":
+                curr_perm.doc = locked
+            case "exe":
+                curr_perm.exe = locked
+            case "jpg":
+                curr_perm.jpg = locked
+            case "mp3":
+                curr_perm.mp3 = locked
+            case "pdf":
+                curr_perm.pdf = locked
+            case "txt":
+                curr_perm.txt = locked
+            case "xml":
+                curr_perm.xml = locked
+            case "zip":
+                curr_perm.zip = locked
 
         SESSION.add(curr_perm)
         SESSION.commit()
@@ -184,19 +224,20 @@ def update_restriction(chat_id, restr_type, locked):
         if not curr_restr:
             curr_restr = init_restrictions(chat_id)
 
-        if restr_type == "messages":
-            curr_restr.messages = locked
-        elif restr_type == "media":
-            curr_restr.media = locked
-        elif restr_type == "other":
-            curr_restr.other = locked
-        elif restr_type == "previews":
-            curr_restr.preview = locked
-        elif restr_type == "all":
-            curr_restr.messages = locked
-            curr_restr.media = locked
-            curr_restr.other = locked
-            curr_restr.preview = locked
+        match restr_type:
+            case "messages":
+                curr_restr.messages = locked
+            case "media":
+                curr_restr.media = locked
+            case "other":
+                curr_restr.other = locked
+            case "previews":
+                curr_restr.preview = locked
+            case "all":
+                curr_restr.messages = locked
+                curr_restr.media = locked
+                curr_restr.other = locked
+                curr_restr.preview = locked
         SESSION.add(curr_restr)
         SESSION.commit()
 
@@ -208,40 +249,59 @@ def is_locked(chat_id, lock_type):
     if not curr_perm:
         return False
 
-    if lock_type == "sticker":
-        return curr_perm.sticker
-    if lock_type == "photo":
-        return curr_perm.photo
-    if lock_type == "audio":
-        return curr_perm.audio
-    if lock_type == "voice":
-        return curr_perm.voice
-    if lock_type == "contact":
-        return curr_perm.contact
-    if lock_type == "video":
-        return curr_perm.video
-    if lock_type == "document":
-        return curr_perm.document
-    if lock_type == "gif":
-        return curr_perm.gif
-    if lock_type == "url":
-        return curr_perm.url
-    if lock_type == "bots":
-        return curr_perm.bots
-    if lock_type == "forward":
-        return curr_perm.forward
-    if lock_type == "game":
-        return curr_perm.game
-    if lock_type == "location":
-        return curr_perm.location
-    if lock_type == "rtl":
-        return curr_perm.rtl
-    if lock_type == "button":
-        return curr_perm.button
-    if lock_type == "egame":
-        return curr_perm.egame
-    if lock_type == "inline":
-        return curr_perm.inline
+    match lock_type:
+        case "sticker":
+            return curr_perm.sticker
+        case "photo":
+            return curr_perm.photo
+        case "audio":
+            return curr_perm.audio
+        case "voice":
+            return curr_perm.voice
+        case "contact":
+            return curr_perm.contact
+        case "video":
+            return curr_perm.video
+        case "document":
+            return curr_perm.document
+        case "gif":
+            return curr_perm.gif
+        case "url":
+            return curr_perm.url
+        case "bots":
+            return curr_perm.bots
+        case "forward":
+            return curr_perm.forward
+        case "game":
+            return curr_perm.game
+        case "location":
+            return curr_perm.location
+        case "rtl":
+            return curr_perm.rtl
+        case "button":
+            return curr_perm.button
+        case "egame":
+            return curr_perm.egame
+        case "inline":
+            return curr_perm.inline
+        case "apk":
+            return curr_perm.apk
+        case "doc":
+            return curr_perm.doc
+        case "exe":
+            return curr_perm.exe
+        case "jpg":
+            return curr_perm.jpg
+        case "mp3":
+            return curr_perm.mp3
+        case "pdf":
+            return curr_perm.pdf
+        case "txt":
+            return curr_perm.txt
+        case "xml":
+            return curr_perm.xml
+        case "zip":
+            return curr_perm.zip
 
 
 def is_restr_locked(chat_id, lock_type):
@@ -251,21 +311,22 @@ def is_restr_locked(chat_id, lock_type):
     if not curr_restr:
         return False
 
-    if lock_type == "messages":
-        return curr_restr.messages
-    if lock_type == "media":
-        return curr_restr.media
-    if lock_type == "other":
-        return curr_restr.other
-    if lock_type == "previews":
-        return curr_restr.preview
-    if lock_type == "all":
-        return (
-            curr_restr.messages
-            and curr_restr.media
-            and curr_restr.other
-            and curr_restr.preview
-        )
+    match lock_type:
+        case "messages":
+            return curr_restr.messages
+        case "media":
+            return curr_restr.media
+        case "other":
+            return curr_restr.other
+        case "previews":
+            return curr_restr.preview
+        case "all":
+            return (
+                curr_restr.messages
+                and curr_restr.media
+                and curr_restr.other
+                and curr_restr.preview
+            )
 
 
 def get_locks(chat_id):

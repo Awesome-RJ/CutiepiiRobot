@@ -1,48 +1,58 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 import os
+import json
+import requests
 
+from gtts import gTTS
 from gpytranslate import SyncTranslator
-from telegram import Update, ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext
+from telegram.constants import ParseMode, ChatAction
 
-from Cutiepii_Robot import dispatcher
+
+from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action, send_action
 
 trans = SyncTranslator()
 
-def translate(update: Update, context: CallbackContext) -> None:
+async def translate(update: Update, context: CallbackContext) -> None:
+    global to_translate
     bot = context.bot
     message = update.effective_message
     reply_msg = message.reply_to_message
+      
     if not reply_msg:
-        message.reply_text("Reply to a message to translate it!")
+        await update.effective_message.reply_text("Reply to a message to translate it!")
         return
     if reply_msg.caption:
         to_translate = reply_msg.caption
@@ -54,21 +64,23 @@ def translate(update: Update, context: CallbackContext) -> None:
             source = args.split("//")[0]
             dest = args.split("//")[1]
         else:
-            source = trans.detect(to_translate)
+            source = await trans.detect(to_translate)
             dest = args
     except IndexError:
-        source = trans.detect(to_translate)
+        source = await trans.detect(to_translate)
         dest = "en"
     translation = trans(to_translate,
                         sourcelang=source, targetlang=dest)
-    reply = f"<b>Translated from {source} to {dest}</b>:\n" \
-        f"<code>{translation.text}</code>"
+    reply = (
+        f"<b>Language: {source} -> {dest}</b>:\n\n"
+        f"Translation: <code>{translation.text}</code>"
+    )
 
-    bot.send_message(text=reply, chat_id=message.chat.id, parse_mode=ParseMode.HTML)
+    await update.effective_message.reply_text(reply, parse_mode=ParseMode.HTML)
 
     
-def languages(update: Update, context: CallbackContext) -> None:
-    update.effective_message.reply_text(
+async def languages(update: Update, context: CallbackContext) -> None:
+    await update.effective_message.reply_text(
         "Click on the button below to see the list of supported language codes.",
         reply_markup=InlineKeyboardMarkup(
             [
@@ -83,15 +95,14 @@ def languages(update: Update, context: CallbackContext) -> None:
         ),
     )
     
-@send_action(ChatAction.RECORD_AUDIO)
-def gtts(update, context):
+async def gtts(update: Update, context: CallbackContext):
     msg = update.effective_message
     reply = " ".join(context.args)
     if not reply:
         if msg.reply_to_message:
             reply = msg.reply_to_message.text
         else:
-            return msg.reply_text(
+            return await msg.reply_text(
                 "Reply to some message or enter some text to convert it into audio format!"
             )
         for x in "\n":
@@ -102,8 +113,8 @@ def gtts(update, context):
         with open("Cutiepii.mp3", "rb") as speech:
             msg.reply_audio(speech)
     finally:
-        if os.path.isfile("zeldris.mp3"):
-            os.remove("zeldris.mp3")
+        if os.path.isfile("Cutiepii.mp3"):
+            os.remove("Cutiepii.mp3")
 
 
 # Open API key
@@ -112,8 +123,8 @@ URL = "http://services.gingersoftware.com/Ginger/correct/json/GingerTheText"
 
 
 @typing_action
-def spellcheck(update, _):
-    if update.effective_message.reply_to_message:
+async def spellcheck(update: Update, context: CallbackContext):
+    if update.effective_update.effective_message.reply_to_message:
         msg = update.effective_message.reply_to_message
 
         params = dict(lang="US", clientVersion="2.0", apiKey=API_KEY, text=msg.text)
@@ -126,45 +137,42 @@ def spellcheck(update, _):
         for change in changes:
             start = change.get("From")
             end = change.get("To") + 1
-            suggestions = change.get("Suggestions")
-            if suggestions:
+            if suggestions := change.get("Suggestions"):
                 sugg_str = suggestions[0].get("Text")  # should look at this list more
                 curr_string += msg.text[prev_end:start] + sugg_str
                 prev_end = end
 
         curr_string += msg.text[prev_end:]
-        update.effective_message.reply_text(curr_string)
+        await update.effective_message.reply_text(curr_string)
     else:
-        update.effective_message.reply_text(
+        await update.effective_message.reply_text(
             "Reply to some message to get grammar corrected text!"
         )
-        
-__help__ = """ 
-Use this module to translate stuff!
 
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["tr", "tl"], translate)
+)
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["langs", "lang"], languages)
+)
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("tts", gtts)
+)
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("splcheck", spellcheck)
+)
+
+__help__ = """
 *Commands:*
-   ➢ `/langs: List of all language code to translates!
-   ➢ `/tl` (or `/tr`): as a reply to a message, translates it to English.
-   ➢ `/tl <lang>`: translates to <lang>
-   
+➛ /langs: List of all language code to translates!
+➛ /tl` (or `/tr`)*:* as a reply to a message, translates it to English.
+➛ /tl <lang>*:* translates to <lang>
+
 eg: `/tl ja`: translates to Japanese.
-   ➢ `/tl <source>//<dest>`: translates from <source> to <lang>.
+➛ /tl <source>//<dest>*:* translates from <source> to <lang>.
 
 • [List of supported languages for translation](https://telegra.ph/Lang-Codes-03-19-3)
 """
-
-dispatcher.add_handler(
-    DisableAbleCommandHandler(["tr", "tl"], translate, pass_args=True, run_async=True)
-)
-dispatcher.add_handler(
-    DisableAbleCommandHandler(["langs", "lang"], languages, run_async=True)
-)
-dispatcher.add_handler(
-    DisableAbleCommandHandler("tts", gtts, pass_args=True, run_async=True)
-)
-dispatcher.add_handler(
-    DisableAbleCommandHandler("splcheck", spellcheck, run_async=True)
-)
 
 __mod_name__ = "Translator"
 __command_list__ = ["tr", "tl", "lang", "languages", "splcheck", "tts"]

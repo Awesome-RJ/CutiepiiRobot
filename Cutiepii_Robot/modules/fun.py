@@ -1,53 +1,54 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import html
 import random
 import time
-import glob
 import requests
-import requests as r
-import urllib.request
-import os
+import telegram
 
 import Cutiepii_Robot.modules.fun_strings as fun_strings
 
-from pyrogram import filters
-from pathlib import Path
-from Cutiepii_Robot import DEMONS, DRAGONS, pgram as bot, dispatcher, BOT_USERNAME, BOT_NAME
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler, DisableAbleMessageHandler
+from pyrogram import filters as cutiepii_pyro
+from Cutiepii_Robot import SUPPORT_USERS, SUDO_USERS, pgram, CUTIEPII_PTB
+from Cutiepii_Robot.modules.disable import DisableAbleMessageHandler
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
-from telegram import ChatPermissions, ParseMode, Update, Bot
+from telegram import ChatPermissions, Update, Bot
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext, run_async, Filters
-from telegram.utils.helpers import escape_markdown
+from telegram.ext import CallbackContext, filters
+from telegram.constants import ParseMode
+from telegram.helpers import escape_markdown
 
 GIF_ID = "CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE"
 
@@ -239,60 +240,47 @@ earth_ani = [
             "🌏"
 ]
 
-@bot.on_message(filters.command("meme", f"meme@{BOT_USERNAME}"))
-def meme(_,message):
+@pgram.on_message(cutiepii_pyro.command("meme", f"meme@Cutiepii_Robot"))
+async def meme(_,message):
 	r = requests.get('https://nksamamemeapi.pythonanywhere.com').json()
 	pic = r['image']
 	title = r['title']
-	bot.send_photo(message.chat.id , pic , caption=title)
+	pgram.send_photo(message.chat.id , pic , caption=title)
 
-    
-@bot.on_message(filters.command("hentaimeme", "hmeme", f"hmeme@{BOT_USERNAME}"))
-def hmeme(_,message):
+
+@pgram.on_message(cutiepii_pyro.command("hentaimeme", "hmeme", f"hmeme@Cutiepii_Robot"))
+async def hmeme(_,message):
 	r = requests.get('https://nksamamemeapi.pythonanywhere.com/get/hentaimemes').json()
 	pic = r['image']
 	title = r['title']
-	bot.send_photo(message.chat.id , pic , caption=title)
+	pgram.send_photo(message.chat.id , pic , caption=title)
 
-def runs(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='runs')
+async def runs(update: Update, context: CallbackContext):
     temp = random.choice(fun_strings.RUN_STRINGS)
     if update.effective_user.id == 1170714920:
         temp = "Run everyone, they just dropped a bomb 💣💣"
-    update.effective_message.reply_text(temp)
+    await update.effective_message.reply_text(temp)
 
 
 @typing_action
-def goodnight(update, context):
+async def goodnight(update: Update, context: CallbackContext):
     message = update.effective_message
     first_name = update.effective_user.first_name
     reply = f"Good Night! {escape_markdown(first_name)}" 
-    message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
+    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
 
 
 @typing_action
-def goodmorning(update, context):
+async def goodmorning(update: Update, context: CallbackContext):
     message = update.effective_message
     first_name = update.effective_user.first_name
     reply = f"Good Morning! {escape_markdown(first_name)}"
-    message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
-	
-	
-def sanitize(update: Update, context: CallbackContext):
-    message = update.effective_message
-    name = (
-        message.reply_to_message.from_user.first_name
-        if message.reply_to_message
-        else message.from_user.first_name
-    )
-    reply_animation = (
-        message.reply_to_message.reply_animation
-        if message.reply_to_message
-        else message.reply_animation
-    )
-    reply_animation(GIF_ID, caption=f"*Sanitizes {name}*")
+    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
 
 
-def sanitize(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='sanitize')
+async def sanitize(update: Update, context: CallbackContext):
     message = update.effective_message
     name = (
         message.reply_to_message.from_user.first_name
@@ -306,9 +294,10 @@ def sanitize(update: Update, context: CallbackContext):
     )
     reply_animation(random.choice(fun_strings.GIFS), caption=f"*Sanitizes {name}*")
 
-
-def slap(update: Update, context: CallbackContext):
-    bot, args = context.bot, context.args
+@cutiepii_cmd(command='slap')
+async def slap(update: Update, context: CallbackContext):
+    bot: telegram.Bot = context.bot
+    args = context.args
     message = update.effective_message
     chat = update.effective_chat
 
@@ -318,7 +307,8 @@ def slap(update: Update, context: CallbackContext):
         else message.reply_text
     )
 
-    curr_user = html.escape(message.from_user.first_name)
+    curr_user = html.escape(message.from_user.first_name) if not message.sender_chat else html.escape(
+        message.sender_chat.title)
     user_id = extract_user(message, args)
 
     if user_id == bot.id:
@@ -326,12 +316,12 @@ def slap(update: Update, context: CallbackContext):
 
         if isinstance(temp, list):
             if temp[2] == "tmute":
-                if is_user_admin(chat, message.from_user.id):
+                if (await is_user_admin(update, message.from_user.id)):
                     reply_text(temp[1])
                     return
 
                 mutetime = int(time.time() + 60)
-                bot.restrict_chat_member(
+                await bot.restrict_chat_member(
                     chat.id,
                     message.from_user.id,
                     until_date=mutetime,
@@ -344,9 +334,9 @@ def slap(update: Update, context: CallbackContext):
 
     if user_id:
 
-        slapped_user = bot.get_chat(user_id)
+        slapped_user = await bot.get_chat(user_id)
         user1 = curr_user
-        user2 = html.escape(slapped_user.first_name)
+        user2 = html.escape(slapped_user.first_name if slapped_user.first_name else slapped_user.title)
 
     else:
         user1 = bot.first_name
@@ -364,23 +354,35 @@ def slap(update: Update, context: CallbackContext):
 
     reply_text(reply, parse_mode=ParseMode.HTML)
 
-
-def pat(update: Update, _):
-    msg = update.effective_message
-    pat = requests.get("https://some-random-api.ml/animu/pat").json()
-    link = pat.get("link")
-    if not link:
-        msg.reply_text("No URL was received from the API!")
-        return
-    msg.reply_video(link)
-
-	
-
-def roll(update: Update, context: CallbackContext):
-    update.message.reply_text(random.choice(range(1, 7)))
+@cutiepii_cmd(command='hug')
+async def hug(update: Update, context: CallbackContext):
+    reply_animation = (
+        update.effective_message.reply_to_message.reply_text
+        if update.effective_message.reply_to_message
+        else update.effective_message.reply_text
+    )
+    hug = requests.get('https://some-random-api.ml/animu/hug').json()
+    reply_animation(hug.get('link'))
 
 
-def shout(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='pat')
+async def pat(update: Update, context: CallbackContext):
+    reply_animation = (
+        update.effective_message.reply_to_message.reply_text
+        if update.effective_message.reply_to_message
+        else update.effective_message.reply_text
+    )
+    pat = requests.get('https://some-random-api.ml/animu/pat').json()
+    reply_animation(pat.get('link'))
+
+
+@cutiepii_cmd(command='roll')
+async def roll(update: Update, context: CallbackContext):
+    await update.message.reply_text(random.choice(range(1, 7)))
+
+
+@cutiepii_cmd(command='shout')
+async def shout(update: Update, context: CallbackContext):
 	args = context.args
 	text = " ".join(args)
 	result = [" ".join(list(text))]
@@ -390,14 +392,16 @@ def shout(update: Update, context: CallbackContext):
 	result[0] = text[0]
 	result = "".join(result)
 	msg = "```\n" + result + "```"
-	return update.effective_message.reply_text(msg, parse_mode="MARKDOWN")
+	return await update.effective_message.reply_text(msg, parse_mode="MARKDOWN")
 
 
-def toss(update: Update, context: CallbackContext):
-    update.message.reply_text(random.choice(fun_strings.TOSS))
+@cutiepii_cmd(command='toss')
+async def toss(update: Update, context: CallbackContext):
+    await update.message.reply_text(random.choice(fun_strings.TOSS))
 
 
-def shrug(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='shrug')
+async def shrug(update: Update, context: CallbackContext):
     msg = update.effective_message
     reply_text = (
         msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -405,7 +409,7 @@ def shrug(update: Update, context: CallbackContext):
     reply_text(r"¯\_(ツ)_/¯")
 
 
-def bluetext(update: Update, context: CallbackContext):
+async def bluetext(update: Update, context: CallbackContext):
     msg = update.effective_message
     reply_text = (
         msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -414,8 +418,8 @@ def bluetext(update: Update, context: CallbackContext):
         "/BLUE /TEXT\n/MUST /CLICK\n/I /AM /A /STUPID /ANIMAL /THAT /IS /ATTRACTED /TO /COLORS",
     )
 
-
-def rlg(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='rlg')
+async def rlg(update: Update, context: CallbackContext):
     eyes = random.choice(fun_strings.EYES)
     mouth = random.choice(fun_strings.MOUTHS)
     ears = random.choice(fun_strings.EARS)
@@ -424,19 +428,28 @@ def rlg(update: Update, context: CallbackContext):
         repl = ears[0] + eyes[0] + mouth[0] + eyes[1] + ears[1]
     else:
         repl = ears[0] + eyes[0] + mouth[0] + eyes[0] + ears[1]
-    update.message.reply_text(repl)
+    await update.message.reply_text(repl)
 
 
-def decide(update: Update, context: CallbackContext):
-    reply_text = (
-        update.effective_message.reply_to_message.reply_text
-        if update.effective_message.reply_to_message
-        else update.effective_message.reply_text
-    )
-    reply_text(random.choice(fun_strings.DECIDE))
+@cutiepii_cmd(command='decide')
+async def decide(update: Update, context: CallbackContext):
+    msg = update.effective_message
+    chat = update.effective_chat
+    res = requests.get("https://yesno.wtf/api")
+    if res.status_code != 200:
+         await msg.reply_text(random.choice(fun.DECIDE))
+         return
+    else:
+        res = res.json()
+    try:
+        context.bot.send_animation(
+            chat.id, animation=res.get("image"), caption=str(res.get("answer")).upper()
+        )
+    except BadRequest:
+        return
 
-
-def eightball(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='8ball')
+async def eightball(update: Update, context: CallbackContext):
     reply_text = (
         update.effective_message.reply_to_message.reply_text
         if update.effective_message.reply_to_message
@@ -445,7 +458,7 @@ def eightball(update: Update, context: CallbackContext):
     reply_text(random.choice(fun_strings.EIGHTBALL))
 
 
-def table(update: Update, context: CallbackContext):
+async def table(update: Update, context: CallbackContext):
     reply_text = (
         update.effective_message.reply_to_message.reply_text
         if update.effective_message.reply_to_message
@@ -511,20 +524,22 @@ weebyfont = [
     "乙",
 ]
 
-
-def weebify(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='weebify')
+async def weebify(update: Update, context: CallbackContext):
     args = context.args
     message = update.effective_message
     string = ""
 
     if message.reply_to_message:
-        string = message.reply_to_message.text.lower().replace(" ", "  ")
+        string = await message.reply_to_message.text.lower().replace(" ", "  ")
 
     if args:
         string = "  ".join(args).lower()
 
     if not string:
-        message.reply_text("Usage is `/weebify <text>`", parse_mode=ParseMode.MARKDOWN)
+        await message.reply_text(
+            "Usage is `/weebify <text>`", parse_mode=ParseMode.MARKDOWN
+        )
         return
 
     for normiecharacter in string:
@@ -533,21 +548,23 @@ def weebify(update: Update, context: CallbackContext):
             string = string.replace(normiecharacter, weebycharacter)
 
     if message.reply_to_message:
-        message.reply_to_message.reply_text(string)
+        await message.reply_to_message.reply_text(string)
     else:
-        message.reply_text(string)
+        await message.reply_text(string)
 
-def gbun(update, context):
+@cutiepii_cmd(command='gbum')
+async def gbun(update: Update, context: CallbackContext):
     user = update.effective_user
     chat = update.effective_chat
 
-    if update.effective_message.chat.type == "private":
+    if update.effective_message.chat.type == ChatType.PRIVATE:
         return
-    if int(user.id) in DRAGONS or int(user.id) in DEMONS:
-        context.bot.sendMessage(chat.id, (random.choice(fun_strings.GBUN)))
+    if int(user.id) in SUDO_USERS or int(user.id) in SUPPORT_USERS:
+        await context.bot.sendMessage(chat.id, (random.choice(fun_strings.GBUN)))
 
 
-def gbam(update, context):
+@cutiepii_cmd(command='gbam')
+async def gbam(update: Update, context: CallbackContext):
     user = update.effective_user
     chat = update.effective_chat
     bot, args = context.bot, context.args
@@ -557,7 +574,7 @@ def gbam(update, context):
     user_id = extract_user(message, args)
 
     if user_id:
-        gbam_user = bot.get_chat(user_id)
+        gbam_user = await bot.get_chat(user_id)
         user1 = curr_user
         user2 = html.escape(gbam_user.first_name)
 
@@ -565,15 +582,17 @@ def gbam(update, context):
         user1 = curr_user
         user2 = bot.first_name
 
-    if update.effective_message.chat.type == "private":
+    if update.effective_message.chat.type == ChatType.PRIVATE:
         return
-    if int(user.id) in DRAGONS or int(user.id) in DEMONS:
+    if int(user.id) in SUDO_USERS or int(user.id) in SUPPORT_USERS:
         gbamm = fun_strings.GBAM
         reason = random.choice(fun_strings.GBAM_REASON)
         gbam = gbamm.format(user1=user1, user2=user2, chatid=chat.id, reason=reason)
-        context.bot.sendMessage(chat.id, gbam, parse_mode=ParseMode.HTML)
+        await context.bot.sendMessage(chat.id, gbam, parse_mode=ParseMode.HTML)
 
-def cuddle(update: Update, context: CallbackContext):
+
+@cutiepii_cmd(command='cuddle')
+async def cuddle(update: Update, context: CallbackContext):
 	bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -584,7 +603,7 @@ def cuddle(update: Update, context: CallbackContext):
 	user_id = extract_user(message, args)
 
 	if user_id:
-	    cuddled_user = bot.get_chat(user_id)
+	    cuddled_user = await bot.get_chat(user_id)
 	    user1 = curr_user
 	    user2 = html.escape(cuddled_user.first_name)
 
@@ -606,11 +625,13 @@ def cuddle(update: Update, context: CallbackContext):
 	    reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-def flirt(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='flirt')
+async def flirt(update: Update, context: CallbackContext):
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
     reply_text(random.choice(fun_strings.FLIRT_TEXT))
 
-def lewd(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='lewd')
+async def lewd(update: Update, context: CallbackContext):
 	bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -621,7 +642,7 @@ def lewd(update: Update, context: CallbackContext):
 	user_id = extract_user(message, args)
 
 	if user_id:
-	    lewd_user = bot.get_chat(user_id)
+	    lewd_user = await bot.get_chat(user_id)
 	    user1 = curr_user
 	    user2 = html.escape(lewd_user.first_name)
 
@@ -649,7 +670,9 @@ def lewd(update: Update, context: CallbackContext):
 	    reply = temp.format(user1=user1, user2=user2)
 	    reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
-def romance(update: Update, context: CallbackContext):
+
+@cutiepii_cmd(command='romance')
+async def romance(update: Update, context: CallbackContext):
 	bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -660,7 +683,7 @@ def romance(update: Update, context: CallbackContext):
 	user_id = extract_user(message, args)
 
 	if user_id:
-	    romantic_user = bot.get_chat(user_id)
+	    romantic_user = await bot.get_chat(user_id)
 	    user1 = curr_user
 	    user2 = html.escape(romantic_user.first_name)
 
@@ -689,7 +712,8 @@ def romance(update: Update, context: CallbackContext):
 	    reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-def owo(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='owo')
+async def owo(update: Update, context: CallbackContext):
 	bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -700,7 +724,7 @@ def owo(update: Update, context: CallbackContext):
 	user_id = extract_user(message, args)
 
 	if user_id:
-	    owo_user = bot.get_chat(user_id)
+	    owo_user = await bot.get_chat(user_id)
 	    user1 = curr_user
 	    user2 = html.escape(owo_user.first_name)
 
@@ -724,7 +748,8 @@ def owo(update: Update, context: CallbackContext):
 	        owo_type = "Text"
 
 
-def uwu(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='uwu')
+async def uwu(update: Update, context: CallbackContext):
 	bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -735,7 +760,7 @@ def uwu(update: Update, context: CallbackContext):
 	user_id = extract_user(message, args)
 
 	if user_id:
-	    uwu_user = bot.get_chat(user_id)
+	    uwu_user = await bot.get_chat(user_id)
 	    user1 = curr_user
 	    user2 = html.escape(uwu_user.first_name)
 
@@ -759,270 +784,172 @@ def uwu(update: Update, context: CallbackContext):
 	        uwu_type = "Text"
 	
 
-def blockanimation(bot: Bot, update: Update):
-    msg = update.effective_message.reply_text('⬜') 
+@cutiepii_cmd(command='blockanimation')
+async def blockanimation(update: Update, context: CallbackContext):
+    bot, args = context.bot, context.args
+    msg = await update.effective_message.reply_text('⬜') 
     for x in range(EDIT_TIMES):
         msg.edit_text(block_chain[x%18])
         time.sleep(EDIT_SLEEP)
     msg.edit_text('🟥')
 
-
-
-def clockanimation(bot: Bot, update: Update):
-    msg = update.effective_message.reply_text('🕛') 
+@cutiepii_cmd(command='clockanimation')
+async def clockanimation(update: Update, context: CallbackContext):
+    bot, args = context.bot, context.args
+    msg = update.effective_message
+    reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
     for x in range(EDIT_TIMES):
         msg.edit_text(clock_ani[x%11])
         time.sleep(EDIT_SLEEP)
     msg.edit_text('🕚')
 
 
-
-def earthanimation(bot: Bot, update: Update):
-    msg = update.effective_message.reply_text('🌏') 
+@cutiepii_cmd(command='earthanimation')
+async def earthanimation(update: Update, context: CallbackContext):
+    bot, args = context.bot, context.args
+    msg = update.effective_message
+    reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
     for x in range(EDIT_TIMES):
         msg.edit_text(earth_ani[x%18])
         time.sleep(EDIT_SLEEP)
     msg.edit_text('🌍')
 
 
-
-def moonanimation(bot: Bot, update: Update):
-    msg = update.effective_message.reply_text('🌚') 
+@cutiepii_cmd(command='moonanimation')
+async def moonanimation(update: Update, context: CallbackContext):
+    bot, args = context.bot, context.args
+    msg = await update.effective_message.reply_text('🌚') 
     for x in range(EDIT_TIMES):
         msg.edit_text(moon_ani[x%32])
         time.sleep(EDIT_SLEEP)
     msg.edit_text('🌙')
 
 
-
-def bombs(bot: Bot, update: Update):
-    msg = update.effective_message.reply_text('💣') 
+@cutiepii_cmd(command='bombs')
+async def bombs(bot: Bot, update: Update):
+    await update.effective_message.reply_text('💣') 
     for x in range(EDIT_TIMES):
-        msg.edit_text(bomb_ettu[x%9])
+        await update.effective_message.edit_text(bomb_ettu[x%9])
         time.sleep(EDIT_SLEEP)
-    msg.edit_text('RIP PLOX...')
+    await update.effective_message.edit_text('RIP PLOX...')
 
 
-
-def hack(bot: Bot, update: Update):
-    msg = update.effective_message.reply_text('Target selected') 
+@cutiepii_cmd(command='hack')
+async def hack(update: Update, context: CallbackContext):
+    bot, args = context.bot, context.args
+    msg = await update.effective_message.reply_text('Target selected') 
     for x in range(EDIT_TIMES):
         msg.edit_text(hack_you[x%5])
         time.sleep(EDIT_SLEEP)
-    msg.edit_text('successful hacked')
+    msg.edit_text('successful hacked all data send on my Database')
 
 
-
-def love(bot: Bot, update: Update):
-    msg = update.effective_message.reply_text('❣️') 
+@cutiepii_cmd(command='love')
+async def love(update: Update, context: CallbackContext):
+    bot, args = context.bot, context.args
+    msg = await update.effective_message.reply_text('❣️') 
     for x in range(EDIT_TIMES):
         msg.edit_text(love_siren[x%5])
         time.sleep(EDIT_SLEEP)
-    msg.edit_text('പ്രണയം  😂 ')
+    msg.edit_text('True Love💞')
 
 
-def kill(bot: Bot, update: Update):
-    msg = update.effective_message.reply_text('🔫') 
+@cutiepii_cmd(command='kill')
+async def kill(update: Update, context: CallbackContext):
+    bot, args = context.bot, context.args
+    msg = await update.effective_message.reply_text('🔫') 
     for x in range(EDIT_TIMES):
         msg.edit_text(kill_you[x%12])
         time.sleep(EDIT_SLEEP)
     msg.edit_text('⚰')
 
+async def cutiepii(update: Update, context: CallbackContext):
+    reply_text = (
+        update.effective_message.reply_to_message.reply_text
+        if update.effective_message.reply_to_message
+        else update.effective_message.reply_text
+    )
+    reply_text(random.choice(fun.DECIDE))
 
 __help__ = f"""
-  ➢ `/runs`*:* reply a random string from an array of replies
-  ➢ `/slap`*:* slap a user, or get slapped if not a reply
-  ➢ `/shrug`*:* get shrug XD
-  ➢ `/table`*:* get flip/unflip :v
-  ➢ `/decide`*:* Randomly answers yes/no/maybe
-  ➢ `/toss`*:* Tosses A coin
-  ➢ `/bluetext`*:* check urself :V
-  ➢ `/roll`*:* Roll a dice
-  ➢ `/rlg`*:* Join ears,nose,mouth and create an emo ;-;
-  ➢ `/shout <keyword>`*:* write anything you want to give loud shout
-  ➢ `/weebify <text>`*:* returns a weebified text
-  ➢ `/sanitize`*:* always use this before /pat or any contact
-  ➢ `/pat`*:* pats a user, or get patted
-  ➢ `/8ball`*:* predicts using 8ball method
-  ➢ `/gbam`*:* troll somone with fake gbans, only Disaster People can do this
-  ➢ `/meme`*:* sends random anime memes
-  ➢ `/hmeme`*:* sends random hentai memes
-  ➢ `/cuddle`*:* cuddle someone by replying to his/her message or get cuddled
-  ➢ `/hug`*:* hug someone or get hugged by {BOT_NAME}
-  ➢ `/love`*:* Checks Love in your heart weather it's true or fake
-  ➢ `/kiss`*:* Kiss someone or get kissed 
-  ➢ `/flirt`*:* {BOT_NAME} will flirt to the replied person or with you
-  ➢ `/lewd`*:* {BOT_NAME} will act lewd with you or with the replied person
-  ➢ `/romance`*:* {BOT_NAME} will act all romantic with you or replied person
-  ➢ `/couples`*:* To Choose Couple Of The Day
-  ➢ `/owo`*:* OWO de text
-  ➢ `/stretch`*:* STRETCH de text
-  ➢ `/clapmoji`*:* Type in reply to a message and see magic
-  ➢ `/bmoji`*:* Type in reply to a message and see magic
-  ➢ `/copypasta`*:* Type in reply to a message and see magic
-  ➢ `/vapor`*:* owo vapor dis
-  ➢ `/zalgofy`*:* reply to a message to glitch it out!
-  ➢ `/abuse`*:* Abuses the cunt
-  ➢ `/insult`*:* Insult the cunt
-  ➢ `/react`*:* Check on your own
-  ➢ `/rhappy`*:* Check on your own
-  ➢ `/rangry`*:* Check on your own
-  ➢ `/angrymoji`*:* Check on your own
-  ➢ `/crymoji`*:* Check on your own
-  ➢ `/cowsay, /tuxsay , /milksay , /kisssay , /wwwsay , /defaultsay , /bunnysay , /moosesay , /sheepsay , /rensay , /cheesesay , /ghostbusterssay , /skeletonsay <i>text</i>`*:* Returns a stylish art text from the given text
-  ➢ `/deepfry`*:* Type this in reply to an image/sticker to roast the image/sticker
-  ➢ `/figlet`*:* Another Style art
-  ➢ `/dice`*:* Roll A dice
-  ➢ `/dart`*:* Throw a dart and try your luck
-  ➢ `/ball`*:* 1 to 5 any value
-  ➢ `/basketball`*:* Try your luck if you can enter the ball in the ring
-  ➢ `/type <text>`*:* Make the bot type something for you in a professional way
-  ➢ `/carbon <text</i>`*:* Beautifies your text and enwraps inside a terminal image [ENGLISH ONLY]
-  ➢ `/sticklet <text>`*:* Turn a text into a sticker
-  ➢ `/fortune`*:* gets a random fortune quote
-  ➢ `/quotly`*:* Type /quotly in reply to a message to make a sticker of that
-  ➢ `/animate`*:* Enwrap your text in a beautiful anime
-  ➢ `/dare`*:* sends random dare
-  ➢ `/truth`*:* sends random truth
-  ➢ `/love`*:* ❣️
-  ➢ `/hack`*:* 👨‍💻
-  ➢ `/bombs`*:* 💣
-  ➢ `/moonanimation`*:* 🌚
-  ➢ `/clockanimation`*:* 🕛
-  ➢ `/earthanimation`*:* 🌍
-  ➢ `/blockanimation`*:* 🟥
-  ➢ `/kill`*:* ⚰
-  ➢ `/police`*:* 🚓
+➛ /runs*:* reply a random string from an array of replies
+➛ /slap*:* slap a user, or get slapped if not a reply
+➛ /shrug*:* get shrug XD
+➛ /table*:* get flip/unflip :v
+➛ /decide*:* Randomly answers yes/no/maybe
+➛ /toss*:* Tosses A coin
+➛ /bluetext*:* check urself :V
+➛ /roll*:* Roll a dice
+➛ /rlg*:* Join ears,nose,mouth and create an emo ;-;
+➛ /shout <keyword>*:* write anything you want to give loud shout
+➛ /weebify <text>*:* returns a weebified text
+➛ /sanitize*:* always use this before /pat or any contact
+➛ /pat*:* pats a user, or get patted
+➛ /8ball*:* predicts using 8ball method
+➛ /gbam*:* troll somone with fake gbans, only Disaster People can do this
+➛ /meme*:* sends random anime memes
+➛ /hmeme*:* sends random hentai memes
+➛ /cuddle*:* cuddle someone by replying to his/her message or get cuddled
+➛ /hug*:* hug someone or get hugged by {CUTIEPII_PTB.bot.first_name}
+➛ /love*:* Checks Love in your heart weather it's true or fake
+➛ /kiss*:* Kiss someone or get kissed 
+➛ /flirt*:* {CUTIEPII_PTB.bot.first_name} will flirt to the replied person or with you
+➛ /lewd*:* {CUTIEPII_PTB.bot.first_name} will act lewd with you or with the replied person
+➛ /romance*:* {CUTIEPII_PTB.bot.first_name} will act all romantic with you or replied person
+➛ /couples*:* To Choose Couple Of The Day
+➛ /owo*:* OWO de text
+➛ /stretch*:* STRETCH de text
+➛ /clapmoji*:* Type in reply to a message and see magic
+➛ /bmoji*:* Type in reply to a message and see magic
+➛ /copypasta*:* Type in reply to a message and see magic
+➛ /vapor*:* owo vapor dis
+➛ /zalgofy*:* reply to a message to glitch it out!
+➛ /abuse*:* Abuses the cunt
+➛ /insult*:* Insult the cunt
+➛ /react*:* Check on your own
+➛ /rhappy*:* Check on your own
+➛ /rangry*:* Check on your own
+➛ /angrymoji*:* Check on your own
+➛ /crymoji*:* Check on your own
+➛ /cowsay, /tuxsay , /milksay , /kisssay , /wwwsay , /defaultsay , /bunnysay , /moosesay , /sheepsay , /rensay , /cheesesay , /ghostbusterssay , /skeletonsay <i>text</i>*:* Returns a stylish art text from the given text
+➛ /deepfry*:* Type this in reply to an image/sticker to roast the image/sticker
+➛ /figlet*:* Another Style art
+➛ /dice*:* Roll A dice
+➛ /dart*:* Throw a dart and try your luck
+➛ /ball*:* 1 to 5 any value
+➛ /basketball*:* Try your luck if you can enter the ball in the ring
+➛ /type <text>*:* Make the bot type something for you in a professional way
+➛ /carbon <text</i>*:* Beautifies your text and enwraps inside a terminal image [ENGLISH ONLY]
+➛ /sticklet <text>*:* Turn a text into a sticker
+➛ /fortune*:* gets a random fortune quote
+➛ /quotly*:* Type /quotly in reply to a message to make a sticker of that
+➛ /animate*:* Enwrap your text in a beautiful anime
+➛ /dare*:* sends random dare
+➛ /truth*:* sends random truth
+➛ /love*:* ❣️
+➛ /hack*:* 👨‍💻
+➛ /bombs*:* 💣
+➛ /moonanimation*:* 🌚
+➛ /clockanimation*:* 🕛
+➛ /earthanimation*:* 🌍
+➛ /blockanimation*:* 🟥
+➛ /kill*:* ⚰
+➛ /police*:* 🚓
 """
 
-SANITIZE_HANDLER = DisableAbleCommandHandler("sanitize", sanitize, run_async=True)
-RUNS_HANDLER = DisableAbleCommandHandler("runs", runs, run_async=True)
-SLAP_HANDLER = DisableAbleCommandHandler("slap", slap, run_async=True)
-PAT_HANDLER = DisableAbleCommandHandler("pat", pat, run_async=True)
-ROLL_HANDLER = DisableAbleCommandHandler("roll", roll, run_async=True)
-TOSS_HANDLER = DisableAbleCommandHandler("toss", toss, run_async=True)
-SHRUG_HANDLER = DisableAbleCommandHandler("shrug", shrug, run_async=True)
-BLUETEXT_HANDLER = DisableAbleCommandHandler("bluetext", bluetext, run_async=True)
-RLG_HANDLER = DisableAbleCommandHandler("rlg", rlg, run_async=True)
-DECIDE_HANDLER = DisableAbleCommandHandler("decide", decide, run_async=True)
-EIGHTBALL_HANDLER = DisableAbleCommandHandler("8ball", eightball, run_async=True)
-TABLE_HANDLER = DisableAbleCommandHandler("table", table, run_async=True)
-SHOUT_HANDLER = DisableAbleCommandHandler("shout", shout, run_async=True)
-WEEBIFY_HANDLER = DisableAbleCommandHandler("weebify", weebify, run_async=True)
-GBUN_HANDLER = DisableAbleCommandHandler("gbun", gbun, run_async=True)
-GBAM_HANDLER = DisableAbleCommandHandler("gbam", gbam, run_async=True)
-CUDDLE_HANDLER = DisableAbleCommandHandler("cuddle", cuddle, run_async=True)
-FLIRT_HANDLER = DisableAbleCommandHandler("flirt", flirt, run_async=True)   
-ROMANCE_HANDLER = DisableAbleCommandHandler("romance", romance, run_async=True) 
-UWU_HANDLER = DisableAbleCommandHandler("uwu", uwu, run_async=True)
-OWO_HANDLER = DisableAbleCommandHandler("owo", owo, run_async=True)
-GDMORNING_HANDLER = DisableAbleMessageHandler(Filters.regex(r"(?i)(goodmorning|good morning)"), goodmorning, friendly="goodmorning", run_async=True)
-GDNIGHT_HANDLER = DisableAbleMessageHandler(Filters.regex(r"(?i)(goodnight|good night)"), goodnight, friendly="goodnight", run_async=True)
-KILL_HANDLER = DisableAbleCommandHandler("kill",kill, run_async=True)
-LOVE_HANDLER = DisableAbleCommandHandler("love", love, run_async=True)
-HACK_HANDLER = DisableAbleCommandHandler("hack", hack, run_async=True)
-BOMBS_HANDLER = DisableAbleCommandHandler("bombs",bombs, run_async=True)
-MOONANIMATION_HANDLER = DisableAbleCommandHandler("moonanimation", moonanimation, run_async=True)
-CLOCKANIMATION_HANDLER = DisableAbleCommandHandler("clockanimation", clockanimation, run_async=True)
-BLOCKANIMATION_HANDLER = DisableAbleCommandHandler("blockanimation", blockanimation, run_async=True)
-EARTHANIMATION_HANDLER = DisableAbleCommandHandler("earthanimation", earthanimation, run_async=True)
+GDMORNING_HANDLER = DisableAbleMessageHandler(filters.Regex(r"(?i)(goodmorning|good morning)"), goodmorning, friendly="goodmorning")
+GDNIGHT_HANDLER = DisableAbleMessageHandler(filters.Regex(r"(?i)(goodnight|good night)"), goodnight, friendly="goodnight")
+CUTIEPII_HANDLER = DisableAbleMessageHandler(filters.Regex(r"(?i)^cutiepii\?"), cutiepii, friendly="decide")
 
-
-dispatcher.add_handler(GBAM_HANDLER)
-dispatcher.add_handler(GBUN_HANDLER)
-dispatcher.add_handler(WEEBIFY_HANDLER)
-dispatcher.add_handler(SHOUT_HANDLER)
-dispatcher.add_handler(SANITIZE_HANDLER)
-dispatcher.add_handler(RUNS_HANDLER)
-dispatcher.add_handler(SLAP_HANDLER)
-dispatcher.add_handler(PAT_HANDLER)
-dispatcher.add_handler(ROLL_HANDLER)
-dispatcher.add_handler(TOSS_HANDLER)
-dispatcher.add_handler(SHRUG_HANDLER)
-dispatcher.add_handler(BLUETEXT_HANDLER)
-dispatcher.add_handler(RLG_HANDLER)
-dispatcher.add_handler(DECIDE_HANDLER)
-dispatcher.add_handler(EIGHTBALL_HANDLER)
-dispatcher.add_handler(TABLE_HANDLER)
-dispatcher.add_handler(CUDDLE_HANDLER)
-dispatcher.add_handler(FLIRT_HANDLER)
-dispatcher.add_handler(ROMANCE_HANDLER)    
-dispatcher.add_handler(UWU_HANDLER)
-dispatcher.add_handler(OWO_HANDLER)
-dispatcher.add_handler(GDMORNING_HANDLER)
-dispatcher.add_handler(GDNIGHT_HANDLER)
-dispatcher.add_handler(KILL_HANDLER)
-dispatcher.add_handler(LOVE_HANDLER)
-dispatcher.add_handler(HACK_HANDLER)
-dispatcher.add_handler(BOMBS_HANDLER)
-dispatcher.add_handler(EARTHANIMATION_HANDLER)
-dispatcher.add_handler(MOONANIMATION_HANDLER)
-dispatcher.add_handler(CLOCKANIMATION_HANDLER)
-dispatcher.add_handler(BLOCKANIMATION_HANDLER)
+CUTIEPII_PTB.add_handler(GDMORNING_HANDLER)
+CUTIEPII_PTB.add_handler(GDNIGHT_HANDLER)
+CUTIEPII_PTB.add_handler(CUTIEPII_HANDLER)
 
 
 __mod_name__ = "Fun"
-__command_list__ = [
-    "runs",
-    "slap",
-    "roll",
-    "toss",
-    "shrug",
-    "bluetext",
-    "rlg",
-    "decide",
-    "table",
-    "pat",
-    "sanitize",
-    "shout",
-    "weebify",
-    "8ball",
-    "gbun",
-    "gbam",
-    "cuddle", 
-    "flirt", 
-    "romance", 
-    "uwu", 
-    "owo",
-     "love",
-     "hack",
-     "bombs",
-     "moonanimation",
-     "clockanimation",
-     "earthanimation",
-     "blockanimation",
-     "kill"
-]
+
 __handlers__ = [
-    RUNS_HANDLER,
-    SLAP_HANDLER,
-    PAT_HANDLER,
-    ROLL_HANDLER,
-    TOSS_HANDLER,
-    SHRUG_HANDLER,
-    BLUETEXT_HANDLER,
-    RLG_HANDLER,
-    DECIDE_HANDLER,
-    TABLE_HANDLER,
-    SANITIZE_HANDLER,
-    SHOUT_HANDLER,
-    WEEBIFY_HANDLER,
-    EIGHTBALL_HANDLER,
-    GBUN_HANDLER,
-    GBAM_HANDLER,
-    CUDDLE_HANDLER,
-    FLIRT_HANDLER,
-    ROMANCE_HANDLER,
-    UWU_HANDLER,
-    OWO_HANDLER,
     GDMORNING_HANDLER,
     GDNIGHT_HANDLER,
-    LOVE_HANDLER,
-    HACK_HANDLER,
-    BOMBS_HANDLER,
-    MOONANIMATION_HANDLER,
-    CLOCKANIMATION_HANDLER,
-    EARTHANIMATION_HANDLER,
-    BLOCKANIMATION_HANDLER,
-    KILL_HANDLER
+    CUTIEPII_HANDLER,
 ]

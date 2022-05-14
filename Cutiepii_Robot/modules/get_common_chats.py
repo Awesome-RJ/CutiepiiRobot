@@ -1,68 +1,71 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import os
 
 from time import sleep
-from Cutiepii_Robot import OWNER_ID, dispatcher
+from Cutiepii_Robot import OWNER_ID, CUTIEPII_PTB
+from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from Cutiepii_Robot.modules.sql.users_sql import get_user_com_chats
 from telegram import Update
-from telegram.error import BadRequest, RetryAfter, Unauthorized
-from telegram.ext import CallbackContext, CommandHandler, Filters
-from telegram.ext.dispatcher import run_async
+from telegram.error import BadRequest, RetryAfter, Forbidden
+from telegram.ext import CallbackContext, CommandHandler, filters
 
-
-def get_user_common_chats(update: Update, context: CallbackContext):
+@dev_plus
+async def get_user_common_chats(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     msg = update.effective_message
     user = extract_user(msg, args)
     if not user:
-        msg.reply_text("I share no common chats with the void.")
+        await msg.reply_text("I share no common chats with the void.")
         return
     common_list = get_user_com_chats(user)
     if not common_list:
-        msg.reply_text("No common chats with this user!")
+        await msg.reply_text("No common chats with this user!")
         return
-    name = bot.get_chat(user).first_name
+    name = await bot.get_chat(user).first_name
     text = f"<b>Common chats with {name}</b>\n"
     for chat in common_list:
         try:
-            chat_name = bot.get_chat(chat).title
+            chat_name = await bot.get_chat(chat).title
             sleep(0.3)
-            text += f"• <code>{chat_name}</code>\n"
-        except (BadRequest, Unauthorized):
+            text += f"➛ <code>{chat_name}</code>\n"
+        except (BadRequest, Forbidden):
             pass
         except RetryAfter as e:
             sleep(e.retry_after)
 
     if len(text) < 4096:
-        msg.reply_text(text, parse_mode="HTML")
+        await msg.reply_text(text, parse_mode="HTML")
     else:
         with open("common_chats.txt", "w") as f:
             f.write(text)
@@ -72,7 +75,7 @@ def get_user_common_chats(update: Update, context: CallbackContext):
 
 
 COMMON_CHATS_HANDLER = CommandHandler(
-    "getchats", get_user_common_chats, filters=Filters.user(OWNER_ID), run_async=True,
+    "getchats", get_user_common_chats,
 )
 
-dispatcher.add_handler(COMMON_CHATS_HANDLER)
+CUTIEPII_PTB.add_handler(COMMON_CHATS_HANDLER)

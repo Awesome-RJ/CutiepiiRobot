@@ -1,45 +1,49 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import re
 
 from jikanpy import Jikan
 from jikanpy.exceptions import APIException
-from telegram import Message, Chat, User, ParseMode, Update, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import CallbackContext, CommandHandler, Filters, CallbackQueryHandler, run_async
+from telegram import Chat, InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import CallbackContext, CallbackQueryHandler
+from telegram.constants import ParseMode
 
-from Cutiepii_Robot import dispatcher, REDIS
+from Cutiepii_Robot import CUTIEPII_PTB, REDIS
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 jikan = Jikan()
 
 
-def anime(update: Update, context: CallbackContext):
+async def anime(update: Update, context: CallbackContext):
     msg = update.effective_message
     args = context.args
     query = " ".join(args)
@@ -47,12 +51,12 @@ def anime(update: Update, context: CallbackContext):
     try:
         res = jikan.search("anime", query)
     except APIException:
-        msg.reply_text("Error connecting to the API. Please try again!")
+        await msg.reply_text("Error connecting to the API. Please try again!")
         return ""
     try:
         res = res.get("results")[0].get("mal_id") # Grab first result
     except APIException:
-        msg.reply_text("Error connecting to the API. Please try again!")
+        await msg.reply_text("Error connecting to the API. Please try again!")
         return ""
     if res:
         anime = jikan.anime(res)
@@ -78,7 +82,7 @@ def anime(update: Update, context: CallbackContext):
         url = anime.get("url")
         trailer = anime.get("trailer_url")
     else:
-        msg.reply_text("No results found!")
+        await msg.reply_text("No results found!")
         return
     rep = f"<b>{title} ({japanese})</b>\n"
     rep += f"<b>Type:</b> <code>{type}</code>\n"
@@ -106,10 +110,10 @@ def anime(update: Update, context: CallbackContext):
 
 
 
-    msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
+    await msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
     
 
-def character(update: Update, context: CallbackContext):
+async def character(update: Update, context: CallbackContext):
     msg = update.effective_message
     res = ""
     args = context.args
@@ -117,13 +121,13 @@ def character(update: Update, context: CallbackContext):
     try:
         search = jikan.search("character", query).get("results")[0].get("mal_id")
     except APIException:
-        msg.reply_text("No results found!")
+        await msg.reply_text("No results found!")
         return ""
     if search:
         try:
             res = jikan.character(search)
         except APIException:
-            msg.reply_text("Error connecting to the API. Please try again!")
+            await msg.reply_text("Error connecting to the API. Please try again!")
             return ""
     if res:
         name = res.get("name")
@@ -141,12 +145,12 @@ def character(update: Update, context: CallbackContext):
         keyb = [
             [InlineKeyboardButton("More Information", url=url),
            InlineKeyboardButton("Add to favorite character", callback_data=f"xanime_fvrtchar={name}")]]
-            
-        
-        msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
         
         
-def upcoming(update: Update, context: CallbackContext):
+        await msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
+        
+        
+async def upcoming(update: Update, context: CallbackContext):
     msg = update.effective_message
     rep = "<b>Upcoming anime</b>\n"
     later = jikan.season_later()
@@ -154,13 +158,13 @@ def upcoming(update: Update, context: CallbackContext):
     for new in anime:
         name = new.get("title")
         url = new.get("url")
-        rep += f"• <a href='{url}'>{name}</a>\n"
+        rep += f"➛ <a href='{url}'>{name}</a>\n"
         if len(rep) > 2000:
             break
-    msg.reply_text(rep, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+    await msg.reply_text(rep, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     
-  
-def manga(update: Update, context: CallbackContext):
+
+async def manga(update: Update, context: CallbackContext):
     msg = update.effective_message
     args = context.args
     query = " ".join(args)
@@ -169,13 +173,13 @@ def manga(update: Update, context: CallbackContext):
     try:
         res = jikan.search("manga", query).get("results")[0].get("mal_id")
     except APIException:
-        msg.reply_text("Error connecting to the API. Please try again!")
+        await msg.reply_text("Error connecting to the API. Please try again!")
         return ""
     if res:
         try:
             manga = jikan.manga(res)
         except APIException:
-            msg.reply_text("Error connecting to the API. Please try again!")
+            await msg.reply_text("Error connecting to the API. Please try again!")
             return ""
         title = manga.get("title")
         japanese = manga.get("title_japanese")
@@ -204,59 +208,59 @@ def manga(update: Update, context: CallbackContext):
            InlineKeyboardButton("Add to Read list", callback_data=f"xanime_manga={title}")]]
 
 
-        msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
+        await msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
         
         
-def animestuffs(update, context):
+async def animestuffs(update: Update, context: CallbackContext):
     query = update.callback_query
     user = update.effective_user
-    splitter = query.data.split('=')
+    splitter = query.data.split("=")
     query_match = splitter[0]
     callback_anime_data = splitter[1]
     if query_match == "xanime_watchlist":
-        watchlist = list(REDIS.sunion(f'anime_watch_list{user.id}'))
+        watchlist = list(REDIS.sunion(f"anime_watch_list{user.id}"))
         if callback_anime_data not in watchlist:
-            REDIS.sadd(f'anime_watch_list{user.id}', callback_anime_data)
-            context.bot.answer_callback_query(query.id,
+            REDIS.sadd(f"anime_watch_list{user.id}", callback_anime_data)
+            await context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} is successfully added to your watch list.",
                                                 show_alert=True)
         else:
-            context.bot.answer_callback_query(query.id,
+            await context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} already exists in your watch list!",
                                                 show_alert=True)
 
     elif query_match == "xanime_fvrtchar":   
-        fvrt_char = list(REDIS.sunion(f'anime_fvrtchar{user.id}'))
+        fvrt_char = list(REDIS.sunion(f"anime_fvrtchar{user.id}"))
         if callback_anime_data not in fvrt_char:
-            REDIS.sadd(f'anime_fvrtchar{user.id}', callback_anime_data)
-            context.bot.answer_callback_query(query.id,
+            REDIS.sadd(f"anime_fvrtchar{user.id}", callback_anime_data)
+            await context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} is successfully added to your favorite character.",
                                                 show_alert=True)
         else:
-            context.bot.answer_callback_query(query.id,
+            await context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} already exists in your favorite characters list!",
                                                 show_alert=True)
     elif query_match == "xanime_manga":   
-        fvrt_char = list(REDIS.sunion(f'anime_mangaread{user.id}'))
+        fvrt_char = list(REDIS.sunion(f"anime_mangaread{user.id}"))
         if callback_anime_data not in fvrt_char:
-            REDIS.sadd(f'anime_mangaread{user.id}', callback_anime_data)
-            context.bot.answer_callback_query(query.id,
+            REDIS.sadd(f"anime_mangaread{user.id}", callback_anime_data)
+            await context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} is successfully added to your read list.",
                                                 show_alert=True)
         else:
-            context.bot.answer_callback_query(query.id,
+            await context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} already exists in your favorite read list!",
                                                 show_alert=True)
 
 
-ANIME_STUFFS_HANDLER = CallbackQueryHandler(animestuffs, pattern='xanime_.*', run_async=True)        
-ANIME_HANDLER = DisableAbleCommandHandler("manime", anime, pass_args=True, run_async=True)
-CHARACTER_HANDLER = DisableAbleCommandHandler("mcharacter", character, pass_args=True, run_async=True)
-UPCOMING_HANDLER = DisableAbleCommandHandler("mupcoming", upcoming, run_async=True)
-MANGA_HANDLER = DisableAbleCommandHandler("mmanga", manga, pass_args=True, run_async=True)
+ANIME_STUFFS_HANDLER = CallbackQueryHandler(animestuffs, pattern="xanime_.*")        
+ANIME_HANDLER = DisableAbleCommandHandler("manime", anime)
+CHARACTER_HANDLER = DisableAbleCommandHandler("mcharacter", character)
+UPCOMING_HANDLER = DisableAbleCommandHandler("mupcoming", upcoming)
+MANGA_HANDLER = DisableAbleCommandHandler("mmanga", manga)
 
-dispatcher.add_handler(ANIME_STUFFS_HANDLER)
-dispatcher.add_handler(ANIME_HANDLER)
-dispatcher.add_handler(CHARACTER_HANDLER)
-dispatcher.add_handler(UPCOMING_HANDLER)
-dispatcher.add_handler(MANGA_HANDLER)
+CUTIEPII_PTB.add_handler(ANIME_STUFFS_HANDLER)
+CUTIEPII_PTB.add_handler(ANIME_HANDLER)
+CUTIEPII_PTB.add_handler(CHARACTER_HANDLER)
+CUTIEPII_PTB.add_handler(UPCOMING_HANDLER)
+CUTIEPII_PTB.add_handler(MANGA_HANDLER)

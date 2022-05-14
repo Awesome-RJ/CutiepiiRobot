@@ -1,144 +1,152 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from typing import Optional
-
 import Cutiepii_Robot.modules.sql.rules_sql as sql
-from Cutiepii_Robot import dispatcher
-from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
-from Cutiepii_Robot.modules.helper_funcs.string_handling import markdown_parser
+
+from typing import Optional
 from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     Message,
-    ParseMode,
     Update,
     User,
 )
+from telegram.constants import ParseMode
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext, CommandHandler, Filters, run_async
-from telegram.utils.helpers import escape_markdown
+from telegram.ext import CallbackContext, filters
+from telegram.helpers import escape_markdown
+from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot.modules.helper_funcs.string_handling import markdown_parser
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
+from Cutiepii_Robot.modules.helper_funcs.admin_status import (
+    user_admin_check,
+    AdminPerms,
+)
 
 
-def get_rules(update: Update, context: CallbackContext):
+
+@cutiepii_cmd(command='rules', filters=filters.ChatType.GROUPS)
+def get_rules(update: Update, _: CallbackContext):
     chat_id = update.effective_chat.id
     send_rules(update, chat_id)
 
 
 # Do not async - not from a handler
-def send_rules(update, chat_id, from_pm=False):
-    bot = dispatcher.bot
+async def send_rules(update, chat_id, from_pm=False):
+    bot = CUTIEPII_PTB.bot
     user = update.effective_user  # type: Optional[User]
-    reply_msg = update.message.reply_to_message
+    message = update.effective_message
     try:
-        chat = bot.get_chat(chat_id)
+        chat = await bot.get_chat(chat_id)
     except BadRequest as excp:
-        if excp.message == "Chat not found" and from_pm:
-            bot.send_message(
-                user.id,
-                "The rules shortcut for this chat hasn't been set properly! Ask admins to "
-                "fix this.\nMaybe they forgot the hyphen in ID",
-            )
-            return
-        raise
+        if excp.message != "Chat not found" or not from_pm:
+            raise
 
+        await bot.send_message(
+            user.id,
+            "The rules shortcut for this chat hasn't been set properly! Ask admins to "
+            "fix this.\nMaybe they forgot the hyphen in ID",
+        )
+        return
     rules = sql.get_rules(chat_id)
     text = f"The rules for *{escape_markdown(chat.title)}* are:\n\n{rules}"
 
     if from_pm and rules:
-        bot.send_message(
-            user.id, text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True,
+        await bot.send_message(
+            user.id, text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True
         )
     elif from_pm:
-        bot.send_message(
+        await bot.send_message(
             user.id,
             "The group admins haven't set any rules for this chat yet. "
             "This probably doesn't mean it's lawless though...!",
         )
-    elif rules and reply_msg:
-        reply_msg.reply_text(
-            "Please click the button below to see the rules.",
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="Rules", url=f"t.me/{bot.username}?start={chat_id}",
-                        ),
-                    ],
-                ],
-            ),
-        )
     elif rules:
-        update.effective_message.reply_text(
-            "Please click the button below to see the rules.",
-            reply_markup=InlineKeyboardMarkup(
+        btn = InlineKeyboardMarkup(
                 [
                     [
                         InlineKeyboardButton(
-                            text="Rules", url=f"t.me/{bot.username}?start={chat_id}",
-                        ),
-                    ],
-                ],
-            ),
+                            text="Rules", url=f"t.me/{bot.username}?start={chat_id}"
+                        )
+                    ]
+                ]
         )
+        txt = "Please click the button below to see the rules."
+        if not message.reply_to_message:
+            await message.reply_text(txt, reply_markup=btn)
+
+        if message.reply_to_message:
+            message.reply_to_message.reply_text(txt, reply_markup=btn)
     else:
-        update.effective_message.reply_text(
+        await update.effective_message.reply_text(
             "The group admins haven't set any rules for this chat yet. "
-            "This probably doesn't mean it's lawless though...!",
+            "This probably doesn't mean it's lawless though...!"
         )
 
 
-@user_admin
-def set_rules(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='setrules', filters=filters.ChatType.GROUPS)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+async def set_rules(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     msg = update.effective_message  # type: Optional[Message]
+    chat = update.effective_chat  # type: Optional[Chat]
+    user = update.effective_user  # type: Optional[User]
+
     raw_text = msg.text
     args = raw_text.split(None, 1)  # use python's maxsplit to separate cmd and args
     if len(args) == 2:
         txt = args[1]
         offset = len(txt) - len(raw_text)  # set correct offset relative to command
         markdown_rules = markdown_parser(
-            txt, entities=msg.parse_entities(), offset=offset,
+            txt, entities=msg.parse_entities(), offset=offset
         )
 
         sql.set_rules(chat_id, markdown_rules)
-        update.effective_message.reply_text("Successfully set rules for this group.")
+        await update.effective_message.reply_text("Successfully set rules for this group.")
 
 
-@user_admin
-def clear_rules(update: Update, context: CallbackContext):
+@cutiepii_cmd(command='clearrules', filters=filters.ChatType.GROUPS)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+async def clear_rules(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
+    chat = update.effective_chat  # type: Optional[Chat]
+    msg = update.effective_message  # type: Optional[Message]
+    user = update.effective_user  # type: Optional[User]
+
     sql.set_rules(chat_id, "")
-    update.effective_message.reply_text("Successfully cleared rules!")
+    await update.effective_message.reply_text(f"Rules for {chat.title} were successfully cleared!")
 
 
 def __stats__():
-    return f"• {sql.num_chats()} chats have rules set."
+    return f"➛ {sql.num_chats()} chats have rules set."
 
 
 def __import_data__(chat_id, data):
@@ -156,11 +164,3 @@ def __chat_settings__(chat_id, user_id):
 
 
 __mod_name__ = "Rules"
-
-GET_RULES_HANDLER = CommandHandler("rules", get_rules, filters=Filters.chat_type.groups, run_async=True)
-SET_RULES_HANDLER = CommandHandler("setrules", set_rules, filters=Filters.chat_type.groups, run_async=True)
-RESET_RULES_HANDLER = CommandHandler("clearrules", clear_rules, filters=Filters.chat_type.groups, run_async=True)
-
-dispatcher.add_handler(GET_RULES_HANDLER)
-dispatcher.add_handler(SET_RULES_HANDLER)
-dispatcher.add_handler(RESET_RULES_HANDLER)

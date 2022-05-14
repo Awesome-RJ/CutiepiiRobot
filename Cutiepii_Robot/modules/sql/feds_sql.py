@@ -1,38 +1,44 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import ast
 import threading
 
-from Cutiepii_Robot import dispatcher
+from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.sql import BASE, SESSION
+from telegram import Update
+from telegram.ext import CallbackContext
+from telegram.error import BadRequest, Forbidden
 from sqlalchemy import Boolean, Column, Integer, String, UnicodeText
-from telegram.error import BadRequest, Unauthorized
+from sqlalchemy.sql.sqltypes import BigInteger
 
 
 class Federations(BASE):
@@ -87,7 +93,7 @@ class BansF(BASE):
 
 class FedsUserSettings(BASE):
     __tablename__ = "feds_settings"
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(BigInteger, primary_key=True)
     should_report = Column(Boolean, default=True)
 
     def __init__(self, user_id):
@@ -218,7 +224,7 @@ def get_user_fbanlist(user_id):
     fedname = []
     for x in banlist:
         if banlist[x].get(user_id):
-            if user_name == "":
+            if not user_name:
                 user_name = banlist[x][user_id].get("first_name")
             fedname.append([x, banlist[x][user_id].get("reason")])
     return user_name, fedname
@@ -595,7 +601,7 @@ def un_fban_user(fed_id, user_id):
                 SESSION.delete(I)
         try:
             SESSION.commit()
-        except:
+        except Exception:
             SESSION.rollback()
             return False
         finally:
@@ -603,20 +609,19 @@ def un_fban_user(fed_id, user_id):
         __load_all_feds_banned()
         return I
 
-
 def get_fban_user(fed_id, user_id):
     list_fbanned = FEDERATION_BANNED_USERID.get(fed_id)
     if list_fbanned is None:
         FEDERATION_BANNED_USERID[fed_id] = []
-    if user_id in FEDERATION_BANNED_USERID[fed_id]:
-        r = SESSION.query(BansF).all()
-        reason = None
-        for I in r:
-            if I.fed_id == fed_id and int(I.user_id) == int(user_id):
-                reason = I.reason
-                time = I.time
-        return True, reason, time
-    return False, None, None
+    if user_id not in FEDERATION_BANNED_USERID[fed_id]:
+        return False, None, None
+    r = SESSION.query(BansF).all()
+    reason = None
+    for I in r:
+        if I.fed_id == fed_id and int(I.user_id) == int(user_id):
+            reason = I.reason
+            time = I.time
+    return True, reason, time
 
 
 def get_all_fban_users(fed_id):
@@ -650,9 +655,7 @@ def get_all_feds_users_global():
 
 def search_fed_by_id(fed_id):
     get = FEDERATION_BYFEDID.get(fed_id)
-    if get is None:
-        return False
-    return get
+    return False if get is None else get
 
 
 def user_feds_report(user_id: int) -> bool:
@@ -675,22 +678,22 @@ def set_feds_setting(user_id: int, setting: bool):
         SESSION.commit()
 
 
-def get_fed_log(fed_id):
+async def get_fed_log(fed_id):
     fed_setting = FEDERATION_BYFEDID.get(str(fed_id))
     if fed_setting is None:
         fed_setting = False
         return fed_setting
     if fed_setting.get("flog") is None:
         return False
-    if fed_setting.get("flog"):
+    elif fed_setting.get("flog"):
         try:
-            dispatcher.bot.get_chat(fed_setting.get("flog"))
-        except (BadRequest, Unauthorized):
+            await CUTIEPII_PTB.bot.get_chat(fed_setting.get("flog"))
+        except (BadRequest, Forbidden):
             set_fed_log(fed_id, None)
             return False
         return fed_setting.get("flog")
-    return False
-
+    else:
+        return False
 
 def set_fed_log(fed_id, chat_id):
     with FEDS_LOCK:

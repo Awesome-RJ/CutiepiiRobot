@@ -1,56 +1,62 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import html
+import Cutiepii_Robot.modules.sql.log_channel_sql as logsql
 
-from Cutiepii_Robot import LOGGER, DRAGONS, TIGERS, WOLVES, dispatcher
-from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin, user_not_admin
+from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
+from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
+from Cutiepii_Robot.modules.helper_funcs.chat_status import user_not_admin
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql import reporting_sql as sql
-from telegram import Chat, InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
-from telegram.error import BadRequest, Unauthorized
+from telegram import Chat, InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.error import BadRequest, Forbidden
+from telegram.constants import ParseMode
 from telegram.ext import (
     CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
-    Filters,
+    filters,
     MessageHandler,
-    run_async,
+
 )
-from telegram.utils.helpers import mention_html
+from telegram.helpers import mention_html
 
 REPORT_GROUP = 12
-REPORT_IMMUNE_USERS = DRAGONS + TIGERS + WOLVES
+#REPORT_IMMUNE_USERS = SUDO_USERS + TIGER_USERS + WHITELIST_USERS
 
 
 
 @user_admin
-def report_setting(update: Update, context: CallbackContext):
+async def report_setting(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
     msg = update.effective_message
@@ -59,15 +65,15 @@ def report_setting(update: Update, context: CallbackContext):
         if len(args) >= 1:
             if args[0] in ("yes", "on"):
                 sql.set_user_setting(chat.id, True)
-                msg.reply_text(
+                await msg.reply_text(
                     "Turned on reporting! You'll be notified whenever anyone reports something.",
                 )
 
             elif args[0] in ("no", "off"):
                 sql.set_user_setting(chat.id, False)
-                msg.reply_text("Turned off reporting! You wont get any reports.")
+                await msg.reply_text("Turned off reporting! You wont get any reports.")
         else:
-            msg.reply_text(
+            await msg.reply_text(
                 f"Your current report preference is: `{sql.user_should_report(chat.id)}`",
                 parse_mode=ParseMode.MARKDOWN,
             )
@@ -75,18 +81,18 @@ def report_setting(update: Update, context: CallbackContext):
     elif len(args) >= 1:
         if args[0] in ("yes", "on"):
             sql.set_chat_setting(chat.id, True)
-            msg.reply_text(
+            await msg.reply_text(
                 "Turned on reporting! Admins who have turned on reports will be notified when /report "
                 "or @admin is called.",
             )
 
         elif args[0] in ("no", "off"):
             sql.set_chat_setting(chat.id, False)
-            msg.reply_text(
+            await msg.reply_text(
                 "Turned off reporting! No admins will be notified on /report or @admin.",
             )
     else:
-        msg.reply_text(
+        await msg.reply_text(
             f"This group's current setting is: `{sql.chat_should_report(chat.id)}`",
             parse_mode=ParseMode.MARKDOWN,
         )
@@ -95,34 +101,51 @@ def report_setting(update: Update, context: CallbackContext):
 
 @user_not_admin
 @loggable
-def report(update: Update, context: CallbackContext) -> str:
+async def report(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
+    
+    log_setting = logsql.get_chat_setting(chat.id)
+    if not log_setting:
+        logsql.set_chat_setting(logsql.LogChannelSettings(chat.id, True, True, True, True, True))
+        log_setting = logsql.get_chat_setting(chat.id)
+    
+    if message.sender_chat:
+        admin_list = await bot.getChatAdministrators(chat.id)
+        reported = "Reported to admins."
+        for admin in admin_list:
+            if admin.user.is_bot:  # AI didnt take over yet
+                continue
+            try:
+                reported += f"<a href=\"tg://user?id={admin.user.id}\">\u2063</a>"
+            except BadRequest:
+                LOGGER.exception("Exception while reporting user")
+        await message.reply_text(reported, parse_mode=ParseMode.HTML)
 
     if chat and message.reply_to_message and sql.chat_should_report(chat.id):
         reported_user = message.reply_to_message.from_user
-        chat_name = chat.title or chat.first or chat.username
+        chat_name = chat.title or chat.username
         admin_list = chat.get_administrators()
         message = update.effective_message
 
         if not args:
-            message.reply_text("Add a reason for reporting first.")
+            await update.effective_message.reply_text("Add a reason for reporting first.")
             return ""
 
         if user.id == reported_user.id:
-            message.reply_text("Uh yeah, Sure sure...maso much?")
+            await update.effective_message.reply_text("Uh yeah, Sure sure...maso much?")
             return ""
 
         if user.id == bot.id:
-            message.reply_text("Nice try.")
+            await update.effective_message.reply_text("Nice try.")
             return ""
 
-        if reported_user.id in REPORT_IMMUNE_USERS:
-            message.reply_text("Uh? You reporting a disaster?")
-            return ""
+#        if reported_user.id in REPORT_IMMUNE_USERS:
+#            await update.effective_message.reply_text("Uh? You reporting a disaster?")
+#            return ""
 
         if chat.username and chat.type == Chat.SUPERGROUP:
 
@@ -133,13 +156,13 @@ def report(update: Update, context: CallbackContext) -> str:
                 f"<b> ❍ Report by:</b> {mention_html(user.id, user.first_name)}(<code>{user.id}</code>)\n"
                 f"<b> ❍ Reported user:</b> {mention_html(reported_user.id, reported_user.first_name)} (<code>{reported_user.id}</code>)\n"
             )
-            link = f'<b> ❍ Reported message:</b> <a href="https://t.me/{chat.username}/{message.reply_to_message.message_id}">click here</a>'
+            link = f"<b> ❍ Reported message:</b> <a href='https://telegram.dog/{chat.username}/{message.reply_to_message.message_id}'>click here</a>"
             should_forward = False
             keyboard = [
                 [
                     InlineKeyboardButton(
                         "➡ Message",
-                        url=f"https://t.me/{chat.username}/{message.reply_to_message.message_id}",
+                        url=f"https://telegram.dog/{chat.username}/{message.reply_to_message.message_id}",
                     ),
                 ],
                 [
@@ -166,7 +189,7 @@ def report(update: Update, context: CallbackContext) -> str:
                 f"{mention_html(reported_user.id, reported_user.first_name)} to the admins!"
             )
 
-            msg = f'{mention_html(user.id, user.first_name)} is calling for admins in "{html.escape(chat_name)}"!'
+            msg = f"{mention_html(user.id, user.first_name)} is calling for admins in '{html.escape(chat_name)}'!"
             link = ""
             should_forward = True
 
@@ -177,7 +200,7 @@ def report(update: Update, context: CallbackContext) -> str:
             if sql.user_should_report(admin.user.id):
                 try:
                     if chat.type != Chat.SUPERGROUP:
-                        bot.send_message(
+                        await bot.send_message(
                             admin.user.id, msg + link, parse_mode=ParseMode.HTML,
                         )
 
@@ -187,9 +210,9 @@ def report(update: Update, context: CallbackContext) -> str:
                             if (
                                 len(message.text.split()) > 1
                             ):  # If user is giving a reason, send his message too
-                                message.forward(admin.user.id)
+                                await message.forward(admin.user.id)
                     if not chat.username:
-                        bot.send_message(
+                        await bot.send_message(
                             admin.user.id, msg + link, parse_mode=ParseMode.HTML,
                         )
 
@@ -199,10 +222,10 @@ def report(update: Update, context: CallbackContext) -> str:
                             if (
                                 len(message.text.split()) > 1
                             ):  # If user is giving a reason, send his message too
-                                message.forward(admin.user.id)
+                                await message.forward(admin.user.id)
 
                     if chat.username and chat.type == Chat.SUPERGROUP:
-                        bot.send_message(
+                        await bot.send_message(
                             admin.user.id,
                             msg + link,
                             parse_mode=ParseMode.HTML,
@@ -215,9 +238,9 @@ def report(update: Update, context: CallbackContext) -> str:
                             if (
                                 len(message.text.split()) > 1
                             ):  # If user is giving a reason, send his message too
-                                message.forward(admin.user.id)
+                                await message.forward(admin.user.id)
 
-                except Unauthorized:
+                except Forbidden:
                     pass
                 except BadRequest as excp:  # TODO: cleanup exceptions
                     LOGGER.exception("Exception while reporting user")
@@ -247,69 +270,69 @@ def __user_settings__(user_id):
     )
 
 
-def buttons(update: Update, context: CallbackContext):
+async def buttons(update: Update, context: CallbackContext):
     bot = context.bot
     query = update.callback_query
     splitter = query.data.replace("report_", "").split("=")
     if splitter[1] == "kick":
         try:
-            bot.kickChatMember(splitter[0], splitter[2])
-            bot.unbanChatMember(splitter[0], splitter[2])
-            query.answer("✅ Succesfully kicked")
+            await bot.banChatMember(splitter[0], splitter[2])
+            await bot.unbanChatMember(splitter[0], splitter[2])
+            await query.answer("✅ Succesfully kicked")
             return ""
         except Exception as err:
-            query.answer("🛑 Failed to kick")
-            bot.sendMessage(
+            await query.answer("🛑 Failed to kick")
+            await bot.sendMessage(
                 text=f"Error: {err}",
                 chat_id=query.message.chat_id,
                 parse_mode=ParseMode.HTML,
             )
     elif splitter[1] == "banned":
         try:
-            bot.kickChatMember(splitter[0], splitter[2])
-            query.answer("✅  Succesfully Banned")
+            await bot.banChatMember(splitter[0], splitter[2])
+            await query.answer("✅  Succesfully Banned")
             return ""
         except Exception as err:
-            bot.sendMessage(
+            await bot.sendMessage(
                 text=f"Error: {err}",
                 chat_id=query.message.chat_id,
                 parse_mode=ParseMode.HTML,
             )
-            query.answer("🛑 Failed to Ban")
+            await query.answer("🛑 Failed to Ban")
     elif splitter[1] == "delete":
         try:
-            bot.deleteMessage(splitter[0], splitter[3])
-            query.answer("✅ Message Deleted")
+            await bot.deleteMessage(splitter[0], splitter[3])
+            await query.answer("✅ Message Deleted")
             return ""
         except Exception as err:
-            bot.sendMessage(
+            await bot.sendMessage(
                 text=f"Error: {err}",
                 chat_id=query.message.chat_id,
                 parse_mode=ParseMode.HTML,
             )
-            query.answer("🛑 Failed to delete message!")
-
+            await query.answer("🛑 Failed to delete message!")
 
 __help__ = """
-  ➢ `/report <reason>`*:* reply to a message to report it to admins.
- ➩ `@admins`*:* reply to a message to report it to admins.
+➛ /report <reason>*:* reply to a message to report it to admins.
+ ➛ `@admins*:* reply to a message to report it to admins.
 *NOTE:* Neither of these will get triggered if used by admins.
 
 *Admins only:*
-  ➢ `/reports <on/off>`*:* change report setting, or view current status.
-   ➩ If done in pm, toggles your status.
-   ➩ If in group, toggles that groups's status.
+➛ /reports <on/off>*:* change report setting, or view current status.
+   ➛ If done in pm, toggles your status.
+   ➛ If in group, toggles that groups's status.
+
 """
 
-SETTING_HANDLER = CommandHandler("reports", report_setting, run_async=True)
-REPORT_HANDLER = CommandHandler("report", report, filters=Filters.chat_type.groups, run_async=True)
-ADMIN_REPORT_HANDLER = MessageHandler(Filters.regex(r"(?i)@admins(s)?"), report, run_async=True)
+SETTING_HANDLER = CommandHandler("reports", report_setting)
+REPORT_HANDLER = CommandHandler("report", report, filters=filters.ChatType.GROUPS)
+ADMIN_REPORT_HANDLER = MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report)
 REPORT_BUTTON_USER_HANDLER = CallbackQueryHandler(buttons, pattern=r"report_")
 
-dispatcher.add_handler(REPORT_BUTTON_USER_HANDLER)
-dispatcher.add_handler(SETTING_HANDLER)
-dispatcher.add_handler(REPORT_HANDLER, REPORT_GROUP)
-dispatcher.add_handler(ADMIN_REPORT_HANDLER, REPORT_GROUP)
+CUTIEPII_PTB.add_handler(REPORT_BUTTON_USER_HANDLER)
+CUTIEPII_PTB.add_handler(SETTING_HANDLER)
+CUTIEPII_PTB.add_handler(REPORT_HANDLER, REPORT_GROUP)
+CUTIEPII_PTB.add_handler(ADMIN_REPORT_HANDLER, REPORT_GROUP)
 
 __mod_name__ = "Reporting"
 __handlers__ = [

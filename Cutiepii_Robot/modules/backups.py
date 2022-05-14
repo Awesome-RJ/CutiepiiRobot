@@ -1,29 +1,32 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import json
@@ -31,16 +34,17 @@ import time
 import os
 
 from io import BytesIO
-from telegram import ParseMode, Message
+from telegram import Message, Update
+from telegram.constants import ParseMode
 from telegram.error import BadRequest
-from telegram.ext import CommandHandler, run_async
+from telegram.ext import CallbackContext, CommandHandler
+
 
 import Cutiepii_Robot.modules.sql.notes_sql as sql
-from Cutiepii_Robot import dispatcher, LOGGER, OWNER_ID, JOIN_LOGGER, SUPPORT_CHAT
+from Cutiepii_Robot import CUTIEPII_PTB, LOGGER, OWNER_ID, JOIN_LOGGER, SUPPORT_CHAT
 from Cutiepii_Robot.__main__ import DATA_IMPORT
-from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
-
+from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.rules import get_rules
 import Cutiepii_Robot.modules.sql.rules_sql as rulessql
 
@@ -57,20 +61,20 @@ from Cutiepii_Robot.modules.connection import connected
 
 @user_admin
 @typing_action
-def import_data(update, context):
+async def import_data(update: Update, context: CallbackContext):
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
     # TODO: allow uploading doc with command, not just as reply
     # only work with a doc
 
-    conn = connected(context.bot, update, chat, user.id, need_admin=True)
+    conn = await connected(context.bot, update, chat, user.id, need_admin=True)
     if conn:
-        chat = dispatcher.bot.getChat(conn)
-        chat_name = dispatcher.bot.getChat(conn).title
+        chat = await CUTIEPII_PTB.bot.getChat(conn)
+        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
     else:
-        if update.effective_message.chat.type == "private":
-            update.effective_message.reply_text("This is a group only command!")
+        if update.effective_message.chat.type == ChatType.PRIVATE:
+            await update.effective_message.reply_text("This is a group only command!")
             return ""
 
         chat = update.effective_chat
@@ -78,9 +82,9 @@ def import_data(update, context):
 
     if msg.reply_to_message and msg.reply_to_message.document:
         try:
-            file_info = context.bot.get_file(msg.reply_to_message.document.file_id)
+            file_info = await context.bot.get_file(msg.reply_to_message.document.file_id)
         except BadRequest:
-            msg.reply_text(
+            await msg.reply_text(
                 "Try downloading and uploading the file yourself again, This one seem broken to me!",
             )
             return
@@ -92,7 +96,7 @@ def import_data(update, context):
 
         # only import one group
         if len(data) > 1 and str(chat.id) not in data:
-            msg.reply_text(
+            await msg.reply_text(
                 "There are more than one group in this file and the chat.id is not same! How am i supposed to import it?",
             )
             return
@@ -106,17 +110,16 @@ def import_data(update, context):
                     )
                 else:
                     text = "Backup comes from another chat, I can't return another chat to this chat"
-                return msg.reply_text(text, parse_mode="markdown")
+                return await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN)
         except Exception:
-            return msg.reply_text("There was a problem while importing the data!")
+            return await msg.reply_text("There was a problem while importing the data!")
         # Check if backup is from self
-        try:
+        with contextlib.suppress(Exception):
             if str(context.bot.id) != str(data[str(chat.id)]["bot"]):
-                return msg.reply_text(
+                return await msg.reply_text(
                     "Backup from another bot that is not suggested might cause the problem, documents, photos, videos, audios, records might not work as it should be.",
                 )
-        except Exception:
-            pass
+
         # Select data source
         if str(chat.id) in data:
             data = data[str(chat.id)]["hashes"]
@@ -127,7 +130,7 @@ def import_data(update, context):
             for mod in DATA_IMPORT:
                 mod.__import_data__(str(chat.id), data)
         except Exception:
-            msg.reply_text(
+            await msg.reply_text(
                 f"An error occurred while recovering your data. The process failed. If you experience a problem with this, please take it to @{SUPPORT_CHAT}",
             )
 
@@ -145,26 +148,26 @@ def import_data(update, context):
             text = "Backup fully restored on *{}*.".format(chat_name)
         else:
             text = "Backup fully restored"
-        msg.reply_text(text, parse_mode="markdown")
+        await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN)
 
 
 
 @user_admin
-def export_data(update, context):
+async def export_data(update: Update, context: CallbackContext):
     chat_data = context.chat_data
     msg = update.effective_message  # type: Optional[Message]
     user = update.effective_user  # type: Optional[User]
     chat_id = update.effective_chat.id
     chat = update.effective_chat
     current_chat_id = update.effective_chat.id
-    conn = connected(context.bot, update, chat, user.id, need_admin=True)
+    conn = await connected(context.bot, update, chat, user.id, need_admin=True)
     if conn:
-        chat = dispatcher.bot.getChat(conn)
+        chat = await CUTIEPII_PTB.bot.getChat(conn)
         chat_id = conn
-        # chat_name = dispatcher.bot.getChat(conn).title
+        # chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
     else:
-        if update.effective_message.chat.type == "private":
-            update.effective_message.reply_text("This is a group only command!")
+        if update.effective_message.chat.type == ChatType.PRIVATE:
+            await update.effective_message.reply_text("This is a group only command!")
             return ""
         chat = update.effective_chat
         chat_id = update.effective_chat.id
@@ -177,7 +180,7 @@ def export_data(update, context):
         timeformatt = time.strftime(
             "%H:%M:%S %d/%m/%Y", time.localtime(checkchat.get("value")),
         )
-        update.effective_message.reply_text(
+        await update.effective_message.reply_text(
             "You can only backup once a day!\nYou can backup again in about `{}`".format(
                 timeformatt,
             ),
@@ -351,19 +354,17 @@ def export_data(update, context):
     baccinfo = json.dumps(backup, indent=4)
     with open("Cutiepii_Robot{}Backup".format(chat_id), "w") as f:
         f.write(str(baccinfo))
-    context.bot.sendChatAction(current_chat_id, "upload_document")
+    await context.bot.sendChatAction(current_chat_id, "upload_document")
     tgl = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime(time.time()))
-    try:
-        context.bot.sendMessage(
+    with contextlib.suppress(BadRequest):
+        await context.bot.sendMessage(
             JOIN_LOGGER,
             "*Successfully imported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`".format(
                 chat.title, chat_id, tgl,
             ),
             parse_mode=ParseMode.MARKDOWN,
         )
-    except BadRequest:
-        pass
-    context.bot.sendDocument(
+    await context.bot.sendDocument(
         current_chat_id,
         document=open("Cutiepii_Robot{}Backup".format(chat_id), "rb"),
         caption="*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `Cutiepii-Robot-Backup` was specially made for notes.".format(
@@ -390,18 +391,17 @@ def get_chat(chat_id, chat_data):
     except KeyError:
         return {"status": False, "value": False}
 
+__help__ = """
+*Only for group owner:*
+➛ /import*:* Reply to the backup file for the butler / emilia group to import as much as possible, making transfers very easy! \
+ Note that files / photos cannot be imported due to telegram restrictions.
+➛ /export*:* Export group data, which will be exported are: rules, notes (documents, images, music, video, audio, voice, text, text buttons) \
+"""
 
 __mod_name__ = "Backups"
 
-__help__ = """
-*Only for group owner:*
-   ➢ `/import`*:* Reply to the backup file for the butler / emilia group to import as much as possible, making transfers very easy! \
- Note that files / photos cannot be imported due to telegram restrictions.
-   ➢ `/export`*:* Export group data, which will be exported are: rules, notes (documents, images, music, video, audio, voice, text, text buttons) \
-"""
+IMPORT_HANDLER = CommandHandler("import", import_data)
+EXPORT_HANDLER = CommandHandler("export", export_data)
 
-IMPORT_HANDLER = CommandHandler("import", import_data, run_async=True)
-EXPORT_HANDLER = CommandHandler("export", export_data, pass_chat_data=True, run_async=True)
-
-dispatcher.add_handler(IMPORT_HANDLER)
-dispatcher.add_handler(EXPORT_HANDLER)
+CUTIEPII_PTB.add_handler(IMPORT_HANDLER)
+CUTIEPII_PTB.add_handler(EXPORT_HANDLER)

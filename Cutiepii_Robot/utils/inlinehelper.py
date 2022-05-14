@@ -1,29 +1,32 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import socket
@@ -47,7 +50,7 @@ from pyrogram.types import (
 )
 from search_engine_parser import GoogleSearch
 
-from Cutiepii_Robot import BOT_USERNAME, OWNER_ID, pgram, arq
+from Cutiepii_Robot import OWNER_ID, pgram, arq, CUTIEPII_PTB
 from Cutiepii_Robot.utils.pluginhelpers import convert_seconds_to_minutes as time_convert
 from Cutiepii_Robot.utils.pluginhelpers import fetch
 
@@ -76,7 +79,7 @@ async def paste(content):
 async def inline_help_func(__HELP__):
     buttons = InlineKeyboard(row_width=2)
     buttons.add(
-        InlineKeyboardButton("Get More Help.", url=f"t.me/{BOT_USERNAME}?start=start"),
+        InlineKeyboardButton("Get More Help.", url=f"https://telegram.dog/{CUTIEPII_PTB.bot.username}?start=start"),
         InlineKeyboardButton("Go Inline!", switch_inline_query_current_chat=""),
     )
     answerss = [
@@ -95,9 +98,9 @@ async def inline_help_func(__HELP__):
 async def alive_function(answers):
     buttons = InlineKeyboard(row_width=2)
     bot_state = "Dead" if not await app.get_me() else "Alive"
-    # ubot_state = 'Dead' if not await app2.get_me() else 'Alive'
+    # ubot_state = "Dead" if not await app2.get_me() else "Alive"
     buttons.add(
-        InlineKeyboardButton("Main Bot", url="https://t.me/Cutiepii_Robot"),
+        InlineKeyboardButton("Main Bot", url="https://telegram.dog/Cutiepii_Robot"),
         InlineKeyboardButton("Go Inline!", switch_inline_query_current_chat=""),
     )
 
@@ -109,7 +112,7 @@ async def alive_function(answers):
 **Pyrogram:** `{pyrover}`
 **MongoDB:** `{mongover}`
 **Platform:** `{sys.platform}`
-**Profiles:** [BOT](t.me/{BOT_USERNAME}) | [UBOT](t.me/Awesome_Cutiepii)
+**Profiles:** [BOT](https://telegram.dog/{CUTIEPII_PTB.bot.username}) | [UBOT](https://telegram.dog/Awesome_Cutiepii)
 """
     answers.append(
         InlineQueryResultArticle(
@@ -207,8 +210,8 @@ async def google_search_func(answers, text):
 
         try:
             msg = f"""
-[{i['titles']}]({i['links']})
-{i['descriptions']}"""
+[{i["titles"]}]({i["links"]})
+{i["descriptions"]}"""
 
             answers.append(
                 InlineQueryResultArticle(
@@ -446,7 +449,7 @@ async def ping_func(answers):
     ping = Ping(ping_id=randint(696969, 6969696))
     await app.send(ping)
     t2 = time()
-    ping = f'{round(t2 - t1, 2)} Seconds'
+    ping = f"{round(t2 - t1, 2)} Seconds"
     answers.append(
         InlineQueryResultArticle(
             title=ping, input_message_content=InputTextMessageContent(f"__**{ping}**__")
@@ -463,15 +466,15 @@ async def pokedexinfo(answers, pokemon):
         InlineKeyboardButton("Pokedex", switch_inline_query_current_chat="pokedex")
     )
     caption = f"""
-**Pokemon:** `{result['name']}`
-**Pokedex:** `{result['id']}`
-**Type:** `{result['type']}`
-**Abilities:** `{result['abilities']}`
-**Height:** `{result['height']}`
-**Weight:** `{result['weight']}`
-**Gender:** `{result['gender']}`
-**Stats:** `{result['stats']}`
-**Description:** `{result['description']}`"""
+**Pokemon:** `{result["name"]}`
+**Pokedex:** `{result["id"]}`
+**Type:** `{result["type"]}`
+**Abilities:** `{result["abilities"]}`
+**Height:** `{result["height"]}`
+**Weight:** `{result["weight"]}`
+**Gender:** `{result["gender"]}`
+**Stats:** `{result["stats"]}`
+**Description:** `{result["description"]}`"""
     answers.append(
         InlineQueryResultPhoto(
             photo_url=f"https://img.pokemondb.net/artwork/large/{pokemon}.jpg",
