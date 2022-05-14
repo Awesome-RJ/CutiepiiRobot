@@ -1,4 +1,4 @@
-![Cutiepii](https://telegra.ph/file/9ac7926eaba55e6437735.png)
+![Cutiepii](https://telegra.ph/file/85581d42f2b95ff65fc06.jpg)
 
 # 𝑪𝒖𝒕𝒊𝒆𝒑𝒊𝒊 𝑹𝒐𝒃𝒐𝒕 [ BETA ]
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html) [![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/Awesome-RJ/CutiepiiRobot/?ref=repository-badge) [![Join Support!](https://img.shields.io/badge/Join%20Channel-!-red)](https://telegram.dog/Black_Knights_Union_Support) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity) [![GitHub contributors](https://img.shields.io/github/contributors/Naereen/StrapDown.js.svg)](https://GitHub.com/Awesome-RJ/CutiepiiRobot/graphs/contributors/)
