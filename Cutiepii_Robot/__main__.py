@@ -221,7 +221,7 @@ def send_help(chat_id, text, keyboard=None):
     )
 
 
-@Cutiepii_cmd(command="test")
+@cutiepii_cmd(command="test")
 async def test(update: Update, _: CallbackContext):
     # pprint(eval(str(update)))
     # await update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
@@ -229,6 +229,7 @@ async def test(update: Update, _: CallbackContext):
     print(update.effective_message)
 
 
+@cutiepii_cmd(command="start")
 async def start(update: Update, context: CallbackContext):
     args = context.args
     uptime = get_readable_time((time.time() - StartTime))
