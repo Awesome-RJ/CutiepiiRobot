@@ -60,7 +60,7 @@ cowpy==1.1.4
 selenium==4.0.0
 hiredis==2.0.0
 pendulum==2.1.2
-img2pdf==0.4.3
+img2pdf==0.4.4
 google-api-python-client==2.39.0
 secureme==0.0.4
 git+https://github.com/Awesome-RJ/GoGoAnimeAPI.git
