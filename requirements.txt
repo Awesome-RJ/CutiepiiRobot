@@ -1,13 +1,13 @@
 alphabet-detector==0.0.7
 bleach==4.1.0
-cachetools~=5.0.0
+cachetools==5.0.0
 CurrencyConverter
 emoji==1.6.1
 feedparser==6.0.8
 pyrate-limiter==2.4.7
-lxml>=4.6.5
-nltk>=3.6.6
-pillow>=4.2.0
+lxml==4.8.0
+nltk==3.7
+pillow==9.1.0
 pretty-errors==1.2.25
 psutil==5.8.0
 pynewtonmath==1.0.1
@@ -89,7 +89,7 @@ googletrans
 youtube_search_python==1.5.2
 httpx
 httpx[http2]
-pyYAML>=5.1.2
+pyYAML==6.0
 gitpython
 pygithub
 flask
@@ -98,5 +98,5 @@ dateparser
 python-barcode==0.13.1
 moviepy
 pytimeparse
-APScheduler~=3.9.1
+APScheduler==3.9.1
 CloudScraper
