@@ -11,7 +11,6 @@ from datetime import datetime
 from PIL import Image
 from io import BytesIO
 from Cutiepii_Robot import telethn as bot
-from Cutiepii_Robot import telethn as tgbot
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import CUTIEPII_PTB
 

@@ -36,7 +36,6 @@ from time import sleep
 
 from telegram.error import BadRequest, TelegramError, Forbidden
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.error import BadRequest, Forbidden
 from telegram.constants import ParseMode
 from telegram.ext import (
     CallbackContext,

@@ -51,7 +51,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 
 
-from Cutiepii_Robot import SUDO_USERS, TOKEN, CUTIEPII_PTB, telethn as bot, pgram, telethn
+from Cutiepii_Robot import SUDO_USERS, TOKEN, CUTIEPII_PTB, pgram, telethn
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.connection import connected
@@ -64,8 +64,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     connection_status,
     is_user_admin,
     can_manage_voice_chats,
-    user_admin,
-)
+    )
 
 from Cutiepii_Robot.modules.helper_funcs.extraction import (
     extract_user,
