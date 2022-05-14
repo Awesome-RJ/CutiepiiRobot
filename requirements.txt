@@ -56,7 +56,7 @@ faker==9.9.1
 PyDictionary==2.0.1
 python-rapidjson==1.5
 markdown2
-cowpy==1.1.4
+cowpy==1.1.5
 selenium==4.0.0
 hiredis==2.0.0
 pendulum==2.1.2
