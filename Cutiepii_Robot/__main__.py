@@ -599,7 +599,7 @@ async def settings_button(update: Update, context: CallbackContext):
         ]:
             LOGGER.exception("Exception in settings buttons. %s", str(query.data))
 
-
+@cutiepii_cmd(command="settings")
 async def get_settings(update: Update, context: CallbackContext):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
