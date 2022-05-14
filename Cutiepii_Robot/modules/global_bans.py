@@ -137,12 +137,11 @@ async def gban(update: Update, context: CallbackContext):
             )
             return
 
-        old_reason = gban_db.update_gban_reason(
+        if old_reason := gban_db.update_gban_reason(
             user_id,
             user_chat.username or user_chat.first_name,
             reason,
-        )
-        if old_reason:
+        ):
             await message.reply_text(
                 "This user is already gbanned, for the following reason:\n"
                 "<code>{}</code>\n"
@@ -236,9 +235,10 @@ async def gban(update: Update, context: CallbackContext):
 
     if GBAN_LOGS:
         log.edit_text(
-            log_message + f"\n<b>Chats affected:</b> <code>{gbanned_chats}</code>",
+            f"{log_message}\n<b>Chats affected:</b> <code>{gbanned_chats}</code>",
             parse_mode=ParseMode.HTML,
         )
+
     else:
         send_to_list(
             bot,
@@ -364,9 +364,10 @@ async def ungban(update: Update, context: CallbackContext):  # sourcery no-metri
 
     if GBAN_LOGS:
         log.edit_text(
-            log_message + f"\n<b>Chats affected:</b> {ungbanned_chats}",
+            f"{log_message}\n<b>Chats affected:</b> {ungbanned_chats}",
             parse_mode=ParseMode.HTML,
         )
+
     else:
         send_to_list(bot, SUDO_USERS + SUPPORT_USERS, "un-gban complete!")
 
@@ -492,8 +493,10 @@ async def clear_gbans(bot: Bot, update: Update):
         except BadRequest:
             deleted += 1
             sql.ungban_user(id)
-    await update.message.reply_text("Done! `{}` deleted accounts were removed " \
-    "from the gbanlist.".format(deleted), parse_mode=ParseMode.MARKDOWN)
+    await update.message.reply_text(
+        f"Done! `{deleted}` deleted accounts were removed from the gbanlist.",
+        parse_mode=ParseMode.MARKDOWN,
+    )
     
 
 
@@ -510,9 +513,11 @@ async def check_gbans(bot: Bot, update: Update):
         except BadRequest:
             deleted += 1
     if deleted:
-        await update.message.reply_text("`{}` deleted accounts found in the gbanlist! " \
-        "Run /cleangb to remove them from the database!".format(deleted),
-        parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(
+            f"`{deleted}` deleted accounts found in the gbanlist! Run /cleangb to remove them from the database!",
+            parse_mode=ParseMode.MARKDOWN,
+        )
+
     else:
         await update.message.reply_text("No deleted accounts in the gbanlist!")
 

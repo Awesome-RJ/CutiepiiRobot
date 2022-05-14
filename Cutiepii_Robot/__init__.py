@@ -57,7 +57,7 @@ from httpx import AsyncClient, Timeout
 StartTime = time.time()
 
 def get_user_list(__init__, key):
-    with open("{}/Cutiepii_Robot/{}".format(os.getcwd(), __init__), "r") as json_file:
+    with open(f"{os.getcwd()}/Cutiepii_Robot/{__init__}", "r") as json_file:
         return json.load(json_file)[key]
 
 # enable logging

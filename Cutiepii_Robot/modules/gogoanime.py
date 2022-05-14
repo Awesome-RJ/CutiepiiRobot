@@ -45,9 +45,7 @@ async def gogo(event):
     result = anime.get_search_results(args)
     buttons = []
     for i in result:
-        k = [
-            Button.inline("{}".format(i["name"]), data="search_{}".format(i["animeid"]))
-        ]
+        k = [Button.inline(f'{i["name"]}', data=f'search_{i["animeid"]}')]
         buttons.append(k)
         if len(buttons) == 99:
             break
@@ -64,7 +62,7 @@ async def search(event):
     result = anime.get_anime_details(animeid)
     episodes = result["episodes"]
     nfo = f"{animeid}?{episodes}"
-    buttons = Button.inline("Download", data="episode_{}".format(nfo))
+    buttons = Button.inline("Download", data=f"episode_{nfo}")
     text = """
 {} (Released: {})
 Type: {}
@@ -99,7 +97,7 @@ async def episode(event):
     cbutton = []
     for i in range(epsd):
         nfo = f"{i}?{animeid}"
-        button = Button.inline(f"{i}", data="download_{}".format(nfo))
+        button = Button.inline(f"{i}", data=f"download_{nfo}")
         buttons.append(button)
         if len(buttons) == 4:
             cbutton.append(buttons)

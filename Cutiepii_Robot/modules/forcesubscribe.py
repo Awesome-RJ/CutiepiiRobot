@@ -132,17 +132,19 @@ def _check_member(client, message):
                                     [
                                         InlineKeyboardButton(
                                             "Join Channel",
-                                            url="https://telegram.dog/{}".format(channel),
+                                            url=f"https://telegram.dog/{channel}",
                                         )
                                     ],
                                     [
                                         InlineKeyboardButton(
-                                            "UnMute Me", callback_data="onUnMuteRequest"
+                                            "UnMute Me",
+                                            callback_data="onUnMuteRequest",
                                         )
                                     ],
                                 ]
                             ),
                         )
+
                         client.restrict_chat_member(
                             chat_id, user_id, ChatPermissions(can_send_messages=False)
                         )
@@ -164,7 +166,7 @@ def _check_member(client, message):
             return
 
 
-@pgram.on_message(filters.command(["forcesubscribe", "forcesub", f"forcesub@Cutiepii_Robot", f"forcesubscribe@Cutiepii_Robot"]) & ~filters.private)
+@pgram.on_message(filters.command(["forcesubscribe", "forcesub", "forcesub@Cutiepii_Robot", "forcesubscribe@Cutiepii_Robot"]) & ~filters.private)
 def config(client, message):
     user = client.get_chat_member(message.chat.id, message.from_user.id)
     if user.status == "creator" or user.user.id in SUDO_USERS:

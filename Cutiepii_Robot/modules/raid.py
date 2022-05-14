@@ -39,7 +39,7 @@ def get_readable_time(time: int) -> str:
     t = f"{timedelta(seconds=time)}".split(":")
     if time == 86400:
         return "1 day"
-    return "{} hour(s)".format(t[0]) if time >= 3600 else "{} minutes".format(t[1])
+    return f"{t[0]} hour(s)" if time >= 3600 else f"{t[1]} minutes"
 
 
 @cutiepii_cmd(command="raid")
@@ -60,17 +60,33 @@ async def setRaid(update: Update, context: CallbackContext) -> Optional[str]:
     if len(args) == 0:
         if stat:
             text = 'Raid mode is currently <code>Enabled</code>\nWould you like to <code>Disable</code> raid?'
-            keyboard = [[
-                InlineKeyboardButton("Disable Raid Mode", callback_data="disable_raid={}={}".format(chat.id, time)),
-                InlineKeyboardButton("Cancel Action", callback_data="cancel_raid=1"),
-            ]]
+            keyboard = [
+                [
+                    InlineKeyboardButton(
+                        "Disable Raid Mode",
+                        callback_data=f"disable_raid={chat.id}={time}",
+                    ),
+                    InlineKeyboardButton(
+                        "Cancel Action", callback_data="cancel_raid=1"
+                    ),
+                ]
+            ]
+
         else:
             text = f"Raid mode is currently <code>Disabled</code>\nWould you like to <code>Enable</code> " \
                    f"raid for {readable_time}?"
-            keyboard = [[
-                InlineKeyboardButton("Enable Raid Mode", callback_data="enable_raid={}={}".format(chat.id, time)),
-                InlineKeyboardButton("Cancel Action", callback_data="cancel_raid=0"),
-            ]]
+            keyboard = [
+                [
+                    InlineKeyboardButton(
+                        "Enable Raid Mode",
+                        callback_data=f"enable_raid={chat.id}={time}",
+                    ),
+                    InlineKeyboardButton(
+                        "Cancel Action", callback_data="cancel_raid=0"
+                    ),
+                ]
+            ]
+
         reply_markup = InlineKeyboardMarkup(keyboard)
         await msg.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=reply_markup)
 
@@ -93,10 +109,18 @@ async def setRaid(update: Update, context: CallbackContext) -> Optional[str]:
             if 300 <= time < 86400:
                 text = f"Raid mode is currently <code>Disabled</code>\nWould you like to <code>Enable</code> " \
                        f"raid for {readable_time}? "
-                keyboard = [[
-                    InlineKeyboardButton("Enable Raid", callback_data="enable_raid={}={}".format(chat.id, time)),
-                    InlineKeyboardButton("Cancel Action", callback_data="cancel_raid=0"),
-                ]]
+                keyboard = [
+                    [
+                        InlineKeyboardButton(
+                            "Enable Raid",
+                            callback_data=f"enable_raid={chat.id}={time}",
+                        ),
+                        InlineKeyboardButton(
+                            "Cancel Action", callback_data="cancel_raid=0"
+                        ),
+                    ]
+                ]
+
                 reply_markup = InlineKeyboardMarkup(keyboard)
                 await msg.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=reply_markup)
             else:
@@ -130,7 +154,7 @@ async def enable_raid_cb(update: Update, ctx: CallbackContext) -> Optional[str]:
 
     def disable_raid(_):
         sql.setRaidStatus(chat_id, False, t, acttime)
-        LOGGER.info("disbled raid mode in {}".format(chat_id))
+        LOGGER.info(f"disbled raid mode in {chat_id}")
         ctx.bot.send_message(chat_id, "Raid mode has been automatically disabled!")
 
     raid = j.run_once(disable_raid, time)

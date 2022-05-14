@@ -1553,12 +1553,12 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
         chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
         if not args:
             get_permapin = sql.get_permapin(chat_id)
-            text_maker = "Cleanlinked is currently set to: `{}`".format(bool(int(get_permapin)))
+            text_maker = f"Cleanlinked is currently set to: `{bool(int(get_permapin))}`"
             if get_permapin:
                 if chat.username:
-                    old_pin = "https://t.me/{}/{}".format(chat.username, get_permapin)
+                    old_pin = f"https://t.me/{chat.username}/{get_permapin}"
                 else:
-                    old_pin = "https://t.me/c/{}/{}".format(str(chat.id)[4:], get_permapin)
+                    old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
                 text_maker += "\nTo disable cleanlinked send: `/cleanlinked off`"
                 text_maker += "\n\n[The permanent pinned message is here]({})".format(old_pin)
             CUTIEPII_PTB.bot.send_message(chat_id, text_maker, parse_mode=ParseMode.MARKDOWN)
@@ -1589,12 +1589,12 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
             return
         else:
             get_permapin = sql.get_permapin(chat_id)
-            text_maker = "Cleanlinked is currently set to: `{}`".format(bool(int(get_permapin)))
+            text_maker = f"Cleanlinked is currently set to: `{bool(int(get_permapin))}`"
             if get_permapin:
                 if chat.username:
-                    old_pin = "https://t.me/{}/{}".format(chat.username, get_permapin)
+                    old_pin = f"https://t.me/{chat.username}/{get_permapin}"
                 else:
-                    old_pin = "https://t.me/c/{}/{}".format(str(chat.id)[4:], get_permapin)
+                    old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
                 text_maker += "\nTo disable cleanlinked send: `/cleanlinked off`"
                 text_maker += "\n\n[The permanent pinned message is here]({})".format(old_pin)
             CUTIEPII_PTB.bot.send_message(chat_id, text_maker, parse_mode=ParseMode.MARKDOWN)
@@ -1640,9 +1640,9 @@ def permanent_pin(update: Update, context: CallbackContext):
         except BadRequest:
             sql.set_permapin(chat.id, 0)
             if chat.username:
-                old_pin = "https://t.me/{}/{}".format(chat.username, get_permapin)
+                old_pin = f"https://t.me/{chat.username}/{get_permapin}"
             else:
-                old_pin = "https://t.me/c/{}/{}".format(str(chat.id)[4:], get_permapin)
+                old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
                 print(old_pin)
             CUTIEPII_PTB.bot.send_message(chat.id, "*Cleanlinked error:*\nI can't pin messages here!\nMake sure I'm an admin and can pin messages.\n\nClean linked has been disabled, [The old permanent pinned message is here]({})".format(old_pin), parse_mode=ParseMode.MARKDOWN)
             return
@@ -1664,8 +1664,9 @@ async def unpinallbtn(update: Update, context: CallbackContext):
     user = update.effective_user
     reply = query.data.split("_")[1]
     if reply == "yes":
-        unpinall = requests.post(f"https://api.telegram.org/bot{TOKEN}/unpinAllChatMessages?chat_id={chat.id}")
-        if unpinall:
+        if unpinall := requests.post(
+            f"https://api.telegram.org/bot{TOKEN}/unpinAllChatMessages?chat_id={chat.id}"
+        ):
             await query.message.edit_text("All pinned messages have been unpinned.")
         else:
             await query.message.edit_text("Failed to unpin all messages")
@@ -1673,13 +1674,14 @@ async def unpinallbtn(update: Update, context: CallbackContext):
     else:
         await query.message.edit_text("Unpin of all pinned messages has been cancelled.")
         return
-    log_message = "<b>{}:</b>" \
-                  "\n#UNPINNEDALL" \
-                  "\n<b>Admin:</b> {}".format(
-                      html.escape(chat.title),
-                      mention_html(user.id, user.first_name),
-                  )
-    return log_message
+    return (
+        "<b>{}:</b>"
+        "\n#UNPINNEDALL"
+        "\n<b>Admin:</b> {}".format(
+            html.escape(chat.title),
+            mention_html(user.id, user.first_name),
+        )
+    )
     
 
 SET_DESC_HANDLER = CommandHandler("setdesc", set_desc, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)

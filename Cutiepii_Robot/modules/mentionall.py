@@ -46,7 +46,7 @@ async def all(event):
   chat_id = event.chat_id
   if event.is_private:
     return await event.respond("This command Can Be Use In Groups And Channels/n")
-  
+
   is_admin = False
   try:
     partici_ = await telethn(GetParticipantRequest(
@@ -68,7 +68,7 @@ async def all(event):
       is_admin = True
   if not is_admin:
     return await event.respond("Only admins can mention all!")
-  
+
   if event.pattern_match.group(1) and event.is_reply:
     return await event.respond("Give me one argument!")
   elif event.pattern_match.group(1):
@@ -81,12 +81,12 @@ async def all(event):
         return await event.respond("I Can't Mention Members For Older Messages! (messages which are sent before I'm added to group)")
   else:
     return await event.respond("Reply To a Message Or Give Me Some Text To Mention Others")
-  
+
   spam_chats.append(chat_id)
   usrnum = 0
   usrtxt = ''
   async for usr in telethn.iter_participants(chat_id):
-    if not chat_id in spam_chats:
+    if chat_id not in spam_chats:
       break
     usrnum += 1
     usrtxt += f"[{usr.first_name}](tg://user?id={usr.id}) "
@@ -106,13 +106,12 @@ async def all(event):
 
 @telethn.on(events.NewMessage(pattern="^/cancel$"))
 async def cancel_spam(event):
-  if not event.chat_id in spam_chats:
+  if event.chat_id not in spam_chats:
     return await event.respond("There Is No Proccess On Going")
-  else:
-    try:
-      spam_chats.remove(event.chat_id)
-    except:
-      pass
-    return await event.respond("Mentioning Are Stopped")
+  try:
+    spam_chats.remove(event.chat_id)
+  except:
+    pass
+  return await event.respond("Mentioning Are Stopped")
         
 __mod_name__ = "Mention All"

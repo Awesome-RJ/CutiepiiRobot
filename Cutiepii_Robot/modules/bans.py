@@ -87,8 +87,10 @@ async def ban_chat(bot: Bot, who: Chat, where_chat_id, reason=None) -> Union[str
         await bot.banChatSenderChat(where_chat_id, who.id)
     except BadRequest as excp:
         if excp.message != "Reply message not found":
-            LOGGER.warning("error banning channel {}:{} in {} because: {}".format(
-                    who.title, who.id, where_chat_id, excp.message))
+            LOGGER.warning(
+                f"error banning channel {who.title}:{who.id} in {where_chat_id} because: {excp.message}"
+            )
+
             return False
 
     return (
@@ -103,8 +105,10 @@ async def ban_user(bot: Bot, who: ChatMember, where_chat_id, reason=None) -> Uni
         await bot.banChatMember(where_chat_id, who.user.id)
     except BadRequest as excp:
         if excp.message != "Reply message not found":
-            LOGGER.warning("error banning user {}:{} in {} because: {}".format(
-                    who.user.first_name, who.user.id, where_chat_id, excp.message))
+            LOGGER.warning(
+                f"error banning user {who.user.first_name}:{who.user.id} in {where_chat_id} because: {excp.message}"
+            )
+
             return False
 
     return (
@@ -118,8 +122,10 @@ async def unban_chat(bot: Bot, who: Chat, where_chat_id, reason=None) -> Union[s
         await bot.unbanChatSenderChat(where_chat_id, who.id)
     except BadRequest as excp:
         if excp.message != "Reply message not found":
-            LOGGER.warning("error banning channel {}:{} in {} because: {}".format(
-                    who.title, who.id, where_chat_id, excp.message))
+            LOGGER.warning(
+                f"error banning channel {who.title}:{who.id} in {where_chat_id} because: {excp.message}"
+            )
+
             return False
 
     return (
@@ -134,8 +140,10 @@ async def unban_user(bot: Bot, who: ChatMember, where_chat_id, reason=None) -> U
         await bot.unbanChatMember(where_chat_id, who.user.id)
     except BadRequest as excp:
         if excp.message != "Reply message not found":
-            LOGGER.warning("error banning user {}:{} in {} because: {}".format(
-                    who.user.first_name, who.user.id, where_chat_id, excp.message))
+            LOGGER.warning(
+                f"error banning user {who.user.first_name}:{who.user.id} in {where_chat_id} because: {excp.message}"
+            )
+
             return False
 
     return (
@@ -196,12 +204,11 @@ async def ban(update: Update, context: CallbackContext) -> Optional[str]:  # sou
             f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
             logmsg += did_ban
 
-            await message.reply_text("Channel {} was banned successfully from {}".format(
-                html.escape(message.reply_to_message.sender_chat.title),
-                html.escape(chat.title)
-            ),
-                parse_mode="html"
+            await message.reply_text(
+                f"Channel {html.escape(message.reply_to_message.sender_chat.title)} was banned successfully from {html.escape(chat.title)}",
+                parse_mode="html",
             )
+
 
         else:
             await message.reply_text("Failed to ban channel")
@@ -234,12 +241,11 @@ async def ban(update: Update, context: CallbackContext) -> Optional[str]:  # sou
             f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
             logmsg += did_ban
 
-            await message.reply_text("Channel {} was banned successfully from {}".format(
-                html.escape(chan.title),
-                html.escape(chat.title)
-            ),
-                parse_mode="html"
+            await message.reply_text(
+                f"Channel {html.escape(chan.title)} was banned successfully from {html.escape(chat.title)}",
+                parse_mode="html",
             )
+
 
         else:
             await message.reply_text("Failed to ban channel")
@@ -311,7 +317,7 @@ async def temp_ban(update: Update, context: CallbackContext) -> str:
     message = update.effective_message
     log_message = ""
     bot, args = context.bot, context.args
-    
+
 
     user_id, reason = await extract_user_and_text(message, args)
 
@@ -400,13 +406,11 @@ async def temp_ban(update: Update, context: CallbackContext) -> str:
             return log
         else:
             await bot.sendMessage(ERROR_LOGS, str(update))
-            await bot.sendMessage(ERROR_LOGS, 
-                "ERROR banning user {} in chat {} ({}) due to {}".format(
-                user_id,
-                chat.title,
-                chat.id,
-                excp.message)
+            await bot.sendMessage(
+                ERROR_LOGS,
+                f"ERROR banning user {user_id} in chat {chat.title} ({chat.id}) due to {excp.message}",
             )
+
             await message.reply_text("Well damn, I can't ban that user.")
 
     return log_message
@@ -537,12 +541,11 @@ async def unban(update: Update, context: CallbackContext) -> Optional[str]:  # s
             f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
             logmsg += did_ban
 
-            await message.reply_text("Channel {} was unbanned successfully from {}".format(
-                html.escape(message.reply_to_message.sender_chat.title),
-                html.escape(chat.title)
-            ),
-                parse_mode="html"
+            await message.reply_text(
+                f"Channel {html.escape(message.reply_to_message.sender_chat.title)} was unbanned successfully from {html.escape(chat.title)}",
+                parse_mode="html",
             )
+
 
         else:
             await message.reply_text("Failed to unban channel")
@@ -575,12 +578,11 @@ async def unban(update: Update, context: CallbackContext) -> Optional[str]:  # s
             f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
             logmsg += did_ban
 
-            await message.reply_text("Channel {} was unbanned successfully from {}".format(
-                html.escape(chan.title),
-                html.escape(chat.title)
-            ),
-                parse_mode="html"
+            await message.reply_text(
+                f"Channel {html.escape(chan.title)} was unbanned successfully from {html.escape(chat.title)}",
+                parse_mode="html",
             )
+
 
         else:
             await message.reply_text("Failed to unban channel")
@@ -605,12 +607,11 @@ async def unban(update: Update, context: CallbackContext) -> Optional[str]:  # s
         f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
         logmsg += did_ban
 
-        await message.reply_text("User {} was unbanned successfully from {}".format(
-            mention_html(member.user.id, member.user.first_name),
-            html.escape(chat.title),
-        ),
-            parse_mode="html"
+        await message.reply_text(
+            f"User {mention_html(member.user.id, member.user.first_name)} was unbanned successfully from {html.escape(chat.title)}",
+            parse_mode="html",
         )
+
 
     else:
         await message.reply_text("Failed to unban user")
@@ -710,8 +711,7 @@ async def banme(update: Update, context: CallbackContext):
     user_id = update.effective_message.from_user.id
     chat = update.effective_chat
     user = update.effective_user
-    res = update.effective_chat.ban_member(user_id)
-    if res:
+    if res := update.effective_chat.ban_member(user_id):
         await update.effective_message.reply_text("Yes, you're right! GTFO..")
         return (
             "<b>{}:</b>"
@@ -741,7 +741,7 @@ async def snipe(update: Update, context: CallbackContext):
     to_send = " ".join(args)
     if len(to_send) >= 2:
         try:
-            await bot.sendMessage(int(chat_id), str(to_send))
+            await bot.sendMessage(int(chat_id), to_send)
         except TelegramError:
             LOGGER.warning("Couldn't send to group %s", chat_id)
             await update.effective_message.reply_text(

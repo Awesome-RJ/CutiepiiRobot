@@ -158,10 +158,7 @@ def get_readable_time(seconds: int) -> str:
 
     while count < 4:
         count += 1
-        if count < 3:
-            remainder, result = divmod(seconds, 60)
-        else:
-            remainder, result = divmod(seconds, 24)
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
         if seconds == 0 and remainder == 0:
             break
         time_list.append(int(result))
@@ -170,7 +167,7 @@ def get_readable_time(seconds: int) -> str:
     for x in range(len(time_list)):
         time_list[x] = str(time_list[x]) + time_suffix_list[x]
     if len(time_list) == 4:
-        ping_time += time_list.pop() + ", "
+        ping_time += f"{time_list.pop()}, "
 
     time_list.reverse()
     ping_time += ":".join(time_list)
@@ -291,10 +288,10 @@ async def rmemes(update: Update, context: CallbackContext):
         return
     res = res.json()
 
-    rpage = res.get(str("subreddit"))  # Subreddit
-    title = res.get(str("title"))  # Post title
-    memeu = res.get(str("url"))  # meme pic url
-    plink = res.get(str("postLink"))
+    rpage = res.get("subreddit")
+    title = res.get("title")
+    memeu = res.get("url")
+    plink = res.get("postLink")
 
     caps = f"× <b>Title</b>: {title}\n"
     caps += f"× <b>Subreddit:</b> <pre>r/{rpage}</pre>"

@@ -98,8 +98,7 @@ def chatbot_response(query: str, user_id: int) -> str:
     data = requests.get(
         f"https://www.kukiapi.xyz/api/apikey=5349869477-KUKIhU1ygu8mm0/Cutiepii/@Awesome_RJ/message={query}"
     )
-    response = data.json()["reply"]
-    return response
+    return data.json()["reply"]
 
 
 def check_message(context: CallbackContext, message):
@@ -107,12 +106,11 @@ def check_message(context: CallbackContext, message):
     text = message.text
     if re.search("[.|\n]{0,}"+CUTIEPII_PTB.bot.first_name+"[.|\n]{0,}", text, flags=re.IGNORECASE):
         return True
-    if reply_msg and reply_msg.from_user.id == BOT_ID:
-        return True
-    elif message.chat.type == "private":
-        return True
-    else:
-        return False
+    return bool(
+        reply_msg
+        and reply_msg.from_user.id == BOT_ID
+        or message.chat.type == "private"
+    )
 
 
 async def chatbot(update: Update, context: CallbackContext):

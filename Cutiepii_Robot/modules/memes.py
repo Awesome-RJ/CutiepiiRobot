@@ -189,11 +189,11 @@ async def msg(event):
     text = re.sub(r"ｎ([ａｅｉｏｕ])", r"ｎｙ\1", text)
     text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", text)
     text = re.sub(r"Ｎ([ａｅｉｏｕＡＥＩＯＵ])", r"Ｎｙ\1", text)
-    text = re.sub(r"\!+", " " + random.choice(faces), text)
-    text = re.sub(r"！+", " " + random.choice(faces), text)
+    text = re.sub(r"\!+", f" {random.choice(faces)}", text)
+    text = re.sub(r"！+", f" {random.choice(faces)}", text)
     text = text.replace("ove", "uv")
     text = text.replace("ｏｖｅ", "ｕｖ")
-    text += " " + random.choice(faces)
+    text += f" {random.choice(faces)}"
     await event.reply(text)
 
 
@@ -493,8 +493,8 @@ async def typewriter(typew):
     now = await typew.reply(typing_symbol)
     await asyncio.sleep(2)
     for character in message:
-        old_text = old_text + "" + character
-        typing_text = old_text + "" + typing_symbol
+        old_text = f"{old_text}{character}"
+        typing_text = f"{old_text}{typing_symbol}"
         await now.edit(typing_text)
         await asyncio.sleep(2)
         await now.edit(old_text)

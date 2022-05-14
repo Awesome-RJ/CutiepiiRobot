@@ -196,11 +196,9 @@ if is_module_loaded(FILENAME):
 
             if sql.enable_command(chat.id, enable_cmd):
                 if conn:
-                    text = "Enabled the use of `{}` command in *{}*!".format(
-                        enable_cmd, chat_name
-                    )
+                    text = f"Enabled the use of `{enable_cmd}` command in *{chat_name}*!"
                 else:
-                    text = "Enabled the use of `{}` command!".format(enable_cmd)
+                    text = f"Enabled the use of `{enable_cmd}` command!"
                 send_message(
                     update.effective_message,
                     text,
@@ -264,9 +262,7 @@ if is_module_loaded(FILENAME):
             sql.disable_command(chat_id, disable_cmd)
 
     def __stats__():
-        return "➛ {} disabled items, across {} chats.".format(
-            sql.num_disabled(), sql.num_chats()
-        )
+        return f"➛ {sql.num_disabled()} disabled items, across {sql.num_chats()} chats."
 
     def __migrate__(old_chat_id, new_chat_id):
         sql.migrate_chat(old_chat_id, new_chat_id)

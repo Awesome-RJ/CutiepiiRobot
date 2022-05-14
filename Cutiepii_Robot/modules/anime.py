@@ -127,7 +127,7 @@ QUOTES_IMG = (
 def shorten(description, info='anilist.co'):
     msg = ""
     if len(description) > 700:
-        description = description[0:500] + '....'
+        description = description[:500] + '....'
         msg += f"\n*Description*: {description}[Read More]({info})"
     else:
         msg += f"\n*Description*: {description}"
@@ -138,15 +138,18 @@ def shorten(description, info='anilist.co'):
 def t(milliseconds: int) -> str:
     """Inputs time in milliseconds, to get beautified time,
     as string"""
-    seconds, milliseconds = divmod(int(milliseconds), 1000)
+    seconds, milliseconds = divmod(milliseconds, 1000)
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
-    tmp = ((str(days) + " Days, ") if days else "") + \
-        ((str(hours) + " Hours, ") if hours else "") + \
-        ((str(minutes) + " Minutes, ") if minutes else "") + \
-        ((str(seconds) + " Seconds, ") if seconds else "") + \
-        ((str(milliseconds) + " ms, ") if milliseconds else "")
+    tmp = (
+        (f"{str(days)} Days, " if days else "")
+        + (f"{str(hours)} Hours, " if hours else "")
+        + (f"{str(minutes)} Minutes, " if minutes else "")
+        + (f"{str(seconds)} Seconds, " if seconds else "")
+        + (f"{str(milliseconds)} ms, " if milliseconds else "")
+    )
+
     return tmp[:-2]
 
 
@@ -330,7 +333,7 @@ def anime(update, context):
             trailer_id = trailer.get('id', None)
             site = trailer.get('site', None)
             if site == "youtube":
-                trailer = 'https://youtu.be/' + trailer_id
+                trailer = f'https://youtu.be/{trailer_id}'
         description = json.get('description', 'N/A').replace('<b>', '').replace(
             '</b>', '').replace('<br>', '')
         msg += shorten(description, info)
@@ -389,8 +392,7 @@ def character(update, context):
         site_url = json.get('siteUrl')
         char_name = f"{json.get('name').get('full')}"
         msg += shorten(description, site_url)
-        image = json.get('image', None)
-        if image:
+        if image := json.get('image', None):
             image = image.get('large')
             buttons = [[InlineKeyboardButton("Save as Waifu ❣️", callback_data=f"xanime_fvrtchar={char_name}")]]
             update.effective_message.reply_photo(
@@ -571,13 +573,11 @@ def upcoming(update, context):
 
 
 def watchlist(update, context):
-    chat = update.effective_chat  
-    user = update.effective_user 
-    message = update.effective_message  
-    watchlist = list(REDIS.sunion(f'anime_watch_list{user.id}'))
-    watchlist.sort()
-    watchlist = "\n• ".join(watchlist)
-    if watchlist:
+    chat = update.effective_chat
+    user = update.effective_user
+    message = update.effective_message
+    watchlist = sorted(REDIS.sunion(f'anime_watch_list{user.id}'))
+    if watchlist := "\n• ".join(watchlist):
         message.reply_text(
             "{}<b>'s Watchlist:</b>"
             "\n• {}".format(mention_html(user.id, user.first_name),
@@ -615,13 +615,11 @@ def removewatchlist(update, context):
 
 
 def fvrtchar(update, context):
-    chat = update.effective_chat  
-    user = update.effective_user 
-    message = update.effective_message  
-    fvrt_char = list(REDIS.sunion(f'anime_fvrtchar{user.id}'))
-    fvrt_char.sort()
-    fvrt_char = "\n• ".join(fvrt_char)
-    if fvrt_char:
+    chat = update.effective_chat
+    user = update.effective_user
+    message = update.effective_message
+    fvrt_char = sorted(REDIS.sunion(f'anime_fvrtchar{user.id}'))
+    if fvrt_char := "\n• ".join(fvrt_char):
         message.reply_text(
             "{}<b>'s Harem:</b>"
             "\n• {}".format(mention_html(user.id, user.first_name),
@@ -660,13 +658,11 @@ def removefvrtchar(update, context):
     
 
 def readmanga(update, context):
-    chat = update.effective_chat  
-    user = update.effective_user 
-    message = update.effective_message  
-    manga_list = list(REDIS.sunion(f'anime_mangaread{user.id}'))
-    manga_list.sort()
-    manga_list = "\n• ".join(manga_list)
-    if manga_list:
+    chat = update.effective_chat
+    user = update.effective_user
+    message = update.effective_message
+    manga_list = sorted(REDIS.sunion(f'anime_mangaread{user.id}'))
+    if manga_list := "\n• ".join(manga_list):
         message.reply_text(
             "{}<b>'s Manga Lists:</b>"
             "\n• {}".format(mention_html(user.id, user.first_name),
@@ -708,10 +704,10 @@ def animestuffs(update, context):
     user = update.effective_user
     splitter = query.data.split('=')
     query_match = splitter[0]
-    callback_anime_data = splitter[1] 
+    callback_anime_data = splitter[1]
     if query_match == "xanime_watchlist":
         watchlist = list(REDIS.sunion(f'anime_watch_list{user.id}'))
-        if not callback_anime_data in watchlist:
+        if callback_anime_data not in watchlist:
             REDIS.sadd(f'anime_watch_list{user.id}', callback_anime_data)
             context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} is successfully added to your watch list.",
@@ -720,10 +716,10 @@ def animestuffs(update, context):
             context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} is already exists in your watch list!",
                                                 show_alert=True)
-            
+
     elif query_match == "xanime_fvrtchar":   
         fvrt_char = list(REDIS.sunion(f'anime_fvrtchar{user.id}'))
-        if not callback_anime_data in fvrt_char:
+        if callback_anime_data not in fvrt_char:
             REDIS.sadd(f'anime_fvrtchar{user.id}', callback_anime_data)
             context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} is successfully added to your favorite character.",
@@ -734,7 +730,7 @@ def animestuffs(update, context):
                                                 show_alert=True)
     elif query_match == "xanime_manga":   
         fvrt_char = list(REDIS.sunion(f'anime_mangaread{user.id}'))
-        if not callback_anime_data in fvrt_char:
+        if callback_anime_data not in fvrt_char:
             REDIS.sadd(f'anime_mangaread{user.id}', callback_anime_data)
             context.bot.answer_callback_query(query.id,
                                                 text=f"{callback_anime_data} is successfully added to your favorite character.",
@@ -831,9 +827,7 @@ def site_search(update: Update, context: CallbackContext, site: str):
         search_url = f"https://animekaizoku.com/?s={search_query}"
         html_text = requests.get(search_url).text
         soup = bs4.BeautifulSoup(html_text, "html.parser")
-        search_result = soup.find_all("h2", {"class": "post-title"})
-
-        if search_result:
+        if search_result := soup.find_all("h2", {"class": "post-title"}):
             result = f"<b>Search results for</b> <code>{html.escape(search_query)}</code> <b>on</b> @KaizokuAnime: \n"
             for entry in search_result:
                 post_link = "https://animekaizoku.com/" + entry.a["href"]

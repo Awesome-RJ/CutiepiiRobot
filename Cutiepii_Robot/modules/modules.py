@@ -50,7 +50,7 @@ async def load(update: Update, context: CallbackContext):
     )
 
     try:
-        imported_module = importlib.import_module("Cutiepii_Robot.modules." + text)
+        imported_module = importlib.import_module(f"Cutiepii_Robot.modules.{text}")
     except Exception:
         await load_messasge.edit_text("Does that module even exist?")
         return
@@ -105,7 +105,8 @@ async def load(update: Update, context: CallbackContext):
         USER_SETTINGS[imported_module.__mod_name__.lower()] = imported_module
 
     await load_messasge.edit_text(
-        "Successfully loaded module : <b>{}</b>".format(text), parse_mode=ParseMode.HTML,
+        f"Successfully loaded module : <b>{text}</b>",
+        parse_mode=ParseMode.HTML,
     )
 
 
@@ -119,7 +120,7 @@ async def unload(update: Update, context: CallbackContext):
     )
 
     try:
-        imported_module = importlib.import_module("Cutiepii_Robot.modules." + text)
+        imported_module = importlib.import_module(f"Cutiepii_Robot.modules.{text}")
     except Exception:
         await unload_messasge.edit_text("Does that module even exist?")
         return

@@ -49,11 +49,11 @@ def main(url, filename):
 
 def download_video(quality, url, filename):
     html = requests.get(url).content.decode("utf-8")
-    video_url = re.search(rf'{quality.lower()}_src:"(.+?)"', html).group(1)
+    video_url = re.search(rf'{quality.lower()}_src:"(.+?)"', html)[1]
     file_size_request = requests.get(video_url, stream=True)
     int(file_size_request.headers["Content-Length"])
     block_size = 1024
-    with open(filename + ".mp4", "wb") as f:
+    with open(f"{filename}.mp4", "wb") as f:
         for data in file_size_request.iter_content(block_size):
             f.write(data)
     print("\nVideo downloaded successfully.")
@@ -65,9 +65,7 @@ async def _(event):
         return
     if await is_admin(event, event.message.sender_id):
         url = event.pattern_match.group(1)
-        x = re.match(r"^(https:|)[/][/]www.([^/]+[.])*facebook.com", url)
-
-        if x:
+        if x := re.match(r"^(https:|)[/][/]www.([^/]+[.])*facebook.com", url):
             html = requests.get(url).content.decode("utf-8")
             await event.reply(
                 "Starting Video download... \n Please note: FBDL is not for big files."

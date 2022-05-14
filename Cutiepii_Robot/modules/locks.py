@@ -190,7 +190,7 @@ async def lock(update, context) -> str:  # sourcery no-metrics
             ltype = args[0].lower()
             if ltype in LOCK_TYPES:
 
-                text = "Locked {} for non-admins!".format(ltype)
+                text = f"Locked {ltype} for non-admins!"
                 sql.update_lock(chat.id, ltype, locked=True)
                 send_message(update.effective_message, text, parse_mode="markdown")
 
@@ -206,7 +206,7 @@ async def lock(update, context) -> str:  # sourcery no-metrics
                 )
 
             elif ltype in LOCK_CHAT_RESTRICTION:
-                text = "Locked {} for all non-admins!".format(ltype)
+                text = f"Locked {ltype} for all non-admins!"
                 current_permission = context.bot.getChat(chat.id).permissions
                 context.bot.set_chat_permissions(
                     chat_id=chat.id,
@@ -257,7 +257,7 @@ def unlock(update, context) -> str:  # sourcery no-metrics
         if len(args) >= 1:
             ltype = args[0].lower()
             if ltype in LOCK_TYPES:
-                text = "Unlocked {} for everyone!".format(ltype)
+                text = f"Unlocked {ltype} for everyone!"
                 sql.update_lock(chat.id, ltype, locked=False)
                 send_message(update.effective_message, text, parse_mode="markdown")
                 return (
@@ -272,7 +272,7 @@ def unlock(update, context) -> str:  # sourcery no-metrics
                 )
 
             elif ltype in UNLOCK_CHAT_RESTRICTION:
-                text = "Unlocked {} for everyone!".format(ltype)
+                text = f"Unlocked {ltype} for everyone!"
 
                 current_permission = context.bot.getChat(chat.id).permissions
                 context.bot.set_chat_permissions(
@@ -318,7 +318,7 @@ async def del_lockables(update, context):  # sourcery no-metrics
         if lockable == "rtl":
             if sql.is_locked(chat.id, lockable) and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES):
                 if message.caption:
-                    check = ad.detect_alphabet(u"{}".format(message.caption))
+                    check = ad.detect_alphabet(f"{message.caption}")
                     if "ARABIC" in check:
                         try:
                             # replyyy = "This action is restricted to admins only!"
@@ -329,7 +329,7 @@ async def del_lockables(update, context):  # sourcery no-metrics
                                 LOGGER.exception("ERROR in lockables")
                         break
                 if message.text:
-                    check = ad.detect_alphabet(u"{}".format(message.text))
+                    check = ad.detect_alphabet(f"{message.text}")
                     if "ARABIC" in check:
                         try:
                             # replyyy = "This action is restricted to admins only!"
@@ -455,8 +455,8 @@ def get_permission_list(current, new):
         "can_invite_users": None,
         "can_pin_messages": None,
     }
-    permissions.update(current)
-    permissions.update(new)
+    permissions |= current
+    permissions |= new
     return ChatPermissions(**permissions)
 
 

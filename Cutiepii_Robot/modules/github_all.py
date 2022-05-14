@@ -35,18 +35,18 @@ def getphh(index):
     assets = api.getAssets(recentRelease)
     releaseName = api.getReleaseName(recentRelease)
     message = "<b>Author:</b> <a href='{}'>{}</a>\n".format(authorUrl, author)
-    message += "<b>Release Name:</b> <code>"+releaseName+"</code>\n\n"
+    message += f"<b>Release Name:</b> <code>{releaseName}" + "</code>\n\n"
     message += "<b>Assets:</b>\n"
     for asset in assets:
         fileName = api.getReleaseFileName(asset)
         if fileName in ("manifest.xml", "patches.zip"):
             continue
         fileURL = api.getReleaseFileURL(asset)
-        assetFile = "➛ <a href='{}'>{}</a>".format(fileURL, fileName)
+        assetFile = f"➛ <a href='{fileURL}'>{fileName}</a>"
         sizeB = ((api.getSize(asset))/1024)/1024
         size = "{0:.2f}".format(sizeB)
         message += assetFile + "\n"
-        message += "    <code>Size: "  + size + " MB</code>\n"
+        message += f"    <code>Size: {size}" + " MB</code>\n"
     return message
 
 
@@ -63,17 +63,17 @@ def getData(url, index):
     assets = api.getAssets(recentRelease)
     releaseName = api.getReleaseName(recentRelease)
     message = "*Author:* [{}]({})\n".format(author, authorUrl)
-    message += "*Release Name:* " + releaseName + "\n\n"
+    message += f"*Release Name:* {releaseName}" + "\n\n"
     for asset in assets:
         message += "*Asset:* \n"
         fileName = api.getReleaseFileName(asset)
         fileURL = api.getReleaseFileURL(asset)
-        assetFile = "[{}]({})".format(fileName, fileURL)
+        assetFile = f"[{fileName}]({fileURL})"
         sizeB = ((api.getSize(asset)) / 1024) / 1024
         size = "{0:.2f}".format(sizeB)
         downloadCount = api.getDownloadCount(asset)
         message += assetFile + "\n"
-        message += "Size: " + size + " MB"
+        message += f"Size: {size} MB"
         message += "\nDownload Count: " + str(downloadCount) + "\n\n"
     return message
 
@@ -81,8 +81,7 @@ def getData(url, index):
 # likewise, aux function, not async
 def getRepo(bot, update, reponame):
     chat_id = update.effective_chat.id
-    repo = sql.get_repo(str(chat_id), reponame)
-    if repo:
+    if repo := sql.get_repo(str(chat_id), reponame):
         return repo.value, repo.backoffset
     return None, None
 
@@ -95,14 +94,12 @@ async def getRelease(update: Update, context: CallbackContext):
         return
     if (
         len(args) != 1
-        and not (len(args) == 2 and args[1].isdigit())
-        and not ("/" in args[0])
+        and (len(args) != 2 or not args[1].isdigit())
+        and "/" not in args[0]
     ):
         deletion(update, context, await msg.reply_text("Please specify a valid combination of <user>/<repo>"))
         return
-    index = 0
-    if len(args) == 2:
-        index = int(args[1])
+    index = int(args[1]) if len(args) == 2 else 0
     url = args[0]
     text = getData(url, index)
     deletion(update, context, await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True))
@@ -172,13 +169,11 @@ async def saveRepo(update: Update, context: CallbackContext):
     if (
         len(args) != 2
         and (len(args) != 3 and not args[2].isdigit())
-        or not ("/" in args[1])
+        or "/" not in args[1]
     ):
         deletion(update, context, await msg.reply_text("Invalid data, use <reponame> <user>/<repo> <value (optional)>"))
         return
-    index = 0
-    if len(args) == 3:
-        index = int(args[2])
+    index = int(args[2]) if len(args) == 3 else 0
     sql.add_repo_to_db(str(chat_id), args[0], args[1], index)
     deletion(update, context, await msg.reply_text("Repo shortcut saved successfully!"))
     return
@@ -221,15 +216,13 @@ async def listRepo(update: Update, context: CallbackContext):
 async def getVer(update: Update, context: CallbackContext):
     msg = update.effective_message
     ver = api.vercheck()
-    deletion(update, context, await msg.reply_text("GitHub API version: " + ver))
+    deletion(update, context, await msg.reply_text(f"GitHub API version: {ver}"))
     return
 
 
 def deletion(update: Update, context: CallbackContext, delmsg):
     chat = update.effective_chat
-    cleartime = get_clearcmd(chat.id, "github")
-
-    if cleartime:
+    if cleartime := get_clearcmd(chat.id, "github"):
         context.CUTIEPII_PTB.run_async(delete, delmsg, cleartime.time)
 
 """

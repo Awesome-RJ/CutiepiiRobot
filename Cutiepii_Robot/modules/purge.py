@@ -80,11 +80,10 @@ async def purge_messages(event):
         await event.reply(
             "Reply to a message to select where to start purging from.")
         return
-    messages = []
     message_id = reply_msg.id
     delete_to = event.message.id
 
-    messages.append(event.reply_to_msg_id)
+    messages = [event.reply_to_msg_id]
     for msg_id in range(message_id, delete_to + 1):
         messages.append(msg_id)
         if len(messages) == 100:
@@ -99,9 +98,7 @@ async def purge_messages(event):
     text = f"Purged Successfully in {time_:0.2f} Second(s)"
     prmsg = await event.respond(text, parse_mode='markdown')
 
-    cleartime = get_clearcmd(event.chat_id, "purge")
-
-    if cleartime:
+    if cleartime := get_clearcmd(event.chat_id, "purge"):
         await sleep(cleartime.time)
         await prmsg.delete()
 
@@ -128,10 +125,6 @@ async def delete_messages(event):
         return
 
     message = await event.get_reply_message()
-    # elif event.chat.admin_rights:
-    #     status = event.chat.admin_rights.delete_messages
-    #     return status
-                # if user_id == user.id:# and user_id.ChatAdminRights(delete_messages=True):
     if not message:
         await event.reply("Whadya want to delete?")
         return
@@ -152,8 +145,7 @@ async def delete_messages(event):
     try:
         await event.client.delete_messages(chat, event.message)
     except MessageDeleteForbiddenError:
-        print("error in deleting message {} in {}".format(event.message.id, event.chat.id))
-        pass
+        print(f"error in deleting message {event.message.id} in {event.chat.id}")
 
 
 
@@ -187,7 +179,7 @@ async def purgefrom(update: Update, context: CallbackContext):
 
 async def purgeto_messages(event):
     start = time.perf_counter()
-      
+
     if event.from_id is None:
         return
 
@@ -206,17 +198,14 @@ async def purgeto_messages(event):
         await event.reply("Reply to a message to select where to start purging from.")
         return
 
-    messages = []
-
     x = sql.show_purgefrom(event.chat_id)
     for i in x:
         with contextlib.suppress(Exception):
             message_id = int(i.message_from)
-            message_from_ids = []
-            message_from_ids.append(int(i.message_from))
+            message_from_ids = [int(i.message_from)]
             for message_from in message_from_ids:
                 sql.clear_purgefrom(Update.effective_message.chat_id, message_from)
-    messages.append(message_id)
+    messages = [message_id]
     delete_to = reply_msg.id
 
     for msg_id in range(message_id, delete_to + 1):

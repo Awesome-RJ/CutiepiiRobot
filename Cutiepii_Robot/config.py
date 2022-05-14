@@ -28,8 +28,7 @@ import os
 
 
 def get_user_list(config, key):
-    with open('{}/Cutiepii_Robot/{}'.format(os.getcwd(), config),
-              'r') as json_file:
+    with open(f'{os.getcwd()}/Cutiepii_Robot/{config}', 'r') as json_file:
         return json.load(json_file)[key]
 
 

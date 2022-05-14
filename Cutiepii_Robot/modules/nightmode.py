@@ -99,7 +99,7 @@ async def profanity(event):
     if event.is_private:
         return
     input = event.pattern_match.group(2)
-    if not event.sender_id == OWNER_ID:
+    if event.sender_id != OWNER_ID:
         if not await is_register_admin(event.input_chat, event.sender_id):
            await event.reply("Only admins can execute this command!")
            return
@@ -136,7 +136,7 @@ async def profanity(event):
                 return
         rmnightmode(str(event.chat_id))
         await event.reply("NightMode Disabled!")
-    if not "off" in input and not "on" in input:
+    if "off" not in input and "on" not in input:
         await event.reply("Please Specify On or Off!")
         return
 

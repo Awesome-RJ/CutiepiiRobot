@@ -206,10 +206,11 @@ async def executor(client, message):
         )
         await message.reply_document(
             document=filename,
-            caption=f"**INPUT:**\n`{cmd[0:980]}`\n\n**OUTPUT:**\n`Attached Document`",
+            caption=f"**INPUT:**\n`{cmd[:980]}`\n\n**OUTPUT:**\n`Attached Document`",
             quote=False,
             reply_markup=keyboard,
         )
+
         await message.delete()
         os.remove(filename)
     else:

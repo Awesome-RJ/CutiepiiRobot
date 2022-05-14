@@ -69,9 +69,7 @@ async def list_handlers(update, context):
     all_handlers = sql.get_chat_triggers(chat_id)
 
     if not all_handlers:
-        send_message(
-            update.effective_message, "No filters saved in {}!".format(chat_name)
-        )
+        send_message(update.effective_message, f"No filters saved in {chat_name}!")
         return
 
     for keyword in all_handlers:
@@ -214,16 +212,15 @@ async def filters(update, context) -> None:  # sourcery no-metrics
     if add is True:
         send_message(
             update.effective_message,
-            "Saved filter '{}' in *{}*!".format(keyword, chat_name),
+            f"Saved filter '{keyword}' in *{chat_name}*!",
             parse_mode=telegram.ParseMode.MARKDOWN,
         )
-        logmsg = (
-        f"<b>{escape(chat.title or chat.id)}:</b>\n"
+
+        return f"<b>{escape(chat.title or chat.id)}:</b>\n"
         f"#ADDFILTER\n"
         f"<b>Admin:</b> {mention_html(user.id, escape(user.first_name))}\n"
         f"<b>Note:</b> {keyword}"
-        )
-        return logmsg
+
     raise CUTIEPII_PTBHandlerStop
 
 
@@ -260,9 +257,10 @@ async def stop_filter(update, context) -> str:
             sql.remove_filter(chat_id, args[1])
             send_message(
                 update.effective_message,
-                "Okay, I'll stop replying to that filter in *{}*.".format(chat_name),
+                f"Okay, I'll stop replying to that filter in *{chat_name}*.",
                 parse_mode=telegram.ParseMode.MARKDOWN,
             )
+
             logmsg = (
                     f"<b>{escape(chat.title or chat.id)}:</b>\n"
                     f"#STOPFILTER\n"
@@ -506,7 +504,7 @@ async def addnew_filter(update, chat_id, keyword, text, file_type, file_id, butt
 
 
 def __stats__():
-    return "➛ {} filters, across {} chats.".format(sql.num_filters(), sql.num_chats())
+    return f"➛ {sql.num_filters()} filters, across {sql.num_chats()} chats."
 
 
 def __import_data__(chat_id, data):
@@ -522,7 +520,7 @@ def __migrate__(old_chat_id, new_chat_id):
 
 def __chat_settings__(chat_id, _):
     cust_filters = sql.get_chat_triggers(chat_id)
-    return "There are `{}` custom filters here.".format(len(cust_filters))
+    return f"There are `{len(cust_filters)}` custom filters here."
 
 __help__ = """
 ➛ /filters*:* List all active filters saved in the chat.

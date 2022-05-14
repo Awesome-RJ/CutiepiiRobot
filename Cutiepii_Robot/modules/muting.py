@@ -92,8 +92,6 @@ async def check_user(user_id: int, bot: Bot, update: Update) -> Optional[str]:
     if (await is_user_admin(update, user_id, member)) and user_id not in DEV_USERS:
         if user_id == OWNER_ID:
             return "I'd never ban my owner."
-        elif user_id in DEV_USERS:
-            return "I can't act against our own."
         elif user_id in SUDO_USERS:
             return "My sudos are ban immune"
         elif user_id in SUPPORT_USERS:
@@ -150,11 +148,12 @@ async def mute(update: Update, context: CallbackContext) -> str:
             [
                 [
                     InlineKeyboardButton(
-                        "[► 🔊 Unmute ◄]", callback_data="cb_unmute({})".format(user_id)
+                        "[► 🔊 Unmute ◄]", callback_data=f"cb_unmute({user_id})"
                     )
                 ]
             ]
         )
+
 
         await context.bot.send_message(
             chat.id,
@@ -162,7 +161,7 @@ async def mute(update: Update, context: CallbackContext) -> str:
             reply_markup=keyboard,
             parse_mode=ParseMode.HTML
             )
-         
+
 
 
         return log
@@ -391,13 +390,12 @@ async def temp_nomedia(update: Update, context: CallbackContext) -> str:
     args = context.args
 
     conn = await connected(bot, chat, chat, user.id)
-    if not conn is False:
+    if conn is not False:
         chatD = await CUTIEPII_PTB.bot.getChat(conn)
+    elif chat.type == "private":
+        sys.exit(1)
     else:
-        if chat.type == "private":
-            sys.exit(1)
-        else:
-            chatD = chat
+        chatD = chat
 
     user_id, reason = await extract_user_and_text(message, args)
 
@@ -408,12 +406,11 @@ async def temp_nomedia(update: Update, context: CallbackContext) -> str:
     try:
         member = chat.get_member(user_id)
     except BadRequest as excp:
-        if excp.message == "User not found":
-            await message.reply_text(tld(chat.id, "I can't seem to find this user"))
-            return ""
-        else:
+        if excp.message != "User not found":
             raise
 
+        await message.reply_text(tld(chat.id, "I can't seem to find this user"))
+        return ""
     if (await is_user_admin(update, user_id, member)):
         await message.reply_text(tld(chat.id, "I really wish I could restrict admins..."))
         return ""
@@ -429,11 +426,7 @@ async def temp_nomedia(update: Update, context: CallbackContext) -> str:
     split_reason = reason.split(None, 1)
 
     time_val = split_reason[0].lower()
-    if len(split_reason) > 1:
-        reason = split_reason[1]
-    else:
-        reason = ""
-
+    reason = split_reason[1] if len(split_reason) > 1 else ""
     mutetime = await extract_time(message, time_val)
 
     if not mutetime:
@@ -483,13 +476,12 @@ async def media(update: Update, context: CallbackContext) -> str:
     args = context.args
 
     conn = await connected(bot, chat, chat, user.id)
-    if not conn is False:
+    if conn is not False:
         chatD = await CUTIEPII_PTB.bot.getChat(conn)
+    elif chat.type == "private":
+        sys.exit(1)
     else:
-        if chat.type == "private":
-            sys.exit(1)
-        else:
-            chatD = chat
+        chatD = chat
 
     user_id = extract_user(message, args)
     if not user_id:
@@ -498,26 +490,25 @@ async def media(update: Update, context: CallbackContext) -> str:
 
     member = chatD.get_member(int(user_id))
 
-    if member.status != 'kicked' and member.status != 'left':
-        if member.can_send_messages and member.can_send_media_messages \
-                and member.can_send_other_messages and member.can_add_web_page_previews:
-            await message.reply_text(tld(chat.id, "This user already has the rights to send anything in {}.").format(chatD.title))
-        else:
-            await context.bot.restrict_chat_member(chatD.id, int(user_id), NOMEDIA_PERMISSIONS)
-            keyboard = []
-            reply = tld(chat.id, "Yep, {} can send media again in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
-            await message.reply_text(reply,  parse_mode=ParseMode.HTML)
-            return "<b>{}:</b>" \
-                   "\n#UNRESTRICTED" \
-                   "\n<b>➛ Admin:</b> {}" \
-                   "\n<b>➛ User:</b> {}" \
-                   "\n<b>➛ ID:</b> <code>{}</code>".format(html.escape(chatD.title),
-                                                           mention_html(user.id, user.first_name),
-                                                           mention_html(member.user.id, member.user.first_name), user_id)
-    else:
+    if member.status in ['kicked', 'left']:
         await message.reply_text(tld(chat.id, "This user isn't even in the chat, unrestricting them won't make them send anything than they "
                            "already do!"))
 
+    elif member.can_send_messages and member.can_send_media_messages \
+                and member.can_send_other_messages and member.can_add_web_page_previews:
+        await message.reply_text(tld(chat.id, "This user already has the rights to send anything in {}.").format(chatD.title))
+    else:
+        await context.bot.restrict_chat_member(chatD.id, int(user_id), NOMEDIA_PERMISSIONS)
+        keyboard = []
+        reply = tld(chat.id, "Yep, {} can send media again in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
+        await message.reply_text(reply,  parse_mode=ParseMode.HTML)
+        return "<b>{}:</b>" \
+               "\n#UNRESTRICTED" \
+               "\n<b>➛ Admin:</b> {}" \
+               "\n<b>➛ User:</b> {}" \
+               "\n<b>➛ ID:</b> <code>{}</code>".format(html.escape(chatD.title),
+                                                       mention_html(user.id, user.first_name),
+                                                       mention_html(member.user.id, member.user.first_name), user_id)
     return ""
 
 
@@ -533,13 +524,12 @@ async def nomedia(update: Update, context: CallbackContext) -> str:
     args = context.args
 
     conn = await connected(bot, chat, chat, user.id)
-    if not conn is False:
+    if conn is not False:
         chatD = await CUTIEPII_PTB.bot.getChat(conn)
+    elif chat.type == "private":
+        sys.exit(1)
     else:
-        if chat.type == "private":
-            sys.exit(1)
-        else:
-            chatD = chat
+        chatD = chat
 
     user_id = extract_user(message, args)
     if not user_id:
@@ -550,9 +540,7 @@ async def nomedia(update: Update, context: CallbackContext) -> str:
         await message.reply_text(tld(chat.id, "I'm not restricting myself!"))
         return ""
 
-    member = chatD.get_member(int(user_id))
-
-    if member:
+    if member := chatD.get_member(int(user_id)):
         if (await is_user_admin(update, user_id, member=member)):
             await message.reply_text(tld(chat.id, "Afraid I can't restrict admins!"))
 

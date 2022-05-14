@@ -136,7 +136,7 @@ async def character(update: Update, context: CallbackContext):
         about = re.sub(r"\\n", r"\n", about)
         about = re.sub(r"\r\n", r"", about)
         if len(about) > 4096:
-            about = about[:4000] + "..."
+            about = f"{about[:4000]}..."
         image = res.get("image_url")
         url = res.get("url")
         rep = f"<b>{name} ({kanji})</b>\n\n"
@@ -145,8 +145,8 @@ async def character(update: Update, context: CallbackContext):
         keyb = [
             [InlineKeyboardButton("More Information", url=url),
            InlineKeyboardButton("Add to favorite character", callback_data=f"xanime_fvrtchar={name}")]]
-        
-        
+
+
         await msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
         
         
