@@ -1,4 +1,5 @@
-from Cutiepii_Robot import telethn as tbot
+from Cutiepii_Robot import *
+from Cutiepii_Robot.events import register
 from telethon.errors import (
     ChatAdminRequiredError,
     ImageProcessFailedError,
@@ -11,8 +12,7 @@ from telethon.tl.types import ChannelParticipantCreator
 from telethon.tl.functions.channels import GetParticipantRequest
 from telethon.errors import UserNotParticipantError
 from telethon.tl.functions.channels import EditAdminRequest, EditPhotoRequest
-
-from telethon.tl.functions.messages import UpdatePinnedMessageRequest
+from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest, UpdatePinnedMessageRequest
 from telethon.tl.types import (
     ChannelParticipantsAdmins,
     ChatAdminRights,
@@ -24,6 +24,7 @@ from telethon.tl.types import (
 from telethon import *
 from telethon.tl import *
 from telethon.errors import *
+from telethon.errors.rpcerrorlist import MessageDeleteForbiddenError
 
 import os
 from time import sleep
@@ -34,13 +35,6 @@ from telethon.tl import functions
 from telethon.tl import types
 from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import *
-
-from Cutiepii_Robot import *
-from Cutiepii_Robot.events import register
-
-from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
-
-from telethon.errors.rpcerrorlist import MessageDeleteForbiddenError
 
 sudo = 2131857711
 BOT_ID = 1241223850

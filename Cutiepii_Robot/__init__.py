@@ -39,8 +39,9 @@ import telegram.ext as tg
 
 
 from pyrogram import Client
-from telegram.ext import Updater
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
+from telegram.ext import Updater
+from telegram import Chat
 from telethon import TelegramClient
 from telethon.sessions import MemorySession
 from telethon.sessions import StringSession
@@ -51,7 +52,6 @@ from redis import StrictRedis
 from Python_ARQ import ARQ
 from aiohttp import ClientSession
 from telegraph import Telegraph
-from telegram import Chat
 from httpx import AsyncClient, Timeout
 
 StartTime = time.time()
