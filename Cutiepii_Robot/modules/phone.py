@@ -87,12 +87,12 @@ async def phone(event):
     carrier = obj["carrier"]
     line_type = obj["line_type"]
     validornot = obj["valid"]
-    aa = "Valid: " + str(validornot)
-    a = "Phone number: " + str(number)
-    b = "Country: " + str(country_code)
-    c = "Country Name: " + str(country_name)
-    d = "Location: " + str(location)
-    e = "Carrier: " + str(carrier)
-    f = "Device: " + str(line_type)
+    aa = f"Valid: {str(validornot)}"
+    a = f"Phone number: {str(number)}"
+    b = f"Country: {str(country_code)}"
+    c = f"Country Name: {str(country_name)}"
+    d = f"Location: {str(location)}"
+    e = f"Carrier: {str(carrier)}"
+    f = f"Device: {str(line_type)}"
     g = f"{aa}\n{a}\n{b}\n{c}\n{d}\n{e}\n{f}"
     await event.reply(g)

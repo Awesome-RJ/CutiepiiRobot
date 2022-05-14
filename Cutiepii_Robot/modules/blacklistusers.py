@@ -152,8 +152,10 @@ async def bl_users(update: Update, context: CallbackContext):
         else:
             users.append(f"➛ {mention_html(user.id, html.escape(user.first_name))}")
 
-    message = "<b>Blacklisted Users</b>\n"
-    message += "\n".join(users) if users else "Noone is being ignored as of yet."
+    message = "<b>Blacklisted Users</b>\n" + (
+        "\n".join(users) if users else "Noone is being ignored as of yet."
+    )
+
     await message.reply_text(message, parse_mode=ParseMode.HTML)
 
 

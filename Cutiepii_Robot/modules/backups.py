@@ -105,9 +105,8 @@ async def import_data(update: Update, context: CallbackContext):
         try:
             if data.get(str(chat.id)) is None:
                 if conn:
-                    text = "Backup comes from another chat, I can't return another chat to chat *{}*".format(
-                        chat_name,
-                    )
+                    text = f"Backup comes from another chat, I can't return another chat to chat *{chat_name}*"
+
                 else:
                     text = "Backup comes from another chat, I can't return another chat to this chat"
                 return await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN)
@@ -145,7 +144,7 @@ async def import_data(update: Update, context: CallbackContext):
         # NOTE: consider default permissions stuff?
         if conn:
 
-            text = "Backup fully restored on *{}*.".format(chat_name)
+            text = f"Backup fully restored on *{chat_name}*."
         else:
             text = "Backup fully restored"
         await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN)

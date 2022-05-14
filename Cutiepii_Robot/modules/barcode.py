@@ -87,7 +87,7 @@ async def _(event):
         return
     end = datetime.now()
     ms = (end - start).seconds
-    await event.reply("Created BarCode in {} seconds".format(ms))
+    await event.reply(f"Created BarCode in {ms} seconds")
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")

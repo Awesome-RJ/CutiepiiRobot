@@ -132,7 +132,7 @@ async def downvote(_, message):
     )
 
 
-@pgram.on_message(filters.command("karma", f"karma@Cutiepii_Robot") & filters.group)
+@pgram.on_message(filters.command("karma", "karma@Cutiepii_Robot") & filters.group)
 @capture_err
 async def command_karma(_, message):
     chat_id = message.chat.id

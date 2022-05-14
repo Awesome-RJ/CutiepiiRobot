@@ -57,7 +57,7 @@ async def leave_cb(update: Update, context: CallbackContext):
         return
 
     match = re.match(r"leavechat_cb_\((.+?)\)", callback.data)
-    chat = int(match.group(1))
+    chat = int(match[1])
     await bot.leave_chat(chat_id=chat)
     callback.answer(text="Left chat")
 
@@ -131,7 +131,7 @@ async def pip_install(update: Update, context: CallbackContext):
         await update.effective_message.reply_text("Enter a package name.")
         return
     if len(args) >= 1:
-        cmd = "py -m pip install {}".format(' '.join(args))
+        cmd = f"py -m pip install {' '.join(args)}"
         process = subprocess.Popen(
             cmd.split(" "), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
         )

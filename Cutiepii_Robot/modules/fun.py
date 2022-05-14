@@ -240,7 +240,7 @@ earth_ani = [
             "🌏"
 ]
 
-@pgram.on_message(cutiepii_pyro.command("meme", f"meme@Cutiepii_Robot"))
+@pgram.on_message(cutiepii_pyro.command("meme", "meme@Cutiepii_Robot"))
 async def meme(_,message):
 	r = requests.get('https://nksamamemeapi.pythonanywhere.com').json()
 	pic = r['image']
@@ -248,7 +248,7 @@ async def meme(_,message):
 	pgram.send_photo(message.chat.id , pic , caption=title)
 
 
-@pgram.on_message(cutiepii_pyro.command("hentaimeme", "hmeme", f"hmeme@Cutiepii_Robot"))
+@pgram.on_message(cutiepii_pyro.command("hentaimeme", "hmeme", "hmeme@Cutiepii_Robot"))
 async def hmeme(_,message):
 	r = requests.get('https://nksamamemeapi.pythonanywhere.com/get/hentaimemes').json()
 	pic = r['image']
@@ -296,63 +296,63 @@ async def sanitize(update: Update, context: CallbackContext):
 
 @cutiepii_cmd(command='slap')
 async def slap(update: Update, context: CallbackContext):
-    bot: telegram.Bot = context.bot
-    args = context.args
-    message = update.effective_message
-    chat = update.effective_chat
+	bot: telegram.Bot = context.bot
+	args = context.args
+	message = update.effective_message
+	chat = update.effective_chat
 
-    reply_text = (
-        message.reply_to_message.reply_text
-        if message.reply_to_message
-        else message.reply_text
-    )
+	reply_text = (
+	    message.reply_to_message.reply_text
+	    if message.reply_to_message
+	    else message.reply_text
+	)
 
-    curr_user = html.escape(message.from_user.first_name) if not message.sender_chat else html.escape(
-        message.sender_chat.title)
-    user_id = extract_user(message, args)
+	curr_user = (html.escape(message.sender_chat.title) if message.sender_chat
+	             else html.escape(message.from_user.first_name))
+	user_id = extract_user(message, args)
 
-    if user_id == bot.id:
-        temp = random.choice(fun_strings.SLAP_CUTIEPII_TEMPLATES)
+	if user_id == bot.id:
+	    temp = random.choice(fun_strings.SLAP_CUTIEPII_TEMPLATES)
 
-        if isinstance(temp, list):
-            if temp[2] == "tmute":
-                if (await is_user_admin(update, message.from_user.id)):
-                    reply_text(temp[1])
-                    return
+	    if isinstance(temp, list):
+	        if temp[2] == "tmute":
+	            if (await is_user_admin(update, message.from_user.id)):
+	                reply_text(temp[1])
+	                return
 
-                mutetime = int(time.time() + 60)
-                await bot.restrict_chat_member(
-                    chat.id,
-                    message.from_user.id,
-                    until_date=mutetime,
-                    permissions=ChatPermissions(can_send_messages=False),
-                )
-            reply_text(temp[0])
-        else:
-            reply_text(temp)
-        return
+	            mutetime = int(time.time() + 60)
+	            await bot.restrict_chat_member(
+	                chat.id,
+	                message.from_user.id,
+	                until_date=mutetime,
+	                permissions=ChatPermissions(can_send_messages=False),
+	            )
+	        reply_text(temp[0])
+	    else:
+	        reply_text(temp)
+	    return
 
-    if user_id:
+	if user_id:
 
-        slapped_user = await bot.get_chat(user_id)
-        user1 = curr_user
-        user2 = html.escape(slapped_user.first_name if slapped_user.first_name else slapped_user.title)
+		slapped_user = await bot.get_chat(user_id)
+		user1 = curr_user
+		user2 = html.escape(slapped_user.first_name or slapped_user.title)
 
-    else:
-        user1 = bot.first_name
-        user2 = curr_user
+	else:
+		user1 = bot.first_name
+		user2 = curr_user
 
-    temp = random.choice(fun_strings.SLAP_TEMPLATES)
-    item = random.choice(fun_strings.ITEMS)
-    hit = random.choice(fun_strings.HIT)
-    throw = random.choice(fun_strings.THROW)
+	temp = random.choice(fun_strings.SLAP_TEMPLATES)
+	item = random.choice(fun_strings.ITEMS)
+	hit = random.choice(fun_strings.HIT)
+	throw = random.choice(fun_strings.THROW)
 
-    if update.effective_user.id == 1096215023:
-        temp = "@NeoTheKitty scratches {user2}"
+	if update.effective_user.id == 1096215023:
+	    temp = "@NeoTheKitty scratches {user2}"
 
-    reply = temp.format(user1=user1, user2=user2, item=item, hits=hit, throws=throw)
+	reply = temp.format(user1=user1, user2=user2, item=item, hits=hit, throws=throw)
 
-    reply_text(reply, parse_mode=ParseMode.HTML)
+	reply_text(reply, parse_mode=ParseMode.HTML)
 
 @cutiepii_cmd(command='hug')
 async def hug(update: Update, context: CallbackContext):
@@ -386,8 +386,8 @@ async def shout(update: Update, context: CallbackContext):
 	args = context.args
 	text = " ".join(args)
 	result = [" ".join(list(text))]
-	for pos, symbol in enumerate(text[1:]):
-	    result.append(symbol + " " + "  " * pos + symbol)
+	result.extend(
+	    f"{symbol} " + "  " * pos + symbol for pos, symbol in enumerate(text[1:]))
 	result = list("\n".join(result))
 	result[0] = text[0]
 	result = "".join(result)
@@ -565,30 +565,28 @@ async def gbun(update: Update, context: CallbackContext):
 
 @cutiepii_cmd(command='gbam')
 async def gbam(update: Update, context: CallbackContext):
-    user = update.effective_user
-    chat = update.effective_chat
-    bot, args = context.bot, context.args
-    message = update.effective_message
+	user = update.effective_user
+	chat = update.effective_chat
+	bot, args = context.bot, context.args
+	message = update.effective_message
 
-    curr_user = html.escape(message.from_user.first_name)
-    user_id = extract_user(message, args)
+	curr_user = html.escape(message.from_user.first_name)
+	if user_id := extract_user(message, args):
+		gbam_user = await bot.get_chat(user_id)
+		user1 = curr_user
+		user2 = html.escape(gbam_user.first_name)
 
-    if user_id:
-        gbam_user = await bot.get_chat(user_id)
-        user1 = curr_user
-        user2 = html.escape(gbam_user.first_name)
+	else:
+		user1 = curr_user
+		user2 = bot.first_name
 
-    else:
-        user1 = curr_user
-        user2 = bot.first_name
-
-    if update.effective_message.chat.type == ChatType.PRIVATE:
-        return
-    if int(user.id) in SUDO_USERS or int(user.id) in SUPPORT_USERS:
-        gbamm = fun_strings.GBAM
-        reason = random.choice(fun_strings.GBAM_REASON)
-        gbam = gbamm.format(user1=user1, user2=user2, chatid=chat.id, reason=reason)
-        await context.bot.sendMessage(chat.id, gbam, parse_mode=ParseMode.HTML)
+	if update.effective_message.chat.type == ChatType.PRIVATE:
+	    return
+	if int(user.id) in SUDO_USERS or int(user.id) in SUPPORT_USERS:
+	    gbamm = fun_strings.GBAM
+	    reason = random.choice(fun_strings.GBAM_REASON)
+	    gbam = gbamm.format(user1=user1, user2=user2, chatid=chat.id, reason=reason)
+	    await context.bot.sendMessage(chat.id, gbam, parse_mode=ParseMode.HTML)
 
 
 @cutiepii_cmd(command='cuddle')
@@ -600,16 +598,14 @@ async def cuddle(update: Update, context: CallbackContext):
 	reply_to = message.reply_to_message or message
 
 	curr_user = html.escape(message.from_user.first_name)
-	user_id = extract_user(message, args)
-
-	if user_id:
-	    cuddled_user = await bot.get_chat(user_id)
-	    user1 = curr_user
-	    user2 = html.escape(cuddled_user.first_name)
+	if user_id := extract_user(message, args):
+		cuddled_user = await bot.get_chat(user_id)
+		user1 = curr_user
+		user2 = html.escape(cuddled_user.first_name)
 
 	else:
-	    user1 = bot.first_name
-	    user2 = curr_user
+		user1 = bot.first_name
+		user2 = curr_user
 
 	cuddle_type = random.choice(("Text", "Gif"))
 	if cuddle_type == "Gif":
@@ -639,16 +635,14 @@ async def lewd(update: Update, context: CallbackContext):
 	reply_to = message.reply_to_message or message
 
 	curr_user = html.escape(message.from_user.first_name)
-	user_id = extract_user(message, args)
-
-	if user_id:
-	    lewd_user = await bot.get_chat(user_id)
-	    user1 = curr_user
-	    user2 = html.escape(lewd_user.first_name)
+	if user_id := extract_user(message, args):
+		lewd_user = await bot.get_chat(user_id)
+		user1 = curr_user
+		user2 = html.escape(lewd_user.first_name)
 
 	else:
-	    user1 = bot.first_name
-	    user2 = curr_user
+		user1 = bot.first_name
+		user2 = curr_user
 
 	lewd_type = random.choice(("Text", "Gif", "Sticker"))
 	if lewd_type == "Gif":
@@ -680,16 +674,14 @@ async def romance(update: Update, context: CallbackContext):
 	reply_to = message.reply_to_message or message
 
 	curr_user = html.escape(message.from_user.first_name)
-	user_id = extract_user(message, args)
-
-	if user_id:
-	    romantic_user = await bot.get_chat(user_id)
-	    user1 = curr_user
-	    user2 = html.escape(romantic_user.first_name)
+	if user_id := extract_user(message, args):
+		romantic_user = await bot.get_chat(user_id)
+		user1 = curr_user
+		user2 = html.escape(romantic_user.first_name)
 
 	else:
-	    user1 = bot.first_name
-	    user2 = curr_user
+		user1 = bot.first_name
+		user2 = curr_user
 
 	romance_type = random.choice(("Text", "Gif", "Sticker"))
 	if romance_type == "Gif":
@@ -721,16 +713,14 @@ async def owo(update: Update, context: CallbackContext):
 	reply_to = message.reply_to_message or message
 
 	curr_user = html.escape(message.from_user.first_name)
-	user_id = extract_user(message, args)
-
-	if user_id:
-	    owo_user = await bot.get_chat(user_id)
-	    user1 = curr_user
-	    user2 = html.escape(owo_user.first_name)
+	if user_id := extract_user(message, args):
+		owo_user = await bot.get_chat(user_id)
+		user1 = curr_user
+		user2 = html.escape(owo_user.first_name)
 
 	else:
-	    user1 = bot.first_name
-	    user2 = curr_user
+		user1 = bot.first_name
+		user2 = curr_user
 
 	owo_type = random.choice(("Gif", "Sticker"))
 	if owo_type == "Gif":
@@ -757,16 +747,14 @@ async def uwu(update: Update, context: CallbackContext):
 	reply_to = message.reply_to_message or message
 
 	curr_user = html.escape(message.from_user.first_name)
-	user_id = extract_user(message, args)
-
-	if user_id:
-	    uwu_user = await bot.get_chat(user_id)
-	    user1 = curr_user
-	    user2 = html.escape(uwu_user.first_name)
+	if user_id := extract_user(message, args):
+		uwu_user = await bot.get_chat(user_id)
+		user1 = curr_user
+		user2 = html.escape(uwu_user.first_name)
 
 	else:
-	    user1 = bot.first_name
-	    user2 = curr_user
+		user1 = bot.first_name
+		user2 = curr_user
 
 	uwu_type = random.choice(("Gif", "Sticker"))
 	if uwu_type == "Gif":

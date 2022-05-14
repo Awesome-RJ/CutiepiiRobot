@@ -95,10 +95,10 @@ async def blacklist(update: Update, context: CallbackContext):
                 html.escape(chat_name)):
             send_message(
                 update.effective_message,
-                "No blacklisted words in <b>{}</b>!".format(
-                    html.escape(chat_name)),
+                f"No blacklisted words in <b>{html.escape(chat_name)}</b>!",
                 parse_mode=ParseMode.HTML,
             )
+
             return
         send_message(update.effective_message, text, parse_mode=ParseMode.HTML)
 
@@ -181,11 +181,10 @@ async def unblacklist(update: Update, context: CallbackContext):
             if successful:
                 send_message(
                     msg,
-                    "Removed <code>{}</code> from blacklist in <b>{}</b>!"
-                    .format(
-                        html.escape(to_unblacklist[0]), html.escape(chat_name)),
+                    f"Removed <code>{html.escape(to_unblacklist[0])}</code> from blacklist in <b>{html.escape(chat_name)}</b>!",
                     parse_mode=ParseMode.HTML,
                 )
+
             else:
                 send_message(msg,
                              "This is not a blacklist trigger!")
@@ -193,10 +192,10 @@ async def unblacklist(update: Update, context: CallbackContext):
         elif successful == len(to_unblacklist):
             send_message(
                 msg,
-                "Removed <code>{}</code> from blacklist in <b>{}</b>!".format(
-                    successful, html.escape(chat_name)),
+                f"Removed <code>{successful}</code> from blacklist in <b>{html.escape(chat_name)}</b>!",
                 parse_mode=ParseMode.HTML,
             )
+
 
         elif not successful:
             send_message(
@@ -210,11 +209,10 @@ async def unblacklist(update: Update, context: CallbackContext):
         else:
             send_message(
                 msg,
-                "Removed <code>{}</code> from blacklist. {} did not exist, "
-                "so were not removed.".format(successful,
-                                              len(to_unblacklist) - successful),
+                f"Removed <code>{successful}</code> from blacklist. {len(to_unblacklist) - successful} did not exist, so were not removed.",
                 parse_mode=ParseMode.HTML,
             )
+
     else:
         send_message(
             msg,
@@ -392,10 +390,11 @@ async def del_blacklist(update: Update, context: CallbackContext):
                     warn(
                         update.effective_user,
                         chat,
-                        ("Using blacklisted trigger: {}".format(trigger)),
+                        f"Using blacklisted trigger: {trigger}",
                         message,
                         update.effective_user,
                     )
+
                     return
                 elif getmode == 3:
                     await message.delete()
@@ -411,8 +410,7 @@ async def del_blacklist(update: Update, context: CallbackContext):
                     return
                 elif getmode == 4:
                     await message.delete()
-                    res = chat.unban_member(update.effective_user.id)
-                    if res:
+                    if res := chat.unban_member(update.effective_user.id):
                         await bot.sendMessage(
                             chat.id,
                             f"Kicked {user.first_name} for using Blacklisted word: {trigger}!",
@@ -468,12 +466,11 @@ def __migrate__(old_chat_id, new_chat_id):
 
 def __chat_settings__(chat_id, user_id):
     blacklisted = sql.num_blacklist_chat_filters(chat_id)
-    return "There are {} blacklisted words.".format(blacklisted)
+    return f"There are {blacklisted} blacklisted words."
 
 
 def __stats__():
-    return "➛ {} blacklist triggers, across {} chats.".format(
-        sql.num_blacklist_filters(), sql.num_blacklist_filter_chats())
+    return f"➛ {sql.num_blacklist_filters()} blacklist triggers, across {sql.num_blacklist_filter_chats()} chats."
 
 __help__ = """
 Blacklists are used to stop certain triggers from being said in a group. Any time the trigger is mentioned, the message will immediately be deleted. A good combo is sometimes to pair this up with warn filters!

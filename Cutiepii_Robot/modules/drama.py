@@ -12,9 +12,7 @@ url = "https://mydramalist.com/"
     
 # Text Shorter
 def shorten(des: str = '', short: int = 500):
-    msg = des
-    if len(des) > int(short):
-        msg = des[0:int(short)]
+    msg = des[:short] if len(des) > short else des
     return escape(msg)
 
 # Drama
@@ -46,7 +44,7 @@ async def drama(update: Update, context: CallbackContext):
        if len(buttons) > 4:
            break
 
-    if len(buttons) < 1:
+    if not buttons:
         await message.reply_text("No Results Found!")
         return
 
@@ -67,10 +65,10 @@ async def drama_button(update: Update, context: CallbackContext):
     # Split data from query
     splitter = query.data.split()
     query_match = splitter[0]
-    user_id = splitter[1]
-    slug = splitter[2]
-
     if query_match == "drama-detail":
+        user_id = splitter[1]
+        slug = splitter[2]
+
         if int(query.from_user.id) != int(user_id):
             await query.answer("You Aren't Allowed!")
             return
@@ -122,10 +120,10 @@ async def casts_button(update: Update, context: CallbackContext):
     # Split data from query
     splitter = query.data.split()
     query_match = splitter[0]
-    user_id = splitter[1]
-    slug = splitter[2]
-
     if query_match == "drama-cast-detail":
+        user_id = splitter[1]
+        slug = splitter[2]
+
         if int(query.from_user.id) != int(user_id):
             await query.answer("You Aren't Allowed!")
             return

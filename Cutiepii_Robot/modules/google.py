@@ -136,17 +136,14 @@ async def _(event):
         geoloc = geolocator.geocode(location)
         longitude = geoloc.longitude
         latitude = geoloc.latitude
-        gm = "https://www.google.com/maps/search/{},{}".format(latitude, longitude)
+        gm = f"https://www.google.com/maps/search/{latitude},{longitude}"
         await telethn.send_file(
             event.chat_id,
             file=types.InputMediaGeoPoint(
                 types.InputGeoPoint(float(latitude), float(longitude))
             ),
         )
-        await event.reply(
-            "Open with: [Google Maps]({})".format(gm),
-            link_preview=False,
-        )
+        await event.reply(f"Open with: [Google Maps]({gm})", link_preview=False)
     except Exception as e:
         print(e)
         await event.reply("I can't find that")
@@ -316,7 +313,7 @@ async def apk(e):
             .findNext("div", "uzcko")
             .img["data-src"]
         )
-        app_details = "<a href=" + app_icon + "'>📲&#8203;</a>"
+        app_details = f"<a href={app_icon}" + "'>📲&#8203;</a>"
         app_details += f" <b>{app_name}</b>"
         app_details += (
             "\n\n<code>Developer :</code> <a href="
@@ -442,7 +439,7 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
     )
     os.remove(required_file_name)
     duration = (datetime.now() - start).seconds
-    await qrcode.reply("Created QRCode in {} seconds".format(duration))
+    await qrcode.reply(f"Created QRCode in {duration} seconds")
     await sleep(5)
 
 __help__ = """

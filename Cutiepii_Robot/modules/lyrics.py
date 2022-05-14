@@ -89,7 +89,7 @@ async def lyrics_func(_, message):
     await m.edit(f"**LYRICS_TOO_LONG:** [URL]({lyrics})")
 
 
-@pgram.on_message(filters.command(["glyrics", f"glyrics@Cutiepii_Robot"]))
+@pgram.on_message(filters.command(["glyrics", "glyrics@Cutiepii_Robot"]))
 async def lyrics(client, message):
 
     if r"-" not in message.text:

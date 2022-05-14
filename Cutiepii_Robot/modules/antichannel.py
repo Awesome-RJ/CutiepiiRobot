@@ -46,14 +46,16 @@ async def set_antichannel(update: Update, context: CallbackContext):
         s = args[0].lower()
         if s in ["yes", "on"]:
             enable_antichannel(chat.id)
-            await message.reply_html("Enabled antichannel in {}".format(html.escape(chat.title)))
+            await message.reply_html(f"Enabled antichannel in {html.escape(chat.title)}")
         elif s in ["off", "no"]:
             disable_antichannel(chat.id)
-            await message.reply_html("Disabled antichannel in {}".format(html.escape(chat.title)))
+            await message.reply_html(f"Disabled antichannel in {html.escape(chat.title)}")
         else:
-            await update.effective_message.reply_text("Unrecognized arguments {}".format(s))
+            await update.effective_message.reply_text(f"Unrecognized arguments {s}")
         return
-    await message.reply_html("Antichannel setting is currently {} in {}".format(antichannel_status(chat.id), html.escape(chat.title)))
+    await message.reply_html(
+        f"Antichannel setting is currently {antichannel_status(chat.id)} in {html.escape(chat.title)}"
+    )
 
 
 async def eliminate_channel(update: Update, context: CallbackContext):

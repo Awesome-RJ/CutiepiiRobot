@@ -85,7 +85,7 @@ async def paste_func(_, message):
             content = await f.read()
         os.remove(doc)
     link = await paste(content)
-    preview = link + "/preview.png"
+    preview = f"{link}/preview.png"
     button = InlineKeyboard(row_width=1)
     button.add(InlineKeyboardButton(text="Paste Link", url=link))
 

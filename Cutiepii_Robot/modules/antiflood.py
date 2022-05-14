@@ -275,15 +275,12 @@ async def flood(update: Update, context: CallbackContext):
             ) if conn else await msg.reply_text("I'm not enforcing any flood control here!")
     elif conn:
         text = await msg.reply_text(
-            "I'm currently restricting members after {} consecutive messages in {}.".format(
-                limit, chat_name,
-            ),
+            f"I'm currently restricting members after {limit} consecutive messages in {chat_name}."
         )
+
     else:
         text = await msg.reply_text(
-            "I'm currently restricting members after {} consecutive messages.".format(
-                limit,
-            ),
+            f"I'm currently restricting members after {limit} consecutive messages."
         )
 
 
@@ -351,16 +348,14 @@ async def set_flood_mode(update: Update, context: CallbackContext):
             return
         if conn:
             text = await msg.reply_text(
-                "Exceeding consecutive flood limit will result in {} in {}!".format(
-                    settypeflood, chat_name,
-                ),
+                f"Exceeding consecutive flood limit will result in {settypeflood} in {chat_name}!"
             )
+
         else:
             text = await msg.reply_text(
-                "Exceeding consecutive flood limit will result in {}!".format(
-                    settypeflood,
-                ),
+                f"Exceeding consecutive flood limit will result in {settypeflood}!"
             )
+
         return (
             "<b>{}:</b>\n"
             "<b>Admin:</b> {}\n"
@@ -384,16 +379,14 @@ async def set_flood_mode(update: Update, context: CallbackContext):
             settypeflood = f"tmute for {getvalue}"
         if conn:
             text = await msg.reply_text(
-                "Sending more messages than flood limit will result in {} in {}.".format(
-                    settypeflood, chat_name,
-                ),
+                f"Sending more messages than flood limit will result in {settypeflood} in {chat_name}."
             )
+
         else:
             text = await msg.reply_text(
-                "Sending more message than flood limit will result in {}.".format(
-                    settypeflood,
-                ),
+                f"Sending more message than flood limit will result in {settypeflood}."
             )
+
     return ""
 
 

@@ -38,8 +38,7 @@ async def addsudo(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     user_id = extract_user(message, args)
     user_member = await update.effective_chat.get_member(user_id)
-    reply = check_user_id(user_id, bot)
-    if reply:
+    if reply := check_user_id(user_id, bot):
         await message.reply_text(reply)
         return ""
     if user_id in SUDO_USERS:
@@ -56,8 +55,9 @@ async def addsudo(update: Update, context: CallbackContext) -> str:
     sql.set_superuser_role(user_id, "sudos")
     SUDO_USERS.append(user_id)
     await update.effective_message.reply_text(
-        "Successfully promoted {} to sudo!".format(
-            user_member.user.first_name))
+        f"Successfully promoted {user_member.user.first_name} to sudo!"
+    )
+
     return "<b>{}:</b>" \
            "\n#SUDO" \
            "\n<b>Admin:</b> {}" \
@@ -75,8 +75,7 @@ async def addsupport(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     user_id = extract_user(message, args)
     user_member = await update.effective_chat.get_member(user_id)
-    reply = check_user_id(user_id, bot)
-    if reply:
+    if reply := check_user_id(user_id, bot):
         await message.reply_text(reply)
         return ""
     if user_id in DEV_USERS:
@@ -100,8 +99,9 @@ async def addsupport(update: Update, context: CallbackContext) -> str:
     sql.set_superuser_role(user_id, "supports")
     SUPPORT_USERS.append(user_id)
     await update.effective_message.reply_text(
-        "Successfully promoted {} to support!".format(
-            user_member.user.first_name))
+        f"Successfully promoted {user_member.user.first_name} to support!"
+    )
+
     return "<b>{}:</b>" \
            "\n#SUPPORT" \
            "\n<b>Admin:</b> {}" \
@@ -119,8 +119,7 @@ async def addwhitelist(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     user_id = extract_user(message, args)
     user_member = await update.effective_chat.get_member(user_id)
-    reply = check_user_id(user_id, bot)
-    if reply:
+    if reply := check_user_id(user_id, bot):
         await message.reply_text(reply)
         return ""
     if user_id in DEV_USERS:
@@ -144,8 +143,9 @@ async def addwhitelist(update: Update, context: CallbackContext) -> str:
     sql.set_superuser_role(user_id, "whitelists")
     WHITELIST_USERS.append(user_id)
     await update.effective_message.reply_text(
-        "Successfully promoted {} to whitelist!".format(
-            user_member.user.first_name))
+        f"Successfully promoted {user_member.user.first_name} to whitelist!"
+    )
+
     return "<b>{}:</b>" \
            "\n#WHITELIST" \
            "\n<b>Admin:</b> {}" \
@@ -163,8 +163,7 @@ async def removesudo(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     user_id = extract_user(message, args)
     user_member = await update.effective_chat.get_member(user_id)
-    reply = check_user_id(user_id, bot)
-    if reply:
+    if reply := check_user_id(user_id, bot):
         await message.reply_text(reply)
         return ""
     if user_id in SUDO_USERS:
@@ -191,8 +190,7 @@ async def removesupport(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     user_id = extract_user(message, args)
     user_member = await update.effective_chat.get_member(user_id)
-    reply = check_user_id(user_id, bot)
-    if reply:
+    if reply := check_user_id(user_id, bot):
         await message.reply_text(reply)
         return ""
     if user_id in SUPPORT_USERS:
@@ -219,8 +217,7 @@ async def removewhitelist(update: Update, context: CallbackContext) -> str:
     user = update.effective_user
     user_id = extract_user(message, args)
     user_member = await update.effective_chat.get_member(user_id)
-    reply = check_user_id(user_id, bot)
-    if reply:
+    if reply := check_user_id(user_id, bot):
         await message.reply_text(reply)
         return ""
     if user_id in WHITELIST_USERS:
