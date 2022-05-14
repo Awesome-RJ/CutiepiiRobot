@@ -326,7 +326,7 @@ async def error_handler(_: Update, context: CallbackContext):
 
 
 # for test purposes
-async def error_callback(_, context: CallbackContext):
+async def error_callback(update: Update, context: CallbackContext):
     try:
         raise context.error
     except (BadRequest):
@@ -345,6 +345,7 @@ async def error_callback(_, context: CallbackContext):
         pass
         # handle all other telegram related errors
 
+@kigcallback(pattern=r"help_.")
 async def help_button(update: Update, context: CallbackContext):
     query = update.callback_query
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
@@ -405,7 +406,7 @@ async def help_button(update: Update, context: CallbackContext):
         # await query.message.delete()
 
 
-
+@cutiepii_callback(pattern=r"cutiepii_")
 async def cutiepii_callback_data(update: Update, context: CallbackContext):
     query = update.callback_query
     uptime = get_readable_time((time.time() - StartTime))
@@ -438,6 +439,7 @@ async def cutiepii_callback_data(update: Update, context: CallbackContext):
         )
 
 
+@cutiepii_cmd(command="help")
 @typing_action
 async def get_help(update: Update, context: CallbackContext):
     chat = update.effective_chat  # type: Optional[Chat]
@@ -688,29 +690,6 @@ async def migrate_chats(update: Update, _: CallbackContext):
     
       
 def main():
-    test_handler = DisableAbleCommandHandler("test", test)
-    start_handler = DisableAbleCommandHandler("start", start)
-
-    help_handler = DisableAbleCommandHandler("help", get_help)
-    help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_.*")
-
-    settings_handler = DisableAbleCommandHandler("settings", get_settings)
-    settings_callback_handler = CallbackQueryHandler(settings_button, pattern=r"stngs_")
-
-    data_callback_handler = CallbackQueryHandler(cutiepii_callback_data, pattern=r"cutiepii_")
-    donate_handler = DisableAbleCommandHandler("donate", donate)
-    migrate_handler = MessageHandler(filters.StatusUpdate.MIGRATE, migrate_chats)
-
-    # CUTIEPII_PTB.add_handler(test_handler)
-    CUTIEPII_PTB.add_handler(start_handler)
-    CUTIEPII_PTB.add_handler(help_handler)
-    CUTIEPII_PTB.add_handler(data_callback_handler)
-    CUTIEPII_PTB.add_handler(settings_handler)
-    CUTIEPII_PTB.add_handler(help_callback_handler)
-    CUTIEPII_PTB.add_handler(settings_callback_handler)
-    CUTIEPII_PTB.add_handler(migrate_handler)
-    CUTIEPII_PTB.add_handler(donate_handler)
-
     CUTIEPII_PTB.add_error_handler(error_callback)
 
     if WEBHOOK:
