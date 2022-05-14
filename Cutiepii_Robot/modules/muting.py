@@ -40,7 +40,6 @@ from telegram.ext import CallbackContext, CommandHandler, CallbackQueryHandler
 from telegram.helpers import mention_html
 
 from Cutiepii_Robot import (
-    WHITELIST_USERS, 
     DEV_USERS,
     SUDO_USERS,
     SUPPORT_USERS,

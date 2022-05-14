@@ -27,7 +27,6 @@ from telethon.errors import *
 
 import os
 from time import sleep
-from telethon import events
 from telethon.errors import FloodWaitError, ChatNotModifiedError
 from telethon.errors import UserAdminInvalidError
 from telethon.tl import functions

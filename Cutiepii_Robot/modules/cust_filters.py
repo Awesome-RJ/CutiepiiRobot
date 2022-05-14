@@ -20,8 +20,7 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import (
     split_quotes,
     button_markdown_parser,
     markdown_to_html,
-    escape_invalid_curly_brackets,
-)
+    )
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql import cust_filters_sql as sql
 from Cutiepii_Robot.modules.connection import connected

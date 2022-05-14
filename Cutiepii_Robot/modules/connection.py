@@ -36,7 +36,6 @@ import Cutiepii_Robot.modules.sql.connection_sql as sql
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, Bot
 from telegram.error import BadRequest, Forbidden
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
-from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 
 from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS, DEV_USERS

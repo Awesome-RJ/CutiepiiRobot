@@ -38,7 +38,6 @@ from bs4 import BeautifulSoup
 
 from telegram.error import BadRequest, TelegramError
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.error import BadRequest
 from telegram.constants import ParseMode
 from telegram.ext import CallbackContext
 
