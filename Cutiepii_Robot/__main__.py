@@ -55,19 +55,17 @@ from Cutiepii_Robot import (
     GROUP_START_IMG,
     CUTIEPII_PTB,
     StartTime,
-    telethn,
     pgram,
     ubot,
     )
 
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
-from Cutiepii_Robot.events import register
 from Cutiepii_Robot.modules import ALL_MODULES
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 from Cutiepii_Robot.modules.helper_funcs.misc import paginate_modules
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_msg, cutiepii_cmd, cutiepii_callback
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.error import (
@@ -79,9 +77,7 @@ from telegram.error import (
 )
 from telegram.ext import (
     CallbackContext,
-    CallbackQueryHandler,
     filters,
-    MessageHandler,
 )
 
 from telegram.helpers import escape_markdown
@@ -699,33 +695,6 @@ def main():
     else:
         CUTIEPII_PTB.run_polling(drop_pending_updates=True, stop_signals=None)
         LOGGER.info(f"Cutiepii Robot started, Using long polling. | BOT: [@{CUTIEPII_PTB.bot.username}]")
-#    if len(argv) in {1, 3, 4}:
-#        telethn.run_until_disconnected()
-#    else:
-#        telethn.disconnect()
-
-"""
-    if WEBHOOK:
-        LOGGER.info("Using webhooks.")
-        CUTIEPII_PTB.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
-
-        if CERT_PATH:
-            CUTIEPII_PTB.bot.set_webhook(url=URL + TOKEN, certificate=open(CERT_PATH, "rb"))
-        else:
-            CUTIEPII_PTB.bot.set_webhook(url=URL + TOKEN)
-
-    else:
-        LOGGER.info(f"Cutiepii started, Using long polling. | BOT: [@{CUTIEPII_PTB.bot.username}]")
-    else:
-        CUTIEPII_PTB.run_polling(drop_pending_updates=True, stop_signals=None)
-#        CUTIEPII_PTB.start_polling(timeout=15, read_latency=4, drop_pending_updates=True, allowed_updates = allowed_updates)
-    if len(argv) in {1, 3, 4}:
-        telethn.run_until_disconnected()
-
-    else:
-        telethn.disconnect()
-    CUTIEPII_PTB.idle()
-"""
 
 try:
     ubot.start()
