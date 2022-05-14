@@ -668,7 +668,8 @@ async def donate(update: Update, context: CallbackContext):
             )
 
 
-def migrate_chats(update: Update, _: CallbackContext):
+@cutiepii_msg(filters.StatusUpdate.MIGRATE)
+async def migrate_chats(update: Update, _: CallbackContext):
     msg = update.effective_message  # type: Optional[Message]
     if msg.migrate_to_chat_id:
         old_chat = update.effective_chat.id
@@ -683,10 +684,9 @@ def migrate_chats(update: Update, _: CallbackContext):
     for mod in MIGRATEABLE:
         with contextlib.suppress(KeyError, AttributeError):
             mod.__migrate__(old_chat, new_chat)
-
-
     LOGGER.info("Successfully migrated!")
     
+      
 def main():
     test_handler = DisableAbleCommandHandler("test", test)
     start_handler = DisableAbleCommandHandler("start", start)
