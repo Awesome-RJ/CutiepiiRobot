@@ -629,7 +629,7 @@ async def get_settings(update: Update, context: CallbackContext):
     else:
         text = "Click here to check your settings."
 
-
+@cutiepii_cmd(command="donate")
 async def donate(update: Update, context: CallbackContext):
     user = update.effective_message.from_user
     chat = update.effective_chat  # type: Optional[Chat]
