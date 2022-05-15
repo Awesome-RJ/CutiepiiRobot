@@ -795,7 +795,7 @@ async def fed_ban(update, context):  # sourcery no-metrics
                             except Forbidden:
                                 targetfed_id = sql.get_fed_id(fedschat)
                                 sql.unsubs_fed(fed_id, targetfed_id)
-                                log.info(
+                                LOGGER.info(
                                     "Chat {} has unsub fed {} because I was kicked".format(
                                         fedschat, info["fname"]
                                     )
@@ -950,7 +950,7 @@ async def fed_ban(update, context):  # sourcery no-metrics
                             except Forbidden:
                                 targetfed_id = sql.get_fed_id(fedschat)
                                 sql.unsubs_fed(fed_id, targetfed_id)
-                                log.info(
+                                LOGGER.info(
                                     "Chat {} has unsub fed {} because I was kicked".format(
                                         fedschat, info["fname"]
                                     )
@@ -1121,7 +1121,7 @@ async def unfban(update, context):
                         await CUTIEPII_PTB.bot.getChat(fedschat)
                     except Forbidden:
                         sql.chat_leave_fed(fedschat)
-                        log.info(
+                                LOGGER.info(
                             "Chat {} has leave fed {} because I was kicked".format(
                                 fedschat, info["fname"]
                             )
