@@ -134,7 +134,7 @@ async def webss(url):
     screenshot = await fetch(f"https://patheticprogrammers.cf/ss?site={url}")
     end_time = time()
     # m = await app.send_photo(LOG_GROUP_ID, photo=screenshot["url"])
-    await m.delete()
+    await screenshot.delete()
     a = []
     pic = InlineQueryResultPhoto(
         photo_url=screenshot["url"],
