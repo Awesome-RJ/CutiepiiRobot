@@ -30,7 +30,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import glob
-import io
 import os
 import re
 import urllib
@@ -38,22 +37,14 @@ import urllib.request
 import bs4
 import requests
 from asyncio import sleep
-
-from search_engine_parser import GoogleSearch
 from datetime import datetime
 from requests import get, post
 from bs4 import BeautifulSoup
 from bing_image_downloader import downloader
-from PIL import Image
 from geopy.geocoders import Nominatim
-from urllib.parse import urlencode
-from urllib.error import URLError, HTTPError
 from telethon.tl import functions, types
 from telethon import *
 from telethon.tl.types import *
-from telethon.errors.rpcerrorlist import MessageDeleteForbiddenError
-from telethon.tl.custom import Message
-from gpytranslate import SyncTranslator
 
 
 from Cutiepii_Robot import telethn, CUTIEPII_PTB

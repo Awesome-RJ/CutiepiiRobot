@@ -33,7 +33,7 @@ import asyncio
 from typing import Union
 
 from future.utils import string_types
-from telegram import Update, Chat
+from telegram import Update
 from telegram.constants import ParseMode
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.helpers import escape_markdown

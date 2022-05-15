@@ -29,7 +29,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 import html
-from telegram.error import BadRequest, TelegramError, Forbidden
+from telegram.error import TelegramError
 from telegram import Update
 from telegram.ext import CallbackContext
 from telegram.ext import filters

@@ -1,4 +1,3 @@
-import html
 
 from typing import Optional, List
 
@@ -6,8 +5,7 @@ import Cutiepii_Robot.modules.helper_funcs.git_api as api
 import Cutiepii_Robot.modules.sql.github_sql as sql
 
 from Cutiepii_Robot.modules.sql.clear_cmd_sql import get_clearcmd
-from Cutiepii_Robot import CUTIEPII_PTB, OWNER_ID, GBAN_LOGS, SUDO_USERS
-from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
+from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.misc import delete
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler

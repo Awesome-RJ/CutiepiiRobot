@@ -37,12 +37,10 @@ import asyncio
 from Cutiepii_Robot import CUTIEPII_PTB, DEV_USERS, telethn, OWNER_ID
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.error import BadRequest, TelegramError, Forbidden
+from telegram.error import TelegramError
 from telegram.ext import CallbackContext, CommandHandler
 from telegram.constants import ParseMode
 from telegram.ext import CallbackQueryHandler
-
-from contextlib import suppress
 from statistics import mean
 from time import monotonic as time
 from time import sleep

@@ -32,9 +32,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import random
 import requests
 import time
-
-import sys
-import traceback
 import psutil
 import platform
 import sqlalchemy

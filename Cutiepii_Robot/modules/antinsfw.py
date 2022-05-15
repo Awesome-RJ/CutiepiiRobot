@@ -31,9 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from os import remove
 from pyrogram import filters
-from pyrogram.types import Message
 
-from Cutiepii_Robot import SUDO_USERS, arq, pgram, CUTIEPII_PTB
+from Cutiepii_Robot import SUDO_USERS, arq, pgram
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.permissions import adminsOnly
 from Cutiepii_Robot.modules.mongo.nsfw_mongo import is_nsfw_on, nsfw_off, nsfw_on

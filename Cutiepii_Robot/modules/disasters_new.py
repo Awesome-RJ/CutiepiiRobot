@@ -1,6 +1,4 @@
 import html
-import json
-import os
 from typing import Optional
 
 from telegram import Update

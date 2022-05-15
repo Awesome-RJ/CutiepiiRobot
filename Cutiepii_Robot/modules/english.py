@@ -31,18 +31,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import json
 import requests
-import os
 import urllib.request
 
 from telethon import *
-from telethon.tl import functions, types
 
 from typing import List
 from typing import Optional
 from PyDictionary import PyDictionary
-from telegram import Message
-
-from Cutiepii_Robot import telethn
 from Cutiepii_Robot.events import register
 
 

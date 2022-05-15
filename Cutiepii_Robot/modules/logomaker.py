@@ -35,7 +35,7 @@ import requests
 import random
 import glob
 
-from Cutiepii_Robot import OWNER_ID, SUPPORT_CHAT, CUTIEPII_PTB, telethn
+from Cutiepii_Robot import OWNER_ID, SUPPORT_CHAT, telethn
 from Cutiepii_Robot.events import register
 from PIL import Image, ImageDraw, ImageFont
 

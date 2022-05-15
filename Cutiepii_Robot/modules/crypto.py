@@ -2,9 +2,7 @@ import requests
 
 from Cutiepii_Robot import pgram
 from Cutiepii_Robot.utils.errors import capture_err
-from pykeyboard import InlineKeyboard
 from pyrogram import filters
-from pyrogram.types import InlineKeyboardButton as Ikb
 
 def ikb(data: dict, row_width: int = 2):
     """

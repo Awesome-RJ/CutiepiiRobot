@@ -34,13 +34,13 @@ import re
 
 
 from typing import Optional
-from telegram import Message, Chat, Update, User, ChatPermissions
+from telegram import Update, ChatPermissions
 from telegram.error import BadRequest
 from telegram.constants import ParseMode
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler, filters, MessageHandler
 from telegram.helpers import mention_html
 
-from Cutiepii_Robot import TIGER_USERS, WHITELIST_USERS, CUTIEPII_PTB
+from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_admin,
     is_user_admin,

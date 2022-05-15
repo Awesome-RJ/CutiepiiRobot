@@ -36,7 +36,7 @@ import re
 from pyrogram import filters
 
 
-from Cutiepii_Robot import pgram, CUTIEPII_PTB
+from Cutiepii_Robot import pgram
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.permissions import adminsOnly
 from Cutiepii_Robot.modules.mongo.karma_mongo import (alpha_to_int, get_karma,

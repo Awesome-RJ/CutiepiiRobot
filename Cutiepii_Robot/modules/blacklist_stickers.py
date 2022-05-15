@@ -43,7 +43,7 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import extract_time
 from Cutiepii_Robot.modules.redis.approvals_redis import is_approved
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.warns import warn
-from telegram import Chat, Message, Update, User, ChatPermissions
+from telegram import Update, ChatPermissions
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler, filters, MessageHandler
 from telegram.helpers import mention_html, mention_markdown

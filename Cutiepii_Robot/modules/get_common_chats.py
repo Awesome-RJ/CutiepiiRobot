@@ -32,13 +32,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import os
 
 from time import sleep
-from Cutiepii_Robot import OWNER_ID, CUTIEPII_PTB
+from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from Cutiepii_Robot.modules.sql.users_sql import get_user_com_chats
 from telegram import Update
 from telegram.error import BadRequest, RetryAfter, Forbidden
-from telegram.ext import CallbackContext, CommandHandler, filters
+from telegram.ext import CallbackContext, CommandHandler
 
 @dev_plus
 async def get_user_common_chats(update: Update, context: CallbackContext):

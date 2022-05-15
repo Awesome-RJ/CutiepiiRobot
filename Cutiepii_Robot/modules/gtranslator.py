@@ -36,12 +36,12 @@ from gtts import gTTS
 from gpytranslate import SyncTranslator
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext
-from telegram.constants import ParseMode, ChatAction
+from telegram.constants import ParseMode
 
 
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action, send_action
+from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 
 trans = SyncTranslator()
 

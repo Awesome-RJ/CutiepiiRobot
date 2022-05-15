@@ -7,7 +7,6 @@ from datetime import datetime
 from barcode.writer import ImageWriter
 from typing import List
 from typing import Optional
-from pymongo import MongoClient
 from telethon import *
 from telethon.tl import types, functions
 

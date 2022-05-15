@@ -34,7 +34,7 @@ import time
 import os
 
 from io import BytesIO
-from telegram import Message, Update
+from telegram import Update
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler
@@ -45,14 +45,9 @@ from Cutiepii_Robot import CUTIEPII_PTB, LOGGER, OWNER_ID, JOIN_LOGGER, SUPPORT_
 from Cutiepii_Robot.__main__ import DATA_IMPORT
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
-from Cutiepii_Robot.modules.rules import get_rules
 import Cutiepii_Robot.modules.sql.rules_sql as rulessql
-
-from Cutiepii_Robot.modules.sql import warns_sql as warnssql
 import Cutiepii_Robot.modules.sql.blacklist_sql as blacklistsql
 from Cutiepii_Robot.modules.sql import disable_sql as disabledsql
-
-from Cutiepii_Robot.modules.sql import cust_filters_sql as filtersql
 import Cutiepii_Robot.modules.sql.welcome_sql as welcsql
 import Cutiepii_Robot.modules.sql.locks_sql as locksql
 from Cutiepii_Robot.modules.connection import connected
