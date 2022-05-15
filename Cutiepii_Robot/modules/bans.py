@@ -255,7 +255,7 @@ async def ban(update: Update, context: CallbackContext) -> Optional[str]:  # sou
         await message.reply_text(ban_myself)
         return ''
 
-    elif (await is_user_admin(update, user_id, member)) and user.id not in DEV_USERS:
+    elif await is_user_admin(update, user_id, member) and user.id not in DEV_USERS:
         cannot_ban(user_id, message)
         return ''
 
@@ -336,7 +336,7 @@ async def temp_ban(update: Update, context: CallbackContext) -> str:
         await message.reply_text(ban_myself)
         return log_message
 
-    if (await is_user_admin(update, user_id, member)) and user not in DEV_USERS:
+    if await is_user_admin(update, user_id, member) and user not in DEV_USERS:
         cannot_ban(user_id, message)
         return log_message
 
@@ -448,7 +448,7 @@ async def kick(update: Update, context: CallbackContext) -> str:
         await message.reply_text("Yeahhh I'm not gonna do that.")
         return log_message
 
-    if (await is_user_admin(update, user_id, member)) and user not in DEV_USERS:
+    if await is_user_admin(update, user_id, member) and user not in DEV_USERS:
         cannot_ban(user_id, message)
         return log_message
 
@@ -493,7 +493,7 @@ async def kickme(update: Update, _: CallbackContext) -> Optional[str]:
     user_id = update.effective_message.from_user.id
     user = update.effective_message.from_user
     chat = update.effective_chat
-    if (await is_user_admin(update, user_id, member)): 
+    if await is_user_admin(update, user_id, member): 
         await update.effective_message.reply_text("Haha you're stuck with us here.")
         return ''
 
@@ -587,7 +587,7 @@ async def unban(update: Update, context: CallbackContext) -> Optional[str]:  # s
         await message.reply_text(ban_myself)
         return ''
 
-    elif (await is_user_admin(update, user_id, member)) and user.id not in DEV_USERS:
+    elif await is_user_admin(update, user_id, member) and user.id not in DEV_USERS:
         cannot_ban(user_id, message)
         return ''
 

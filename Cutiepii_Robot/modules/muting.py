@@ -85,7 +85,7 @@ async def check_user(user_id: int, bot: Bot, update: Update) -> Optional[str]:
     if user_id == bot.id:
         return "I'm not gonna MUTE myself, How high are you?"
 
-    if (await is_user_admin(update, user_id, member)) and user_id not in DEV_USERS:
+    if await is_user_admin(update, user_id, member) and user_id not in DEV_USERS:
         if user_id == OWNER_ID:
             return "I'd never ban my owner."
         if user_id in SUDO_USERS:
@@ -402,7 +402,7 @@ async def temp_nomedia(update: Update, context: CallbackContext) -> str:
 
         await message.reply_text(tld(chat.id, "I can't seem to find this user"))
         return ""
-    if (await is_user_admin(update, user_id, member)):
+    if await is_user_admin(update, user_id, member):
         await message.reply_text(tld(chat.id, "I really wish I could restrict admins..."))
         return ""
 
@@ -530,7 +530,7 @@ async def nomedia(update: Update, context: CallbackContext) -> str:
         return ""
 
     if member := chatD.get_member(int(user_id)):
-        if (await is_user_admin(update, user_id, member=member)):
+        if await is_user_admin(update, user_id, member=member):
             await message.reply_text(chat.id, "Afraid I can't restrict admins!")
 
         elif member.can_send_messages is None or member.can_send_messages:

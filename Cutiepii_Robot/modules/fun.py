@@ -316,7 +316,7 @@ async def slap(update: Update, context: CallbackContext):
 
 	    if isinstance(temp, list):
 	        if temp[2] == "tmute":
-	            if (await is_user_admin(update, message.from_user.id)):
+	            if await is_user_admin(update, message.from_user.id):
 	                reply_text(temp[1])
 	                return
 
