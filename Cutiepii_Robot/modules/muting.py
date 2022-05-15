@@ -83,22 +83,20 @@ async def check_user(user_id: int, bot: Bot, update: Update) -> Optional[str]:
     except BadRequest as excp:
         if excp.message == 'User not found':
             return "I can't seem to find this user"
-        else:
-            raise
+        raise
     if user_id == bot.id:
         return "I'm not gonna MUTE myself, How high are you?"
 
     if (await is_user_admin(update, user_id, member)) and user_id not in DEV_USERS:
         if user_id == OWNER_ID:
             return "I'd never ban my owner."
-        elif user_id in SUDO_USERS:
+        if user_id in SUDO_USERS:
             return "My sudos are ban immune"
-        elif user_id in SUPPORT_USERS:
+        if user_id in SUPPORT_USERS:
             return "My support users are ban immune"
-        elif user_id in WHITELIST_USERS:
+        if user_id in WHITELIST_USERS:
             return "Bring an order from My Devs to fight a Whitelist user."
-        else:
-            return "Can't. Find someone else to mute but not this one."
+        return "Can't. Find someone else to mute but not this one."
 
     return None
 
@@ -164,9 +162,7 @@ async def mute(update: Update, context: CallbackContext) -> str:
 
 
         return log
-
-    else:
-        await message.reply_text("⚠️ This user is already muted! ⚠️")
+    await message.reply_text("⚠️ This user is already muted! ⚠️")
 
     return ""
 
@@ -356,24 +352,22 @@ async def temp_mute(update: Update, context: CallbackContext) -> str:
                 parse_mode=ParseMode.HTML,
             )
             return log
-        else:
-            await message.reply_text("This user is already muted.")
+        await message.reply_text("This user is already muted.")
 
     except BadRequest as excp:
         if excp.message == "Reply message not found":
             # Do not reply
             await message.reply_text(f"Muted for {time_val}!", quote=False)
             return log
-        else:
-            LOGGER.warning(update)
-            LOGGER.exception(
-                "ERROR muting user %s in chat %s (%s) due to %s",
-                user_id,
-                chat.title,
-                chat.id,
-                excp.message,
-            )
-            await message.reply_text("Well damn, I can't mute that user.")
+        LOGGER.warning(update)
+        LOGGER.exception(
+            "ERROR muting user %s in chat %s (%s) due to %s",
+            user_id,
+            chat.title,
+            chat.id,
+            excp.message,
+        )
+        await message.reply_text("Well damn, I can't mute that user.")
 
     return ""
 
@@ -446,19 +440,17 @@ async def temp_nomedia(update: Update, context: CallbackContext) -> str:
             await context.bot.restrict_chat_member(chat.id, user_id, NOMEDIA_PERMISSIONS, until_date=mutetime)
             await message.reply_text(tld(chat.id, "Restricted from sending media for {} in {}!").format(time_val, chatD.title))
             return log
-        else:
-            await message.reply_text(tld(chat.id, "This user is already restricted in {}.").format(chatD.title))
+        await message.reply_text(tld(chat.id, "This user is already restricted in {}.").format(chatD.title))
 
     except BadRequest as excp:
         if excp.message == "Reply message not found":
             # Do not reply
             await message.reply_text(tld(chat.id, "Restricted for {} in {}!").format(time_val, chatD.title), quote=False)
             return log
-        else:
-            LOGGER.warning(update)
-            LOGGER.exception("ERROR muting user %s in chat %s (%s) due to %s", user_id, chat.title, chat.id,
-                             excp.message)
-            await message.reply_text(tld(chat.id, "Well damn, I can't restrict that user."))
+        LOGGER.warning(update)
+        LOGGER.exception("ERROR muting user %s in chat %s (%s) due to %s", user_id, chat.title, chat.id,
+                         excp.message)
+        await message.reply_text(tld(chat.id, "Well damn, I can't restrict that user."))
 
     return ""
 

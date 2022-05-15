@@ -200,13 +200,13 @@ async def weather(update: Update, context: CallbackContext):
             def air_qual(aqin):
                 if aqin == 1:
                     return "Good"
-                elif aqin == 2:
+                if aqin == 2:
                     return "Fair"
-                elif aqin == 3:
+                if aqin == 3:
                     return 'Moderate'                
-                elif aqin == 4:
+                if aqin == 4:
                     return  'Poor'
-                elif aqin == 5:
+                if aqin == 5:
                     return "Very Poor"
 
 

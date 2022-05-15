@@ -895,17 +895,17 @@ infotext = (
 def LastOnline(user: User):
     if user.is_bot:
         return ""
-    elif user.status == "recently":
+    if user.status == "recently":
         return "Recently"
-    elif user.status == "within_week":
+    if user.status == "within_week":
         return "Within the last week"
-    elif user.status == "within_month":
+    if user.status == "within_month":
         return "Within the last month"
-    elif user.status == "long_time_ago":
+    if user.status == "long_time_ago":
         return "A long time ago :("
-    elif user.status == "online":
+    if user.status == "online":
         return "Currently Online"
-    elif user.status == "offline":
+    if user.status == "offline":
         return datetime.fromtimestamp(user.status.date).strftime(
             "%a, %d %b %Y, %H:%M:%S"
         )

@@ -125,8 +125,7 @@ class CustomCommandHandler(tg.CommandHandler):
 
                 if filter_result := self.filters.check_update(update):
                     return args, filter_result
-                else:
-                    return False
+                return False
 
 
     async def collect_additional_context(self, context, chat, CUTIEPII_PTB, check_result):

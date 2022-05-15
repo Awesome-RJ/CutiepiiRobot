@@ -129,7 +129,7 @@ async def rban(update: Update, context: CallbackContext):
             "You don't seem to be referring to a user or the ID specified is incorrect.."
         )
         return
-    elif not chat_id:
+    if not chat_id:
         await message.reply_text("You don't seem to be referring to a chat.")
         return
 
@@ -205,7 +205,7 @@ async def runban(update: Update, context: CallbackContext):
             "You don't seem to be referring to a user or the ID specified is incorrect.."
         )
         return
-    elif not chat_id:
+    if not chat_id:
         await message.reply_text("You don't seem to be referring to a chat.")
         return
 
@@ -283,7 +283,7 @@ async def rkick(update: Update, context: CallbackContext):
             "You don't seem to be referring to a user or the ID specified is incorrect.."
         )
         return
-    elif not chat_id:
+    if not chat_id:
         await message.reply_text("You don't seem to be referring to a chat.")
         return
 
@@ -360,7 +360,7 @@ async def rmute(update: Update, context: CallbackContext):
             "You don't seem to be referring to a user or the ID specified is incorrect.."
         )
         return
-    elif not chat_id:
+    if not chat_id:
         await message.reply_text("You don't seem to be referring to a chat.")
         return
 
@@ -439,7 +439,7 @@ async def runmute(update: Update, context: CallbackContext):
             "You don't seem to be referring to a user or the ID specified is incorrect.."
         )
         return
-    elif not chat_id:
+    if not chat_id:
         await message.reply_text("You don't seem to be referring to a chat.")
         return
 

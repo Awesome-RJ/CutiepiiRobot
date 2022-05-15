@@ -66,8 +66,7 @@ def bot_admin_check(permission: AdminPerms = None):
 
 			if bot_member.status == "administrator":  # if no perm is required, check for admin-ship only
 				return func(update, context, *args, **kwargs)
-			else:  # not admin
-				return await update.effective_message.reply_text("I can't perform this action because I'm not admin!")
+			return await update.effective_message.reply_text("I can't perform this action because I'm not admin!")
 
 		return wrapped
 
@@ -204,7 +203,7 @@ def user_not_admin_check(func):
 				or (message.sender_chat and message.sender_chat.type != "channel")
 				or not user):
 			return
-		elif not user_is_admin(update, user.id, channels = True):
+		if not user_is_admin(update, user.id, channels = True):
 			return func(update, context, *args, **kwargs)
 		return
 	return wrapped

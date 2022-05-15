@@ -71,7 +71,7 @@ async def all(event):
 
   if event.pattern_match.group(1) and event.is_reply:
     return await event.respond("Give me one argument!")
-  elif event.pattern_match.group(1):
+  if event.pattern_match.group(1):
     mode = "text_on_cmd"
     msg = event.pattern_match.group(1)
   elif event.is_reply:

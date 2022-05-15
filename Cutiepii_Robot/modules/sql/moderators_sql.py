@@ -76,9 +76,8 @@ def dismod(chat_id, user_id):
             SESSION.delete(dismod_user)
             SESSION.commit()
             return True
-        else:
-            SESSION.close()
-            return False
+        SESSION.close()
+        return False
 
 
 def list_modd(chat_id):

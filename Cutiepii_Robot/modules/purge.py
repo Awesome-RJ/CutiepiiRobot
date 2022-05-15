@@ -72,7 +72,7 @@ async def purge_messages(event):
     if not await can_delete_messages(message=event):
         if event.chat.admin_rights is None:
             return await event.reply("I'm not an admin, do you mind promoting me first?")
-        elif not event.chat.admin_rights.delete_messages:
+        if not event.chat.admin_rights.delete_messages:
             return await event.reply("I don't have the permission to delete messages!")
 
     reply_msg = await event.get_reply_message()

@@ -119,8 +119,7 @@ async def add_blacklist(update, context):
         chat_id = update.effective_chat.id
         if chat.type == "private":
             return
-        else:
-            chat_name = chat.title
+        chat_name = chat.title
     chat_name = html.escape(chat_name)
 
     if len(words) > 1:

@@ -404,14 +404,13 @@ async def temp_ban(update: Update, context: CallbackContext) -> str:
                 f"Banned! User will be banned for {time_val}.", quote=False
             )
             return log
-        else:
-            await bot.sendMessage(ERROR_LOGS, str(update))
-            await bot.sendMessage(
-                ERROR_LOGS,
-                f"ERROR banning user {user_id} in chat {chat.title} ({chat.id}) due to {excp.message}",
-            )
+        await bot.sendMessage(ERROR_LOGS, str(update))
+        await bot.sendMessage(
+            ERROR_LOGS,
+            f"ERROR banning user {user_id} in chat {chat.title} ({chat.id}) due to {excp.message}",
+        )
 
-            await message.reply_text("Well damn, I can't ban that user.")
+        await message.reply_text("Well damn, I can't ban that user.")
 
     return log_message
 
@@ -482,9 +481,7 @@ async def kick(update: Update, context: CallbackContext) -> str:
             log += f"\n<b>Reason:</b> {reason}"
 
         return log
-
-    else:
-        await message.reply_text("Well damn, I can't kick that user.")
+    await message.reply_text("Well damn, I can't kick that user.")
 
     return log_message
 
@@ -512,9 +509,7 @@ async def kickme(update: Update, _: CallbackContext) -> Optional[str]:
         )
 
         return log
-
-    else:
-        await update.effective_message.reply_text("Huh? I can't :/")
+    await update.effective_message.reply_text("Huh? I can't :/")
 
 
 @cutiepii_cmd(command='unban')
@@ -648,8 +643,7 @@ async def selfunban(update: Update, context: CallbackContext) -> Optional[str]:
         if excp.message == "User not found":
             await message.reply_text("I can't seem to find this user.")
             return
-        else:
-            raise
+        raise
 
     if member.status not in ("left", "kicked"):
         await message.reply_text("Aren't you already in the chat??")
@@ -723,9 +717,7 @@ async def banme(update: Update, context: CallbackContext):
                 user_id,
             )
         )
-
-    else:
-        await update.effective_message.reply_text("Huh? I can't :/")
+    await update.effective_message.reply_text("Huh? I can't :/")
 
 
 @cutiepii_cmd(command='snipe', can_disable=False, filters=CustomFilters.sudo_filter)

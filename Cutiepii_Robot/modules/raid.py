@@ -234,8 +234,7 @@ async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
                     f"#RAID\n"
                     f"Set Raid mode time to {readable_time}\n"
                     f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
-        else:
-            await msg.reply_text("You can only set time between 5 minutes and 1 day", parse_mode=ParseMode.HTML)
+        await msg.reply_text("You can only set time between 5 minutes and 1 day", parse_mode=ParseMode.HTML)
     else:
         await msg.reply_text("Unknown time given, give me something like 5m or 1h", parse_mode=ParseMode.HTML)
 
@@ -270,8 +269,7 @@ async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
                     f"#RAID\n"
                     f"Set Raid mode action time to {readable_time}\n"
                     f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
-        else:
-            await msg.reply_text("You can only set time between 5 minutes and 1 day", parse_mode=ParseMode.HTML)
+        await msg.reply_text("You can only set time between 5 minutes and 1 day", parse_mode=ParseMode.HTML)
     else:
         await msg.reply_text("Unknown time given, give me something like 5m or 1h", parse_mode=ParseMode.HTML)
 

@@ -56,8 +56,7 @@ def del_clearcmd(chat_id, cmd):
             SESSION.delete(del_cmd)
             SESSION.commit()
             return True
-        else:
-            SESSION.close()
+        SESSION.close()
         return False
 
 
@@ -69,8 +68,7 @@ def del_allclearcmd(chat_id):
                 SESSION.delete(cmd)
                 SESSION.commit()
             return True
-        else:
-            SESSION.close()
+        SESSION.close()
         return False
 
 

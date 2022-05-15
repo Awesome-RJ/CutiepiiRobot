@@ -24,8 +24,7 @@ def getData(repoURL):
 def getReleaseData(repoData, index):
     if index < len(repoData):
         return repoData[index]
-    else:
-        return None
+    return None
 
 
 # Release-wise stuff

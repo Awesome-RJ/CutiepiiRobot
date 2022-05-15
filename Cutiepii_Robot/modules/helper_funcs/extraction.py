@@ -85,11 +85,9 @@ async def extract_user_and_text(
                 "you reply to that person's message instead, or forward one of that user's messages."
             )
             return None, None
-
-        else:
-            res = await message.text.split(None, 2)
-            if len(res) >= 3:
-                text = res[2]
+        res = await message.text.split(None, 2)
+        if len(res) >= 3:
+            text = res[2]
 
     elif len(args) >= 1 and args[0].lstrip("-").isdigit():
         user_id = int(args[0])
@@ -158,11 +156,9 @@ async def extract_unt_fedban(
                 "you reply to the person's message, or forward one of the user's message"
             )
             return None, None
-
-        else:
-            res = await message.text.split(None, 2)
-            if len(res) >= 3:
-                text = res[2]
+        res = await message.text.split(None, 2)
+        if len(res) >= 3:
+            text = res[2]
 
     elif len(args) >= 1 and args[0].isdigit():
         user_id = int(args[0])
@@ -189,10 +185,10 @@ async def extract_unt_fedban(
                 "run a certain command ...)"
             )
             return None, None
-        elif excp.message != "Chat not found":
+        if excp.message != "Chat not found":
             LOGGER.exception("Exception %s on user %s", excp.message, user_id)
             return None, None
-        elif not isinstance(user_id, int):
+        if not isinstance(user_id, int):
             return None, None
 
     return user_id, text

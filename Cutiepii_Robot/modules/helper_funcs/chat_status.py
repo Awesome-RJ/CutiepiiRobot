@@ -103,8 +103,7 @@ def bot_admin(func):
         if bot_is_admin(update.effective_chat, context.bot.id):
 
             return func(update, context, *args, **kwargs)
-        else:
-            await update.effective_message.reply_text(not_admin, parse_mode=ParseMode.HTML)
+        await update.effective_message.reply_text(not_admin, parse_mode=ParseMode.HTML)
 
     return is_admin
 
@@ -116,7 +115,7 @@ def owner_plus(func):
 
         if user.id == OWNER_ID:
             return func(update, context, *args, **kwargs)
-        elif not user:
+        if not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
             try:
@@ -417,7 +416,7 @@ def user_admin(func):
 
         if user and (await is_user_admin(update, user.id)):
             return func(update, context, *args, **kwargs)
-        elif not user:
+        if not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
             with contextlib.suppress(TelegramError):
@@ -440,7 +439,7 @@ def user_admin_no_reply(func):
 
         if user and (await is_user_admin(update, user_id, member)):
             return func(update, context, *args, **kwargs)
-        elif not user:
+        if not user:
             pass
         elif DEL_CMDS and " " not in update.effective_message.text:
             with contextlib.suppress(TelegramError):
@@ -460,10 +459,10 @@ def user_not_admin(func):
             return
         if message.sender_chat and message.sender_chat.type != "channel":
             return
-        elif user and not (await is_user_admin(update, user.id)):
+        if user and not (await is_user_admin(update, user.id)):
             return func(update, context, *args, **kwargs)
 
-        elif not user:
+        if not user:
             pass
 
     return is_not_admin
@@ -484,8 +483,7 @@ def bot_admin(func):
 
         if bot_is_admin(update.effective_chat, context.bot.id):
             return func(update, context, *args, **kwargs)
-        else:
-            await update.effective_message.reply_text(not_admin, parse_mode=ParseMode.HTML)
+        await update.effective_message.reply_text(not_admin, parse_mode=ParseMode.HTML)
 
     return is_admin
 
@@ -573,10 +571,9 @@ def can_restrict(func):
 
         if (await chat.get_member(bot.id)).can_restrict_members:
             return func(update, context, *args, **kwargs)
-        else:
-            await update.effective_message.reply_text(
-                cant_restrict, parse_mode=ParseMode.HTML
-            )
+        await update.effective_message.reply_text(
+            cant_restrict, parse_mode=ParseMode.HTML
+        )
 
     return restrict_rights
 

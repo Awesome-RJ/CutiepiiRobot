@@ -140,8 +140,7 @@ async def modd(update: Update, context: CallbackContext):
     if msg.endswith("moderator.\n"):
         await message.reply_text(f"No users are Moderator in {chat_title}.")
         return ""
-    else:
-        await message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+    await message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
 async def modr(update: Update, context: CallbackContext):

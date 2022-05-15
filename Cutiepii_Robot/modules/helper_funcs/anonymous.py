@@ -99,11 +99,10 @@ def user_admin(permission: AdminPerms):
                     or user_id in SUDO_USERS
                 ):
                     return func(update, context, *args, **kwargs)
-                else:
-                    return await message.reply_text(
-                        f"You lack the permission: `{permission.name}`",
-                        parse_mode=ParseMode.MARKDOWN,
-                    )
+                return await message.reply_text(
+                    f"You lack the permission: `{permission.name}`",
+                    parse_mode=ParseMode.MARKDOWN,
+                )
 
         return awrapper
 

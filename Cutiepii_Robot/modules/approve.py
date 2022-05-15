@@ -138,8 +138,7 @@ async def approved(update: Update, _: CallbackContext):
     if msg.endswith("approved.\n"):
         await message.reply_text(f"No users are approved in {chat_title}.")
         return ""
-    else:
-        await message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+    await message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
 @user_admin_check()

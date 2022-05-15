@@ -205,7 +205,7 @@ async def lock(update, context) -> str:  # sourcery no-metrics
                     )
                 )
 
-            elif ltype in LOCK_CHAT_RESTRICTION:
+            if ltype in LOCK_CHAT_RESTRICTION:
                 text = f"Locked {ltype} for all non-admins!"
                 current_permission = context.bot.getChat(chat.id).permissions
                 context.bot.set_chat_permissions(
@@ -227,12 +227,10 @@ async def lock(update, context) -> str:  # sourcery no-metrics
                         ltype,
                     )
                 )
-
-            else:
-                send_message(
-                    update.effective_message,
-                    "What are you trying to lock...? Try /locktypes for the list of lockables",
-                )
+            send_message(
+                update.effective_message,
+                "What are you trying to lock...? Try /locktypes for the list of lockables",
+            )
         else:
             send_message(update.effective_message, "What are you trying to lock...?")
 
@@ -271,7 +269,7 @@ def unlock(update, context) -> str:  # sourcery no-metrics
                     )
                 )
 
-            elif ltype in UNLOCK_CHAT_RESTRICTION:
+            if ltype in UNLOCK_CHAT_RESTRICTION:
                 text = f"Unlocked {ltype} for everyone!"
 
                 current_permission = context.bot.getChat(chat.id).permissions
@@ -295,11 +293,10 @@ def unlock(update, context) -> str:  # sourcery no-metrics
                         ltype,
                     )
                 )
-            else:
-                send_message(
-                    update.effective_message,
-                    "What are you trying to unlock...? Try /locktypes for the list of lockables.",
-                )
+            send_message(
+                update.effective_message,
+                "What are you trying to unlock...? Try /locktypes for the list of lockables.",
+            )
 
         else:
             send_message(update.effective_message, "What are you trying to unlock...?")

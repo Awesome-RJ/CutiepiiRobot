@@ -74,9 +74,8 @@ def clear_purgefrom(chat_id, message_from):
             SESSION.delete(note)
             SESSION.commit()
             return True
-        else:
-            SESSION.close()
-            return False
+        SESSION.close()
+        return False
 
 def show_purgefrom(chat_id):
     try:

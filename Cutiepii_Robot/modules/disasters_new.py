@@ -20,11 +20,9 @@ def check_user_id(user_id: int, context: CallbackContext) -> Optional[str]:
     if not user_id:
         return "Nice try... Nope! Provide me an valid User ID."
 
-    elif user_id == bot.id:
+    if user_id == bot.id:
         return "This does not work that way."
-
-    else:
-        return None
+    return None
 
 
 @dev_plus
@@ -174,9 +172,8 @@ async def removesudo(update: Update, context: CallbackContext) -> str:
            "\n<b>User:</b> {}".format(html.escape(update.effective_chat.title),
                                       mention_html(user.id, user.first_name),
                                       mention_html(user_member.user.id, user_member.user.first_name))
-    else:
-        await message.reply_text("This user is not a sudo!")
-        return ""
+    await message.reply_text("This user is not a sudo!")
+    return ""
 
 
 @sudo_plus
@@ -201,9 +198,8 @@ async def removesupport(update: Update, context: CallbackContext) -> str:
            "\n<b>User:</b> {}".format(html.escape(update.effective_chat.title),
                                       mention_html(user.id, user.first_name),
                                       mention_html(user_member.user.id, user_member.user.first_name))
-    else:
-        await message.reply_text("This user is not a support user!")
-        return ""
+    await message.reply_text("This user is not a support user!")
+    return ""
 
 
 @sudo_plus
@@ -228,9 +224,8 @@ async def removewhitelist(update: Update, context: CallbackContext) -> str:
            "\n<b>User:</b> {}".format(html.escape(update.effective_chat.title),
                                       mention_html(user.id, user.first_name),
                                       mention_html(user_member.user.id, user_member.user.first_name))
-    else:
-        await message.reply_text("This user is not a whitelisted user!")
-        return ""
+    await message.reply_text("This user is not a whitelisted user!")
+    return ""
 
 
 @whitelist_plus

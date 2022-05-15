@@ -439,8 +439,7 @@ async def decide(update: Update, context: CallbackContext):
     if res.status_code != 200:
          await msg.reply_text(random.choice(fun.DECIDE))
          return
-    else:
-        res = res.json()
+    res = res.json()
     try:
         context.bot.send_animation(
             chat.id, animation=res.get("image"), caption=str(res.get("answer")).upper()
