@@ -201,7 +201,7 @@ async def set_flood(update: Update, context: CallbackContext) -> str:
                 sql.set_flood(chat_id, 0)
                 if conn:
                     await message.reply_text(f"Antiflood has been disabled in {chat_name}.")
-                     
+
                 else:
                     await update.effective_message.reply_text("Antiflood has been disabled.")
                 return (

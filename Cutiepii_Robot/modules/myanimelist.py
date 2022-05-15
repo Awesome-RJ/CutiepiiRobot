@@ -111,7 +111,7 @@ async def anime(update: Update, context: CallbackContext):
 
 
     await msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
-    
+
 
 async def character(update: Update, context: CallbackContext):
     msg = update.effective_message
@@ -148,8 +148,8 @@ async def character(update: Update, context: CallbackContext):
 
 
         await msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
-        
-        
+
+
 async def upcoming(update: Update, context: CallbackContext):
     msg = update.effective_message
     rep = "<b>Upcoming anime</b>\n"
@@ -162,7 +162,7 @@ async def upcoming(update: Update, context: CallbackContext):
         if len(rep) > 2000:
             break
     await msg.reply_text(rep, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
-    
+
 
 async def manga(update: Update, context: CallbackContext):
     msg = update.effective_message
@@ -209,8 +209,8 @@ async def manga(update: Update, context: CallbackContext):
 
 
         await msg.reply_text(rep, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(keyb))
-        
-        
+
+
 async def animestuffs(update: Update, context: CallbackContext):
     query = update.callback_query
     user = update.effective_user

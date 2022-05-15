@@ -600,7 +600,7 @@ def removewatchlist(update, context):
         return
     watchlist = list(REDIS.sunion(f'anime_watch_list{user.id}'))
     removewlist = removewlist[1]
-    
+
     if removewlist not in watchlist:
         message.reply_text(
             f"<code>{removewlist}</code> doesn't exist in your watch list.",
@@ -630,7 +630,7 @@ def fvrtchar(update, context):
         message.reply_text(
             "You havn't added any waifu in your harem!"
         )
-        
+
 
 def removefvrtchar(update, context):
     user = update.effective_user 
@@ -643,7 +643,7 @@ def removefvrtchar(update, context):
         return
     fvrt_char = list(REDIS.sunion(f'anime_fvrtchar{user.id}'))
     removewlist = removewlist[1]
-    
+
     if removewlist not in fvrt_char:
         message.reply_text(
             f"<code>{removewlist}</code> doesn't exist in your harem",
@@ -655,7 +655,7 @@ def removefvrtchar(update, context):
             parse_mode=ParseMode.HTML
         )
         REDIS.srem(f'anime_fvrtchar{user.id}', removewlist)
-    
+
 
 def readmanga(update, context):
     chat = update.effective_chat
@@ -686,7 +686,7 @@ def removemangalist(update, context):
         return
     fvrt_char = list(REDIS.sunion(f'anime_mangaread{user.id}'))
     removewlist = removewlist[1]
-    
+
     if removewlist not in fvrt_char:
         message.reply_text(
             f"<code>{removewlist}</code> doesn't exist in your manga list.",
@@ -885,7 +885,7 @@ def animequotes(update: Update, context: CallbackContext):
     reply_photo = message.reply_to_message.reply_photo if message.reply_to_message else message.reply_photo
     reply_photo(
         random.choice(QUOTES_IMG))
-      
+
 @pgram.on_message(filters.command('watchorder'))
 def watchorderx(_,message):
 	anime =  message.text.replace(message.text.split(' ')[0], '')
@@ -907,7 +907,7 @@ Get information about anime, manga or characters from [AniList](anilist.co)
   ➢ `/manga <manga>`*:* returns information about the manga from AniList.
   ➢ `/upcoming`*:* returns a list of new anime in the upcoming seasons from AniList.
   ➢ `/airing <anime>`*:* returns anime airing info from AniList.
- 
+
 Get information about anime, manga or characters from [MAL](https://myanimelist.net/)
 *My Anime list Commands:*
   ➢ `/manime <anime>`*:* returns information about the anime MAL.
@@ -921,17 +921,17 @@ Get information about anime, manga or characters from [MAL](https://myanimelist.
    ➢ `/kayo`*:* search an Anime on AnimeKayo website.
    ➢ `/kaizoku`*:* search an Anime on AnimeKaizoku website.
    ➢ `/whatanime`*:* Please reply to a Gif or Photo or Video, then bot gives information about the anime.
-   
+
 *Anime Search Commands:*
   ➢ `/meme`*:* sends Anime Memes.
   ➢ `/hmeme`*:* sends Hentai Memes.
   ➢ `/rmeme`*:* sends Reddit Memes.
-  
+
 *Anime Search Commands:*
   ➢ `/watchorder <anime>`*:* send watch Order of anime.
-  
+
 You saw a good anime video, photo, gif but dont know what is that anime's name?
-This is where whatanime comes in, just reply to that media with /whatanime and it will search the anime name for you from anilist.                             
+This is where whatanime comes in, just reply to that media with /whatanime and it will search the anime name for you from anilist.
  """
 
 ANIME_HANDLER = DisableAbleCommandHandler("anime", anime, run_async=True)

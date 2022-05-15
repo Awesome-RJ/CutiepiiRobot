@@ -39,7 +39,7 @@ async def privatenotes(update: Update, context: CallbackContext):
 
 def setprivatenotes(chat_id, setting):
     sql.set_private_notes(chat_id, setting)
-            
+
 
 def getprivatenotes(chat_id):
     return sql.get_private_notes(chat_id)

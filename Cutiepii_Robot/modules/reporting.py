@@ -107,12 +107,12 @@ async def report(update: Update, context: CallbackContext) -> str:
     message = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
-    
+
     log_setting = logsql.get_chat_setting(chat.id)
     if not log_setting:
         logsql.set_chat_setting(logsql.LogChannelSettings(chat.id, True, True, True, True, True))
         log_setting = logsql.get_chat_setting(chat.id)
-    
+
     if message.sender_chat:
         admin_list = await bot.getChatAdministrators(chat.id)
         reported = "Reported to admins."

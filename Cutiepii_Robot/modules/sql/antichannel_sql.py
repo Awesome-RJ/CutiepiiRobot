@@ -39,7 +39,7 @@ from Cutiepii_Robot.modules.sql import BASE, SESSION
 
 class AntiChannelSettings(BASE):
     __tablename__ = "anti_channel_settings"
-    
+
     chat_id = Column(String(14), primary_key=True)
     setting = Column(Boolean, default=False, nullable=False)
 

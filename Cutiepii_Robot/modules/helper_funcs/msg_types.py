@@ -46,7 +46,7 @@ class Types(IntEnum):
     VOICE = 6
     VIDEO = 7
 
-    
+
 def get_note_type(msg: Message):  # sourcery no-metrics
     data_type = None
     content = None
@@ -101,13 +101,13 @@ def get_note_type(msg: Message):  # sourcery no-metrics
             content = msg.reply_to_message.video.file_id
             text, buttons = button_markdown_parser(msgtext, entities=entities)
             data_type = Types.VIDEO
-            
+
         if buttons and not text:
             text = note_name
 
     return note_name, text, data_type, content, buttons
-    
-    
+
+
 """
 def get_note_type(msg: Message):
     data_type = None

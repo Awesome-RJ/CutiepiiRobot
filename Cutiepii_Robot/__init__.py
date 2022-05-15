@@ -156,7 +156,7 @@ if ENV:
 
     HELP_IMG = os.environ.get("HELP_IMG", True)
     GROUP_START_IMG = os.environ.get("GROUP_START_IMG", True)
-    
+
     try:
         BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
     except ValueError:
@@ -176,7 +176,7 @@ else:
         REMINDER_LIMIT = int(os.environ.get("REMINDER_LIMIT", 20))
     except ValueError:
         raise Exception("Your REMINDER_LIMIT env variable is not a valid integer.")
-    
+
     JOIN_LOGGER = Config.JOIN_LOGGER
     OWNER_USERNAME = Config.OWNER_USERNAME
     ALLOW_CHATS = Config.ALLOW_CHATS
@@ -250,7 +250,7 @@ else:
         BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
     except ValueError:
         raise Exception("Your blacklisted chats list does not contain valid integers.")
-        
+
 
 SUDO_USERS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
@@ -274,7 +274,7 @@ finally:
    REDIS.ping()
 
    LOGGER.info("[CUTIEPII]: Connection To The Yūki • Data Center • Mumbai • Redis Database Established Successfully!")
-   
+
 
 if not SPAMWATCH_API:
     sw = None

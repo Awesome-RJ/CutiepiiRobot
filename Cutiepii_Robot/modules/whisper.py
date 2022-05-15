@@ -33,7 +33,7 @@ async def die(event):
                 ]
             )
     await event.answer([dn])
-    
+
 @bot.on(events.InlineQuery(pattern="wspr"))
 async def inline(event):
     me = (await bot.get_me()).username

@@ -279,7 +279,7 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
 
             # Welcome yourself
             if new_mem.id == bot.id:
-                
+
                 await update.effective_message.reply_text(
                     f"Hey {user.first_name}, I'm {context.bot.first_name}! Thank you for adding me to {chat.title}\n"
                     "Join support and channel update with clicking button below!",
@@ -297,7 +297,7 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
                         ],
                     ),
                 )
-                
+
                 chet_name = f"<a href='t.me/{chat.username}'>{html.escape(chat.title)}</a>" if chat.username else html.escape(chat.title)
                 creator = None
 
@@ -305,7 +305,7 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
                     if x.status == "creator":
                         creator = mention_html(x.user.id, html.escape(x.user.first_name) or "Creator") + f" (<code>{x.user.id}</code>)"
                         break
-                        
+
                 await bot.send_message(
                      JOIN_LOGGER,
                      "#NEW_GROUP\n\n"

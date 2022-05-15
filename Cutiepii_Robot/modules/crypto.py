@@ -39,7 +39,7 @@ def section(
         )
     return text
 
-  
+
 @pgram.on_message(filters.command("crypto"))
 @capture_err
 async def crypto(_, message):

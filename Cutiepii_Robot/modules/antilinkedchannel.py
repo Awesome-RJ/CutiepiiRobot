@@ -112,7 +112,7 @@ async def set_antipinchannel(update: Update, context: CallbackContext):
     message.reply_html(
         f"Linked channel message unpin is currently {sql.status_pin(chat.id)} in {html.escape(chat.title)}"
     )
-      
+
 def eliminate_linked_channel_msg(update: Update, _: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat

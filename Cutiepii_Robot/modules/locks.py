@@ -476,7 +476,7 @@ def __migrate__(old_chat_id, new_chat_id):
 
 def __chat_settings__(chat_id, user_id):
     return asyncio.get_running_loop().run_until_complete(build_lock_message(chat_id))
-    
+
 
 
 __help__ = """
@@ -489,7 +489,7 @@ telegram world; the bot will automatically delete them!
 ➛ /lock <type>*:* Lock items of a certain type (not available in private)
 ➛ /unlock <type>*:* Unlock items of a certain type (not available in private)
 ➛ /locks*:* The current list of locks in this chat.
-  
+
 Locks can be used to restrict a group's users.
 eg:
 Locking urls will auto-delete all messages with urls, locking stickers will restrict all \

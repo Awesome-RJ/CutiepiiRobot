@@ -136,7 +136,7 @@ def user_can_ban(func):
     @wraps(func)
     async def user_banner(update, context, *args, **kwargs):
 
-        
+
         user = update.effective_user.id
         member = await update.effective_chat.get_member(user)
 
@@ -157,11 +157,11 @@ def user_can_change(func):
     async def info_changer(update, context, *args, **kwargs):	
         user = update.effective_user.id	
         member = await update.effective_chat.get_member(user)	
-        
+
 
         if not (member.can_change_info or member.status == "creator") and not user in SUDO_USERS:
             await update.effective_message.reply_text("You are missing the following rights to use this command: \nCanChangeInfo")
-            
+
             return ""	
 
         return func(update, context, *args, **kwargs)	

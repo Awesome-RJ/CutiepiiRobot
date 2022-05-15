@@ -140,7 +140,7 @@ def hpmanager(user):
         # Assign new var `new_hp` since we need `total_hp` in
         # end to calculate percentage.
         new_hp = total_hp
-        
+
 
         # if no username decrease 25% of hp.
         if not user.username:
@@ -276,7 +276,7 @@ def info(update: Update, context: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
     user_id = extract_user(update.effective_message, args)
-    
+
     if user_id and int(user_id) != 777000 and int(user_id) != 1087968824:
         user = await bot.get_chat(user_id)
          elif user_id and int(user_id) == 777000:
@@ -308,12 +308,12 @@ def info(update: Update, context: CallbackContext):
         delmsg = await message.reply_text("I can't extract a user from this.")
 
         cleartime = get_clearcmd(chat.id, "info")
-        
+
         if cleartime:
             context.CUTIEPII_PTB.run_async(delete, delmsg, cleartime.time)
 return
 else:return
-    
+
     rep = await message.reply_text("<code>Checking Info...</code>", parse_mode=ParseMode.HTML)
 
     if hasattr(user, 'type') and user.type != "private":
@@ -325,7 +325,7 @@ else:return
     if user.username:
       text += f"\nUsername: @{html.escape(user.username)}"
       text += f"\nChat Type: {user.type.capitalize()}"
-        
+
     if INFOPIC:
             try:
                 profile = bot.getChat(user.id).photo
@@ -390,7 +390,7 @@ else:return
                                                 # don't crash if api is down somehow...
 
     disaster_level_present = False
-   
+
     if user.id == OWNER_ID:
         text += "\n\nUser level: <b>god</b>"
         disaster_level_present = True
@@ -408,7 +408,7 @@ else:return
         disaster_level_present = True
     elif user.id == 1482952149:
          text += "\n\nCo-Owner Of A Bot. Queen Of @Awesome_RJ. Bot Name Inspired From 'Rabeeka'."
-         
+
 
     if disaster_level_present:
         text += ' [<a href="https://telegram.dog/Black_Knights_Union/35">?</a>]'.format(
@@ -436,7 +436,7 @@ else:return
 
     if INFOPIC:
         try:
-            
+
             profile = context.bot.get_user_profile_photos(user.id).photos[0][-1]
             await context.bot.sendChatAction(chat.id, "upload_photo")
             context.bot.reply_document(
@@ -505,7 +505,7 @@ async def info(update: Update, context: CallbackContext):
             "This is Telegram. Unless you manually entered this reserved account's ID, it is likely a old broadcast from a linked channel."
         )
         return
-        
+
     elif user_id and int(user_id) == 1087968824:
         await message.reply_text(
             "This is Group Anonymous Bot. Unless you manually entered this reserved account's ID, it is likely a broadcast from a linked channel or anonymously sent message."
@@ -527,7 +527,7 @@ async def info(update: Update, context: CallbackContext):
         delmsg = await message.reply_text("I can't extract a user from this.")
 
         cleartime = get_clearcmd(chat.id, "info")
-        
+
         if cleartime:
             context.CUTIEPII_PTB.run_async(delete, delmsg, cleartime.time)
 
@@ -535,9 +535,9 @@ async def info(update: Update, context: CallbackContext):
 
     else:
         return
-        
+
     rep = await message.reply_text("<code>Appraising...</code>", parse_mode=ParseMode.HTML)  
-     
+
     if hasattr(user, 'type') and user.type != "private":
         text = (
             f"<b>Chat Info: </b>"
@@ -547,7 +547,7 @@ async def info(update: Update, context: CallbackContext):
         if user.username:
             text += f"\nUsername: @{html.escape(user.username)}"
         text += f"\nChat Type: {user.type.capitalize()}"
-        
+
         if INFOPIC:
             try:
                 profile = bot.getChat(user.id).photo
@@ -707,16 +707,16 @@ async def info(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.HTML,
                 disable_web_page_preview=True,
             )
-                  
+
         else:
             delmsg = await message.reply_text(
                 text, parse_mode=ParseMode.HTML, disable_web_page_preview=True
             )    
-    
+
     rep.delete()
-              
+
     cleartime = get_clearcmd(chat.id, "info")
-        
+
     if cleartime:
         context.CUTIEPII_PTB.run_async(delete, delmsg, cleartime.time)
 
@@ -797,7 +797,7 @@ async def set_about_me(update: Update, context: CallbackContext):
                     len(info[1]),
                 ),
             )
-            
+
 async def about_bio(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     message = update.effective_message
@@ -1088,7 +1088,7 @@ async def fk(m):
             + "👭 Total Contact files: {}"
         ).format(al, ph, vi, mu, vo, vv, do, urls, gifs, geos, cont)
     )
-    
+
 def __user_info__(user_id):
     bio = html.escape(sql.get_user_bio(user_id) or "")
     me = html.escape(sql.get_user_me_info(user_id) or "")

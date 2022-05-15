@@ -232,7 +232,7 @@ def deletion(update: Update, context: CallbackContext, delmsg):
  • `/listrepo`: lists all repo shortcuts in chat
  • `/gitver`: returns the current API version
  • `/changelog <reponame>`: gets the changelog of a saved repo shortcut
- 
+
 *Admin only:*
  • `/saverepo <name> <user>/<repo> <number (optional)>`: saves a repo value as shortcut
  • `/delrepo <name>`: deletes a repo shortcut

@@ -156,13 +156,13 @@ async def google(event):
         out += f" 👉🏻  [{text}]({url})\n`{des}`\n\n"
     omk = f"**Google Search Query:**\n`{inp}`\n\n**Results:**\n{out}"
     await x.edit(omk, link_preview=False)
-        
+
 
 @register(pattern="^/google (.*)")
 async def _(event):
     if event.fwd_from:
         return
-    
+
     webevent = await event.reply("searching........")
     match = event.pattern_match.group(1)
     page = re.findall(r"page=\d+", match)
@@ -193,7 +193,7 @@ async def _(event):
 async def img_sampler(event):
     if event.fwd_from:
         return
-    
+
     query = event.pattern_match.group(1)
     jit = f"{query}"
     downloader.download(
@@ -265,7 +265,7 @@ async def scam(results, lim):
 
 @register(pattern="^/app (.*)")
 async def apk(e):
-    
+
     try:
         app_name = e.pattern_match.group(1)
         remove_space = app_name.split(" ")

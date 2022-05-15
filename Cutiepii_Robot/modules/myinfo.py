@@ -43,16 +43,16 @@ async def proboyx(event):
 
     await asyncio.sleep(edit_time)
     ok7 = await bot.edit_message(event.chat_id, ok6, file=file4, buttons=button)
-    
+
     await asyncio.sleep(edit_time)
     ok4 = await bot.edit_message(event.chat_id, ok3, file=file2, buttons=button)
-    
+
     await asyncio.sleep(edit_time)
     ok5 = await bot.edit_message(event.chat_id, ok4, file=file1, buttons=button)
-    
+
     await asyncio.sleep(edit_time)
     ok6 = await bot.edit_message(event.chat_id, ok5, file=file3, buttons=button)
-    
+
     await asyncio.sleep(edit_time)
     ok7 = await bot.edit_message(event.chat_id, ok6, file=file5, buttons=button)
 

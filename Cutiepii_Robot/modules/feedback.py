@@ -76,7 +76,7 @@ async def feedback(e):
     if user_id == 1087968824:
        await e.reply("**Turn Off Ur Anonymous Mode And Try**", parse_mode=ParseMode.MARKDOWN)
        return 
- 
+
     if e.sender_id != OWNER_ID and not quew:
         await e.reply(
             GIVE,

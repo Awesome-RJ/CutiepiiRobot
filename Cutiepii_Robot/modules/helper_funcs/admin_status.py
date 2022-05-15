@@ -131,7 +131,7 @@ async def is_user_admin(update: Update, user_id: int, member: ChatMember = None)
                 return True
             return False
 
-	
+
 
 
 RLOCK = RLock()

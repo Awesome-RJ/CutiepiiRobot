@@ -9,7 +9,7 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_callback
 
 url = "https://mydramalist.com/"
-    
+
 # Text Shorter
 def shorten(des: str = '', short: int = 500):
     msg = des[:short] if len(des) > short else des
