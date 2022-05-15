@@ -42,10 +42,10 @@ from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler, 
 from telegram.helpers import mention_html
 
 from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_admin,
-    is_user_admin,
-    user_admin,
+    ,
     user_admin_no_reply,
 )
 from Cutiepii_Robot.modules.log_channel import loggable
