@@ -86,16 +86,15 @@ async def warn_immune(message, update, uid, warner):
         await message.reply_text("NDamn admins, They are too far to be warned!")
         return True
 
-    if uid in WHITELIST_USERS:
-        if warner:
-            await message.reply_text("NWhitelisted users are warn immune.")
-            return True
-        await message.reply_text(
-            "A whitelisted user triggered an auto warn filter!\nI can't warn them users but they should avoid abusing this."
-        )
-        return True
-    else:
+    if uid not in WHITELIST_USERS:
         return False
+    if warner:
+        await message.reply_text("NWhitelisted users are warn immune.")
+        return True
+    await message.reply_text(
+        "A whitelisted user triggered an auto warn filter!\nI can't warn them users but they should avoid abusing this."
+    )
+    return True
 
 # Not async
 async def warn(
@@ -145,12 +144,22 @@ async def warn(
         )
 
     else:
-        keyboard = [[
-            InlineKeyboardButton("🚨 Remove Warn", callback_data="rm_warn({})".format(user.id))
-            ]]
-        rules = rules_sql.get_rules(chat.id)
-        if rules: 
-            keyboard[0].append(InlineKeyboardButton("📝 Rules", url="t.me/{}?start={}".format(CUTIEPII_PTB.bot.username, chat.id)))
+        keyboard = [
+            [
+                InlineKeyboardButton(
+                    "🚨 Remove Warn", callback_data=f"rm_warn({user.id})"
+                )
+            ]
+        ]
+
+        if rules := rules_sql.get_rules(chat.id):
+            keyboard[0].append(
+                InlineKeyboardButton(
+                    "📝 Rules",
+                    url=f"t.me/{CUTIEPII_PTB.bot.username}?start={chat.id}",
+                )
+            )
+
 
         reply = (
             f"<b>╔━「 Warn Event 」</b>\n"
@@ -231,12 +240,22 @@ async def swarn(
         )
 
     else:
-        keyboard = [[
-            InlineKeyboardButton("🚨 Remove Warn", callback_data="rm_warn({})".format(user.id))
-            ]]
-        rules = rules_sql.get_rules(chat.id)
-        if rules: 
-            keyboard[0].append(InlineKeyboardButton("📝 Rules", url="t.me/{}?start={}".format(CUTIEPII_PTB.bot.username, chat.id)))
+        keyboard = [
+            [
+                InlineKeyboardButton(
+                    "🚨 Remove Warn", callback_data=f"rm_warn({user.id})"
+                )
+            ]
+        ]
+
+        if rules := rules_sql.get_rules(chat.id):
+            keyboard[0].append(
+                InlineKeyboardButton(
+                    "📝 Rules",
+                    url=f"t.me/{CUTIEPII_PTB.bot.username}?start={chat.id}",
+                )
+            )
+
 
         reply = (
             f"<b>╔━「 Warn Event 」</b>\n"
@@ -260,22 +279,20 @@ async def swarn(
         )
 
     try:
-        if dels:
-            if message.reply_to_message:
-                await message.reply_to_message.delete()
+        if dels and message.reply_to_message:
+            await message.reply_to_message.delete()
         await message.reply_text(reply, InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.HTML)
         await message.delete()
     except BadRequest as excp:
-        if excp.message == "Reply message not found":
-            # Do not reply
-            if message.reply_to_message:
-                await message.reply_to_message.delete()
-            await message.reply_text(
-                reply, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.HTML, quote=False
-            )
-            await message.delete()
-        else:
+        if excp.message != "Reply message not found":
             raise
+        # Do not reply
+        if message.reply_to_message:
+            await message.reply_to_message.delete()
+        await message.reply_text(
+            reply, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.HTML, quote=False
+        )
+        await message.delete()
     return log_reason
 
 # Not async
@@ -324,12 +341,22 @@ async def dwarn(
         )
 
     else:
-        keyboard = [[
-            InlineKeyboardButton("🚨 Remove Warn", callback_data="rm_warn({})".format(user.id))
-            ]]
-        rules = rules_sql.get_rules(chat.id)
-        if rules: 
-            keyboard[0].append(InlineKeyboardButton("📝 Rules", url="t.me/{}?start={}".format(CUTIEPII_PTB.bot.username, chat.id)))
+        keyboard = [
+            [
+                InlineKeyboardButton(
+                    "🚨 Remove Warn", callback_data=f"rm_warn({user.id})"
+                )
+            ]
+        ]
+
+        if rules := rules_sql.get_rules(chat.id):
+            keyboard[0].append(
+                InlineKeyboardButton(
+                    "📝 Rules",
+                    url=f"t.me/{CUTIEPII_PTB.bot.username}?start={chat.id}",
+                )
+            )
+
 
         reply = (
             f"<b>╔━「 Warn Event 」</b>\n"
@@ -354,15 +381,14 @@ async def dwarn(
             await message.reply_to_message.delete()
         await message.reply_text(reply, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.HTML)
     except BadRequest as excp:
-        if excp.message == "Reply message not found":
-            # Do not reply
-            if message.reply_to_message:
-                await message.reply_to_message.delete()
-            await message.reply_text(
-                reply, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.HTML, quote=False
-            )
-        else:
+        if excp.message != "Reply message not found":
             raise
+        # Do not reply
+        if message.reply_to_message:
+            await message.reply_to_message.delete()
+        await message.reply_text(
+            reply, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode=ParseMode.HTML, quote=False
+        )
     return log_reason
 
 @cutiepii_callback(pattern=r"rm_warn")
@@ -372,18 +398,18 @@ async def dwarn(
 async def button(update: Update, context: CallbackContext) -> str:
     query = update.callback_query  # type: Optional[CallbackQuery]
     user = update.effective_user  # type: Optional[User]
-    match = re.match(r"rm_warn\((.+?)\)", query.data)
-    if match:
+    if match := re.match(r"rm_warn\((.+?)\)", query.data):
         user_id = match.group(1)
         chat = update.effective_chat  # type: Optional[Chat]
         if not is_user_admin(update, int(user.id)):
             await query.answer(text="You are not authorized to remove this warn! Only administrators may remove warns.", show_alert=True)
             return ""
-        res = sql.remove_warn(user_id, chat.id)
-        if res:
+        if res := sql.remove_warn(user_id, chat.id):
             await update.effective_message.edit_text(
-                "Warn removed by {}.".format(mention_html(user.id, user.first_name)),
-                parse_mode=ParseMode.HTML)
+                f"Warn removed by {mention_html(user.id, user.first_name)}.",
+                parse_mode=ParseMode.HTML,
+            )
+
             user_member = chat.get_member(user_id)
             return "<b>{}:</b>" \
                    "\n#UNWARN" \
@@ -449,7 +475,35 @@ async def warn_user(update: Update, context: CallbackContext) -> str:
             return swarn(chat.get_member(user_id).user, update, reason, message, dels, warner)
         else:
             await message.reply_text("NThat looks like an invalid User ID to me.")
-    if delsilent:
+    if not delsilent and delban and user_id:
+        if (
+            message.reply_to_message
+            and message.reply_to_message.from_user.id == user_id
+        ):
+            return dwarn(
+                message.reply_to_message.from_user,
+                update,
+                reason,
+                message,
+                warner,
+            )
+        return dwarn(chat.get_member(user_id).user, update, reason, message, warner)
+    elif not delsilent and delban or not delsilent and not user_id:
+        await message.reply_text("NThat looks like an invalid User ID to me.")
+    elif not delsilent:
+        if (
+            message.reply_to_message
+            and message.reply_to_message.from_user.id == user_id
+        ):
+            return await warn(
+                message.reply_to_message.from_user,
+                update,
+                reason,
+                message.reply_to_message,
+                warner,
+            )
+        return await warn(chat.get_member(user_id).user, update, reason, message, warner)
+    else:
         dels = True
         if user_id:
             if (
@@ -465,38 +519,6 @@ async def warn_user(update: Update, context: CallbackContext) -> str:
                     warner,
                 )
             return swarn(chat.get_member(user_id).user, update, reason, message, dels, warner)
-        else:
-            await message.reply_text("NThat looks like an invalid User ID to me.")
-    elif delban:
-        if user_id:
-            if (
-                message.reply_to_message
-                and message.reply_to_message.from_user.id == user_id
-            ):
-                return dwarn(
-                    message.reply_to_message.from_user,
-                    update,
-                    reason,
-                    message,
-                    warner,
-                )
-            return dwarn(chat.get_member(user_id).user, update, reason, message, warner)
-        else:
-            await message.reply_text("NThat looks like an invalid User ID to me.")
-    else:
-        if user_id:
-            if (
-                message.reply_to_message
-                and message.reply_to_message.from_user.id == user_id
-            ):
-                return await warn(
-                    message.reply_to_message.from_user,
-                    update,
-                    reason,
-                    message.reply_to_message,
-                    warner,
-                )
-            return await warn(chat.get_member(user_id).user, update, reason, message, warner)
         else:
             await message.reply_text("NThat looks like an invalid User ID to me.")
     return ""
@@ -689,7 +711,7 @@ async def set_warn_limit(update: Update, context: CallbackContext) -> str:
                 await msg.reply_text("The minimum warn limit is 3!")
             else:
                 sql.set_warn_limit(chat.id, int(args[0]))
-                await msg.reply_text("Updated the warn limit to {}".format(args[0]))
+                await msg.reply_text(f"Updated the warn limit to {args[0]}")
                 return (
                     f"<b>{html.escape(chat.title)}:</b>\n"
                     f"#SET_WARN_LIMIT\n"
@@ -701,7 +723,7 @@ async def set_warn_limit(update: Update, context: CallbackContext) -> str:
     else:
         limit, _ = sql.get_warn_setting(chat.id)
 
-        await msg.reply_text("The current warn limit is {}".format(limit))
+        await msg.reply_text(f"The current warn limit is {limit}")
     return ""
 
 @cutiepii_cmd(command='strongwarn', filters=filters.ChatType.GROUPS)

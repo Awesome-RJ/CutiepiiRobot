@@ -29,6 +29,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+
 import asyncio
 import io
 import re
@@ -55,7 +56,7 @@ from telegram.helpers import mention_html
 
 html_tags = re.compile("<.*?>")
 
-REMINDER_LIMIT = int(20)
+REMINDER_LIMIT = 20
 
 @user_admin
 @loggable
@@ -118,7 +119,17 @@ async def reminders(update: Update, context: CallbackContext):
     text = f"Reminders in {chat.title} are:\n"
     for reminder in reminders:
         user = await context.bot.get_chat(reminder.user_id)
-        text += ("\n➛ {}\n  <b>By</b>: {}\n  <b>Time left</b>: {}\n  <b>Time stamp</b>: <code>{}</code>").format(reminder.remind_message, (mention_html(user.id, user.first_name) if not user.username else "@"+user.username), get_readable_time(reminder.time_seconds-round(time.time())), reminder.time_seconds)
+        text += (
+            "\n➛ {}\n  <b>By</b>: {}\n  <b>Time left</b>: {}\n  <b>Time stamp</b>: <code>{}</code>"
+        ).format(
+            reminder.remind_message,
+            f"@{user.username}"
+            if user.username
+            else mention_html(user.id, user.first_name),
+            get_readable_time(reminder.time_seconds - round(time.time())),
+            reminder.time_seconds,
+        )
+
     text += "\n\n<b>Note</b>: You can clear a particular reminder with its time stamp."
     if len(text) > 4096:
         text = re.sub(html_tags, "", text)

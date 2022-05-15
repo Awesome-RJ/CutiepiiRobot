@@ -64,7 +64,7 @@ def get_readable_time(seconds: int) -> str:
     for x in range(len(time_list)):
         time_list[x] = str(time_list[x]) + time_suffix_list[x]
     if len(time_list) == 4:
-        ping_time += time_list.pop() + ", "
+        ping_time += f"{time_list.pop()}, "
 
     time_list.reverse()
     ping_time += ":".join(time_list)
@@ -80,23 +80,23 @@ async def stats(update: Update, context: CallbackContext):
     uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
     botuptime = get_readable_time((time.time() - StartTime))
     status = "*╔═━「 System statistics: 」*\n\n"
-    status += "*➛ System Start time:* " + str(uptime) + "\n"
+    status += f"*➛ System Start time:* {str(uptime)}" + "\n"
     uname = platform.uname()
-    status += "*➛ System:* " + str(uname.system) + "\n"
-    status += "*➛ Node name:* " + escape_markdown(str(uname.node)) + "\n"
-    status += "*➛ Release:* " + escape_markdown(str(uname.release)) + "\n"
-    status += "*➛ Machine:* " + escape_markdown(str(uname.machine)) + "\n"
+    status += f"*➛ System:* {str(uname.system)}" + "\n"
+    status += f"*➛ Node name:* {escape_markdown(str(uname.node))}" + "\n"
+    status += f"*➛ Release:* {escape_markdown(str(uname.release))}" + "\n"
+    status += f"*➛ Machine:* {escape_markdown(str(uname.machine))}" + "\n"
 
     mem = virtual_memory()
     cpu = cpu_percent()
     disk = disk_usage("/")
-    status += "*➛ CPU:* " + str(cpu) + " %\n"
-    status += "*➛ RAM:* " + str(mem[2]) + " %\n"
-    status += "*➛ Storage:* " + str(disk[3]) + " %\n\n"
-    status += "*➛ Python version:* " + python_version() + "\n"
-    status += "*➛ python-telegram-bot:* " + str(ptbver) + "\n"
-    status += "*➛ Uptime:* " + str(botuptime) + "\n"
-    status += "*➛ Database size:* " + str(db_size) + "\n"
+    status += f"*➛ CPU:* {str(cpu)}" + " %\n"
+    status += f"*➛ RAM:* {str(mem[2])}" + " %\n"
+    status += f"*➛ Storage:* {str(disk[3])}" + " %\n\n"
+    status += f"*➛ Python version:* {python_version()}" + "\n"
+    status += f"*➛ python-telegram-bot:* {str(ptbver)}" + "\n"
+    status += f"*➛ Uptime:* {str(botuptime)}" + "\n"
+    status += f"*➛ Database size:* {str(db_size)}" + "\n"
     kb = [
           [
            InlineKeyboardButton("Ping", callback_data="pingCB")

@@ -159,11 +159,11 @@ def hpmanager(user):
             afkst = afk_reason(user.id)
             # if user is afk and no reason then decrease 7%
             # else if reason exist decrease 5%
-            new_hp -= no_by_per(total_hp, 7) if not afkst else no_by_per(total_hp, 5)
-            # fbanned users will have (2*number of fbans) less from max HP
-            # Example: if HP is 100 but user has 5 diff fbans
-            # Available HP is (2*5) = 10% less than Max HP
-            # So.. 10% of 100HP = 90HP
+            new_hp -= no_by_per(total_hp, 5) if afkst else no_by_per(total_hp, 7)
+                    # fbanned users will have (2*number of fbans) less from max HP
+                    # Example: if HP is 100 but user has 5 diff fbans
+                    # Available HP is (2*5) = 10% less than Max HP
+                    # So.. 10% of 100HP = 90HP
 
     else:
         new_hp = no_by_per(total_hp, 5)
@@ -205,18 +205,16 @@ async def get_id(update: Update, context: CallbackContext):
                 parse_mode=ParseMode.HTML,
             )
 
+    elif chat.type == "private":
+        await msg.reply_text(
+            f"➛ Your id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML
+        )
+
     else:
-
-        if chat.type == "private":
-            await msg.reply_text(
-                f"➛ Your id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML
-            )
-
-        else:
-            await msg.reply_text(
-                f"➛ <b>User:</b> {mention_html(msg.from_user.id, msg.from_user.first_name)}\n➛ <b>From User ID:</b> <code>{update.effective_message.from_user.id}</code>\n➛ <b>This Group ID:</b> <code>{chat.id}</code>", 
-                parse_mode=ParseMode.HTML,
-            )
+        await msg.reply_text(
+            f"➛ <b>User:</b> {mention_html(msg.from_user.id, msg.from_user.first_name)}\n➛ <b>From User ID:</b> <code>{update.effective_message.from_user.id}</code>\n➛ <b>This Group ID:</b> <code>{chat.id}</code>", 
+            parse_mode=ParseMode.HTML,
+        )
 
 
 @telethn.on(
@@ -504,7 +502,7 @@ async def info(update: Update, context: CallbackContext):
         )
         return
 
-    elif user_id and int(user_id) == 1087968824:
+    elif user_id:
         await message.reply_text(
             "This is Group Anonymous Bot. Unless you manually entered this reserved account's ID, it is likely a broadcast from a linked channel or anonymously sent message."
         )
@@ -524,9 +522,7 @@ async def info(update: Update, context: CallbackContext):
     ):
         delmsg = await message.reply_text("I can't extract a user from this.")
 
-        cleartime = get_clearcmd(chat.id, "info")
-
-        if cleartime:
+        if cleartime := get_clearcmd(chat.id, "info"):
             context.CUTIEPII_PTB.run_async(delete, delmsg, cleartime.time)
 
         return
@@ -588,30 +584,23 @@ async def info(update: Update, context: CallbackContext):
         if chat.type != "private" and user_id != bot.id:
             _stext = "\n➛ Presence: <code>{}</code>"
 
-            afk_st = is_user_afk(user.id)
-            if afk_st:
+            if afk_st := is_user_afk(user.id):
                 text += _stext.format("AFK")
-            else:
-                status = bot.get_chat_member(chat.id, user.id).status
-                if status:
-                    if status == "left":
-                        text += _stext.format("Not here")
-                    if status == "kicked":
-                        text += _stext.format("Banned")
-                    elif status == "member":
-                        text += _stext.format("Detected")
-                    elif status in {"administrator", "creator"}:
-                        text += _stext.format("Admin")
+            elif status := bot.get_chat_member(chat.id, user.id).status:
+                if status == "left":
+                    text += _stext.format("Not here")
+                if status == "kicked":
+                    text += _stext.format("Banned")
+                elif status == "member":
+                    text += _stext.format("Detected")
+                elif status in {"administrator", "creator"}:
+                    text += _stext.format("Admin")
 
         with contextlib.suppress(Exception):
-            spamwtc = sw.get_ban(int(user.id))
-            if spamwtc:
+            if spamwtc := sw.get_ban(int(user.id)):
                 text += "\n\n<b>➛ This person is Spamwatched!</b>"
                 text += f"\n➛ Reason: <pre>{spamwtc.reason}</pre>"
                 text += "\n➛ Appeal at @SpamWatchSupport"
-            else:
-                pass
-
         disaster_level_present = False
 
         if user.id == OWNER_ID:
@@ -713,9 +702,7 @@ async def info(update: Update, context: CallbackContext):
 
     rep.delete()
 
-    cleartime = get_clearcmd(chat.id, "info")
-
-    if cleartime:
+    if cleartime := get_clearcmd(chat.id, "info"):
         context.CUTIEPII_PTB.run_async(delete, delmsg, cleartime.time)
 
 
@@ -725,9 +712,7 @@ async def about_me(update: Update, context: CallbackContext):
     user_id = extract_user(message, args)
 
     user = await bot.get_chat(user_id) if user_id else message.from_user
-    info = sql.get_user_me_info(user.id)
-
-    if info:
+    if info := sql.get_user_me_info(user.id):
         await update.effective_message.reply_text(
             f"*{user.first_name}*:\n{escape_markdown(info)}",
             parse_mode=ParseMode.MARKDOWN,
@@ -747,9 +732,7 @@ async def about_me(update: Update, context: CallbackContext):
     user_id = extract_user(message, args)
 
     user = await bot.get_chat(user_id) if user_id else message.from_user
-    info = sql.get_user_me_info(user.id)
-
-    if info:
+    if info := sql.get_user_me_info(user.id):
         await message.reply_text(
             f"*{user.first_name}*:\n{escape_markdown(info)}",
             parse_mode=ParseMode.MARKDOWN,
@@ -790,10 +773,7 @@ async def set_about_me(update: Update, context: CallbackContext):
                 await update.effective_message.reply_text("Information updated!")
         else:
             await message.reply_text(
-                "The info needs to be under {} characters! You have {}.".format(
-                    MessageLimit.TEXT_LENGTH // 4,
-                    len(info[1]),
-                ),
+                f"The info needs to be under {MessageLimit.TEXT_LENGTH // 4} characters! You have {len(info[1])}."
             )
 
 async def about_bio(update: Update, context: CallbackContext):
@@ -802,9 +782,7 @@ async def about_bio(update: Update, context: CallbackContext):
 
     user_id = extract_user(message, args)
     user = await bot.get_chat(user_id) if user_id else message.from_user
-    info = sql.get_user_bio(user.id)
-
-    if info:
+    if info := sql.get_user_bio(user.id):
         await message.reply_text(
             "*{}*:\n{}".format(user.first_name, escape_markdown(info)),
             parse_mode=ParseMode.MARKDOWN,
@@ -859,10 +837,9 @@ async def set_about_bio(update: Update, context: CallbackContext):
                 )
             else:
                 await message.reply_text(
-                    "Bio needs to be under {} characters! You tried to set {}.".format(
-                        MessageLimit.TEXT_LENGTH // 4, len(bio[1]),
-                    ),
+                    f"Bio needs to be under {MessageLimit.TEXT_LENGTH // 4} characters! You tried to set {len(bio[1])}."
                 )
+
     else:
         await update.effective_message.reply_text("Reply to someone to set their bio!")
 
@@ -910,7 +887,11 @@ def LastOnline(user: User):
 
 
 def FullName(user: User):
-    return user.first_name + " " + user.last_name if user.last_name else user.first_name
+    return (
+        f"{user.first_name} {user.last_name}"
+        if user.last_name
+        else user.first_name
+    )
 
 
 @pgram.on_message(filters.command("whois") & ~filters.edited & ~filters.bot)
@@ -939,10 +920,10 @@ async def whois(client, message):
             user_id=user.id,
             user_dc=user.dc_id,
             first_name=user.first_name,
-            last_name=user.last_name if user.last_name else "",
-            username=user.username if user.username else "",
+            last_name=user.last_name or "",
+            username=user.username or "",
             last_online=LastOnline(user),
-            bio=desc if desc else "`No bio set up.`",
+            bio=desc or "`No bio set up.`",
         ),
         disable_web_page_preview=True,
     )
@@ -966,13 +947,14 @@ async def get_chat_info(chat, already=False):
         "DC": dc_id,
         "Type": type_,
         "Name": [title],
-        "Username": [("@" + username) if username else None],
+        "Username": [f"@{username}" if username else None],
         "Mention": [link],
         "Members": members,
         "Scam": is_scam,
         "Restricted": is_restricted,
         "Description": [description],
     }
+
     caption = section("Chat info", body)
     return [caption, photo_id]
 

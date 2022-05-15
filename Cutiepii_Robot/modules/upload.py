@@ -47,7 +47,7 @@ def get_date_in_two_weeks():
     get maximum date of storage for file
     :return: date in two weeks
     """
-    today = datetime.datetime.today()
+    today = datetime.datetime.now()
     date_in_two_weeks = today + datetime.timedelta(days=14)
     return date_in_two_weeks.date()
 

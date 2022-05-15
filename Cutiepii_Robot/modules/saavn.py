@@ -39,9 +39,9 @@ from Cutiepii_Robot import pgram
 from Cutiepii_Robot.utils.saavnhelp import get_arg
 
 
-@pgram.on_message(filters.command("saavn", f"saavn@Cutiepii_Robot"))
+@pgram.on_message(filters.command("saavn", "saavn@Cutiepii_Robot"))
 async def song(client, message):
-    args = get_arg(message) + " " + "song"
+    args = f"{get_arg(message)} song"
     if args.startswith(" "):
         await message.reply("<b> Song name required!! </b>")
         return ""

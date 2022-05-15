@@ -529,6 +529,6 @@ async def recho(update: Update, context: CallbackContext):
     to_send = " ".join(args)
     if len(to_send) >= 2:
         try:
-            await bot.sendMessage(int(chat_id), str(to_send))
+            await bot.sendMessage(int(chat_id), to_send)
         except TelegramError:
             await message.reply_text("Couldn't send the message. Perhaps I'm not part of that group?")

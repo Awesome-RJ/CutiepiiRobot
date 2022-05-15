@@ -56,17 +56,17 @@ def latest():
         time = x['time']
         try:
             aired = bool(x['aired'])
-            title = f"**[{title}](https://subsplease.org/shows/{x['page']})**" if not aired else f"**~~[{title}](https://subsplease.org/shows/{x['page']})~~**"
+            title = (
+                f"**~~[{title}](https://subsplease.org/shows/{x['page']})~~**"
+                if aired
+                else f"**[{title}](https://subsplease.org/shows/{x['page']})**"
+            )
+
         except KeyError:
             title = f"**[{title}](https://subsplease.org/shows/{x['page']})**"
         data = f"{title} - {time}"
 
-        if k:
-            k = f"{k}\n{data}"
-
-        else:
-            k = data
-
+        k = f"{k}\n{data}" if k else data
     return k
 
 

@@ -88,7 +88,7 @@ async def _(event):
         try:
             await tbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
-            LOGGER.warn("sleeping for {} seconds".format(ex.seconds))
+            LOGGER.warn(f"sleeping for {ex.seconds} seconds")
             sleep(ex.seconds)
         except Exception as ex:
             await event.reply(str(ex))
@@ -150,7 +150,7 @@ async def _(event):
         try:
             await tbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
-            LOGGER.warn("sleeping for {} seconds".format(ex.seconds))
+            LOGGER.warn(f"sleeping for {ex.seconds} seconds")
             sleep(ex.seconds)
         except Exception as ex:
             await event.reply(str(ex))
@@ -170,26 +170,27 @@ async def _(event):
 async def get_users(show):
     if not show.is_group:
         return
-    if show.is_group:
-        if not await is_register_admin(show.input_chat, show.sender_id):
-            return
+    if not await is_register_admin(show.input_chat, show.sender_id):
+        return
     info = await tbot.get_entity(show.chat_id)
-    title = info.title if info.title else "this chat"
+    title = info.title or "this chat"
     mentions = "Users in {}: \n".format(title)
     async for user in tbot.iter_participants(show.chat_id):
-        if not user.deleted:
-            mentions += f"\n[{user.first_name}](tg://user?id={user.id}) {user.id}"
-        else:
-            mentions += f"\nDeleted Account {user.id}"
-    file = open("userslist.txt", "w+")
-    file.write(mentions)
-    file.close()
+        mentions += (
+            f"\nDeleted Account {user.id}"
+            if user.deleted
+            else f"\n[{user.first_name}](tg://user?id={user.id}) {user.id}"
+        )
+
+    with open("userslist.txt", "w+") as file:
+        file.write(mentions)
     await tbot.send_file(
         show.chat_id,
         "userslist.txt",
-        caption="Users in {}".format(title),
+        caption=f"Users in {title}",
         reply_to=show.id,
     )
+
     os.remove("userslist.txt")
 
 

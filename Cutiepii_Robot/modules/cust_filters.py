@@ -215,9 +215,6 @@ async def filters(update, context) -> None:  # sourcery no-metrics
         )
 
         return f"<b>{escape(chat.title or chat.id)}:</b>\n"
-        f"#ADDFILTER\n"
-        f"<b>Admin:</b> {mention_html(user.id, escape(user.first_name))}\n"
-        f"<b>Note:</b> {keyword}"
 
 
 
