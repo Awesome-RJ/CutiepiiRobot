@@ -9,7 +9,7 @@ lxml==4.8.0
 nltk==3.7
 pillow==9.1.0
 pretty-errors==1.2.25
-psutil==5.8.0
+psutil==5.9.0
 pynewtonmath==1.0.1
 python-telegram-bot==20.0a0
 regex==2022.3.2
