@@ -1,5 +1,5 @@
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler, DisableAbleMessageHandler
-from Cutiepii_Robot import LOGGER, CUTIEPII_PTB as app, telethn, OWNER_ID
+from Cutiepii_Robot import LOGGER, CUTIEPII_PTB as app
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, InlineQueryHandler, MessageHandler
 from telegram.ext.filters import BaseFilter
 from typing import Optional, List

@@ -3,7 +3,6 @@ from typing import Optional
 from threading import RLock
 
 from telegram import Chat, Update, ChatMember
-from telegram import constants
 from telegram.ext import CallbackContext as Ctx, CallbackQueryHandler as CBHandler
 
 from Cutiepii_Robot import CUTIEPII_PTB

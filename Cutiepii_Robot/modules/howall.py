@@ -29,11 +29,8 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 import random
-from .. import OWNER_ID
 from .. import telethn as asst
 from telethon import Button, events
-from telegram.constants import ParseMode
-from ..events import register
 
 BUTTON = [[Button.url("❓ What Is This", "https://t.me/Black_Knights_Union/195")]]
 HOT = "https://telegra.ph/file/daad931db960ea40c0fca.gif"

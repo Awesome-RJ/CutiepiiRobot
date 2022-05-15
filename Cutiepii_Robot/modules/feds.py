@@ -42,7 +42,6 @@ from io import BytesIO
 
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.admin_status import user_is_admin
-from Cutiepii_Robot.modules.sql.users_sql import get_user_com_chats
 from Cutiepii_Robot import (
     GBAN_LOGS,
     LOGGER,
@@ -50,7 +49,6 @@ from Cutiepii_Robot import (
     OWNER_ID,
     DEV_USERS,
     SUDO_USERS,
-    TIGER_USERS,
     WHITELIST_USERS,
     CUTIEPII_PTB,
 )
@@ -67,8 +65,6 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import (
 from Cutiepii_Robot.modules.helper_funcs.string_handling import markdown_parser
 from telegram import (
     Update,
-    Chat,
-    User,
     MessageEntity,
     InlineKeyboardMarkup,
     InlineKeyboardButton,

@@ -33,7 +33,7 @@ import html
 import ast
 import Cutiepii_Robot.modules.sql.locks_sql as sql
 
-from telegram import Message, Chat, MessageEntity, ChatPermissions, Update
+from telegram import MessageEntity, ChatPermissions, Update
 from telegram.constants import ParseMode
 from telegram.error import BadRequest, TelegramError
 from telegram.ext import filters, CommandHandler, MessageHandler

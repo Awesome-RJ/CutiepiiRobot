@@ -35,7 +35,7 @@ import requests
 import json
 
 from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update)
-from telegram.ext import CallbackQueryHandler, CommandHandler, run_async, CallbackContext
+from telegram.ext import CallbackQueryHandler, CallbackContext
 from telegram.utils.helpers import mention_html
 from pyrogram import filters
 from bs4 import BeautifulSoup

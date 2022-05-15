@@ -36,7 +36,7 @@ from pyrogram import filters
 from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent
 
 
-from Cutiepii_Robot import pgram, GENIUS_API_TOKEN, arq, CUTIEPII_PTB
+from Cutiepii_Robot import pgram, GENIUS_API_TOKEN, arq
 
 
 async def lyrics_func(answers, text):

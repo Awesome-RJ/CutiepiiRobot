@@ -31,20 +31,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import asyncio
-import os
-import requests
 import datetime
-import time
-import random
-
-from PIL import Image
-from io import BytesIO
 from datetime import datetime
-from telethon import Button, __version__ as tlhver, custom, events, version
-from telethon.tl.types import ChannelParticipantsAdmins
+from telethon import Button, __version__ as tlhver
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn as borg
-from Cutiepii_Robot import StartTime, CUTIEPII_PTB
 from platform import python_version
 from pyrogram import __version__ as pyrover
 

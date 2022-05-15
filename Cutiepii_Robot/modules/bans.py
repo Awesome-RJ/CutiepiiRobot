@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import html
 from typing import Optional, Union
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Bot, Chat, ChatMember, Message, Update, User
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Bot, Chat, ChatMember, Update
 from telegram.error import BadRequest
 from telegram.ext import filters, CallbackContext
 from telegram.helpers import mention_html

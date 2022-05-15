@@ -40,7 +40,6 @@ import telegram.ext as tg
 
 from pyrogram import Client
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
-from telegram.ext import Updater
 from telegram import Chat
 from telethon import TelegramClient
 from telethon.sessions import MemorySession
