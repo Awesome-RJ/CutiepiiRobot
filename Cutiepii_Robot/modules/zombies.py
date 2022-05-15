@@ -29,8 +29,6 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import asyncio
-
 from asyncio import sleep
 from telethon import events
 from telethon.errors import ChatAdminRequiredError, UserAdminInvalidError

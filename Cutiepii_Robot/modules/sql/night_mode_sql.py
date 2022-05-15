@@ -29,7 +29,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from sqlalchemy import Boolean, Column, Integer, String, UnicodeText
+from sqlalchemy import Column, String
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
 

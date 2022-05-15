@@ -37,7 +37,6 @@ from telegram import (
     InlineKeyboardMarkup,
     # ParseMode,
     Update,
-    ChatMember,
     User,
 )
 from telegram.error import BadRequest, TelegramError

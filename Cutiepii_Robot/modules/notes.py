@@ -38,7 +38,6 @@ from typing import Optional
 from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
-    Message,
     Update,
 )
 from telegram.constants import ParseMode, MessageLimit

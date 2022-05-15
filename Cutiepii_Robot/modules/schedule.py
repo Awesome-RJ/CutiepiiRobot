@@ -33,7 +33,7 @@ import time
 import datetime
 
 from requests import get
-from pyrogram import Client, filters
+from pyrogram import filters
 from pyrogram.types.bots_and_keyboards.inline_keyboard_button import InlineKeyboardButton
 from pyrogram.types.bots_and_keyboards.inline_keyboard_markup import InlineKeyboardMarkup
 

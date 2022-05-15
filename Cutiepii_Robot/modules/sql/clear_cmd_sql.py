@@ -1,7 +1,7 @@
 import threading
 
 from Cutiepii_Robot.modules.sql import BASE, SESSION
-from sqlalchemy import Integer, String, Boolean, Column, UnicodeText
+from sqlalchemy import Integer, String, Column, UnicodeText
 
 
 class ClearCmd(BASE):

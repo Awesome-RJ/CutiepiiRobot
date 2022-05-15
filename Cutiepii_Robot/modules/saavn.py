@@ -35,7 +35,7 @@ import wget
 
 from pyrogram import filters
 
-from Cutiepii_Robot import pgram, CUTIEPII_PTB
+from Cutiepii_Robot import pgram
 from Cutiepii_Robot.utils.saavnhelp import get_arg
 
 

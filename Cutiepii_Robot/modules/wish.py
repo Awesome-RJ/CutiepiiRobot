@@ -31,7 +31,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import random
 
 from Cutiepii_Robot import OWNER_ID, telethn
-from Cutiepii_Robot.events import register
 
 from telethon import events, Button
 from telegram.constants import ParseMode

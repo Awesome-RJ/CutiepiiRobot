@@ -1,38 +1,22 @@
 from Cutiepii_Robot import *
 from Cutiepii_Robot.events import register
-from telethon.errors import (
-    ChatAdminRequiredError,
-    ImageProcessFailedError,
-    PhotoCropSizeSmallError,
-)
-from telethon import Button
-from telethon import TelegramClient, events
 from telethon.tl.types import ChannelParticipantAdmin
 from telethon.tl.types import ChannelParticipantCreator
 from telethon.tl.functions.channels import GetParticipantRequest
 from telethon.errors import UserNotParticipantError
-from telethon.tl.functions.channels import EditAdminRequest, EditPhotoRequest
-from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest, UpdatePinnedMessageRequest
 from telethon.tl.types import (
-    ChannelParticipantsAdmins,
-    ChatAdminRights,
     ChatBannedRights,
-    MessageEntityMentionName,
-    MessageMediaPhoto,
-)
+    )
 
 from telethon import *
 from telethon.tl import *
 from telethon.errors import *
-from telethon.errors.rpcerrorlist import MessageDeleteForbiddenError
 
 import os
 from time import sleep
-from telethon.errors import FloodWaitError, ChatNotModifiedError
-from telethon.errors import UserAdminInvalidError
+from telethon.errors import FloodWaitError
 from telethon.tl import functions
 from telethon.tl import types
-from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import *
 
 sudo = 2131857711

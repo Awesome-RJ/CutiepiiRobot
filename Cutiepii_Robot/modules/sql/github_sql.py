@@ -1,8 +1,6 @@
 import threading
 
-from sqlalchemy import Column, String, UnicodeText, func, distinct, Integer
-
-from Cutiepii_Robot.modules.helper_funcs.msg_types import Types
+from sqlalchemy import Column, String, UnicodeText, Integer
 from Cutiepii_Robot.modules.sql import SESSION, BASE
 
 

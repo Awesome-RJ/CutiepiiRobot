@@ -1,6 +1,6 @@
 import threading
 
-from sqlalchemy import Column, String, Boolean, UnicodeText
+from sqlalchemy import Column, String, Boolean
 from Cutiepii_Robot.modules.sql import SESSION, BASE
 
 

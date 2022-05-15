@@ -28,14 +28,11 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-
-import telegram
 import html
 import re
 import Cutiepii_Robot.modules.sql.rules_sql as rules_sql
 
 from typing import Optional
-from sqlalchemy.sql.expression import false
 
 from Cutiepii_Robot import BAN_STICKER, DEV_USERS, OWNER_ID, SUDO_USERS, WHITELIST_USERS, CUTIEPII_PTB
 #from .disable import DisableAbleCommandHandler
@@ -45,7 +42,6 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import (
     extract_user,
     extract_user_and_text,
 )
-from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
 from Cutiepii_Robot.modules.helper_funcs.misc import split_message
 from Cutiepii_Robot.modules.helper_funcs.string_handling import split_quotes
 from Cutiepii_Robot.modules.log_channel import loggable
@@ -55,7 +51,6 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import user_admin_check, b
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_msg, cutiepii_callback
 from telegram import (
-    CallbackQuery,
     Chat,
     InlineKeyboardButton,
     InlineKeyboardMarkup,

@@ -33,8 +33,6 @@ import threading
 
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.sql import BASE, SESSION
-from telegram import Update
-from telegram.ext import CallbackContext
 from sqlalchemy.sql.sqltypes import BigInteger
 from sqlalchemy import (
     Column,

@@ -1,8 +1,6 @@
 import random
 import threading
 from typing import Union
-
-from sqlalchemy.sql.expression import false
 from sqlalchemy import BigInteger, Boolean, Column, Integer, String, UnicodeText
 
 from Cutiepii_Robot.modules.helper_funcs.msg_types import Types

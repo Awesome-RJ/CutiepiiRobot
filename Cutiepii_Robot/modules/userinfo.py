@@ -30,11 +30,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import html
-import re
 import os
 import requests
 import datetime
-import platform
 import asyncio
 import time
 import telegram

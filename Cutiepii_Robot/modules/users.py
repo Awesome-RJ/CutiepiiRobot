@@ -34,7 +34,7 @@ import contextlib
 from io import BytesIO
 from time import sleep
 
-from telegram.error import BadRequest, TelegramError, Forbidden
+from telegram.error import BadRequest, TelegramError
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
 from telegram.ext import (
@@ -47,7 +47,7 @@ from telegram.ext import (
 import Cutiepii_Robot.modules.sql.users_sql as sql
 from Cutiepii_Robot import DEV_USERS, LOGGER, OWNER_ID, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus, sudo_plus
-from Cutiepii_Robot.modules.sql.users_sql import get_all_users, update_user
+from Cutiepii_Robot.modules.sql.users_sql import get_all_users
 from Cutiepii_Robot.modules.helper_funcs.string_handling import button_markdown_parser
 
 USERS_GROUP = 4

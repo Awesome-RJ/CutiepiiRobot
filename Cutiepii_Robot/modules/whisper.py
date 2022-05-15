@@ -1,7 +1,6 @@
-from telethon import events, TelegramClient, Button
+from telethon import events, Button
 import logging
 from telethon.tl.functions.users import GetFullUserRequest as us
-import os
 from Cutiepii_Robot import telethn as bot
 
 logging.basicConfig(level=logging.INFO)

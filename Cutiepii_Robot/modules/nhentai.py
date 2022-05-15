@@ -33,9 +33,7 @@ import requests
 
 from pyrogram import filters
 from pyrogram.types import (InlineKeyboardMarkup,
-                            InlineKeyboardButton,
-                            InlineQueryResultArticle,
-                            InputTextMessageContent
+                            InlineKeyboardButton
                             )
 
 from Cutiepii_Robot import pgram, telegraph

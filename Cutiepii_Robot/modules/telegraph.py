@@ -33,7 +33,7 @@ import os
 
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn
-from telethon import events, Button, types
+from telethon import types
 from PIL import Image
 from datetime import datetime
 from telegraph import Telegraph, upload_file, exceptions
