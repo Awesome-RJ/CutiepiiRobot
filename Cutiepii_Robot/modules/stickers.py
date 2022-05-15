@@ -12,6 +12,7 @@ from telegram import Update
 from telegram.ext import CallbackContext, CallbackQueryHandler
 from telegram.constants import ParseMode
 from telegram.helpers import mention_html
+from urllib.parse import quote as urlquote
 
 from Cutiepii_Robot import REDIS, CUTIEPII_PTB
 from Cutiepii_Robot.events import register as Cutiepii
