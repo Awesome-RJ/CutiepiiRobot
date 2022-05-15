@@ -80,7 +80,7 @@ psycopg2-binary==2.9.2
 geopy
 humanize
 beautifulsoup4
-pyrogram==1.4.1
+pyrogram==1.4.16
 python-arq
 aiohttp
 carbonnow
