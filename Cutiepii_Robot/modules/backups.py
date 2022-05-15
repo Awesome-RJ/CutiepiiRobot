@@ -35,7 +35,7 @@ import os
 
 from io import BytesIO
 from telegram import Update
-from telegram.constants import ParseMode
+from telegram.constants import ParseMode, ChatType
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, CommandHandler
 
