@@ -71,7 +71,7 @@ def get_muted_chats(bot: Bot, update: Update, leave: bool = False):
         sleep(0.1)
 
         try:
-            await bot.send_chat_action(cid, "TYPING", timeout=120)
+            await bot..sendChatAction(cid, "TYPING", timeout=120)
         except (BadRequest, Forbidden):
             muted_chats += +1
             chat_list.append(cid)
