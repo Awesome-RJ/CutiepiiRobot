@@ -150,7 +150,7 @@ async def _(event):
         try:
             await tbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
-            logger.warn("sleeping for {} seconds".format(ex.seconds))
+            LOGGER.warn("sleeping for {} seconds".format(ex.seconds))
             sleep(ex.seconds)
         except Exception as ex:
             await event.reply(str(ex))
