@@ -11,7 +11,7 @@ from uuid import uuid4
 
 from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import InlineKeyboardButton, CallbackQuery, Message, InlineKeyboardMarkup
-from Cutiepii_Robot import DEV_USERS, pgram, GBAN_LOGS
+from Cutiepii_Robot import DEV_USERS, pgram, GBAN_LOGS, TEMP_DOWNLOAD_DIRECTORY
 from Cutiepii_Robot.utils.db import get_collection
 
 AUTH_USERS = get_collection("AUTH_USERS")
@@ -81,15 +81,15 @@ async def media_to_image(client: pgram, message: Message, x: Message, replied: M
         await x.delete()
         return
     media = replied.photo or replied.sticker or replied.animation or replied.video
-    if not os.path.isdir(DOWN_PATH):
-        os.makedirs(DOWN_PATH)
+    if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
+        os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
     dls = await client.download_media(
         media,
-        file_name=DOWN_PATH + rand_key(),
+        file_name=TEMP_DOWNLOAD_DIRECTORY + rand_key(),
     )
-    dls_loc = os.path.join(DOWN_PATH, os.path.basename(dls))
+    dls_loc = os.path.join(TEMP_DOWNLOAD_DIRECTORY, os.path.basename(dls))
     if replied.sticker and replied.sticker.file_name.endswith(".tgs"):
-        png_file = os.path.join(DOWN_PATH, f"{rand_key()}.png")
+        png_file = os.path.join(TEMP_DOWNLOAD_DIRECTORY, f"{rand_key()}.png")
         cmd = f"lottie_convert.py --frame 0 -if lottie -of png {dls_loc} {png_file}"
         stdout, stderr = (await runcmd(cmd))[:2]
         os.remove(dls_loc)
@@ -100,7 +100,7 @@ async def media_to_image(client: pgram, message: Message, x: Message, replied: M
             raise Exception(stdout + stderr)
         dls_loc = png_file
     elif replied.sticker and replied.sticker.file_name.endswith(".webp"):
-        stkr_file = os.path.join(DOWN_PATH, f"{rand_key()}.png")
+        stkr_file = os.path.join(TEMP_DOWNLOAD_DIRECTORY, f"{rand_key()}.png")
         os.rename(dls_loc, stkr_file)
         if not os.path.lexists(stkr_file):
             await x.edit_text("```Sticker not found...```")
@@ -110,7 +110,7 @@ async def media_to_image(client: pgram, message: Message, x: Message, replied: M
         dls_loc = stkr_file
     elif replied.animation or replied.video:
         await x.edit_text("`Converting Media To Image ...`")
-        jpg_file = os.path.join(DOWN_PATH, f"{rand_key()}.jpg")
+        jpg_file = os.path.join(TEMP_DOWNLOAD_DIRECTORY, f"{rand_key()}.jpg")
         await take_screen_shot(dls_loc, 0, jpg_file)
         os.remove(dls_loc)
         if not os.path.lexists(jpg_file):
@@ -147,7 +147,7 @@ async def take_screen_shot(
         duration,
     )
     thumb_image_path = path or os.path.join(
-        DOWN_PATH, f"{basename(video_file)}.jpg"
+        TEMP_DOWNLOAD_DIRECTORY, f"{basename(video_file)}.jpg"
     )
     command = f'''ffmpeg -ss {duration} -i "{video_file}" -vframes 1 "{thumb_image_path}"'''
     err = (await runcmd(command))[1]
