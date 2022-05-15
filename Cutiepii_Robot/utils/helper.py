@@ -228,7 +228,7 @@ def get_btns(media, user: int, result: list, lsqry: str = None, lspage: int = No
         buttons.append([InlineKeyboardButton("Description", callback_data=f"desc_{result[2][0]}_CHAR{qry}{pg}_{str(auth)}_{user}")])
         buttons.append([InlineKeyboardButton("List Series", callback_data=f"lsc_{result[2][0]}{qry}{pg}_{str(auth)}_{user}")])
     if media == "SCHEDULED":
-        if result[0]!=0 and result[0]!=6:
+        if result[0] not in (0, 6):
             buttons.append([
                 InlineKeyboardButton(str(day_(result[0]-1)), callback_data=f"sched_{result[0]-1}_{user}"),
                 InlineKeyboardButton(str(day_(result[0]+1)), callback_data=f"sched_{result[0]+1}_{user}")
