@@ -104,7 +104,7 @@ async def reverse(update: Update, context: CallbackContext):
         match = ParseSauce(fetchUrl + "&hl=en")
         guess = match.get("best_guess")
         MsG.edit_text("Uploading...")
-        if match.get("override") and (not match.get("override") == "" or not match.get("override") == None):
+        if match.get("override") and (not match.get("override") == "" or not match.get("override") is None):
             imgspage = match.get("override")
         else:
             imgspage = match.get("similar_images")
