@@ -77,34 +77,33 @@ async def backup_db(_: CallbackContext):
         sleep(8)
         tmp.delete()
         return
-    else:
-        LOGGER.info("copying config, and logs to backup location")
-        if os.path.exists('log.txt'):
-            print("logs copied")
-            shutil.copyfile('log.txt', f'{bkplocation}/log.txt')
-        if os.path.exists('Cutiepii_Robot/config.py'):
-            print("config copied")
-            shutil.copyfile('Cutiepii_Robot/config.py', f'{bkplocation}/config.py')
-        LOGGER.info("zipping the backup")
-        zipcmd = f"zip --password '{zip_pass}' {bkplocation} {bkplocation}/*"
-        zipinfo = "zipping db backup"
-        LOGGER.info("zip started")
-        term(zipcmd, zipinfo)
-        LOGGER.info("zip done")
-        sleep(1)
-        with open(f'backups/{datenow}.zip', 'rb') as bkp:
-            nm = "{} backup \n".format(bot.username) + datenow
-            await bot.send_document(OWNER_ID,
-                            document=bkp,
-                            caption=nm,
-                            timeout=20
-                            )
-        LOGGER.info("removing zipped files")
-        shutil.rmtree(f"backups/{datenow}")
-        LOGGER.info("backup done")
-        tmp.edit_text("Backup complete!")
-        sleep(5)
-        tmp.delete()
+    LOGGER.info("copying config, and logs to backup location")
+    if os.path.exists('log.txt'):
+        print("logs copied")
+        shutil.copyfile('log.txt', f'{bkplocation}/log.txt')
+    if os.path.exists('Cutiepii_Robot/config.py'):
+        print("config copied")
+        shutil.copyfile('Cutiepii_Robot/config.py', f'{bkplocation}/config.py')
+    LOGGER.info("zipping the backup")
+    zipcmd = f"zip --password '{zip_pass}' {bkplocation} {bkplocation}/*"
+    zipinfo = "zipping db backup"
+    LOGGER.info("zip started")
+    term(zipcmd, zipinfo)
+    LOGGER.info("zip done")
+    sleep(1)
+    with open(f'backups/{datenow}.zip', 'rb') as bkp:
+        nm = "{} backup \n".format(bot.username) + datenow
+        await bot.send_document(OWNER_ID,
+                        document=bkp,
+                        caption=nm,
+                        timeout=20
+                        )
+    LOGGER.info("removing zipped files")
+    shutil.rmtree(f"backups/{datenow}")
+    LOGGER.info("backup done")
+    tmp.edit_text("Backup complete!")
+    sleep(5)
+    tmp.delete()
 
 @owner_plus
 async def del_bkp_fldr(update: Update, _: CallbackContext):

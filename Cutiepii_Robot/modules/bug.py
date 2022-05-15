@@ -62,10 +62,9 @@ async def bug(_, msg: Message):
                 "❎ <b>How can be owner bot reporting bug??</b>",
             )
             return
-        else:
-            await msg.reply_text(
-                "Owner noob!"
-            )
+        await msg.reply_text(
+            "Owner noob!"
+        )
     elif bugs:
         await msg.reply_text(
             f"<b>Bug Report : {bugs}</b>\n\n"
@@ -111,8 +110,7 @@ async def close_send_photo(_, CallbackQuery):
         return await CallbackQuery.answer(
             "You're not allowed to close this.", show_alert=True
         )
-    else:
-        await CallbackQuery.message.delete()
+    await CallbackQuery.message.delete()
 
 
 __mod_name__ = "Bug"

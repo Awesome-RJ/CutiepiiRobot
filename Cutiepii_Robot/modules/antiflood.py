@@ -214,29 +214,27 @@ async def set_flood(update: Update, context: CallbackContext) -> str:
                     )
                 )
 
-            elif amount <= 3:
+            if amount <= 3:
                 send_message(
                     message,
                     "Antiflood must be either 0 (disabled) or number greater than 3!",
                 )
                 return ""
-
+            sql.set_flood(chat_id, amount)
+            if conn:
+                await message.reply_text(f"Anti-flood has been set to {amount} in chat: {chat_name}")
             else:
-                sql.set_flood(chat_id, amount)
-                if conn:
-                    await message.reply_text(f"Anti-flood has been set to {amount} in chat: {chat_name}")
-                else:
-                    await message.reply_text(f"Successfully updated anti-flood limit to {amount}!")
-                return (
-                    "<b>{}:</b>"
-                    "\n#SETFLOOD"
-                    "\n<b>Admin:</b> {}"
-                    "\nSet antiflood to <code>{}</code>.".format(
-                        html.escape(chat_name),
-                        mention_html(user.id, user.first_name),
-                        amount,
-                    )
+                await message.reply_text(f"Successfully updated anti-flood limit to {amount}!")
+            return (
+                "<b>{}:</b>"
+                "\n#SETFLOOD"
+                "\n<b>Admin:</b> {}"
+                "\nSet antiflood to <code>{}</code>.".format(
+                    html.escape(chat_name),
+                    mention_html(user.id, user.first_name),
+                    amount,
                 )
+            )
 
         else:
             await update.effective_message.reply_text("Invalid argument please use a number, 'off' or 'no'")
@@ -365,27 +363,26 @@ async def set_flood_mode(update: Update, context: CallbackContext):
                 mention_html(user.id, user.first_name),
             )
         )
-    else:
-        getmode, getvalue = sql.get_flood_setting(chat.id)
-        if getmode == 1:
-            settypeflood = "ban"
-        elif getmode == 2:
-            settypeflood = "kick"
-        elif getmode == 3:
-            settypeflood = "mute"
-        elif getmode == 4:
-            settypeflood = f"tban for {getvalue}"
-        elif getmode == 5:
-            settypeflood = f"tmute for {getvalue}"
-        if conn:
-            text = await msg.reply_text(
-                f"Sending more messages than flood limit will result in {settypeflood} in {chat_name}."
-            )
+    getmode, getvalue = sql.get_flood_setting(chat.id)
+    if getmode == 1:
+        settypeflood = "ban"
+    elif getmode == 2:
+        settypeflood = "kick"
+    elif getmode == 3:
+        settypeflood = "mute"
+    elif getmode == 4:
+        settypeflood = f"tban for {getvalue}"
+    elif getmode == 5:
+        settypeflood = f"tmute for {getvalue}"
+    if conn:
+        text = await msg.reply_text(
+            f"Sending more messages than flood limit will result in {settypeflood} in {chat_name}."
+        )
 
-        else:
-            text = await msg.reply_text(
-                f"Sending more message than flood limit will result in {settypeflood}."
-            )
+    else:
+        text = await msg.reply_text(
+            f"Sending more message than flood limit will result in {settypeflood}."
+        )
 
     return ""
 
@@ -399,8 +396,7 @@ def __chat_settings__(chat_id, user_id):
     limit = sql.get_flood_limit(chat_id)
     if limit == 0:
         return "Not enforcing to flood control."
-    else:
-        return f"Antiflood has been set to`{limit}`."
+    return f"Antiflood has been set to`{limit}`."
 
 __help__ = """
 Antiflood allows you to take action on users that send more than x messages in a row. Exceeding the set flood \

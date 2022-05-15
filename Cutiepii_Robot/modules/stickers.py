@@ -730,10 +730,9 @@ async def getsticker(update: Update, context: CallbackContext):
             await bot.sendVideo(chat_id, video=open("sticker.webm", "rb"))
             os.remove("sticker.webm")
         return
-    else:
-        await update.effective_message.reply_text(
-            "Please reply to a sticker for me to upload its PNG or TGS or WEBM for video sticker."
-        )
+    await update.effective_message.reply_text(
+        "Please reply to a sticker for me to upload its PNG or TGS or WEBM for video sticker."
+    )
 
 
 async def delsticker(update, context):

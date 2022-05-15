@@ -107,8 +107,7 @@ if is_module_loaded(FILENAME):
                             is_disabled = command[0] in ADMIN_CMDS and is_ad
                             return (args, filter_result) if is_disabled else None
                         return args, filter_result
-                    else:
-                        return False
+                    return False
 
     class DisableAbleMessageHandler(MessageHandler):
         def __init__(self, pattern, callback, block=False, friendly="", **kwargs):

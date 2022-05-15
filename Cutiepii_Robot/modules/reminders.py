@@ -159,9 +159,8 @@ async def clearreminder(update: Update, context: CallbackContext):
             f"<b>Time stamp</b>: <code>{timestamp}</code>\n"
             "<b>Message</b>: {}{}".format(re.sub(html_tags, "", remind.remind_message[:20]), "...." if len(remind.remind_message) > 20 else "")
         )
-    else:
-        await msg.reply_text("You need to provide me the timestamp of the reminder.\n<b>Note</b>: You can see timestamps via /reminders command.", parse_mode=ParseMode.HTML)
-        return
+    await msg.reply_text("You need to provide me the timestamp of the reminder.\n<b>Note</b>: You can see timestamps via /reminders command.", parse_mode=ParseMode.HTML)
+    return
 
 
 @user_admin

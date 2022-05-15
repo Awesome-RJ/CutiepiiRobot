@@ -81,9 +81,8 @@ def rem_remind(chat_id, time_sec, remind_message, user_id):
             SESSION.commit()
             REMINDERS[time_sec].remove({"chat_id": str(chat_id), "message": remind_message, "user_id": user_id})
             return True
-        else:
-            SESSION.close()
-            return False
+        SESSION.close()
+        return False
 
 def get_remind_in_chat(chat_id, timestamp):
     return (SESSION.query(Reminds).filter(Reminds.chat_id == str(chat_id), Reminds.time_seconds == timestamp).first())

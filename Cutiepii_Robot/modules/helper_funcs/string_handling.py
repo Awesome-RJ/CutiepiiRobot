@@ -109,9 +109,8 @@ async def extract_time_seconds(message, time_val):
             # how even...?
             return ""
         return bantime
-    else:
-        await message.reply_text(f"That isn't a valid time - {time_val[-1]} is not a valid number")
-        return ""
+    await message.reply_text(f"That isn't a valid time - {time_val[-1]} is not a valid number")
+    return ""
 
 
 def markdown_parser(
@@ -315,10 +314,9 @@ async def extract_time(message, time_val):
             # how even...?
             return ""
         return bantime
-    else:
-        await message.reply_text(f"Invalid time type specified. Expected m,h, or d, got: {time_val[-1]}")
+    await message.reply_text(f"Invalid time type specified. Expected m,h, or d, got: {time_val[-1]}")
 
-        return ""
+    return ""
 
 
 def markdown_to_html(text):

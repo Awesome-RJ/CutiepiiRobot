@@ -64,9 +64,8 @@ async def add_nsfw(update: Update, context: CallbackContext):
             f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
         )
         return message
-    else:
-        await msg.reply_text("NSFW Mode is already Activated for this chat!")
-        return ""
+    await msg.reply_text("NSFW Mode is already Activated for this chat!")
+    return ""
 
 
 
@@ -80,15 +79,14 @@ async def rem_nsfw(update: Update, context: CallbackContext):
     if not is_nsfw:
         await msg.reply_text("NSFW Mode is already Deactivated")
         return ""
-    else:
-        sql.rem_nsfw(chat.id)
-        await msg.reply_text("Rolled Back to SFW Mode!")
-        message = (
-            f"<b>{chat.title}:</b>\n"
-            f"DEACTIVATED_NSFW\n"
-            f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
-        )
-        return message
+    sql.rem_nsfw(chat.id)
+    await msg.reply_text("Rolled Back to SFW Mode!")
+    message = (
+        f"<b>{chat.title}:</b>\n"
+        f"DEACTIVATED_NSFW\n"
+        f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
+    )
+    return message
 
 
 async def list_nsfw_chats(update: Update, context: CallbackContext):

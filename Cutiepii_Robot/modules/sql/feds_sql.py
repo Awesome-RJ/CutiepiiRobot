@@ -676,15 +676,14 @@ async def get_fed_log(fed_id):
         return fed_setting
     if fed_setting.get("flog") is None:
         return False
-    elif fed_setting.get("flog"):
+    if fed_setting.get("flog"):
         try:
             await CUTIEPII_PTB.bot.get_chat(fed_setting.get("flog"))
         except (BadRequest, Forbidden):
             set_fed_log(fed_id, None)
             return False
         return fed_setting.get("flog")
-    else:
-        return False
+    return False
 
 def set_fed_log(fed_id, chat_id):
     with FEDS_LOCK:

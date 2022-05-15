@@ -28,8 +28,7 @@ def is_superuser(user_id: int, role: str = None):
 	with SESSION() as local_session:
 		if role:
 			return bool(local_session.query(SuperUsers).get((user_id, role)))
-		else:
-			return bool(local_session.query(SuperUsers).get(user_id))
+		return bool(local_session.query(SuperUsers).get(user_id))
 
 
 def get_superuser_role(user_id: int):
@@ -44,8 +43,7 @@ def get_superusers(role: str = None):
 	with SESSION() as local_session:
 		if not role:
 			return local_session.query(SuperUsers).all()
-		else:
-			return local_session.query(SuperUsers).filter(SuperUsers.role_name == role).all()
+		return local_session.query(SuperUsers).filter(SuperUsers.role_name == role).all()
 
 
 def set_superuser_role(user_id: int, role: str):

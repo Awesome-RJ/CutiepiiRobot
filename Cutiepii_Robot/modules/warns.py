@@ -88,19 +88,17 @@ async def warn_immune(message, update, uid, warner):
         if uid in SUDO_USERS:
             await message.reply_text("NThis user is a SUDO user, i'm not gonna warn him!")
             return True
-        else:
-            await message.reply_text("NDamn admins, They are too far to be warned!")
-            return True
+        await message.reply_text("NDamn admins, They are too far to be warned!")
+        return True
 
     if uid in WHITELIST_USERS:
         if warner:
             await message.reply_text("NWhitelisted users are warn immune.")
             return True
-        else:
-            await message.reply_text(
-                "A whitelisted user triggered an auto warn filter!\nI can't warn them users but they should avoid abusing this."
-            )
-            return True
+        await message.reply_text(
+            "A whitelisted user triggered an auto warn filter!\nI can't warn them users but they should avoid abusing this."
+        )
+        return True
     else:
         return False
 
@@ -399,10 +397,9 @@ async def button(update: Update, context: CallbackContext) -> str:
                                                                 mention_html(user.id, user.first_name),
                                                                 mention_html(user_member.user.id, user_member.user.first_name),
                                                                 user_member.user.id)
-        else:
-            await update.effective_message.edit_text(
-                "User has already has no warns.".format(mention_html(user.id, user.first_name)),
-                parse_mode=ParseMode.HTML)
+        await update.effective_message.edit_text(
+            "User has already has no warns.".format(mention_html(user.id, user.first_name)),
+            parse_mode=ParseMode.HTML)
 
     return ""
 
@@ -454,8 +451,7 @@ async def warn_user(update: Update, context: CallbackContext) -> str:
                     dels,
                     warner,
                 )
-            else:
-                return swarn(chat.get_member(user_id).user, update, reason, message, dels, warner)
+            return swarn(chat.get_member(user_id).user, update, reason, message, dels, warner)
         else:
             await message.reply_text("NThat looks like an invalid User ID to me.")
     if delsilent:
@@ -473,8 +469,7 @@ async def warn_user(update: Update, context: CallbackContext) -> str:
                     dels,
                     warner,
                 )
-            else:
-                return swarn(chat.get_member(user_id).user, update, reason, message, dels, warner)
+            return swarn(chat.get_member(user_id).user, update, reason, message, dels, warner)
         else:
             await message.reply_text("NThat looks like an invalid User ID to me.")
     elif delban:
@@ -490,8 +485,7 @@ async def warn_user(update: Update, context: CallbackContext) -> str:
                     message,
                     warner,
                 )
-            else:
-                return dwarn(chat.get_member(user_id).user, update, reason, message, warner)
+            return dwarn(chat.get_member(user_id).user, update, reason, message, warner)
         else:
             await message.reply_text("NThat looks like an invalid User ID to me.")
     else:
@@ -507,8 +501,7 @@ async def warn_user(update: Update, context: CallbackContext) -> str:
                     message.reply_to_message,
                     warner,
                 )
-            else:
-                return await warn(chat.get_member(user_id).user, update, reason, message, warner)
+            return await warn(chat.get_member(user_id).user, update, reason, message, warner)
         else:
             await message.reply_text("NThat looks like an invalid User ID to me.")
     return ""
@@ -534,8 +527,7 @@ async def reset_warns(update: Update, context: CallbackContext) -> str:
             f"<b>User:</b> {mention_html(warned.id, warned.first_name)}\n"
             f"<b>User ID:</b> <code>{warned.id}</code>"
         )
-    else:
-        await message.reply_text("NNo user has been designated!")
+    await message.reply_text("NNo user has been designated!")
     return ""
 
 @cutiepii_cmd(command='warns', filters=filters.ChatType.GROUPS, can_disable=True)
@@ -737,7 +729,7 @@ async def set_warn_strength(update: Update, context: CallbackContext):
                 f"Has enabled strong warns. Users will be banned"
             )
 
-        elif args[0].lower() in ("off", "no"):
+        if args[0].lower() in ("off", "no"):
             sql.set_warn_strength(chat.id, True)
             await msg.reply_text(
                 "Too many warns will now result in a kick! Users will be able to join again after."
@@ -747,9 +739,7 @@ async def set_warn_strength(update: Update, context: CallbackContext):
                 f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"Has disabled bans. I will just kick users."
             )
-
-        else:
-            await msg.reply_text("I only understand on/yes/no/off!")
+        await msg.reply_text("I only understand on/yes/no/off!")
     else:
         limit, soft_warn = sql.get_warn_setting(chat.id)
         if soft_warn:

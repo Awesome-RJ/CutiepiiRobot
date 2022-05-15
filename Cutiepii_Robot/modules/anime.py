@@ -304,8 +304,7 @@ def anime(update, context):
     if len(search) == 1:
         update.effective_message.reply_animation(ANIME_IMG, caption="""Format : /anime < anime name >""", parse_mode="markdown")
         return
-    else:
-        search = search[1]
+    search = search[1]
     variables = {'search': search}
     json = requests.post(
         url, json={
