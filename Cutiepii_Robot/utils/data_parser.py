@@ -638,7 +638,7 @@ async def get_top_animes(gnr: str, page, user):
         if len(result['data']['Page']['media'])==0:
             return [f"No results Found"]
         nsls = await get_all_tags('nsfw')
-        nsfw = True if gnr.lower() in nsls.lower() else False
+        nsfw = gnr.lower() in nsls.lower()
     data = result["data"]["Page"]
     for i in data['media']:
         msg += f"⚬ `{i['title']['romaji']}`\n"
@@ -1115,7 +1115,7 @@ async def toggle_favourites(id_: int, media: str, user: int):
 
 async def get_user(vars_, req, user):
     query = USER_QRY if "user" in req else VIEWER_QRY
-    k = await return_json_senpai(query=query, vars_=vars_, auth=False if "user" in req else True, user=int(user))
+    k = await return_json_senpai(query=query, vars_=vars_, auth=not "user" in req, user=int(user))
     error = k.get("errors")
     if error:
         error_sts = error[0].get("message")
