@@ -37,7 +37,7 @@ import re
 from typing import Optional
 from telegram import Update, ChatPermissions
 from telegram.error import BadRequest
-from telegram.constants import ParseMode
+from telegram.constants import ParseMode, ChatType
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler, filters, MessageHandler
 from telegram.helpers import mention_html
 
