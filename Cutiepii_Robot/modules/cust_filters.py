@@ -219,7 +219,6 @@ async def filters(update, context) -> None:  # sourcery no-metrics
         f"<b>Admin:</b> {mention_html(user.id, escape(user.first_name))}\n"
         f"<b>Note:</b> {keyword}"
 
-    raise CUTIEPII_PTBHandlerStop
 
 
 # NOT ASYNC BECAUSE CUTIEPII_PTB HANDLER RAISE
@@ -265,8 +264,6 @@ async def stop_filter(update, context) -> str:
                     f"<b>Admin:</b> {mention_html(user.id, escape(user.first_name))}\n"
                     f"<b>Filter:</b> {keyword}"
                 )
-            try:
-                raise CUTIEPII_PTBHandlerStop
             finally:
                 return logmsg
 
