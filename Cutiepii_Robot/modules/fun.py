@@ -47,7 +47,7 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from telegram import ChatPermissions, Update, Bot
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, filters
-from telegram.constants import ParseMode
+from telegram.constants import ParseMode, ChatType
 from telegram.helpers import escape_markdown
 
 GIF_ID = "CgACAgQAAx0CSVUvGgAC7KpfWxMrgGyQs-GUUJgt-TSO8cOIDgACaAgAAlZD0VHT3Zynpr5nGxsE"
