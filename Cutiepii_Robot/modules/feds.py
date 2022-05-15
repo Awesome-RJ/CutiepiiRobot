@@ -752,7 +752,7 @@ async def fed_ban(update, context):  # sourcery no-metrics
             except BadRequest as excp:
                 if excp.message in FBAN_ERRORS:
                     try:
-                        await application.bot.getChat(fedschat)
+                        await CUTIEPII_PTB.bot.getChat(fedschat)
                     except Forbidden:
                         sql.chat_leave_fed(fedschat)
                         LOGGER.info(
@@ -791,7 +791,7 @@ async def fed_ban(update, context):  # sourcery no-metrics
                     except BadRequest as excp:
                         if excp.message in FBAN_ERRORS:
                             try:
-                                await application.bot.getChat(fedschat)
+                                await CUTIEPII_PTB.bot.getChat(fedschat)
                             except Forbidden:
                                 targetfed_id = sql.get_fed_id(fedschat)
                                 sql.unsubs_fed(fed_id, targetfed_id)
