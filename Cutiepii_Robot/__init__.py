@@ -39,6 +39,7 @@ import telegram.ext as tg
 
 
 from pyrogram import Client
+from metaapi import META
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
 from telegram import Chat
 from telethon import TelegramClient
@@ -328,6 +329,7 @@ aiohttpsession = ClientSession()
 # ARQ Client
 print("[INFO]: INITIALIZING ARQ CLIENT")
 arq = ARQ("https://arq.hamker.in", "ERUOGT-KHSTDT-RUYZKQ-FZNSHO-ARQ", aiohttpsession)
+meta = META()
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
 ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
 print("[CUTIEPII]: Connecting To Yūki • Cutiepii Userbot (https://telegram.dog/Awesome_Cutiepii)")
