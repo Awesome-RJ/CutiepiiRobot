@@ -329,7 +329,7 @@ async def leave_fed(update: Update, context: CallbackContext):
                     parse_mode=ParseMode.MARKDOWN,
                 )
 
-            send_message(msg, f'This group has left the federation {fed_info["fname"]}!')
+            send_message(update.effective_message, f'This group has left the federation {fed_info["fname"]}!')
         else:
             await update.effective_message.reply_text(
                  "How can you leave a federation that you never joined?!",
