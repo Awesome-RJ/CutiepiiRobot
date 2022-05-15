@@ -126,7 +126,7 @@ async def chatbot(update: Update, context: CallbackContext):
         botname = bot.first_name.lower()
         if botname in query:
             query = query.replace(botname, "bot.name")
-        await bot.send_chat_action(chat_id, action="typing")
+        await bot.sendChatAction(chat_id, action="typing")
         user_id = update.message.from_user.id
         response = chatbot_response(query, user_id)
         if "Aco" in response:
