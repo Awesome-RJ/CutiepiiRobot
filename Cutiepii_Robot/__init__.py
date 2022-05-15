@@ -139,7 +139,6 @@ if ENV:
     GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN") # From:- http://genius.com/api-clients
     MONGO_DB_URL = os.environ.get("MONGO_DB_URL") # MongoDB URL (From:- https://www.mongodb.com/)
     REDIS_URL = os.environ.get("REDIS_URL") # REDIS URL (From:- Heraku & Redis)
-    BOT_ID = int(os.environ.get("BOT_ID")) # Telegram Bot ID (EXP:- 1241223850)
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT") # Support Chat Group Link (Use @Black_Knights_Union_Support || Dont Use https://telegram.dog/Black_Knights_Union_Support)
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API") # From https://telegram.dog/SpamWatchBot 
     STRING_SESSION = os.environ.get("STRING_SESSION") # Telethon Based String Session (2nd ID) [ From https://repl.it/@SpEcHiDe/GenerateStringSession ]
@@ -152,6 +151,7 @@ if ENV:
     MONGO_DB = "Cutiepii"
     BOT_API_FILE_URL = "https://api.telegram.org/file/bot"
     BOT_API_URL = "https://api.telegram.org/bot"
+    BOT_ID = int(TOKEN.split(":")[0])
 
 
     HELP_IMG = os.environ.get("HELP_IMG", True)
@@ -230,7 +230,6 @@ else:
     OPENWEATHERMAP_ID = Config.OPENWEATHERMAP_ID
     APP_ID = Config.APP_ID
     APP_HASH = Config.APP_HASH
-    BOT_ID = Config.BOT_ID
     STRING_SESSION = Config.STRING_SESSION
     GENIUS_API_TOKEN = Config.GENIUS_API_TOKEN
     YOUTUBE_API_KEY = Config.YOUTUBE_API_KEY
