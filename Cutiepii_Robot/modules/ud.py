@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from requests import get
 
 from telegram.error import BadRequest
-from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot import CUTIEPII_PTB, meta
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 
@@ -46,10 +46,11 @@ async def ud(update, context):
     if text == "Cutiepii":
         await msg.reply_text("Cutiepii is my owner so if you search him on urban dictionary you can't find the meaning because he is my husband and only me who know what's the meaning of!")
         return
-    try:
-        results = get(f"http://api.urbandictionary.com/v0/define?term={text}").json()
-        reply_text = f'Word: {text}\n\nDefinition: \n{results["list"][0]["definition"]}'
-        reply_text += f'\n\nExample: \n{results["list"][0]["example"]}'
+    try:       
+        result = meta.urban(text, "1")
+        for results in result:
+        reply_text = f'Word: {text}\n\nDefinition: \n{result["definition"]}'
+        reply_text += f'\n\nExample: \n{results["example"]}'
     except IndexError:
         reply_text = (
             f"Word: {text}\n\nResults: Sorry could not find any matching results!"
@@ -66,9 +67,35 @@ async def ud(update, context):
         await msg.reply_text(f"Error! {err.message}")
 
 
+async def udrandom(update, context):
+    msg = update.effective_message
+    args = context.args
+    result = meta.urban_random()
+    for results in result:
+    reply_text = f'Word: {text}\n\nDefinition: \n{result["definition"]}'
+    reply_text += f'\n\nExample: \n{results["example"]}'
+except IndexError:
+    reply_text = (
+        f"Word: {text}\n\nResults: Sorry could not find any matching results!"
+    )
+ignore_chars = "[]"
+reply = reply_text
+for chars in ignore_chars:
+    reply = reply.replace(chars, "")
+if len(reply) >= 4096:
+    reply = reply[:4096]  # max msg lenth of tg.
+try:
+    await msg.reply_text(reply)
+except BadRequest as err:
+    await msg.reply_text(f"Error! {err.message}")
+
+
+
 UD_HANDLER = DisableAbleCommandHandler(["ud"], ud)
+UDRANDOM_HANDLER = DisableAbleCommandHandler(["udrandom"], udrandom)
 
 CUTIEPII_PTB.add_handler(UD_HANDLER)
+CUTIEPII_PTB.add_handler(UDRANDOM_HANDLER)
 
-__command_list__ = ["ud"]
-__handlers__ = [UD_HANDLER]
+__command_list__ = ["ud", "udrandom"]
+__handlers__ = [UD_HANDLER, UDRANDOM_HANDLER]
