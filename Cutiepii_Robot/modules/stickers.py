@@ -647,7 +647,7 @@ async def getsticker(update, context):
         )
         await context.bot.sendChatAction(chat_id, "upload_document")
         file_id = msg.reply_to_message.sticker.file_id
-        newFile = await bot.get_file(file_id)
+        newFile = await context.bot.get_file(file_id)
         newFile.download("sticker.png")
         await context.bot.sendDocument(chat_id, document=open("sticker.png", "rb"))
         await context.bot.sendChatAction(chat_id, "upload_photo")
