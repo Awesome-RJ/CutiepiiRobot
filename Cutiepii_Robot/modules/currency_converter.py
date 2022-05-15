@@ -83,6 +83,18 @@ async def convert(update: Update, context: CallbackContext):
             parse_mode=ParseMode.MARKDOWN,
         )
 
+_help_ = """
+💴 Currency converter:
+➛ /cash`: currency converter.
+
+Example:
+ `/cash 1 USD INR`
+      OR
+ `/cash 1 usd inr`
+ 
+Output: `1.0 USD = 75.505 INR`
+"""
+         
 CONVERTER_HANDLER = CommandHandler("cash", convert)
 
 CUTIEPII_PTB.add_handler(CONVERTER_HANDLER)
