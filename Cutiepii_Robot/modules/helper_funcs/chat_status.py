@@ -28,6 +28,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
+import contextlib
 import requests
 
 from time import perf_counter
@@ -437,7 +438,7 @@ def user_admin_no_reply(func):
         user = update.effective_user
         # chat = update.effective_chat
 
-        if user and (await is_user_admin(update, user_id, member)):
+        if user and (await is_user_admin(update, user.id)):
             return func(update, context, *args, **kwargs)
         if not user:
             pass
