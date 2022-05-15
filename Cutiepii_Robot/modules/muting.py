@@ -436,19 +436,19 @@ async def temp_nomedia(update: Update, context: CallbackContext) -> str:
     try:
         if member.can_send_messages is None or member.can_send_messages:
             await context.bot.restrict_chat_member(chat.id, user_id, NOMEDIA_PERMISSIONS, until_date=mutetime)
-            await message.reply_text(tld(chat.id, "Restricted from sending media for {} in {}!").format(time_val, chatD.title))
+            await message.reply_text(chat.id, "Restricted from sending media for {} in {}!").format(time_val, chatD.title)
             return log
-        await message.reply_text(tld(chat.id, "This user is already restricted in {}.").format(chatD.title))
+        await message.reply_text(chat.id, "This user is already restricted in {}.").format(chatD.title)
 
     except BadRequest as excp:
         if excp.message == "Reply message not found":
             # Do not reply
-            await message.reply_text(tld(chat.id, "Restricted for {} in {}!").format(time_val, chatD.title), quote=False)
+            await message.reply_text(chat.id, "Restricted for {} in {}!").format(time_val, chatD.title), quote=False
             return log
         LOGGER.warning(update)
         LOGGER.exception("ERROR muting user %s in chat %s (%s) due to %s", user_id, chat.title, chat.id,
                          excp.message)
-        await message.reply_text(tld(chat.id, "Well damn, I can't restrict that user."))
+        await message.reply_text(chat.id, "Well damn, I can't restrict that user.")
 
     return ""
 
@@ -474,22 +474,22 @@ async def media(update: Update, context: CallbackContext) -> str:
 
     user_id = extract_user(message, args)
     if not user_id:
-        await message.reply_text(tld(chat.id, "You'll need to either give me a username to unrestrict, or reply to someone to be unrestricted."))
+        await message.reply_text(chat.id, "You'll need to either give me a username to unrestrict, or reply to someone to be unrestricted.")
         return ""
 
     member = chatD.get_member(int(user_id))
 
     if member.status in ['kicked', 'left']:
-        await message.reply_text(tld(chat.id, "This user isn't even in the chat, unrestricting them won't make them send anything than they "
-                           "already do!"))
+        await message.reply_text(chat.id, "This user isn't even in the chat, unrestricting them won't make them send anything than they "
+                           "already do!")
 
     elif member.can_send_messages and member.can_send_media_messages \
                 and member.can_send_other_messages and member.can_add_web_page_previews:
-        await message.reply_text(tld(chat.id, "This user already has the rights to send anything in {}.").format(chatD.title))
+        await message.reply_text(chat.id, "This user already has the rights to send anything in {}.").format(chatD.title)
     else:
         await context.bot.restrict_chat_member(chatD.id, int(user_id), NOMEDIA_PERMISSIONS)
         keyboard = []
-        reply = tld(chat.id, "Yep, {} can send media again in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
+        reply = (chat.id, "Yep, {} can send media again in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
         await message.reply_text(reply,  parse_mode=ParseMode.HTML)
         return "<b>{}:</b>" \
                "\n#UNRESTRICTED" \
@@ -522,21 +522,21 @@ async def nomedia(update: Update, context: CallbackContext) -> str:
 
     user_id = extract_user(message, args)
     if not user_id:
-        await message.reply_text(tld(chat.id, "You'll need to either give me a username to restrict, or reply to someone to be restricted."))
+        await message.reply_text(chat.id, "You'll need to either give me a username to restrict, or reply to someone to be restricted.")
         return ""
 
     if user_id == bot.id:
-        await message.reply_text(tld(chat.id, "I'm not restricting myself!"))
+        await message.reply_text(chat.id, "I'm not restricting myself!")
         return ""
 
     if member := chatD.get_member(int(user_id)):
         if (await is_user_admin(update, user_id, member=member)):
-            await message.reply_text(tld(chat.id, "Afraid I can't restrict admins!"))
+            await message.reply_text(chat.id, "Afraid I can't restrict admins!")
 
         elif member.can_send_messages is None or member.can_send_messages:
             await context.bot.restrict_chat_member(chatD.id, user_id, NOMEDIA_PERMISSIONS)
             keyboard = []
-            reply = tld(chat.id, "{} is restricted from sending media in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
+            reply = (chat.id, "{} is restricted from sending media in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
             await message.reply_text(reply, parse_mode=ParseMode.HTML)
             return "<b>{}:</b>" \
                    "\n#RESTRICTED" \
@@ -547,9 +547,9 @@ async def nomedia(update: Update, context: CallbackContext) -> str:
                                               mention_html(member.user.id, member.user.first_name), user_id)
 
         else:
-            await message.reply_text(tld(chat.id, "This user is already restricted in {}!"))
+            await message.reply_text(chat.id, "This user is already restricted in {}!")
     else:
-        await message.reply_text(tld(chat.id, "This user isn't in the {}!").format(chatD.title))
+        await message.reply_text(chat.id, "This user isn't in the {}!").format(chatD.title)
 
     return ""
 
