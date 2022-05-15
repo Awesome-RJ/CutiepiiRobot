@@ -43,7 +43,7 @@ from Cutiepii_Robot import pgram, SUPPORT_CHAT, CUTIEPII_PTB
 @admins_only
 async def shazamm(client, message):
     kek = await edit_or_reply(message, "`Shazaming In Progress!`")
-    if not update.effective_message.reply_to_message:
+    if not message.reply_to_message:
         await kek.edit("Reply To The Audio.")
         return
     if os.path.exists("friday.mp3"):
