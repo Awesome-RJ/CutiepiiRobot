@@ -587,7 +587,6 @@ async def add_warn_filter(update: Update, context: CallbackContext):
     sql.add_warn_filter(chat.id, keyword, content)
 
     await update.effective_message.reply_text(f"Warn handler added for '{keyword}'!")
-    raise CUTIEPII_PTBHandlerStop
 
 @cutiepii_cmd(command=['nowarn', 'stopwarn'], filters=filters.ChatType.GROUPS)
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
