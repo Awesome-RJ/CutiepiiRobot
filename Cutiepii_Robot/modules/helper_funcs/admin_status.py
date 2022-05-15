@@ -5,7 +5,7 @@ from threading import RLock
 from telegram import Chat, Update, ChatMember
 from telegram.ext import CallbackContext as Ctx, CallbackQueryHandler as CBHandler
 
-from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot import CUTIEPII_PTB, DEV_USERS
 
 from .admin_status_helpers import (
 	ADMINS_CACHE as A_CACHE,
