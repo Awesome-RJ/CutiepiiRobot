@@ -54,7 +54,7 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import (
 )
 
 from telegram import Chat, ChatMember, Update, User
-from telegram.constants import ParseMode
+from telegram.constants import ParseMode, ChatType
 from telegram.ext import CallbackContext
 
 # stores admemes in memory for 10 min.
