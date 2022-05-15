@@ -87,7 +87,6 @@ async def extract_user_and_text(
             return None, None
 
         else:
-            user_id = user_id
             res = await message.text.split(None, 2)
             if len(res) >= 3:
                 text = res[2]
@@ -161,7 +160,6 @@ async def extract_unt_fedban(
             return None, None
 
         else:
-            user_id = user_id
             res = await message.text.split(None, 2)
             if len(res) >= 3:
                 text = res[2]
