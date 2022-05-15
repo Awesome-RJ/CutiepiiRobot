@@ -6,7 +6,6 @@ import urllib.request as urllib
 
 from PIL import Image, ImageFont, ImageDraw
 from html import escape
-from bs4 import BeautifulSoup as bs
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.error import TelegramError
 from telegram import Update

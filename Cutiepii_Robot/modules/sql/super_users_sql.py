@@ -1,11 +1,9 @@
-import threading
 import traceback
 
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
 from sqlalchemy.sql.sqltypes import BigInteger
 from sqlalchemy import Column, String
-from sqlalchemy.dialects import postgresql
 
 
 class SuperUsers(BASE):

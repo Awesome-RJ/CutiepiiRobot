@@ -34,7 +34,6 @@ import threading
 from sqlalchemy import Column, String, UnicodeText, Boolean, Integer, distinct, func
 
 from Cutiepii_Robot.modules.helper_funcs.msg_types import Types
-from Cutiepii_Robot.modules.helper_funcs.string_handling import escape_invalid_curly_brackets
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
 

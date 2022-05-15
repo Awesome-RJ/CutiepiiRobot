@@ -29,11 +29,8 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import os
-
-from telethon.tl.types import ChannelParticipantsAdmins, ChatAdminRights, ChatBannedRights, MessageEntityMentionName, MessageMediaPhoto
+from telethon.tl.types import ChatBannedRights
 from telethon import *
-from telethon.tl.functions.channels import EditAdminRequest, EditBannedRequest, EditPhotoRequest
 from apscheduler.schedulers.asyncio import AsyncIOScheduler 
 
 

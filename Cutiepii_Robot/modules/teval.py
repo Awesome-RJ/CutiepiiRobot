@@ -1,14 +1,9 @@
-import os
 import sys
-import logging
-import asyncio
 import io
 import traceback
 
 from Cutiepii_Robot import telethn
 from telethon.sync import events
-from datetime import datetime
-from os import environ, execle
 
 
 # telethon eval

@@ -33,7 +33,7 @@ import re
 
 from jikanpy import Jikan
 from jikanpy.exceptions import APIException
-from telegram import Chat, InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler
 from telegram.constants import ParseMode
 

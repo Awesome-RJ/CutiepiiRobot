@@ -28,24 +28,13 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-import sys
-import os
-import datetime
-import time
 from telethon import *
-from telethon.tl import functions, types
 from telethon.tl.functions.account import *
 from telethon.tl.functions.channels import *
 from telethon.tl.functions.photos import *
-from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import *
-from telethon.utils import get_input_location
-import asyncio
-from telethon import utils
-from Cutiepii_Robot.utils.pluginhelpers import admins_only
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn as borg
-import html
 from html import *
 import logging
 

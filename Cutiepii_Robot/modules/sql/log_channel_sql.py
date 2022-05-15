@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import threading
 import typing
 
-from sqlalchemy import Column, String, func, distinct, BigInteger, Boolean, select
+from sqlalchemy import Column, String, func, distinct, BigInteger, Boolean
 
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 

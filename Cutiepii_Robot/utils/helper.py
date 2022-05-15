@@ -11,7 +11,7 @@ from uuid import uuid4
 
 from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import InlineKeyboardButton, CallbackQuery, Message, InlineKeyboardMarkup
-from Cutiepii_Robot import DEV_USERS, TEMP_DOWNLOAD_DIRECTORY, pgram, GBAN_LOGS, telethn
+from Cutiepii_Robot import DEV_USERS, pgram, GBAN_LOGS
 from Cutiepii_Robot.utils.db import get_collection
 
 AUTH_USERS = get_collection("AUTH_USERS")
