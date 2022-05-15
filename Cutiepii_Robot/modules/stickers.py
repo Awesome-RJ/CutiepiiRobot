@@ -851,7 +851,7 @@ async def handler(event):
     if len(text) < 1:
         return await msg.reply("You might want to try `/mmf text`")
     meme = await drawText(file, text)
-    await bot.send_file(event.chat_id, file=meme, force_document=False)
+    await event.client.send_file(event.chat_id, file=meme, force_document=False)
     await msg.delete()
     os.remove(meme)
 
