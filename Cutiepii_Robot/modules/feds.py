@@ -2288,7 +2288,7 @@ def is_user_fed_owner(fed_id, user_id):
     if getsql is False:
         return False
     getfedowner = ast.literal_eval(getsql["fusers"])
-    if getfedowner == None or getfedowner == False:
+    if getfedowner in (None, False):
         return False
     getfedowner = getfedowner["owner"]
     if str(user_id) == getfedowner or int(user_id) == OWNER_ID:

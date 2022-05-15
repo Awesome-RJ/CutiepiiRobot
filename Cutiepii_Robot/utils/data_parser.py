@@ -1101,7 +1101,7 @@ async def get_airing(vars_, auth: bool = False, user: int = None):
 async def toggle_favourites(id_: int, media: str, user: int):
     vars_ = {"id": int(id_)}
     query = (
-      ANIME_MUTATION if media=="ANIME" or media=="AIRING"
+      ANIME_MUTATION if media in ("ANIME", "AIRING")
       else CHAR_MUTATION if media=="CHARACTER"
       else MANGA_MUTATION
     )
