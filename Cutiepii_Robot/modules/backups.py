@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import json
 import time
 import os
+import contextlib
 
 from io import BytesIO
 from telegram import Update
