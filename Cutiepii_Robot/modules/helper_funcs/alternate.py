@@ -45,9 +45,8 @@ def typing_action(func):
 
     @wraps(func)
     async def command_func(update, context, *args, **kwargs):
-        await context.bot.send_chat_action(
-            chat_id=update.effective_chat.id, action=ChatAction.TYPING
-        )
+        await context.bot.sendChatAction(chat_id=update.effective_chat.id, "typing")
+
         return func(update, context, *args, **kwargs)
 
     return command_func
@@ -59,9 +58,7 @@ def send_action(action):
     def decorator(func):
         @wraps(func)
         async def command_func(update, context, *args, **kwargs):
-            await context.bot.send_chat_action(
-                chat_id=update.effective_chat.id, action=action
-            )
+            await context.bot.sendChatAction(chat_id=update.effective_chat.id, "action")
             return func(update, context, *args, **kwargs)
 
         return command_func
