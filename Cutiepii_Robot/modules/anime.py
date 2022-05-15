@@ -124,6 +124,12 @@ QUOTES_IMG = (
       "https://i.imgur.com/6lG4tsO.jpg",
       )
 
+def extract_arg(arg):
+    command_length = len(arg.split()[0])
+    if len(arg) == command_length:
+        raise NoArgumentsError()
+    return arg[command_length+1:]
+
 def shorten(description, info='anilist.co'):
     msg = ""
     if len(description) > 700:
