@@ -699,8 +699,8 @@ async def getsticker(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
 
     if msg.reply_to_message and msg.reply_to_message.sticker:
-        animated = msg.reply_to_message.sticker.is_animated == True
-        videos = msg.reply_to_message.sticker.is_video == True
+        animated = msg.reply_to_message.sticker.is_animated is True
+        videos = msg.reply_to_message.sticker.is_video is True
 
         if not animated and not videos:
             file_id = msg.reply_to_message.sticker.file_id
