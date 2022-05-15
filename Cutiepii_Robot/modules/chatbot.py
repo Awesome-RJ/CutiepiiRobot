@@ -34,7 +34,7 @@ import requests
 from time import sleep
 
 
-from Cutiepii_Robot import TOKEN, CUTIEPII_PTB
+from Cutiepii_Robot import BOT_ID, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_user_admin,
     user_admin,
@@ -47,8 +47,6 @@ from telegram.ext import (
 )
 
 CHATBOT_ENABLED_CHATS = []
-
-BOT_ID = int(TOKEN.split(":")[0])
 
 
 @user_admin
