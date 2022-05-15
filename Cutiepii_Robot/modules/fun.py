@@ -770,7 +770,7 @@ async def uwu(update: Update, context: CallbackContext):
 	        reply_to.reply_sticker(temp)
 	    except BadRequest:
 	        uwu_type = "Text"
-	
+
 
 @cutiepii_cmd(command='blockanimation')
 async def blockanimation(update: Update, context: CallbackContext):

@@ -57,7 +57,7 @@ from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
 
 
 async def cannot_ban(user_id, message):
-    
+
     if user_id == OWNER_ID:
         await message.reply_text("I'd never ban my owner.")
     elif user_id in DEV_USERS:
@@ -747,7 +747,7 @@ async def snipe(update: Update, context: CallbackContext):
             await update.effective_message.reply_text(
                 "Couldn't send the message. Perhaps I'm not part of that group?"
             )
-            
+
 __help__ = """
 *User Commands*:
 ➛ /kickme*:* kicks the user who issued the command

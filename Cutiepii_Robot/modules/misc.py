@@ -146,7 +146,7 @@ async def echo(update: Update, context: CallbackContext):
     with contextlib.suppress(BadRequest):
         await message.delete()
 
-      
+
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -170,16 +170,16 @@ def get_readable_time(seconds: int) -> str:
     ping_time += ":".join(time_list)
 
     return ping_time
-      
-   
+
+
 def get_size(bytes, suffix="B"):
     factor = 1024
     for unit in ["", "K", "M", "G", "T", "P"]:
         if bytes < factor:
             return f"{bytes:.2f}{unit}{suffix}"
         bytes /= factor
-   
-   
+
+
 async def markdown_help_sender(update: Update):
     markup = InlineKeyboardMarkup([
         [InlineKeyboardButton(text="Markdown formatting", callback_data="mkhelp_markdownformat"), InlineKeyboardButton(text="Fillings", callback_data="mkhelp_fillings")],
@@ -189,7 +189,7 @@ async def markdown_help_sender(update: Update):
         await update.effective_message.edit_text(FORMATTING_HELP, parse_mode=ParseMode.MARKDOWN, reply_markup=markup)
     else:
         await update.effective_message.reply_text(FORMATTING_HELP, parse_mode=ParseMode.MARKDOWN, reply_markup=markup)
-    
+
 async def markdown_help(update: Update, context: CallbackContext):
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
@@ -257,7 +257,7 @@ async def src(update: Update, context: CallbackContext) -> None:
             disable_web_page_preview=True,
         ),
     )
-    
+
 @send_action(ChatAction.UPLOAD_PHOTO)
 async def rmemes(update: Update, context: CallbackContext):
     msg = update.effective_message
@@ -325,7 +325,7 @@ async def markdown_help(update: Update, context: CallbackContext):
         )
         return
     markdown_help_sender(update)
-   
+
 @sudo_plus
 async def status(update: Update, context: CallbackContext):
     message = update.effective_message

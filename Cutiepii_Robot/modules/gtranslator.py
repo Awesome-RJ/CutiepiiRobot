@@ -50,7 +50,7 @@ async def translate(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     message = update.effective_message
     reply_msg = message.reply_to_message
-      
+
     if not reply_msg:
         await update.effective_message.reply_text("Reply to a message to translate it!")
         return
@@ -78,7 +78,7 @@ async def translate(update: Update, context: CallbackContext) -> None:
 
     await update.effective_message.reply_text(reply, parse_mode=ParseMode.HTML)
 
-    
+
 async def languages(update: Update, context: CallbackContext) -> None:
     await update.effective_message.reply_text(
         "Click on the button below to see the list of supported language codes.",
@@ -94,7 +94,7 @@ async def languages(update: Update, context: CallbackContext) -> None:
             disable_web_page_preview=True,
         ),
     )
-    
+
 async def gtts(update: Update, context: CallbackContext):
     msg = update.effective_message
     reply = " ".join(context.args)

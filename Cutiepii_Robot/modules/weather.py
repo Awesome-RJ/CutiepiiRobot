@@ -222,11 +222,11 @@ async def weather(update: Update, context: CallbackContext):
             msg += f"➛ **Sunrise**: `{sun(sunrise)}`\n"
             msg += f"➛ **Sunset**: `{sun(sunset)}`\n"
             msg += f"➛ **Air Quality**: `{air_qual(aqi)}`"
-        
+
     else:
         msg =  "Please specify a city or country"
-            
-            
+
+
     delmsg = await message.reply_text(
         text=msg,
         parse_mode=ParseMode.MARKDOWN,

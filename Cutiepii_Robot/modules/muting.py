@@ -344,12 +344,12 @@ async def temp_mute(update: Update, context: CallbackContext) -> str:
             await bot.restrict_chat_member(
                 chat.id, user_id, chat_permissions, until_date=mutetime
             )
-            
+
             msg = (
                 f"Yep! Temporary Muted {mention_html(member.user.id, member.user.first_name)} from talking for <code>{time_val}</code> in {chat.title}\n"
                 f"by {mention_html(user.id, html.escape(user.first_name))}",
             )
-            
+
             await bot.sendMessage(
                 chat.id,
                 f"Muted <b>{html.escape(member.user.first_name)}</b> for {time_val}!\n<b>Reason</b>: <code>{reason}</code>",

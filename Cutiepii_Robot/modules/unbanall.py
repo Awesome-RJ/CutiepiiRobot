@@ -67,7 +67,7 @@ async def _(event):
     creator = chat.creator
     if event.is_private:
       return await event.respond("__This command can be use in groups and channels!__")
-  
+
     is_admin = False
     try:
       zaid = await tbot(GetParticipantRequest(
@@ -122,7 +122,7 @@ async def _(event):
     chat_id = event.chat_id
     if event.is_private:
       return await event.respond("__This command can be use in groups and channels!__")
-  
+
     is_admin = False
     try:
       zaid = await tbot(GetParticipantRequest(

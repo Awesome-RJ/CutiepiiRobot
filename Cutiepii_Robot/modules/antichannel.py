@@ -68,8 +68,8 @@ async def eliminate_channel(update: Update, context: CallbackContext):
         await message.delete()
         sender_chat = message.sender_chat
         await bot.ban_chat_sender_chat(sender_chat_id=sender_chat.id, chat_id=chat.id)
-        
-        
+
+
 ANTICHANNEL_HANDLER = DisableAbleCommandHandler("antichannel", set_antichannel, filters=filters.ChatType.GROUPS)
 
 

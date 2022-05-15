@@ -39,7 +39,7 @@ def is_user_afk(userid):
 
 def start_afk(userid, reason):
     REDIS.set(f"is_afk_{userid}", reason)
-    
+
 def afk_reason(userid):
     return strb(REDIS.get(f"is_afk_{userid}"))
 

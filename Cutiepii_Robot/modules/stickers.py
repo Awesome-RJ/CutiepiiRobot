@@ -125,7 +125,7 @@ async def kang(update, context):
             await msg.reply_text("Yea, I can't kang that.")
 
         kang_file = await context.bot.get_file(file_id)
-        
+
         if is_video:
             kang_file.download("kangsticker.webm")
         elif is_animated:
@@ -202,7 +202,7 @@ async def kang(update, context):
                         packnum,
                         png_sticker=open("kangsticker.png", "rb"),
                     )
-                    
+
                 elif e.message == "Sticker_png_dimensions":
                     im.save(kangsticker, "PNG")
                     context.bot.add_sticker_to_set(
@@ -304,7 +304,7 @@ async def kang(update, context):
                         packnum,
                         tgs_sticker=open("kangsticker.tgs", "rb"),
                     )
-                    
+
                 elif e.message == "Invalid sticker emojis":
                     await msg.reply_text("Invalid emoji(s).")
                 elif e.message == "Internal Server Error: sticker set not found (500)":
@@ -380,7 +380,7 @@ async def kang(update, context):
                         packnum,
                         webm_sticker=open("kangsticker.webm", "rb"),
                     )
-                    
+
                 elif e.message == "Invalid sticker emojis":
                     await msg.reply_text("Invalid emoji(s).")
                 elif e.message == "Internal Server Error: sticker set not found (500)":
@@ -467,7 +467,7 @@ async def kang(update, context):
                     packnum,
                     png_sticker=open("kangsticker.png", "rb"),
                 )
-                
+
             elif e.message == "Sticker_png_dimensions":
                 im.save(kangsticker, "PNG")
                 context.bot.add_sticker_to_set(
@@ -829,7 +829,7 @@ async def remove_fvrtsticker(update, context):
             f"<code>{del_stick}</code> doesn't exist in your favorite sticker pack list.",
             parse_mode=ParseMode.HTML
         )
-        
+
 Credit = "Yūki • Black Knights Union"
 
 @Cutiepii(pattern="^/mmf ?(.*)")

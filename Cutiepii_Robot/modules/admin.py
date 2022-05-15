@@ -96,7 +96,7 @@ async def  is_register_admin(chat, user):
         )
     if isinstance(chat, types.InputPeerUser):
         return True
-    
+
 async def  can_promote_users(message):
     result = await bot(
         functions.channels.GetParticipantRequest(
@@ -126,7 +126,7 @@ async def  reload(event):
   tai = event.sender.first_name
   text = "✅ **bot restarted successfully**\n\n• Admin list has been **updated**"
   await telethn.send_message(event.chat_id, text)
-    
+
 
 @bot.on(events.NewMessage(pattern="/users$"))
 async def  get_users(show):
@@ -185,7 +185,7 @@ async def set_sticker(update: Update, context: CallbackContext) -> str:
             f"<b>Admin:</b> {mention_html(user.id, user.first_name)}"
         )
         return log_message
-    
+
     except BadRequest as e:
         # https://github.com/el0xren/tgbot/blob/773220202ea0b20137ccdd833dd97f10d0e54b83/tg_bot/modules/admin.py#L297
         if e.message == 'Participants_too_few':
@@ -195,7 +195,7 @@ async def set_sticker(update: Update, context: CallbackContext) -> str:
             errmsg = f"An Error occurred:\n{str(e)}"
         await msg.reply_text(errmsg)
         return ''
-    
+
 @loggable
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
@@ -239,8 +239,8 @@ async def setchatpic(update: Update, context: CallbackContext) -> str:
     except BadRequest as e:
         await msg.reply_text("An Error occurred:\n" + str(e))
         return ''
-        
-        
+
+
 @loggable
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
@@ -268,7 +268,7 @@ async def rmchatpic(update: Update, context: CallbackContext) -> str:
         await msg.reply_text("An Error occurred:\n" + str(e))
         return ''
 
-    
+
 @loggable 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
@@ -310,7 +310,7 @@ async def set_desc(update: Update, context: CallbackContext) -> str:
     except BadRequest as e:
         await msg.reply_text("An Error occurred:\n" + str(e))
         return '' 
-        
+
 @loggable
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
@@ -352,7 +352,7 @@ async def setchat_title(update: Update, context: CallbackContext) -> str:
     except BadRequest as e:
         await msg.reply_text("An Error occurred:\n" + str(e))
         return ''
-        
+
 @loggable
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
@@ -400,7 +400,7 @@ async def promote_button(update: Update, context: CallbackContext):
             "Message can't be deleted",
         ]:
             LOGGER.exception("Exception in promote buttons. %s", str(query.data))
-       
+
 @loggable
 @user_admin
 async def refresh_admin(update: Update, context: CallbackContext):
@@ -410,8 +410,8 @@ async def refresh_admin(update: Update, context: CallbackContext):
         pass
 
     await update.effective_message.reply_text("Admins cache refreshed!")
-    
-      
+
+
 @connection_status
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
@@ -501,8 +501,8 @@ async def promoteanon(update: Update, context: CallbackContext) -> Optional[str]
     )
 
     return log_message
-      
-      
+
+
 @connection_status
 @bot_admin
 @can_promote
@@ -669,7 +669,7 @@ async def midpromote(update: Update, context: CallbackContext) -> str:
             await update.effective_message.reply_text("An error occured while midpromoting.")
         return
 
-   
+
     await bot.sendMessage(
         chat.id,
         f"<b>╔━「 MidPromote in {chat.title}</b> \n"
@@ -864,7 +864,7 @@ async def fullpromote(update: Update, context: CallbackContext) -> Optional[str]
     if status is False:
         await update.effective_message.reply_text("An error occurred while promoting.")
         return
-   
+
     await bot.sendMessage(
         chat.id,
         f"<b>╔━「 FullPromote in {chat.title}</b> \n"
@@ -959,7 +959,7 @@ async def middemote(update: Update, context: CallbackContext) -> Optional[str]:
             can_promote_members=False,
             #can_manage_voice_chats=False
         )
-      
+
         await bot.sendMessage(
             chat.id,
             f"<b>╔═━「 ⏬ MidDemote Event Of {chat.title}  」</b> \n"
@@ -987,7 +987,7 @@ async def middemote(update: Update, context: CallbackContext) -> Optional[str]:
             " user, so I can't act upon them!",
         )
         return
-    
+
 @connection_status
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
@@ -1156,8 +1156,8 @@ async def demoteanon(update: Update, context: CallbackContext) -> Optional[str]:
             f"Could not demote!\n{str(e)}"
         )
         return
-      
-      
+
+
 @user_admin
 async def refresh_admin(update: Update, context: CallbackContext):
     try:
@@ -1500,7 +1500,7 @@ def staff(client: Client, message: Message):
         )
     pgram.send_message(message.chat.id, result)
 
-   
+
 @connection_status
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES, allow_mods = True)
@@ -1533,7 +1533,7 @@ async def permapin(update: Update, context: CallbackContext):
         context.bot.pinChatMessage(chat_id, sendingmsg.message_id)
     except BadRequest:
         await context.bot.send_message(chat_id, "I don't have access to message pins!")
-    
+
 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_DELETE_MESSAGES)
@@ -1609,7 +1609,7 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
                "\n<b>Admin:</b> {}".format(html.escape(chat.title), mention_html(user.id, user.first_name))
 
     return ""
-    
+
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES, allow_mods = True)
 async def unpinall(update: Update, context: CallbackContext):
@@ -1653,7 +1653,7 @@ def permanent_pin(update: Update, context: CallbackContext):
             except BadRequest:
                 CUTIEPII_PTB.bot.send_message(chat.id, "Cleanlinked error: cannot delete pinned msg")
                 print("Cleanlinked error: cannot delete pin msg")    
-    
+
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES, allow_mods = True)
 @loggable
@@ -1681,7 +1681,7 @@ async def unpinallbtn(update: Update, context: CallbackContext):
             mention_html(user.id, user.first_name),
         )
     )
-    
+
 
 SET_DESC_HANDLER = CommandHandler("setdesc", set_desc, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
 SET_STICKER_HANDLER = CommandHandler("setsticker", set_sticker, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
@@ -1708,7 +1708,7 @@ ANONMYOUS_HANDLER = DisableAbleCommandHandler("setanon", promoteanon)
 DEMOTE_HANDLER = DisableAbleCommandHandler("demote", demote)
 MID_DEMOTE_HANDLER = DisableAbleCommandHandler("middemote", middemote)
 ANONMYOUS_DEMOTE_HANDLER = DisableAbleCommandHandler("unsetanon", demoteanon)
-                           
+
 SET_TITLE_HANDLER = CommandHandler("title", set_title)
 ADMIN_REFRESH_HANDLER = CommandHandler("admincache", refresh_admin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
 
@@ -1741,7 +1741,7 @@ __help__ = """
 ➛ /pinned*:* to get the current pinned message.
 ➛ /rules*:* get the rules for this chat.
 ➛ /modlist*:* moderation user list.
-➛ /modcheck*:* moderation cheak of a user. 
+➛ /modcheck*:* moderation cheak of a user.
 *Promote & Demote Commands are Admins only*:
 ➛ /promote (user) (?admin's title)*:* Promotes the user to admin.
 ➛ /demote (user)*:* Demotes the user from admin.
@@ -1750,9 +1750,9 @@ __help__ = """
 ➛ /highpromote*:* Promote a member with max rights
 ➛ /lowdemote*:* Demote an admin to low permissions
 ➛ /middemote*:* Demote an admin to mid permissions
-➛ /addmod*:* moderator of a user. 
+➛ /addmod*:* moderator of a user.
 ➛ /rmmod*:* Unmoderator of a user.
- 
+
 *Cleaner & Purge Commands are Admins only*:
 ➛ /del*:* deletes the message you replied to
 ➛ /purge*:* deletes all messages between this and the replied to message.
@@ -1777,7 +1777,7 @@ __help__ = """
 *Rules*:
 ➛ /setrules <your rules here>*:* set the rules for this chat.
 ➛ /clearrules*:* clear the rules for this chat.
-  
+
 *Anti channel*
 Tired of telegram's stupidity? well here you go
 *Available commands:*

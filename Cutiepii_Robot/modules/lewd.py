@@ -845,8 +845,8 @@ __help__ = """
 Usage*:*
 /addnsfw*:* Enable NSFW mode
 /rmnsfw*:* Disable NSFW mode
- 
-Commands*:*   
+
+Commands*:*
 ➛ /neko*:* Sends Random SFW Neko source Images.
 ➛ /feet*:* Sends Random Anime Feet Images.
 ➛ /yuri*:* Sends Random Yuri source Images.

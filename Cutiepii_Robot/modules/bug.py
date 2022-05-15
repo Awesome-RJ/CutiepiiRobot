@@ -96,7 +96,7 @@ async def bug(_, msg: Message):
         )
     else:
         await msg.reply_text("❎ <b>No bug to Report!</b>")
-        
+
 
 @pgram.on_callback_query(filters.regex("close_reply"))
 async def close_reply(msg, CallbackQuery):
@@ -113,6 +113,6 @@ async def close_send_photo(_, CallbackQuery):
         )
     else:
         await CallbackQuery.message.delete()
-        
+
 
 __mod_name__ = "Bug"

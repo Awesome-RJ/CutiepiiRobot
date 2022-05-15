@@ -497,7 +497,7 @@ async def clear_gbans(bot: Bot, update: Update):
         f"Done! `{deleted}` deleted accounts were removed from the gbanlist.",
         parse_mode=ParseMode.MARKDOWN,
     )
-    
+
 
 
 async def check_gbans(bot: Bot, update: Update):
