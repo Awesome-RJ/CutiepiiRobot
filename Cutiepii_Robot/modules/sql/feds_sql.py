@@ -232,7 +232,6 @@ def get_user_fbanlist(user_id):
 
 def new_fed(owner_id, fed_name, fed_id):
     with FEDS_LOCK:
-        global FEDERATION_BYOWNER, FEDERATION_BYFEDID, FEDERATION_BYNAME
         fed = Federations(
             str(owner_id),
             fed_name,
@@ -269,7 +268,6 @@ def new_fed(owner_id, fed_name, fed_id):
 
 def del_fed(fed_id):
     with FEDS_LOCK:
-        global FEDERATION_BYOWNER, FEDERATION_BYFEDID, FEDERATION_BYNAME, FEDERATION_CHATS, FEDERATION_CHATS_BYID, FEDERATION_BANNED_USERID, FEDERATION_BANNED_FULL
         getcache = FEDERATION_BYFEDID.get(fed_id)
         if getcache is None:
             return False
@@ -323,7 +321,6 @@ def del_fed(fed_id):
 
 def rename_fed(fed_id, owner_id, newname):
     with FEDS_LOCK:
-        global FEDERATION_BYFEDID, FEDERATION_BYOWNER, FEDERATION_BYNAME
         fed = SESSION.query(Federations).get(fed_id)
         if not fed:
             return False
@@ -343,7 +340,6 @@ def rename_fed(fed_id, owner_id, newname):
 
 def chat_join_fed(fed_id, chat_name, chat_id):
     with FEDS_LOCK:
-        global FEDERATION_CHATS, FEDERATION_CHATS_BYID
         r = ChatF(chat_id, chat_name, fed_id)
         SESSION.add(r)
         FEDERATION_CHATS[str(chat_id)] = {"chat_name": chat_name, "fid": fed_id}
@@ -372,7 +368,6 @@ def search_user_in_fed(fed_id, user_id):
 
 def user_demote_fed(fed_id, user_id):
     with FEDS_LOCK:
-        global FEDERATION_BYOWNER, FEDERATION_BYFEDID, FEDERATION_BYNAME
         # Variables
         getfed = FEDERATION_BYFEDID.get(str(fed_id))
         owner_id = getfed["owner"]
@@ -411,7 +406,6 @@ def user_demote_fed(fed_id, user_id):
 
 def user_join_fed(fed_id, user_id):
     with FEDS_LOCK:
-        global FEDERATION_BYOWNER, FEDERATION_BYFEDID, FEDERATION_BYNAME
         # Variables
         getfed = FEDERATION_BYFEDID.get(str(fed_id))
         owner_id = getfed["owner"]
@@ -448,7 +442,6 @@ def user_join_fed(fed_id, user_id):
 
 def chat_leave_fed(chat_id):
     with FEDS_LOCK:
-        global FEDERATION_CHATS, FEDERATION_CHATS_BYID
         # Set variables
         fed_info = FEDERATION_CHATS.get(str(chat_id))
         if fed_info is None:
@@ -493,7 +486,6 @@ def all_fed_members(fed_id):
 
 def set_frules(fed_id, rules):
     with FEDS_LOCK:
-        global FEDERATION_BYOWNER, FEDERATION_BYFEDID, FEDERATION_BYNAME
         # Variables
         getfed = FEDERATION_BYFEDID.get(str(fed_id))
         owner_id = getfed["owner"]
@@ -667,7 +659,6 @@ def user_feds_report(user_id: int) -> bool:
 
 def set_feds_setting(user_id: int, setting: bool):
     with FEDS_SETTINGS_LOCK:
-        global FEDERATION_NOTIFICATION
         user_setting = SESSION.query(FedsUserSettings).get(user_id)
         if not user_setting:
             user_setting = FedsUserSettings(user_id)
@@ -697,7 +688,6 @@ async def get_fed_log(fed_id):
 
 def set_fed_log(fed_id, chat_id):
     with FEDS_LOCK:
-        global FEDERATION_BYOWNER, FEDERATION_BYFEDID, FEDERATION_BYNAME
         # Variables
         getfed = FEDERATION_BYFEDID.get(str(fed_id))
         owner_id = getfed["owner"]
@@ -728,7 +718,6 @@ def subs_fed(fed_id, my_fed):
 
         SESSION.merge(subsfed)  # merge to avoid duplicate key issues
         SESSION.commit()
-        global FEDS_SUBSCRIBER, MYFEDS_SUBSCRIBER
         #Temporary Data For Subbed Feds
         if FEDS_SUBSCRIBER.get(fed_id, set()) == set():
             FEDS_SUBSCRIBER[fed_id] = {my_fed}
@@ -778,7 +767,6 @@ def get_subscriber(fed_id):
 
 
 def __load_all_feds():
-    global FEDERATION_BYOWNER, FEDERATION_BYFEDID, FEDERATION_BYNAME
     try:
         feds = SESSION.query(Federations).all()
         for x in feds:  # remove tuple by ( ,)
@@ -867,7 +855,6 @@ def __load_all_feds_banned():
 
 
 def __load_all_feds_settings():
-    global FEDERATION_NOTIFICATION
     try:
         getuser = SESSION.query(FedsUserSettings).all()
         for x in getuser:

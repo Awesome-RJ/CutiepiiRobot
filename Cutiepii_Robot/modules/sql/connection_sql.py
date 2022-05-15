@@ -150,7 +150,6 @@ def disconnect(user_id):
 
 
 def add_history_conn(user_id, chat_id, chat_name):
-    global HISTORY_CONNECT
     with CONNECTION_HISTORY_LOCK:
         conn_time = int(time.time())
         if HISTORY_CONNECT.get(int(user_id)):
@@ -205,7 +204,6 @@ def get_history_conn(user_id):
 
 
 def clear_history_conn(user_id):
-    global HISTORY_CONNECT
     todel = list(HISTORY_CONNECT[int(user_id)])
     for x in todel:
         chat_old = HISTORY_CONNECT[int(user_id)][x]["chat_id"]
