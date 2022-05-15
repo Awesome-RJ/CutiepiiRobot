@@ -549,7 +549,7 @@ async def fed_admin(update, context):
         text += "\n🔱 Admin:\n"
         for x in members:
             try:
-                user = await bot.get_chat(x)
+                user = await context.bot.get_chat(x)
             except BadRequest as excp:
                 pass
             name = user.first_name or 'Deleted'
@@ -755,7 +755,7 @@ async def fed_ban(update, context):  # sourcery no-metrics
                         await application.bot.getChat(fedschat)
                     except Forbidden:
                         sql.chat_leave_fed(fedschat)
-                        log.info(
+                        LOGGER.info(
                             "Chat {} has leave fed {} because I was kicked".format(
                                 fedschat, info["fname"]
                             )
