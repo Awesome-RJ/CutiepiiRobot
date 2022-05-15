@@ -19,6 +19,7 @@ spongemock==0.3.4
 SQLAlchemy==1.4.36
 telethon==1.24.0
 ujson==5.1.0
+metavoidapi
 wikipedia==1.4.0
 zalgo-text==0.6
 fontTools==4.28.5
