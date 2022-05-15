@@ -88,7 +88,6 @@ def add_to_stickers(chat_id, trigger):
 
         SESSION.merge(stickers_filt)  # merge to avoid duplicate key issues
         SESSION.commit()
-        global CHAT_STICKERS
         if CHAT_STICKERS.get(str(chat_id), set()) == set():
             CHAT_STICKERS[str(chat_id)] = {trigger}
         else:
@@ -150,7 +149,6 @@ def set_blacklist_strength(chat_id, blacklist_type, value):
     # 6 = tban
     # 7 = tmute
     with STICKSET_FILTER_INSERTION_LOCK:
-        global CHAT_BLSTICK_BLACKLISTS
         curr_setting = SESSION.query(StickerSettings).get(str(chat_id))
         if not curr_setting:
             curr_setting = StickerSettings(
@@ -197,7 +195,6 @@ def __load_CHAT_STICKERS():
 
 
 def __load_chat_stickerset_blacklists():
-    global CHAT_BLSTICK_BLACKLISTS
     try:
         chats_settings = SESSION.query(StickerSettings).all()
         for x in chats_settings:  # remove tuple by ( ,)
