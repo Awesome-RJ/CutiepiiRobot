@@ -34,7 +34,7 @@ from typing import Union
 
 from future.utils import string_types
 from telegram import Update
-from telegram.constants import ParseMode
+from telegram.constants import ParseMode, ChatType
 from telegram.ext import CommandHandler, MessageHandler
 from telegram.helpers import escape_markdown
 from Cutiepii_Robot import CUTIEPII_PTB
