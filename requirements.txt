@@ -4,7 +4,7 @@ cachetools==5.0.0
 CurrencyConverter
 emoji==1.6.1
 feedparser==6.0.8
-pyrate-limiter==2.4.7
+pyrate-limiter==2.8.1
 lxml==4.8.0
 nltk==3.7
 pillow==9.1.0
