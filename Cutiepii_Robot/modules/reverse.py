@@ -60,8 +60,7 @@ async def reverse(update: Update, context: CallbackContext):
     if os.path.isfile(imagename):
         os.remove(imagename)
 
-    reply = msg.reply_to_message
-    if reply:
+    if reply := msg.reply_to_message:
         if reply.sticker:
             file_id = reply.sticker.file_id
         elif reply.photo:
@@ -75,10 +74,10 @@ async def reverse(update: Update, context: CallbackContext):
         image_file = await context.bot.get_file(file_id)
         image_file.download(imagename)
     else:
-         await msg.reply_text(
-             "Please Reply To A Sticker, Or An Image To Search It!", parse_mode=ParseMode.MARKDOWN,
-         )
-         return
+        await msg.reply_text(
+            "Please Reply To A Sticker, Or An Image To Search It!", parse_mode=ParseMode.MARKDOWN,
+        )
+        return
 
     MsG = await context.bot.send_message(chat_id,
                                    "Let Me See...",
@@ -100,10 +99,12 @@ async def reverse(update: Update, context: CallbackContext):
             MsG.edit_text("Google Told Me To Go Away...")
             return
 
-        match = ParseSauce(fetchUrl + "&hl=en")
+        match = ParseSauce(f"{fetchUrl}&hl=en")
         guess = match.get("best_guess")
         MsG.edit_text("Uploading...")
-        if match.get("override") and (not match.get("override") == "" or not match.get("override") is None):
+        if match.get("override") and (
+            match.get("override") != "" or match.get("override") is not None
+        ):
             imgspage = match.get("override")
         else:
             imgspage = match.get("similar_images")
@@ -131,8 +132,6 @@ async def reverse(update: Update, context: CallbackContext):
         MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: TelegramError!\n\n{Tge}", parse_mode=ParseMode.MARKDOWN)
     except Exception as Exp:
         MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: Exception!\n\n{Exp}", parse_mode=ParseMode.MARKDOWN)
-    except:
-        MsG.edit_text("ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: Duno!", parse_mode=ParseMode.MARKDOWN)
 
 
 def ParseSauce(googleurl):

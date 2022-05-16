@@ -134,7 +134,7 @@ def extract_arg(arg):
 def shorten(description, info='anilist.co'):
     msg = ""
     if len(description) > 700:
-        description = description[:500] + '....'
+        description = f'{description[:500]}....'
         msg += f"\n*Description*: {description}[Read More]({info})"
     else:
         msg += f"\n*Description*: {description}"

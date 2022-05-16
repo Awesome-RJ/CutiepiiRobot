@@ -54,7 +54,6 @@ async def wall(update: Update, context: CallbackContext):
     if not query:
         await msg.reply_text("Please enter a query!")
         return
-    caption = query
     term = await query.replace(" ", "%20")
     json_rep = r.get(
         f"https://wall.alphacoders.com/api2.0/get.php?auth={WALL_API}&method=search&term={term}"
@@ -77,6 +76,7 @@ async def wall(update: Update, context: CallbackContext):
             reply_to_message_id=msg_id,
             timeout=60,
         )
+        caption = query
         await bot.send_document(
             chat_id,
             document=wallpaper,

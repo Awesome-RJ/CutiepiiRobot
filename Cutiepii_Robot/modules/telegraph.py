@@ -71,7 +71,7 @@ async def telegrap(event):
                 start = datetime.now()
                 media_urls = upload_file(downloaded_file_name)
             except exceptions.TelegraphException as exc:
-                await event.reply("ERROR: " + str(exc))
+                await event.reply(f"ERROR: {str(exc)}")
                 os.remove(downloaded_file_name)
             else:
                 end = datetime.now()
@@ -83,11 +83,13 @@ async def telegrap(event):
                     buttons=[
                         [
                             types.KeyboardButtonUrl(
-                                "➡ View Telegraph", "https://telegra.ph{}".format(media_urls[0], (ms + ms_two))
+                                "➡ View Telegraph",
+                                f"https://telegra.ph{media_urls[0]}",
                             )
                         ]
-                    ]
+                    ],
                 )
+
         elif input_str == "gt":
             user_object = await telethn.get_entity(reply_msg.sender_id)
             title_of_page = user_object.first_name # + " " + user_object.last_name
@@ -121,16 +123,18 @@ async def telegrap(event):
             end = datetime.now()
             ms = (end - start).seconds
             await telethn.send_message(
-                    event.chat_id,
-                        "Your telegraph is complete uploaded!",
-                        buttons=[
-                            [
-                                types.KeyboardButtonUrl(
-                                    "➡ View Telegraph", "https://telegra.ph{}".format(media_urls[0], (ms + ms_two))
-                                )
-                            ]
-                        ]
-                    )
+                event.chat_id,
+                "Your telegraph is complete uploaded!",
+                buttons=[
+                    [
+                        types.KeyboardButtonUrl(
+                            "➡ View Telegraph",
+                            f"https://telegra.ph{media_urls[0]}",
+                        )
+                    ]
+                ],
+            )
+
     else:
         await event.reply("Reply to a message to get a permanent telegra.ph link.")
 

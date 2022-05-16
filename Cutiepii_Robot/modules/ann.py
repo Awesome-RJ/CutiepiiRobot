@@ -117,55 +117,55 @@ async def chatmemberupdates(update: Update, context: CallbackContext) -> Optiona
         cause_name = await update.chat_member.from_user.mention_html()
         member_name = update.chat_member.new_chat_member.user.mention_html()
 
-        if oldstat == "administrator" and newstat == "member":
-            if do_announce(chat):
-                await update.effective_chat.send_message(
-                    f"{member_name} was demoted by {cause_name}.",
-                    parse_mode=ParseMode.HTML,
+        if oldstat == "administrator":
+            if newstat == "member":
+                if do_announce(chat):
+                    await update.effective_chat.send_message(
+                        f"{member_name} was demoted by {cause_name}.",
+                        parse_mode=ParseMode.HTML,
+                    )
+
+                if not log_setting.log_action:
+                    return ""
+
+                log_message = (
+                    f"<b>{html.escape(chat.title)}:</b>\n"
+                    f"#ADMIN\n<b>Demoted</b>\n"
+                    f"<b>Admin:</b> {cause_name}\n"
+                    f"<b>User:</b> {member_name}"
                 )
+                return log_message
 
-            if not log_setting.log_action:
-                return ""
+            if newstat == "kicked":
+                if do_announce(chat):
+                    await update.effective_chat.send_message(
+                        f"{member_name} was demoted and removed by {cause_name}.",
+                        parse_mode=ParseMode.HTML,
+                    )
 
-            log_message = (
-                f"<b>{html.escape(chat.title)}:</b>\n"
-                f"#ADMIN\n<b>Demoted</b>\n"
-                f"<b>Admin:</b> {cause_name}\n"
-                f"<b>User:</b> {member_name}"
-            )
-            return log_message
+                if not log_setting.log_action:
+                    return ""
 
-        if oldstat == "administrator" and newstat == "kicked":
-            if do_announce(chat):
-                await update.effective_chat.send_message(
-                    f"{member_name} was demoted and removed by {cause_name}.",
-                    parse_mode=ParseMode.HTML,
+                log_message = (
+                    f"<b>{html.escape(chat.title)}:</b>\n"
+                    f"#BANNED\n"
+                    f"#ADMIN\n<b>Demoted</b>\n"
+                    f"<b>Admin:</b> {cause_name}\n"
+                    f"<b>User:</b> {member_name}"
                 )
+                return log_message
 
-            if not log_setting.log_action:
-                return ""
+            if newstat == "left":
+                if not log_setting.log_action:
+                    return ""
 
-            log_message = (
-                f"<b>{html.escape(chat.title)}:</b>\n"
-                f"#BANNED\n"
-                f"#ADMIN\n<b>Demoted</b>\n"
-                f"<b>Admin:</b> {cause_name}\n"
-                f"<b>User:</b> {member_name}"
-            )
-            return log_message
-
-        if oldstat == "administrator" and newstat == "left":
-
-            if not log_setting.log_action:
-                return ""
-
-            log_message = (
-                f"<b>{html.escape(chat.title)}:</b>\n"
-                f"#ADMIN\n<b>Left</b>\n"
-                f"<b>Admin:</b> {cause_name}\n"
-                f"<b>User:</b> {member_name}"
-            )
-            return log_message
+                log_message = (
+                    f"<b>{html.escape(chat.title)}:</b>\n"
+                    f"#ADMIN\n<b>Left</b>\n"
+                    f"<b>Admin:</b> {cause_name}\n"
+                    f"<b>User:</b> {member_name}"
+                )
+                return log_message
 
         if oldstat != "administrator" and newstat == "administrator":
             if title_change is not None:
@@ -279,25 +279,6 @@ async def chatmemberupdates(update: Update, context: CallbackContext) -> Optiona
             log_message = (
                 f"<b>{html.escape(chat.title)}:</b>\n"
                 f"#UNBANNED\n"
-                f"<b>Admin:</b> {cause_name}\n"
-                f"<b>User:</b> {member_name}"
-            )
-            return log_message
-
-        if oldstat == "kicked" and newstat == "member":
-            if do_announce(chat):
-                await update.effective_chat.send_message(
-                    f"{member_name} was unbanned and added by {cause_name}.",
-                    parse_mode=ParseMode.HTML,
-                )
-
-            if not log_setting.log_action:
-                return ""
-
-            log_message = (
-                f"<b>{html.escape(chat.title)}:</b>\n"
-                f"#UNBANNED\n"
-                f"#WELCOME\n"
                 f"<b>Admin:</b> {cause_name}\n"
                 f"<b>User:</b> {member_name}"
             )

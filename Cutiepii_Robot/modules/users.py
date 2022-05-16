@@ -77,9 +77,7 @@ async def get_user_id(username):
                 return userdat.id
 
         except BadRequest as excp:
-            if excp.message == "Chat not found":
-                pass
-            else:
+            if excp.message != "Chat not found":
                 LOGGER.exception("Error extracting user ID")
 
     return None
