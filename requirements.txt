@@ -48,7 +48,7 @@ html2text==2020.1.16
 NumPy==1.22.3
 opencv-python-headless==4.5.5.64
 uvloop==0.16.0
-python-dotenv==0.19.2
+python-dotenv==0.20.0
 gpytranslate==1.4.0
 glitch_this==1.0.2
 countryinfo==0.1.2
