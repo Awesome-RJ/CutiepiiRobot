@@ -54,7 +54,7 @@ glitch_this==1.0.2
 countryinfo==0.1.2
 faker==9.9.1
 PyDictionary==2.0.1
-python-rapidjson==1.5
+python-rapidjson==1.6
 markdown2
 cowpy==1.1.5
 selenium==4.0.0
