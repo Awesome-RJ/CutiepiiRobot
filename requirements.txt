@@ -26,7 +26,7 @@ nekos.py==1.1.0
 telegraph==2.1.0
 tgcrypto==1.2.3
 youtube_search==2.1.0
-pytube==11.0.2
+pytube==12.1.0
 pymongo==3.12.3
 motor>==2.3.1
 dnspython==2.1.0
