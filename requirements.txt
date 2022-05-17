@@ -86,7 +86,7 @@ aiohttp
 carbonnow
 search_engine_parser
 googletrans
-youtube_search_python==1.5.2
+youtube_search_python==1.6.5
 httpx
 httpx[http2]
 pyYAML==6.0
