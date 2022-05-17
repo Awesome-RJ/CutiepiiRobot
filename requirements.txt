@@ -95,7 +95,7 @@ pygithub
 flask
 gunicorn
 dateparser
-python-barcode==0.13.1
+python-barcode==0.14.0
 moviepy
 pytimeparse
 APScheduler==3.9.1
