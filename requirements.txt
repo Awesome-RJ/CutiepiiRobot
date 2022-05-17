@@ -12,7 +12,7 @@ pretty-errors==1.2.25
 psutil==5.9.0
 pynewtonmath==1.0.1
 python-telegram-bot==20.0a0
-regex==2022.3.2
+regex==2022.4.24
 requests==2.27.1
 spamwatch==0.3.0
 spongemock==0.3.4
