@@ -1,46 +1,49 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 
 import Cutiepii_Robot.modules.sql.global_bans_sql as gban_sql
 import Cutiepii_Robot.modules.sql.users_sql as user_sql
 
 from time import sleep
-from Cutiepii_Robot import DEV_USERS, OWNER_ID, dispatcher
+from Cutiepii_Robot import DEV_USERS, OWNER_ID, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.error import BadRequest, Unauthorized
+from telegram.error import BadRequest, Forbidden
 from telegram.ext import (
     CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
-    run_async,
+
 )
-from telegram import Bot, Update
+from telegram import Bot
 
 def get_muted_chats(bot: Bot, update: Update, leave: bool = False):
     chat_id = update.effective_chat.id
@@ -68,8 +71,8 @@ def get_muted_chats(bot: Bot, update: Update, leave: bool = False):
         sleep(0.1)
 
         try:
-            bot.send_chat_action(cid, "TYPING", timeout=120)
-        except (BadRequest, Unauthorized):
+            await bot..sendChatAction(cid, "TYPING", timeout=120)
+        except (BadRequest, Forbidden):
             muted_chats += +1
             chat_list.append(cid)
         except:
@@ -91,7 +94,8 @@ def get_muted_chats(bot: Bot, update: Update, leave: bool = False):
         user_sql.rem_chat(muted_chat)
     return muted_chats
 
-def get_invalid_chats(update: Update, context: CallbackContext, remove: bool = False):
+
+async def get_invalid_chats(update: Update, context: CallbackContext, remove: bool = False):
     bot = context.bot
     chat_id = update.effective_chat.id
     chats = user_sql.get_all_chats()
@@ -105,27 +109,25 @@ def get_invalid_chats(update: Update, context: CallbackContext, remove: bool = F
             progress_bar = f"{progress}% completed in getting invalid chats."
             if progress_message:
                 try:
-                    bot.editMessageText(
+                    await bot.editMessageText(
                         progress_bar, chat_id, progress_message.message_id,
                     )
                 except:
                     pass
             else:
-                progress_message = bot.sendMessage(chat_id, progress_bar)
+                progress_message = await bot.sendMessage(chat_id, progress_bar)
             progress += 5
 
         cid = chat.chat_id
         sleep(0.1)
-        try:
-            bot.get_chat(cid, timeout=60)
-        except (BadRequest, Unauthorized):
+        with contextlib.suppress(Exception):
+            await bot.get_chat(cid, timeout=60)
+        except (BadRequest, Forbidden):
             kicked_chats += 1
             chat_list.append(cid)
-        except:
-            pass
 
     try:
-        progress_message.delete()
+        await progress_message.delete()
     except:
         pass
 
@@ -137,7 +139,7 @@ def get_invalid_chats(update: Update, context: CallbackContext, remove: bool = F
     return kicked_chats
 
 
-def get_invalid_gban(update: Update, context: CallbackContext, remove: bool = False):
+async def get_invalid_gban(update: Update, context: CallbackContext, remove: bool = False):
     bot = context.bot
     banned = gban_sql.get_gban_list()
     ungbanned_users = 0
@@ -146,13 +148,11 @@ def get_invalid_gban(update: Update, context: CallbackContext, remove: bool = Fa
     for user in banned:
         user_id = user["user_id"]
         sleep(0.1)
-        try:
-            bot.get_chat(user_id)
+        with contextlib.suppress(Exception):
+            await bot.get_chat(user_id)
         except BadRequest:
             ungbanned_users += 1
             ungban_list.append(user_id)
-        except:
-            pass
 
     if not remove:
         return ungbanned_users
@@ -164,13 +164,13 @@ def get_invalid_gban(update: Update, context: CallbackContext, remove: bool = Fa
 
 
 @dev_plus
-def dbcleanup(update: Update, context: CallbackContext):
+async def dbcleanup(update: Update, context: CallbackContext):
     msg = update.effective_message
 
-    msg.reply_text("Getting invalid chat count ...")
+    await msg.reply_text("Getting invalid chat count ...")
     invalid_chat_count = get_invalid_chats(update, context)
 
-    msg.reply_text("Getting invalid gbanned count ...")
+    await msg.reply_text("Getting invalid gbanned count ...")
     invalid_gban_count = get_invalid_gban(update, context)
 
     reply = f"Total invalid chats - {invalid_chat_count}\n"
@@ -178,13 +178,13 @@ def dbcleanup(update: Update, context: CallbackContext):
 
     buttons = [[InlineKeyboardButton("Cleanup DB", callback_data="db_cleanup")]]
 
-    update.effective_message.reply_text(
+    await msg.reply_text(
         reply, reply_markup=InlineKeyboardMarkup(buttons),
     )
 
 
 
-def callback_button(update: Update, context: CallbackContext):
+async def callback_button(update: Update, context: CallbackContext):
     bot = context.bot
     query = update.callback_query
     message = query.message
@@ -193,33 +193,34 @@ def callback_button(update: Update, context: CallbackContext):
 
     admin_list = [OWNER_ID] + DEV_USERS
 
-    bot.answer_callback_query(query.id)
+    await bot.answer_callback_query(query.id)
 
     if query_type == "db_leave_chat" and query.from_user.id in admin_list:
-        bot.editMessageText("Leaving chats ...", chat_id, message.message_id)
+        await bot.editMessageText("Leaving chats ...", chat_id, message.message_id)
         chat_count = get_muted_chats(update, context, True)
-        bot.sendMessage(chat_id, f"Left {chat_count} chats.")
+        await bot.sendMessage(chat_id, f"Left {chat_count} chats.")
     elif (
         query_type == "db_leave_chat"
         or query_type == "db_cleanup"
         and query.from_user.id not in admin_list
     ):
-        query.answer("You are not allowed to use this.")
+        await query.answer("You are not allowed to use this.")
     elif query_type == "db_cleanup":
-        bot.editMessageText("Cleaning up DB ...", chat_id, message.message_id)
+        await bot.editMessageText("Cleaning up DB ...", chat_id, message.message_id)
         invalid_chat_count = get_invalid_chats(update, context, True)
         invalid_gban_count = get_invalid_gban(update, context, True)
         reply = "Cleaned up {} chats and {} gbanned users from db.".format(
             invalid_chat_count, invalid_gban_count,
         )
-        bot.sendMessage(chat_id, reply)
+        await bot.sendMessage(chat_id, reply)
 
 
-DB_CLEANUP_HANDLER = CommandHandler("dbcleanup", dbcleanup, run_async=True)
-BUTTON_HANDLER = CallbackQueryHandler(callback_button, pattern="db_.*", run_async=True)
+DB_CLEANUP_HANDLER = CommandHandler("dbcleanup", dbcleanup)
+BUTTON_HANDLER = CallbackQueryHandler(callback_button, pattern="db_.*")
 
-dispatcher.add_handler(DB_CLEANUP_HANDLER)
-dispatcher.add_handler(BUTTON_HANDLER)
+CUTIEPII_PTB.add_handler(DB_CLEANUP_HANDLER)
+CUTIEPII_PTB.add_handler(BUTTON_HANDLER)
 
 __mod_name__ = "DB Cleanup"
 __handlers__ = [DB_CLEANUP_HANDLER, BUTTON_HANDLER]
+"""

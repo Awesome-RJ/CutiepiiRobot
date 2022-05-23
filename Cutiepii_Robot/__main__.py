@@ -1,33 +1,36 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+import contextlib
 import html
-import os
 import json
 import importlib
 import time
@@ -39,83 +42,48 @@ import Cutiepii_Robot.modules.sql.users_sql as sql
 
 from sys import argv
 from typing import Optional
+
 from Cutiepii_Robot import (
-    ALLOW_EXCL,
-    CERT_PATH,
     DONATION_LINK,
     LOGGER,
     OWNER_ID,
     PORT,
     TOKEN,
-    URL,
     WEBHOOK,
     SUPPORT_CHAT,
-    BOT_USERNAME,
-    BOT_NAME,
-    EVENT_LOGS,
     HELP_IMG,
     GROUP_START_IMG,
-    CUTIEPII_PHOTO,
-    dispatcher,
+    CUTIEPII_PTB,
     StartTime,
-    telethn,
-    updater,
     pgram,
     ubot,
     )
 
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
-from Cutiepii_Robot.events import register
 from Cutiepii_Robot.modules import ALL_MODULES
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
 from Cutiepii_Robot.modules.helper_funcs.misc import paginate_modules
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_msg, cutiepii_cmd, cutiepii_callback
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.constants import ParseMode
 from telegram.error import (
     BadRequest,
     ChatMigrated,
     NetworkError,
     TelegramError,
     TimedOut,
-    Unauthorized,
 )
 from telegram.ext import (
     CallbackContext,
-    CallbackQueryHandler,
-    CommandHandler,
-    Filters,
-    MessageHandler,
+    filters,
 )
 
-from telegram.ext.dispatcher import DispatcherHandlerStop, run_async
-from telegram.utils.helpers import escape_markdown
-from pyrogram import Client, idle
-from telethon import Button, events
+from telegram.helpers import escape_markdown
+from pyrogram import idle
 
-@register(pattern=("/alive"))
-async def awake(event):
-  CUTIEPII = event.sender.first_name
-  CUTIEPII = "**♡ I,m Cutiepii Robot 愛** \n\n"
-  CUTIEPII += "**♡ I'm Working With Awesome Speed**\n\n"
-  CUTIEPII += "**♡ Cutiepii: LATEST Version**\n\n"
-  CUTIEPII += "**♡ My Creator:** [Rajkumar](t.me/Awesome_RJ)\n\n"
-  CUTIEPII += "**♡ python-Telegram-Bot: 13.7**\n\n"
-  CUTIEPII_BUTTON = [
-      [
-          Button.url("🚑 Support", f"https://t.me/{SUPPORT_CHAT}"),
-          Button.url("📢 Updates", "https://t.me/Black_Knights_Union")
-      ]
-  ]
-  await telethn.send_file(
-      event.chat_id,
-      CUTIEPII_PHOTO,
-      caption = CUTIEPII,
-      buttons = CUTIEPII_BUTTON,
-  )
-
-    
+  
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -133,7 +101,7 @@ def get_readable_time(seconds: int) -> str:
     for x in range(len(time_list)):
         time_list[x] = str(time_list[x]) + time_suffix_list[x]
     if len(time_list) == 4:
-        ping_time += time_list.pop() + ", "
+        ping_time += f"{time_list.pop()}, "
 
     time_list.reverse()
     ping_time += ":".join(time_list)
@@ -142,53 +110,49 @@ def get_readable_time(seconds: int) -> str:
 
 HELP_MSG = "Click the button below to get help manu in your pm."
 START_MSG = "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>"
-    
+
 PM_START_TEXT = """
-────「 [{}](https://telegra.ph/file/2909a312d9438798d237a.png) 」────
+────「 [{}](https://telegra.ph/file/85581d42f2b95ff65fc06.jpg) 」────
+
 *Hola! {},*
-*I am an Anime themed advance group management bot with a lot of Sexy Features.*
+*I am an Anime themed advance group management bot with a lot of Cool Features.*
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
-• *Uptime:* `{}`
-• `{}` *users, across* `{}` *chats.*
+❍ *Uptime:* `{}`
+❍ `{}` *users, across* `{}` *chats.*
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
 ➛ Try The Help Buttons Below To Know My Abilities ××
-"""
-
-GROUP_START_TEXT = """
-I'm awake already!
-Haven't slept since: {}
 """
 
 buttons = [
     [
                         InlineKeyboardButton(
-                            text=f"Add {BOT_NAME} To Your Group",
-                            url=f"t.me/{BOT_USERNAME}?startgroup=true")
+                            text=f"Add {CUTIEPII_PTB.bot.first_name} To Your Group",
+                            url=f"https://telegram.dog/{CUTIEPII_PTB.bot.username}?startgroup=true")
                     ],
                    [
                        InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
-                       InlineKeyboardButton(text="❔ Chit Chat", url="https://t.me/HindiKDrama"),
+                       InlineKeyboardButton(text="❔ Chit Chat", url="https://telegram.dog/GIrlsBoysXD"),
                        InlineKeyboardButton(text="[► Inline ◄]", switch_inline_query_current_chat=""),
                      ],
                     [                  
                        InlineKeyboardButton(
                              text="🚑 Support",
-                             url=f"https://t.me/{SUPPORT_CHAT}"),
+                             url=f"https://telegram.dog/{SUPPORT_CHAT}"),
                        InlineKeyboardButton(
                              text="📢 Updates",
-                             url="https://t.me/Black_Knights_Union")
+                             url="https://telegram.dog/Black_Knights_Union")
                      ], 
     ]
 
-                    
+
 HELP_STRINGS = """
 *Main* commands available:
- ➛ /help: PM's you this message.
- ➛ /help <module name>: PM's you info about that module.
- ➛ /donate: information on how to donate!
- ➛ /settings:
-   ❂ in PM: will send you your settings for all supported modules.
-   ❂ in a group: will redirect you to pm, with all that chat's settings.
+➛ /help: PM's you this message.
+➛ /help <module name>: PM's you info about that module.
+➛ /donate: information on how to donate!
+➛ /settings:
+   ❍ in PM: will send you your settings for all supported modules.
+   ❍ in a group: will redirect you to pm, with all that chat's settings.
 """
 
 DONATE_STRING = """❂ I'm Free for Everyone ❂"""
@@ -244,7 +208,7 @@ for module_name in ALL_MODULES:
 def send_help(chat_id, text, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
-    dispatcher.bot.send_message(
+    CUTIEPII_PTB.bot.send_message(
         chat_id=chat_id,
         text=text,
         parse_mode=ParseMode.MARKDOWN,
@@ -253,14 +217,16 @@ def send_help(chat_id, text, keyboard=None):
     )
 
 
-def test(update: Update, context: CallbackContext):
+@cutiepii_cmd(command="test")
+async def test(update: Update, _: CallbackContext):
     # pprint(eval(str(update)))
-    # update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
-    update.effective_message.reply_text("This person edited a message")
+    # await update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
+    await update.effective_message.reply_text("This person edited a message")
     print(update.effective_message)
 
 
-def start(update: Update, context: CallbackContext):
+@cutiepii_cmd(command="start")
+async def start(update: Update, context: CallbackContext):
     args = context.args
     uptime = get_readable_time((time.time() - StartTime))
     if update.effective_chat.type == "private":
@@ -281,9 +247,9 @@ def start(update: Update, context: CallbackContext):
 
             elif args[0].lower().startswith("stngs_"):
                 match = re.match("stngs_(.*)", args[0].lower())
-                chat = dispatcher.bot.getChat(match.group(1))
+                chat = await CUTIEPII_PTB.bot.getChat(match.group(1))
 
-                if is_user_admin(chat, update.effective_user.id):
+                if await is_user_admin(update, update.effective_user.id):
                     send_settings(match.group(1), update.effective_user.id, False)
                 else:
                     send_settings(match.group(1), update.effective_user.id, True)
@@ -293,7 +259,7 @@ def start(update: Update, context: CallbackContext):
 
         else:
             first_name = update.effective_user.first_name
-            update.effective_message.reply_text(
+            await update.effective_message.reply_text(
                 PM_START_TEXT.format(
                     escape_markdown(context.bot.first_name),
                     escape_markdown(first_name),
@@ -326,7 +292,8 @@ def start(update: Update, context: CallbackContext):
             ),
         )
 
-def error_handler(update, context):
+
+async def error_handler(_: Update, context: CallbackContext):
     """Log the error and send a telegram message to notify the developer."""
     # Log the error before we do anything else, so we can see it even if something breaks.
     LOGGER.error(msg="Exception while handling an update:", exc_info=context.error)
@@ -351,20 +318,14 @@ def error_handler(update, context):
     if len(message) >= 4096:
         message = message[:4096]
     # Finally, send the message
-    context.bot.send_message(chat_id=OWNER_ID, text=message, parse_mode=ParseMode.HTML)
+    await context.bot.send_message(chat_id=OWNER_ID, text=message, parse_mode=ParseMode.HTML)
 
 
 # for test purposes
-def error_callback(update, context):
-    """#TODO
-    Params:
-        update  -
-        context -
-    """
-
+async def error_callback(update: Update, context: CallbackContext):
     try:
         raise context.error
-    except (Unauthorized, BadRequest):
+    except (BadRequest):
         pass
         # remove update.message.chat_id from conversation list
     except TimedOut:
@@ -373,44 +334,43 @@ def error_callback(update, context):
     except NetworkError:
         pass
         # handle other connection problems
-    except ChatMigrated as e:
+    except ChatMigrated:
         pass
         # the chat_id of a group has changed, use e.new_chat_id instead
     except TelegramError:
         pass
         # handle all other telegram related errors
 
-
-def help_button(update, context):
+@kigcallback(pattern=r"help_.")
+async def help_button(update: Update, context: CallbackContext):
     query = update.callback_query
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     prev_match = re.match(r"help_prev\((.+?)\)", query.data)
     next_match = re.match(r"help_next\((.+?)\)", query.data)
     back_match = re.match(r"help_back", query.data)
 
-    print(query.message.chat.id)
-
-    try:
+    with contextlib.suppress(BadRequest):
         if mod_match:
             module = mod_match.group(1)
             text = (
-                "╒═══「 *{}* module: 」\n".format(
+                "╔═━「 *{}* module: 」\n".format(
                     HELPABLE[module].__mod_name__
                 )
                 + HELPABLE[module].__help__
             )
-            query.message.edit_text(
+            await query.message.edit_text(
                 text=text,
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
+                    [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back"),
+                    InlineKeyboardButton(text="[► Support ◄]", url="https://t.me/Black_Knights_Union_Support")]]
                 ),
             )
 
         elif prev_match:
             curr_page = int(prev_match.group(1))
-            query.message.edit_text(
+            await query.message.edit_text(
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
@@ -420,7 +380,7 @@ def help_button(update, context):
 
         elif next_match:
             next_page = int(next_match.group(1))
-            query.message.edit_text(
+            await query.message.edit_text(
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
@@ -429,7 +389,7 @@ def help_button(update, context):
             )
 
         elif back_match:
-            query.message.edit_text(
+            await query.message.edit_text(
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
@@ -438,17 +398,16 @@ def help_button(update, context):
             )
 
         # ensure no spinny white circle
-        context.bot.answer_callback_query(query.id)
-        # query.message.delete()
+        await context.bot.answer_callback_query(query.id)
+        # await query.message.delete()
 
-    except BadRequest:
-        pass
 
-def cutiepii_callback_data(update, context):
+@cutiepii_callback(pattern=r"cutiepii_")
+async def cutiepii_callback_data(update: Update, context: CallbackContext):
     query = update.callback_query
     uptime = get_readable_time((time.time() - StartTime))
     if query.data == "cutiepii_":
-        query.message.edit_text(
+        await query.message.edit_text(
             text="""CallBackQueriesData Here""",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
@@ -462,7 +421,7 @@ def cutiepii_callback_data(update, context):
         )
     elif query.data == "cutiepii_back":
         first_name = update.effective_user.first_name
-        query.message.edit_text(
+        await query.message.edit_text(
                 PM_START_TEXT.format(
                     escape_markdown(context.bot.first_name),
                     escape_markdown(first_name),
@@ -476,8 +435,9 @@ def cutiepii_callback_data(update, context):
         )
 
 
+@cutiepii_cmd(command="help")
 @typing_action
-def get_help(update, context):
+async def get_help(update: Update, context: CallbackContext):
     chat = update.effective_chat  # type: Optional[Chat]
     args = update.effective_message.text.split(None, 1)
 
@@ -520,47 +480,45 @@ def get_help(update, context):
 
 
 
-def send_settings(chat_id, user_id, user=False):
+async def send_settings(chat_id, user_id, user=False):
     if user:
         if USER_SETTINGS:
             settings = "\n\n".join(
                 "*{}*:\n{}".format(mod.__mod_name__, mod.__user_settings__(user_id))
                 for mod in USER_SETTINGS.values()
             )
-            dispatcher.bot.send_message(
+            CUTIEPII_PTB.bot.send_message(
                 user_id,
                 "These are your current settings:" + "\n\n" + settings,
                 parse_mode=ParseMode.MARKDOWN,
             )
 
         else:
-            dispatcher.bot.send_message(
+            CUTIEPII_PTB.bot.send_message(
                 user_id,
                 "Seems like there aren't any user specific settings available :'(",
                 parse_mode=ParseMode.MARKDOWN,
             )
 
     elif CHAT_SETTINGS:
-        chat_name = dispatcher.bot.getChat(chat_id).title
-        dispatcher.bot.send_message(
+        chat_name = await CUTIEPII_PTB.bot.getChat(chat_id).title
+        CUTIEPII_PTB.bot.send_message(
             user_id,
-            text="Which module would you like to check {}'s settings for?".format(
-                chat_name
-            ),
+            text=f"Which module would you like to check {chat_name}'s settings for?",
             reply_markup=InlineKeyboardMarkup(
                 paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
             ),
         )
     else:
-        dispatcher.bot.send_message(
+        CUTIEPII_PTB.bot.send_message(
             user_id,
             "Seems like there aren't any chat settings available :'(\nSend this "
             "in a group chat you're admin in to find its current settings!",
             parse_mode=ParseMode.MARKDOWN,
         )
 
-
-def settings_button(update: Update, context: CallbackContext):
+@cutiepii_callback(pattern=r"stngs_")
+async def settings_button(update: Update, context: CallbackContext):
     query = update.callback_query
     user = update.effective_user
     bot = context.bot
@@ -572,11 +530,11 @@ def settings_button(update: Update, context: CallbackContext):
         if mod_match:
             chat_id = mod_match.group(1)
             module = mod_match.group(2)
-            chat = bot.get_chat(chat_id)
+            chat = await bot.get_chat(chat_id)
             text = "*{}* has the following settings for the *{}* module:\n\n".format(
                 escape_markdown(chat.title), CHAT_SETTINGS[module].__mod_name__
             ) + CHAT_SETTINGS[module].__chat_settings__(chat_id, user.id)
-            query.message.reply_text(
+            await query.message.reply_text(
                 text=text,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
@@ -584,7 +542,7 @@ def settings_button(update: Update, context: CallbackContext):
                         [
                             InlineKeyboardButton(
                                 text="Back",
-                                callback_data="stngs_back({})".format(chat_id),
+                                callback_data=f"stngs_back({chat_id})",
                             )
                         ]
                     ]
@@ -594,10 +552,9 @@ def settings_button(update: Update, context: CallbackContext):
         elif prev_match:
             chat_id = prev_match.group(1)
             curr_page = int(prev_match.group(2))
-            chat = bot.get_chat(chat_id)
-            query.message.reply_text(
-                "Hi there! There are quite a few settings for {} - go ahead and pick what "
-                "you're interested in.".format(chat.title),
+            chat = await bot.get_chat(chat_id)
+            await query.message.reply_text(
+                f"Hi there! There are quite a few settings for {chat.title} - go ahead and pick what you're interested in.",
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(
                         curr_page - 1, CHAT_SETTINGS, "stngs", chat=chat_id
@@ -608,10 +565,9 @@ def settings_button(update: Update, context: CallbackContext):
         elif next_match:
             chat_id = next_match.group(1)
             next_page = int(next_match.group(2))
-            chat = bot.get_chat(chat_id)
-            query.message.reply_text(
-                "Hi there! There are quite a few settings for {} - go ahead and pick what "
-                "you're interested in.".format(chat.title),
+            chat = await bot.get_chat(chat_id)
+            await query.message.reply_text(
+                f"Hi there! There are quite a few settings for {chat.title} - go ahead and pick what you're interested in.",
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(
                         next_page + 1, CHAT_SETTINGS, "stngs", chat=chat_id
@@ -621,10 +577,9 @@ def settings_button(update: Update, context: CallbackContext):
 
         elif back_match:
             chat_id = back_match.group(1)
-            chat = bot.get_chat(chat_id)
-            query.message.reply_text(
-                text="Hi there! There are quite a few settings for {} - go ahead and pick what "
-                "you're interested in.".format(escape_markdown(chat.title)),
+            chat = await bot.get_chat(chat_id)
+            await query.message.reply_text(
+                text=f"Hi there! There are quite a few settings for {escape_markdown(chat.title)} - go ahead and pick what you're interested in.",
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
@@ -632,9 +587,9 @@ def settings_button(update: Update, context: CallbackContext):
             )
 
         # ensure no spinny white circle
-        bot.answer_callback_query(query.id)
-        query.message.delete()
-    except BadRequest as excp:
+        await bot.answer_callback_query(query.id)
+        await query.message.delete()
+      except BadRequest as excp:
         if excp.message not in [
             "Message is not modified",
             "Query_id_invalid",
@@ -642,8 +597,8 @@ def settings_button(update: Update, context: CallbackContext):
         ]:
             LOGGER.exception("Exception in settings buttons. %s", str(query.data))
 
-
-def get_settings(update: Update, context: CallbackContext):
+@cutiepii_cmd(command="settings")
+async def get_settings(update: Update, context: CallbackContext):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -652,16 +607,16 @@ def get_settings(update: Update, context: CallbackContext):
     if chat.type == chat.PRIVATE:
         send_settings(chat.id, user.id, True)
 
-    elif is_user_admin(chat, user.id):
+    elif await is_user_admin(update, user.id):
         text = "Click here to get this chat's settings, as well as yours."
-        msg.reply_text(
+        await msg.reply_text(
             text,
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
                         InlineKeyboardButton(
                             text="Settings",
-                            url="t.me/{}?start=stngs_{}".format(
+                            url="https://telegram.dog/{}?start=stngs_{}".format(
                                 context.bot.username, chat.id
                             ),
                         )
@@ -672,18 +627,18 @@ def get_settings(update: Update, context: CallbackContext):
     else:
         text = "Click here to check your settings."
 
-
-def donate(update: Update, context: CallbackContext):
+@cutiepii_cmd(command="donate")
+async def donate(update: Update, context: CallbackContext):
     user = update.effective_message.from_user
     chat = update.effective_chat  # type: Optional[Chat]
     bot = context.bot
     if chat.type == "private":
-        update.effective_message.reply_text(
+        await update.effective_message.reply_text(
             DONATE_STRING, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True
         )
 
-        if OWNER_ID != 254318997 and DONATION_LINK:
-            update.effective_message.reply_text(
+        if OWNER_ID != 2131857711 and DONATION_LINK:
+            await update.effective_message.reply_text(
                 "You can also donate to the person currently running me "
                 "[here]({})".format(DONATION_LINK),
                 parse_mode=ParseMode.MARKDOWN,
@@ -691,23 +646,28 @@ def donate(update: Update, context: CallbackContext):
 
     else:
         try:
-            bot.send_message(
+            await bot.send_message(
                 user.id,
                 DONATE_STRING,
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
             )
 
-            update.effective_message.reply_text(
-                "I've PM'ed you about donating to my creator!"
-            )
-        except Unauthorized:
-            update.effective_message.reply_text(
+            await update.effective_message.reply_text(
+                text="I'm free for everyone❤️\njust donate by subs channel, Don't forget to join the support group.",
+                reply_markup=InlineKeyboardMarkup(
+                    [[InlineKeyboardButton(text="📢 Updates", url="https://telegram.dog/Black_Knights_Union"),
+                      InlineKeyboardButton(text="🚑 Support", url="https://telegram.dog/Black_Knights_Union_Support")]]
+                ),
+            )       
+        except Forbidden:
+            await update.effective_message.reply_text(
                 "Contact me in PM first to get donation information."
             )
 
 
-def migrate_chats(update: Update, context: CallbackContext):
+@cutiepii_msg(filters.StatusUpdate.MIGRATE)
+async def migrate_chats(update: Update, _: CallbackContext):
     msg = update.effective_message  # type: Optional[Message]
     if msg.migrate_to_chat_id:
         old_chat = update.effective_chat.id
@@ -720,59 +680,21 @@ def migrate_chats(update: Update, context: CallbackContext):
 
     LOGGER.info("Migrating from %s, to %s", str(old_chat), str(new_chat))
     for mod in MIGRATEABLE:
-        try:
+        with contextlib.suppress(KeyError, AttributeError):
             mod.__migrate__(old_chat, new_chat)
-        except BaseException:
-            pass  # Some sql modules make errors.
-
     LOGGER.info("Successfully migrated!")
-    raise DispatcherHandlerStop
     
+      
 def main():
-    test_handler = DisableAbleCommandHandler("test", test, run_async=True)
-    start_handler = DisableAbleCommandHandler("start", start, run_async=True)
-
-    help_handler = DisableAbleCommandHandler("help", get_help, run_async=True)
-    help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_.*", run_async=True)
-
-    settings_handler = DisableAbleCommandHandler("settings", get_settings)
-    settings_callback_handler = CallbackQueryHandler(settings_button, pattern=r"stngs_", run_async=True)
-
-    data_callback_handler = CallbackQueryHandler(cutiepii_callback_data, pattern=r"cutiepii_", run_async=True)
-    donate_handler = DisableAbleCommandHandler("donate", donate, run_async=True)
-    migrate_handler = MessageHandler(Filters.status_update.migrate, migrate_chats, run_async=True)
-
-    # dispatcher.add_handler(test_handler)
-    dispatcher.add_handler(start_handler)
-    dispatcher.add_handler(help_handler)
-    dispatcher.add_handler(data_callback_handler)
-    dispatcher.add_handler(settings_handler)
-    dispatcher.add_handler(help_callback_handler)
-    dispatcher.add_handler(settings_callback_handler)
-    dispatcher.add_handler(migrate_handler)
-    dispatcher.add_handler(donate_handler)
-
-    dispatcher.add_error_handler(error_callback)
+    CUTIEPII_PTB.add_error_handler(error_callback)
 
     if WEBHOOK:
         LOGGER.info("Using webhooks.")
-        updater.start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
-
-        if CERT_PATH:
-            updater.bot.set_webhook(url=URL + TOKEN, certificate=open(CERT_PATH, "rb"))
-        else:
-            updater.bot.set_webhook(url=URL + TOKEN)
+        CUTIEPII_PTB.run_webhook(listen="127.0.0.1", port=PORT, url_path=TOKEN)
 
     else:
-        LOGGER.info(f"Cutiepii started, Using long polling. | BOT: [@{dispatcher.bot.username}]")
-        updater.start_polling(timeout=15, read_latency=4, drop_pending_updates=True, allowed_updates=Update.ALL_TYPES)
-
-    if len(argv) not in (1, 3, 4):
-        telethn.disconnect()
-    else:
-        telethn.run_until_disconnected()
-
-    updater.idle()
+        CUTIEPII_PTB.run_polling(drop_pending_updates=True, stop_signals=None)
+        LOGGER.info(f"Cutiepii Robot started, Using long polling. | BOT: [@{CUTIEPII_PTB.bot.username}]")
 
 try:
     ubot.start()
@@ -780,9 +702,8 @@ except BaseException:
     print("Userbot Error! Have you added a STRING_SESSION in deploying??")
     sys.exit(1)
 
-if __name__ == '__main__':
-    LOGGER.info("Successfully loaded modules: " + str(ALL_MODULES))
-    telethn.start(bot_token=TOKEN)
+if __name__ == "__main__":
+    LOGGER.info(f"Successfully loaded modules: {str(ALL_MODULES)}")
     pgram.start()
     main()
     idle()

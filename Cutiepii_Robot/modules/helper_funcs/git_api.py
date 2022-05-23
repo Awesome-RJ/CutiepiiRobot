@@ -1,102 +1,97 @@
-"""
-MIT License
-
-Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
-
-This file is part of @Cutiepii_Robot (Telegram Bot)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
-
 import urllib.request as url
 import json
-import datetime
 
-VERSION = "1.0.2"
+VERSION = "1.1.0"
 APIURL = "http://api.github.com/repos/"
+
 
 def vercheck() -> str:
     return str(VERSION)
 
-#Repo-wise stuff
+
+# Repo-wise stuff
+
 
 def getData(repoURL):
     try:
         with url.urlopen(APIURL + repoURL + "/releases") as data_raw:
-            return json.loads(data_raw.read().decode())
+            repoData = json.loads(data_raw.read().decode())
+            return repoData
     except:
         return None
+
 
 def getReleaseData(repoData, index):
     if index < len(repoData):
         return repoData[index]
     return None
 
-#Release-wise stuff
+
+# Release-wise stuff
+
 
 def getAuthor(releaseData):
     if releaseData is None:
         return None
-    return releaseData['author']['login']
-    
+    return releaseData["author"]["login"]
+
+
 def getAuthorUrl(releaseData):
     if releaseData is None:
-        return None    
-    return releaseData['author']['html_url']
-    
+        return None
+    return releaseData["author"]["html_url"]
+
+
 def getReleaseName(releaseData):
     if releaseData is None:
-        return None    
-    return releaseData['name']
+        return None
+    return releaseData["name"]
+
+
+def getReleaseTag(releaseData):
+    if releaseData is None:
+        return None
+    return releaseData["tag_name"]
+
 
 def getReleaseDate(releaseData):
     if releaseData is None:
-        return None    
-    return releaseData['published_at']
+        return None
+    return releaseData["published_at"]
+
 
 def getAssetsSize(releaseData):
     if releaseData is None:
-        return None    
-    return len(releaseData['assets'])
-  
+        return None
+    return len(releaseData["assets"])
+
+
 def getAssets(releaseData):
     if releaseData is None:
         return None
-    return releaseData['assets']
-    
-def getBody(releaseData): #changelog stuff
+    return releaseData["assets"]
+
+
+def getBody(releaseData):  # changelog stuff
     if releaseData is None:
         return None
-    return releaseData['body']
+    return releaseData["body"]
 
-#Asset-wise stuff
 
-def getReleaseFileName(asset): 
-    return asset['name']
+# Asset-wise stuff
+
+
+def getReleaseFileName(asset):
+    return asset["name"]
+
 
 def getReleaseFileURL(asset):
-    return asset['browser_download_url']
+    return asset["browser_download_url"]
+
 
 def getDownloadCount(asset):
-    return asset['download_count']
+    return asset["download_count"]
+
 
 def getSize(asset):
-    return asset['size']
+    return asset["size"]

@@ -1,40 +1,44 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import sre_constants
 import regex
 import telegram
 
-from Cutiepii_Robot import LOGGER, dispatcher
+
+from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleMessageHandler
 from Cutiepii_Robot.modules.helper_funcs.regex_helper import infinite_loop_check
 from telegram import Update
-from telegram.ext import CallbackContext, Filters, run_async
+from telegram.ext import CallbackContext, filters
 
 DELIMITERS = ("/", ":", "|", "_")
 
@@ -85,9 +89,9 @@ def separate_sed(sed_string):
     return replace, replace_with, flags.lower()
 
 
-def sed(update: Update, context: CallbackContext):
+async def sed(update: Update, context: CallbackContext):
     sed_result = separate_sed(update.effective_message.text)
-    if sed_result and update.effective_message.reply_to_message:
+    if sed_result and update.effective_update.effective_message.reply_to_message:
         if update.effective_message.reply_to_message.text:
             to_fix = update.effective_message.reply_to_message.text
         elif update.effective_message.reply_to_message.caption:
@@ -109,13 +113,12 @@ def sed(update: Update, context: CallbackContext):
                 return
             if check and check.group(0).lower() == to_fix.lower():
                 update.effective_message.reply_to_message.reply_text(
-                    "Hey everyone, {} is trying to make "
-                    "me say stuff I don't wanna "
-                    "say!".format(update.effective_user.first_name),
+                    f"Hey everyone, {update.effective_user.first_name} is trying to make me say stuff I don't wanna say!"
                 )
+
                 return
             if infinite_loop_check(repl):
-                update.effective_message.reply_text(
+                await update.effective_message.reply_text(
                     "I'm afraid I can't run that regex.",
                 )
                 return
@@ -132,17 +135,17 @@ def sed(update: Update, context: CallbackContext):
             else:
                 text = regex.sub(repl, repl_with, to_fix, count=1, timeout=3).strip()
         except TimeoutError:
-            update.effective_message.reply_text("Timeout")
+            await update.effective_message.reply_text("Timeout")
             return
         except sre_constants.error:
             LOGGER.warning(update.effective_message.text)
             LOGGER.exception("SRE constant error")
-            update.effective_message.reply_text("Do you even sed? Apparently not.")
+            await update.effective_message.reply_text("Do you even sed? Apparently not.")
             return
 
         # empty string errors -_-
-        if len(text) >= telegram.MAX_MESSAGE_LENGTH:
-            update.effective_message.reply_text(
+        if len(text) >= telegram.MessageLimit.TEXT_LENGTH:
+            await update.effective_message.reply_text(
                 "The result of the sed command was too long for \
                                                  telegram!",
             )
@@ -151,21 +154,21 @@ def sed(update: Update, context: CallbackContext):
 
 
 __help__ = """
- ➩ `s/<text1>/<text2>(/<flag>)`*:* Reply to a message with this to perform a sed operation on that message, replacing all \
-occurrences of 'text1' with 'text2'. Flags are optional, and currently include 'i' for ignore case, 'g' for global, \
+ ➛ `s/<text1>/<text2>(/<flag>)*:* Reply to a message with this to perform a sed operation on that message, replacing all \
+occurrences of 'text1' with 'text2'. Flags are optional, and currently include 'i' for ignore case, "g' for global, \
 or nothing. Delimiters include `/`, `_`, `|`, and `:`. Text grouping is supported. The resulting message cannot be \
 larger than {}.
 *Reminder:* Sed uses some special characters to make matching easier, such as these: `+*.?\\`
 If you want to use these characters, make sure you escape them!
 *Example:* \\?.
-""".format(
-    telegram.MAX_MESSAGE_LENGTH,
-)
+"""
+
 
 __mod_name__ = "Sed/Regex"
 
 SED_HANDLER = DisableAbleMessageHandler(
-    Filters.regex(r"s([{}]).*?\1.*".format("".join(DELIMITERS))), sed, friendly="sed", run_async=True,
+    filters.Regex(f's([{"".join(DELIMITERS)}]).*?\\1.*'), sed, friendly="sed"
 )
 
-dispatcher.add_handler(SED_HANDLER)
+
+CUTIEPII_PTB.add_handler(SED_HANDLER)

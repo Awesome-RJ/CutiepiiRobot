@@ -1,57 +1,110 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import glob
-import io
 import os
 import re
 import urllib
 import urllib.request
 import bs4
 import requests
-
-from search_engine_parser import GoogleSearch
 from asyncio import sleep
 from datetime import datetime
 from requests import get, post
 from bs4 import BeautifulSoup
 from bing_image_downloader import downloader
-from PIL import Image
 from geopy.geocoders import Nominatim
-from urllib.parse import urlencode
-from urllib.error import URLError, HTTPError
 from telethon.tl import functions, types
 from telethon import *
 from telethon.tl.types import *
 
 
-from Cutiepii_Robot import telethn, BOT_NAME
+from Cutiepii_Robot import telethn, CUTIEPII_PTB
 from Cutiepii_Robot.events import register
+
+"""
+trans = SyncTranslator()
+
+def get_string(key: str) -> Any:
+    lang = language[0]
+    try:
+        return languages[lang][key]
+    except KeyError:
+        try:
+            en_ = languages["en"][key]
+            tr = trans.translate(en_, lang_tgt=lang).replace("\ N", "\n")
+            if en_.count("{}") != tr.count("{}"):
+                tr = en_
+            if languages.get(lang):
+                languages[lang][key] = tr
+            else:
+                languages.update({lang: {key: tr}})
+            return tr
+        except KeyError:
+            return f"Warning: could not load any string with the key `{key}`"
+        except Exception as er:
+            LOGGER.exception(er)
+            return languages["en"].get(key) or f"Failed to load language string "{key}"
+
+
+async def google_search(query):
+    query = query.replace(" ", "+")
+    _base = "https://google.com"
+    headers = {
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "User-Agent": choice(some_random_headers),
+    }
+    soup = BeautifulSoup(
+        await async_searcher(_base + "/search?q=" + query, headers=headers),
+        "html.parser",
+    )
+    another_soup = soup.find_all("div", class_="ZINbbc xpd O9g5cc uUPGi")
+    result = []
+    results = [someone.find_all("div", class_="kCrYT") for someone in another_soup]
+    for data in results:
+        try:
+            if len(data) > 1:
+                result.append(
+                    {
+                        "title": data[0].h3.text,
+                        "link": _base + data[0].a["href"],
+                        "description": data[1].text,
+                    }
+                )
+        except BaseException:
+            pass
+    return result
+"""
+
 
 @register(pattern="^/gps (.*)")
 async def _(event):
@@ -74,26 +127,42 @@ async def _(event):
         geoloc = geolocator.geocode(location)
         longitude = geoloc.longitude
         latitude = geoloc.latitude
-        gm = "https://www.google.com/maps/search/{},{}".format(latitude, longitude)
+        gm = f"https://www.google.com/maps/search/{latitude},{longitude}"
         await telethn.send_file(
             event.chat_id,
             file=types.InputMediaGeoPoint(
                 types.InputGeoPoint(float(latitude), float(longitude))
             ),
         )
-        await event.reply(
-            "Open with: [Google Maps]({})".format(gm),
-            link_preview=False,
-        )
+        await event.reply(f"Open with: [Google Maps]({gm})", link_preview=False)
     except Exception as e:
         print(e)
         await event.reply("I can't find that")
+"""
+@register(pattern="^/google (.*)")
+async def google(event):
+    inp = event.pattern_match.group(1)
+    if not inp:
+        return await eod(event, get_string("autopic_1"))
+    x = await event.reply(get_string("com_2"))
+    gs = await google_search(inp)
+    if not gs:
+        return await eod(x, get_string("autopic_2").format(inp))
+    out = ""
+    for res in gs:
+        text = res["title"]
+        url = res["link"]
+        des = res["description"]
+        out += f" 👉🏻  [{text}]({url})\n`{des}`\n\n"
+    omk = f"**Google Search Query:**\n`{inp}`\n\n**Results:**\n{out}"
+    await x.edit(omk, link_preview=False)
+
 
 @register(pattern="^/google (.*)")
 async def _(event):
     if event.fwd_from:
         return
-    
+
     webevent = await event.reply("searching........")
     match = event.pattern_match.group(1)
     page = re.findall(r"page=\d+", match)
@@ -118,14 +187,15 @@ async def _(event):
     await webevent.edit(
         "**Search Query:**\n`" + match + "`\n\n**Results:**\n" + msg, link_preview=False
     )
+"""
 
 @register(pattern="^/img (.*)")
 async def img_sampler(event):
     if event.fwd_from:
         return
-    
+
     query = event.pattern_match.group(1)
-    jit = f'"{query}"'
+    jit = f"{query}"
     downloader.download(
         jit,
         limit=4,
@@ -134,7 +204,7 @@ async def img_sampler(event):
         force_replace=False,
         timeout=60,
     )
-    os.chdir(f'./store/"{query}"')
+    os.chdir(f"./store/'{query}'")
     types = ("*.png", "*.jpeg", "*.jpg")  # the tuple of file types
     files_grabbed = []
     for files in types:
@@ -195,14 +265,15 @@ async def scam(results, lim):
 
 @register(pattern="^/app (.*)")
 async def apk(e):
-    
+
     try:
         app_name = e.pattern_match.group(1)
         remove_space = app_name.split(" ")
         final_name = "+".join(remove_space)
         page = requests.get(
-            "https://play.google.com/store/search?q=" + final_name + "&c=apps"
+            f"https://play.google.com/store/search?q={final_name}&c=apps"
         )
+
         lnk = str(page.status_code)
         soup = bs4.BeautifulSoup(page.content, "lxml", from_encoding="utf-8")
         results = soup.findAll("div", "ZmHEEd")
@@ -233,10 +304,10 @@ async def apk(e):
             .findNext("div", "uzcko")
             .img["data-src"]
         )
-        app_details = "<a href='" + app_icon + "'>📲&#8203;</a>"
-        app_details += " <b>" + app_name + "</b>"
+        app_details = f"<a href={app_icon}" + "'>📲&#8203;</a>"
+        app_details += f" <b>{app_name}</b>"
         app_details += (
-            "\n\n<code>Developer :</code> <a href='"
+            "\n\n<code>Developer :</code> <a href="
             + app_dev_link
             + "'>"
             + app_dev
@@ -250,16 +321,16 @@ async def apk(e):
             "five", "5"
         )
         app_details += (
-            "\n<code>Features :</code> <a href='"
+            "\n<code>Features :</code> <a href="
             + app_link
             + "'>View in Play Store</a>"
         )
-        app_details += f"\n\n===> *{BOT_NAME}* <==="
+        app_details += f"\n\n===> *{CUTIEPII_PTB.bot.first_name}* <==="
         await e.reply(app_details, link_preview=True, parse_mode="HTML")
     except IndexError:
         await e.reply("No result found in search. Please enter **Valid app name**")
     except Exception as err:
-        await e.reply("Exception Occured:- " + str(err))
+        await e.reply(f"Exception Occured:- {str(err)}")
 
 
 def progress(current, total):
@@ -359,22 +430,22 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
     )
     os.remove(required_file_name)
     duration = (datetime.now() - start).seconds
-    await qrcode.reply("Created QRCode in {} seconds".format(duration))
+    await qrcode.reply(f"Created QRCode in {duration} seconds")
     await sleep(5)
 
-__mod_name__ = "Google"
-
 __help__ = """
-  ➢ `/google <text>` :- Perform a google search
-  ➢ `/img <text>` :- Search Google for images and returns them\nFor greater no. of results specify lim, For eg: `/img hello lim=10`
-  ➢ `/app <appname>` :- Searches for an app in Play Store and returns its details.
-  ➢ `/reverse` :- reply to a sticker, or an image to search it!
+➛ /google <text>*:* Perform a google search
+➛ /img <text>*:* Search Google for images and returns them\nFor greater no. of results specify lim, For eg: `/img hello lim=10`
+➛ /app <appname>*:* Searches for an app in Play Store and returns its details.
+➛ /reverse*:* reply to a sticker, or an image to search it!
   Do you know that you can search an image with a link too? /reverse picturelink <amount>.
-  ➢ `/gitinfo <github username>` :- Get info of any github profile
-  ➢ `/ytdl <youtube video link` :- download any youtube video in every possible resolution.
-  ➢ `/webss <website url>` :- get screen shot of any website you want.
-  ➢ `/makeqr <text` : make any text to a qr code format
-  ➢ `/getqr <reply to a qrcode>` : decode and get what is inside the qr code.
+➛ /gitinfo <github username>*:* Get info of any github profile
+➛ /ytdl <youtube video link*:* download any youtube video in every possible resolution.
+➛ /webss <website url>*:* get screen shot of any website you want.
+➛ /makeqr <text*:*  make any text to a qr code format
+➛ /getqr <reply to a qrcode>*:*  decode and get what is inside the qr code.
 """
+
+__mod_name__ = "Google"
 
 

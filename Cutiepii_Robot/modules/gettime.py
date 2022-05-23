@@ -1,43 +1,47 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import datetime
 from typing import List
 
-import requests
-from Cutiepii_Robot import TIME_API_KEY, dispatcher
+from requests import get
+from Cutiepii_Robot import TIME_API_KEY, CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from telegram import ParseMode, Update
-from telegram.ext import CallbackContext, run_async
+from telegram import Update
+from telegram.constants import ParseMode
+from telegram.ext import CallbackContext
 
 
 def generate_time(to_find: str, findtype: List[str]) -> str:
-    data = requests.get(
+    data = get(
         f"https://api.timezonedb.com/v2.1/list-time-zone"
         f"?key={TIME_API_KEY}"
         f"&format=json"
@@ -76,21 +80,21 @@ def generate_time(to_find: str, findtype: List[str]) -> str:
             f"<b>Current Date:</b> <code>{current_date}</code>\n"
             '<b>Timezones:</b> <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List here</a>'
         )
-    except:
+    except Exception:
         result = None
 
     return result
 
 
-def gettime(update: Update, context: CallbackContext):
+async def gettime(update: Update, context: CallbackContext):
     message = update.effective_message
 
     try:
         query = message.text.strip().split(" ", 1)[1]
-    except:
-        message.reply_text("Provide a country name/abbreviation/timezone to find.")
+    except Exception:
+        await update.effective_message.reply_text("Provide a country name/abbreviation/timezone to find.")
         return
-    send_message = message.reply_text(
+    send_message = await message.reply_text(
         f"Finding timezone info for <b>{query}</b>", parse_mode=ParseMode.HTML,
     )
 
@@ -103,7 +107,7 @@ def gettime(update: Update, context: CallbackContext):
     if not result:
         send_message.edit_text(
             f"Timezone info not available for <b>{query}</b>\n"
-            '<b>All Timezones:</b> <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List here</a>',
+            "<b>All Timezones:</b> <a href='https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'>List here</a>",
             parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
         )
@@ -114,9 +118,9 @@ def gettime(update: Update, context: CallbackContext):
     )
 
 
-TIME_HANDLER = DisableAbleCommandHandler("time", gettime, run_async=True)
+TIME_HANDLER = DisableAbleCommandHandler("time", gettime)
 
-dispatcher.add_handler(TIME_HANDLER)
+CUTIEPII_PTB.add_handler(TIME_HANDLER)
 
 __mod_name__ = "Time"
 __command_list__ = ["time"]

@@ -1,37 +1,42 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from math import ceil
+import contextlib
 from typing import Dict, List
+from asyncio import sleep
 
 from Cutiepii_Robot import NO_LOAD
-from telegram import MAX_MESSAGE_LENGTH, Bot, InlineKeyboardButton, ParseMode
+from telegram import Bot, InlineKeyboardButton
 from telegram.error import TelegramError
+from telegram.constants import ParseMode, MessageLimit
 
 
 class EqInlineKeyboardButton(InlineKeyboardButton):
@@ -44,16 +49,22 @@ class EqInlineKeyboardButton(InlineKeyboardButton):
     def __gt__(self, other):
         return self.text > other.text
 
+def delete(delmsg, timer):
+    sleep(timer)
+    try:
+        delmsg.delete()
+    except:
+        return
 
 def split_message(msg: str) -> List[str]:
-    if len(msg) < MAX_MESSAGE_LENGTH:
+    if len(msg) < MessageLimit.TEXT_LENGTH:
         return [msg]
 
     lines = msg.splitlines(True)
     small_msg = ""
     result = []
     for line in lines:
-        if len(small_msg) + len(line) < MAX_MESSAGE_LENGTH:
+        if len(small_msg) + len(line) < MessageLimit.TEXT_LENGTH:
             small_msg += line
         else:
             result.append(small_msg)
@@ -63,8 +74,7 @@ def split_message(msg: str) -> List[str]:
 
     return result
 
-
-def paginate_modules(page_n: int, module_dict: Dict, prefix, chat=None) -> List:
+def paginate_modules(page_n: int, module_dict: Dict, prefix, chat=None) -> List[List[EqInlineKeyboardButton]]:
     if not chat:
         modules = sorted(
             [EqInlineKeyboardButton(x.__mod_name__,
@@ -76,9 +86,7 @@ def paginate_modules(page_n: int, module_dict: Dict, prefix, chat=None) -> List:
                                     callback_data="{}_module({},{})".format(prefix, chat, x.__mod_name__.lower())) for x
              in module_dict.values()])
 
-    pairs = [
-    modules[i * 3:(i + 1) * 3] for i in range((len(modules) + 3 - 1) // 3)
-    ]
+    pairs = [list (a) for a in zip(modules[::3], modules[1::3], modules[2::3])]
 
     round_num = len(modules) / 3
     calc = len(modules) - round(round_num)
@@ -89,21 +97,19 @@ def paginate_modules(page_n: int, module_dict: Dict, prefix, chat=None) -> List:
 
     return pairs
 
-def send_to_list(
+async def send_to_list(
     bot: Bot, send_to: list, message: str, markdown=False, html=False
-) -> None:
+) -> None:  # sourcery skip: raise-specific-error
     if html and markdown:
         raise Exception("Can only send with either markdown or HTML!")
     for user_id in set(send_to):
-        try:
+        with contextlib.suppress(TelegramError):
             if markdown:
-                bot.send_message(user_id, message, parse_mode=ParseMode.MARKDOWN)
+                await bot.send_message(user_id, message, parse_mode=ParseMode.MARKDOWN)
             elif html:
-                bot.send_message(user_id, message, parse_mode=ParseMode.HTML)
+                await bot.send_message(user_id, message, parse_mode=ParseMode.HTML)
             else:
-                bot.send_message(user_id, message)
-        except TelegramError:
-            pass  # ignore users who fail
+                await bot.send_message(user_id, message)
 
 
 def build_keyboard(buttons):
@@ -130,7 +136,7 @@ def build_keyboard_parser(bot, chat_id, buttons):
     keyb = []
     for btn in buttons:
         if btn.url == "{rules}":
-            btn.url = "http://t.me/{}?start={}".format(bot.username, chat_id)
+            btn.url = "http://https://telegram.dog/{}?start={}".format(bot.username, chat_id)
         if btn.same_line and keyb:
             keyb[-1].append(InlineKeyboardButton(btn.name, url=btn.url))
         else:

@@ -1,39 +1,43 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+
 import asyncio
-import html
 import io
 import re
 import time
 
-from Cutiepii_Robot import DRAGONS, REMINDER_LIMIT, dispatcher
-from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
+
+from Cutiepii_Robot import SUDO_USERS, CUTIEPII_PTB
+from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.string_handling import (
     extract_time_seconds, markdown_to_html,
 )
@@ -41,28 +45,29 @@ from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.ping import get_readable_time
 from Cutiepii_Robot.modules.sql import remind_sql as sql
 from telegram import (
-    InlineKeyboardButton, InlineKeyboardMarkup, ParseMode,
-    Update,
+    InlineKeyboardButton, InlineKeyboardMarkup, Update,
 )
+from telegram.constants import ParseMode
 from telegram.ext import (
     CallbackContext, CallbackQueryHandler,
-    CommandHandler, run_async,
+    CommandHandler,
 )
-from telegram.utils.helpers import mention_html
+from telegram.helpers import mention_html
 
-html_tags = re.compile('<.*?>')
+html_tags = re.compile("<.*?>")
 
+REMINDER_LIMIT = 20
 
 @user_admin
 @loggable
-def remind(update: Update, context: CallbackContext):
+async def remind(update: Update, context: CallbackContext):
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
     args = msg.text.split(None, 2)
 
     if len(args) != 3:
-        msg.reply_text(
+        await msg.reply_text(
             "Incorrect format\nFormat: `/remind 20m message here`",
             parse_mode=ParseMode.MARKDOWN,
         )
@@ -74,16 +79,16 @@ def remind(update: Update, context: CallbackContext):
     if not when or when == "":
         return
     if int(when) > 63072000:
-        msg.reply_text("Max remind time is limtied to 2 years!")
+        await msg.reply_text("Max remind time is limtied to 2 years!")
         return
     if int(when) < 30:
-        msg.reply_text("Your reminder needs to be more than 30 seconds!")
+        await msg.reply_text("Your reminder needs to be more than 30 seconds!")
         return
 
     t = (round(time.time()) + when)
     chat_limit = sql.num_reminds_in_chat(chat.id)
     if chat_limit >= REMINDER_LIMIT:
-        msg.reply_text(f"You can set {REMINDER_LIMIT} reminders in a chat.")
+        await msg.reply_text(f"You can set {REMINDER_LIMIT} reminders in a chat.")
         return
 
     sql.set_remind(chat.id, t, text[:512], user.id)
@@ -92,42 +97,52 @@ def remind(update: Update, context: CallbackContext):
     if len(text) > 512:
         confirmation += "\n<b>Note</b>: Reminder was over 512 characters and was truncated."
 
-    msg.reply_text(confirmation, parse_mode=ParseMode.HTML)
+    await msg.reply_text(confirmation, parse_mode=ParseMode.HTML)
 
     return (
-        f"<b>{html.escape(chat.title)}:</b>\n"
+        f"<b>{chat.title}:</b>\n"
         f"#REMINDER\n"
         f"<b>Admin</b>: {mention_html(user.id, user.first_name)}\n"
         f"<b>Time left</b>: {duration}\n"
-        "<b>Message</b>: {}{}".format(re.sub(html_tags, '', text[:20]), "...." if len(text) > 20 else "")
+        "<b>Message</b>: {}{}".format(re.sub(html_tags, "", text[:20]), "...." if len(text) > 20 else "")
     )
 
 
 @user_admin
-def reminders(update: Update, context: CallbackContext):
+async def reminders(update: Update, context: CallbackContext):
     chat = update.effective_chat
     msg = update.effective_message
     chat.title = "your private chat" if chat.type == "private" else chat.title
     reminders = sql.get_reminds_in_chat(chat.id)
     if len(reminders) < 1:
-        return msg.reply_text(f"There are no reminders in {chat.title} yet.")
+        return await msg.reply_text(f"There are no reminders in {chat.title} yet.")
     text = f"Reminders in {chat.title} are:\n"
     for reminder in reminders:
-        user = context.bot.get_chat(reminder.user_id)
-        text += ("\n• {}\n  <b>By</b>: {}\n  <b>Time left</b>: {}\n  <b>Time stamp</b>: <code>{}</code>").format(reminder.remind_message, (mention_html(user.id, user.first_name) if not user.username else "@"+user.username), get_readable_time(reminder.time_seconds-round(time.time())), reminder.time_seconds)
+        user = await context.bot.get_chat(reminder.user_id)
+        text += (
+            "\n➛ {}\n  <b>By</b>: {}\n  <b>Time left</b>: {}\n  <b>Time stamp</b>: <code>{}</code>"
+        ).format(
+            reminder.remind_message,
+            f"@{user.username}"
+            if user.username
+            else mention_html(user.id, user.first_name),
+            get_readable_time(reminder.time_seconds - round(time.time())),
+            reminder.time_seconds,
+        )
+
     text += "\n\n<b>Note</b>: You can clear a particular reminder with its time stamp."
     if len(text) > 4096:
-        text = re.sub(html_tags, '', text)
+        text = re.sub(html_tags, "", text)
         with io.BytesIO(str.encode(text)) as file:
             file.name = f"reminders_{chat.id}.txt"
-            dispatcher.bot.send_document(chat_id=update.effective_chat.id, document=file, caption="Click to get the list of all reminders in this chat.", reply_to_message_id=msg.message_id)
+            await CUTIEPII_PTB.bot.send_document(chat_id=update.effective_chat.id, document=file, caption="Click to get the list of all reminders in this chat.", reply_to_message_id=msg.message_id)
         return
-    msg.reply_text(text, parse_mode=ParseMode.HTML)
+    await msg.reply_text(text, parse_mode=ParseMode.HTML)
 
 
 @user_admin
 @loggable
-def clearreminder(update: Update, context: CallbackContext):
+async def clearreminder(update: Update, context: CallbackContext):
     msg = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -140,32 +155,31 @@ def clearreminder(update: Update, context: CallbackContext):
 
         remind = sql.get_remind_in_chat(chat.id, timestamp)
         if not remind:
-            msg.reply_text("This time stamp doesn't seem to be valid.")
+            await msg.reply_text("This time stamp doesn't seem to be valid.")
             return
 
         sql.rem_remind(chat.id, timestamp, remind.remind_message, remind.user_id)
-        msg.reply_text("I've deleted this reminder.")
+        await msg.reply_text("I've deleted this reminder.")
         user = update.effective_user
         return (
-            f"<b>{html.escape(chat.title)}:</b>\n"
+            f"<b>{chat.title}:</b>\n"
             f"#REMINDER_DELETED\n"
             f"<b>Admin</b>: {mention_html(user.id, user.first_name)}\n"
             f"<b>Reminder by</b>: <code>{remind.user_id}</code>\n"
             f"<b>Time stamp</b>: <code>{timestamp}</code>\n"
-            "<b>Message</b>: {}{}".format(re.sub(html_tags, '', remind.remind_message[:20]), "...." if len(remind.remind_message) > 20 else "")
+            "<b>Message</b>: {}{}".format(re.sub(html_tags, "", remind.remind_message[:20]), "...." if len(remind.remind_message) > 20 else "")
         )
-    else:
-        msg.reply_text("You need to provide me the timestamp of the reminder.\n<b>Note</b>: You can see timestamps via /reminders command.", parse_mode=ParseMode.HTML)
-        return
+    await msg.reply_text("You need to provide me the timestamp of the reminder.\n<b>Note</b>: You can see timestamps via /reminders command.", parse_mode=ParseMode.HTML)
+    return
 
 
 @user_admin
-def clearallreminders(update: Update, context: CallbackContext):
-    member = update.effective_chat.get_member(update.effective_user.id)
-    if update.effective_chat.type != "private" and member.status != "creator" and member.user.id not in DRAGONS:
-        return update.effective_message.reply_text("Only group owner can do this!")
+async def clearallreminders(update: Update, context: CallbackContext):
+    member = await update.effective_chat.get_member(update.effective_user.id)
+    if update.effective_chat.type != "private" and member.status != "creator" and member.user.id not in SUDO_USERS:
+        return await update.effective_message.reply_text("Only group owner can do this!")
 
-    context.bot.send_message(
+    await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text="Are you sure you want to delete all reminders?",
         reply_markup=InlineKeyboardMarkup([[
@@ -177,15 +191,15 @@ def clearallreminders(update: Update, context: CallbackContext):
 
 @user_admin
 @loggable
-def clearallremindersbtn(update: Update, context: CallbackContext):
+async def clearallremindersbtn(update: Update, context: CallbackContext):
     query = update.callback_query
     chat = update.effective_chat
     option = query.data.split("_")[1]
     member = chat.get_member(update.effective_user.id)
-    if update.effective_chat.type != "private" and member.status != "creator" and member.user.id not in DRAGONS:
-        return query.answer("Only group owner can do this!")
+    if update.effective_chat.type != "private" and member.status != "creator" and member.user.id not in SUDO_USERS:
+        return await query.answer("Only group owner can do this!")
     if option == "no":
-        query.message.edit_text("No reminders were deleted!")
+        await query.message.edit_text("No reminders were deleted!")
     elif option == "yes":
         reminders = sql.get_reminds_in_chat(chat.id)
         for r in reminders:
@@ -193,10 +207,10 @@ def clearallremindersbtn(update: Update, context: CallbackContext):
                 sql.rem_remind(r.chat_id, r.time_seconds, r.remind_message, r.user_id)
             except:
                 pass
-        query.message.edit_text("I have deleted all reminders.")
-    context.bot.answer_callback_query(query.id)
+        await query.message.edit_text("I have deleted all reminders.")
+    await context.bot.answer_callback_query(query.id)
     return (
-            f"<b>{html.escape(chat.title)}:</b>\n"
+            f"<b>{chat.title}:</b>\n"
             f"#ALL_REMINDERS_DELETED"
     )
 
@@ -208,9 +222,9 @@ async def check_reminds():
             r = sql.REMINDERS[t]
             for a in r:
                 try:
-                    user = dispatcher.bot.get_chat(a["user_id"])
+                    user = await CUTIEPII_PTB.bot.get_chat(a["user_id"])
                     text = "{}'s reminder:\n{}".format(mention_html(user.id, user.first_name), markdown_to_html(a["message"]))
-                    dispatcher.bot.send_message(a["chat_id"], text, parse_mode=ParseMode.HTML)
+                    CUTIEPII_PTB.bot.send_message(a["chat_id"], text, parse_mode=ParseMode.HTML)
                     sql.rem_remind(a["chat_id"], t, a["message"], a["user_id"])
                 except:
                     continue
@@ -220,28 +234,29 @@ async def check_reminds():
 asyncio.get_event_loop().create_task(check_reminds())
 
 
-REMIND_HANDLER = CommandHandler(["remind", "reminder"], remind, run_async=True)
-REMINDERS_HANDLER = CommandHandler(["reminds", "reminders"], reminders, run_async=True)
-CLEARREMINDER_HANDLER = CommandHandler("clearreminder", clearreminder, run_async=True)
-CLEARALLREMINDERS_HANDLER = CommandHandler("clearallreminders", clearallreminders, run_async=True)
-CLEARALLREMINDERSBTN_HANDLER = CallbackQueryHandler(clearallremindersbtn, pattern=r"clearremind_", run_async=True)
+REMIND_HANDLER = CommandHandler(["remind", "reminder"], remind)
+REMINDERS_HANDLER = CommandHandler(["reminds", "reminders"], reminders)
+CLEARREMINDER_HANDLER = CommandHandler("clearreminder", clearreminder)
+CLEARALLREMINDERS_HANDLER = CommandHandler("clearallreminders", clearallreminders)
+CLEARALLREMINDERSBTN_HANDLER = CallbackQueryHandler(clearallremindersbtn, pattern=r"clearremind_")
 
-dispatcher.add_handler(REMIND_HANDLER)
-dispatcher.add_handler(REMINDERS_HANDLER)
-dispatcher.add_handler(CLEARREMINDER_HANDLER)
-dispatcher.add_handler(CLEARALLREMINDERS_HANDLER)
-dispatcher.add_handler(CLEARALLREMINDERSBTN_HANDLER)
+CUTIEPII_PTB.add_handler(REMIND_HANDLER)
+CUTIEPII_PTB.add_handler(REMINDERS_HANDLER)
+CUTIEPII_PTB.add_handler(CLEARREMINDER_HANDLER)
+CUTIEPII_PTB.add_handler(CLEARALLREMINDERS_HANDLER)
+CUTIEPII_PTB.add_handler(CLEARALLREMINDERSBTN_HANDLER)
 
 __mod_name__ = "Reminders"
+
 __help__ = """
 This module lets you setup upto 20 reminders per group/pm.
 The usage is as follows
 
 *Commands*:
-  ➢ `/remind <time> <text>`*:* Sets a reminder for given time, usage is same like a mute command
-  ➢ `/reminders`*:* Lists all the reminders for current chat
-  ➢ `/clearreminder <timestampID>`*:* Removes the reminder of the given timestamp ID from the list
-  ➢ `/clearallreminders`*:* Cleans all saved reminders (owner only)
+➛ /remind <time> <text>*:* Sets a reminder for given time, usage is same like a mute command
+➛ /reminders*:* Lists all the reminders for current chat
+➛ /clearreminder <timestampID>*:* Removes the reminder of the given timestamp ID from the list
+➛ /clearallreminders*:* Cleans all saved reminders (owner only)
 
 *TimestampID:* An ID number listed under each reminder, used to remove a reminder
 *Time:* 1d or 1h or 1m or 30s

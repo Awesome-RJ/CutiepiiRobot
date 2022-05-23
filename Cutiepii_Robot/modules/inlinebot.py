@@ -1,31 +1,3 @@
-"""
-MIT License
-
-Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
-
-This file is part of @Cutiepii_Robot (Telegram Bot)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-"""
-
 import datetime
 import re
 import time
@@ -54,7 +26,7 @@ from youtubesearchpython import VideosSearch
 
 from Cutiepii_Robot.utils.inlinehelper import *
 from Cutiepii_Robot.utils.pluginhelpers import fetch, json_prettify
-from Cutiepii_Robot import pgram, OPENWEATHERMAP_ID, TIME_API_KEY, BOT_USERNAME, SUPPORT_CHAT
+from Cutiepii_Robot import pgram, OPENWEATHERMAP_ID, TIME_API_KEY, SUPPORT_CHAT, CUTIEPII_PTB
 
 dictionary = PyDictionary()
 
@@ -78,54 +50,52 @@ class AioHttp:
 
 __mod_name__ = "Inline"
 __help__ = f"""
-INLINE BOT SERVICE OF @{BOT_USERNAME}
+INLINE BOT SERVICE OF @{CUTIEPII_PTB.bot.username}
 I'm more efficient when added as group admin. By the way these commands can be used by anyone in a group via inline.
-
 ──「 Syntax 」──
-   @{BOT_USERNAME} [command] [query]
-
+   @{CUTIEPII_PTB.bot.username} [command] [query]
 ──「 Commands Available 」──
-➩ alive - Check Bot's Stats.
-➩ yt [query] - Youtube Search.
-➩ tr [LANGUAGE_CODE] [QUERY]** - Translate Text.
-➩ modapk [name] - Give you direct link of mod apk.
-➩ ud [QUERY] - Urban Dictionary Query
-➩ google [QUERY] - Google Search.
-➩ webss [URL] - Take Screenshot Of A Website.
-➩ bitly [URL] - Shorten A Link.
-➩ wall [Query] - Find Wallpapers.
-➩ pic [Query] - Find pictures.
-➩ saavn [SONG_NAME] - Get Songs From Saavn.
-➩ deezer [SONG_NAME] - Get Songs From Deezer.
-➩ torrent [QUERY] - Torrent Search.
-➩ reddit [QUERY] - Get memes from reddit.
-➩ imdb [QUERY] - Search movies on imdb.
-➩ spaminfo [ID] - Get spam info of the user.
-➩ lyrics [QUERY] - Get lyrics of the song.
-➩ paste [TEXT] - Paste text on pastebin.
-➩ define [WORD] - Get definition from Dictionary.
-➩ synonyms [WORD] - Get synonyms from Dictionary.
-➩ antonyms [WORD] - Get antonyms from Dictionary.
-➩ country [QUERY] - Get Information about given country.
-➩ cs - Gathers Cricket info (Globally).
-➩ covid [COUNTRY] - Get covid updates of given country.
-➩ fakegen - Gathers fake information.
-➩ weather [QUERY] - Get weather information.
-➩ datetime [QUERY] - Get Date & time information of given country/region.
-➩ app [QUERY] - Search for apps in playstore.
-➩ gh [QUERY] - Search github.
-➩ so [QUERY] - Search stack overflow.
-➩ wiki [QUERY] - Search wikipedia.
-➩ ping - Check ping rate.
-➩ pokedex [TEXT]: Pokemon Search
+➛ alive - Check Bot's Stats.
+➛ yt [query] - Youtube Search.
+➛ tr [LANGUAGE_CODE] [QUERY]** - Translate Text.
+➛ modapk [name] - Give you direct link of mod apk.
+➛ ud [QUERY] - Urban Dictionary Query
+➛ google [QUERY] - Google Search.
+➛ webss [URL] - Take Screenshot Of A Website.
+➛ bitly [URL] - Shorten A Link.
+➛ wall [Query] - Find Wallpapers.
+➛ pic [Query] - Find pictures.
+➛ saavn [SONG_NAME] - Get Songs From Saavn.
+➛ deezer [SONG_NAME] - Get Songs From Deezer.
+➛ torrent [QUERY] - Torrent Search.
+➛ reddit [QUERY] - Get memes from reddit.
+➛ imdb [QUERY] - Search movies on imdb.
+➛ spaminfo [ID] - Get spam info of the user.
+➛ lyrics [QUERY] - Get lyrics of the song.
+➛ paste [TEXT] - Paste text on pastebin.
+➛ define [WORD] - Get definition from Dictionary.
+➛ synonyms [WORD] - Get synonyms from Dictionary.
+➛ antonyms [WORD] - Get antonyms from Dictionary.
+➛ country [QUERY] - Get Information about given country.
+➛ cs - Gathers Cricket info (Globally).
+➛ covid [COUNTRY] - Get covid updates of given country.
+➛ fakegen - Gathers fake information.
+➛ weather [QUERY] - Get weather information.
+➛ datetime [QUERY] - Get Date & time information of given country/region.
+➛ app [QUERY] - Search for apps in playstore.
+➛ gh [QUERY] - Search github.
+➛ so [QUERY] - Search stack overflow.
+➛ wiki [QUERY] - Search wikipedia.
+➛ ping - Check ping rate.
+➛ pokedex [TEXT]: Pokemon Search
 """
 
 __MODULE__ = "Inline"
 __HELP__ = f"""
- ==>> **INLINE BOT SERVICE OF @{BOT_USERNAME}** <<==
+ ==>> **INLINE BOT SERVICE OF @{CUTIEPII_PTB.bot.username}** <<==
 `I'm more efficient when added as group admin. By the way these commands can be used by anyone in a group via inline.`
    >> Syntax <<
-@{BOT_USERNAME} [command] [query]
+@{CUTIEPII_PTB.bot.username} [command] [query]
    >> Commands Available <<
 - **alive** - __Check Bot's Stats.__
 - **yt [query]** - __Youtube Search.__
@@ -466,7 +436,7 @@ async def inline_query_handler(client, query):
                 date = a["results"]["last_updated"]
                 stats = "**◢ Intellivoid• SpamProtection Info**:\n"
                 stats += f' ❍ **Updated on**: `{datetime.fromtimestamp(date).strftime("%Y-%m-%d %I:%M:%S %p")}`\n'
-                stats += f" ❍ **Chat Info**: [Link](t.me/SpamProtectionBot/?start=00_{cmd})\n"
+                stats += f" ❍ **Chat Info**: [Link](https://telegram.dog/SpamProtectionBot/?start=00_{cmd})\n"
 
                 if a["results"]["attributes"]["is_potential_spammer"] is True:
                     stats += " ❍ **User**: `USERxSPAM`\n"
@@ -646,7 +616,7 @@ async def inline_query_handler(client, query):
                 Time Zones:- {tom}
                 Top Level Domain:- {lanester}
                 wikipedia:- {wiki}</b>
-                Gathered By @{BOT_USERNAME}.</b>
+                Gathered By @{CUTIEPII_PTB.bot.username}.</b>
                 """
             results.append(
                 InlineQueryResultArticle(
