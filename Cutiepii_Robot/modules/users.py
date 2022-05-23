@@ -250,20 +250,9 @@ def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
 
 
-__help__ = ""  # no help string
-
-BROADCAST_HANDLER = CommandHandler(
-    ["broadcastall", "broadcastusers", "broadcastgroups"],
-    broadcast
-)
-USER_HANDLER = MessageHandler(filters.ALL & filters.ChatType.GROUPS, log_user)
-#CHAT_CHECKER_HANDLER = MessageHandler(filters.ALL & filters.ChatType.GROUPS, chat_checker)
-CHATLIST_HANDLER = CommandHandler("groups", chats)
-
-CUTIEPII_PTB.add_handler(USER_HANDLER, USERS_GROUP)
-CUTIEPII_PTB.add_handler(BROADCAST_HANDLER)
-CUTIEPII_PTB.add_handler(CHATLIST_HANDLER)
-#CUTIEPII_PTB.add_handler(CHAT_CHECKER_HANDLER, CHAT_GROUP)
+CUTIEPII_PTB.add_handler(CommandHandler(["broadcastall", "broadcastusers", "broadcastgroups"], broadcast))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & filters.ChatType.GROUPS, log_user))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & filters.ChatType.GROUPS, chat_checker))
+CUTIEPII_PTB.add_handler(CommandHandler("groups", chats))
 
 __mod_name__ = "Users"
-__handlers__ = [(USER_HANDLER, USERS_GROUP), BROADCAST_HANDLER] #CHATLIST_HANDLER ]

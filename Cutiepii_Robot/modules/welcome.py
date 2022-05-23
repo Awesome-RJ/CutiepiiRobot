@@ -1313,87 +1313,20 @@ def __chat_settings__(chat_id, user_id):
     )
 
 
-
-def get_help(chat):
-    return gs(chat, "greetings_help")
-
-
-NEW_MEM_HANDLER = MessageHandler(
-    filters.StatusUpdate.NEW_CHAT_MEMBERS, new_member, block=False
-)
-LEFT_MEM_HANDLER = MessageHandler(
-    filters.StatusUpdate.LEFT_CHAT_MEMBER, left_member, block=False
-)
-WELC_PREF_HANDLER = CommandHandler(
-    "welcome", welcome, filters=filters.ChatType.GROUPS, block=False
-)
-GOODBYE_PREF_HANDLER = CommandHandler(
-    "goodbye", goodbye, filters=filters.ChatType.GROUPS, block=False
-)
-SET_WELCOME = CommandHandler(
-    "setwelcome", set_welcome, filters=filters.ChatType.GROUPS, block=False
-)
-SET_GOODBYE = CommandHandler(
-    "setgoodbye", set_goodbye, filters=filters.ChatType.GROUPS, block=False
-)
-RESET_WELCOME = CommandHandler(
-    "resetwelcome", reset_welcome, filters=filters.ChatType.GROUPS, block=False
-)
-RESET_GOODBYE = CommandHandler(
-    "resetgoodbye", reset_goodbye, filters=filters.ChatType.GROUPS, block=False
-)
-WELCOMEMUTE_HANDLER = CommandHandler(
-    "welcomemute", welcomemute, filters=filters.ChatType.GROUPS, block=False
-)
-CLEAN_SERVICE_HANDLER = CommandHandler(
-    "cleanservice", cleanservice, filters=filters.ChatType.GROUPS, block=False
-)
-CLEAN_WELCOME = CommandHandler(
-    "cleanwelcome", clean_welcome, filters=filters.ChatType.GROUPS, block=False
-)
-WELCOME_HELP = CommandHandler("welcomehelp", welcome_help, block=False)
-WELCOME_MUTE_HELP = CommandHandler("welcomemutehelp", welcome_mute_help, block=False)
-BUTTON_VERIFY_HANDLER = CallbackQueryHandler(
-    user_button, pattern=r"user_join_", block=False
-)
-CAPTCHA_BUTTON_VERIFY_HANDLER = CallbackQueryHandler(
-    user_captcha_button,
-    pattern=r"user_captchajoin_\([\d\-]+,\d+\)_\(\d{4}\)",
-    block=False,
-)
-
-CUTIEPII_PTB.add_handler(NEW_MEM_HANDLER)
-CUTIEPII_PTB.add_handler(LEFT_MEM_HANDLER)
-CUTIEPII_PTB.add_handler(WELC_PREF_HANDLER)
-CUTIEPII_PTB.add_handler(GOODBYE_PREF_HANDLER)
-CUTIEPII_PTB.add_handler(SET_WELCOME)
-CUTIEPII_PTB.add_handler(SET_GOODBYE)
-CUTIEPII_PTB.add_handler(RESET_WELCOME)
-CUTIEPII_PTB.add_handler(RESET_GOODBYE)
-CUTIEPII_PTB.add_handler(CLEAN_WELCOME)
-CUTIEPII_PTB.add_handler(WELCOME_HELP)
-CUTIEPII_PTB.add_handler(WELCOMEMUTE_HANDLER)
-CUTIEPII_PTB.add_handler(CLEAN_SERVICE_HANDLER)
-CUTIEPII_PTB.add_handler(BUTTON_VERIFY_HANDLER)
-CUTIEPII_PTB.add_handler(WELCOME_MUTE_HELP)
-CUTIEPII_PTB.add_handler(CAPTCHA_BUTTON_VERIFY_HANDLER)
+CUTIEPII_PTB.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, new_member, block=False))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.StatusUpdate.LEFT_CHAT_MEMBER, left_member, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("welcome", welcome, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("goodbye", goodbye, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("setwelcome", set_welcome, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("setgoodbye", set_goodbye, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("resetwelcome", reset_welcome, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("resetgoodbye", reset_goodbye, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("welcomemute", welcomemute, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("cleanservice", cleanservice, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("cleanwelcome", clean_welcome, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("welcomehelp", welcome_help, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("welcomemutehelp", welcome_mute_help, block=False))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(user_button, pattern=r"user_join_", block=False))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(user_captcha_button, pattern=r"user_captchajoin_\([\d\-]+,\d+\)_\(\d{4}\)", block=False))
 
 __mod_name__ = "Greetings"
-__command_list__ = []
-__handlers__ = [
-    NEW_MEM_HANDLER,
-    LEFT_MEM_HANDLER,
-    WELC_PREF_HANDLER,
-    GOODBYE_PREF_HANDLER,
-    SET_WELCOME,
-    SET_GOODBYE,
-    RESET_WELCOME,
-    RESET_GOODBYE,
-    CLEAN_WELCOME,
-    WELCOME_HELP,
-    WELCOMEMUTE_HANDLER,
-    CLEAN_SERVICE_HANDLER,
-    BUTTON_VERIFY_HANDLER,
-    CAPTCHA_BUTTON_VERIFY_HANDLER,
-    WELCOME_MUTE_HELP,
-]
