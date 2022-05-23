@@ -25,7 +25,7 @@ zalgo-text==0.6
 fontTools==4.28.0
 nekos.py==1.0.3
 telegraph==2.0.1
-tgcrypto==1.2.2
+tgcrypto==1.2.3
 youtube_search==2.1.0
 pytube==11.0.1
 pymongo==3.12.1
