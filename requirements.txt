@@ -61,7 +61,7 @@ selenium==4.1.5
 hiredis==2.0.0
 pendulum==2.1.2
 img2pdf==0.4.4
-google-api-python-client==2.48.0
+google-api-python-client==2.49.0
 secureme==0.0.4
 git+https://github.com/Awesome-RJ/GoGoAnimeAPI.git
 better_profanity==0.7.0
