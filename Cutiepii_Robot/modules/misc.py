@@ -1,52 +1,75 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
+import contextlib
+import random
+import requests
+import time
+import psutil
+import platform
+import sqlalchemy
+import Cutiepii_Robot.modules.helper_funcs.git_api as git
+
+
+from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
+from Cutiepii_Robot .modules.helper_funcs.chat_status import sudo_plus  
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot import dispatcher
+from Cutiepii_Robot import CUTIEPII_PTB, pgram, StartTime
 from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action, send_action
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update, ChatAction
-from telegram.ext.dispatcher import run_async
-from telegram.ext import CallbackContext, Filters, CommandHandler
+from datetime import datetime
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, __version__ as ptbver
+from telegram.constants import ParseMode, ChatAction
+from telegram.error import BadRequest
+from telegram.ext import filters as PTB_Cutiepii_Filters, CommandHandler, CallbackQueryHandler, CallbackContext
+from platform import python_version, uname
+from telethon import version as tlthn
+from pyrogram import filters
+from requests import get
 
+FORMATTING_HELP = """
+Main Help Here
+"""
 MARKDOWN_HELP = f"""
-Markdown is a very powerful formatting tool supported by telegram. {dispatcher.bot.first_name} has some enhancements, to make sure that \
+Markdown is a very powerful formatting tool supported by telegram. {CUTIEPII_PTB.bot.first_name} has some enhancements, to make sure that \
 saved messages are correctly parsed, and to allow you to create buttons.
 
- ➢ <code>_italic_</code>: wrapping text with '_' will produce italic text
- ➢ <code>*bold*</code>: wrapping text with '*' will produce bold text
- ➢ <code>`code`</code>: wrapping text with '`' will produce monospaced text, also known as 'code'
- ➢ <code>[sometext](someURL)</code>: this will create a link - the message will just show <code>sometext</code>, \
+➛ <code>_italic_</code>: wrapping text with '_' will produce italic text
+➛ <code>*bold*</code>: wrapping text with "*' will produce bold text
+➛ <code>`code`</code>: wrapping text with "`' will produce monospaced text, also known as 'code'
+➛ <code>[sometext](someURL)</code>: this will create a link - the message will just show <code>sometext</code>, \
 and tapping on it will open the page at <code>someURL</code>.
 <b>Example:</b><code>[test](example.com)</code>
 
-• <code>[buttontext](buttonurl:someURL)</code>: this is a special enhancement to allow users to have telegram \
+➛ <code>[buttontext](buttonurl:someURL)</code>: this is a special enhancement to allow users to have telegram \
 buttons in their markdown. <code>buttontext</code> will be what is displayed on the button, and <code>someurl</code> \
 will be the url which is opened.
 <b>Example:</b> <code>[This is a button](buttonurl:example.com)</code>
@@ -59,49 +82,185 @@ This will create two buttons on a single line, instead of one button per line.
 Keep in mind that your message <b>MUST</b> contain some text other than just a button!
 """
 
+FILLINGS_HELP = """
+<b>Fillings</b>
 
+You can also customise the contents of your message with contextual data. For example, you could mention a user by name in the welcome message, or mention them in a filter!
+
+<b>Supported fillings</b>:
+- <code>{first}</code>: The user's first name.
+- <code>{last}</code>: The user's last name.
+- <code>{fullname}</code>: The user's full name.
+- <code>{username}</code>: The user's username. If they don't have one, mentions the user instead.
+- <code>{mention}</code>: Mentions the user with their firstname.
+- <code>{id}</code>: The user's ID.
+- <code>{chatname}</code>: The chat's name.
+- <code>{rules}</code>: Create a button to the chat's rules.
+- <code>{preview}</code>: Enables link previews for this message. Useful when using links to Instant View pages.
+- <code>{random}</code>: You can use this filling for a random greeting in welcome message.
+"""
+
+RANDOM_HELP = f"""
+<b>Random Content</b>
+
+Another thing that can be fun, is to randomise the contents of a message. Make things a little more personal by changing welcome messages, or changing notes!
+
+<b>How to use random contents</b>:
+- <code>%%%</code>: This separator can be used to add "random" replies to the bot.
+For example:
+<code>hello
+%%%
+how are you</code>
+This will randomly choose between sending the first message, "hello", or the second message, "how are you". Use this to make {CUTIEPII_PTB.bot.first_name} feel a bit more customised! (only works in notes/filters/greetings)
+
+<b>Example welcome message</b>:
+- Every time a new user joins, they'll be presented with one of the three messages shown here.
+-> <code>/setwelcome hello there""" + "{first}! %%% Ooooh, {first} is in the house! %%% Welcome to the group, {first}!</code>"
+
+
+@pgram.on_message(filters.command("slcheck"))
+async def slcheck(_,message):
+    message = Update.effective_message
+    user = message.text.split(" ")[1]
+    res = get(f"https://sylviorus.up.railway.app/user/{user}")
+    if res["blacklisted"]:
+       enf = res["enforcer"]
+       reason = res["reason"]
+       await message.reply_text(f"**Enforcer**: {enf}\n**User** : {user}\n**Reason**: {reason}")
 
 @user_admin
-def echo(update, _):
+async def echo(update: Update, context: CallbackContext):
     args = update.effective_message.text.split(None, 1)
     message = update.effective_message
 
-    if message.reply_to_message:
+    if update.effective_message.reply_to_message:
         message.reply_to_message.reply_text(
             args[1], parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True
         )
     else:
-        message.reply_text(
+        await message.reply_text(
             args[1],
             quote=False,
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
         )
-    message.delete()
+    with contextlib.suppress(BadRequest):
+        await message.delete()
 
 
-def markdown_help_sender(update: Update):
-    update.effective_message.reply_text(MARKDOWN_HELP, parse_mode=ParseMode.HTML)
-    update.effective_message.reply_text(
-        "Try forwarding the following message to me, and you'll see, and Use #test!",
-    )
-    update.effective_message.reply_text(
-        "/save test This is a markdown test. _italics_, *bold*, code, "
-        "[URL](example.com) [button](buttonurl:github.com) "
-        "[button2](buttonurl://google.com:same)",
-    )
+def get_readable_time(seconds: int) -> str:
+    count = 0
+    ping_time = ""
+    time_list = []
+    time_suffix_list = ["s", "m", "h", "days"]
+
+    while count < 4:
+        count += 1
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
+        if seconds == 0 and remainder == 0:
+            break
+        time_list.append(int(result))
+        seconds = int(remainder)
+
+    for x in range(len(time_list)):
+        time_list[x] = str(time_list[x]) + time_suffix_list[x]
+    if len(time_list) == 4:
+        ping_time += f"{time_list.pop()}, "
+
+    time_list.reverse()
+    ping_time += ":".join(time_list)
+
+    return ping_time
+
+
+def get_size(bytes, suffix="B"):
+    factor = 1024
+    for unit in ["", "K", "M", "G", "T", "P"]:
+        if bytes < factor:
+            return f"{bytes:.2f}{unit}{suffix}"
+        bytes /= factor
+
+
+async def markdown_help_sender(update: Update):
+    markup = InlineKeyboardMarkup([
+        [InlineKeyboardButton(text="Markdown formatting", callback_data="mkhelp_markdownformat"), InlineKeyboardButton(text="Fillings", callback_data="mkhelp_fillings")],
+        [InlineKeyboardButton(text="Random Content", callback_data="mkhelp_randomcontent")],
+    ])
+    if update.callback_query:
+        await update.effective_message.edit_text(FORMATTING_HELP, parse_mode=ParseMode.MARKDOWN, reply_markup=markup)
+    else:
+        await update.effective_message.reply_text(FORMATTING_HELP, parse_mode=ParseMode.MARKDOWN, reply_markup=markup)
+
+async def markdown_help(update: Update, context: CallbackContext):
+    if update.effective_chat.type != "private":
+        await update.effective_message.reply_text(
+            "Contact me in pm",
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            "Markdown help",
+                            url=f"t.me/{context.bot.username}?start=markdownhelp",
+                        ),
+                    ],
+                ],
+            ),
+        )
+        return
+    markdown_help_sender(update)
+
+
+async def mkdown_btn(update: Update, context: CallbackContext):
+    bot = context.bot
+    query = update.callback_query
+    match = query.data.split("_")[1]
+
+    if match == "fillings":
+        await update.effective_message.edit_text(
+            FILLINGS_HELP, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(
+            [[InlineKeyboardButton(text="Back", callback_data="mkhelp_main")]],
+            ),
+        )
+
+    elif match == "markdownformat":
+        await update.effective_message.edit_text(
+            MARKDOWN_HELP, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(
+            [[InlineKeyboardButton(text="Back", callback_data="mkhelp_main")]],
+            ),
+        )
+
+    elif match == "randomcontent":
+        await update.effective_message.edit_text(
+            RANDOM_HELP, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(
+            [[InlineKeyboardButton(text="Back", callback_data="mkhelp_main")]],
+            ),
+        )
+
+    else:
+        markdown_help_sender(update)
+
+    await bot.answer_callback_query(query.id)
 
 
 @typing_action
-def src(update, _):
-    update.effective_message.reply_text(
-        "Hey there! You can find what makes me click [here](https://github.com/Awesome-RJ/CutiepiiRobot).",
-        parse_mode=ParseMode.MARKDOWN,
-        disable_web_page_preview=True,
+async def src(update: Update, context: CallbackContext) -> None:
+    await update.effective_message.reply_text(
+        "old Unmaintained Source Code Are Public. Click Below For The Source.",
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton(
+                        text="[► Click Here ◄]",
+                        url="https://github.com/Awesome-RJ/CutiepiiRobot",
+                    ),
+                ],
+            ],
+            disable_web_page_preview=True,
+        ),
     )
-    
+
 @send_action(ChatAction.UPLOAD_PHOTO)
-def rmemes(update, context):
+async def rmemes(update: Update, context: CallbackContext):
     msg = update.effective_message
     chat = update.effective_chat
 
@@ -120,24 +279,24 @@ def rmemes(update, context):
     ]
 
     subreddit = random.choice(SUBREDS)
-    res = r.get(f"https://meme-api.herokuapp.com/gimme/{subreddit}")
+    res = requests.get(f"https://meme-api.herokuapp.com/gimme/{subreddit}")
 
     if res.status_code != 200:  # Like if api is down?
-        msg.reply_text("Sorry some error occurred :(")
+        await msg.reply_text("Sorry some error occurred :(")
         return
     res = res.json()
 
-    rpage = res.get(str("subreddit"))  # Subreddit
-    title = res.get(str("title"))  # Post title
-    memeu = res.get(str("url"))  # meme pic url
-    plink = res.get(str("postLink"))
+    rpage = res.get("subreddit")
+    title = res.get("title")
+    memeu = res.get("url")
+    plink = res.get("postLink")
 
     caps = f"× <b>Title</b>: {title}\n"
     caps += f"× <b>Subreddit:</b> <pre>r/{rpage}</pre>"
 
     keyb = [[InlineKeyboardButton(text="Subreddit Postlink 🔗", url=plink)]]
     try:
-        context.bot.send_photo(
+        await context.bot.send_photo(
             chat.id,
             photo=memeu,
             caption=caps,
@@ -147,19 +306,19 @@ def rmemes(update, context):
         )
 
     except BadRequest as excp:
-        return msg.reply_text(f"Error! {excp.message}")
-   
-   
-def markdown_help(update: Update, context: CallbackContext):
+        return await msg.reply_text(f"Error! {excp.message}")
+
+
+async def markdown_help(update: Update, context: CallbackContext):
     if update.effective_chat.type != "private":
-        update.effective_message.reply_text(
+        await update.effective_message.reply_text(
             "Contact me in pm",
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
                         InlineKeyboardButton(
                             "Markdown help",
-                            url=f"t.me/{context.bot.username}?start=markdownhelp",
+                            url=f"https://telegram.dog/{context.bot.username}?start=markdownhelp",
                         ),
                     ],
                 ],
@@ -168,110 +327,155 @@ def markdown_help(update: Update, context: CallbackContext):
         return
     markdown_help_sender(update)
 
+@sudo_plus
+async def status(update: Update, context: CallbackContext):
+    message = update.effective_message
+    chat = update.effective_chat
+    query = update.callback_query
+
+    msg = "*Bot information*\n"
+    msg += f"Python: `{python_version()}`\n"
+    msg += f"Python Tg Bot: `{ptbver}`\n"
+    msg += f"Telethon: `{tlthn.__version__}`\n"
+    msg += f"SQLAlchemy: `{sqlalchemy.__version__}`\n"
+    msg += f"GitHub API: `{str(git.vercheck())}`\n"
+    uptime = get_readable_time((time.time() - StartTime))
+    msg += f"Uptime: `{uptime}`\n\n"
+    uname = platform.uname()
+    msg += "*System information*\n"
+    msg += f"OS: `{uname.system}`\n"
+    msg += f"Version: `{uname.version}`\n"
+    msg += f"Release: `{uname.release}`\n"
+    msg += f"Processor: `{uname.processor}`\n"
+    boot_time_timestamp = psutil.boot_time()
+    bt = datetime.fromtimestamp(boot_time_timestamp)
+    msg += f"Boot time: `{bt.day}/{bt.month}/{bt.year} - {bt.hour}:{bt.minute}:{bt.second}`\n"
+    msg += f"CPU cores: `{psutil.cpu_count(logical=False)} physical, {psutil.cpu_count()} logical`\n"
+    msg += f"CPU freq: `{psutil.cpu_freq().current:.2f}Mhz`\n"
+    msg += f"CPU usage: `{psutil.cpu_percent()}%`\n"
+    ram = psutil.virtual_memory()
+    msg += f"RAM: `{get_size(ram.total)} - {get_size(ram.used)} used ({ram.percent}%)`\n"
+    disk = psutil.disk_usage('/')
+    msg += f"Disk usage: `{get_size(disk.total)} total - {get_size(disk.used)} used ({disk.percent}%)`\n"
+    swap = psutil.swap_memory()
+    msg += f"SWAP: `{get_size(swap.total)} - {get_size(swap.used)} used ({swap.percent}%)`\n"
+
+    await message.reply_text(
+        text = msg,
+        parse_mode = ParseMode.MARKDOWN,
+        disable_web_page_preview = True,
+    )
 
 __help__ = """
 Available commands:
 📐 Markdown:
-  ➢ `/markdownhelp`: quick summary of how markdown works in telegram - can only be called in private chats
+➛ /markdownhelp`: quick summary of how markdown works in telegram - can only be called in private chats
 
 💴 Currency converter:
-  ➢ `/cash`: currency converter
- Example:
+➛ /cash`: currency converter.
+
+Example:
  `/cash 1 USD INR`
       OR
  `/cash 1 usd inr`
- Output: `1.0 USD = 75.505 INR`
+
+Output: `1.0 USD = 75.505 INR`
 
 🗣 Translator:
-  ➢ `/tr` or `/tl` (language code) as reply to a long message
+➛ /tr` or `/tl` (language code) as reply to a long message
 Example:
   `/tr en`: translates something to english
   `/tr hi-en`: translates hindi to english.
-  ➢ `/langs` : lists all the language codes
+➛ /langs` : lists all the language codes
 
 🕐 Timezones:
-  ➢ `/time <query>`: Gives information about a timezone.
+➛ /time <query>`: Gives information about a timezone.
 Available queries: Country Code/Country Name/Timezone Name
- ➩ [Timezones list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+ ➛ [Timezones list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
 🖌️ Quotly:
-  ➢ `/q` : To quote a message.
-  ➢ `/q <Number>` : To quote more than 1 messages.
-  ➢ `/q r` : to quote a message with it's reply
+➛ /q` : To quote a message.
+➛ /q <Number>` : To quote more than 1 messages.
+➛ /q r` : to quote a message with it's reply
 
-🗜️ Compress And Decompress: 
-  ➢ `/zip`*:* reply to a telegram file to compress it in .zip format
-  ➢ `/unzip`*:* reply to a telegram file to decompress it from the .zip format
-  
+🗜️ Compress And Decompress:
+➛ /zip*:* reply to a telegram file to compress it in .zip format
+➛ /unzip*:* reply to a telegram file to decompress it from the .zip format
+
 👤 Fake Info:
-  ➢ `/fakegen`*:* Generates Fake Information
-  ➢ `/picgen  ➢ `/ generate a fake pic
+➛ /fakegen*:* Generates Fake Information
+➛ /picgen➛ / generate a fake pic
 
 🎛️ Encryprion:
-  ➢ `/encrypt`*:* Encrypts The Given Text
-  ➢ `/decrypt`*:* Decrypts Previously Ecrypted Text
+➛ /encrypt*:* Encrypts The Given Text
+➛ /decrypt*:* Decrypts Previously Ecrypted Text
 
 📙 English:
-  ➢ `/define <text>`*:* Type the word or expression you want to search\nFor example /define kill
-  ➢ `/spell`*:* while replying to a message, will reply with a grammar corrected version
-  ➢ `/synonyms <word>`*:* Find the synonyms of a word
-  ➢ `/antonyms <word>`*:* Find the antonyms of a word
-  
+➛ /define <text>*:* Type the word or expression you want to search\nFor example /define kill
+➛ /spell*:* while replying to a message, will reply with a grammar corrected version
+➛ /synonyms <word>*:* Find the synonyms of a word
+➛ /antonyms <word>*:* Find the antonyms of a word
+
 📙 Encryprion:
-  ➢ `/antonyms <Word>`*:* Get antonyms from Dictionary.
-  ➢ `/synonyms <Word>`*:* Get synonyms from Dictionary.
-  ➢ `/define <Word>`*:* Get definition from Dictionary.
-  ➢ `/spell <Word>`*:* Get definition from Dictionary.
-  
+➛ /antonyms <Word>*:* Get antonyms from Dictionary.
+➛ /synonyms <Word>*:* Get synonyms from Dictionary.
+➛ /define <Word>*:* Get definition from Dictionary.
+➛ /spell <Word>*:* Get definition from Dictionary.
+
 💳 CC Checker:
-  ➢ `/au [cc]`*:* Stripe Auth given CC
-  ➢ `/pp [cc]`*:* Paypal 1$ Guest Charge
-  ➢ `/ss [cc]`*:* Speedy Stripe Auth
-  ➢ `/ch [cc]`*:* Check If CC is Live
-  ➢ `/bin [bin]`*:* Gather's Info About the bin
-  ➢ `/gen [bin]`*:* Generates CC with given bin
-  ➢ `/key [sk]`*:* Checks if Stripe key is Live
+➛ /au [cc]*:* Stripe Auth given CC
+➛ /pp [cc]*:* Paypal 1$ Guest Charge
+➛ /ss [cc]*:* Speedy Stripe Auth
+➛ /ch [cc]*:* Check If CC is Live
+➛ /bin [bin]*:* Gather's Info About the bin
+➛ /gen [bin]*:* Generates CC with given bin
+➛ /key [sk]*:* Checks if Stripe key is Live
 
 
 🗳  Other Commands:
 Paste:
-  ➢ `/paste`*:* Saves replied content to nekobin.com and replies with a url
+➛ /paste*:* Saves replied content to nekobin.com and replies with a url
 React:
-  ➢ `/react`*:* Reacts with a random reaction
+➛ /react*:* Reacts with a random reaction
 Urban Dictonary:
-  ➢ `/ud <word>`*:* Type the word or expression you want to search use
+➛ /ud <word>*:* Type the word or expression you want to search use
 Wikipedia:
-  ➢ `/wiki <query>`*:* wikipedia your query
+➛ /wiki <query>*:* wikipedia your query
 Wallpapers:
-  ➢ `/wall <query>`*:* get a wallpaper from alphacoders
+➛ /wall <query>*:* get a wallpaper from alphacoders
 Text To Speech:
-  ➢ `/texttospeech <text>`*:* Converts a text message to a voice message.
+➛ /texttospeech <text>*:* Converts a text message to a voice message.
 Books:
-  ➢ `/book <book name>`*:* Gets Instant Download Link Of Given Book.
+➛ /book <book name>*:* Gets Instant Download Link Of Given Book.
 Cricket Score:
-  ➢ `/cs`*:* get a Cricket Score.
+➛ /cs*:* get a Cricket Score.
 Phone Info
-  ➢ `/phone [phone no]`*:* Gathers no info.
+➛ /phone [phone no]*:* Gathers no info.
 
 Bass Boosting
-  ➢ `/bassboost`*:* Reply To Music Bass Boost.
+➛ /bassboost*:* Reply To Music Bass Boost.
 """
 
-ECHO_HANDLER = DisableAbleCommandHandler("echo", echo, filters=Filters.chat_type.groups, run_async=True)
-MD_HELP_HANDLER = CommandHandler("markdownhelp", markdown_help, run_async=True)
-SRC_HANDLER = CommandHandler("source", src, filters=Filters.chat_type.private, run_async=True)
-REDDIT_MEMES_HANDLER = DisableAbleCommandHandler("rmeme", rmemes, run_async=True)
 
-dispatcher.add_handler(ECHO_HANDLER)
-dispatcher.add_handler(MD_HELP_HANDLER)
-dispatcher.add_handler(SRC_HANDLER)
-dispatcher.add_handler(REDDIT_MEMES_HANDLER)
+ECHO_HANDLER = DisableAbleCommandHandler("echo", echo, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
+MD_HELP_HANDLER = CommandHandler("markdownhelp", markdown_help)
+MK_BUTTON_HANDLER = CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_")
+SRC_HANDLER = CommandHandler("source", src, filters=PTB_Cutiepii_Filters.ChatType.PRIVATE)
+REDDIT_MEMES_HANDLER = DisableAbleCommandHandler("rmeme", rmemes)
+STATUS_HANDLER = DisableAbleCommandHandler("status", status)
+
+CUTIEPII_PTB.add_handler(ECHO_HANDLER)
+CUTIEPII_PTB.add_handler(MD_HELP_HANDLER)
+CUTIEPII_PTB.add_handler(SRC_HANDLER)
+CUTIEPII_PTB.add_handler(REDDIT_MEMES_HANDLER)
+CUTIEPII_PTB.add_handler(STATUS_HANDLER)
 
 __mod_name__ = "Extras"
-__command_list__ = ["id", "echo", "source", "rmeme"]
+__command_list__ = ["id", "echo", "source", "rmeme", "status"]
 __handlers__ = [
     ECHO_HANDLER,
     MD_HELP_HANDLER,
     SRC_HANDLER,
     REDDIT_MEMES_HANDLER,
+    STATUS_HANDLER,
 ]

@@ -1,38 +1,41 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import Cutiepii_Robot.modules.sql.blacklistusers_sql as sql
 
 from Cutiepii_Robot import ALLOW_EXCL
-from Cutiepii_Robot import DEV_USERS, DRAGONS, DEMONS, TIGERS, WOLVES
+from Cutiepii_Robot import DEV_USERS, SUDO_USERS, SUPPORT_USERS, TIGER_USERS, WHITELIST_USERS
 
 from telegram import Update
-from telegram.ext import CommandHandler, MessageHandler, RegexHandler, Filters
+import telegram.ext as tg
 from pyrate_limiter import (
     BucketFullException,
     Duration,
@@ -41,17 +44,17 @@ from pyrate_limiter import (
     MemoryListBucket,
 )
 
-CMD_STARTERS = ("/", "!") if ALLOW_EXCL else ("/", )
+CMD_STARTERS = ("/", "!", "?", ".", "~", "+") if ALLOW_EXCL else ("/", "!", "?", ".", "+")
 
 
 class AntiSpam:
     def __init__(self):
         self.whitelist = (
             (DEV_USERS or [])
-            + (DRAGONS or [])
-            + (WOLVES or [])
-            + (DEMONS or [])
-            + (TIGERS or [])
+            + (SUDO_USERS or [])
+            + (WHITELIST_USERS or [])
+            + (SUPPORT_USERS or [])
+            + (TIGER_USERS or [])
         )
         # Values are HIGHLY experimental, its recommended you pay attention to our commits as we will be adjusting the values over time with what suits best.
         Duration.CUSTOM = 15  # Custom duration, 15 seconds
@@ -84,83 +87,53 @@ SpamChecker = AntiSpam()
 MessageHandlerChecker = AntiSpam()
 
 
-class CustomCommandHandler(CommandHandler):
-    def __init__(self, command, callback, admin_ok=False, allow_edit=False, **kwargs):
+class CustomCommandHandler(tg.CommandHandler):
+    def __init__(self, command, callback, block=False, **kwargs):
+        if "admin_ok" in kwargs:
+            del kwargs["admin_ok"]
         super().__init__(command, callback, **kwargs)
 
-        if allow_edit is False:
-            self.filters &= ~(
-                Filters.update.edited_message | Filters.update.edited_channel_post
-            )
-
-    def check_update(self, update):
+    async def check_update(self, update):
         if not isinstance(update, Update) or not update.effective_message:
             return
         message = update.effective_message
 
         try:
             user_id = update.effective_user.id
-        except:
+        except Exception:
             user_id = None
-
-        if user_id and sql.is_user_blacklisted(user_id):
-            return False
 
         if message.text and len(message.text) > 1:
             fst_word = message.text.split(None, 1)[0]
             if len(fst_word) > 1 and any(
                 fst_word.startswith(start) for start in CMD_STARTERS
             ):
-
-                args = message.text.split()[1:]
+                args = await message.text.split()[1:]
                 command = fst_word[1:].split("@")
-                command.append(message.bot.username)
-                if user_id == 1087968824:
-                    user_id = update.effective_chat.id
+                command.append(
+                    message._bot.username
+                )  # in case the command was sent without a username
+
                 if not (
                     command[0].lower() in self.command
-                    and command[1].lower() == message.bot.username.lower()
+                    and command[1].lower() == await message._bot.username.lower()
                 ):
                     return None
+
                 if SpamChecker.check_user(user_id):
                     return None
-                filter_result = self.filters(update)
-                if filter_result:
+
+                if filter_result := self.filters.check_update(update):
                     return args, filter_result
                 return False
 
-    def handle_update(self, update, dispatcher, check_result, context=None):
-        if context:
-            self.collect_additional_context(context, update, dispatcher,
-                                            check_result)
-            return self.callback(update, context)
-        optional_args = self.collect_optional_args(dispatcher, update,
-                                                   check_result)
-        return self.callback(dispatcher.bot, update, **optional_args)
 
-        
-    def collect_additional_context(self, context, update, dispatcher, check_result):
+    async def collect_additional_context(self, context, chat, CUTIEPII_PTB, check_result):
         if isinstance(check_result, bool):
-            context.args = update.effective_message.text.split()[1:]
+            context.args = await update.effective_message.text.split()[1:]
         else:
             context.args = check_result[0]
             if isinstance(check_result[1], dict):
                 context.update(check_result[1])
 
 
-class CustomRegexHandler(RegexHandler):
-    def __init__(self, pattern, callback, friendly="", **kwargs):
-        super().__init__(pattern, callback, **kwargs)
-
-
-class CustomMessageHandler(MessageHandler):
-    def __init__(self, filters, callback, friendly="", allow_edit=False, **kwargs):
-        super().__init__(filters, callback, **kwargs)
-        if allow_edit is False:
-            self.filters &= ~(
-                Filters.update.edited_message | Filters.update.edited_channel_post
-            )
-
-        def check_update(self, update):
-            if isinstance(update, Update) and update.effective_message:
-                return self.filters(update)

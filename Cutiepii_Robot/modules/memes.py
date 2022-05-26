@@ -1,29 +1,32 @@
 """
-MIT License
+BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021 Awesome-RJ
-Copyright (c) 2021, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
+Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
-This file is part of @Cutiepii_Robot (Telegram Bot)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import requests
@@ -40,8 +43,6 @@ import nltk
 from random import randint, randrange, uniform
 from cowpy import cow
 from PIL import Image, ImageDraw, ImageEnhance, ImageFont, ImageOps
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from telethon.tl.types import DocumentAttributeFilename, InputMessagesFilterDocument, InputMediaDice
 from telethon import events
 from zalgo_text import zalgo
@@ -51,7 +52,7 @@ from pyrogram import filters
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.carbon import make_carbon
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import telethn, ubot, pgram, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT, GOOGLE_CHROME_BIN, CHROME_DRIVER
+from Cutiepii_Robot import telethn, ubot, pgram, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT
 
 nltk.download("punkt")
 nltk.download("averaged_perceptron_tagger")
@@ -81,18 +82,18 @@ async def _(event):
         sed1 = img
         sedm = f"**Title : {titles}** \n{sedlyf} \nDate : {dateis} \nAuthor : {writter} \nReadMore : {readthis}"
         await pgram.send_photo(event.chat_id, sed1, caption=sedm)
-        
+
 
 @register(pattern="^/ball(?: |$)(.*)")
 async def _(event):
     if event.fwd_from:
         return
-    input_str = event.pattern_match.group(1)
+    inputstr = event.pattern_match.group(1)
     r = await event.reply(file=InputMediaDice("🏀"))
-    input_int = int(input_str)
+    input_int = int(inputstr)
     if input_int > 5:
         await event.reply("hey nigga use number 1 to 6 only")
-    
+
     else:
         try:
             required_number = input_int
@@ -131,7 +132,7 @@ async def chika(event):
     except Exception:
         await event.reply(f"Error Report @{SUPPORT_CHAT}")
 
-        
+
 @register(pattern="^/truth ?(.*)")
 async def _(td):
     try:
@@ -186,11 +187,11 @@ async def msg(event):
     text = re.sub(r"ｎ([ａｅｉｏｕ])", r"ｎｙ\1", text)
     text = re.sub(r"N([aeiouAEIOU])", r"Ny\1", text)
     text = re.sub(r"Ｎ([ａｅｉｏｕＡＥＩＯＵ])", r"Ｎｙ\1", text)
-    text = re.sub(r"\!+", " " + random.choice(faces), text)
-    text = re.sub(r"！+", " " + random.choice(faces), text)
+    text = re.sub(r"\!+", f" {random.choice(faces)}", text)
+    text = re.sub(r"！+", f" {random.choice(faces)}", text)
     text = text.replace("ove", "uv")
     text = text.replace("ｏｖｅ", "ｕｖ")
-    text += " " + random.choice(faces)
+    text += f" {random.choice(faces)}"
     await event.reply(text)
 
 
@@ -369,7 +370,7 @@ async def msg(event):
     reply_text += " 😭"
     await event.reply(reply_text)
 
-    
+
 @pgram.on_message(filters.command("carbon"))
 @capture_err
 async def carbon_func(_, message):
@@ -490,8 +491,8 @@ async def typewriter(typew):
     now = await typew.reply(typing_symbol)
     await asyncio.sleep(2)
     for character in message:
-        old_text = old_text + "" + character
-        typing_text = old_text + "" + typing_symbol
+        old_text = f"{old_text}{character}"
+        typing_text = f"{old_text}{typing_symbol}"
         await now.edit(typing_text)
         await asyncio.sleep(2)
         await now.edit(old_text)
@@ -621,7 +622,7 @@ async def _(event):
     input_int = int(input_str)
     if input_int > 6:
         await event.reply("hey nigga use number 1 to 6 only")
-    
+
     else:
         try:
             required_number = input_int
@@ -695,7 +696,7 @@ async def _(event):
     input_int = int(input_str)
     if input_int > 6:
         await event.reply("hey nigga use number 1 to 6 only")
-    
+
     else:
         try:
             required_number = input_int

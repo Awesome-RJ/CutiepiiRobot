@@ -1,0 +1,13 @@
+version: '4'
+services:
+  cutiepierobot:
+    container_name: cutipie
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - API_ID=$API_ID
+      - API_HASH=$API_HASH
+      - BOT_TOKEN=$BOT_TOKEN
+      - OWNER_ID=$OWNER_ID
+    restart: on-failure
