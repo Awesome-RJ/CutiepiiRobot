@@ -55,7 +55,7 @@ async def dimonhandler(event):
         admim = but.admin_rights
 
         # Check Permissions
-        if not await user_is_admin(event.sender_id, event) and event.from_id not in [1087968824]:
+        if not await user_is_admin(event.sender_id, event) and event.sender_id not in [1087968824]:
             await event.answer("You don't have the necessary rights to do this!", show_alert=True)
             return
         if not admim and not await can_ban_users(event):

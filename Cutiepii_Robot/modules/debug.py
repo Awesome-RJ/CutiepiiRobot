@@ -62,16 +62,16 @@ async def debug(update: Update, context: CallbackContext):
 @telethn.on(events.NewMessage(pattern="[/!].*"))
 async def i_do_nothing_yes(event):
     if DEBUG_MODE:
-        print(f"-{event.from_id} ({event.chat_id}) : {event.text}")
+        print(f"-{event.sender_id} ({event.chat_id}) : {event.text}")
         if os.path.exists("updates.txt"):
             with open("updates.txt", "r") as f:
                 text = f.read()
             with open("updates.txt", "w+") as f:
-                f.write(f"{text}\n-{event.from_id} ({event.chat_id}) : {event.text}")
+                f.write(f"{text}\n-{event.sender_id} ({event.chat_id}) : {event.text}")
         else:
             with open("updates.txt", "w+") as f:
                 f.write(
-                    f"- {event.from_id} ({event.chat_id}) : {event.text} | {datetime.datetime.now()}",
+                    f"- {event.sender_id} ({event.chat_id}) : {event.text} | {datetime.datetime.now()}",
                 )
 
 

@@ -56,11 +56,11 @@ from Cutiepii_Robot.modules.helper_funcs.telethn.chatstatus import (
 
 async def purge_messages(event):
     start = time.perf_counter()
-    if event.from_id is None:
+    if event.sender_id is None:
         return
 
     if not await user_is_admin(
-            user_id=event.sender_id, message=event) and event.from_id not in [
+            user_id=event.sender_id, message=event) and event.sender_id not in [
                 1087968824
             ]:
         await event.reply("Only Admins are allowed to use this command")
@@ -111,11 +111,11 @@ async def delete_messages(event):
     #     print(user)
 
 
-    if event.from_id is None:
+    if event.sender_id is None:
         return
 
     if not await user_is_admin(
-            user_id=event.sender_id, message=event) and event.from_id not in [
+            user_id=event.sender_id, message=event) and event.sender_id not in [
                 1087968824
             ]:
         await event.reply("Only Admins are allowed to use this command")
@@ -181,12 +181,12 @@ async def purgefrom(update: Update, context: CallbackContext):
 async def purgeto_messages(event):
     start = time.perf_counter()
 
-    if event.from_id is None:
+    if event.sender_id is None:
         return
 
     if not await user_is_admin(
         user_id=event.sender_id, message=event,
-    ) and event.from_id not in [1087968824]:
+    ) and event.sender_id not in [1087968824]:
         await event.reply("Only Admins are allowed to use this command")
         return
 
