@@ -39,7 +39,6 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_user_admin,
     user_admin,
 )
-from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
     CallbackContext, CallbackQueryHandler,
@@ -156,38 +155,10 @@ Chatbot utilizes the Brainshop's API and allows {CUTIEPII_PTB.bot.first_name} to
 ➛ /chatbot*:* Shows chatbot control panel
 """
 
-CHATBOT_TOGGLE_COMMAND_HANDLER = CommandHandler(
-    "chatbot",
-    chatbot_toggle,
-)
-CHATBOT_TOGGLE_CALLBACK_HANDLER = CallbackQueryHandler(
-    chatbot_handle_callq, pattern=r"chatbot_",
-)
-CHATBOT_HANDLER = MessageHandler(
-    filters.TEXT    & (
-        ~filters.Regex(r"^#[^\s]+")
-        & ~filters.Regex(r"^!")
-        & ~filters.Regex(r"^\/")
-    ),
-    chatbot,
-)
-LIST_CB_CHATS_HANDLER = CommandHandler(
-    "listaichats",
-    list_chatbot_chats,
-    filters=CustomFilters.dev_filter,
-)
-# Filters for ignoring #note messages, !commands and sed.
-
-CUTIEPII_PTB.add_handler(CHATBOT_TOGGLE_COMMAND_HANDLER)
-CUTIEPII_PTB.add_handler(CHATBOT_TOGGLE_CALLBACK_HANDLER)
-CUTIEPII_PTB.add_handler(CHATBOT_HANDLER)
-CUTIEPII_PTB.add_handler(LIST_CB_CHATS_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler("chatbot", chatbot_toggle, block=False))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(chatbot_handle_callq, pattern=r"chatbot_", block=False))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.TEXT & (~filters.Regex(r"^#[^\s]+") & ~filters.Regex(r"^!") & ~filters.Regex(r"^\/")) chatbot, block=False)
+CUTIEPII_PTB.add_handler(CommandHandler("listaichats", list_chatbot_chats, filters=Filters.user(DEV_USERS), block=False))
 
 __mod_name__ = "Chatbot"
 __command_list__ = ["chatbot", "listaichats"]
-__handlers__ = [
-    CHATBOT_TOGGLE_CALLBACK_HANDLER,
-    CHATBOT_TOGGLE_COMMAND_HANDLER,
-    CHATBOT_HANDLER,
-    LIST_CB_CHATS_HANDLER,
-]
