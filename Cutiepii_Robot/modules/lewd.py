@@ -45,7 +45,6 @@ from telegram.helpers import mention_html
 import Cutiepii_Robot.modules.sql.nsfw_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
-from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
 from Cutiepii_Robot.modules.log_channel import gloggable
 
 
@@ -695,7 +694,7 @@ async def baka(update: Update, context: CallbackContext):
 
 CUTIEPII_PTB.add_handler(CommandHandler("addnsfw", add_nsfw, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("rmnsfw", rem_nsfw, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("nsfwchats", list_nsfw_chats, filters=CustomFilters.dev_filter, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("nsfwchats", list_nsfw_chats, filters=Filters.user(DEV_USERS), block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("lewdkemo", lewdkemo, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("neko", neko, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("feet", feet, block=False))

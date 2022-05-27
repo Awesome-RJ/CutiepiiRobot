@@ -53,7 +53,6 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user_and_text
 from Cutiepii_Robot.modules.helper_funcs.string_handling import extract_time
 from Cutiepii_Robot.modules.log_channel import loggable, gloggable
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_callback
-from Cutiepii_Robot.modules.helper_funcs.filters import CustomFilters
 
 
 async def cannot_ban(user_id, message):
@@ -720,7 +719,7 @@ async def banme(update: Update, context: CallbackContext):
     await update.effective_message.reply_text("Huh? I can't :/")
 
 
-@cutiepii_cmd(command='snipe', can_disable=False, filters=CustomFilters.sudo_filter)
+@cutiepii_cmd(command='snipe', can_disable=False, filters=Filters.user(SUDO_USERS))
 @dev_plus
 async def snipe(update: Update, context: CallbackContext):
     args = context.args
