@@ -43,7 +43,6 @@ from telegram.ext import CallbackContext, filters
 from telegram.helpers import escape_markdown
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.string_handling import markdown_parser
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 from Cutiepii_Robot.modules.helper_funcs.admin_status import (
     user_admin_check,
     AdminPerms,
@@ -51,7 +50,6 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import (
 
 
 
-@cutiepii_cmd(command='rules', filters=filters.ChatType.GROUPS)
 def get_rules(update: Update, _: CallbackContext):
     chat_id = update.effective_chat.id
     send_rules(update, chat_id)
@@ -110,7 +108,6 @@ async def send_rules(update, chat_id, from_pm=False):
         )
 
 
-@cutiepii_cmd(command='setrules', filters=filters.ChatType.GROUPS)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
 async def set_rules(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
@@ -131,7 +128,6 @@ async def set_rules(update: Update, context: CallbackContext):
         await update.effective_message.reply_text("Successfully set rules for this group.")
 
 
-@cutiepii_cmd(command='clearrules', filters=filters.ChatType.GROUPS)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
 async def clear_rules(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
@@ -162,3 +158,8 @@ def __chat_settings__(chat_id, user_id):
 
 
 __mod_name__ = "Rules"
+
+CUTIEPII_PTB.add_handler(CommandHandler("rules", get_rules, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("setrules", set_rules, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("clearrules", clear_rules, filters=filters.ChatType.GROUPS, block=False))
+

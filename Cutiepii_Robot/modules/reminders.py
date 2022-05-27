@@ -234,18 +234,6 @@ async def check_reminds():
 asyncio.get_event_loop().create_task(check_reminds())
 
 
-REMIND_HANDLER = CommandHandler(["remind", "reminder"], remind)
-REMINDERS_HANDLER = CommandHandler(["reminds", "reminders"], reminders)
-CLEARREMINDER_HANDLER = CommandHandler("clearreminder", clearreminder)
-CLEARALLREMINDERS_HANDLER = CommandHandler("clearallreminders", clearallreminders)
-CLEARALLREMINDERSBTN_HANDLER = CallbackQueryHandler(clearallremindersbtn, pattern=r"clearremind_")
-
-CUTIEPII_PTB.add_handler(REMIND_HANDLER)
-CUTIEPII_PTB.add_handler(REMINDERS_HANDLER)
-CUTIEPII_PTB.add_handler(CLEARREMINDER_HANDLER)
-CUTIEPII_PTB.add_handler(CLEARALLREMINDERS_HANDLER)
-CUTIEPII_PTB.add_handler(CLEARALLREMINDERSBTN_HANDLER)
-
 __mod_name__ = "Reminders"
 
 __help__ = """
@@ -274,3 +262,11 @@ This will print a reminder with the text after 2 hours
 `/clearreminder 1631378953`
 Removes the reminder of the said timestamp ID
 """
+
+
+CUTIEPII_PTB.add_handler(CommandHandler(["remind", "reminder"], remind))
+CUTIEPII_PTB.add_handler(CommandHandler(["reminds", "reminders"], reminders))
+CUTIEPII_PTB.add_handler(CommandHandler("clearreminder", clearreminder))
+CUTIEPII_PTB.add_handler(CommandHandler("clearallreminders", clearallreminders))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(clearallremindersbtn, pattern=r"clearremind_"))
+

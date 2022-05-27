@@ -149,10 +149,8 @@ async def pingCallback(update: Update, context: CallbackContext):
     await query.answer(f'Pong! {ping_time}ms')
 
 
-STATS_HANDLER = CommandHandler(["stats", "statistics"], stats)
-STATS_CALLBACK_HANDLER = CallbackQueryHandler(pingCallback, pattern=r"pingCB")
+CUTIEPII_PTB.add_handler(CommandHandler(["stats", "statistics"], stats))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(pingCallback, pattern=r"pingCB"))
 
-CUTIEPII_PTB.add_handler(STATS_HANDLER)
-CUTIEPII_PTB.add_handler(STATS_CALLBACK_HANDLER)
 
 __mod_name__ = "statistics"

@@ -35,7 +35,7 @@ import Cutiepii_Robot.modules.sql.rules_sql as rules_sql
 from typing import Optional
 
 from Cutiepii_Robot import BAN_STICKER, DEV_USERS, OWNER_ID, SUDO_USERS, WHITELIST_USERS, CUTIEPII_PTB
-#from .disable import DisableAbleCommandHandler
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 from Cutiepii_Robot.modules.helper_funcs.extraction import (
     extract_text,
@@ -49,7 +49,6 @@ from Cutiepii_Robot.modules.sql import warns_sql as sql
 from Cutiepii_Robot.modules.sql.approve_sql import is_approved
 from Cutiepii_Robot.modules.helper_funcs.admin_status import user_admin_check, bot_admin_check, AdminPerms, bot_is_admin, user_is_admin
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_msg, cutiepii_callback
 from telegram import (
     Chat,
     InlineKeyboardButton,
@@ -391,7 +390,6 @@ async def dwarn(
         )
     return log_reason
 
-@cutiepii_callback(pattern=r"rm_warn")
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, noreply=True)
 @loggable
@@ -425,10 +423,6 @@ async def button(update: Update, context: CallbackContext) -> str:
     return ""
 
 
-@cutiepii_cmd(command='swarn', filters=filters.ChatType.GROUPS)
-@cutiepii_cmd(command='dwarn', filters=filters.ChatType.GROUPS)
-@cutiepii_cmd(command='dswarn', filters=filters.ChatType.GROUPS)
-@cutiepii_cmd(command='warn', filters=filters.ChatType.GROUPS)
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
 @loggable
@@ -523,7 +517,6 @@ async def warn_user(update: Update, context: CallbackContext) -> str:
             await message.reply_text("NThat looks like an invalid User ID to me.")
     return ""
 
-@cutiepii_cmd(command=['restwarn', 'resetwarns'], filters=filters.ChatType.GROUPS)
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
@@ -547,7 +540,6 @@ async def reset_warns(update: Update, context: CallbackContext) -> str:
     await message.reply_text("NNo user has been designated!")
     return ""
 
-@cutiepii_cmd(command='warns', filters=filters.ChatType.GROUPS, can_disable=True)
 async def warns(update: Update, context: CallbackContext):
     args = context.args
     message: Optional[Message] = update.effective_message
@@ -576,7 +568,6 @@ async def warns(update: Update, context: CallbackContext):
     else:
         await update.effective_message.reply_text("This user doesn't have any warns!")
 
-@cutiepii_cmd(command='addwarn', filters=filters.ChatType.GROUPS)
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 # CUTIEPII_PTB handler stop - do not async
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
@@ -610,7 +601,6 @@ async def add_warn_filter(update: Update, context: CallbackContext):
 
     await update.effective_message.reply_text(f"Warn handler added for '{keyword}'!")
 
-@cutiepii_cmd(command=['nowarn', 'stopwarn'], filters=filters.ChatType.GROUPS)
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def remove_warn_filter(update: Update, context: CallbackContext):
@@ -648,7 +638,6 @@ async def remove_warn_filter(update: Update, context: CallbackContext):
         "That's not a current warning filter - run /warnlist for all active warning filters."
     )
 
-@cutiepii_cmd(command=['warnlist', 'warnfilters'], filters=filters.ChatType.GROUPS, can_disable=True)
 async def list_warn_filters(update: Update, context: CallbackContext):
     chat: Optional[Chat] = update.effective_chat
     all_handlers = sql.get_chat_warn_triggers(chat.id)
@@ -669,7 +658,7 @@ async def list_warn_filters(update: Update, context: CallbackContext):
     if filter_list != CURRENT_WARNING_FILTER_STRING:
         await update.effective_message.reply_text(filter_list, parse_mode=ParseMode.HTML)
 
-@cutiepii_msg(filters.ChatType.GROUPS, group=WARNS_GROUP)
+
 @loggable
 async def reply_filter(update: Update, context: CallbackContext) -> Optional[str]:
     chat: Optional[Chat] = update.effective_chat
@@ -697,7 +686,6 @@ async def reply_filter(update: Update, context: CallbackContext) -> Optional[str
             return await warn(user, update, warn_filter.reply, message)
     return ""
 
-@cutiepii_cmd(command='warnlimit', filters=filters.ChatType.GROUPS)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def set_warn_limit(update: Update, context: CallbackContext) -> str:
@@ -726,7 +714,7 @@ async def set_warn_limit(update: Update, context: CallbackContext) -> str:
         await msg.reply_text(f"The current warn limit is {limit}")
     return ""
 
-@cutiepii_cmd(command='strongwarn', filters=filters.ChatType.GROUPS)
+
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def set_warn_strength(update: Update, context: CallbackContext):
     args = context.args
@@ -810,3 +798,15 @@ be a sentence, encompass it with quotes, as such*:* `/addwarn "very angry" This 
   """
 
 __mod_name__ = "Warnings"
+
+CUTIEPII_PTB.add_handler(CommandHandler(["swarn", "dwarn",  "dswarn", "warn"], warn_user, pass_args=True, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler(["resetwarn", "resetwarns"], reset_warns, pass_args=True, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler(["rmwarn", "unwarn"], remove_warns, pass_args=True, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"rm_warn")
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("warns", warns, pass_args=True, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("addwarn", add_warn_filter, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler(["nowarn", "stopwarn"], remove_warn_filter, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["warnlist", "warnfilters"], list_warn_filters, filters=filters.ChatType.GROUPS,admin_ok=True))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.TEXT & filters.ChatType.GROUPS, reply_filter))
+CUTIEPII_PTB.add_handler(CommandHandler("warnlimit", set_warn_limit, pass_args=True, filters=filters.ChatType.GROUPS,block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("strongwarn", set_warn_strength, pass_args=True, filters=filters.ChatType.GROUPS, block=False))

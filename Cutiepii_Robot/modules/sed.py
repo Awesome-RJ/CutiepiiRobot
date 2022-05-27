@@ -166,9 +166,4 @@ If you want to use these characters, make sure you escape them!
 
 __mod_name__ = "Sed/Regex"
 
-SED_HANDLER = DisableAbleMessageHandler(
-    filters.Regex(f's([{"".join(DELIMITERS)}]).*?\\1.*'), sed, friendly="sed"
-)
-
-
-CUTIEPII_PTB.add_handler(SED_HANDLER)
+CUTIEPII_PTB.add_handler(DisableAbleMessageHandler(filters.Regex(f's([{"".join(DELIMITERS)}]).*?\\1.*'), sed, friendly="sed")

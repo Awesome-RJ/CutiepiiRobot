@@ -324,19 +324,10 @@ __help__ = """
 
 """
 
-SETTING_HANDLER = CommandHandler("reports", report_setting)
-REPORT_HANDLER = CommandHandler("report", report, filters=filters.ChatType.GROUPS)
-ADMIN_REPORT_HANDLER = MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report)
-REPORT_BUTTON_USER_HANDLER = CallbackQueryHandler(buttons, pattern=r"report_")
+CUTIEPII_PTB.add_handler(CommandHandler("reports", report_setting))
+CUTIEPII_PTB.add_handler(CommandHandler("report", report, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(buttons, pattern=r"report_"))
 
-CUTIEPII_PTB.add_handler(REPORT_BUTTON_USER_HANDLER)
-CUTIEPII_PTB.add_handler(SETTING_HANDLER)
-CUTIEPII_PTB.add_handler(REPORT_HANDLER, REPORT_GROUP)
-CUTIEPII_PTB.add_handler(ADMIN_REPORT_HANDLER, REPORT_GROUP)
 
 __mod_name__ = "Reporting"
-__handlers__ = [
-    (REPORT_HANDLER, REPORT_GROUP),
-    (ADMIN_REPORT_HANDLER, REPORT_GROUP),
-    (SETTING_HANDLER),
-]

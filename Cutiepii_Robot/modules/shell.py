@@ -72,9 +72,7 @@ async def shell(update: Update, context: CallbackContext):
         await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
 
 
-SHELL_HANDLER = CommandHandler(["sh"], shell)
-CUTIEPII_PTB.add_handler(SHELL_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler(["sh"], shell))
 
 __mod_name__ = "Shell"
 __command_list__ = ["sh"]
-__handlers__ = [SHELL_HANDLER]

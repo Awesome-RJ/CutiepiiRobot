@@ -1080,55 +1080,6 @@ def __user_info__(user_id):
     result = result.strip("\n")
     return result
 
-async def lookup(update: Update, context: CallbackContext):
-    message = update.effective_message
-    args = context.args
-    user_id = extract_user(message, args)
-    if user_id is None:
-        user_id = update.effective_user.id
-    url = f"https://api.intellivoid.net/spamprotection/v1/lookup?query={user_id}"
-    #print(url)
-    r = requests.get(url)
-    a = r.json()
-    #print(a)
-    response = a.get('success')
-    if response is True:
-        date = a.get("results").get("last_updated")
-        stats = '**◢ Intellivoid• SpamProtection Info**:\n'
-        stats += f'➛ **Updated on**: `{datetime.datetime.fromtimestamp(date).strftime("%Y-%m-%d %I:%M:%S %p")}`\n'
-        stats += (
-            f"➛ **Chat Info**: [Link](t.me/SpamProtectionBot/?start=00_{user_id})\n"
-        )
-
-        if a.get("results").get("attributes").get("is_potential_spammer") is True:
-            stats += '➛ *User*: `USERxSPAM`\n'
-        elif a.get("results").get("attributes").get("is_operator") is True:
-            stats += '➛ *User*: `USERxOPERATOR`\n'
-        elif a.get("results").get("attributes").get("is_agent") is True:
-            stats += '➛ *User*: `USERxAGENT`\n'
-        elif a.get("results").get("attributes").get("is_whitelisted") is True:
-            stats += '➛ *User*: `USERxWHITELISTED`\n'
-
-        stats += f'➛ *Type*: `{a.get("results").get("entity_type")}`\n'
-        stats += (
-            f'➛ *Language*: `{a.get("results").get("language_prediction").get("language")}`\n'
-        )
-        stats += f'➛ *Language Probability*: `{a.get("results").get("language_prediction").get("probability")}`\n'
-        stats += '*Spam Prediction*:\n'
-        stats += f'➛ *Ham Prediction*: `{a.get("results").get("spam_prediction").get("ham_prediction")}`\n'
-        stats += f'➛ *Spam Prediction*: `{a.get("results").get("spam_prediction").get("spam_prediction")}`\n'
-        stats += f'*Blacklisted*: `{a.get("results").get("attributes").get("is_blacklisted")}`\n'
-        if a.get("results").get("attributes").get("is_blacklisted") is True:
-            stats += (
-                f'➛ *Reason*: `{a.get("results").get("attributes").get("blacklist_reason")}`\n'
-            )
-            stats += f'➛ *Flag*: `{a.get("results").get("attributes").get("blacklist_flag")}`\n'
-        stats += f'*PTID*:\n`{a.get("results").get("private_telegram_id")}`\n'
-        await message.reply_text(stats, parse_mode=telegram.ParseMode.MARKDOWN, disable_web_page_preview=True)
-    else:
-        await message.reply_text("`cannot reach SpamProtection API`", parse_mode=telegram.ParseMode.MARKDOWN)
-        time.sleep(3)
-
 __help__ = """
 *ID:*
 ➛ /id*:* get the current group id. If used by replying to a message, gets that user's id.
@@ -1174,35 +1125,13 @@ When marked as AFK, any mentions will be replied to with a message stating that 
 """
 
 
-SET_BIO_HANDLER = DisableAbleCommandHandler("setbio", set_about_bio)
-GET_BIO_HANDLER = DisableAbleCommandHandler("bio", about_bio)
-ID_HANDLER = DisableAbleCommandHandler("id", get_id)
-GIFID_HANDLER = DisableAbleCommandHandler("gifid", gifid)
-INFO_HANDLER = DisableAbleCommandHandler("info", info)
-SPW_INFO_HANDLER = CommandHandler("spwinfo", lookup) 
-SET_ABOUT_HANDLER = DisableAbleCommandHandler("setme", set_about_me)
-GET_ABOUT_HANDLER = DisableAbleCommandHandler("me", about_me)
-
-
-CUTIEPII_PTB.add_handler(ID_HANDLER)
-CUTIEPII_PTB.add_handler(GIFID_HANDLER)
-CUTIEPII_PTB.add_handler(INFO_HANDLER)
-CUTIEPII_PTB.add_handler(SPW_INFO_HANDLER)
-CUTIEPII_PTB.add_handler(SET_BIO_HANDLER)
-CUTIEPII_PTB.add_handler(GET_BIO_HANDLER)
-CUTIEPII_PTB.add_handler(SET_ABOUT_HANDLER)
-CUTIEPII_PTB.add_handler(GET_ABOUT_HANDLER)
-
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("setbio", set_about_bio))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("bio", about_bio))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("id", get_id))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("gifid", gifid))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("info", info))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("setme", set_about_me))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("me", about_me))
 
 __mod_name__ = "Info & AFK"
-__command_list__ = ["setbio", "bio", "setme", "me", "info", "spwinfo",]
-__handlers__ = [
-    ID_HANDLER,
-    GIFID_HANDLER,
-    INFO_HANDLER,
-    SPW_INFO_HANDLER,
-    SET_BIO_HANDLER,
-    GET_BIO_HANDLER,
-    SET_ABOUT_HANDLER,
-    GET_ABOUT_HANDLER,
-]
+__command_list__ = ["setbio", "bio", "setme", "me", "info"]

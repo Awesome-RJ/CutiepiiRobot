@@ -951,6 +951,7 @@ async def drawText(image_path, text):
 
 __help__ = """
 Stickers made easy with stickers module!
+
 ➛ /stickers`: Find stickers for given term on combot sticker catalogue 
 ➛ /addsticker` or `/kang` or `/steal`: Reply to a sticker to add it to your pack.
 ➛ /delkang`: Reply to your anime exist sticker to your pack to delete it.
@@ -959,34 +960,19 @@ Stickers made easy with stickers module!
 ➛ /addfsticker` or `/afs <custom name>`: Reply to a sticker to add it into your favorite pack list.
 ➛ /myfsticker` or `/mfs`: Get list of your favorite packs.
 ➛ /removefsticke`r or `/rfs <custom name>`: Reply to a sticker to remove it into your favorite pack list.
+
 *Example:* `/addfsticker` my cool pack`
 """
 
 __mod_name__ = "Stickers"
 
 
-STICKERID_HANDLER = DisableAbleCommandHandler("stickerid", stickerid)
-GETSTICKER_HANDLER = DisableAbleCommandHandler("getsticker", getsticker)
-KANG_HANDLER = DisableAbleCommandHandler("kang", kang)
-DEL_HANDLER = DisableAbleCommandHandler("delsticker", delsticker)
-
-ADD_FSTICKER_HANDLER = DisableAbleCommandHandler(
-    ["addfsticker", "afs"], add_fvrtsticker)
-REMOVE_FSTICKER_HANDLER = DisableAbleCommandHandler(
-    ["removefsticker", "rfs"], remove_fvrtsticker)
-MY_FSTICKERS_HANDLER = DisableAbleCommandHandler(
-    ["myfsticker", "mfs"], list_fvrtsticker)
-STICKERS_HANDLER = DisableAbleCommandHandler(
-    "stickers", cb_sticker)
-CBSCALLBACK_HANDLER = CallbackQueryHandler(
-    cbs_callback, pattern="cbs_")
-
-
-CUTIEPII_PTB.add_handler(STICKERS_HANDLER)
-CUTIEPII_PTB.add_handler(STICKERID_HANDLER)
-CUTIEPII_PTB.add_handler(GETSTICKER_HANDLER)
-CUTIEPII_PTB.add_handler(KANG_HANDLER)
-CUTIEPII_PTB.add_handler(DEL_HANDLER)
-CUTIEPII_PTB.add_handler(ADD_FSTICKER_HANDLER)
-CUTIEPII_PTB.add_handler(REMOVE_FSTICKER_HANDLER)
-CUTIEPII_PTB.add_handler(CBSCALLBACK_HANDLER)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("stickerid", stickerid)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("getsticker", getsticker)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("kang", kang)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("delsticker", delsticker)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["addfsticker", "afs"], add_fvrtsticker))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["removefsticker", "rfs"], remove_fvrtsticker))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["myfsticker", "mfs"], list_fvrtsticker))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("stickers", cb_sticker))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(cbs_callback, pattern="cbs_"))
