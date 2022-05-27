@@ -106,9 +106,22 @@ async def list_nsfw_chats(update: Update, context: CallbackContext):
 
 
 async def neko(update: Update, context: CallbackContext):
-    msg = update.effective_message
-    target = "neko"
-    await msg.reply_photo(nekos.img(target))
+    message = update.effective_message
+    args = context.args
+    type = args[0]
+    query = args[1]
+    img = nekos.img(query)
+    try:
+        if type == "-i":
+            await message.reply_photo(photo=img, parse_mode=ParseMode.MARKDOWN)
+        elif type == "-d":
+            await message.reply_document(document=img, parse_mode=ParseMode.MARKDOWN)
+        elif type == "-s":
+            await message.reply_sticker(sticker=img)
+        elif type == "-v":
+            await message.reply_video(video=img, parse_mode=ParseMode.MARKDOWN)
+    except Exception as excp:
+        await message.reply_text(f"Failed to find image. Error: {excp}")
 
 
 async def cuddle(update: Update, context: CallbackContext):
@@ -845,7 +858,17 @@ Usage*:*
 /rmnsfw*:* Disable NSFW mode
 
 Commands*:*
-➛ /neko*:* Sends Random SFW Neko source Images.
+➛ /neko <flags> <query>: Get random images from [Nekos API](nekos.life)
+
+*Available flags:*
+-i = send as image
+-d = send as document(full resolution)
+-s = send as sticker
+-v = send as video(only for some query)
+
+*Available query:*
+Check this : [List Query](https://telegra.ph/List-Query-of-Nekos-01-19)
+
 ➛ /feet*:* Sends Random Anime Feet Images.
 ➛ /yuri*:* Sends Random Yuri source Images.
 ➛ /trap*:* Sends Random Trap source Images.
