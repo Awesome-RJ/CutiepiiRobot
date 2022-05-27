@@ -34,8 +34,6 @@ import os
 import requests
 import datetime
 import asyncio
-import time
-import telegram
 
 from pyrogram import filters
 from pyrogram.errors import PeerIdInvalid
@@ -1101,6 +1099,9 @@ Examples:
 
 *Overall Information about you:*
 ➛ /info*:* get information about a user.
+
+*Remove Your Overall Information:*
+➛ /gdpr: Deletes your information from the bot's database. Private chats only.
 
 *◢ Intellivoid SpamProtection:*
 ➛ /spwinfo*:* SpamProtection Info

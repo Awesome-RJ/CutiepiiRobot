@@ -40,10 +40,10 @@ import Cutiepii_Robot.modules.helper_funcs.git_api as git
 
 
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
-from Cutiepii_Robot .modules.helper_funcs.chat_status import sudo_plus  
+from Cutiepii_Robot.modules.helper_funcs.chat_status import sudo_plus  
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot import CUTIEPII_PTB, pgram, StartTime
-, send_action
+from Cutiepii_Robot import CUTIEPII_PTB, pgram, StartTime, send_action
+from Cutiepii_Robot.__main__ import GDPR
 
 from datetime import datetime
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, __version__ as ptbver
@@ -60,6 +60,7 @@ FORMATTING_HELP = """
 Main Help Here
 """
 MARKDOWN_HELP = f"""
+
 Markdown is a very powerful formatting tool supported by telegram. {CUTIEPII_PTB.bot.first_name} has some enhancements, to make sure that \
 saved messages are correctly parsed, and to allow you to create buttons.
 
@@ -128,6 +129,22 @@ async def slcheck(_,message):
        enf = res["enforcer"]
        reason = res["reason"]
        await message.reply_text(f"**Enforcer**: {enf}\n**User** : {user}\n**Reason**: {reason}")
+
+async def gdpr(update, context):
+    await update.effective_message.reply_text("Deleting identifiable data...")
+    for mod in GDPR:
+        mod.__gdpr__(update.effective_user.id)
+
+    await update.effective_message.reply_text(
+        "Your personal data has been deleted.\n\nNote that this will not unban "
+        "you from any chats, as that is telegram data, not Priscia data. "
+        "Flooding, warns, and gbans are also preserved, as of "
+        "[this](https://ico.org.uk/for-organisations/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/right-to-erasure/), "
+        "which clearly states that the right to erasure does not apply "
+        '"for the performance of a task carried out in the public interest", as is '
+        "the case for the aforementioned pieces of data.",
+        parse_mode=ParseMode.MARKDOWN,
+    )
 
 @user_admin
 async def echo(update: Update, context: CallbackContext):
@@ -459,25 +476,13 @@ Bass Boosting
 """
 
 
-ECHO_HANDLER = DisableAbleCommandHandler("echo", echo, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-MD_HELP_HANDLER = CommandHandler("markdownhelp", markdown_help)
-MK_BUTTON_HANDLER = CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_")
-SRC_HANDLER = CommandHandler("source", src, filters=PTB_Cutiepii_Filters.ChatType.PRIVATE)
-REDDIT_MEMES_HANDLER = DisableAbleCommandHandler("rmeme", rmemes)
-STATUS_HANDLER = DisableAbleCommandHandler("status", status)
-
-CUTIEPII_PTB.add_handler(ECHO_HANDLER)
-CUTIEPII_PTB.add_handler(MD_HELP_HANDLER)
-CUTIEPII_PTB.add_handler(SRC_HANDLER)
-CUTIEPII_PTB.add_handler(REDDIT_MEMES_HANDLER)
-CUTIEPII_PTB.add_handler(STATUS_HANDLER)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("echo", echo, filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("markdownhelp", markdown_help, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("gdpr", gdpr, filters=Filters.privete, block=False))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_", block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("source", src, filters=PTB_Cutiepii_Filters.ChatType.PRIVATE, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("rmeme", rmemes, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("status", status, block=False))
 
 __mod_name__ = "Extras"
 __command_list__ = ["id", "echo", "source", "rmeme", "status"]
-__handlers__ = [
-    ECHO_HANDLER,
-    MD_HELP_HANDLER,
-    SRC_HANDLER,
-    REDDIT_MEMES_HANDLER,
-    STATUS_HANDLER,
-]
