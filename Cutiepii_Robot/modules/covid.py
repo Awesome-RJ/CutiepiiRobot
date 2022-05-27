@@ -39,22 +39,59 @@ from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 
-async def covid(update: Update, context: CallbackContext):
+async def dot(number, thousand_separator="."):
+    def reverse(string):
+        string = "".join(reversed(string))
+        return string
+
+    s = reverse(str(number))
+    count = 0
+    result = ""
+    for char in s:
+        count = count + 1
+        if count % 3 == 0:
+            if len(s) == count:
+                result = char + result
+            else:
+                result = thousand_separator + char + result
+        else:
+            result = char + result
+    return result
+
+
+async def covid(update, context):
     message = update.effective_message
-    text = message.text.split(' ', 1)
+    args = context.args
+    query = " ".join(args)
+    remove_space = query.split(" ")
+    country = "%20".join(remove_space)
+    if not country:
+        url = "https://disease.sh/v3/covid-19/all?yesterday=false&twoDaysAgo=false&allowNull=true"
+        country = "World"
+    else:
+        url = f"https://disease.sh/v3/covid-19/countries/{country}?yesterday=false&twoDaysAgo=false&strict=true&allowNull=true"
+    request = requests.get(url).text
+    case = json.loads(request)
     try:
-       if len(text) == 1:
-           r = requests.get("https://disease.sh/v3/covid-19/all").json()
-           reply_text = f"**Global Totals** 🦠\nCases: {r['cases']:,}\nCases Today: {r['todayCases']:,}\nDeaths: {r['deaths']:,}\nDeaths Today: {r['todayDeaths']:,}\nRecovered: {r['recovered']:,}\nActive: {r['active']:,}\nCritical: {r['critical']:,}\nCases/Mil: {r['casesPerOneMillion']}\nDeaths/Mil: {r['deathsPerOneMillion']}"
-       else:
-           variabla = text[1]
-           r = requests.get(
-               f"https://disease.sh/v3/covid-19/countries/{variabla}").json()
-           reply_text = f"**Cases for {r['country']} 🦠**\nCases: {r['cases']:,}\nCases Today: {r['todayCases']:,}\nDeaths: {r['deaths']:,}\nDeaths Today: {r['todayDeaths']:,}\nRecovered: {r['recovered']:,}\nActive: {r['active']:,}\nCritical: {r['critical']:,}\nCases/Mil: {r['casesPerOneMillion']}\nDeaths/Mil: {r['deathsPerOneMillion']}"
-       await message.reply_text(reply_text, parse_mode=ParseMode.MARKDOWN)
+        json_date = case["updated"]
+    except KeyError:
+        await message.reply_text("Make sure you have input correct country")
+        return
+    float_date = float(json_date) / 1000.0
+    date = datetime.datetime.fromtimestamp(float_date).strftime("%d %b %Y %I:%M:%S %p")
+    try:
+        flag = case["countryInfo"]["flag"]
+    except KeyError:
+        flag = []
+    if flag:
+        text = f"*COVID-19 Statistics in* [{query}]({flag})\n"
+    else:
+        text = f"*COVID-19 Statistics in {country} :*\n"
+    text += f"Last Updated on `{date} GMT`\n\n🔼 Confirmed Cases : `{dot(case['cases'])}` | `+{dot(case['todayCases'])}`\n🔺 Active Cases : `{dot(case['active'])}`\n⚰️ Deaths : `{dot(case['deaths'])}` | `+{dot(case['todayDeaths'])}`\n💹 Recovered Cases: `{dot(case['recovered'])}` | `+{dot(case['todayRecovered'])}`\n💉 Total Tests : `{dot(case['tests'])}`\n👥 Populations : `{dot(case['population'])}`\n🌐 Source : worldometers"
+    try:
+        await message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
     except Exception:
-        return await update.effective_message.reply_text("There was a problem while importing the data!")
+        await message.reply_text("Try again in few times, maybe API are go down")
 
 
-COVID_HANDLER = DisableAbleCommandHandler(["covid", "corona"], covid)
-CUTIEPII_PTB.add_handler(COVID_HANDLER)
+CUTIEPII_PTB.add_handler(CDisableAbleCommandHandler(["covid", "corona"], covid, block=False)
