@@ -345,6 +345,75 @@ async def markdown_help(update: Update, context: CallbackContext):
         return
     markdown_help_sender(update)
 
+async def imdb(update, context):
+    try:
+        args = context.args
+        movie_name = " ".join(args)
+        remove_space = movie_name.split(" ")
+        final_name = "+".join(remove_space)
+        page = requests.get(
+            "https://www.imdb.com/find?ref_=nv_sr_fn&q=" + final_name + "&s=all"
+        )
+        str(page.status_code)
+        soup = BeautifulSoup(page.content, "lxml")
+        odds = soup.findAll("tr", "odd")
+        mov_title = odds[0].findNext("td").findNext("td").text
+        mov_link = (
+            "http://www.imdb.com/" + odds[0].findNext("td").findNext("td").a["href"]
+        )
+        page1 = requests.get(mov_link)
+        soup = BeautifulSoup(page1.content, "lxml")
+        if soup.find("div", "poster"):
+            poster = soup.find("div", "poster").img["src"]
+        else:
+            poster = ""
+        if soup.find("div", "title_wrapper"):
+            pg = soup.find("div", "title_wrapper").findNext("div").text
+            mov_details = re.sub(r"\s+", " ", pg)
+        else:
+            mov_details = ""
+        credit = soup.findAll("div", "credit_summary_item")
+        director = credit[0].a.text
+        if len(credit) == 1:
+            writer = "Not available"
+            stars = "Not available"
+        elif len(credit) > 2:
+            writer = credit[1].a.text
+            actors = [x.text for x in credit[2].findAll("a")]
+            actors.pop()
+            stars = actors[0] + "," + actors[1] + "," + actors[2]
+        else:
+            writer = "Not available"
+            actors = [x.text for x in credit[1].findAll("a")]
+            actors.pop()
+            stars = actors[0] + "," + actors[1] + "," + actors[2]
+        if soup.find("div", "inline canwrap"):
+            story_line = soup.find("div", "inline canwrap").findAll("p")[0].text
+        else:
+            story_line = "Not available"
+        info = soup.findAll("div", "txt-block")
+        if info:
+            mov_country = []
+            mov_language = []
+            for node in info:
+                a = node.findAll("a")
+                for i in a:
+                    if "country_of_origin" in i["href"]:
+                        mov_country.append(i.text)
+                    elif "primary_language" in i["href"]:
+                        mov_language.append(i.text)
+        if soup.findAll("div", "ratingValue"):
+            for r in soup.findAll("div", "ratingValue"):
+                mov_rating = r.strong["title"]
+        else:
+            mov_rating = "Not available"
+        msg = f"*Title :* {mov_title}\n{mov_details}\n*Rating :* {mov_rating} \n*Country :*  {mov_country}\n*Language :* {mov_language}\n*Director :* {director}\n*Writer :* {writer}\n*Stars :* {stars}\n*IMDB Url :* {mov_link}\n*Story Line :* {story_line}"
+        await update.effective_message.reply_photo(
+            photo=poster, caption=msg, parse_mode=ParseMode.MARKDOWN
+        )
+    except IndexError:
+        await update.effective_message.reply_text("Plox enter **Valid movie name** kthx")
+
 @sudo_plus
 async def status(update: Update, context: CallbackContext):
     message = update.effective_message
@@ -483,6 +552,8 @@ CUTIEPII_PTB.add_handler(CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_", bl
 CUTIEPII_PTB.add_handler(CommandHandler("source", src, filters=PTB_Cutiepii_Filters.ChatType.PRIVATE, block=False))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("rmeme", rmemes, block=False))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("status", status, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("imdb", imdb, block=False))
+
 
 __mod_name__ = "Extras"
 __command_list__ = ["id", "echo", "source", "rmeme", "status"]
