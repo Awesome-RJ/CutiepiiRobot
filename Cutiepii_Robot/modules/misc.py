@@ -43,16 +43,17 @@ from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot .modules.helper_funcs.chat_status import sudo_plus  
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot import CUTIEPII_PTB, pgram, StartTime
-from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action, send_action
+, send_action
 
 from datetime import datetime
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, __version__ as ptbver
 from telegram.constants import ParseMode, ChatAction
 from telegram.error import BadRequest
 from telegram.ext import filters as PTB_Cutiepii_Filters, CommandHandler, CallbackQueryHandler, CallbackContext
-from platform import python_version, uname
+from platform import python_version
 from telethon import version as tlthn
 from pyrogram import filters
+from pyrogram import __version__ as __pyro__
 from requests import get
 
 FORMATTING_HELP = """
@@ -242,7 +243,7 @@ async def mkdown_btn(update: Update, context: CallbackContext):
     await bot.answer_callback_query(query.id)
 
 
-@typing_action
+
 async def src(update: Update, context: CallbackContext) -> None:
     await update.effective_message.reply_text(
         "old Unmaintained Source Code Are Public. Click Below For The Source.",
@@ -337,6 +338,7 @@ async def status(update: Update, context: CallbackContext):
     msg += f"Python: `{python_version()}`\n"
     msg += f"Python Tg Bot: `{ptbver}`\n"
     msg += f"Telethon: `{tlthn.__version__}`\n"
+    msg += f"Pyrogram: `{__pyro__}`\n"
     msg += f"SQLAlchemy: `{sqlalchemy.__version__}`\n"
     msg += f"GitHub API: `{str(git.vercheck())}`\n"
     uptime = get_readable_time((time.time() - StartTime))

@@ -40,13 +40,13 @@ from telegram.constants import ParseMode
 
 from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS, DEV_USERS
 from Cutiepii_Robot.modules.helper_funcs import admin_status
-from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
+from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 
 user_admin_check = admin_status.user_admin_check
 AdminPerms = admin_status.AdminPerms
 
 
-@typing_action
+
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 def allow_connections(update: Update, context: CallbackContext):
 
@@ -91,7 +91,7 @@ def allow_connections(update: Update, context: CallbackContext):
             parse_mode=ParseMode.MARKDOWN,
         )
 
-@typing_action
+
 async def connection_chat(update: Update, context: CallbackContext):
 
     chat = update.effective_chat
@@ -114,7 +114,7 @@ async def connection_chat(update: Update, context: CallbackContext):
         message = "You are currently not connected in any group.\n"
     send_message(update.effective_message, message, parse_mode="markdown")
 
-@typing_action
+
 async def connect_chat(update: Update, context: CallbackContext):  # sourcery no-metrics
 
     chat = update.effective_chat

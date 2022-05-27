@@ -40,18 +40,6 @@ async def send_message(message, text, *args, **kwargs):
             return await message.reply_text(text, quote=False, *args, **kwargs)
 
 
-def typing_action(func):
-    """Sends typing action while processing func command."""
-
-    @wraps(func)
-    async def command_func(update, context, *args, **kwargs):
-        await context.bot.sendChatAction(chat_id=update.effective_chat.id, "typing")
-
-        return func(update, context, *args, **kwargs)
-
-    return command_func
-
-
 def send_action(action):
     """Sends `action` while processing func command."""
 

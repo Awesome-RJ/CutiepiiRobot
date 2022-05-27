@@ -63,7 +63,7 @@ from Cutiepii_Robot import (
 # NOTE: Module order is not guaranteed, specify that in the config file!
 from Cutiepii_Robot.modules import ALL_MODULES
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
-from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
+
 from Cutiepii_Robot.modules.helper_funcs.misc import paginate_modules
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_msg, cutiepii_cmd, cutiepii_callback
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
@@ -436,7 +436,7 @@ async def cutiepii_callback_data(update: Update, context: CallbackContext):
 
 
 @cutiepii_cmd(command="help")
-@typing_action
+
 async def get_help(update: Update, context: CallbackContext):
     chat = update.effective_chat  # type: Optional[Chat]
     args = update.effective_message.text.split(None, 1)

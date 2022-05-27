@@ -40,7 +40,7 @@ from telegram.helpers import escape_markdown
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.handlers import CMD_STARTERS
 from Cutiepii_Robot.modules.helper_funcs.misc import is_module_loaded
-from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
+from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 from Cutiepii_Robot.modules.connection import connected
 
 
@@ -123,7 +123,7 @@ if is_module_loaded(FILENAME):
                 )
 
     @user_admin
-    @typing_action
+    
     async def disable(update, context):
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
@@ -166,7 +166,7 @@ if is_module_loaded(FILENAME):
             send_message(update.effective_message, "What should I disable?")
 
     @user_admin
-    @typing_action
+    
     async def enable(update, context):
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
@@ -210,7 +210,7 @@ if is_module_loaded(FILENAME):
             send_message(update.effective_message, "What should I enable?")
 
     @user_admin
-    @typing_action
+    
     async def list_cmds(update, context):
         if DISABLE_CMDS + DISABLE_OTHER:
             result = "".join(
@@ -234,7 +234,7 @@ if is_module_loaded(FILENAME):
         result = "".join(" - `{}`\n".format(escape_markdown(cmd)) for cmd in disabled)
         return "The following commands are currently restricted:\n{}".format(result)
 
-    @typing_action
+    
     async def commands(update, context):
         chat = update.effective_chat
         user = update.effective_user

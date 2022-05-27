@@ -42,7 +42,7 @@ from Cutiepii_Robot import SUPPORT_USERS, SUDO_USERS, pgram, CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleMessageHandler
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
-from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
+
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from telegram import ChatPermissions, Update, Bot
 from telegram.error import BadRequest
@@ -263,7 +263,7 @@ async def runs(update: Update, context: CallbackContext):
     await update.effective_message.reply_text(temp)
 
 
-@typing_action
+
 async def goodnight(update: Update, context: CallbackContext):
     message = update.effective_message
     first_name = update.effective_user.first_name
@@ -271,7 +271,7 @@ async def goodnight(update: Update, context: CallbackContext):
     await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
 
 
-@typing_action
+
 async def goodmorning(update: Update, context: CallbackContext):
     message = update.effective_message
     first_name = update.effective_user.first_name

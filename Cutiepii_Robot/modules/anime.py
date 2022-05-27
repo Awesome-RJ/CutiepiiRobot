@@ -41,7 +41,7 @@ from telegram.utils.helpers import mention_html
 from pyrogram import filters
 from bs4 import BeautifulSoup
 
-from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
+
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot import OWNER_ID, REDIS, dispatcher, pgram, DEV_USERS
 
@@ -276,7 +276,7 @@ url = 'https://graphql.anilist.co'
 
 
 
-@typing_action
+
 def airing(update, context):
     message = update.effective_message
     search_str = message.text.split(' ', 1)
@@ -304,7 +304,7 @@ def airing(update, context):
 
 
 
-@typing_action
+
 def anime(update, context):
     message = update.effective_message
     search = message.text.split(' ', 1)
@@ -374,7 +374,7 @@ def anime(update, context):
 
 
 
-@typing_action
+
 def character(update, context):
     message = update.effective_message
     search = message.text.split(' ', 1)
@@ -412,7 +412,7 @@ def character(update, context):
 
 
 
-@typing_action
+
 def manga(update, context):
     message = update.effective_message
     search = message.text.split(' ', 1)
@@ -478,7 +478,7 @@ def manga(update, context):
 
 
 
-@typing_action
+
 def user(update, context):
     message = update.effective_message
     args = message.text.strip().split(" ", 1)
@@ -562,7 +562,7 @@ def user(update, context):
 
 
 
-@typing_action
+
 def upcoming(update, context):
     jikan = jikanpy.jikan.Jikan()
     upcoming = jikan.top('anime', page=1, subtype="upcoming")

@@ -41,7 +41,7 @@ from telegram.constants import ParseMode
 
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
+
 
 trans = SyncTranslator()
 
@@ -122,7 +122,7 @@ API_KEY = "6ae0c3a0-afdc-4532-a810-82ded0054236"
 URL = "http://services.gingersoftware.com/Ginger/correct/json/GingerTheText"
 
 
-@typing_action
+
 async def spellcheck(update: Update, context: CallbackContext):
     if update.effective_update.effective_message.reply_to_message:
         msg = update.effective_message.reply_to_message

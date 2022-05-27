@@ -54,7 +54,6 @@ from Cutiepii_Robot import (
 )
 from Cutiepii_Robot.modules.helper_funcs.alternate import (
     send_message,
-    typing_action,
     send_action,
 )
 from Cutiepii_Robot.modules.helper_funcs.extraction import (
@@ -1279,7 +1278,7 @@ async def set_frules(update, context):
         await update.effective_message.reply_text("Please write rules to set it up!")
 
 
-@typing_action
+
 async def get_frules(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     args = context.args
@@ -1302,7 +1301,7 @@ async def get_frules(update, context):
     await update.effective_message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
 
 
-@typing_action
+
 async def fed_broadcast(update, context):
     msg = update.effective_message  # type: Optional[Message]
     user = update.effective_user  # type: Optional[User]
@@ -1538,7 +1537,7 @@ async def fed_ban_list(update, context):  # sourcery no-metrics
             )
 
 
-@typing_action
+
 async def fed_notif(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -1573,7 +1572,7 @@ async def fed_notif(update, context):
         )
 
 
-@typing_action
+
 async def fed_chats(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -1641,7 +1640,7 @@ async def fed_chats(update, context):
             )
 
 
-@typing_action
+
 async def fed_import_bans(update, context):  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -1882,7 +1881,7 @@ async def del_fed_button(update, context):
             )
 
 
-@typing_action
+
 async def fed_stat_user(update, context):  # sourcery no-metrics
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -1989,7 +1988,7 @@ async def fed_stat_user(update, context):  # sourcery no-metrics
         )
 
 
-@typing_action
+
 def set_fed_log(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2030,7 +2029,7 @@ def set_fed_log(update, context):
         )
 
 
-@typing_action
+
 def unset_fed_log(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2072,7 +2071,7 @@ def unset_fed_log(update, context):
         )
 
 
-@typing_action
+
 async def subs_feds(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2138,7 +2137,7 @@ async def subs_feds(update, context):
         )
 
 
-@typing_action
+
 async def unsubs_feds(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2204,7 +2203,7 @@ async def unsubs_feds(update, context):
         )
 
 
-@typing_action
+
 def get_myfedsubs(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -2251,7 +2250,7 @@ def get_myfedsubs(update, context):
     send_message(update.effective_message, listfed, parse_mode="markdown")
 
 
-@typing_action
+
 def get_myfeds_list(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]

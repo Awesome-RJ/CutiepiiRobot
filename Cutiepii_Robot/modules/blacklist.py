@@ -42,7 +42,7 @@ import Cutiepii_Robot.modules.sql.blacklist_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB, LOGGER
 from Cutiepii_Robot.modules.connection import connected
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
+from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.chat_status import user_not_admin
 
@@ -60,7 +60,7 @@ BLACKLIST_GROUP = 11
 
 
 @user_admin
-@typing_action
+
 async def blacklist(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
@@ -105,7 +105,7 @@ async def blacklist(update: Update, context: CallbackContext):
 
 @cutiepii_cmd(command="addblacklist")
 @user_admin(AdminPerms.CAN_DELETE_MESSAGES)
-@typing_action
+
 async def add_blacklist(update, context):
     msg = update.effective_message
     chat = update.effective_chat
@@ -148,7 +148,7 @@ async def add_blacklist(update, context):
 
 
 @user_admin
-@typing_action
+
 async def unblacklist(update: Update, context: CallbackContext):
     msg = update.effective_message
     chat = update.effective_chat
@@ -221,7 +221,7 @@ async def unblacklist(update: Update, context: CallbackContext):
 
 @loggable
 @user_admin
-@typing_action
+
 async def blacklist_mode(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user

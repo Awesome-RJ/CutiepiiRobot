@@ -44,7 +44,7 @@ from telegram.ext import CallbackContext, CommandHandler
 import Cutiepii_Robot.modules.sql.notes_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB, LOGGER, OWNER_ID, JOIN_LOGGER, SUPPORT_CHAT
 from Cutiepii_Robot.__main__ import DATA_IMPORT
-from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
+
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 import Cutiepii_Robot.modules.sql.rules_sql as rulessql
 import Cutiepii_Robot.modules.sql.blacklist_sql as blacklistsql
@@ -56,7 +56,7 @@ from Cutiepii_Robot.modules.connection import connected
 
 
 @user_admin
-@typing_action
+
 async def import_data(update: Update, context: CallbackContext):
     msg = update.effective_message
     chat = update.effective_chat

@@ -24,7 +24,7 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import (
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql import cust_filters_sql as sql
 from Cutiepii_Robot.modules.connection import connected
-from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
+from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_text
 from Cutiepii_Robot.modules.helper_funcs.admin_status import (
     user_admin_check,
@@ -46,7 +46,7 @@ ENUM_FUNC_MAP = {
 }
 
 @cutiepii_cmd(command='filters', admin_ok=True)
-@typing_action
+
 async def list_handlers(update, context):
     chat = update.effective_chat
     user = update.effective_user
@@ -92,7 +92,7 @@ async def list_handlers(update, context):
 
 # NOT ASYNC BECAUSE CUTIEPII_PTB HANDLER RAISED
 @cutiepii_cmd(command='filter', group=55)
-@typing_action
+
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def filters(update, context) -> None:  # sourcery no-metrics
@@ -220,7 +220,7 @@ async def filters(update, context) -> None:  # sourcery no-metrics
 
 # NOT ASYNC BECAUSE CUTIEPII_PTB HANDLER RAISE
 @cutiepii_cmd(command="stop")
-@typing_action
+
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def stop_filter(update, context) -> str:
