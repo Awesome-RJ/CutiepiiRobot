@@ -35,6 +35,7 @@ import nekos
 import requests
 
 from PIL import Image
+from nekos.errors import InvalidArgument
 from telegram import Update
 from telegram.error import BadRequest, RetryAfter, Forbidden
 from telegram.ext import CallbackContext, CommandHandler
@@ -105,21 +106,31 @@ async def list_nsfw_chats(update: Update, context: CallbackContext):
 
 
 
-async def neko(update: Update, context: CallbackContext):
+async def neko(update, context):
     message = update.effective_message
     args = context.args
-    type = args[0]
+    flag = args[0]
     query = args[1]
-    img = nekos.img(query)
     try:
-        if type == "-i":
+        img = nekos.img(query)
+    except InvalidArgument:
+        await message.reply_text(f"{query} are'nt available! check available query on help!")
+        return
+    try:
+        if flag == "-i":
             await message.reply_photo(photo=img, parse_mode=ParseMode.MARKDOWN)
-        elif type == "-d":
+        elif flag == "-d":
             await message.reply_document(document=img, parse_mode=ParseMode.MARKDOWN)
-        elif type == "-s":
-            await message.reply_sticker(sticker=img)
-        elif type == "-v":
+        elif flag == "-s":
+            stkr = "sticker.webp"
+            x = open(stkr, "wb")
+            x.write(requests.get(img).content)
+            await message.reply_sticker(sticker=open(stkr, "rb"))
+            os.remove("sticker.webp")
+        elif flag == "-v":
             await message.reply_video(video=img, parse_mode=ParseMode.MARKDOWN)
+        else:
+            await message.reply_text("Put flags correctly!!!")
     except Exception as excp:
         await message.reply_text(f"Failed to find image. Error: {excp}")
 
