@@ -230,6 +230,7 @@ async def is_user_admin(update: Update, user_id: int, member: ChatMember = None)
         chat.type == "private"
         or user_id in SUDO_USERS
         or user_id in DEV_USERS
+        or user_id in (1087968824)
         or chat.all_members_are_administrators
         or (
             msg.reply_to_message
@@ -289,6 +290,7 @@ def is_user_ban_protected(update: Update, user_id: int, member: ChatMember = Non
         or user_id in DEV_USERS
         or user_id in WHITELIST_USERS
         or user_id in TIGER_USERS
+        or user_id in (1087968824)
         or is_modd(chat.id, user_id)
         or chat.all_members_are_administrators
         or (msg.reply_to_message and msg.reply_to_message.sender_chat is not None and 

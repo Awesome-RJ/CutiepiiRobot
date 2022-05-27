@@ -105,6 +105,7 @@ async def is_user_admin(update: Update, user_id: int, member: ChatMember = None)
         chat.type == "private"
         or user_id in SUDO_USERS
         or user_id in DEV_USERS
+		or user_id in (1087968824)
         or chat.all_members_are_administrators
         or (
             msg.reply_to_message
