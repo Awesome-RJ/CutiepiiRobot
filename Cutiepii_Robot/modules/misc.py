@@ -352,8 +352,9 @@ async def imdb(update, context):
         remove_space = movie_name.split(" ")
         final_name = "+".join(remove_space)
         page = requests.get(
-            "https://www.imdb.com/find?ref_=nv_sr_fn&q=" + final_name + "&s=all"
+            f"https://www.imdb.com/find?ref_=nv_sr_fn&q={final_name}&s=all"
         )
+
         str(page.status_code)
         soup = BeautifulSoup(page.content, "lxml")
         odds = soup.findAll("tr", "odd")
@@ -381,18 +382,17 @@ async def imdb(update, context):
             writer = credit[1].a.text
             actors = [x.text for x in credit[2].findAll("a")]
             actors.pop()
-            stars = actors[0] + "," + actors[1] + "," + actors[2]
+            stars = f"{actors[0]},{actors[1]},{actors[2]}"
         else:
             writer = "Not available"
             actors = [x.text for x in credit[1].findAll("a")]
             actors.pop()
-            stars = actors[0] + "," + actors[1] + "," + actors[2]
+            stars = f"{actors[0]},{actors[1]},{actors[2]}"
         if soup.find("div", "inline canwrap"):
             story_line = soup.find("div", "inline canwrap").findAll("p")[0].text
         else:
             story_line = "Not available"
-        info = soup.findAll("div", "txt-block")
-        if info:
+        if info := soup.findAll("div", "txt-block"):
             mov_country = []
             mov_language = []
             for node in info:
