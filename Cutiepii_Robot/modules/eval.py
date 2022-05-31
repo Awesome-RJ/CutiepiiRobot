@@ -153,11 +153,10 @@ async def do(func, bot, update):
             return result
 
 
-@app.on_message(
+@app.on_edited_message(
     filters.user(DEV_USERS)
     & ~filters.forwarded
     & ~filters.via_bot
-    & ~filters.edited
     & filters.command(["eval", "e"])
 )
 async def executor(client, message):

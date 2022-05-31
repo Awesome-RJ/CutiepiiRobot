@@ -49,7 +49,7 @@ karma_negative_group = 4
 regex_upvote = r"^((?i)\+|\+\+|\+1|thx|tnx|ty|thank you|thanx|thanks|pro|cool|good|👍)$"
 regex_downvote = r"^(\-|\-\-|\-1|👎)$"
 
-@pgram.on_message(
+@pgram.on_edited_message(
     filters.text
     & filters.group
     & filters.incoming
@@ -57,7 +57,6 @@ regex_downvote = r"^(\-|\-\-|\-1|👎)$"
     & filters.regex(regex_upvote, re.IGNORECASE)
     & ~filters.via_bot
     & ~filters.bot
-    & ~filters.edited,
     group=karma_positive_group,
 )
 @capture_err
@@ -90,7 +89,7 @@ async def upvote(_, message):
     )
 
 
-@pgram.on_message(
+@pgram.on_edited_message(
     filters.text  
     & filters.group
     & filters.incoming
@@ -98,7 +97,6 @@ async def upvote(_, message):
     & filters.regex(regex_downvote, re.IGNORECASE)
     & ~filters.via_bot
     & ~filters.bot
-    & ~filters.edited,
     group=karma_negative_group,
 )
 @capture_err

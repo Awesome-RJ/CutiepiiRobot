@@ -892,7 +892,7 @@ def FullName(user: User):
     )
 
 
-@pgram.on_message(filters.command("whois") & ~filters.edited & ~filters.bot)
+@pgram.on_edited_message(filters.command("whois") & ~filters.bot)
 async def whois(client, message):
     cmd = message.command
     if not message.reply_to_message and len(cmd) == 1:

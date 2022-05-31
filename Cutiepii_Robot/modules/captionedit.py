@@ -5,8 +5,8 @@ from Cutiepii_Robot import pgram
 from Cutiepii_Robot.utils.pluginhelpers import admins_only, get_text
 
 
-@pgram.on_message(
-    filters.command("captedit") & ~filters.edited & ~filters.bot & ~filters.private
+@pgram.on_edited_message(
+    filters.command("captedit") & ~filters.bot & ~filters.private
 )
 @admins_only
 async def loltime(client, message):

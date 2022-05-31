@@ -34,7 +34,7 @@ from pyrogram import filters
 from Cutiepii_Robot import pgram
 
 
-@pgram.on_message(filters.command("repo") & ~filters.edited)
+@pgram.on_edited_message(filters.command("repo"))
 async def give_repo(c, m):
     g = github.Github()
     repo = g.get_repo("Awesome-RJ/CutiepiiRobot")
