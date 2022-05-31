@@ -60,10 +60,9 @@ async def mod(update: Update, context: CallbackContext):
             "I don't know who you're talking about, you're going to need to specify a user!"
         )
         return ""
-    try:
+    with contextlib.suppress(BadRequest):
         member = chat.get_member(user_id)
-    except BadRequest:
-        return ""
+
     if member.status in ("administrator", "creator"):
         await message.reply_text(
             "No need to Modertor an Admin!"

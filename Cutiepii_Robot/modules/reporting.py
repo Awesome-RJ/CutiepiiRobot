@@ -119,9 +119,8 @@ async def report(update: Update, context: CallbackContext) -> str:
         for admin in admin_list:
             if admin.user.is_bot:  # AI didnt take over yet
                 continue
-            try:
+            with contextlib.suppress(BadRequest):
                 reported += f"<a href=\"tg://user?id={admin.user.id}\">\u2063</a>"
-            except BadRequest:
                 LOGGER.exception("Exception while reporting user")
         await message.reply_text(reported, parse_mode=ParseMode.HTML)
 

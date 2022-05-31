@@ -214,10 +214,8 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
 
         if raid and new_mem.id not in WHITELISTED:
             bantime = deftime
-            try:
+            with contextlib.suppress(BadRequest):
                 chat.ban_member(new_mem.id, until_date=bantime)
-            except BadRequest:
-                pass
             return
 
 
@@ -596,10 +594,8 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
                 sent = await send(update, res, keyboard, backup_message)
             prev_welc = sql.get_clean_pref(chat.id)
             if prev_welc:
-                try:
+                with contextlib.suppress(BadRequest):
                     await bot.delete_message(chat.id, prev_welc)
-                except BadRequest:
-                    pass
 
                 if sent:
                     sql.set_clean_welcome(chat.id, sent.message_id)
@@ -1141,10 +1137,8 @@ async def user_button(update: Update, context: CallbackContext):
 
             prev_welc = sql.get_clean_pref(chat.id)
             if prev_welc:
-                try:
+                with contextlib.suppress(BadRequest):
                     await bot.delete_message(chat.id, prev_welc)
-                except BadRequest:
-                    pass
 
                 if sent:
                     sql.set_clean_welcome(chat.id, sent.message_id)
@@ -1211,10 +1205,8 @@ async def user_captcha_button(update: Update, context: CallbackContext):
 
                 prev_welc = sql.get_clean_pref(chat.id)
                 if prev_welc:
-                    try:
+                    with contextlib.suppress(BadRequest):
                         await bot.delete_message(chat.id, prev_welc)
-                    except BadRequest:
-                        pass
 
                     if sent:
                         sql.set_clean_welcome(chat.id, sent.message_id)
@@ -1315,17 +1307,17 @@ def __chat_settings__(chat_id, user_id):
 
 CUTIEPII_PTB.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, new_member, block=False))
 CUTIEPII_PTB.add_handler(MessageHandler(filters.StatusUpdate.LEFT_CHAT_MEMBER, left_member, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("welcome", welcome, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("goodbye", goodbye, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("setwelcome", set_welcome, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("setgoodbye", set_goodbye, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("resetwelcome", reset_welcome, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("resetgoodbye", reset_goodbye, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("welcomemute", welcomemute, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("cleanservice", cleanservice, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("cleanwelcome", clean_welcome, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("welcomehelp", welcome_help, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("welcomemutehelp", welcome_mute_help, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("welcome", welcome, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("goodbye", goodbye, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("setwelcome", set_welcome, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("setgoodbye", set_goodbye, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("resetwelcome", reset_welcome, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("resetgoodbye", reset_goodbye, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("welcomemute", welcomemute, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("cleanservice", cleanservice, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("cleanwelcome", clean_welcome, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("welcomehelp", welcome_help))
+CUTIEPII_PTB.add_handler(CommandHandler("welcomemutehelp", welcome_mute_help))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(user_button, pattern=r"user_join_", block=False))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(user_captcha_button, pattern=r"user_captchajoin_\([\d\-]+,\d+\)_\(\d{4}\)", block=False))
 
