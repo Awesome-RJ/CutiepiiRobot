@@ -470,11 +470,12 @@ Example:
 Output: `1.0 USD = 75.505 INR`
 
 🗣 Translator:
-➛ /tr` or `/tl` (language code) as reply to a long message
-Example:
-  `/tr en`: translates something to english
-  `/tr hi-en`: translates hindi to english.
-➛ /langs` : lists all the language codes
+Translate some text by give a text or reply that text/caption.
+Translate by Google Translate
+➛ `/tr (lang) (""text)`
+Give a target language and text as args for translate to that target.
+Reply a message to translate that.
+"" = Not used when replied to a message.
 
 🕐 Timezones:
 ➛ /time <query>`: Gives information about a timezone.

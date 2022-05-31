@@ -160,7 +160,7 @@ async def extract_unt_fedban(
         if len(res) >= 3:
             text = res[2]
 
-    elif len(args) >= 1 and args[0].isdigit():
+    elif len(args) >= 1 and args[0].lstrip("-").isdigit():
         user_id = int(args[0])
         res = await message.text.split(None, 2)
         if len(res) >= 3:

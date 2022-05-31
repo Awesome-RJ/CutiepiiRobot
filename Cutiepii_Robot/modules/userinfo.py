@@ -45,7 +45,7 @@ from telethon import events
 
 from telegram import Update, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode, MessageLimit
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import CallbackContext
 from telegram.error import BadRequest
 from telegram.helpers import escape_markdown, mention_html
 
@@ -256,7 +256,7 @@ async def group_info(event) -> None:
 
 async def gifid(update: Update, context: CallbackContext):
     msg = update.effective_message
-    if msg.reply_to_message and msg.reply_to_message.animation:
+    if await msg.reply_to_message and await msg.reply_to_message.animation:
         await update.effective_message.reply_text(
             f"Gif ID:\n<code>{msg.reply_to_message.animation.file_id}</code>",
             parse_mode=ParseMode.HTML,

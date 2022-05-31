@@ -71,15 +71,18 @@ def can_manage_voice_chats(chat_id, user_id):
 		return data
 	return False
 
+def is_anon(user: User, chat: Chat):
+    return chat.get_member(user.id).is_anonymous
+
 def is_whitelist_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
     return any(user_id in user for user in [WHITELIST_USERS, TIGER_USERS, SUPPORT_USERS, SUDO_USERS, DEV_USERS])
 
 
-def is_support_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
+def is_support_plus(_: Chat, user_id: int) -> bool:
     return user_id in SUPPORT_USERS or user_id in SUDO_USERS or user_id in DEV_USERS
 
 
-def is_sudo_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
+def is_sudo_plus(_: Chat, user_id: int) -> bool:
     return user_id in SUDO_USERS or user_id in DEV_USERS
 
 def is_stats_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:

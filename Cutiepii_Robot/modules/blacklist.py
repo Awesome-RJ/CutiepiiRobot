@@ -404,7 +404,9 @@ async def del_blacklist(update: Update, context: CallbackContext):
                     )
                     await bot.sendMessage(
                         chat.id,
-                        f"Muted {user.first_name} for using Blacklisted word: {trigger}!",
+                        f"Muted {user.first_name} for using Blacklisted word: <code>{html.escape(to_match)}</code>!\nBlacklist caused by trigger: <code>{html.escape(trigger)}</code>",
+                        disable_web_page_preview=True,
+                        parse_mode = ParseMode.HTML,
                     )
                     return
                 elif getmode == 4:
@@ -412,7 +414,9 @@ async def del_blacklist(update: Update, context: CallbackContext):
                     if res := chat.unban_member(update.effective_user.id):
                         await bot.sendMessage(
                             chat.id,
-                            f"Kicked {user.first_name} for using Blacklisted word: {trigger}!",
+                            f"Kicked {user.first_name} for using Blacklisted word: <code>{html.escape(to_match)}</code>!\nBlacklist caused by trigger: <code>{html.escape(trigger)}</code>",
+                            disable_web_page_preview=True,
+                            parse_mode = ParseMode.HTML,
                         )
                     return
                 elif getmode == 5:
@@ -420,7 +424,9 @@ async def del_blacklist(update: Update, context: CallbackContext):
                     chat.ban_member(user.id)
                     await bot.sendMessage(
                         chat.id,
-                        f"Banned {user.first_name} for using Blacklisted word: {trigger}",
+                        f"Banned {user.first_name} for using Blacklisted word: <code>{html.escape(to_match)}</code>!\nBlacklist caused by trigger: <code>{html.escape(trigger)}</code>",
+                        disable_web_page_preview=True,
+                        parse_mode = ParseMode.HTML,
                     )
                     return
                 elif getmode == 6:
@@ -429,7 +435,9 @@ async def del_blacklist(update: Update, context: CallbackContext):
                     chat.ban_member(user.id, until_date=bantime)
                     await bot.sendMessage(
                         chat.id,
-                        f"Banned {user.first_name} until '{value}' for using Blacklisted word: {trigger}!",
+                        f"Banned {user.first_name} until '{value}' for using Blacklisted word: <code>{html.escape(to_match)}</code>!\nBlacklist caused by trigger: <code>{html.escape(trigger)}</code>",
+                        disable_web_page_preview=True,
+                        parse_mode = ParseMode.HTML,
                     )
                     return
                 elif getmode == 7:
@@ -443,7 +451,9 @@ async def del_blacklist(update: Update, context: CallbackContext):
                     )
                     await bot.sendMessage(
                         chat.id,
-                        f"Muted {user.first_name} until '{value}' for using Blacklisted word: {trigger}!",
+                        f"Muted {user.first_name} until '{value}' for using Blacklisted word: <code>{html.escape(to_match)}</code>!\nBlacklist caused by trigger: <code>{html.escape(trigger)}</code>",
+                        disable_web_page_preview=True,
+                        parse_mode = ParseMode.HTML,
                     )
                     return
             except BadRequest as excp:
