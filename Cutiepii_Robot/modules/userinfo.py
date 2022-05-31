@@ -304,7 +304,7 @@ def info(update: Update, context: CallbackContext):
         cleartime = get_clearcmd(chat.id, "info")
 
         if cleartime:
-            context.CUTIEPII_PTB.run_async(delete, delmsg, cleartime.time)
+            context.bot.run_async(delete, delmsg, cleartime.time)
 return
 else:return
 
@@ -521,7 +521,7 @@ async def info(update: Update, context: CallbackContext):
         delmsg = await message.reply_text("I can't extract a user from this.")
 
         if cleartime := get_clearcmd(chat.id, "info"):
-            context.CUTIEPII_PTB.run_async(delete, delmsg, cleartime.time)
+            context.bot.run_async(delete, delmsg, cleartime.time)
 
         return
 
@@ -699,10 +699,10 @@ async def info(update: Update, context: CallbackContext):
             )    
 
     rep.delete()
-
+"""
     if cleartime := get_clearcmd(chat.id, "info"):
-        context.CUTIEPII_PTB.run_async(delete, delmsg, cleartime.time)
-
+        context.bot.run_async(delete, delmsg, cleartime.time)
+"""
 
 async def about_me(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args

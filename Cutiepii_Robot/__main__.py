@@ -209,7 +209,7 @@ for module_name in ALL_MODULES:
 
 
 # do not async
-def send_help(chat_id, text, keyboard=None):
+async def send_help(chat_id, text, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
     await context.bot.send_message(
@@ -345,7 +345,7 @@ async def error_callback(update: Update, context: CallbackContext):
         pass
         # handle all other telegram related errors
 
-@kigcallback(pattern=r"help_.")
+@cutiepii_callback(pattern=r"help_.")
 async def help_button(update: Update, context: CallbackContext):
     query = update.callback_query
     mod_match = re.match(r"help_module\((.+?)\)", query.data)

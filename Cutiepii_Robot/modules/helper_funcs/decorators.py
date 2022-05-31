@@ -1,7 +1,10 @@
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler, DisableAbleMessageHandler
 from Cutiepii_Robot import LOGGER, CUTIEPII_PTB as app
-from telegram.ext import Application, CallbackQueryHandler, CommandHandler, InlineQueryHandler, MessageHandler
-from telegram.ext.filters import BaseFilter, Filters
+
+from typing import Optional
+
+from telegram.ext import Application, CallbackQueryHandler, CommandHandler, InlineQueryHandler, MessageHandler, filters
+from telegram.ext.filters import BaseFilter
 
 
 class Cutiepii_TG_Handler:
@@ -13,16 +16,16 @@ class Cutiepii_TG_Handler:
         command: str,
         filters: Optional[BaseFilter] = None,
         admin_ok: bool = False,
-        pass_args: bool = False,
+#        pass_args: bool = False,
         pass_chat_data: bool = False,
-        run_async: bool = True,
+#        run_async: bool = True,
         can_disable: bool = True,
         group: Optional[int] = 40,
     ):
         if filters:
-           filters = filters & ~Filters.update.edited_message
+           filters = filters & ~filters.UpdateType.EDITED_MESSAGE
         else:
-            filters = ~Filters.update.edited_message
+            filters = ~filters.UpdateType.EDITED_MESSAGE
         def _command(func):
             try:
                 if can_disable:
@@ -79,14 +82,14 @@ class Cutiepii_TG_Handler:
         self,
         pattern: Optional[BaseFilter] = None,
         can_disable: bool = True,
-        run_async: bool = True,
+#        run_async: bool = True,
         group: Optional[int] = 60,
         friendly=None,
     ):
         if pattern:
-           pattern = pattern & ~Filters.update.edited_message
+           pattern = pattern & ~filters.UpdateType.EDITED_MESSAGE
         else:
-           pattern = ~Filters.update.edited_message
+           pattern = ~filters.UpdateType.EDITED_MESSAGE
         def _message(func):
             try:
                 if can_disable:
@@ -114,7 +117,7 @@ class Cutiepii_TG_Handler:
 
         return _message
 
-    def callbackquery(self, pattern: str = None, run_async: bool = True):
+    def callbackquery(self, pattern: str = None):
         def _callbackquery(func):
             self.app.add_handler(CallbackQueryHandler(pattern=pattern, callback=func))
             LOGGER.debug(
@@ -127,7 +130,7 @@ class Cutiepii_TG_Handler:
     def inlinequery(
         self,
         pattern: Optional[str] = None,
-        run_async: bool = True,
+#        run_async: bool = True,
         pass_user_data: bool = True,
         pass_chat_data: bool = True,
         chat_types: List[str] = None,

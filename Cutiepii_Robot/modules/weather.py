@@ -232,10 +232,10 @@ async def weather(update: Update, context: CallbackContext):
     )
 
     cleartime = get_clearcmd(chat.id, "weather")
-
+"""
     if cleartime:
-        context.CUTIEPII_PTB.run_async(delete, delmsg, cleartime.time)
-
+        context.bot.run_async(delete, delmsg, cleartime.time)
+"""
 
 @register(pattern="^/wttr (.*)")
 async def _(event):
