@@ -178,7 +178,7 @@ async def button(update: Update, context: CallbackContext) -> str:
     if match and admeme.status == "administrator":
 
         bot = context.bot
-        user_id = match.group(1)
+        user_id = match[1]
         chat: Optional[Chat] = update.effective_chat
         user_member = chat.get_member(user_id)
 
