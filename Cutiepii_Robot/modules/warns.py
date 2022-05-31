@@ -62,6 +62,8 @@ from telegram.constants import ParseMode, MessageLimit
 from telegram.ext import (
     CallbackContext,
     filters,
+    CallbackQueryHandler,
+    CommandHandler
 )
 from telegram.helpers import mention_html
 
@@ -799,14 +801,14 @@ be a sentence, encompass it with quotes, as such*:* `/addwarn "very angry" This 
 
 __mod_name__ = "Warnings"
 
-CUTIEPII_PTB.add_handler(CommandHandler(["swarn", "dwarn",  "dswarn", "warn"], warn_user, pass_args=True, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler(["resetwarn", "resetwarns"], reset_warns, pass_args=True, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler(["rmwarn", "unwarn"], remove_warns, pass_args=True, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler(["swarn", "dwarn",  "dswarn", "warn"], warn_user, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler(["resetwarn", "resetwarns"], reset_warns, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler(["rmwarn", "unwarn"], remove_warns, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"rm_warn"))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("warns", warns, pass_args=True, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("warns", warns, filters=filters.ChatType.GROUPS))
 CUTIEPII_PTB.add_handler(CommandHandler("addwarn", add_warn_filter, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler(["nowarn", "stopwarn"], remove_warn_filter, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["warnlist", "warnfilters"], list_warn_filters, filters=filters.ChatType.GROUPS,admin_ok=True))
 CUTIEPII_PTB.add_handler(MessageHandler(filters.TEXT & filters.ChatType.GROUPS, reply_filter))
-CUTIEPII_PTB.add_handler(CommandHandler("warnlimit", set_warn_limit, pass_args=True, filters=filters.ChatType.GROUPS,block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("strongwarn", set_warn_strength, pass_args=True, filters=filters.ChatType.GROUPS, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("warnlimit", set_warn_limit, filters=filters.ChatType.GROUPS,block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("strongwarn", set_warn_strength, filters=filters.ChatType.GROUPS, block=False))
