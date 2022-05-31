@@ -125,7 +125,7 @@ async def anon_callback_handler1(upd: Update, _: CallbackContext):
         await CUTIEPII_PTB.bot.delete_message(
             chat_id, anon_callback_messages.pop((chat_id, message_id), None)
         )
-        await CUTIEPII_PTB.bot.send_message(
+        await context.bot.send_message(
             chat_id, "You lack the permissions required for this command"
         )
     elif (

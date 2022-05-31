@@ -2300,7 +2300,7 @@ async def welcome_fed(update, chat, user_id):
         try:
             await update.effective_message.reply_text(msgg, parse_mode="markdown")
         except BadRequest:
-            CUTIEPII_PTB.bot.send_message(chat.id, msgg, parse_mode="markdown")
+            await context.bot.send_message(chat.id, msgg, parse_mode="markdown")
         update.effective_chat.ban_member(user_id)
         return True
     return False

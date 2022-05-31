@@ -1560,18 +1560,18 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
                     old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
                 text_maker += "\nTo disable cleanlinked send: `/cleanlinked off`"
                 text_maker += "\n\n[The permanent pinned message is here]({})".format(old_pin)
-            CUTIEPII_PTB.bot.send_message(chat_id, text_maker, parse_mode=ParseMode.MARKDOWN)
+            await context.bot.send_message(chat_id, text_maker, parse_mode=ParseMode.MARKDOWN)
             return ""
         prev_message = args[0]
         if prev_message == "off":
             sql.set_permapin(chat_id, 0)
-            CUTIEPII_PTB.bot.send_message(chat_id, "Cleanlinked has been disabled!")
+            await context.bot.send_message(chat_id, "Cleanlinked has been disabled!")
             return
         if "/" in prev_message:
             prev_message = prev_message.split("/")[-1]
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
-            CUTIEPII_PTB.bot.send_message(chat_id, "This command is meant to use in group not in PM")
+            await context.bot.send_message(chat_id, "This command is meant to use in group not in PM")
             return ""
         chat = update.effective_chat
         chat_id = update.effective_chat.id
@@ -1580,11 +1580,11 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
             prev_message = update.effective_message.reply_to_message.message_id
         elif len(args) >= 1 and args[0] in ["off", "false"]:
             sql.set_permapin(chat.id, 0)
-            CUTIEPII_PTB.bot.send_message(chat_id, "Cleanlinked has been disabled!")
+            await context.bot.send_message(chat_id, "Cleanlinked has been disabled!")
             return
         elif len(args) >= 1 and args[0] in ["on", "true"]:
             sql.set_permapin(chat.id, 1)
-            CUTIEPII_PTB.bot.send_message(chat_id, "Cleanlinked has been enabled!")
+            await context.bot.send_message(chat_id, "Cleanlinked has been enabled!")
             return
         else:
             get_permapin = sql.get_permapin(chat_id)
@@ -1596,14 +1596,14 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
                     old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
                 text_maker += "\nTo disable cleanlinked send: `/cleanlinked off`"
                 text_maker += "\n\n[The permanent pinned message is here]({})".format(old_pin)
-            CUTIEPII_PTB.bot.send_message(chat_id, text_maker, parse_mode=ParseMode.MARKDOWN)
+            await context.bot.send_message(chat_id, text_maker, parse_mode=ParseMode.MARKDOWN)
             return ""
 
     is_group = chat.type not in ("private", "channel")
 
     if prev_message and is_group:
         sql.set_permapin(chat.id, prev_message)
-        CUTIEPII_PTB.bot.send_message(chat_id, "Cleanlinked successfully set!")
+        await context.bot.send_message(chat_id, "Cleanlinked successfully set!")
         return "<b>{}:</b>" \
                "\n#PERMANENT_PIN" \
                "\n<b>Admin:</b> {}".format(html.escape(chat.title), mention_html(user.id, user.first_name))
@@ -1643,7 +1643,7 @@ def permanent_pin(update: Update, context: CallbackContext):
             else:
                 old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
                 print(old_pin)
-            CUTIEPII_PTB.bot.send_message(chat.id, "*Cleanlinked error:*\nI can't pin messages here!\nMake sure I'm an admin and can pin messages.\n\nClean linked has been disabled, [The old permanent pinned message is here]({})".format(old_pin), parse_mode=ParseMode.MARKDOWN)
+            await context.bot.send_message(chat.id, "*Cleanlinked error:*\nI can't pin messages here!\nMake sure I'm an admin and can pin messages.\n\nClean linked has been disabled, [The old permanent pinned message is here]({})".format(old_pin), parse_mode=ParseMode.MARKDOWN)
             return
 
         if to_del:
@@ -1651,7 +1651,7 @@ def permanent_pin(update: Update, context: CallbackContext):
                 print(message.message_id)
                 context.bot.deleteMessage(chat.id, message.message_id)
             except BadRequest:
-                CUTIEPII_PTB.bot.send_message(chat.id, "Cleanlinked error: cannot delete pinned msg")
+                await context.bot.send_message(chat.id, "Cleanlinked error: cannot delete pinned msg")
                 print("Cleanlinked error: cannot delete pin msg")    
 
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)

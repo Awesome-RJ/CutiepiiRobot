@@ -354,7 +354,7 @@ async def mychatmemberupdates(update: Update, _: CallbackContext):
                 f"<b>ID</b>: <code>{update.effective_user.id}</code>\n"
                 f"<b>Chat ID</b>: <code>{update.effective_chat.id}</code>"
             )
-            await CUTIEPII_PTB.bot.send_message(OWNER_ID, new_group, parse_mode=ParseMode.HTML)
+            await context.bot.send_message(OWNER_ID, new_group, parse_mode=ParseMode.HTML)
 
 async def admincacheupdates(update: Update, _: CallbackContext):
     try:

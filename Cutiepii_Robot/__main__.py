@@ -212,7 +212,7 @@ for module_name in ALL_MODULES:
 def send_help(chat_id, text, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
-    CUTIEPII_PTB.bot.send_message(
+    await context.bot.send_message(
         chat_id=chat_id,
         text=text,
         parse_mode=ParseMode.MARKDOWN,
@@ -491,14 +491,14 @@ async def send_settings(chat_id, user_id, user=False):
                 "*{}*:\n{}".format(mod.__mod_name__, mod.__user_settings__(user_id))
                 for mod in USER_SETTINGS.values()
             )
-            CUTIEPII_PTB.bot.send_message(
+            await context.bot.send_message(
                 user_id,
                 "These are your current settings:" + "\n\n" + settings,
                 parse_mode=ParseMode.MARKDOWN,
             )
 
         else:
-            CUTIEPII_PTB.bot.send_message(
+            await context.bot.send_message(
                 user_id,
                 "Seems like there aren't any user specific settings available :'(",
                 parse_mode=ParseMode.MARKDOWN,
@@ -506,7 +506,7 @@ async def send_settings(chat_id, user_id, user=False):
 
     elif CHAT_SETTINGS:
         chat_name = await CUTIEPII_PTB.bot.getChat(chat_id).title
-        CUTIEPII_PTB.bot.send_message(
+        await context.bot.send_message(
             user_id,
             text=f"Which module would you like to check {chat_name}'s settings for?",
             reply_markup=InlineKeyboardMarkup(
@@ -514,7 +514,7 @@ async def send_settings(chat_id, user_id, user=False):
             ),
         )
     else:
-        CUTIEPII_PTB.bot.send_message(
+        await context.bot.send_message(
             user_id,
             "Seems like there aren't any chat settings available :'(\nSend this "
             "in a group chat you're admin in to find its current settings!",
