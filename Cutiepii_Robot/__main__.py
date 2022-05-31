@@ -593,7 +593,7 @@ async def settings_button(update: Update, context: CallbackContext):
         # ensure no spinny white circle
         await bot.answer_callback_query(query.id)
         await query.message.delete()
-      except BadRequest as excp:
+    except BadRequest as excp:
         if excp.message not in [
             "Message is not modified",
             "Query_id_invalid",
