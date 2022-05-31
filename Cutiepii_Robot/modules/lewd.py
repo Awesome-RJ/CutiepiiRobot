@@ -694,7 +694,7 @@ async def baka(update: Update, context: CallbackContext):
 
 CUTIEPII_PTB.add_handler(CommandHandler("addnsfw", add_nsfw, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("rmnsfw", rem_nsfw, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("nsfwchats", list_nsfw_chats, filters=Filters.user(DEV_USERS), block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("nsfwchats", list_nsfw_chats, filters=filters.User(DEV_USERS), block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("lewdkemo", lewdkemo, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("neko", neko, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("feet", feet, block=False))

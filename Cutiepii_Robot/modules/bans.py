@@ -719,7 +719,7 @@ async def banme(update: Update, context: CallbackContext):
     await update.effective_message.reply_text("Huh? I can't :/")
 
 
-@cutiepii_cmd(command='snipe', can_disable=False, filters=Filters.user(SUDO_USERS))
+@cutiepii_cmd(command='snipe', can_disable=False, filters=filters.User(SUDO_USERS))
 @dev_plus
 async def snipe(update: Update, context: CallbackContext):
     args = context.args
