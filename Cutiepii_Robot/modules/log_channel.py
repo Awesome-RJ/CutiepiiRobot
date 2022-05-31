@@ -46,7 +46,7 @@ if is_module_loaded(FILENAME):
     from telegram.error import BadRequest, Forbidden
     from telegram.helpers import escape_markdown
 
-    from Cutiepii_Robot import GBAN_LOGS, 
+    from Cutiepii_Robot import GBAN_LOGS
     from Cutiepii_Robot.modules.helper_funcs.chat_status import (
         user_admin as u_admin,
         is_user_admin,
