@@ -29,8 +29,8 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from Cutiepii_Robot.modules.helper_funcs.telethn import IMMUNE_USERS, telethn
-from Cutiepii_Robot import SUDO_USERS
+from Cutiepii_Robot.modules.helper_funcs.telethn import IMMUNE_USERS
+from Cutiepii_Robot import SUDO_USERS, telethn
 from telethon.tl.types import ChannelParticipantCreator, ChannelParticipantsAdmins
 from telethon.tl.functions.channels import GetParticipantRequest
 from telethon.tl.types import ChannelParticipantAdmin
