@@ -802,7 +802,7 @@ __mod_name__ = "Warnings"
 CUTIEPII_PTB.add_handler(CommandHandler(["swarn", "dwarn",  "dswarn", "warn"], warn_user, pass_args=True, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler(["resetwarn", "resetwarns"], reset_warns, pass_args=True, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler(["rmwarn", "unwarn"], remove_warns, pass_args=True, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"rm_warn")
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"rm_warn"))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("warns", warns, pass_args=True, filters=filters.ChatType.GROUPS))
 CUTIEPII_PTB.add_handler(CommandHandler("addwarn", add_warn_filter, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler(["nowarn", "stopwarn"], remove_warn_filter, filters=filters.ChatType.GROUPS, block=False))
