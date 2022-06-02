@@ -28,27 +28,29 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-
 import time
 import re
-import Cutiepii_Robot.modules.sql.connection_sql as sql
 
+from telegram.constants import ParseMode
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, Bot
 from telegram.error import BadRequest, Forbidden
-from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
-from telegram.constants import ParseMode
+from telegram.ext import (
+    CommandHandler,
+    CallbackQueryHandler,
+)
 
+import Cutiepii_Robot.modules.sql.connection_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS, DEV_USERS
+from Cutiepii_Robot.modules.helper_funcs import chat_status
 from Cutiepii_Robot.modules.helper_funcs import admin_status
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 
-user_admin_check = admin_status.user_admin_check
 AdminPerms = admin_status.AdminPerms
-
+user_admin = chat_status.user_admin
 
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-def allow_connections(update: Update, context: CallbackContext):
+async def allow_connections(update, context) -> str:
 
     chat = update.effective_chat
     args = context.args
@@ -92,12 +94,13 @@ def allow_connections(update: Update, context: CallbackContext):
         )
 
 
-async def connection_chat(update: Update, context: CallbackContext):
+
+async def connection_chat(update, context):
 
     chat = update.effective_chat
     user = update.effective_user
 
-    conn = connected(context.bot, update, chat, user.id, need_admin=True)
+    conn = await connected(context.bot, update, chat, user.id, need_admin=True)
 
     if conn:
         chat = await CUTIEPII_PTB.bot.getChat(conn)
@@ -115,7 +118,8 @@ async def connection_chat(update: Update, context: CallbackContext):
     send_message(update.effective_message, message, parse_mode="markdown")
 
 
-async def connect_chat(update: Update, context: CallbackContext):  # sourcery no-metrics
+
+async def connect_chat(update, context):  # sourcery no-metrics
 
     chat = update.effective_chat
     user = update.effective_user
@@ -131,7 +135,7 @@ async def connect_chat(update: Update, context: CallbackContext):  # sourcery no
             except ValueError:
                 try:
                     connect_chat = str(args[0])
-                    get_chat = context.bot.getChat(connect_chat)
+                    get_chat = await context.bot.getChat(connect_chat)
                     connect_chat = get_chat.id
                     getstatusadmin = await context.bot.get_chat_member(
                         connect_chat, update.effective_message.from_user.id
@@ -148,11 +152,12 @@ async def connect_chat(update: Update, context: CallbackContext):  # sourcery no
             isallow = sql.allow_connect_to_chat(connect_chat)
 
             if (isadmin) or (isallow and ismember) or (user.id in SUDO_USERS):
-                if connection_status := sql.connect(
+                connection_status = sql.connect(
                     update.effective_message.from_user.id, connect_chat
-                ):
+                )
+                if connection_status:
                     conn_chat = await CUTIEPII_PTB.bot.getChat(
-                      await connected(context.bot, update, chat, user.id, need_admin=False)
+                        await connected(context.bot, update, chat, user.id, need_admin=False)
                     )
                     chat_name = conn_chat.title
                     send_message(
@@ -185,7 +190,9 @@ async def connect_chat(update: Update, context: CallbackContext):  # sourcery no
             conn = await connected(context.bot, update, chat, user.id, need_admin=False)
             if conn:
                 connectedchat = await CUTIEPII_PTB.bot.getChat(conn)
-                text = f"You are currently connected to *{connectedchat.title}* (`{conn}`)"
+                text = "You are currently connected to *{}* (`{}`)".format(
+                    connectedchat.title, conn
+                )
                 buttons.append(
                     InlineKeyboardButton(
                         text="🔌 Disconnect", callback_data="connect_disconnect"
@@ -209,17 +216,17 @@ async def connect_chat(update: Update, context: CallbackContext):  # sourcery no
                         [
                             InlineKeyboardButton(
                                 text=gethistory[x]["chat_name"],
-                                callback_data=f'connect({gethistory[x]["chat_id"]})',
+                                callback_data="connect({})".format(
+                                    gethistory[x]["chat_id"]
+                                ),
                             )
                         ]
                     )
-
                 text += "╘══「 Total {} Chats 」".format(
-                    f"{len(gethistory)} (max)"
+                    str(len(gethistory)) + " (max)"
                     if len(gethistory) == 5
                     else str(len(gethistory))
                 )
-
                 conn_hist = InlineKeyboardMarkup(buttons)
             elif buttons:
                 conn_hist = InlineKeyboardMarkup([buttons])
@@ -240,16 +247,16 @@ async def connect_chat(update: Update, context: CallbackContext):  # sourcery no
         ismember = getstatusadmin.status == "member"
         isallow = sql.allow_connect_to_chat(chat.id)
         if (isadmin) or (isallow and ismember) or (user.id in SUDO_USERS):
-            if connection_status := sql.connect(
+            connection_status = sql.connect(
                 update.effective_message.from_user.id, chat.id
-            ):
+            )
+            if connection_status:
                 chat_name = await CUTIEPII_PTB.bot.getChat(chat.id).title
                 send_message(
                     update.effective_message,
-                    f"Successfully connected to *{chat_name}*.",
+                    "Successfully connected to *{}*.".format(chat_name),
                     parse_mode=ParseMode.MARKDOWN,
                 )
-
                 try:
                     sql.add_history_conn(user.id, str(chat.id), chat_name)
                     await context.bot.send_message(
@@ -259,7 +266,9 @@ async def connect_chat(update: Update, context: CallbackContext):  # sourcery no
                         ),
                         parse_mode="markdown",
                     )
-                except (BadRequest, Forbidden):
+                except BadRequest:
+                    pass
+                except Forbidden:
                     pass
             else:
                 send_message(update.effective_message, "Connection failed!")
@@ -268,12 +277,12 @@ async def connect_chat(update: Update, context: CallbackContext):  # sourcery no
                 update.effective_message, "Connection to this chat is not allowed!"
             )
 
-def disconnect_chat(update: Update, context: CallbackContext):
+
+async def disconnect_chat(update, context):
 
     if update.effective_chat.type == "private":
-        if disconnection_status := sql.disconnect(
-            update.effective_message.from_user.id
-        ):
+        disconnection_status = sql.disconnect(update.effective_message.from_user.id)
+        if disconnection_status:
             sql.disconnected_chat = send_message(
                 update.effective_message, "Disconnected from chat!"
             )
@@ -283,13 +292,13 @@ def disconnect_chat(update: Update, context: CallbackContext):
         send_message(update.effective_message, "This command is only available in PM.")
 
 
-def connected(bot: Bot, update: Update, chat, user_id, need_admin=True):
+async def connected(bot: Bot, update: Update, chat, user_id, need_admin=True):
     user = update.effective_user
 
     if chat.type == chat.PRIVATE and sql.get_connected_chat(user_id):
 
         conn_id = sql.get_connected_chat(user_id).chat_id
-        getstatusadmin = bot.get_chat_member(
+        getstatusadmin = await bot.get_chat_member(
             conn_id, update.effective_message.from_user.id
         )
         isadmin = getstatusadmin.status in ("administrator", "creator")
@@ -310,10 +319,11 @@ def connected(bot: Bot, update: Update, chat, user_id, need_admin=True):
                 or user.id in DEV_USERS
             ):
                 return conn_id
-            send_message(
-                update.effective_message,
-                "You must be an admin in the connected group!",
-            )
+            else:
+                send_message(
+                    update.effective_message,
+                    "You must be an admin in the connected group!",
+                )
         else:
             send_message(
                 update.effective_message,
@@ -338,19 +348,18 @@ CONN_HELP = """
  """
 
 
-def help_connect_chat(update: Update, context: CallbackContext):
+async def help_connect_chat(update, context):
 
     args = context.args
 
     if update.effective_message.chat.type != "private":
         send_message(update.effective_message, "PM me with that command to get help.")
         return
-    send_message(update.effective_message, CONN_HELP, parse_mode="markdown")
+    else:
+        send_message(update.effective_message, CONN_HELP, parse_mode="markdown")
 
 
-
-async def connect_button(update: Update, context: CallbackContext):
-
+async def connect_button(update, context):
     query = update.callback_query
     chat = update.effective_chat
     user = update.effective_user
@@ -361,18 +370,20 @@ async def connect_button(update: Update, context: CallbackContext):
     connect_close = query.data == "connect_close"
 
     if connect_match:
-        target_chat = connect_match[1]
-        getstatusadmin = await context.bot.get_chat_member(target_chat, query.from_user.id)
+        target_chat = connect_match.group(1)
+        getstatusadmin = await context.bot.get_chat_member(
+            target_chat, query.from_user.id
+        )
         isadmin = getstatusadmin.status in ("administrator", "creator")
         ismember = getstatusadmin.status == "member"
         isallow = sql.allow_connect_to_chat(target_chat)
 
         if (isadmin) or (isallow and ismember) or (user.id in SUDO_USERS):
-            if connection_status := sql.connect(
-                query.from_user.id, target_chat
-            ):
+            connection_status = sql.connect(query.from_user.id, target_chat)
+
+            if connection_status:
                 conn_chat = await CUTIEPII_PTB.bot.getChat(
-                  await connected(context.bot, update, chat, user.id, need_admin=False)
+                    await connected(context.bot, update, chat, user.id, need_admin=False)
                 )
                 chat_name = conn_chat.title
                 await query.message.edit_text(
@@ -389,8 +400,11 @@ async def connect_button(update: Update, context: CallbackContext):
                 query.id, "Connection to this chat is not allowed!", show_alert=True
             )
     elif disconnect_match:
-        if disconnection_status := sql.disconnect(query.from_user.id):
-            sql.disconnected_chat = await query.message.edit_text("Disconnected from chat!")
+        disconnection_status = sql.disconnect(query.from_user.id)
+        if disconnection_status:
+            sql.disconnected_chat = await query.message.edit_text(
+                "Disconnected from chat!"
+            )
         else:
             await context.bot.answer_callback_query(
                 query.id, "You're not connected!", show_alert=True
@@ -404,17 +418,18 @@ async def connect_button(update: Update, context: CallbackContext):
         connect_chat(update, context)
 
 
+
 CONNECT_CHAT_HANDLER = CommandHandler("connect", connect_chat)
-CONNECTION_CHAT_HANDLER = CommandHandler("connection", connection_chat)
-DISCONNECT_CHAT_HANDLER = CommandHandler("disconnect", disconnect_chat)
+CONNECTION_CHAT_HANDLER = CommandHandler("connection", connection_chat, block=False)
+DISCONNECT_CHAT_HANDLER = CommandHandler("disconnect", disconnect_chat, block=False)
 ALLOW_CONNECTIONS_HANDLER = CommandHandler(
-    "allowconnect", allow_connections
+    "allowconnect", allow_connections, block=False
 )
 HELP_CONNECT_CHAT_HANDLER = CommandHandler(
-    "helpconnect", help_connect_chat
+    "helpconnect", help_connect_chat, block=False
 )
 CONNECT_BTN_HANDLER = CallbackQueryHandler(
-    connect_button, pattern=r"connect"
+    connect_button, pattern=r"connect", block=False
 )
 
 CUTIEPII_PTB.add_handler(CONNECT_CHAT_HANDLER)
@@ -425,7 +440,6 @@ CUTIEPII_PTB.add_handler(HELP_CONNECT_CHAT_HANDLER)
 CUTIEPII_PTB.add_handler(CONNECT_BTN_HANDLER)
 
 __mod_name__ = "Connection"
-
 __handlers__ = [
     CONNECT_CHAT_HANDLER,
     CONNECTION_CHAT_HANDLER,
