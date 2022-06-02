@@ -45,8 +45,8 @@ from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_admin,
-    ,
     user_admin_no_reply,
+    is_user_admin,
 )
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql import antiflood_sql as sql
@@ -177,7 +177,7 @@ async def set_flood(update: Update, context: CallbackContext) -> str:
     conn = await connected(context.bot, update, chat, user.id, need_admin=True)
     if conn:
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
             send_message(
@@ -256,7 +256,7 @@ async def flood(update: Update, context: CallbackContext):
     conn = await connected(context.bot, update, chat, user.id, need_admin=False)
     if conn:
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
             send_message(
@@ -293,9 +293,9 @@ async def set_flood_mode(update: Update, context: CallbackContext):
 
     conn = await connected(context.bot, update, chat, user.id, need_admin=True)
     if conn:
-        chat = await CUTIEPII_PTB.bot.getChat(conn)
+        chat = CUTIEPII_PTB.bot.getChat(conn)
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
             send_message(

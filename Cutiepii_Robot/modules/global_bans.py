@@ -25,9 +25,9 @@ from Cutiepii_Robot import (
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_user_admin,
     support_plus,
-    user_admin,
     bot_admin,
 )
+from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_msg
 from Cutiepii_Robot.modules.helper_funcs.extraction import (
     extract_user,
@@ -164,7 +164,7 @@ async def gban(update: Update, context: CallbackContext):
     datetime_fmt = "%Y-%m-%dT%H:%M"
     current_time = datetime.utcnow().strftime(datetime_fmt)
 
-    if chat.type != "private":
+    if ChatType.PRIVATE:
         chat_origin = "<b>{} ({})</b>\n".format(html.escape(chat.title), chat.id)
     else:
         chat_origin = "<b>{}</b>\n".format(chat.id)
@@ -299,7 +299,7 @@ async def ungban(update: Update, context: CallbackContext):  # sourcery no-metri
     datetime_fmt = "%Y-%m-%dT%H:%M"
     current_time = datetime.utcnow().strftime(datetime_fmt)
 
-    if chat.type != "private":
+    if ChatType.PRIVATE:
         chat_origin = f"<b>{html.escape(chat.title)} ({chat.id})</b>\n"
     else:
         chat_origin = f"<b>{chat.id}</b>\n"

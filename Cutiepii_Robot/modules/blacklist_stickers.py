@@ -97,7 +97,7 @@ async def add_blackliststicker(update: Update, context: CallbackContext):
     bot = context.bot
     if conn := await connected(bot, chat, chat, user.id):
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         chat_id = update.effective_chat.id
         if chat.type == "private":
@@ -186,7 +186,7 @@ async def unblackliststicker(update: Update, context: CallbackContext):
     bot = context.bot
     if conn := await connected(bot, chat, chat, user.id):
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         chat_id = update.effective_chat.id
         if chat.type == "private":
@@ -271,9 +271,9 @@ async def blacklist_mode(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     conn = await connected(bot, chat, chat, user.id, need_admin=True)
     if conn:
-        chat = await CUTIEPII_PTB.bot.getChat(conn)
+        chat = CUTIEPII_PTB.bot.getChat(conn)
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
             send_message(

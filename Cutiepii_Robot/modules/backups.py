@@ -56,7 +56,6 @@ from Cutiepii_Robot.modules.connection import connected
 
 
 @user_admin
-
 async def import_data(update: Update, context: CallbackContext):
     msg = update.effective_message
     chat = update.effective_chat
@@ -66,8 +65,8 @@ async def import_data(update: Update, context: CallbackContext):
 
     conn = await connected(context.bot, update, chat, user.id, need_admin=True)
     if conn:
-        chat = await CUTIEPII_PTB.bot.getChat(conn)
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat = CUTIEPII_PTB.bot.getChat(conn)
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
             await update.effective_message.reply_text("This is a group only command!")
@@ -157,9 +156,9 @@ async def export_data(update: Update, context: CallbackContext):
     current_chat_id = update.effective_chat.id
     conn = await connected(context.bot, update, chat, user.id, need_admin=True)
     if conn:
-        chat = await CUTIEPII_PTB.bot.getChat(conn)
+        chat = CUTIEPII_PTB.bot.getChat(conn)
         chat_id = conn
-        # chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        # chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
             await update.effective_message.reply_text("This is a group only command!")

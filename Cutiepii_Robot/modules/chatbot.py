@@ -34,11 +34,11 @@ import requests
 from time import sleep
 
 
-from Cutiepii_Robot import BOT_ID, CUTIEPII_PTB
+from Cutiepii_Robot import BOT_ID, CUTIEPII_PTB, DEV_USERS
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_user_admin,
-    user_admin,
 )
+from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
     CallbackContext, CallbackQueryHandler,
@@ -157,7 +157,7 @@ Chatbot utilizes the Brainshop's API and allows {CUTIEPII_PTB.bot.first_name} to
 
 CUTIEPII_PTB.add_handler(CommandHandler("chatbot", chatbot_toggle, block=False))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(chatbot_handle_callq, pattern=r"chatbot_", block=False))
-CUTIEPII_PTB.add_handler(MessageHandler(filters.TEXT & (~filters.Regex(r"^#[^\s]+") & ~filters.Regex(r"^!") & ~filters.Regex(r"^\/")) chatbot, block=False)
+CUTIEPII_PTB.add_handler(MessageHandler(filters.TEXT & (~filters.Regex(r"^#[^\s]+") & ~filters.Regex(r"^!") & ~filters.Regex(r"^\/")), chatbot, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("listaichats", list_chatbot_chats, filters=filters.User(DEV_USERS), block=False))
 
 __mod_name__ = "Chatbot"

@@ -227,7 +227,7 @@ async def chats(update: Update, context: CallbackContext):
 async def chat_checker(update: Update, context: CallbackContext):
     bot = context.bot
     if (
-        (await update.effective_chat.get_member(bot.id)).can_restrict_members is False
+        (await update.effective_chat.get_member(CUTIEPII_PTB.bot.id)).can_restrict_members is False
     ):
         await bot.leaveChat(update.effective_message.chat.id)
 """

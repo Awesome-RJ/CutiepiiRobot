@@ -155,7 +155,7 @@ async def unban_user(bot: Bot, who: ChatMember, where_chat_id, reason=None) -> U
 @cutiepii_cmd(command=['ban', 'dban', 'sban', 'dsban'])
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def ban(update: Update, context: CallbackContext) -> Optional[str]:  # sourcery no-metrics
     global delsilent
@@ -308,7 +308,7 @@ async def ban(update: Update, context: CallbackContext) -> Optional[str]:  # sou
 @cutiepii_cmd(command='tban')
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def temp_ban(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
@@ -417,7 +417,7 @@ async def temp_ban(update: Update, context: CallbackContext) -> str:
 @cutiepii_cmd(command=['kick', 'punch'])
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def kick(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
@@ -514,7 +514,7 @@ async def kickme(update: Update, _: CallbackContext) -> Optional[str]:
 @cutiepii_cmd(command='unban')
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def unban(update: Update, context: CallbackContext) -> Optional[str]:  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
@@ -662,7 +662,7 @@ async def selfunban(update: Update, context: CallbackContext) -> Optional[str]:
 @cutiepii_callback(pattern=r"unbanb_")
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def unbanb_btn(update: Update, context: CallbackContext) -> str:
     bot = context.bot

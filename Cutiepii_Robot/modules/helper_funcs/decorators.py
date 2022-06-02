@@ -1,7 +1,7 @@
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler, DisableAbleMessageHandler
 from Cutiepii_Robot import LOGGER, CUTIEPII_PTB as app
 
-from typing import Optional
+from typing import Optional, List
 
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, InlineQueryHandler, MessageHandler, filters
 from telegram.ext.filters import BaseFilter
@@ -22,10 +22,7 @@ class Cutiepii_TG_Handler:
         can_disable: bool = True,
         group: Optional[int] = 40,
     ):
-        if filters:
-           filters = filters & ~filters.UpdateType.EDITED_MESSAGE
-        else:
-            filters = ~filters.UpdateType.EDITED_MESSAGE
+            
         def _command(func):
             try:
                 if can_disable:
@@ -86,10 +83,6 @@ class Cutiepii_TG_Handler:
         group: Optional[int] = 60,
         friendly=None,
     ):
-        if pattern:
-           pattern = pattern & ~filters.UpdateType.EDITED_MESSAGE
-        else:
-           pattern = ~filters.UpdateType.EDITED_MESSAGE
         def _message(func):
             try:
                 if can_disable:

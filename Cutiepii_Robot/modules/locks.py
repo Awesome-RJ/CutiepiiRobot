@@ -47,6 +47,7 @@ from Cutiepii_Robot.modules.sql.approve_sql import is_approved
 from Cutiepii_Robot import CUTIEPII_PTB, LOGGER
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
+from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.admin_status import (
     user_admin_check,
     bot_admin_check,
@@ -179,7 +180,7 @@ async def locktypes(update, context):
 @connection_status
 
 @bot_admin_check()
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def lock(update, context) -> str:  # sourcery no-metrics
     args = context.args
@@ -244,8 +245,7 @@ async def lock(update, context) -> str:  # sourcery no-metrics
 
 
 @bot_admin_check()
-
-@user_admin_check()
+@user_admin
 @loggable
 def unlock(update, context) -> str:  # sourcery no-metrics
     args = context.args
@@ -430,7 +430,7 @@ async def build_lock_message(chat_id):
 
 
 @connection_status
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods=True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 
 def list_locks(update: Update, context: CallbackContext):
     chat = update.effective_chat  # type: Optional[Chat]

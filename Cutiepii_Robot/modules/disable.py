@@ -52,9 +52,9 @@ FILENAME = __name__.rsplit(".", 1)[-1]
 # If module is due to be loaded, then setup all the magical handlers
 if is_module_loaded(FILENAME):
     from Cutiepii_Robot.modules.helper_funcs.chat_status import (
-        user_admin,
         is_user_admin,
     )
+    from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 
     from Cutiepii_Robot.modules.sql import disable_sql as sql
 
@@ -131,8 +131,8 @@ if is_module_loaded(FILENAME):
 
         conn = await connected(context.bot, update, chat, user.id, need_admin=True)
         if conn:
-            chat = await CUTIEPII_PTB.bot.getChat(conn)
-            chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+            chat = CUTIEPII_PTB.bot.getChat(conn)
+            chat_name = CUTIEPII_PTB.bot.getChat(conn).title
         else:
             if update.effective_message.chat.type == ChatType.PRIVATE:
                 send_message(
@@ -174,9 +174,9 @@ if is_module_loaded(FILENAME):
 
         conn = await connected(context.bot, update, chat, user.id, need_admin=True)
         if conn:
-            chat = await CUTIEPII_PTB.bot.getChat(conn)
+            chat = CUTIEPII_PTB.bot.getChat(conn)
             chat_id = conn
-            chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+            chat_name = CUTIEPII_PTB.bot.getChat(conn).title
         else:
             if update.effective_message.chat.type == ChatType.PRIVATE:
                 send_message(
@@ -240,7 +240,7 @@ if is_module_loaded(FILENAME):
         user = update.effective_user
         conn = await connected(context.bot, update, chat, user.id, need_admin=True)
         if conn:
-            chat = await CUTIEPII_PTB.bot.getChat(conn)
+            chat = CUTIEPII_PTB.bot.getChat(conn)
             chat_id = conn
         else:
             if update.effective_message.chat.type == ChatType.PRIVATE:

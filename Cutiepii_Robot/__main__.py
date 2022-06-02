@@ -440,7 +440,6 @@ async def cutiepii_callback_data(update: Update, context: CallbackContext):
 
 
 @cutiepii_cmd(command="help")
-
 async def get_help(update: Update, context: CallbackContext):
     chat = update.effective_chat  # type: Optional[Chat]
     args = update.effective_message.text.split(None, 1)
@@ -699,12 +698,13 @@ def main():
     else:
         CUTIEPII_PTB.run_polling(drop_pending_updates=True, stop_signals=None)
         LOGGER.info(f"Cutiepii Robot started, Using long polling. | BOT: [@{CUTIEPII_PTB.bot.username}]")
-
+"""
 try:
     ubot.start()
 except BaseException:
     print("Userbot Error! Have you added a STRING_SESSION in deploying??")
     sys.exit(1)
+"""    
 
 if __name__ == "__main__":
     LOGGER.info(f"Successfully loaded modules: {str(ALL_MODULES)}")

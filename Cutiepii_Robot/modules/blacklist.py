@@ -68,7 +68,7 @@ async def blacklist(update: Update, context: CallbackContext):
 
     if conn := await connected(context.bot, update, chat, user.id, need_admin=False):
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         if chat.type == "private":
             return
@@ -114,7 +114,7 @@ async def add_blacklist(update, context):
 
     if conn := await connected(context.bot, update, chat, user.id):
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         chat_id = update.effective_chat.id
         if chat.type == "private":
@@ -157,7 +157,7 @@ async def unblacklist(update: Update, context: CallbackContext):
 
     if conn := await connected(context.bot, update, chat, user.id):
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         chat_id = update.effective_chat.id
         if chat.type == "private":
@@ -230,9 +230,9 @@ async def blacklist_mode(update: Update, context: CallbackContext):
 
     conn = await connected(context.bot, update, chat, user.id, need_admin=True)
     if conn:
-        chat = await CUTIEPII_PTB.bot.getChat(conn)
+        chat = CUTIEPII_PTB.bot.getChat(conn)
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
             send_message(

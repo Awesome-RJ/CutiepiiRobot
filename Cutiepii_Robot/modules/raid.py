@@ -45,7 +45,7 @@ def get_readable_time(time: int) -> str:
 @cutiepii_cmd(command="raid")
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def setRaid(update: Update, context: CallbackContext) -> Optional[str]:
     args = context.args
@@ -132,7 +132,7 @@ async def setRaid(update: Update, context: CallbackContext) -> Optional[str]:
 
 @cutiepii_callback(pattern="enable_raid=")
 @connection_status
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True, noreply=True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def enable_raid_cb(update: Update, ctx: CallbackContext) -> Optional[str]:
     args = await update.callback_query.data.replace("enable_raid=", "").split("=")
@@ -169,7 +169,7 @@ async def enable_raid_cb(update: Update, ctx: CallbackContext) -> Optional[str]:
 
 @cutiepii_callback(pattern="disable_raid=")
 @connection_status
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True, noreply=True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def disable_raid_cb(update: Update, _: CallbackContext) -> Optional[str]:
     args = await update.callback_query.data.replace("disable_raid=", "").split("=")
@@ -195,7 +195,7 @@ async def disable_raid_cb(update: Update, _: CallbackContext) -> Optional[str]:
 
 @cutiepii_callback(pattern="cancel_raid=")
 @connection_status
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True, noreply=True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 async def disable_raid_cb(update: Update, _: CallbackContext):
     args = update.callback_query.data.split("=")
     what = args[0]
@@ -207,7 +207,7 @@ async def disable_raid_cb(update: Update, _: CallbackContext):
 @cutiepii_cmd(command="raidtime")
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
     what, time, acttime = sql.getRaidStatus(update.effective_chat.id)
@@ -242,7 +242,7 @@ async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
 @cutiepii_cmd(command="raidactiontime")
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
     what, t, time = sql.getRaidStatus(update.effective_chat.id)

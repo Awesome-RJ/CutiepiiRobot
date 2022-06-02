@@ -39,7 +39,7 @@ from telegram import (
     )
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext, filters
+from telegram.ext import CallbackContext, filters, CommandHandler
 from telegram.helpers import escape_markdown
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.string_handling import markdown_parser
@@ -108,7 +108,7 @@ async def send_rules(update, chat_id, from_pm=False):
         )
 
 
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def set_rules(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     msg = update.effective_message  # type: Optional[Message]
@@ -128,7 +128,7 @@ async def set_rules(update: Update, context: CallbackContext):
         await update.effective_message.reply_text("Successfully set rules for this group.")
 
 
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def clear_rules(update: Update, context: CallbackContext):
     chat_id = update.effective_chat.id
     chat = update.effective_chat  # type: Optional[Chat]

@@ -967,10 +967,10 @@ Stickers made easy with stickers module!
 __mod_name__ = "Stickers"
 
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("stickerid", stickerid)
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("getsticker", getsticker)
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("kang", kang)
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("delsticker", delsticker)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("stickerid", stickerid))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("getsticker", getsticker))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("kang", kang))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("delsticker", delsticker))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["addfsticker", "afs"], add_fvrtsticker))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["removefsticker", "rfs"], remove_fvrtsticker))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["myfsticker", "mfs"], list_fvrtsticker))

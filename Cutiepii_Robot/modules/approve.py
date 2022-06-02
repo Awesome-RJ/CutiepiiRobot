@@ -42,6 +42,7 @@ from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from Cutiepii_Robot.modules.log_channel import loggable
+from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.admin_status import AdminPerms, user_admin_check
 
 
@@ -125,7 +126,7 @@ async def disapprove(update: Update, context: CallbackContext):
     return log_message
 
 
-@user_admin_check()
+@user_admin
 async def approved(update: Update, _: CallbackContext):
     message = update.effective_message
     chat_title = message.chat.title
@@ -141,7 +142,7 @@ async def approved(update: Update, _: CallbackContext):
     await message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
-@user_admin_check()
+@user_admin
 async def approval(update, context):
     message = update.effective_message
     chat = update.effective_chat

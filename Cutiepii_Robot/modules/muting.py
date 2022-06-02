@@ -101,7 +101,7 @@ async def check_user(user_id: int, bot: Bot, update: Update) -> Optional[str]:
 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def mute(update: Update, context: CallbackContext) -> str:
     bot = context.bot
@@ -167,7 +167,7 @@ async def mute(update: Update, context: CallbackContext) -> str:
 
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True, noreply=True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def button(update: Update, context: CallbackContext) -> str:
     query: Optional[CallbackQuery] = update.callback_query
@@ -226,7 +226,7 @@ async def button(update: Update, context: CallbackContext) -> str:
 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def unmute(update: Update, context: CallbackContext) -> str:
     bot, args = context.bot, context.args
@@ -291,7 +291,7 @@ async def unmute(update: Update, context: CallbackContext) -> str:
 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def temp_mute(update: Update, context: CallbackContext) -> str:
     bot, args = context.bot, context.args
@@ -371,7 +371,7 @@ async def temp_mute(update: Update, context: CallbackContext) -> str:
 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def temp_nomedia(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat  # type: Optional[Chat]
@@ -443,7 +443,7 @@ async def temp_nomedia(update: Update, context: CallbackContext) -> str:
     except BadRequest as excp:
         if excp.message == "Reply message not found":
             # Do not reply
-            await message.reply_text(chat.id, "Restricted for {} in {}!").format(time_val, chatD.title), quote=False
+            await message.reply_text(chat.id, f"Restricted for {time_val} in {chatD.title}!", quote=False)
             return log
         LOGGER.warning(update)
         LOGGER.exception("ERROR muting user %s in chat %s (%s) due to %s", user_id, chat.title, chat.id,
@@ -455,7 +455,7 @@ async def temp_nomedia(update: Update, context: CallbackContext) -> str:
 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def media(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat  # type: Optional[Chat]
@@ -503,7 +503,7 @@ async def media(update: Update, context: CallbackContext) -> str:
 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def nomedia(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat  # type: Optional[Chat]

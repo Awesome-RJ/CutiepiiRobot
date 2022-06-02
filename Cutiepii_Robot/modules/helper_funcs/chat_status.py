@@ -49,9 +49,8 @@ from Cutiepii_Robot import (
     OWNER_ID,
 
 )
-from Cutiepii_Robot.modules.helper_funcs.admin_status import (
-    bot_is_admin,
-)
+
+from Cutiepii_Robot.modules.helper_funcs.admin_status import bot_is_admin
 
 from telegram import Chat, ChatMember, Update, User
 from telegram.constants import ParseMode, ChatType
@@ -62,12 +61,12 @@ ADMIN_CACHE = TTLCache(maxsize=512, ttl=60 * 10, timer=perf_counter)
 THREAD_LOCK = RLock()
 anonymous_data = {}
 
-def can_manage_voice_chats(chat_id, user_id):
+def can_manage_video_chats(chat_id, user_id):
 	result = requests.post(f"https://api.telegram.org/bot{TOKEN}/getChatMember?chat_id={chat_id}&user_id={user_id}")
 	status = result.json()["ok"]
 
 	if status is True:
-		data = result.json()["result"]["can_manage_voice_chats"]
+		data = result.json()["result"]["can_manage_video_chats"]
 		return data
 	return False
 
@@ -90,26 +89,6 @@ def is_stats_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
 
 def user_can_changeinfo(chat: Chat, user: User, bot_id: int) -> bool:
     return chat.get_member(user.id).can_change_info
-
-def bot_admin(func):
-    @wraps(func)
-    async def is_admin(update: Update, context: CallbackContext, *args, **kwargs):
-        bot = context.bot
-        chat = update.effective_chat
-        update_chat_title = chat.title
-        message_chat_title = update.effective_message.chat.title
-
-        if update_chat_title == message_chat_title:
-            not_admin = "I'm not an admin in this chat, how about you promote me first?"
-        else:
-            not_admin = f"I'm not admin in <b>{update_chat_title}</b>, how about you promote me first?"
-
-        if bot_is_admin(update.effective_chat, context.bot.id):
-
-            return func(update, context, *args, **kwargs)
-        await update.effective_message.reply_text(not_admin, parse_mode=ParseMode.HTML)
-
-    return is_admin
 
 def owner_plus(func):
     @wraps(func)
@@ -233,7 +212,6 @@ async def is_user_admin(update: Update, user_id: int, member: ChatMember = None)
         chat.type == "private"
         or user_id in SUDO_USERS
         or user_id in DEV_USERS
-        or user_id in (1087968824)
         or chat.all_members_are_administrators
         or (
             msg.reply_to_message
@@ -293,7 +271,6 @@ def is_user_ban_protected(update: Update, user_id: int, member: ChatMember = Non
         or user_id in DEV_USERS
         or user_id in WHITELIST_USERS
         or user_id in TIGER_USERS
-        or user_id in (1087968824)
         or is_modd(chat.id, user_id)
         or chat.all_members_are_administrators
         or (msg.reply_to_message and msg.reply_to_message.sender_chat is not None and 
@@ -434,6 +411,7 @@ def user_admin(func):
 
     return is_admin
 
+
 def user_admin_no_reply(func):
     @wraps(func)
     async def is_not_admin_no_reply(
@@ -529,7 +507,7 @@ def can_pin(func):
         else:
             cant_pin = f"I can't pin messages in <b>{update_chat_title}</b>!\nMake sure I'm admin and can pin messages there."
 
-        if chat.get_member(bot.id).can_pin_messages:
+        if chat.get_member(CUTIEPII_PTB.bot.id).can_pin_messages:
             return func(update, context, *args, **kwargs)
         await update.effective_message.reply_text(cant_pin, parse_mode=ParseMode.HTML)
 
@@ -552,7 +530,7 @@ def can_promote(func):
                 f"Make sure I'm admin there and have the permission to appoint new admins."
             )
 
-        if chat.get_member(bot.id).can_promote_members:
+        if chat.get_member(CUTIEPII_PTB.bot.id).can_promote_members:
             return func(update, context, *args, **kwargs)
         await update.effective_message.reply_text(cant_promote, parse_mode=ParseMode.HTML)
 
@@ -575,7 +553,7 @@ def can_restrict(func):
                 f"can restrict users. "
             )
 
-        if (await chat.get_member(bot.id)).can_restrict_members:
+        if (await chat.get_member(CUTIEPII_PTB.bot.id)).can_restrict_members:
             return func(update, context, *args, **kwargs)
         await update.effective_message.reply_text(
             cant_restrict, parse_mode=ParseMode.HTML
@@ -608,7 +586,7 @@ def connection_status(func):
         if not (update.effective_chat or update.effective_user):
             return
         if conn := await connected(context.bot, update, update.effective_chat, update.effective_user.id, need_admin=False):
-            chat = await CUTIEPII_PTB.bot.getChat(conn)
+            chat = CUTIEPII_PTB.bot.getChat(conn)
             await update.__setattr__("_effective_chat", chat)
         elif update.effective_message.chat.type == ChatType.PRIVATE:
             await update.effective_message.reply_text(

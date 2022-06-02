@@ -37,8 +37,8 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_can_delete,
     connection_status,
     dev_plus,
-    user_admin,
 )
+from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.sql import cleaner_sql as sql
 from telegram import Update
 from telegram.ext import (
@@ -78,7 +78,8 @@ async def clean_blue_text_must_click(update: Update, context: CallbackContext):
     bot = context.bot
     chat = update.effective_chat
     message = update.effective_message
-    if (chat.get_member(bot.id)).can_delete_messages and sql.is_enabled(chat.id):
+#    if (chat.get_member(CUTIEPII_PTB.bot.id)).can_delete_messages and sql.is_enabled(chat.id):
+    if (chat.get_member(CUTIEPII_PTB.bot.id)).can_delete_messages and sql.is_enabled(chat.id):    
         fst_word = await message.text.strip().split(None, 1)[0]
 
         if len(fst_word) > 1 and any(

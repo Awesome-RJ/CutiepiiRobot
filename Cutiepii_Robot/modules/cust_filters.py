@@ -54,7 +54,7 @@ async def list_handlers(update, context):
     conn = await connected(context.bot, update, chat, user.id, need_admin=False)
     if conn is not False:
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
         filter_list = "*Filter in {}:*\n"
     else:
         chat_id = update.effective_chat.id
@@ -108,7 +108,7 @@ async def filters(update, context) -> None:  # sourcery no-metrics
     conn = await connected(context.bot, update, chat, user.id)
     if conn is not False:
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         chat_id = update.effective_chat.id
         chat_name = "local filters" if chat.type == "private" else chat.title
@@ -232,7 +232,7 @@ async def stop_filter(update, context) -> str:
     conn = await connected(context.bot, update, chat, user.id)
     if conn is not False:
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         chat_id = update.effective_chat.id
         chat_name = "Local filters" if chat.type == "private" else chat.title
@@ -254,15 +254,14 @@ async def stop_filter(update, context) -> str:
                 f"Okay, I'll stop replying to that filter in *{chat_name}*.",
                 parse_mode=telegram.ParseMode.MARKDOWN,
             )
-
             logmsg = (
                     f"<b>{escape(chat.title or chat.id)}:</b>\n"
                     f"#STOPFILTER\n"
                     f"<b>Admin:</b> {mention_html(user.id, escape(user.first_name))}\n"
                     f"<b>Filter:</b> {keyword}"
                 )
-            finally:
-                return logmsg
+            return logmsg
+
 
     send_message(
         update.effective_message,

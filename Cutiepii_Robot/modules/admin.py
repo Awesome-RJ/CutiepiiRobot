@@ -63,7 +63,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     ADMIN_CACHE,
     connection_status,
     is_user_admin,
-    can_manage_voice_chats,
+    can_manage_video_chats,
     )
 
 from Cutiepii_Robot.modules.helper_funcs.extraction import (
@@ -74,7 +74,7 @@ from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.events import register as CUTIEPII
 
 async def  can_promote_users(message):
-    result = await bot(
+    result = await telethn(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
@@ -90,7 +90,7 @@ async def  is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
             (
-                await bot(functions.channels.GetParticipantRequest(chat, user))
+                await telethn(functions.channels.GetParticipantRequest(chat, user))
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
@@ -98,7 +98,7 @@ async def  is_register_admin(chat, user):
         return True
 
 async def  can_promote_users(message):
-    result = await bot(
+    result = await telethn(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
@@ -110,7 +110,7 @@ async def  can_promote_users(message):
     )
 
 async def  can_ban_users(message):
-    result = await bot(
+    result = await telethn(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
@@ -123,21 +123,20 @@ async def  can_ban_users(message):
 
 @CUTIEPII(pattern=("/reload"))
 async def  reload(event):
-  tai = event.sender.first_name
   text = "✅ **bot restarted successfully**\n\n• Admin list has been **updated**"
   await telethn.send_message(event.chat_id, text)
 
 
-@bot.on(events.NewMessage(pattern="/users$"))
+@telethn.on(events.NewMessage(pattern="/users$"))
 async def  get_users(show):
     if not show.is_group:
         return
     if not await is_register_admin(show.input_chat, show.sender_id):
         return
-    info = await bot.get_entity(show.chat_id)
+    info = await telethn.get_entity(show.chat_id)
     title = info.title or "this chat"
     mentions = "Users in {}: \n".format(title)
-    async for user in bot.iter_participants(show.chat_id):
+    async for user in telethn.iter_participants(show.chat_id):
         mentions += (
             f"\nDeleted Account {user.id}"
             if user.deleted
@@ -157,7 +156,7 @@ async def  get_users(show):
 @loggable
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def set_sticker(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     chat = update.effective_chat
@@ -199,7 +198,7 @@ async def set_sticker(update: Update, context: CallbackContext) -> str:
 @loggable
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def setchatpic(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     chat = update.effective_chat
@@ -244,7 +243,7 @@ async def setchatpic(update: Update, context: CallbackContext) -> str:
 @loggable
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def rmchatpic(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     chat = update.effective_chat
@@ -272,7 +271,7 @@ async def rmchatpic(update: Update, context: CallbackContext) -> str:
 @loggable 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def set_desc(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     chat = update.effective_chat
@@ -314,7 +313,7 @@ async def set_desc(update: Update, context: CallbackContext) -> str:
 @loggable
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def setchat_title(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     chat = update.effective_chat
@@ -379,7 +378,7 @@ async def promote_button(update: Update, context: CallbackContext):
                     can_restrict_members=False,
                     can_pin_messages=False,
                     can_promote_members=False,
-                    #can_manage_voice_chats=False
+                    #can_manage_video_chats=False
                 )
                 await query.message.delete()
                 await bot.answer_callback_query(
@@ -473,7 +472,7 @@ async def promoteanon(update: Update, context: CallbackContext) -> Optional[str]
             can_promote_members=bool(bot_member.can_promote_members and u_member.can_promote_members),
             can_restrict_members=bool(bot_member.can_restrict_members and u_member.can_restrict_members),
             can_pin_messages=bool(bot_member.can_pin_messages and u_member.can_pin_messages),
-            can_manage_voice_chats=bool(bot_member.can_manage_voice_chats and u_member.can_manage_voice_chats),
+            can_manage_video_chats=bool(bot_member.can_manage_video_chats and u_member.can_manage_video_chats),
 
         )
 
@@ -859,7 +858,7 @@ async def fullpromote(update: Update, context: CallbackContext) -> Optional[str]
     #if "all" in permissions and bot_member.can_promote_members:
     #    can_promote_members = True
 
-    result = requests.post(f"https://api.telegram.org/bot{TOKEN}/promoteChatMember?chat_id={chat.id}&user_id={user_id}&can_change_info={bot_member.can_change_info}&can_post_messages={bot_member.can_post_messages}&can_edit_messages={bot_member.can_edit_messages}&can_delete_messages={bot_member.can_delete_messages}&can_invite_users={bot_member.can_invite_users}&can_promote_members={bot_member.can_promote_members}&can_restrict_members={bot_member.can_restrict_members}&can_pin_messages={bot_member.can_pin_messages}&can_manage_voice_chats={can_manage_voice_chats(chat.id, bot.id)}")
+    result = requests.post(f"https://api.telegram.org/bot{TOKEN}/promoteChatMember?chat_id={chat.id}&user_id={user_id}&can_change_info={bot_member.can_change_info}&can_post_messages={bot_member.can_post_messages}&can_edit_messages={bot_member.can_edit_messages}&can_delete_messages={bot_member.can_delete_messages}&can_invite_users={bot_member.can_invite_users}&can_promote_members={bot_member.can_promote_members}&can_restrict_members={bot_member.can_restrict_members}&can_pin_messages={bot_member.can_pin_messages}&can_manage_video_chats={can_manage_video_chats(chat.id, bot.id)}")
     status = result.json()["ok"]
     if status is False:
         await update.effective_message.reply_text("An error occurred while promoting.")
@@ -957,7 +956,7 @@ async def middemote(update: Update, context: CallbackContext) -> Optional[str]:
             can_reict_members=False,
             can_pin_messages=True,
             can_promote_members=False,
-            #can_manage_voice_chats=False
+            #can_manage_video_chats=False
         )
 
         await bot.sendMessage(
@@ -1131,7 +1130,7 @@ async def demoteanon(update: Update, context: CallbackContext) -> Optional[str]:
             can_promote_members=bool(bot_member.can_promote_members and u_member.can_promote_members),
             can_restrict_members=bool(bot_member.can_restrict_members and u_member.can_restrict_members),
             can_pin_messages=bool(bot_member.can_pin_messages and u_member.can_pin_messages),
-            can_manage_voice_chats=bool(bot_member.can_manage_voice_chats and u_member.can_manage_voice_chats),
+            can_manage_video_chats=bool(bot_member.can_manage_video_chats and u_member.can_manage_video_chats),
         )
 
         rmsg = f"<b>{user_member.user.first_name or user_id}</b> is no longer anonymous"
@@ -1234,7 +1233,7 @@ async def set_title(update: Update, context: CallbackContext):
 
 
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
-@user_admin_check(AdminPerms.CAN_PIN_MESSAGES, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @loggable
 async def pin(update: Update, context: CallbackContext) -> str:
     bot, args = context.bot, context.args
@@ -1303,7 +1302,7 @@ async def pin(update: Update, context: CallbackContext) -> str:
 
 
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
-@user_admin_check(AdminPerms.CAN_PIN_MESSAGES, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @loggable
 async def unpin(update: Update, context: CallbackContext):
     chat = update.effective_chat
@@ -1345,7 +1344,7 @@ async def unpin(update: Update, context: CallbackContext):
 
     if not prev_message and is_group:
         try:
-            context.bot.unpinChatMessage(chat.id)
+            await bot.unpinChatMessage(chat.id)
             await msg.reply_text("🔽 Unpinned the last message on this group.")
         except BadRequest as excp:
             if excp.message == "Message to unpin not found":
@@ -1409,7 +1408,7 @@ async def pinned(update: Update, context: CallbackContext) -> str:
 
 
 @bot_admin_check(AdminPerms.CAN_INVITE_USERS)
-@user_admin_check(AdminPerms.CAN_INVITE_USERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_INVITE_USERS)
 @connection_status
 async def invite(update: Update, context: CallbackContext):
     bot = context.bot
@@ -1503,7 +1502,7 @@ def staff(client: Client, message: Message):
 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
-@user_admin_check(AdminPerms.CAN_PIN_MESSAGES, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 async def permapin(update: Update, context: CallbackContext):
 
     message = update.effective_message  # type: Optional[Message]
@@ -1530,14 +1529,14 @@ async def permapin(update: Update, context: CallbackContext):
         await context.bot.send_message(chat_id, "Specify what to pin!")
 
     try:
-        context.bot.pinChatMessage(chat_id, sendingmsg.message_id)
+        await context.bot.pinChatMessage(chat_id, sendingmsg.message_id)
     except BadRequest:
         await context.bot.send_message(chat_id, "I don't have access to message pins!")
 
 
 @connection_status
 @bot_admin_check(AdminPerms.CAN_DELETE_MESSAGES)
-@user_admin_check()
+@user_admin
 async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
     u = update.effective_user  # type: Optional[User]
     chat = update.effective_chat  # type: Optional[Chat]
@@ -1547,9 +1546,9 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
 
     conn = await connected(context.bot, update, chat, user.id, need_admin=True)
     if conn:
-        chat = await CUTIEPII_PTB.bot.getChat(conn)
+        chat = CUTIEPII_PTB.bot.getChat(conn)
         chat_id = conn
-        chat_name = await CUTIEPII_PTB.bot.getChat(conn).title
+        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
         if not args:
             get_permapin = sql.get_permapin(chat_id)
             text_maker = f"Cleanlinked is currently set to: `{bool(int(get_permapin))}`"
@@ -1611,7 +1610,7 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
     return ""
 
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
-@user_admin_check(AdminPerms.CAN_PIN_MESSAGES, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 async def unpinall(update: Update, context: CallbackContext):
     member = await update.effective_chat.get_member(update.effective_user.id)
     if member.status != "creator" and member.user.id not in SUDO_USERS:
@@ -1626,7 +1625,7 @@ async def unpinall(update: Update, context: CallbackContext):
         ]]),
     )
 
-def permanent_pin(update: Update, context: CallbackContext):
+async def permanent_pin(update: Update, context: CallbackContext):
     user = update.effective_user  # type: Optional[User]
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message
@@ -1655,7 +1654,7 @@ def permanent_pin(update: Update, context: CallbackContext):
                 print("Cleanlinked error: cannot delete pin msg")    
 
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
-@user_admin_check(AdminPerms.CAN_PIN_MESSAGES, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @loggable
 async def unpinallbtn(update: Update, context: CallbackContext):
     chat = update.effective_chat

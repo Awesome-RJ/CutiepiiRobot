@@ -61,10 +61,7 @@ if is_module_loaded(FILENAME):
             message = update.effective_message
             if result:
                 if chat.type == chat.SUPERGROUP and chat.username:
-                    result += (
-                        "\n<b>Link:</b> "
-                        '<a href = f"http://telegram.me/{chat.username}/{message.message_id}">click here</a>'
-                    )
+                    result += f'\n<b>Link:</b> <a href="https://t.me/{chat.username}/{message.message_id}">click here</a>'
                 if log_chat := sql.get_chat_log_channel(chat.id):
                     try:
                         send_log(context.bot, log_chat, chat.id, result)

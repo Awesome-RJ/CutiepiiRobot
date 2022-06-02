@@ -94,4 +94,4 @@ async def covid(update, context):
         await message.reply_text("Try again in few times, maybe API are go down")
 
 
-CUTIEPII_PTB.add_handler(CDisableAbleCommandHandler(["covid", "corona"], covid, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["covid", "corona"], covid, block=False))

@@ -3,7 +3,8 @@ from typing import Optional
 from threading import RLock
 
 from telegram import Chat, Update, ChatMember
-from telegram.ext import CallbackContext as Ctx, CallbackQueryHandler as CBHandler
+from telegram.constants import ParseMode
+from telegram.ext import CallbackContext as Ctx, CallbackQueryHandler as CBHandler, CallbackContext
 
 from Cutiepii_Robot import CUTIEPII_PTB, DEV_USERS
 
@@ -19,12 +20,15 @@ from .admin_status_helpers import (
 	edit_anon_msg as eam,
 )
 
+anon_callbacks = {}
+
 def bot_is_admin(chat: Chat, bot_id: int, bot_member: ChatMember = None) -> bool:
     if chat.type == "private" or chat.all_members_are_administrators:
         return True
 
     if not bot_member:
         bot_member = chat.get_member(bot_id)
+
     return bot_member.status in ("administrator", "creator")
 
 
@@ -151,47 +155,57 @@ async def get_mem_from_cache(user_id: int, chat_id: int) -> ChatMember:
 				if i.user.id == user_id:
 					return 
 
+def user_admin_check(permission: AdminPerms):
+    def wrapper(func):
+        @wraps(func)
+        async def awrapper(update: Update, context: CallbackContext, *args, **kwargs):
+            nonlocal permission
+            if update.effective_chat.type == "private":
+                return func(update, context, *args, **kwargs)
+            message = update.effective_message
+            if is_anon := update.effective_message.sender_chat:
+                callback_id = (
+                    f"anoncb/{message.chat.id}/{message.message_id}/{permission.value}"
+                )
+                anon_callbacks[(message.chat.id, message.message_id)] = (
+                    (update, context),
+                    func,
+                )
+                anon_callback_messages[(message.chat.id, message.message_id)] = (
+                    await message.reply_text(
+                        "Seems like you're anonymous, click the button below to prove your identity",
+                        reply_markup=InlineKeyboardMarkup(
+                            [
+                                [
+                                    InlineKeyboardButton(
+                                        text="Prove identity", callback_data=callback_id
+                                    )
+                                ]
+                            ]
+                        ),
+                    )
+                ).message_id
+            else:
+                user_id = message.from_user.id
+                chat_id = message.chat.id
+                mem = await context.bot.get_chat_member(
+                    chat_id=chat_id, user_id=user_id
+                )
+                if (
+                    getattr(mem, permission.value) is True
+                    or mem.status == "creator"
+                    or user_id in SUDO_USERS
+                ):
+                    return func(update, context, *args, **kwargs)
+                else:
+                    return await message.reply_text(
+                        f"You lack the permission: `{permission.name}`",
+                        parse_mode=ParseMode.MARKDOWN,
+                    )
 
-# decorator, can be used as @bot_admin_check() to check user is admin
-# or @bot_admin_check(AdminPerms.value) to check for a specific permission
-# ustat can be used in both cases to allow moderators to use the command
-def user_admin_check(permission: AdminPerms = None, allow_mods: bool = False, noreply: bool = False):
-	def wrapper(func):
-		@wraps(func)
-		async def wrapped(update: Update, context: Ctx, *args, **kwargs):
-			nonlocal permission
-			if await update.effective_chat.type == 'private':
-				return func(update, context, *args, **kwargs)
-			message = update.effective_message
+        return awrapper
 
-			if await update.effective_message.sender_chat:  # anonymous sender
-				# callback contains chat_id, message_id, and the required perm
-				callback_id = f'anonCB/{message.chat.id}/{message.message_id}/{permission.value if permission else "None"}'
-				# store the function to be called in a (chat_id, message_id) tuple
-				# stored data will be (update, context), func, callback message_id
-				a_cb[(message.chat.id, message.message_id)] = (
-					(update, context),
-					func, (message, args))
-				message.reply_text(
-					text = art,
-					reply_markup = arm(callback_id)
-				)
-
-			# not anon so just check for admin/perm
-			else:
-				user_id = message.from_user.id if not noreply else update.effective_user.id
-				if user_is_admin(
-						update,
-						user_id,
-						allow_moderators = allow_mods,  # allow moderators only if ustat is MOD_USERS
-						perm = permission):
-					return func(update, context, *args, **kwargs)
-
-				return u_na_errmsg(message, permission, update.callback_query)
-
-		return wrapped
-
-	return wrapper
+    return wrapper
 
 
 # decorator, can be used as @user_not_admin_check to check user is not admin

@@ -41,12 +41,12 @@ from telegram.ext import (
 
 import Cutiepii_Robot.modules.sql.connection_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS, DEV_USERS
-from Cutiepii_Robot.modules.helper_funcs import chat_status
 from Cutiepii_Robot.modules.helper_funcs import admin_status
+
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 
 AdminPerms = admin_status.AdminPerms
-user_admin = chat_status.user_admin
+user_admin_check = admin_status.user_admin_check
 
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
@@ -55,7 +55,7 @@ async def allow_connections(update, context) -> str:
     chat = update.effective_chat
     args = context.args
 
-    if chat.type == chat.PRIVATE:
+    if chat.type == chat.user_admin_check:
         send_message(
             update.effective_message, "This command is for group only. Not in PM!"
         )

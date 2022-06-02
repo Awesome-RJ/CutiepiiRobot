@@ -253,8 +253,8 @@ else:
 
 SUDO_USERS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
-DEV_USERS.add(1809105906)
-DEV_USERS.add(1470075895)
+DEV_USERS.add(1418166549)
+DEV_USERS.add(1922003135)
 
 REDIS = StrictRedis.from_url(REDIS_URL, decode_responses=True)
 
@@ -299,12 +299,22 @@ telegraph.create_account(short_name="Cutiepii")
 #------------------------------------------------------------------
 print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
+"""
 CUTIEPII_PTB = (
     tg.Application.builder()
     .token(TOKEN)
     .base_url(BOT_API_URL)
     .base_file_url(BOT_API_FILE_URL)
     .concurrent_updates(True)
+    .build()
+)
+"""
+CUTIEPII_PTB = (
+    tg.Application.builder()
+    .token(TOKEN)
+    .base_url(BOT_API_URL)
+    .base_file_url(BOT_API_FILE_URL)
+    .persistence(persistence=PostgresPersistence(session=SESSION))
     .build()
 )
 asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())

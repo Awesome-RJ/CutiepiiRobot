@@ -28,15 +28,17 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
+from enum import Enum
 import functools
 
-from enum import Enum
 from telegram import Update#, ParseMode
 from telegram.ext import CallbackContext
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton
+from telegram import InlineKeyboardMarkup
 from telegram.constants import ParseMode
+
 from Cutiepii_Robot import DEV_USERS, SUDO_USERS, CUTIEPII_PTB
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_callback
+from .decorators import cutiepii_callback
 
 
 class AdminPerms(Enum):
@@ -99,10 +101,11 @@ def user_admin(permission: AdminPerms):
                     or user_id in SUDO_USERS
                 ):
                     return func(update, context, *args, **kwargs)
-                return await message.reply_text(
-                    f"You lack the permission: `{permission.name}`",
-                    parse_mode=ParseMode.MARKDOWN,
-                )
+                else:
+                    return await message.reply_text(
+                        f"You lack the permission: `{permission.name}`",
+                        parse_mode=ParseMode.MARKDOWN,
+                    )
 
         return awrapper
 
@@ -125,7 +128,7 @@ async def anon_callback_handler1(upd: Update, _: CallbackContext):
         await CUTIEPII_PTB.bot.delete_message(
             chat_id, anon_callback_messages.pop((chat_id, message_id), None)
         )
-        await context.bot.send_message(
+        await CUTIEPII_PTB.bot.send_message(
             chat_id, "You lack the permissions required for this command"
         )
     elif (

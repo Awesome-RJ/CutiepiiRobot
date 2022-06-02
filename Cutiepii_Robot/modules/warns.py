@@ -63,7 +63,8 @@ from telegram.ext import (
     CallbackContext,
     filters,
     CallbackQueryHandler,
-    CommandHandler
+    CommandHandler,
+    MessageHandler
 )
 from telegram.helpers import mention_html
 
@@ -393,7 +394,7 @@ async def dwarn(
     return log_reason
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, noreply=True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def button(update: Update, context: CallbackContext) -> str:
     query = update.callback_query  # type: Optional[CallbackQuery]
@@ -426,7 +427,7 @@ async def button(update: Update, context: CallbackContext) -> str:
 
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def warn_user(update: Update, context: CallbackContext) -> str:
     args = context.args
@@ -435,6 +436,11 @@ async def warn_user(update: Update, context: CallbackContext) -> str:
     warner: Optional[User] = update.effective_user
 
     user_id, reason = await extract_user_and_text(message, args)
+
+    if (message.reply_to_message and message.reply_to_message.sender_chat) or user_id < 0:
+        message.reply_text("This command can't be used on channels, however you can ban them instead.")
+        return ""
+    
     if message.text.startswith('/s') or message.text.startswith('!s') or message.text.startswith('>s'):
         silent = True
         if not bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES):
@@ -572,7 +578,7 @@ async def warns(update: Update, context: CallbackContext):
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 # CUTIEPII_PTB handler stop - do not async
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods = True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def add_warn_filter(update: Update, context: CallbackContext):
     chat: Optional[Chat] = update.effective_chat
     msg: Optional[Message] = update.effective_message
@@ -634,7 +640,6 @@ async def remove_warn_filter(update: Update, context: CallbackContext):
         if filt == to_remove:
             sql.remove_warn_filter(chat.id, to_remove)
             await msg.reply_text("Okay, I'll stop warning people for that.")
-            raise CUTIEPII_PTBHandlerStop
 
     await msg.reply_text(
         "That's not a current warning filter - run /warnlist for all active warning filters."
@@ -803,12 +808,12 @@ __mod_name__ = "Warnings"
 
 CUTIEPII_PTB.add_handler(CommandHandler(["swarn", "dwarn",  "dswarn", "warn"], warn_user, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler(["resetwarn", "resetwarns"], reset_warns, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler(["rmwarn", "unwarn"], remove_warns, filters=filters.ChatType.GROUPS, block=False))
+#CUTIEPII_PTB.add_handler(CommandHandler(["rmwarn", "unwarn"], remove_warns, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"rm_warn"))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("warns", warns, filters=filters.ChatType.GROUPS))
 CUTIEPII_PTB.add_handler(CommandHandler("addwarn", add_warn_filter, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler(["nowarn", "stopwarn"], remove_warn_filter, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["warnlist", "warnfilters"], list_warn_filters, filters=filters.ChatType.GROUPS,admin_ok=True))
-CUTIEPII_PTB.add_handler(MessageHandler(filters.TEXT & filters.ChatType.GROUPS, reply_filter))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.TEXT & filters.ChatType.GROUPS & ~filters.UpdateType.EDITED_MESSAGE, reply_filter))
 CUTIEPII_PTB.add_handler(CommandHandler("warnlimit", set_warn_limit, filters=filters.ChatType.GROUPS,block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("strongwarn", set_warn_strength, filters=filters.ChatType.GROUPS, block=False))

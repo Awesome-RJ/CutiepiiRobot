@@ -1,4 +1,4 @@
-
+"""
 import contextlib
 import html
 import logging
@@ -83,9 +83,9 @@ async def reply_afk(update: Update, context: CallbackContext):
     message = update.effective_message
     userc = update.effective_user
     userc_id = userc.id
-    if message.entities and (await message.parse_entities(
+    if message.entities and message.parse_entities(
         [MessageEntity.TEXT_MENTION, MessageEntity.MENTION]
-    )):
+    ):
         entities = await message.parse_entities(
             [MessageEntity.TEXT_MENTION, MessageEntity.MENTION]
         )
@@ -147,3 +147,5 @@ def __gdpr__(user_id):
 
 
 __mod_name__ = "AFK"
+
+"""

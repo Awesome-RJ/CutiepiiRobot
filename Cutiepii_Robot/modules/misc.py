@@ -40,9 +40,10 @@ import Cutiepii_Robot.modules.helper_funcs.git_api as git
 
 
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
-from Cutiepii_Robot.modules.helper_funcs.chat_status import sudo_plus  
+from Cutiepii_Robot.modules.helper_funcs.chat_status import sudo_plus
+from Cutiepii_Robot.modules.helper_funcs.alternate import send_action
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot import CUTIEPII_PTB, pgram, StartTime, send_action
+from Cutiepii_Robot import CUTIEPII_PTB, pgram, StartTime
 from Cutiepii_Robot.__main__ import GDPR
 
 from datetime import datetime
@@ -548,7 +549,7 @@ Bass Boosting
 
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("echo", echo, filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("markdownhelp", markdown_help, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("gdpr", gdpr, filters=Filters.privete, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("gdpr", gdpr, filters=PTB_Cutiepii_Filters.ChatType.PRIVATE, block=False))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_", block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("source", src, filters=PTB_Cutiepii_Filters.ChatType.PRIVATE, block=False))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("rmeme", rmemes, block=False))

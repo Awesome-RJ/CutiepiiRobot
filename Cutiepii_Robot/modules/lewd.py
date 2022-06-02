@@ -38,12 +38,12 @@ from PIL import Image
 from nekos.errors import InvalidArgument
 from telegram import Update
 from telegram.error import BadRequest, RetryAfter, Forbidden
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import CallbackContext, CommandHandler, filters
 from telegram.helpers import mention_html
 
 
 import Cutiepii_Robot.modules.sql.nsfw_sql as sql
-from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot import CUTIEPII_PTB, DEV_USERS
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.log_channel import gloggable
 
