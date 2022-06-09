@@ -77,14 +77,12 @@ def bot_admin_check(permission: AdminPerms = None):
 	return wrapper
 
 
-async def user_is_admin(update: Update,
+async def user_is_admin(chat: Chat,
 					user_id: int,
 					channels: bool = False,  # if True, returns True if user is anonymous
 					allow_moderators: bool = False,  # if True, returns True if user is a moderator
 					perm: AdminPerms = None  # if not None, returns True if user has the specified permission
 					) -> bool:
-	chat = update.effective_chat
-	message = update.effective_message
 	if chat.type == "private" or user_id in (SUDO_USERS if allow_moderators else SUDO_USERS):
 		return True
 
