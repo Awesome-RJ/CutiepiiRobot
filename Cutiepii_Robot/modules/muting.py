@@ -242,7 +242,7 @@ async def unmute(update: Update, context: CallbackContext) -> str:
         )
         return ""
 
-    member = chat.get_member(int(user_id))
+    member = chat.get_member(user.id)
 
     if member.status in ["kicked", "left"]:
         await message.reply_text(

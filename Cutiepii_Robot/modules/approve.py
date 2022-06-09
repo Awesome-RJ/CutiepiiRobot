@@ -153,7 +153,7 @@ async def approval(update, context):
             "I don't know who you're talking about, you're going to need to specify a user!"
         )
         return ""
-    member = chat.get_member(int(user_id))
+    member = chat.get_member(user.id)
 
     if sql.is_approved(message.chat_id, user_id):
         await message.reply_text(
