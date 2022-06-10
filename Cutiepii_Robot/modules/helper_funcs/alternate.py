@@ -30,14 +30,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 from functools import wraps
 from telegram.constants import ChatAction
+from urllib.parse import quote
 
 
-async def send_message(message, text, *args, **kwargs):
+async def send_message(message, *args, **kwargs):
     try:
-        return await message.reply_text(text, *args, **kwargs)
+        return await message.reply_text(*args, **kwargs)
     except error.BadRequest as err:
         if str(err) == "Reply message not found":
-            return await message.reply_text(text, quote=False, *args, **kwargs)
+            return await message.reply_text(quote=False, *args, **kwargs)
 
 
 def send_action(action):
