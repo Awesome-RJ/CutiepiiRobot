@@ -45,7 +45,7 @@ class Disable(BASE):
         self.commands = commands
 
     def __repr__(self):
-        return "Disabled cmd {} in {}".format(self.command, self.chat_id)
+        return "Disabled cmd {} in {}".format(self.commands, self.chat_id)
 
 
 Disable.__table__.create(checkfirst=True)

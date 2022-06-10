@@ -90,7 +90,7 @@ if is_module_loaded(FILENAME):
                     command.append(message._bot.username)
 
                     if not (
-                        command[0].lower() in self.command
+                        frozenset({command[0].lower()}) in self.commands
                         and command[1].lower() == message._bot.username.lower()
                     ):
                         return None

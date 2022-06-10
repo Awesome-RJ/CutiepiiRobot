@@ -115,7 +115,7 @@ class CustomCommandHandler(tg.CommandHandler):
                 )  # in case the command was sent without a username
 
                 if not (
-                    command[0].lower() in self.command
+                    frozenset({command[0].lower()}) in self.commands
                     and command[1].lower() == await message._bot.username.lower()
                 ):
                     return None
