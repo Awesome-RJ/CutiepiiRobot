@@ -407,7 +407,7 @@ async def button(update: Update, context: CallbackContext) -> str:
             return ""
         if res := sql.remove_warn(user_id, chat.id):
             await update.effective_message.edit_text(
-                f"Warn removed by {mention_html(user.id, user.first_name)}.",
+                f"Warn removed by {mention_html(user.id, user.first_name)}." if not is_anon(user, chat) else "anon admin"),
                 parse_mode=ParseMode.HTML,
             )
 
