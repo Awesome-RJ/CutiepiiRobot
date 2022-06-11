@@ -118,7 +118,7 @@ if ENV:
     WEBHOOK = bool(os.environ.get("WEBHOOK", False))
     URL = os.environ.get("URL", "")  # If You Deploy On Heraku. [URL PERTEN:- https://{App Name}.herokuapp.com/ || EXP:- https://yuki-cutiepii-robot.herokuapp.com/]
     PORT = int(os.environ.get("PORT", 8443)) 
-    CERT_PATH = os.environ.get("CERT_PATH")
+
     API_ID = os.environ.get("API_ID") # Bot Owner's API_ID (From:- https://my.telegram.org/auth)
     API_HASH = os.environ.get("API_HASH") # Bot Owner's API_HASH (From:- https://my.telegram.org/auth)
     DATABASE_URL = os.environ.get("DATABASE_URL")  # Any SQL Database Link (RECOMMENDED:- PostgreSQL & https://www.elephantsql.com)
@@ -127,7 +127,6 @@ if ENV:
     NO_LOAD = os.environ.get("NO_LOAD", "translation").split() # Don't Change
     DEL_CMDS = bool(os.environ.get("DEL_CMDS", False)) # Don't Change
     STRICT_GBAN = bool(os.environ.get("STRICT_GBAN", False)) # Use `True` Value
-    WORKERS = int(os.environ.get("WORKERS", 8)) # Don't Change
     BAN_STICKER = os.environ.get("BAN_STICKER", "CAADAgADOwADPPEcAXkko5EB3YGYAg") # Don't Change
     ALLOW_EXCL = os.environ.get("ALLOW_EXCL", False) # Don't Change
     TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./") # Don't Change
@@ -144,7 +143,6 @@ if ENV:
     STRING_SESSION = os.environ.get("STRING_SESSION") # Telethon Based String Session (2nd ID) [ From https://repl.it/@SpEcHiDe/GenerateStringSession ]
     APP_ID = os.environ.get("APP_ID") # 2nd ID 
     APP_HASH = os.environ.get("APP_HASH") # 2nd ID
-    YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", True)
     ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True) # Don't Change
     DATABASE_NAME = os.environ.get("DATABASE_NAME", True)  # needed for cron_jobs module, use same databasename from SQLALCHEMY_DATABASE_URI
     BACKUP_PASS = os.environ.get("BACKUP_PASS", True) # The password used for the cron backups zip
@@ -208,13 +206,11 @@ else:
     WEBHOOK = Config.WEBHOOK
     URL = Config.URL
     PORT = Config.PORT
-    CERT_PATH = Config.CERT_PATH
     API_ID = Config.API_ID
     API_HASH = Config.API_HASH
     DATABASE_URL = Config.DATABASE_URL
     DONATION_LINK = Config.DONATION_LINK
     STRICT_GBAN = Config.STRICT_GBAN
-    WORKERS = Config.WORKERS
     BAN_STICKER = Config.BAN_STICKER
     TEMP_DOWNLOAD_DIRECTORY = Config.TEMP_DOWNLOAD_DIRECTORY
     LOAD = Config.LOAD
@@ -232,7 +228,6 @@ else:
     APP_HASH = Config.APP_HASH
     STRING_SESSION = Config.STRING_SESSION
     GENIUS_API_TOKEN = Config.GENIUS_API_TOKEN
-    YOUTUBE_API_KEY = Config.YOUTUBE_API_KEY
     ALLOW_EXCL = Config.ALLOW_EXCL
     DEL_CMDS = Config.DEL_CMDS
     BOT_API_URL = Config.BOT_API_URL
