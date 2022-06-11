@@ -84,7 +84,7 @@ ENUM_FUNC_MAP = {
 
 
 # Do not async
-async def get(update, context, notename, show_none=True, no_format=False):
+async def get(update: Update, context: CallbackContext, notename: str, show_none: bool = True, no_format: bool = False):
     bot = context.bot
     chat_id = update.effective_message.chat.id
     note_chat_id = update.effective_chat.id
