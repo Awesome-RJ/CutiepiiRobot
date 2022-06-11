@@ -56,6 +56,7 @@ MATCH_MD = re.compile(
 
 # regex to find []() links -> hyperlinks/buttons
 LINK_REGEX = re.compile(r"(?<!\\)\[.+?\]\((.*?)\)")
+LINK_REGEX_v2 = re.compile(r"(?<!\\)\[(.+?)\]\((.*?)\)")
 BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\(buttonurl:(?:/{0,2})(.+?)(:same)?\))")
 
 
@@ -155,7 +156,7 @@ def markdown_parser(
         if ent.type == "url":
             if any(
                 match.start(1) <= start and end <= match.end(1)
-                for match in LINK_REGEX.finditer(txt)
+                for match in LINK_REGEX_v2.finditer(txt)
             ):
                 continue
             # TODO: investigate possible offset bug when lots of emoji are present
