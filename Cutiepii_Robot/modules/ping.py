@@ -130,11 +130,8 @@ async def pingall(update: Update, context: CallbackContext):
     )
 
 
-PING_HANDLER = DisableAbleCommandHandler("ping", ping)
-PINGALL_HANDLER = DisableAbleCommandHandler("pingall", pingall)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("ping", ping))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("pingall", pingall))
 
-CUTIEPII_PTB.add_handler(PING_HANDLER)
-CUTIEPII_PTB.add_handler(PINGALL_HANDLER)
 
 __command_list__ = ["ping", "pingall"]
-__handlers__ = [PING_HANDLER, PINGALL_HANDLER]

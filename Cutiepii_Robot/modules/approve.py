@@ -222,19 +222,12 @@ async def unapproveall_btn(update: Update, _: CallbackContext):
         if member.status == "member":
             await query.answer("You need to be admin to do this.")
 
-APPROVE = DisableAbleCommandHandler("approve", approve)
-DISAPPROVE = DisableAbleCommandHandler("unapprove", disapprove)
-APPROVED = DisableAbleCommandHandler("approved", approved)
-APPROVAL = DisableAbleCommandHandler("approval", approval)
-UNAPPROVEALL = DisableAbleCommandHandler("unapproveall", unapproveall)
-UNAPPROVEALL_BTN = CallbackQueryHandler(unapproveall_btn, pattern=r"unapproveall_.*")
-
-CUTIEPII_PTB.add_handler(APPROVE)
-CUTIEPII_PTB.add_handler(DISAPPROVE)
-CUTIEPII_PTB.add_handler(APPROVED)
-CUTIEPII_PTB.add_handler(APPROVAL)
-CUTIEPII_PTB.add_handler(UNAPPROVEALL)
-CUTIEPII_PTB.add_handler(UNAPPROVEALL_BTN)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approve", approve))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unapprove", disapprove))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approved", approved))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approval", approval))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unapproveall", unapproveall))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(unapproveall_btn, pattern=r"unapproveall_.*"))
 
 __help__ = """
 Sometimes, you might trust a user not to send unwanted content.
@@ -254,4 +247,3 @@ That's what approvals are for - approve of trustworthy users to allow them to se
 
 __mod_name__ = "Approvals"
 __command_list__ = ["approve", "unapprove", "approved", "approval"]
-__handlers__ = [APPROVE, DISAPPROVE, APPROVED, APPROVAL]

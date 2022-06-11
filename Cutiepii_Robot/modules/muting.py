@@ -554,18 +554,12 @@ async def nomedia(update: Update, context: CallbackContext) -> str:
     return ""
 
 
-MUTE_HANDLER = CommandHandler("mute", mute)
-UNMUTE_HANDLER = CommandHandler("unmute", unmute)
-TEMPMUTE_HANDLER = CommandHandler(['tmute', 'tempmute'], temp_mute)
-TEMP_NOMEDIA_HANDLER = DisableAbleCommandHandler(["trestrict", "temprestrict"], temp_nomedia, admin_ok=True)
-NOMEDIA_HANDLER = DisableAbleCommandHandler(["restrict", "nomedia"], nomedia, admin_ok=True)
-MEDIA_HANDLER = DisableAbleCommandHandler("unrestrict", media, admin_ok=True)
-UNMUTE_BUTTON_HANDLER = CallbackQueryHandler(button, pattern=r"cb_unmute")
-
-CUTIEPII_PTB.add_handler(MUTE_HANDLER)
-CUTIEPII_PTB.add_handler(UNMUTE_HANDLER)
-CUTIEPII_PTB.add_handler(TEMPMUTE_HANDLER)
-CUTIEPII_PTB.add_handler(UNMUTE_BUTTON_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler("mute", mute))
+CUTIEPII_PTB.add_handler(CommandHandler("unmute", unmute))
+CUTIEPII_PTB.add_handler(CommandHandler(['tmute', 'tempmute'], temp_mute))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["trestrict", "temprestrict"], temp_nomedia, admin_ok=True))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["restrict", "nomedia"], nomedia, admin_ok=True))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unrestrict", media, admin_ok=True))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"cb_unmute"))
 
 __mod_name__ = "Muting"
-__handlers__ = [MUTE_HANDLER, UNMUTE_HANDLER, TEMPMUTE_HANDLER]

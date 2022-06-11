@@ -490,22 +490,8 @@ def __stats__():
 
 __mod_name__ = "Stickers Blacklist"
 
-BLACKLIST_STICKER_HANDLER = DisableAbleCommandHandler(
-    "blsticker", blackliststicker, admin_ok=True,
-)
-ADDBLACKLIST_STICKER_HANDLER = DisableAbleCommandHandler(
-    "addblsticker", add_blackliststicker,
-)
-UNBLACKLIST_STICKER_HANDLER = CommandHandler(
-    ["unblsticker", "rmblsticker"], unblackliststicker,
-)
-BLACKLISTMODE_HANDLER = CommandHandler("blstickermode", blacklist_mode)
-BLACKLIST_STICKER_DEL_HANDLER = MessageHandler(
-    filters.Sticker.ALL & filters.ChatType.GROUPS, del_blackliststicker,
-)
-
-CUTIEPII_PTB.add_handler(BLACKLIST_STICKER_HANDLER)
-CUTIEPII_PTB.add_handler(ADDBLACKLIST_STICKER_HANDLER)
-CUTIEPII_PTB.add_handler(UNBLACKLIST_STICKER_HANDLER)
-CUTIEPII_PTB.add_handler(BLACKLISTMODE_HANDLER)
-CUTIEPII_PTB.add_handler(BLACKLIST_STICKER_DEL_HANDLER)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("blsticker", blackliststicker, admin_ok=True,))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("addblsticker", add_blackliststicker))
+CUTIEPII_PTB.add_handler(CommandHandler(["unblsticker", "rmblsticker"], unblackliststicker))
+CUTIEPII_PTB.add_handler(CommandHandler("blstickermode", blacklist_mode))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.Sticker.ALL & filters.ChatType.GROUPS, del_blackliststicker))

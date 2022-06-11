@@ -1682,57 +1682,34 @@ async def unpinallbtn(update: Update, context: CallbackContext):
     )
 
 
-SET_DESC_HANDLER = CommandHandler("setdesc", set_desc, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-SET_STICKER_HANDLER = CommandHandler("setsticker", set_sticker, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-SETCHATPIC_HANDLER = CommandHandler("setgpic", setchatpic, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-RMCHATPIC_HANDLER = CommandHandler("delgpic", rmchatpic, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-SETCHAT_TITLE_HANDLER = CommandHandler("setgtitle", setchat_title, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
+CUTIEPII_PTB.add_handler(CommandHandler("setdesc", set_desc, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("setsticker", set_sticker, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("setgpic", setchatpic, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("delgpic", rmchatpic, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("setgtitle", setchat_title, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
 
-PIN_HANDLER = CommandHandler("pin", pin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-UNPIN_HANDLER = CommandHandler("unpin", unpin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-UNPINALL_HANDLER = CommandHandler("unpinall", unpinall, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-PERMPIN_HANDLER = CommandHandler("permapin", permapin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-CLEANLINKED_HANDLER = CommandHandler("cleanlinked", permanent_pin_set, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-UNPINALL_BTN_HANDLER = CallbackQueryHandler(unpinallbtn, pattern=r"unpinallbtn_")
-PINNED_HANDLER = CommandHandler("pinned", pinned, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
+CUTIEPII_PTB.add_handler(CommandHandler("pin", pin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("unpin", unpin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("unpinall", unpinall, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("permapin", permapin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("cleanlinked", permanent_pin_set, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(unpinallbtn, pattern=r"unpinallbtn_"))
+CUTIEPII_PTB.add_handler(CommandHandler("pinned", pinned, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
 
-INVITE_HANDLER = DisableAbleCommandHandler("invitelink", invite)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("invitelink", invite))
 
-PROMOTE_HANDLER = DisableAbleCommandHandler("promote", promote)
-PROMOTE_CALLBACK_HANDLER = CallbackQueryHandler(promote_button, pattern=r"admin_")
-FULLPROMOTE_HANDLER = DisableAbleCommandHandler("fullpromote", fullpromote)
-LOW_PROMOTE_HANDLER = DisableAbleCommandHandler("lowpromote", lowpromote)
-MID_PROMOTE_HANDLER = DisableAbleCommandHandler("midpromote", midpromote)
-ANONMYOUS_HANDLER = DisableAbleCommandHandler("setanon", promoteanon)
-DEMOTE_HANDLER = DisableAbleCommandHandler("demote", demote)
-MID_DEMOTE_HANDLER = DisableAbleCommandHandler("middemote", middemote)
-ANONMYOUS_DEMOTE_HANDLER = DisableAbleCommandHandler("unsetanon", demoteanon)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("promote", promote))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(promote_button, pattern=r"admin_"))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("fullpromote", fullpromote))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("lowpromote", lowpromote))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("midpromote", midpromote))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("setanon", promoteanon))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("demote", demote))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("middemote", middemote))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unsetanon", demoteanon))
 
-SET_TITLE_HANDLER = CommandHandler("title", set_title)
-ADMIN_REFRESH_HANDLER = CommandHandler("admincache", refresh_admin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-
-CUTIEPII_PTB.add_handler(SET_DESC_HANDLER)
-CUTIEPII_PTB.add_handler(SET_STICKER_HANDLER)
-CUTIEPII_PTB.add_handler(SETCHATPIC_HANDLER)
-CUTIEPII_PTB.add_handler(RMCHATPIC_HANDLER)
-CUTIEPII_PTB.add_handler(SETCHAT_TITLE_HANDLER)
-CUTIEPII_PTB.add_handler(PIN_HANDLER)
-CUTIEPII_PTB.add_handler(UNPIN_HANDLER)
-CUTIEPII_PTB.add_handler(UNPINALL_HANDLER)
-CUTIEPII_PTB.add_handler(UNPINALL_BTN_HANDLER)
-CUTIEPII_PTB.add_handler(PERMPIN_HANDLER)
-CUTIEPII_PTB.add_handler(CLEANLINKED_HANDLER)
-CUTIEPII_PTB.add_handler(PINNED_HANDLER)
-CUTIEPII_PTB.add_handler(INVITE_HANDLER)
-CUTIEPII_PTB.add_handler(PROMOTE_HANDLER)
-CUTIEPII_PTB.add_handler(PROMOTE_CALLBACK_HANDLER)
-CUTIEPII_PTB.add_handler(FULLPROMOTE_HANDLER)
-CUTIEPII_PTB.add_handler(LOW_PROMOTE_HANDLER)
-CUTIEPII_PTB.add_handler(MID_PROMOTE_HANDLER)
-CUTIEPII_PTB.add_handler(DEMOTE_HANDLER)
-CUTIEPII_PTB.add_handler(SET_TITLE_HANDLER)
-CUTIEPII_PTB.add_handler(ADMIN_REFRESH_HANDLER)
-CUTIEPII_PTB.add_handler(MID_DEMOTE_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler("title", set_title))
+CUTIEPII_PTB.add_handler(CommandHandler("admincache", refresh_admin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
 
 __help__ = """
 *User Commands*:
@@ -1809,26 +1786,4 @@ __command_list__ = [
     "unpin"
     "pin"
     "permapin"
-]
-__handlers__ = [
-    SET_DESC_HANDLER,
-    SET_STICKER_HANDLER,
-    SETCHATPIC_HANDLER,
-    RMCHATPIC_HANDLER,
-    SETCHAT_TITLE_HANDLER,
-    PIN_HANDLER,
-    UNPIN_HANDLER,
-    PINNED_HANDLER,
-    INVITE_HANDLER,
-    PROMOTE_HANDLER,
-    PROMOTE_CALLBACK_HANDLER,
-    FULLPROMOTE_HANDLER,
-    LOW_PROMOTE_HANDLER,
-    MID_PROMOTE_HANDLER,
-    DEMOTE_HANDLER,
-    SET_TITLE_HANDLER,
-    ADMIN_REFRESH_HANDLER,
-    UNPINALL_HANDLER,
-    UNPINALL_BTN_HANDLER,
-    PERMPIN_HANDLER,
 ]

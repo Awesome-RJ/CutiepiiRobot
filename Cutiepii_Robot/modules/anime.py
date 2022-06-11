@@ -996,15 +996,3 @@ __command_list__ = [
     "kaizoku",
     "animequotes",
 ]
-__handlers__ = [
-    ANIME_HANDLER,
-    CHARACTER_HANDLER,
-    MANGA_HANDLER,
-    USER_HANDLER,
-    UPCOMING_HANDLER,
-    BUTTON_HANDLER,
-    AIRING_HANDLER,
-    KAYO_SEARCH_HANDLER,
-    KAIZOKU_SEARCH_HANDLER,
-    ANIMEQUOTES_HANDLER,
-]

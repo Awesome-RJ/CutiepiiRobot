@@ -242,13 +242,7 @@ async def clear(update: Update, context: CallbackContext):
     await send("Cleared locals.", bot, update)
 
 
-EXEC_HANDLER = CommandHandler(
-    ("x", "ex", "exe", "py"),
-    execute
-)
-CLEAR_HANDLER = CommandHandler("clearlocals", clear)
-
-CUTIEPII_PTB.add_handler(EXEC_HANDLER)
-CUTIEPII_PTB.add_handler(CLEAR_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler(("x", "ex", "exe", "py"), execute))
+CUTIEPII_PTB.add_handler(CommandHandler("clearlocals", clear))
 
 __mod_name__ = "Eval Module"

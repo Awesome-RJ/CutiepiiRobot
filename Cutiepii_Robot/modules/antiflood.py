@@ -421,26 +421,8 @@ will result in restricting that user.
 
 __mod_name__ = "Anti-Flood"
 
-FLOOD_BAN_HANDLER = MessageHandler(
-    filters.ALL & ~filters.StatusUpdate.ALL & filters.ChatType.GROUPS, check_flood,
-)
-SET_FLOOD_HANDLER = CommandHandler("setflood", set_flood, filters=filters.ChatType.GROUPS)
-SET_FLOOD_MODE_HANDLER = CommandHandler(
-    "setfloodmode", set_flood_mode,
-)  # , filters.ChatType.GROUPS)
-
-FLOOD_QUERY_HANDLER = CallbackQueryHandler(flood_button, pattern=r"unmute_flooder")
-FLOOD_HANDLER = CommandHandler("flood", flood, filters.ChatType.GROUPS)
-
-CUTIEPII_PTB.add_handler(FLOOD_BAN_HANDLER, FLOOD_GROUP)
-CUTIEPII_PTB.add_handler(FLOOD_QUERY_HANDLER)
-CUTIEPII_PTB.add_handler(SET_FLOOD_HANDLER)
-CUTIEPII_PTB.add_handler(SET_FLOOD_MODE_HANDLER)
-CUTIEPII_PTB.add_handler(FLOOD_HANDLER)
-
-__handlers__ = [
-    (FLOOD_BAN_HANDLER, FLOOD_GROUP),
-    SET_FLOOD_HANDLER,
-    FLOOD_HANDLER,
-    SET_FLOOD_MODE_HANDLER,
-]
+CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & ~filters.StatusUpdate.ALL & filters.ChatType.GROUPS, check_flood))
+CUTIEPII_PTB.add_handler(CommandHandler("setflood", set_flood, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("setfloodmode", set_flood_mode))  # , filters.ChatType.GROUPS)
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(flood_button, pattern=r"unmute_flooder"))
+CUTIEPII_PTB.add_handler(CommandHandler("flood", flood, filters.ChatType.GROUPS))

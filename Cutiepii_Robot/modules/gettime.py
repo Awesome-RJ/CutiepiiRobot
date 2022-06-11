@@ -118,10 +118,8 @@ async def gettime(update: Update, context: CallbackContext):
     )
 
 
-TIME_HANDLER = DisableAbleCommandHandler("time", gettime)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("time", gettime))
 
-CUTIEPII_PTB.add_handler(TIME_HANDLER)
 
 __mod_name__ = "Time"
-__command_list__ = ["time"]
-__handlers__ = [TIME_HANDLER]
+__command_list__ = ["time"

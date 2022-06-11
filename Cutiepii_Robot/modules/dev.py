@@ -190,19 +190,12 @@ async def restart(update: Update, context: CallbackContext):
     process = subprocess.run("pkill python3 && python3 -m Cutiepii_Robot", shell=True, check=True)
     process.communicate()
 
-PIP_INSTALL_HANDLER = CommandHandler("install", pip_install)
-LEAVE_HANDLER = CommandHandler("leave", leave)
-GITPULL_HANDLER = CommandHandler("gitpull", gitpull)
-RESTART_HANDLER = CommandHandler("reboot", restart)
-ALLOWGROUPS_HANDLER = CommandHandler("lockdown", allow_groups)
-LEAVE_CALLBACK_HANDLER = CallbackQueryHandler(leave_cb, pattern=r"leavechat_cb_")
+CUTIEPII_PTB.add_handler(CommandHandler("install", pip_install))
+CUTIEPII_PTB.add_handler(CommandHandler("leave", leave))
+CUTIEPII_PTB.add_handler(CommandHandler("gitpull", gitpull))
+CUTIEPII_PTB.add_handler(CommandHandler("reboot", restart))
+CUTIEPII_PTB.add_handler(CommandHandler("lockdown", allow_groups))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(leave_cb, pattern=r"leavechat_cb_"))
 
-CUTIEPII_PTB.add_handler(PIP_INSTALL_HANDLER)
-CUTIEPII_PTB.add_handler(ALLOWGROUPS_HANDLER)
-CUTIEPII_PTB.add_handler(LEAVE_HANDLER)
-CUTIEPII_PTB.add_handler(GITPULL_HANDLER)
-CUTIEPII_PTB.add_handler(RESTART_HANDLER)
-CUTIEPII_PTB.add_handler(LEAVE_CALLBACK_HANDLER)
 
 __mod_name__ = "Dev"
-__handlers__ = [LEAVE_HANDLER, GITPULL_HANDLER, RESTART_HANDLER, ALLOWGROUPS_HANDLER, LEAVE_CALLBACK_HANDLER, PIP_INSTALL_HANDLER]

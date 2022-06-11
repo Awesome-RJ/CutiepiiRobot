@@ -924,19 +924,8 @@ __help__ = f"""
 ➛ /police*:* 🚓
 """
 
-GDMORNING_HANDLER = DisableAbleMessageHandler(filters.Regex(r"(?i)(goodmorning|good morning)"), goodmorning, friendly="goodmorning")
-GDNIGHT_HANDLER = DisableAbleMessageHandler(filters.Regex(r"(?i)(goodnight|good night)"), goodnight, friendly="goodnight")
-CUTIEPII_HANDLER = DisableAbleMessageHandler(filters.Regex(r"(?i)^cutiepii\?"), cutiepii, friendly="decide")
-
-CUTIEPII_PTB.add_handler(GDMORNING_HANDLER)
-CUTIEPII_PTB.add_handler(GDNIGHT_HANDLER)
-CUTIEPII_PTB.add_handler(CUTIEPII_HANDLER)
-
+CUTIEPII_PTB.add_handler(DisableAbleMessageHandler(filters.Regex(r"(?i)(goodmorning|good morning)"), goodmorning, friendly="goodmorning"))
+CUTIEPII_PTB.add_handler(DisableAbleMessageHandler(filters.Regex(r"(?i)(goodnight|good night)"), goodnight, friendly="goodnight"))
+CUTIEPII_PTB.add_handler(DisableAbleMessageHandler(filters.Regex(r"(?i)^cutiepii\?"), cutiepii, friendly="decide"))
 
 __mod_name__ = "Fun"
-
-__handlers__ = [
-    GDMORNING_HANDLER,
-    GDNIGHT_HANDLER,
-    CUTIEPII_HANDLER,
-]

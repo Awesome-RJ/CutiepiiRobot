@@ -499,18 +499,8 @@ Locking bots will stop non-admins from adding bots to the chat.
 
 __mod_name__ = "Locks"
 
-LOCKTYPES_HANDLER = DisableAbleCommandHandler("locktypes", locktypes)
-LOCK_HANDLER = CommandHandler("lock", lock)  # , filters=Filters.group)
-UNLOCK_HANDLER = CommandHandler(
-    "unlock", unlock
-)  # , filters=Filters.group)
-LOCKED_HANDLER = CommandHandler("locks", list_locks)  # , filters=Filters.group)
-
-CUTIEPII_PTB.add_handler(LOCK_HANDLER)
-CUTIEPII_PTB.add_handler(UNLOCK_HANDLER)
-CUTIEPII_PTB.add_handler(LOCKTYPES_HANDLER)
-CUTIEPII_PTB.add_handler(LOCKED_HANDLER)
-
-CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.ALL & filters.ChatType.GROUPS, del_lockables), PERM_GROUP,
-)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("locktypes", locktypes))
+CUTIEPII_PTB.add_handler(CommandHandler("lock", lock))  # , filters=Filters.group)
+CUTIEPII_PTB.add_handler(CommandHandler("unlock", unlock))  # , filters=Filters.group)
+CUTIEPII_PTB.add_handler(CommandHandler("locks", list_locks))  # , filters=Filters.group)
+CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & filters.ChatType.GROUPS, del_lockables), PERM_GROUP)

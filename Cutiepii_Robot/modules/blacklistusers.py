@@ -179,13 +179,8 @@ def __user_info__(user_id):
     return text
 
 
-BL_HANDLER = CommandHandler("ignore", unbl_user, filters=filters.User(OWNER_ID))
-UNBL_HANDLER = CommandHandler("notice", unbl_user, filters=filters.User(OWNER_ID))
-BLUSERS_HANDLER = CommandHandler("ignoredlist", bl_users, filters=filters.User(OWNER_ID))
-
-CUTIEPII_PTB.add_handler(BL_HANDLER)
-CUTIEPII_PTB.add_handler(UNBL_HANDLER)
-CUTIEPII_PTB.add_handler(BLUSERS_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler("ignore", unbl_user, filters=filters.User(OWNER_ID)))
+CUTIEPII_PTB.add_handler(CommandHandler("notice", unbl_user, filters=filters.User(OWNER_ID)))
+CUTIEPII_PTB.add_handler(CommandHandler("ignoredlist", bl_users, filters=filters.User(OWNER_ID)))
 
 __mod_name__ = "Blacklisting Users"
-__handlers__ = [BL_HANDLER, UNBL_HANDLER, BLUSERS_HANDLER]

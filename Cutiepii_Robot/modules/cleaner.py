@@ -231,49 +231,32 @@ async def bluetext_ignore_list(update: Update, context: CallbackContext):
     return
 
 
-SET_CLEAN_BLUE_TEXT_HANDLER = CommandHandler(
+CUTIEPII_PTB.add_handler(CommandHandler(
     "cleanblue", set_blue_text_must_click
-)
-ADD_CLEAN_BLUE_TEXT_HANDLER = CommandHandler(
+))
+CUTIEPII_PTB.add_handler(CommandHandler(
     "ignoreblue", add_bluetext_ignore
-)
-REMOVE_CLEAN_BLUE_TEXT_HANDLER = CommandHandler(
+))
+CUTIEPII_PTB.add_handler(CommandHandler(
     "unignoreblue", remove_bluetext_ignore
-)
-ADD_CLEAN_BLUE_TEXT_GLOBAL_HANDLER = CommandHandler(
+))
+CUTIEPII_PTB.add_handler(CommandHandler(
     "gignoreblue",
     add_bluetext_ignore_global
-)
-REMOVE_CLEAN_BLUE_TEXT_GLOBAL_HANDLER = CommandHandler(
+))
+CUTIEPII_PTB.add_handler(CommandHandler(
     "ungignoreblue",
     remove_bluetext_ignore_global
-)
-LIST_CLEAN_BLUE_TEXT_HANDLER = CommandHandler(
+))
+CUTIEPII_PTB.add_handler(CommandHandler(
     "listblue", bluetext_ignore_list
-)
-CLEAN_BLUE_TEXT_HANDLER = MessageHandler(
+))
+CUTIEPII_PTB.add_handler(MessageHandler(
     filters.COMMAND & filters.ChatType.GROUPS,
     clean_blue_text_must_click
-)
-
-CUTIEPII_PTB.add_handler(SET_CLEAN_BLUE_TEXT_HANDLER)
-CUTIEPII_PTB.add_handler(ADD_CLEAN_BLUE_TEXT_HANDLER)
-CUTIEPII_PTB.add_handler(REMOVE_CLEAN_BLUE_TEXT_HANDLER)
-CUTIEPII_PTB.add_handler(ADD_CLEAN_BLUE_TEXT_GLOBAL_HANDLER)
-CUTIEPII_PTB.add_handler(REMOVE_CLEAN_BLUE_TEXT_GLOBAL_HANDLER)
-CUTIEPII_PTB.add_handler(LIST_CLEAN_BLUE_TEXT_HANDLER)
-CUTIEPII_PTB.add_handler(CLEAN_BLUE_TEXT_HANDLER, BLUE_TEXT_CLEAN_GROUP)
+))
 
 __mod_name__ = "Cleaning"
-__handlers__ = [
-    SET_CLEAN_BLUE_TEXT_HANDLER,
-    ADD_CLEAN_BLUE_TEXT_HANDLER,
-    REMOVE_CLEAN_BLUE_TEXT_HANDLER,
-    ADD_CLEAN_BLUE_TEXT_GLOBAL_HANDLER,
-    REMOVE_CLEAN_BLUE_TEXT_GLOBAL_HANDLER,
-    LIST_CLEAN_BLUE_TEXT_HANDLER,
-    (CLEAN_BLUE_TEXT_HANDLER, BLUE_TEXT_CLEAN_GROUP),
-]
 
 __help__ = f"""
 Blue text cleaner removed any made up commands that people send in your chat.

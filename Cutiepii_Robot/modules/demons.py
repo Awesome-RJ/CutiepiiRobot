@@ -100,4 +100,3 @@ telethn.add_event_handler(*DEMONS)
 
 __mod_name__ = "Demons"
 __command_list__ = ["demons"]
-__handlers__ = [DEMONS]

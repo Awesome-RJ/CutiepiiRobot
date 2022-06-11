@@ -569,29 +569,15 @@ Constantly help banning spammers off from your group automatically So, you wont 
 *Note:* Users can appeal spamwatch bans at @SpamwatchSupport
 """
 
-GBAN_HANDLER = CommandHandler("gban", gban)
-UNGBAN_HANDLER = CommandHandler("ungban", ungban)
-GBAN_LIST = CommandHandler("gbanlist", gbanlist)
-
-GBAN_STATUS = CommandHandler(
-    "antispam", gbanstat, filters=filters.ChatType.GROUPS
-)
-CHECK_GBAN_HANDLER = CommandHandler("checkgb", check_gbans, filters=filters.User(OWNER_ID))
-CLEAN_GBAN_HANDLER = CommandHandler("cleangb", clear_gbans, filters=filters.User(OWNER_ID))
-
-GBAN_ENFORCER = MessageHandler(
-    filters.ALL & filters.ChatType.GROUPS, enforce_gban
-)
-
-CUTIEPII_PTB.add_handler(GBAN_HANDLER)
-CUTIEPII_PTB.add_handler(UNGBAN_HANDLER)
-CUTIEPII_PTB.add_handler(GBAN_LIST)
-CUTIEPII_PTB.add_handler(GBAN_STATUS)
-CUTIEPII_PTB.add_handler(CHECK_GBAN_HANDLER)
-CUTIEPII_PTB.add_handler(CLEAN_GBAN_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler("gban", gban))
+CUTIEPII_PTB.add_handler(CommandHandler("ungban", ungban))
+CUTIEPII_PTB.add_handler(CommandHandler("gbanlist", gbanlist))
+CUTIEPII_PTB.add_handler(CommandHandler("antispam", gbanstat, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("checkgb", check_gbans, filters=filters.User(OWNER_ID)))
+CUTIEPII_PTB.add_handler(CommandHandler("cleangb", clear_gbans, filters=filters.User(OWNER_ID)))
+GBAN_ENFORCER = MessageHandler(filters.ALL & filters.ChatType.GROUPS, enforce_gban)
 
 __mod_name__ = "Anti-Spam"
-__handlers__ = [GBAN_HANDLER, UNGBAN_HANDLER, GBAN_LIST, GBAN_STATUS]
 
 if STRICT_GBAN:  # enforce GBANS if this is set
     CUTIEPII_PTB.add_handler(GBAN_ENFORCER, GBAN_ENFORCE_GROUP)

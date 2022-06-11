@@ -297,30 +297,13 @@ __help__ = """
 
 __mod_name__ = "Super Users"
 
-SUDO_HANDLER = CommandHandler("addsudo", addsudo)
-UNSUDO_HANDLER = CommandHandler("removesudo", removesudo)
-SUPPORT_HANDLER = CommandHandler("addsupport", addsupport)
-UNSUPPORT_HANDLER = CommandHandler("removesupport",
-                                   removesupport)
-WHITELIST_HANDLER = CommandHandler("addwhitelist",
-                                   addwhitelist)
-UNWHITELIST_HANDLER = CommandHandler("removewhitelist",
-                                     removewhitelist)
-DEVLIST_HANDLER = CommandHandler(("devlist"), devlist)
-SUDOLIST_HANDLER = CommandHandler(("sudolist"), sudolist)
-SUPPORTLIST_HANDLER = CommandHandler(("supportlist"),
-                                     supportlist)
-WHITELISTLIST_HANDLER = CommandHandler(("whitelistlist"),
-                                       whitelistlist)
-
-CUTIEPII_PTB.add_handler(SUDO_HANDLER)
-CUTIEPII_PTB.add_handler(UNSUDO_HANDLER)
-CUTIEPII_PTB.add_handler(SUPPORT_HANDLER)
-CUTIEPII_PTB.add_handler(UNSUPPORT_HANDLER)
-CUTIEPII_PTB.add_handler(WHITELIST_HANDLER)
-CUTIEPII_PTB.add_handler(UNWHITELIST_HANDLER)
-
-CUTIEPII_PTB.add_handler(DEVLIST_HANDLER)
-CUTIEPII_PTB.add_handler(SUDOLIST_HANDLER)
-CUTIEPII_PTB.add_handler(SUPPORTLIST_HANDLER)
-CUTIEPII_PTB.add_handler(WHITELISTLIST_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler("addsudo", addsudo))
+CUTIEPII_PTB.add_handler(CommandHandler("removesudo", removesudo))
+CUTIEPII_PTB.add_handler(CommandHandler("addsupport", addsupport))
+CUTIEPII_PTB.add_handler(CommandHandler("removesupport", removesupport))
+CUTIEPII_PTB.add_handler(CommandHandler("addwhitelist", addwhitelist))
+CUTIEPII_PTB.add_handler(CommandHandler("removewhitelist", removewhitelist))
+CUTIEPII_PTB.add_handler(CommandHandler(("devlist"), devlist))
+CUTIEPII_PTB.add_handler(CommandHandler(("sudolist"), sudolist))
+CUTIEPII_PTB.add_handler(CommandHandler(("supportlist"), supportlist))
+CUTIEPII_PTB.add_handler(CommandHandler(("whitelistlist"), whitelistlist))

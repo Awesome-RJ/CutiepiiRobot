@@ -238,8 +238,7 @@ PURGETO_HANDLER = purgeto_messages, events.NewMessage(pattern="^[!/]purgeto$")
 DEL_HANDLER = delete_messages, events.NewMessage(pattern="^[!/]del$")
 
 #PTB CMDs
-PURGEFROM_HANDLER = CommandHandler("purgefrom", purgefrom, filters=filters.ChatType.GROUPS)
-CUTIEPII_PTB.add_handler(PURGEFROM_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler("purgefrom", purgefrom, filters=filters.ChatType.GROUPS))
 
 telethn.add_event_handler(*PURGE_HANDLER)
 telethn.add_event_handler(*PURGETO_HANDLER)
@@ -247,4 +246,3 @@ telethn.add_event_handler(*DEL_HANDLER)
 
 __mod_name__ = "Purges"
 __command_list__ = ["del", "purge", "purgefrom", "purgeto"]
-__handlers__ = [PURGE_HANDLER, DEL_HANDLER]

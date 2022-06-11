@@ -85,14 +85,9 @@ def logs(update: Update, context: CallbackContext):
         context.bot.send_document(document=f, filename=f.name, chat_id=user.id)
 
 
-LOG_HANDLER = CommandHandler("logs", logs)
-DEBUG_HANDLER = CommandHandler("debug", debug)
-
-CUTIEPII_PTB.add_handler(LOG_HANDLER)
-CUTIEPII_PTB.add_handler(DEBUG_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler("logs", logs))
+CUTIEPII_PTB.add_handler(CommandHandler("debug", debug))
 
 __mod_name__ = "Debug"
 
 __command_list__ = ["debug"]
-
-__handlers__ = [DEBUG_HANDLER]

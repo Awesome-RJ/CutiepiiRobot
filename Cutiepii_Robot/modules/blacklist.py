@@ -511,25 +511,8 @@ Note:
 
 __mod_name__ = "Blacklists"
 
-BLACKLIST_HANDLER = DisableAbleCommandHandler(
-    "blacklist", blacklist, admin_ok=True)
-ADD_BLACKLIST_HANDLER = CommandHandler("addblacklist", add_blacklist)
-UNBLACKLIST_HANDLER = CommandHandler("unblacklist", unblacklist)
-BLACKLISTMODE_HANDLER = CommandHandler(
-    "blacklistmode", blacklist_mode)
-BLACKLIST_DEL_HANDLER = MessageHandler(
-    (filters.TEXT | filters.COMMAND | filters.Sticker.ALL | filters.PHOTO)
-    & filters.ChatType.GROUPS,
-    del_blacklist
-)
-
-CUTIEPII_PTB.add_handler(BLACKLIST_HANDLER)
-CUTIEPII_PTB.add_handler(ADD_BLACKLIST_HANDLER)
-CUTIEPII_PTB.add_handler(UNBLACKLIST_HANDLER)
-CUTIEPII_PTB.add_handler(BLACKLISTMODE_HANDLER)
-CUTIEPII_PTB.add_handler(BLACKLIST_DEL_HANDLER, group=BLACKLIST_GROUP)
-
-__handlers__ = [
-    BLACKLIST_HANDLER, ADD_BLACKLIST_HANDLER, UNBLACKLIST_HANDLER,
-    BLACKLISTMODE_HANDLER, (BLACKLIST_DEL_HANDLER, BLACKLIST_GROUP)
-]
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("blacklist", blacklist, admin_ok=True))
+CUTIEPII_PTB.add_handler(CommandHandler("addblacklist", add_blacklist))
+CUTIEPII_PTB.add_handler(CommandHandler("unblacklist", unblacklist))
+CUTIEPII_PTB.add_handler(CommandHandler("blacklistmode", blacklist_mode))
+CUTIEPII_PTB.add_handler(MessageHandler((filters.TEXT | filters.COMMAND | filters.Sticker.ALL | filters.PHOTO) & filters.ChatType.GROUPS, del_blacklist))

@@ -123,8 +123,5 @@ def eliminate_linked_channel_msg(update: Update, _: CallbackContext):
     except TelegramError:
         return
 
-SET_ANTILINKEDCHANNEL = DisableAbleCommandHandler("antilinkedchan", set_antilinkedchannel, filters=filters.ChatType.GROUPS)
-SET_ANTI_PIN_CHANNEL = DisableAbleCommandHandler("antichannelpin", set_antipinchannel, filters=filters.ChatType.GROUPS)
-
-CUTIEPII_PTB.add_handler(SET_ANTILINKEDCHANNEL)
-CUTIEPII_PTB.add_handler(SET_ANTI_PIN_CHANNEL)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("antilinkedchan", set_antilinkedchannel, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("antichannelpin", set_antipinchannel, filters=filters.ChatType.GROUPS))

@@ -149,18 +149,10 @@ async def spellcheck(update: Update, context: CallbackContext):
             "Reply to some message to get grammar corrected text!"
         )
 
-CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler(["tr", "tl"], translate)
-)
-CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler(["langs", "lang"], languages)
-)
-CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("tts", gtts)
-)
-CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("splcheck", spellcheck)
-)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["tr", "tl"], translate))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["langs", "lang"], languages))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("tts", gtts))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("splcheck", spellcheck))
 
 __help__ = """
 *Commands:*

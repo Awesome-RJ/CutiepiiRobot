@@ -70,7 +70,4 @@ async def eliminate_channel(update: Update, context: CallbackContext):
         await bot.ban_chat_sender_chat(sender_chat_id=sender_chat.id, chat_id=chat.id)
 
 
-ANTICHANNEL_HANDLER = DisableAbleCommandHandler("antichannel", set_antichannel, filters=filters.ChatType.GROUPS)
-
-
-CUTIEPII_PTB.add_handler(ANTICHANNEL_HANDLER)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("antichannel", set_antichannel, filters=filters.ChatType.GROUPS))

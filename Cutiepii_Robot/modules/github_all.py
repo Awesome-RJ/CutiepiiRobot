@@ -241,28 +241,11 @@ def deletion(update: Update, context: CallbackContext, delmsg):
 
 __mod_name__ = "Git"
 
-
-RELEASE_HANDLER = DisableAbleCommandHandler(
-    "git", getRelease, admin_ok=True
-)
-FETCH_HANDLER = DisableAbleCommandHandler(
-    "fetch", cmdFetch, admin_ok=True
-)
-SAVEREPO_HANDLER = CommandHandler("saverepo", saveRepo)
-DELREPO_HANDLER = CommandHandler("delrepo", delRepo)
-LISTREPO_HANDLER = DisableAbleCommandHandler("listrepo", listRepo, admin_ok=True)
-VERCHECKER_HANDLER = DisableAbleCommandHandler("gitver", getVer, admin_ok=True)
-CHANGELOG_HANDLER = DisableAbleCommandHandler(
-    "changelog", changelog, admin_ok=True
-)
-
-HASHFETCH_HANDLER = MessageHandler(r"^&[^\s]+", hashFetch)
-
-CUTIEPII_PTB.add_handler(RELEASE_HANDLER)
-CUTIEPII_PTB.add_handler(FETCH_HANDLER)
-CUTIEPII_PTB.add_handler(SAVEREPO_HANDLER)
-CUTIEPII_PTB.add_handler(DELREPO_HANDLER)
-CUTIEPII_PTB.add_handler(LISTREPO_HANDLER)
-CUTIEPII_PTB.add_handler(HASHFETCH_HANDLER)
-CUTIEPII_PTB.add_handler(VERCHECKER_HANDLER)
-CUTIEPII_PTB.add_handler(CHANGELOG_HANDLER)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("git", getRelease, admin_ok=True))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("fetch", cmdFetch, admin_ok=True))
+CUTIEPII_PTB.add_handler(CommandHandler("saverepo", saveRepo))
+CUTIEPII_PTB.add_handler(CommandHandler("delrepo", delRepo))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("listrepo", listRepo, admin_ok=True))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("gitver", getVer, admin_ok=True))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("changelog", changelog, admin_ok=True))
+CUTIEPII_PTB.add_handler(MessageHandler(r"^&[^\s]+", hashFetch))

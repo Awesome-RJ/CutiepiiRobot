@@ -74,8 +74,4 @@ async def get_user_common_chats(update: Update, context: CallbackContext):
         os.remove("common_chats.txt")
 
 
-COMMON_CHATS_HANDLER = CommandHandler(
-    "getchats", get_user_common_chats,
-)
-
-CUTIEPII_PTB.add_handler(COMMON_CHATS_HANDLER)
+CUTIEPII_PTB.add_handler(CommandHandler("getchats", get_user_common_chats))

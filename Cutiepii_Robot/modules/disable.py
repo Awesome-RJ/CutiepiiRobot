@@ -281,23 +281,18 @@ if is_module_loaded(FILENAME):
   ➛ /listcmds*:* list all possible toggleable commands
     """
 
-    DISABLE_HANDLER = CommandHandler(
+    CUTIEPII_PTB.add_handler(CommandHandler(
         "disable", disable
-    )  # , filters=filters.ChatType.GROUPS)
-    ENABLE_HANDLER = CommandHandler(
+    ))  # , filters=filters.ChatType.GROUPS)
+    CUTIEPII_PTB.add_handler(CommandHandler(
         "enable", enable
-    )  # , filters=filters.ChatType.GROUPS)
-    COMMANDS_HANDLER = CommandHandler(
+    ))  # , filters=filters.ChatType.GROUPS)
+    CUTIEPII_PTB.add_handler(CommandHandler(
         ["cmds", "disabled"], commands
-    )  # , filters=filters.ChatType.GROUPS)
-    TOGGLE_HANDLER = CommandHandler(
+    ))  # , filters=filters.ChatType.GROUPS)
+    CUTIEPII_PTB.add_handler(CommandHandler(
         "listcmds", list_cmds
-    )  # , filters=filters.ChatType.GROUPS)
-
-    CUTIEPII_PTB.add_handler(DISABLE_HANDLER)
-    CUTIEPII_PTB.add_handler(ENABLE_HANDLER)
-    CUTIEPII_PTB.add_handler(COMMANDS_HANDLER)
-    CUTIEPII_PTB.add_handler(TOGGLE_HANDLER)
+    ))  # , filters=filters.ChatType.GROUPS)
 
 else:
     DisableAbleCommandHandler = CommandHandler

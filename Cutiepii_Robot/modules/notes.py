@@ -565,26 +565,17 @@ A button can be added to a note by using standard markdown link syntax - the lin
 
 __mod_name__ = "Notes"
 
-GET_HANDLER = CommandHandler("get", cmd_get)
-HASH_GET_HANDLER = MessageHandler(
+CUTIEPII_PTB.add_handler(CommandHandler("get", cmd_get))
+CUTIEPII_PTB.add_handler(MessageHandler(
     filters.Regex(r"^#[\w\-]+(?!\n)$"), hash_get
-)
-SLASH_GET_HANDLER = MessageHandler(filters.Regex(r"^/\d+$"), slash_get)
-SAVE_HANDLER = CommandHandler("save", save)
-DELETE_HANDLER = CommandHandler("clear", clear)
+))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.Regex(r"^/\d+$"), slash_get))
+CUTIEPII_PTB.add_handler(CommandHandler("save", save))
+CUTIEPII_PTB.add_handler(CommandHandler("clear", clear))
 
-LIST_HANDLER = DisableAbleCommandHandler(
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(
     ["notes", "saved"], list_notes, admin_ok=True
-)
+))
 
-CLEARALL = DisableAbleCommandHandler("removeallnotes", clearall)
-CLEARALL_BTN = CallbackQueryHandler(clearall_btn, pattern=r"notes_.*")
-
-CUTIEPII_PTB.add_handler(GET_HANDLER)
-CUTIEPII_PTB.add_handler(SAVE_HANDLER)
-CUTIEPII_PTB.add_handler(LIST_HANDLER)
-CUTIEPII_PTB.add_handler(DELETE_HANDLER)
-CUTIEPII_PTB.add_handler(HASH_GET_HANDLER)
-CUTIEPII_PTB.add_handler(SLASH_GET_HANDLER)
-CUTIEPII_PTB.add_handler(CLEARALL)
-CUTIEPII_PTB.add_handler(CLEARALL_BTN)
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("removeallnotes", clearall))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(clearall_btn, pattern=r"notes_.*"))

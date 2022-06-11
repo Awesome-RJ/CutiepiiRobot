@@ -164,23 +164,13 @@ async def modr(update: Update, context: CallbackContext):
 
 __mod_name__ = "Moderation" 
 
-ADDMOD = DisableAbleCommandHandler("addmod", mod)
-RMMOD = DisableAbleCommandHandler("rmmod", dismod)
-MODLIST = DisableAbleCommandHandler("modlist", modd)
-MODCHECK = DisableAbleCommandHandler("modcheck", modr)
-
-CUTIEPII_PTB.add_handler(ADDMOD)
-CUTIEPII_PTB.add_handler(RMMOD)
-CUTIEPII_PTB.add_handler(MODLIST)
-CUTIEPII_PTB.add_handler(MODCHECK)
+CUTIEPII_PTB.add_handler(ADDMODDisableAbleCommandHandler("addmod", mod))
+CUTIEPII_PTB.add_handler(ADDMODDisableAbleCommandHandler("rmmod", dismod))
+CUTIEPII_PTB.add_handler(ADDMODDisableAbleCommandHandler("modlist", modd))
+CUTIEPII_PTB.add_handler(ADDMODDisableAbleCommandHandler("modcheck", modr))
 
 __command_list__ = ["addmod", 
                     "rmmod", 
                     "modlist", 
                     "modcheck",
                    ]
-__handlers__ = [ADDMOD, 
-                RMMOD, 
-                MODLIST, 
-                MODCHECK,
-               ]
