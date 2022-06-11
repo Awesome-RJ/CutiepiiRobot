@@ -189,7 +189,10 @@ async def lock(update, context) -> str:  # sourcery no-metrics
     if bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES):
         if len(args) >= 1:
             ltype = args[0].lower()
-            if ltype in LOCK_TYPES:
+            if ltype == "anonchannel":
+                text = "`anonchannel` is not a lock, please use `/antichannel on` to restrict channels"
+                send_message(update.effective_message, text, parse_mode = "markdown")
+            elif ltype in LOCK_TYPES:
 
                 text = f"Locked {ltype} for non-admins!"
                 sql.update_lock(chat.id, ltype, locked=True)
@@ -254,7 +257,10 @@ def unlock(update, context) -> str:  # sourcery no-metrics
     if user_is_admin(update, user.id, allow_moderators=True):
         if len(args) >= 1:
             ltype = args[0].lower()
-            if ltype in LOCK_TYPES:
+            if ltype == "anonchannel":
+                text = "`anonchannel` is not a lock, please use `/antichannel on` to restrict channels"
+                send_message(update.effective_message, text, parse_mode = "markdown")
+            elif ltype in LOCK_TYPES:
                 text = f"Unlocked {ltype} for everyone!"
                 sql.update_lock(chat.id, ltype, locked=False)
                 send_message(update.effective_message, text, parse_mode="markdown")

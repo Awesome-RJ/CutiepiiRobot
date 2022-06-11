@@ -774,6 +774,10 @@ async def welcome(update: Update, context: CallbackContext):
                 ENUM_FUNC_MAP[welcome_type](chat.id, cust_content, caption=welcome_m)
 
             else:
+                if welcome_type in [sql.Types.TEXT, sql.Types.BUTTON_TEXT]:
+                    kwargs = {'disable_web_page_preview': True}
+                else:
+                    kwargs = {}
                 keyb = build_keyboard(buttons)
                 keyboard = InlineKeyboardMarkup(keyb)
                 ENUM_FUNC_MAP[welcome_type](
@@ -782,7 +786,7 @@ async def welcome(update: Update, context: CallbackContext):
                     caption=welcome_m,
                     reply_markup=keyboard,
                     parse_mode=ParseMode.MARKDOWN,
-                    disable_web_page_preview=True,
+                    **kwargs,
                 )
 
     elif len(args) >= 1:
