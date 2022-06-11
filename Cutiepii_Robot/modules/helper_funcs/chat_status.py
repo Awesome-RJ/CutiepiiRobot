@@ -583,7 +583,7 @@ def user_can_ban(func):
 def connection_status(func):
     @wraps(func)
     async def connected_status(update: Update, context: CallbackContext, *args, **kwargs):
-        if not (update.effective_chat or update.effective_user):
+        if update.effective_chat is None or update.effective_user is None:
             return
         if conn := await connected(context.bot, update, update.effective_chat, update.effective_user.id, need_admin=False):
             chat = CUTIEPII_PTB.bot.getChat(conn)
