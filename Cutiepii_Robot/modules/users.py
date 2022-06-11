@@ -34,28 +34,19 @@ import contextlib
 from io import BytesIO
 from time import sleep
 
-from telegram.error import BadRequest, TelegramError
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.constants import ParseMode
-from telegram.ext import (
-    CallbackContext,
-    CommandHandler,
-    filters,
-    MessageHandler,
-)
+from telegram import TelegramError, Update
+from telegram.error import BadRequest
+from telegram.ext import MessageHandler, CommandHandler, CallbackContext
 
+import Cutiepii_Robot.modules.no_sql.sql as sql
 import Cutiepii_Robot.modules.sql.users_sql as sql
-from Cutiepii_Robot import DEV_USERS, LOGGER, OWNER_ID, CUTIEPII_PTB
-from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus, sudo_plus
-from Cutiepii_Robot.modules.sql.users_sql import get_all_users
-from Cutiepii_Robot.modules.helper_funcs.string_handling import button_markdown_parser
+from Cutiepii_Robot import CUTIEPII_PTB, LOGGER, CUTIEPII_PTB
 
 USERS_GROUP = 4
-CHAT_GROUP = 5
-DEV_AND_MORE = DEV_USERS.append(int(OWNER_ID))
+CHAT_GROUP = 10
 
 
-async def get_user_id(username):
+def get_user_id(username):
     # ensure valid userid
     if len(username) <= 5:
         return None
@@ -69,10 +60,10 @@ async def get_user_id(username):
         return None
 
     if len(users) == 1:
-        return users[0].user_id
+        return users[0]["_id"]
     for user_obj in users:
         try:
-            userdat = await CUTIEPII_PTB.bot.get_chat(user_obj.user_id)
+            userdat = await CUTIEPII_PTB.bot.get_chat(user_obj["_id"])
             if userdat.username == username:
                 return userdat.id
 
@@ -82,69 +73,30 @@ async def get_user_id(username):
 
     return None
 
-def build_keyboard_alternate(buttons):
-    keyb = []
-    for btn in buttons:
-        if btn[2] and keyb:
-            keyb[-1].append(InlineKeyboardButton(btn[0], url=btn[1]))
-        else:
-            keyb.append([InlineKeyboardButton(btn[0], url=btn[1])])
 
-    return keyb
-
-
-@dev_plus
-async def broadcast(update: Update, context: CallbackContext):
-    msg = update.effective_message
-    args = msg.text.split(None, 1)
-    text, buttons = button_markdown_parser(args[1], entities=msg.parse_entities() or msg.parse_caption_entities(), offset=(len(args[1]) - len(msg.text)))
-    btns = build_keyboard_alternate(buttons)
-
-    if len(args) >= 2:
-        to_group = False
-        to_user = False
-        if args[0] == "/broadcastgroups":
-            to_group = True
-        elif args[0] == "/broadcastusers":
-            to_user = True
-        else:
-            to_group = to_user = True
-        chats = sql.get_all_chats() or []
-        users = get_all_users()
+def broadcast(update: Update, context: CallbackContext):
+    to_send = await update.effective_message.text.split(None, 1)
+    if len(to_send) >= 2:
+        chats_ = sql.get_all_chats() or []
         failed = 0
-        failed_user = 0
-        if to_group:
-            for chat in chats:
-                try:
-                    await context.bot.sendMessage(
-                        int(chat.chat_id),
-                        text,
-                        parse_mode=ParseMode.MARKDOWN,
-                        reply_markup=InlineKeyboardMarkup(btns),
-                        disable_web_page_preview=True,
-                    )
-                    sleep(0.1)
-                except TelegramError:
-                    failed += 1
-        if to_user:
-            for user in users:
-                try:
-                    await context.bot.sendMessage(
-                        int(user.user_id),
-                        text,
-                       parse_mode=ParseMode.MARKDOWN,
-                        reply_markup=InlineKeyboardMarkup(btns),
-                        disable_web_page_preview=True,
-                    )
-                    sleep(0.1)
-                except TelegramError:
-                    failed_user += 1
+        for chat in chats_:
+            try:
+                await context.bot.sendMessage(int(chat["chat_id"]), to_send[1])
+                sleep(0.1)
+            except TelegramError:
+                failed += 1
+                LOGGER.warning(
+                    "Couldn't send broadcast to %s, group name %s",
+                    str(chat["chat_id"]),
+                    str(chat["chat_name"]),
+                )
+
         await update.effective_message.reply_text(
-            f"Broadcast complete.\nGroups failed: {failed}.\nUsers failed: {failed_user}.",
+            f"Broadcast complete. {failed} groups failed to receive the message, probably due to being kicked."
         )
 
 
-async def log_user(update: Update, _: CallbackContext):
+def log_user(update: Update, _: CallbackContext):
     chat = update.effective_chat
     msg = update.effective_message
 
@@ -186,7 +138,9 @@ async def log_user(update: Update, _: CallbackContext):
                 with contextlib.suppress(AttributeError):
                     sql.update_user(entity.user.id, entity.user.username)
     if msg.sender_chat and not msg.is_automatic_forward:
-        sql.update_user(msg.sender_chat.id, msg.sender_chat.username, chat.id, chat.title)
+        sql.update_user(
+            msg.sender_chat.id, msg.sender_chat.username, chat.id, chat.title
+        )
 
     if msg.new_chat_members:
         for user in msg.new_chat_members:
@@ -194,44 +148,45 @@ async def log_user(update: Update, _: CallbackContext):
                 continue
             sql.update_user(user.id, user.username, chat.id, chat.title)
 
+    if req := update.chat_join_request:
+        sql.update_user(
+            req.from_user.id, req.from_user.username, chat.id, chat.title
+        )
 
 
-@sudo_plus
-async def chats(update: Update, context: CallbackContext):
+def chats(update: Update, _: CallbackContext):
     all_chats = sql.get_all_chats() or []
     chatfile = "List of chats.\n0. Chat name | Chat ID | Members count\n"
     P = 1
     for chat in all_chats:
-        with contextlib.suppress(Exception):
+        try:
             curr_chat = await context.bot.getChat(chat.chat_id)
             bot_member = curr_chat.get_member(context.bot.id)
             chat_members = curr_chat.get_member_count(context.bot.id)
             chatfile += "{}. {} | {} | {}\n".format(
-                P,
-                chat.chat_name,
-                chat.chat_id,
-                chat_members,
+                P, chat.chat_name, chat.chat_id, chat_members
             )
-            P = P + 1
+            P += 1
+        except Exception:
+            pass
 
     with BytesIO(str.encode(chatfile)) as output:
-        output.name = "groups_list.txt"
+        output.name = "glist.txt"
         await update.effective_message.reply_document(
             document=output,
-            filename="groups_list.txt",
+            filename="glist.txt",
             caption="Here be the list of groups in my database.",
         )
-
 
 """
 async def chat_checker(update: Update, context: CallbackContext):
     bot = context.bot
     if (
-        (await update.effective_chat.get_member(CUTIEPII_PTB.bot.id)).can_restrict_members is False
+        await update.effective_message.chat.get_member(bot.id).can_send_messages
+        is False
     ):
         await bot.leaveChat(update.effective_message.chat.id)
 """
-
 
 def __user_info__(user_id):
     if user_id in [777000, 1087968824]:

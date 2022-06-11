@@ -537,10 +537,11 @@ async def settings_button(update: Update, context: CallbackContext):
             text = "*{}* has the following settings for the *{}* module:\n\n".format(
                 escape_markdown(chat.title), CHAT_SETTINGS[module].__mod_name__
             ) + CHAT_SETTINGS[module].__chat_settings__(chat_id, user.id)
-            await query.message.reply_text(
-                text=text,
-                parse_mode=ParseMode.MARKDOWN,
-                reply_markup=InlineKeyboardMarkup(
+            try:
+                keyboard = CHAT_SETTINGS[module].__chat_settings_buttons__(chat_id, user.id)
+            except AttributeError:
+                keyboard = []
+            kbrd = InlineKeyboardMarkup(
                     [
                         [
                             InlineKeyboardButton(
@@ -549,7 +550,11 @@ async def settings_button(update: Update, context: CallbackContext):
                             )
                         ]
                     ]
-                ),
+            keyboard.append(kbrd)
+            query.message.edit_text(
+                text=text,
+                parse_mode=ParseMode.MARKDOWN,
+                reply_markup=keyboard
             )
 
         elif prev_match:
@@ -569,7 +574,7 @@ async def settings_button(update: Update, context: CallbackContext):
             chat_id = next_match.group(1)
             next_page = int(next_match.group(2))
             chat = await bot.get_chat(chat_id)
-            await query.message.reply_text(
+            await query.message.edit_text(
                 f"Hi there! There are quite a few settings for {chat.title} - go ahead and pick what you're interested in.",
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(
@@ -581,7 +586,7 @@ async def settings_button(update: Update, context: CallbackContext):
         elif back_match:
             chat_id = back_match.group(1)
             chat = await bot.get_chat(chat_id)
-            await query.message.reply_text(
+            await query.message.edit_text(
                 text=f"Hi there! There are quite a few settings for {escape_markdown(chat.title)} - go ahead and pick what you're interested in.",
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
@@ -591,7 +596,6 @@ async def settings_button(update: Update, context: CallbackContext):
 
         # ensure no spinny white circle
         await bot.answer_callback_query(query.id)
-        await query.message.delete()
     except BadRequest as excp:
         if excp.message not in [
             "Message is not modified",

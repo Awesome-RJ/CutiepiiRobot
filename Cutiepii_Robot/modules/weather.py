@@ -106,7 +106,7 @@ async def weather(update: Update, context: CallbackContext):
             request = get(url)
             result = json.loads(request.text)
         except ConnectionError:
-            return await message.reply_text("Connection timed out! please try again later.")
+            return message.reply_text("Connection timed out! please try again later.")
 
         if request.status_code != 200:
             msg = "No weather information for this location!"
