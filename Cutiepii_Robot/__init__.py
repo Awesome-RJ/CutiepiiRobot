@@ -312,9 +312,6 @@ CUTIEPII_PTB = (
 CUTIEPII_PTB = (
     tg.Application.builder()
     .token(TOKEN)
-    .base_url(BOT_API_URL)
-    .base_file_url(BOT_API_FILE_URL)
-    .persistence(persistence=PostgresPersistence(session=SESSION))
     .build()
 )
 asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
