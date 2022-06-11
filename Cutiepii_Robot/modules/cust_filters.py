@@ -47,7 +47,7 @@ ENUM_FUNC_MAP = {
 
 @cutiepii_cmd(command='filters', admin_ok=True)
 
-async def list_handlers(update, context):
+async def list_handlers(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
 
@@ -269,7 +269,7 @@ async def stop_filter(update, context) -> str:
     )
 
 @cutiepii_msg((PTB_Cutiepii_Filters.TEXT & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE))
-async def reply_filter(update, context):  # sourcery no-metrics
+async def reply_filter(update: Update, context: CallbackContext):  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
 
@@ -283,9 +283,9 @@ async def reply_filter(update, context):  # sourcery no-metrics
     for keyword in chat_filters:
         pattern = r"( |^|[^\w])" + re.escape(keyword) + r"( |$|[^\w])"
         if re.search(pattern, to_match, flags=re.IGNORECASE):
-            filt = sql.get_filter(chat.id, keyword)
+            filt = sql.get_filter(int(chat.id), keyword)
             if filt.reply == "there is should be a new reply":
-                buttons = sql.get_buttons(chat.id, filt.keyword)
+                buttons = sql.get_buttons(int(chat.id), filt.keyword)
                 keyb = build_keyboard_parser(context.bot, chat.id, buttons)
                 keyboard = InlineKeyboardMarkup(keyb)
 
@@ -321,7 +321,7 @@ async def reply_filter(update, context):  # sourcery no-metrics
                         error_catch = get_exception(excp, filt, chat)
                         if error_catch == "noreply":
                             try:
-                                await context.bot.send_message(chat.id, filtext, parse_mode=ParseMode.HTML, disable_web_page_preview=True, reply_markup=keyboard)
+                                await context.bot.send_message(int(chat.id), filtext, parse_mode=ParseMode.HTML, disable_web_page_preview=True, reply_markup=keyboard)
 
                             except BadRequest as excp:
                                 LOGGER.exception(f"Error in filters: {excp.message}")
@@ -360,7 +360,7 @@ async def reply_filter(update, context):  # sourcery no-metrics
             elif filt.is_video:
                 await message.reply_video(filt.reply)
             elif filt.has_markdown:
-                buttons = sql.get_buttons(chat.id, filt.keyword)
+                buttons = sql.get_buttons(int(chat.id), filt.keyword)
                 keyb = build_keyboard_parser(context.bot, chat.id, buttons)
                 keyboard = InlineKeyboardMarkup(keyb)
 
@@ -381,7 +381,7 @@ async def reply_filter(update, context):  # sourcery no-metrics
                             LOGGER.exception(f"Error in filters: {excp.message}")
                     elif excp.message == "Reply message not found":
                         try:
-                            await context.bot.send_message(chat.id, filt.reply, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True, reply_markup=keyboard)
+                            await context.bot.send_message(int(chat.id), filt.reply, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True, reply_markup=keyboard)
 
                         except BadRequest as excp:
                             LOGGER.exception(f"Error in filters: {excp.message}")
@@ -403,7 +403,7 @@ async def reply_filter(update, context):  # sourcery no-metrics
             break
 
 @cutiepii_cmd(command=["removeallfilters", "stopall"], filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-async def rmall_filters(update, context):
+async def rmall_filters(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
     member = chat.get_member(user.id)
@@ -449,7 +449,7 @@ async def rmall_callback(update: Update, context: CallbackContext):
                 filterlist.append(x)
 
             for i in filterlist:
-                sql.remove_filter(chat.id, i)
+                sql.remove_filter(int(chat.id), i)
 
             msg.edit_text(f"Cleaned {count} filters in {chat.title}")
 

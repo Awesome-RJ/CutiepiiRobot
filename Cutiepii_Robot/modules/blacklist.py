@@ -106,7 +106,7 @@ async def blacklist(update: Update, context: CallbackContext):
 @cutiepii_cmd(command="addblacklist")
 @user_admin(AdminPerms.CAN_DELETE_MESSAGES)
 
-async def add_blacklist(update, context):
+async def add_blacklist(update: Update, context: CallbackContext):
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -370,7 +370,7 @@ async def del_blacklist(update: Update, context: CallbackContext):
     if not to_match:
         return
 
-    if is_approved(chat.id, user.id):
+    if is_approved(int(chat.id), user.id):
         return 
 
     getmode, value = sql.get_blacklist_setting(chat.id)

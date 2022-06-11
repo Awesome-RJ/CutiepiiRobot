@@ -101,11 +101,11 @@ async def list_nsfw_chats(update: Update, context: CallbackContext):
             sql.rem_nsfw(*chat)
         except RetryAfter as e:
             sleep(e.retry_after)
-    await message.reply_text(text, parse_mode="HTML")
+    await message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
 
-async def neko(update, context):
+async def neko(update: Update, context: CallbackContext):
     message = update.effective_message
     args = context.args
     flag = args[0]

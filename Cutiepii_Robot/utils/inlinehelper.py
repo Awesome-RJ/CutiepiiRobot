@@ -207,7 +207,7 @@ async def google_search_func(answers, text):
             break
         limit += 1
 
-        try:
+        with contextlib.suppress(KeyError):
             msg = f"""
 [{i["titles"]}]({i["links"]})
 {i["descriptions"]}"""
@@ -221,8 +221,6 @@ async def google_search_func(answers, text):
                     ),
                 )
             )
-        except KeyError:
-            pass
     return answers
 
 

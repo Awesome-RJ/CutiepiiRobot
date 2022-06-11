@@ -87,7 +87,7 @@ def is_sudo_plus(_: Chat, user_id: int) -> bool:
 def is_stats_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
     return user_id in DEV_USERS
 
-def user_can_changeinfo(chat: Chat, user: User, bot_id: int) -> bool:
+def user_can_changeinfo(chat: Chat, user: User, _: int) -> bool:
     return chat.get_member(user.id).can_change_info
 
 def owner_plus(func):
@@ -174,7 +174,7 @@ def user_can_promote(func):
 
     return user_is_promoter
 
-def user_can_pin(chat: Chat, user: User, bot_id: int) -> bool:
+def user_can_pin(chat: Chat, user: User, _: int) -> bool:
     return chat.get_member(user.id).can_pin_messages
 """
 def is_user_admin(update: Chat, user_id: int, member: ChatMember = None) -> bool:
@@ -249,7 +249,7 @@ def is_user_ban_protected(chat: Chat, user_id: int, member: ChatMember = None) -
         or user_id in SUDO_USERS
         or user_id in DEV_USERS
         or user_id in WHITELIST_USERS
-	or is_modd(chat.id, user_id)
+	or is_modd(int(chat.id), user_id)
     ):
         return True
 

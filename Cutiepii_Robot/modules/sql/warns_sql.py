@@ -72,7 +72,7 @@ class WarnFilters(BASE):
         return "<Permissions for %s>" % self.chat_id
 
     def __eq__(self, other):
-        return bool(
+        return (
             isinstance(other, WarnFilters)
             and self.chat_id == other.chat_id
             and self.keyword == other.keyword,

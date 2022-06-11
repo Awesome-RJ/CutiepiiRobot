@@ -58,7 +58,7 @@ async def parse_button(text: str):
         # if even, not escaped -> create button
         if n_escapes % 2 == 0:
             # create a thruple with button label, url, and newline status
-            buttons.pgramend((match.group(2), match.group(3), bool(match.group(4))))
+            buttons.pgramend((match[2], match[3], bool(match[4])))
             note_data += markdown_note[prev : match.start(1)]
             prev = match.end(1)
         # if odd, escaped -> move along

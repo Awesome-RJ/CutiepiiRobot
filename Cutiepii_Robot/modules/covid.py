@@ -59,7 +59,7 @@ async def dot(number, thousand_separator="."):
     return result
 
 
-async def covid(update, context):
+async def covid(update: Update, context: CallbackContext):
     message = update.effective_message
     args = context.args
     query = " ".join(args)

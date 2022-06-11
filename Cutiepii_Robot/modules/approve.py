@@ -143,7 +143,7 @@ async def approved(update: Update, _: CallbackContext):
 
 
 @user_admin
-async def approval(update, context):
+async def approval(update: Update, context: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
     args = context.args

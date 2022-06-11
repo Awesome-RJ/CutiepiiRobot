@@ -48,7 +48,7 @@ class StickersFilters(BASE):
         return "<Stickers filter '%s' for %s>" % (self.trigger, self.chat_id)
 
     def __eq__(self, other):
-        return bool(
+        return (
             isinstance(other, StickersFilters)
             and self.chat_id == other.chat_id
             and self.trigger == other.trigger,

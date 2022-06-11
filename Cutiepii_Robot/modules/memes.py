@@ -95,13 +95,11 @@ async def _(event):
         await event.reply("hey nigga use number 1 to 6 only")
 
     else:
-        try:
+        with contextlib.suppress(BaseException):
             required_number = input_int
             while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice("🏀"))
-        except BaseException:
-            pass
 
 @register(pattern="^/asupan ?(.*)")
 async def asupan(event):
@@ -546,10 +544,8 @@ async def sticklet(event):
     # replacing upper line with this to get reply tags
 
     # cleanup
-    try:
+    with contextlib.suppress(BaseException):
         os.remove(FONT_FILE)
-    except BaseException:
-        pass
 
 
 async def get_font_file(client, channel_id):
@@ -596,13 +592,11 @@ async def _(event):
     input_str = print(randrange(6))
     r = await event.reply(file=InputMediaDice("🏀"))
     if input_str:
-        try:
+        with contextlib.suppress(BaseException):
             required_number = int(input_str)
             while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice("🏀"))
-        except BaseException:
-            pass
 
 
 @register(pattern="^/jackpot$")
@@ -624,13 +618,11 @@ async def _(event):
         await event.reply("hey nigga use number 1 to 6 only")
 
     else:
-        try:
+        with contextlib.suppress(BaseException):
             required_number = input_int
             while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice("🎯"))
-        except BaseException:
-            pass
 
 
 # Oringinal Source from Nicegrill: https://github.com/erenmetesar/NiceGrill/
@@ -698,13 +690,11 @@ async def _(event):
         await event.reply("hey nigga use number 1 to 6 only")
 
     else:
-        try:
+        with contextlib.suppress(BaseException):
             required_number = input_int
             while r.media.value != required_number:
                 await r.delete()
                 r = await event.reply(file=InputMediaDice(""))
-        except BaseException:
-            pass
 
 
 @register(pattern="^/fortune$")

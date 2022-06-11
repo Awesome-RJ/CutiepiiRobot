@@ -91,7 +91,7 @@ async def send(update, message, keyboard, backup_message):
     # Clean service welcome
     if cleanserv:
         with contextlib.suppress(BadRequest):
-            await CUTIEPII_PTB.bot.delete_message(chat.id, update.message.message_id)
+            await CUTIEPII_PTB.bot.delete_message(int(chat.id), update.message.message_id)
         reply = False
     try:
         msg = await update.effective_message.reply_text(
@@ -177,7 +177,7 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
     log_setting = logsql.get_chat_setting(chat.id)
     if not log_setting:
         logsql.set_chat_setting(
-            logsql.LogChannelSettings(chat.id, True, True, True, True, True)
+            logsql.LogChannelSettings(int(chat.id), True, True, True, True, True)
         )
         log_setting = logsql.get_chat_setting(chat.id)
     should_welc, cust_welcome, cust_content, welc_type = sql.get_welc_pref(chat.id)
@@ -202,13 +202,13 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
               member = bot.get_chat_member(-1001151980503, user.id)
               if member.status in ("kicked", "left"):
                   with suppress(BadRequest):
-                        await bot.send_message(chat.id, text=tXt)
+                        await bot.send_message(int(chat.id), text=tXt)
                   await bot.leave_chat(chat.id)
                   return
           except BadRequest as BR:
               if BR.message in ("User not found", "User_not_mutual_contact", "User_not_participant"):
                   with suppress(BadRequest):
-                        await bot.send_message(chat.id, text=tXt)
+                        await bot.send_message(int(chat.id), text=tXt)
                   await bot.leave_chat(chat.id)
                   return
 
@@ -223,10 +223,8 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
         cleanserv = sql.clean_service(chat.id)
         # Clean service welcome
         if cleanserv:
-            try:
-                await CUTIEPII_PTB.bot.delete_message(chat.id, update.message.message_id)
-            except BadRequest:
-                pass
+            with contextlib.suppress(BadRequest):
+                await CUTIEPII_PTB.bot.delete_message(int(chat.id), update.message.message_id)
             reply = False
 
         if should_welc:
@@ -404,7 +402,7 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
                 if not media_wel:
                     VERIFIED_USER_WAITLIST.update(
                         {
-                            (chat.id, new_mem.id): {
+                            (int(chat.id), new_mem.id): {
                                 "should_welc": should_welc,
                                 "media_wel": False,
                                 "status": False,
@@ -418,7 +416,7 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
                 else:
                     VERIFIED_USER_WAITLIST.update(
                         {
-                            (chat.id, new_mem.id): {
+                            (int(chat.id), new_mem.id): {
                                 "should_welc": should_welc,
                                 "chat_id": chat.id,
                                 "status": False,
@@ -491,12 +489,12 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
                 fileobj.name = f"captcha_{new_mem.id}.png"
                 image.save(fp=fileobj)
                 fileobj.seek(0)
-                CAPTCHA_ANS_DICT[(chat.id, new_mem.id)] = int(characters)
+                CAPTCHA_ANS_DICT[(int(chat.id), new_mem.id)] = int(characters)
                 welcome_bool = False
                 if not media_wel:
                     VERIFIED_USER_WAITLIST.update(
                         {
-                            (chat.id, new_mem.id): {
+                            (int(chat.id), new_mem.id): {
                                 "should_welc": should_welc,
                                 "media_wel": False,
                                 "status": False,
@@ -511,7 +509,7 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
                 else:
                     VERIFIED_USER_WAITLIST.update(
                         {
-                            (chat.id, new_mem.id): {
+                            (int(chat.id), new_mem.id): {
                                 "should_welc": should_welc,
                                 "chat_id": chat.id,
                                 "status": False,
@@ -595,10 +593,10 @@ async def new_member(update: Update, context: CallbackContext):  # sourcery no-m
             prev_welc = sql.get_clean_pref(chat.id)
             if prev_welc:
                 with contextlib.suppress(BadRequest):
-                    await bot.delete_message(chat.id, prev_welc)
+                    await bot.delete_message(int(chat.id), prev_welc)
 
                 if sent:
-                    sql.set_clean_welcome(chat.id, sent.message_id)
+                    sql.set_clean_welcome(int(chat.id), sent.message_id)
 
         if not log_setting.log_joins:
             return ""
@@ -649,7 +647,7 @@ async def left_member(update: Update, context: CallbackContext):  # sourcery no-
     # Clean service welcome
     if cleanserv:
         with contextlib.suppress(BadRequest):
-            await CUTIEPII_PTB.bot.delete_message(chat.id, update.message.message_id)
+            await CUTIEPII_PTB.bot.delete_message(int(chat.id), update.message.message_id)
         reply = False
 
     if should_goodbye:
@@ -688,7 +686,7 @@ async def left_member(update: Update, context: CallbackContext):  # sourcery no-
 
             # if media goodbye, use appropriate function for it
             if goodbye_type not in [sql.Types.TEXT, sql.Types.BUTTON_TEXT]:
-                ENUM_FUNC_MAP[goodbye_type](chat.id, cust_goodbye)
+                ENUM_FUNC_MAP[goodbye_type](int(chat.id), cust_goodbye)
                 return
 
             first_name = (
@@ -771,7 +769,7 @@ async def welcome(update: Update, context: CallbackContext):
             buttons = sql.get_welc_buttons(chat.id)
             if noformat:
                 welcome_m += revert_buttons(buttons)
-                ENUM_FUNC_MAP[welcome_type](chat.id, cust_content, caption=welcome_m)
+                ENUM_FUNC_MAP[welcome_type](int(chat.id), cust_content, caption=welcome_m)
 
             else:
                 if welcome_type in [sql.Types.TEXT, sql.Types.BUTTON_TEXT]:
@@ -835,7 +833,7 @@ async def goodbye(update: Update, context: CallbackContext):
                 await send(update, goodbye_m, keyboard, sql.DEFAULT_GOODBYE)
 
         elif noformat:
-            ENUM_FUNC_MAP[goodbye_type](chat.id, goodbye_m)
+            ENUM_FUNC_MAP[goodbye_type](int(chat.id), goodbye_m)
 
         else:
             ENUM_FUNC_MAP[goodbye_type](
@@ -871,7 +869,7 @@ async def set_welcome(update: Update, context: CallbackContext) -> str:
         await msg.reply_text("You didn't specify what to reply with!")
         return ""
 
-    sql.set_custom_welcome(chat.id, content, text, data_type, buttons)
+    sql.set_custom_welcome(int(chat.id), content, text, data_type, buttons)
     await msg.reply_text("Successfully set custom welcome message!")
 
     return (
@@ -888,7 +886,7 @@ async def reset_welcome(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
 
-    sql.set_custom_welcome(chat.id, None, sql.DEFAULT_WELCOME, sql.Types.TEXT)
+    sql.set_custom_welcome(int(chat.id), None, sql.DEFAULT_WELCOME, sql.Types.TEXT)
     await update.effective_message.reply_text(
         "Successfully reset welcome message to default!"
     )
@@ -913,7 +911,7 @@ async def set_goodbye(update: Update, context: CallbackContext) -> str:
         await msg.reply_text("You didn't specify what to reply with!")
         return ""
 
-    sql.set_custom_gdbye(chat.id, content or text, data_type, buttons)
+    sql.set_custom_gdbye(int(chat.id), content or text, data_type, buttons)
     await msg.reply_text("Successfully set custom goodbye message!")
     return (
         f"<b>{html.escape(chat.title)}:</b>\n"
@@ -929,7 +927,7 @@ async def reset_goodbye(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
 
-    sql.set_custom_gdbye(chat.id, sql.DEFAULT_GOODBYE, sql.Types.TEXT)
+    sql.set_custom_gdbye(int(chat.id), sql.DEFAULT_GOODBYE, sql.Types.TEXT)
     await update.effective_message.reply_text(
         "Successfully reset goodbye message to default!"
     )
@@ -952,7 +950,7 @@ async def welcomemute(update: Update, context: CallbackContext) -> str:
 
     if len(args) >= 1:
         if args[0].lower() in ("off", "no"):
-            sql.set_welcome_mutes(chat.id, False)
+            sql.set_welcome_mutes(int(chat.id), False)
             await msg.reply_text("I will no longer mute people on joining!")
             return (
                 f"<b>{html.escape(chat.title)}:</b>\n"
@@ -961,7 +959,7 @@ async def welcomemute(update: Update, context: CallbackContext) -> str:
                 f"Has toggled welcome mute to <b>OFF</b>."
             )
         elif args[0].lower() in ["soft"]:
-            sql.set_welcome_mutes(chat.id, "soft")
+            sql.set_welcome_mutes(int(chat.id), "soft")
             await msg.reply_text(
                 "I will restrict users' permission to send media for 24 hours."
             )
@@ -972,7 +970,7 @@ async def welcomemute(update: Update, context: CallbackContext) -> str:
                 f"Has toggled welcome mute to <b>SOFT</b>."
             )
         elif args[0].lower() in ["strong"]:
-            sql.set_welcome_mutes(chat.id, "strong")
+            sql.set_welcome_mutes(int(chat.id), "strong")
             await msg.reply_text(
                 "I will now mute people when they join until they prove they're not a bot.\nThey will have 120seconds "
                 "before they get kicked. "
@@ -984,7 +982,7 @@ async def welcomemute(update: Update, context: CallbackContext) -> str:
                 f"Has toggled welcome mute to <b>STRONG</b>."
             )
         elif args[0].lower() in ["captcha"]:
-            sql.set_welcome_mutes(chat.id, "captcha")
+            sql.set_welcome_mutes(int(chat.id), "captcha")
             await msg.reply_text(
                 "I will now mute people when they join until they prove they're not a bot.\nThey have to solve a "
                 "captcha to get unmuted. "
@@ -1077,10 +1075,10 @@ async def cleanservice(update: Update, context: CallbackContext) -> str:
     elif len(args) >= 1:
         var = args[0]
         if var in ("no", "off"):
-            sql.set_clean_service(chat.id, False)
+            sql.set_clean_service(int(chat.id), False)
             await update.effective_message.reply_text("Welcome clean service is : off")
         elif var in ("yes", "on"):
-            sql.set_clean_service(chat.id, True)
+            sql.set_clean_service(int(chat.id), True)
             await update.effective_message.reply_text("Welcome clean service is : on")
         else:
             await update.effective_message.reply_text(
@@ -1099,11 +1097,11 @@ async def user_button(update: Update, context: CallbackContext):
     bot = context.bot
     match = re.match(r"user_join_\((.+?)\)", query.data)
     message = update.effective_message
-    join_user = int(match.group(1))
+    join_user = int(match[1])
 
     if join_user == user.id:
         sql.set_human_checks(user.id, chat.id)
-        member_dict = VERIFIED_USER_WAITLIST[(chat.id, user.id)]
+        member_dict = VERIFIED_USER_WAITLIST[(int(chat.id), user.id)]
         member_dict["status"] = True
         await query.answer(text="Yeet! You're a human, unmuted!")
         await bot.restrict_chat_member(
@@ -1121,7 +1119,7 @@ async def user_button(update: Update, context: CallbackContext):
             ),
         )
         with contextlib.suppress(Exception):
-            await bot.deleteMessage(chat.id, message.message_id)
+            await bot.deleteMessage(int(chat.id), message.message_id)
         if member_dict["should_welc"]:
             if member_dict["media_wel"]:
                 sent = ENUM_FUNC_MAP[member_dict["welc_type"]](
@@ -1142,10 +1140,10 @@ async def user_button(update: Update, context: CallbackContext):
             prev_welc = sql.get_clean_pref(chat.id)
             if prev_welc:
                 with contextlib.suppress(BadRequest):
-                    await bot.delete_message(chat.id, prev_welc)
+                    await bot.delete_message(int(chat.id), prev_welc)
 
                 if sent:
-                    sql.set_clean_welcome(chat.id, sent.message_id)
+                    sql.set_clean_welcome(int(chat.id), sent.message_id)
 
     else:
         await query.answer(text="You're not allowed to do this!")
@@ -1160,16 +1158,16 @@ async def user_captcha_button(update: Update, context: CallbackContext):
     # print(query.data)
     match = re.match(r"user_captchajoin_\(([\d\-]+),(\d+)\)_\((\d{4})\)", query.data)
     message = update.effective_message
-    join_chat = int(match.group(1))
-    join_user = int(match.group(2))
-    captcha_ans = int(match.group(3))
+    join_chat = int(match[1])
+    join_user = int(match[2])
+    captcha_ans = int(match[3])
     join_usr_data = await bot.getChat(join_user)
 
     if join_user == user.id:
         c_captcha_ans = CAPTCHA_ANS_DICT.pop((join_chat, join_user))
         if c_captcha_ans == captcha_ans:
             sql.set_human_checks(user.id, chat.id)
-            member_dict = VERIFIED_USER_WAITLIST[(chat.id, user.id)]
+            member_dict = VERIFIED_USER_WAITLIST[(int(chat.id), user.id)]
             member_dict["status"] = True
             await query.answer(text="Yeet! You're a human, unmuted!")
             await bot.restrict_chat_member(
@@ -1187,8 +1185,8 @@ async def user_captcha_button(update: Update, context: CallbackContext):
                 ),
             )
             try:
-                await bot.deleteMessage(chat.id, message.message_id)
-            except:
+                await bot.deleteMessage(int(chat.id), message.message_id)
+            except BadRequest:
                 pass
             if member_dict["should_welc"]:
                 if member_dict["media_wel"]:
@@ -1210,14 +1208,14 @@ async def user_captcha_button(update: Update, context: CallbackContext):
                 prev_welc = sql.get_clean_pref(chat.id)
                 if prev_welc:
                     with contextlib.suppress(BadRequest):
-                        await bot.delete_message(chat.id, prev_welc)
+                        await bot.delete_message(int(chat.id), prev_welc)
 
                     if sent:
-                        sql.set_clean_welcome(chat.id, sent.message_id)
+                        sql.set_clean_welcome(int(chat.id), sent.message_id)
         else:
             try:
-                await bot.deleteMessage(chat.id, message.message_id)
-            except:
+                await bot.deleteMessage(int(chat.id), message.message_id)
+            except BadRequest:
                 pass
             kicked_msg = f"""
             ❌ [{escape_markdown(join_usr_data.first_name)}](tg://user?id={join_user}) failed the captcha and was kicked.

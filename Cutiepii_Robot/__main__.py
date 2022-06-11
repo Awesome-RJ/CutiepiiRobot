@@ -251,12 +251,12 @@ async def start(update: Update, context: CallbackContext):
 
             elif args[0].lower().startswith("stngs_"):
                 match = re.match("stngs_(.*)", args[0].lower())
-                chat = await CUTIEPII_PTB.bot.getChat(match.group(1))
+                chat = await CUTIEPII_PTB.bot.getChat(match[1])
 
                 if await is_user_admin(update, update.effective_user.id):
-                    send_settings(match.group(1), update.effective_user.id, False)
+                    send_settings(match[1], update.effective_user.id, False)
                 else:
-                    send_settings(match.group(1), update.effective_user.id, True)
+                    send_settings(match[1], update.effective_user.id, True)
 
             elif args[0][1:].isdigit() and "rules" in IMPORTED:
                 IMPORTED["rules"].send_rules(update, args[0], from_pm=True)
@@ -355,7 +355,7 @@ async def help_button(update: Update, context: CallbackContext):
 
     with contextlib.suppress(BadRequest):
         if mod_match:
-            module = mod_match.group(1)
+            module = mod_match[1]
             text = (
                 "╔═━「 *{}* module: 」\n".format(
                     HELPABLE[module].__mod_name__
@@ -373,7 +373,7 @@ async def help_button(update: Update, context: CallbackContext):
             )
 
         elif prev_match:
-            curr_page = int(prev_match.group(1))
+            curr_page = int(prev_match[1])
             await query.message.edit_text(
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
@@ -383,7 +383,7 @@ async def help_button(update: Update, context: CallbackContext):
             )
 
         elif next_match:
-            next_page = int(next_match.group(1))
+            next_page = int(next_match[1])
             await query.message.edit_text(
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
@@ -479,7 +479,7 @@ async def get_help(update: Update, context: CallbackContext):
         )
 
     else:
-        send_help(chat.id, HELP_STRINGS)
+        send_help(int(chat.id), HELP_STRINGS)
 
 
 
@@ -531,8 +531,8 @@ async def settings_button(update: Update, context: CallbackContext):
     back_match = re.match(r"stngs_back\((.+?)\)", query.data)
     try:
         if mod_match:
-            chat_id = mod_match.group(1)
-            module = mod_match.group(2)
+            chat_id = mod_match[1]
+            module = mod_match[2]
             chat = await bot.get_chat(chat_id)
             text = "*{}* has the following settings for the *{}* module:\n\n".format(
                 escape_markdown(chat.title), CHAT_SETTINGS[module].__mod_name__
@@ -558,8 +558,8 @@ async def settings_button(update: Update, context: CallbackContext):
             )
 
         elif prev_match:
-            chat_id = prev_match.group(1)
-            curr_page = int(prev_match.group(2))
+            chat_id = prev_match[1]
+            curr_page = int(prev_match[2])
             chat = await bot.get_chat(chat_id)
             await query.message.reply_text(
                 f"Hi there! There are quite a few settings for {chat.title} - go ahead and pick what you're interested in.",
@@ -571,8 +571,8 @@ async def settings_button(update: Update, context: CallbackContext):
             )
 
         elif next_match:
-            chat_id = next_match.group(1)
-            next_page = int(next_match.group(2))
+            chat_id = next_match[1]
+            next_page = int(next_match[2])
             chat = await bot.get_chat(chat_id)
             await query.message.edit_text(
                 f"Hi there! There are quite a few settings for {chat.title} - go ahead and pick what you're interested in.",
@@ -584,7 +584,7 @@ async def settings_button(update: Update, context: CallbackContext):
             )
 
         elif back_match:
-            chat_id = back_match.group(1)
+            chat_id = back_match[1]
             chat = await bot.get_chat(chat_id)
             await query.message.edit_text(
                 text=f"Hi there! There are quite a few settings for {escape_markdown(chat.title)} - go ahead and pick what you're interested in.",
@@ -612,7 +612,7 @@ async def get_settings(update: Update, context: CallbackContext):
 
     # ONLY send settings in PM
     if chat.type == chat.PRIVATE:
-        send_settings(chat.id, user.id, True)
+        send_settings(int(chat.id), user.id, True)
 
     elif await is_user_admin(update, user.id):
         text = "Click here to get this chat's settings, as well as yours."

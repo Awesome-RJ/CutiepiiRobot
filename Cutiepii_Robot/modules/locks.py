@@ -169,7 +169,7 @@ async def unrestr_members(
             )
 
 
-async def locktypes(update, context):
+async def locktypes(update: Update, context: CallbackContext):
     await update.effective_message.reply_text(
         "\n ➛ ".join(
             ["Locks available: "]
@@ -195,7 +195,7 @@ async def lock(update, context) -> str:  # sourcery no-metrics
             elif ltype in LOCK_TYPES:
 
                 text = f"Locked {ltype} for non-admins!"
-                sql.update_lock(chat.id, ltype, locked=True)
+                sql.update_lock(int(chat.id), ltype, locked=True)
                 send_message(update.effective_message, text, parse_mode="markdown")
 
                 return (
@@ -262,7 +262,7 @@ def unlock(update, context) -> str:  # sourcery no-metrics
                 send_message(update.effective_message, text, parse_mode = "markdown")
             elif ltype in LOCK_TYPES:
                 text = f"Unlocked {ltype} for everyone!"
-                sql.update_lock(chat.id, ltype, locked=False)
+                sql.update_lock(int(chat.id), ltype, locked=False)
                 send_message(update.effective_message, text, parse_mode="markdown")
                 return (
                     "<b>{}:</b>"
@@ -311,15 +311,15 @@ def unlock(update, context) -> str:  # sourcery no-metrics
 
 
 @user_not_admin_check
-async def del_lockables(update, context):  # sourcery no-metrics
+async def del_lockables(update: Update, context: CallbackContext):  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
     user = message.sender_chat or update.effective_user
-    if is_approved(chat.id, user.id):
+    if is_approved(int(chat.id), user.id):
         return
     for lockable, filter in LOCK_TYPES.items():
         if lockable == "rtl":
-            if sql.is_locked(chat.id, lockable) and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES):
+            if sql.is_locked(int(chat.id), lockable) and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES):
                 if message.caption:
                     check = ad.detect_alphabet(f"{message.caption}")
                     if "ARABIC" in check:
@@ -345,7 +345,7 @@ async def del_lockables(update, context):  # sourcery no-metrics
             continue
         if lockable == "button":
             if (
-                sql.is_locked(chat.id, lockable)
+                sql.is_locked(int(chat.id), lockable)
                 and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES)
                 and message.reply_markup
                 and message.reply_markup.inline_keyboard
@@ -361,7 +361,7 @@ async def del_lockables(update, context):  # sourcery no-metrics
             continue
         if lockable == "inline":
             if (
-                sql.is_locked(chat.id, lockable)
+                sql.is_locked(int(chat.id), lockable)
                 and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES)
                 and message
                 and message.via_bot
@@ -377,7 +377,7 @@ async def del_lockables(update, context):  # sourcery no-metrics
             continue
         if (
             filter(update)
-            and sql.is_locked(chat.id, lockable)
+            and sql.is_locked(int(chat.id), lockable)
             and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES)
         ):
             if lockable == "bots":

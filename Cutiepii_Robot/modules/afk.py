@@ -127,8 +127,8 @@ async def reply_afk(update: Update, context: CallbackContext):
         await check_afk(update, context, user_id, fst_name, userc_id)
 
 
-async def check_afk(update, context, user_id, fst_name, userc_id):
-    if int(userc_id) == int(user_id):
+async def check_afk(update: Update, _: CallbackContext, user_id: int, fst_name: int, userc_id: int
+    if userc_id == user_id:
         return
     is_afk, reason = sql.check_afk_status(user_id)
     if is_afk:
@@ -139,7 +139,7 @@ async def check_afk(update, context, user_id, fst_name, userc_id):
             res = "{} is afk.\nReason: <code>{}</code>".format(
                 html.escape(fst_name), html.escape(reason)
             )
-            await update.effective_message.reply_text(res, parse_mode="html")
+            await update.effective_message.reply_text(res, parse_mode=ParseMode.HTML)
 
 
 def __gdpr__(user_id):

@@ -68,11 +68,9 @@ def get_tz(con):
     for c_code in c_n:
         if con == c_n[c_code]:
             return tz(c_tz[c_code][0])
-    try:
+    with contextlib.suppress(KeyError):
         if c_n[con]:
             return tz(c_tz[con][0])
-    except KeyError:
-        return
 
 async def weather(update: Update, context: CallbackContext):
     bot = context.bot
@@ -231,7 +229,7 @@ async def weather(update: Update, context: CallbackContext):
         disable_web_page_preview=True,
     )
 
-    cleartime = get_clearcmd(chat.id, "weather")
+    cleartime = get_clearcmd(int(chat.id), "weather")
 """
     if cleartime:
         context.bot.run_async(delete, delmsg, cleartime.time)

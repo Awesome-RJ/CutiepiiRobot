@@ -559,7 +559,7 @@ async def gbun(update: Update, context: CallbackContext):
     if update.effective_message.chat.type == ChatType.PRIVATE:
         return
     if int(user.id) in SUDO_USERS or int(user.id) in SUPPORT_USERS:
-        await context.bot.sendMessage(chat.id, (random.choice(fun_strings.GBUN)))
+        await context.bot.sendMessage(int(chat.id), (random.choice(fun_strings.GBUN)))
 
 
 @cutiepii_cmd(command='gbam')
@@ -585,7 +585,7 @@ async def gbam(update: Update, context: CallbackContext):
 	    gbamm = fun_strings.GBAM
 	    reason = random.choice(fun_strings.GBAM_REASON)
 	    gbam = gbamm.format(user1=user1, user2=user2, chatid=chat.id, reason=reason)
-	    await context.bot.sendMessage(chat.id, gbam, parse_mode=ParseMode.HTML)
+	    await context.bot.sendMessage(int(chat.id), gbam, parse_mode=ParseMode.HTML)
 
 
 @cutiepii_cmd(command='cuddle')

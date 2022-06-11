@@ -52,13 +52,11 @@ def approve(chat_id, user_id):
 
 def disapprove(chat_id, user_id):
     approved = ast.literal_eval(REDIS.get("Approvals"))
-    try:
+    with contextlib.suppress(BaseException):
         list = approved[chat_id]
         if user_id in list:
             list.remove(user_id)
         approved.update({chat_id: list})
-    except BaseException:
-        pass
     return REDIS.set("Approvals", str(approved))
 
 

@@ -172,7 +172,7 @@ async def set_sticker(update: Update, context: CallbackContext) -> str:
 
     try:
         stk_set = msg.reply_to_message.sticker.set_name
-        await bot.set_chat_sticker_set(chat.id, stk_set)
+        await bot.set_chat_sticker_set(int(chat.id), stk_set)
         await msg.reply_text(
                 f"<b>{user.first_name}</b> changed the group stickers set."
                 if not msg.sender_chat else "Group stickers set has been changed.",
@@ -223,7 +223,7 @@ async def setchatpic(update: Update, context: CallbackContext) -> str:
         image_data = image_file.download(out=BytesIO())
         image_data.seek(0)
 
-        await bot.set_chat_photo(chat.id, image_data)
+        await bot.set_chat_photo(int(chat.id), image_data)
         await msg.reply_text(
                 f"<b>{user.first_name}</b> changed the group photo."
                 if not msg.sender_chat else "Group photo has been changed.",
@@ -291,7 +291,7 @@ async def set_desc(update: Update, context: CallbackContext) -> str:
         return ""
 
     try:
-        await bot.set_chat_description(chat.id, title)
+        await bot.set_chat_description(int(chat.id), title)
         if len(title) > 255: # telegram limits the title/description to 255 characters
             await msg.reply_text("Description longer than 255 characters, Truncating it to 255 characters!")
         await msg.reply_text(
@@ -333,7 +333,7 @@ async def setchat_title(update: Update, context: CallbackContext) -> str:
         return ""
 
     try:
-        await bot.set_chat_title(chat.id, title)
+        await bot.set_chat_title(int(chat.id), title)
         if len(title) > 255:  # telegram limits the title/description to 255 characters
             await msg.reply_text("Title longer than 255 characters, Truncating it to 255 characters!")
         await msg.reply_text(
@@ -403,11 +403,8 @@ async def promote_button(update: Update, context: CallbackContext):
 @loggable
 @user_admin
 async def refresh_admin(update: Update, context: CallbackContext):
-    try:
+    with contextlib.suppress(KeyError):
         ADMIN_CACHE.pop(update.effective_chat.id)
-    except KeyError:
-        pass
-
     await update.effective_message.reply_text("Admins cache refreshed!")
 
 
@@ -458,7 +455,7 @@ async def promoteanon(update: Update, context: CallbackContext) -> Optional[str]
 
     try:
         if title:
-            await bot.setChatAdministratorCustomTitle(chat.id, user_id, title)
+            await bot.setChatAdministratorCustomTitle(int(chat.id), user_id, title)
         await CUTIEPII_PTB.bot.promote_chat_member(
             chat.id,
             user_id,
@@ -593,10 +590,8 @@ async def promote(update: Update, context: CallbackContext) -> str:
             "The title length is longer than 16 characters.\nTruncating it to 16 characters.",
         )
 
-    try:
-        await bot.setChatAdministratorCustomTitle(chat.id, user_id, title)
-    except:
-        pass
+    with contextlib.suppress(BadRequest):
+        await bot.setChatAdministratorCustomTitle(int(chat.id), user_id, title)
 
     log_message = (
         f"<b>{html.escape(chat.title)}:</b>\n"
@@ -696,10 +691,8 @@ async def midpromote(update: Update, context: CallbackContext) -> str:
             "The title length is longer than 16 characters.\nTruncating it to 16 characters.",
         )
 
-    try:
-        await bot.setChatAdministratorCustomTitle(chat.id, user_id, title)
-    except:
-        pass
+    with contextlib.suppress(BadRequest):
+        await bot.setChatAdministratorCustomTitle(int(chat.id), user_id, title)
 
     log_message = (
         f"<b>{html.escape(chat.title)}:</b>\n"
@@ -797,10 +790,8 @@ async def lowpromote(update: Update, context: CallbackContext) -> str:
             "The title length is longer than 16 characters.\nTruncating it to 16 characters.",
         )
 
-    try:
-        await bot.setChatAdministratorCustomTitle(chat.id, user_id, title)
-    except:
-        pass
+    with contextlib.suppress(BadRequest):
+        await bot.setChatAdministratorCustomTitle(int(chat.id), user_id, title)
 
     log_message = (
         f"<b>{html.escape(chat.title)}:</b>\n"
@@ -858,7 +849,7 @@ async def fullpromote(update: Update, context: CallbackContext) -> Optional[str]
     #if "all" in permissions and bot_member.can_promote_members:
     #    can_promote_members = True
 
-    result = requests.post(f"https://api.telegram.org/bot{TOKEN}/promoteChatMember?chat_id={chat.id}&user_id={user_id}&can_change_info={bot_member.can_change_info}&can_post_messages={bot_member.can_post_messages}&can_edit_messages={bot_member.can_edit_messages}&can_delete_messages={bot_member.can_delete_messages}&can_invite_users={bot_member.can_invite_users}&can_promote_members={bot_member.can_promote_members}&can_restrict_members={bot_member.can_restrict_members}&can_pin_messages={bot_member.can_pin_messages}&can_manage_video_chats={can_manage_video_chats(chat.id, bot.id)}")
+    result = requests.post(f"https://api.telegram.org/bot{TOKEN}/promoteChatMember?chat_id={chat.id}&user_id={user_id}&can_change_info={bot_member.can_change_info}&can_post_messages={bot_member.can_post_messages}&can_edit_messages={bot_member.can_edit_messages}&can_delete_messages={bot_member.can_delete_messages}&can_invite_users={bot_member.can_invite_users}&can_promote_members={bot_member.can_promote_members}&can_restrict_members={bot_member.can_restrict_members}&can_pin_messages={bot_member.can_pin_messages}&can_manage_video_chats={can_manage_video_chats(int(chat.id), bot.id)}")
     status = result.json()["ok"]
     if status is False:
         await update.effective_message.reply_text("An error occurred while promoting.")
@@ -891,10 +882,8 @@ async def fullpromote(update: Update, context: CallbackContext) -> Optional[str]
             "The title length is longer than 16 characters.\nTruncating it to 16 characters.",
         )
 
-    try:
-        await bot.setChatAdministratorCustomTitle(chat.id, user_id, title)
-    except:
-        pass
+    with contextlib.suppress(BadRequest):
+        await bot.setChatAdministratorCustomTitle(int(chat.id), user_id, title)
 
     log_message = (
         f"<b>{html.escape(chat.title)}:</b>\n"
@@ -967,10 +956,8 @@ async def middemote(update: Update, context: CallbackContext) -> Optional[str]:
             parse_mode=ParseMode.HTML,
         )
 
-        try:
+        with contextlib.suppress(KeyError):
             ADMIN_CACHE.pop(update.effective_chat.id)
-        except KeyError:
-            pass
 
         log_message = (
             f"<b>{html.escape(chat.title)}:</b>\n"
@@ -1159,11 +1146,8 @@ async def demoteanon(update: Update, context: CallbackContext) -> Optional[str]:
 
 @user_admin
 async def refresh_admin(update: Update, context: CallbackContext):
-    try:
+    with contextlib.suppress(KeyError):
         ADMIN_CACHE.pop(update.effective_chat.id)
-    except KeyError:
-        pass
-
     await update.effective_message.reply_text("Admins cache refreshed!")
 
 
@@ -1217,7 +1201,7 @@ async def set_title(update: Update, context: CallbackContext):
         )
 
     try:
-        await bot.setChatAdministratorCustomTitle(chat.id, user_id, title)
+        await bot.setChatAdministratorCustomTitle(int(chat.id), user_id, title)
     except BadRequest:
         await message.reply_text(
             "Either they aren't promoted by me or you set a title text that is impossible to set."
@@ -1332,7 +1316,7 @@ async def unpin(update: Update, context: CallbackContext):
 
     if prev_message and is_group:
         try:
-            context.bot.unpinChatMessage(chat.id, prev_message.message_id)
+            context.bot.unpinChatMessage(int(chat.id), prev_message.message_id)
             await msg.reply_text(
                 f"Unpinned <a href='{message_link}'>this message</a>.",
                 parse_mode=ParseMode.HTML,
@@ -1578,11 +1562,11 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
         if update.effective_update.effective_message.reply_to_message:
             prev_message = update.effective_message.reply_to_message.message_id
         elif len(args) >= 1 and args[0] in ["off", "false"]:
-            sql.set_permapin(chat.id, 0)
+            sql.set_permapin(int(chat.id), 0)
             await context.bot.send_message(chat_id, "Cleanlinked has been disabled!")
             return
         elif len(args) >= 1 and args[0] in ["on", "true"]:
-            sql.set_permapin(chat.id, 1)
+            sql.set_permapin(int(chat.id), 1)
             await context.bot.send_message(chat_id, "Cleanlinked has been enabled!")
             return
         else:
@@ -1601,7 +1585,7 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
     is_group = chat.type not in ("private", "channel")
 
     if prev_message and is_group:
-        sql.set_permapin(chat.id, prev_message)
+        sql.set_permapin(int(chat.id), prev_message)
         await context.bot.send_message(chat_id, "Cleanlinked successfully set!")
         return "<b>{}:</b>" \
                "\n#PERMANENT_PIN" \
@@ -1634,23 +1618,23 @@ async def permanent_pin(update: Update, context: CallbackContext):
     get_permapin = sql.get_permapin(chat.id)
     if get_permapin and user.id != context.bot.id:
         try:
-            to_del = context.bot.pinChatMessage(chat.id, get_permapin, disable_notification=True)
+            to_del = context.bot.pinChatMessage(int(chat.id), get_permapin, disable_notification=True)
         except BadRequest:
-            sql.set_permapin(chat.id, 0)
+            sql.set_permapin(int(chat.id), 0)
             if chat.username:
                 old_pin = f"https://t.me/{chat.username}/{get_permapin}"
             else:
                 old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
                 print(old_pin)
-            await context.bot.send_message(chat.id, "*Cleanlinked error:*\nI can't pin messages here!\nMake sure I'm an admin and can pin messages.\n\nClean linked has been disabled, [The old permanent pinned message is here]({})".format(old_pin), parse_mode=ParseMode.MARKDOWN)
+            await context.bot.send_message(int(chat.id), "*Cleanlinked error:*\nI can't pin messages here!\nMake sure I'm an admin and can pin messages.\n\nClean linked has been disabled, [The old permanent pinned message is here]({})".format(old_pin), parse_mode=ParseMode.MARKDOWN)
             return
 
         if to_del:
             try:
                 print(message.message_id)
-                context.bot.deleteMessage(chat.id, message.message_id)
+                context.bot.deleteMessage(int(chat.id), message.message_id)
             except BadRequest:
-                await context.bot.send_message(chat.id, "Cleanlinked error: cannot delete pinned msg")
+                await context.bot.send_message(int(chat.id), "Cleanlinked error: cannot delete pinned msg")
                 print("Cleanlinked error: cannot delete pin msg")    
 
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)

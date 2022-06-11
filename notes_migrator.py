@@ -53,12 +53,12 @@ def  parser(
 				buttons.extend((a.text, a.url, True) for a in btn[1:])
 
 	for match in BTN_LINK_REGEX.finditer(markdown_note):
-		if match.group(1):
+		if match[1]:
 			note_data += markdown_note[prev:match.start(1) - 1]
-			note_data += f"<a href=\"{match.group(2)}\">{match.group(1)}</a>"
+			note_data += f"<a href=\"{match[2]}\">{match[1]}</a>"
 			prev = match.end(2) + 1
 		else:
-			buttons.append((match.group(4), match.group(5), bool(match.group(5))))
+			buttons.append((match[4], match[5], bool(match[5])))
 			note_data += markdown_note[prev: match.start(3)].rstrip()
 			prev = match.end(3)
 
@@ -83,25 +83,25 @@ def  Md2HTML(text: str) -> str:
         return f"{match.group('t_b')}{match.group('str')}{match.group('t_e')}{match.group('ws')}"
 
     def  _pre_repl(match):
-        return f'<pre>{match.group(1)}</pre>{match.group(2)}'
+        return f'<pre>{match[1]}</pre>{match[2]}'
 
     def  _code_repl(match):
-        return f'<code>{match.group(1)}</code>{match.group(2)}'
+        return f'<code>{match[1]}</code>{match[2]}'
 
     def  _bold_repl(match):
-        return f'<b>{match.group(1)}</b>{match.group(2)}'
+        return f'<b>{match[1]}</b>{match[2]}'
 
     def  _underline_repl(match):
-        return f'<u>{match.group(1)}</u>{match.group(2)}'
+        return f'<u>{match[1]}</u>{match[2]}'
 
     def  _italic_repl(match):
-        return f'<i>{match.group(1)}</i>{match.group(2)}'
+        return f'<i>{match[1]}</i>{match[2]}'
 
     def  _strike_repl(match):
-        return f'<s>{match.group(1)}</s>{match.group(2)}'
+        return f'<s>{match[1]}</s>{match[2]}'
 
     def  _spoiler_repl(match):
-        return f'<span class="tg-spoiler">{match.group(1)}</span>{match.group(2)}'
+        return f'<span class="tg-spoiler">{match[1]}</span>{match[2]}'
 
     text = _whitespace_re.sub(repl_whitespace, text)
     text = _pre_re.sub(_pre_repl, text)

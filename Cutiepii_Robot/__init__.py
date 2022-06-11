@@ -44,7 +44,7 @@ from telegram import Chat
 from telethon import TelegramClient
 from telethon.sessions import MemorySession
 from telethon.sessions import StringSession
-from motor import motor_asyncio
+from motor.motor_asyncio import AsyncIOMotorClient
 from odmantic import AIOEngine
 from pymongo import MongoClient
 from redis import StrictRedis
@@ -137,7 +137,7 @@ if ENV:
     OPENWEATHERMAP_ID = os.environ.get("OPENWEATHERMAP_ID", "") # From:- https://openweathermap.org/api
     GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN") # From:- http://genius.com/api-clients
     MONGO_DB_URL = os.environ.get("MONGO_DB_URL") # MongoDB URL (From:- https://www.mongodb.com/)
-    REDIS_URL = os.environ.get("REDIS_URL") # REDIS URL (From:- Heraku & Redis)
+    REDIS_URL = os.environ.get("REDIS_URL") # REDIS URL (Take it from redislabs.com and the format should be redis://username:password@publicendpoint:port/)
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT") # Support Chat Group Link (Use @Black_Knights_Union_Support || Dont Use https://telegram.dog/Black_Knights_Union_Support)
     SPAMWATCH_API = os.environ.get("SPAMWATCH_API") # From https://telegram.dog/SpamWatchBot 
     STRING_SESSION = os.environ.get("STRING_SESSION") # Telethon Based String Session (2nd ID) [ From https://repl.it/@SpEcHiDe/GenerateStringSession ]
@@ -322,7 +322,7 @@ pgram = Client(
 )
 print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
 mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
-motor = motor_asyncio.AsyncIOMotorClient(MONGO_DB_URL)
+motor = AsyncIOMotorClient(MONGO_DB_URL)
 db = motor[MONGO_DB]
 engine = AIOEngine(motor, MONGO_DB)
 print("[INFO]: INITIALZING AIOHTTP SESSION")

@@ -5,7 +5,7 @@ from io import BytesIO
 
 from telegram import Update, Bot
 from telegram.constants import ParseMode
-from telegram.error import BadRequest, TelegramError
+from telegram.error import BadRequest, TelegramError, Unauthorized
 from telegram.ext import CallbackContext, CommandHandler, filters, MessageHandler
 from telegram.helpers import mention_html
 
@@ -407,6 +407,7 @@ async def gbanlist(update: Update, context: CallbackContext):
 
 
 async def check_and_ban(update, user_id, should_message=True):
+    with contextlib.suppress(BadRequest, TelegramError, Unauthorized):
     if sql.is_user_gbanned(user_id):
         update.effective_chat.ban_member(user_id)
         if should_message:

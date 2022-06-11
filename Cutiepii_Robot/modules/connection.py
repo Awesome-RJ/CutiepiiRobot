@@ -63,13 +63,13 @@ async def allow_connections(update, context) -> str:
     elif len(args) >= 1:
         var = args[0]
         if var == "no":
-            sql.set_allow_connect_to_chat(chat.id, False)
+            sql.set_allow_connect_to_chat(int(chat.id), False)
             send_message(
                 update.effective_message,
                 "Connection has been disabled for this chat",
             )
         elif var == "yes":
-            sql.set_allow_connect_to_chat(chat.id, True)
+            sql.set_allow_connect_to_chat(int(chat.id), True)
             send_message(
                 update.effective_message,
                 "Connection has been enabled for this chat",
@@ -95,7 +95,7 @@ async def allow_connections(update, context) -> str:
 
 
 
-async def connection_chat(update, context):
+async def connection_chat(update: Update, context: CallbackContext):
 
     chat = update.effective_chat
     user = update.effective_user
@@ -119,7 +119,7 @@ async def connection_chat(update, context):
 
 
 
-async def connect_chat(update, context):  # sourcery no-metrics
+async def connect_chat(update: Update, context: CallbackContext):  # sourcery no-metrics
 
     chat = update.effective_chat
     user = update.effective_user
@@ -278,7 +278,7 @@ async def connect_chat(update, context):  # sourcery no-metrics
             )
 
 
-async def disconnect_chat(update, context):
+async def disconnect_chat(update: Update, context: CallbackContext):
 
     if update.effective_chat.type == "private":
         disconnection_status = sql.disconnect(update.effective_message.from_user.id)
@@ -348,7 +348,7 @@ CONN_HELP = """
  """
 
 
-async def help_connect_chat(update, context):
+async def help_connect_chat(update: Update, context: CallbackContext):
 
     args = context.args
 
@@ -359,7 +359,7 @@ async def help_connect_chat(update, context):
         send_message(update.effective_message, CONN_HELP, parse_mode="markdown")
 
 
-async def connect_button(update, context):
+async def connect_button(update: Update, context: CallbackContext):
     query = update.callback_query
     chat = update.effective_chat
     user = update.effective_user
@@ -370,7 +370,7 @@ async def connect_button(update, context):
     connect_close = query.data == "connect_close"
 
     if connect_match:
-        target_chat = connect_match.group(1)
+        target_chat = connect_match[1]
         getstatusadmin = await context.bot.get_chat_member(
             target_chat, query.from_user.id
         )

@@ -36,7 +36,7 @@ from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 
-async def ud(update, context):
+async def ud(update: Update, context: CallbackContext):
     msg = update.effective_message
     args = context.args
     text = " ".join(args).lower()

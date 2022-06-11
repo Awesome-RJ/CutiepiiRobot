@@ -33,14 +33,12 @@ def control_user(func):
     async def wrapper(_, message: Message):
         msg = json.loads(str(message))
         if func.__name__ not in ["pong_", "quote", "feed_", "help_", "list_disabled", "start_", "auth_link_cmd", "logout_cmd", "list_tags_genres_cmd"]:
-            try:
+            with contextlib.suppress(KeyError):
                 msg['sender_chat']
                 key = rand_key()
                 ANON_JSON[key] = [func, message, msg]
                 await message.reply_text('Click the below button to get results', reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('Click Here', callback_data=f"confirm_{key}")]]))
                 return
-            except KeyError:
-                pass
         try:
             await func(_, message, msg)
         except FloodWait as e:

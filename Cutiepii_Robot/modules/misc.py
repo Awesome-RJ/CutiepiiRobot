@@ -131,7 +131,7 @@ async def slcheck(_,message):
        reason = res["reason"]
        await message.reply_text(f"**Enforcer**: {enf}\n**User** : {user}\n**Reason**: {reason}")
 
-async def gdpr(update, context):
+async def gdpr(update: Update, context: CallbackContext):
     await update.effective_message.reply_text("Deleting identifiable data...")
     for mod in GDPR:
         mod.__gdpr__(update.effective_user.id)
@@ -346,7 +346,7 @@ async def markdown_help(update: Update, context: CallbackContext):
         return
     markdown_help_sender(update)
 
-async def imdb(update, context):
+async def imdb(update: Update, context: CallbackContext):
     try:
         args = context.args
         movie_name = " ".join(args)

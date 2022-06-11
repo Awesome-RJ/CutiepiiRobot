@@ -353,7 +353,7 @@ async def clearall_btn(update: Update, context: CallbackContext):
             try:
                 for notename in note_list:
                     note = notename.name.lower()
-                    sql.rm_note(chat.id, note)
+                    sql.rm_note(int(chat.id), note)
                 await message.edit_text("Deleted all notes.")
             except BadRequest:
                 return

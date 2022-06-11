@@ -65,7 +65,7 @@ async def get_user_common_chats(update: Update, context: CallbackContext):
             sleep(e.retry_after)
 
     if len(text) < 4096:
-        await msg.reply_text(text, parse_mode="HTML")
+        await msg.reply_text(text, parse_mode=ParseMode.HTML)
     else:
         with open("common_chats.txt", "w") as f:
             f.write(text)

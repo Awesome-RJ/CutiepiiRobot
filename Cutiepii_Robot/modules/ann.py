@@ -43,7 +43,7 @@ async def chatmemberupdates(update: Update, context: CallbackContext) -> Optiona
     message = update.effective_message
     log_setting = logsql.get_chat_setting(chat.id)
     if not log_setting:
-        logsql.set_chat_setting(logsql.LogChannelSettings(chat.id, True, True, True, True, True))
+        logsql.set_chat_setting(logsql.LogChannelSettings(int(chat.id), True, True, True, True, True))
         log_setting = logsql.get_chat_setting(chat.id)
 
     result = extract_status_change(update.chat_member)

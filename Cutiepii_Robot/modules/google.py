@@ -91,7 +91,7 @@ async def google_search(query):
     result = []
     results = [someone.find_all("div", class_="kCrYT") for someone in another_soup]
     for data in results:
-        try:
+        with contextlib.suppress(BaseException):
             if len(data) > 1:
                 result.append(
                     {
@@ -100,8 +100,6 @@ async def google_search(query):
                         "description": data[1].text,
                     }
                 )
-        except BaseException:
-            pass
     return result
 """
 
@@ -227,14 +225,12 @@ async def ParseSauce(googleurl):
 
     results = {"similar_images": "", "best_guess": ""}
 
-    try:
+    with contextlib.suppress(BaseException):
         for similar_image in soup.findAll("input", {"class": "gLFyf"}):
             url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(
                 similar_image.get("value")
             )
             results["similar_images"] = url
-    except BaseException:
-        pass
 
     for best_guess in soup.findAll("div", attrs={"class": "r5a77d"}):
         results["best_guess"] = best_guess.get_text()

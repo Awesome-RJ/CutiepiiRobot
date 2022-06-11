@@ -605,7 +605,7 @@ async def get_user_activity(id_, user):
     data = result["data"]["Page"]["activities"]
     msg = ""
     for i in data:
-        try:
+        with contextlib.suppress(KeyError):
             name = f"[{i['media']['title']['romaji']}]({i['media']['siteUrl']})"
             if i['status'] in ["watched episode", "read chapter"]:
                 msg += f"⚬ {str(i['status']).capitalize()} {i['progress']} of {name}\n"
@@ -615,8 +615,6 @@ async def get_user_activity(id_, user):
                 if i['status'] == "dropped":
                     of = "at"
                 msg += f"⚬ {str(i['status']).capitalize()}{f'{progress} {of} ' if progress is not None else ' '}{name}\n"
-        except KeyError:
-            pass
     btn = [[InlineKeyboardButton("Back", callback_data=f"getusrbc_{user}")]]
     return f"https://img.anili.st/user/{id_}?a={time.time()}", msg, InlineKeyboardMarkup(btn)
 

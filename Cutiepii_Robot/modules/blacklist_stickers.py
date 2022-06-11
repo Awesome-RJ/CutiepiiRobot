@@ -377,7 +377,7 @@ async def del_blackliststicker(update: Update, context: CallbackContext):
     if not to_match or not to_match.set_name:
         return
 
-    if is_approved(chat.id, user.id): # ignore approved users
+    if is_approved(int(chat.id), user.id): # ignore approved users
         return
 
     getmode, value = sql.get_blacklist_setting(chat.id)

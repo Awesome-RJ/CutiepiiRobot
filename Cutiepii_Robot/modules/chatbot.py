@@ -144,7 +144,7 @@ async def list_chatbot_chats(update: Update, context: CallbackContext):
         x = await context.bot.get_chat(chat)
         name = x.title or x.first_name
         text += f"➛ <code>{name}</code>\n"
-    await update.effective_message.reply_text(text, parse_mode="HTML")
+    await update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
 __help__ = f"""

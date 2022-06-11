@@ -64,13 +64,13 @@ async def report_setting(update: Update, context: CallbackContext):
     if chat.type == chat.PRIVATE:
         if len(args) >= 1:
             if args[0] in ("yes", "on"):
-                sql.set_user_setting(chat.id, True)
+                sql.set_user_setting(int(chat.id), True)
                 await msg.reply_text(
                     "Turned on reporting! You'll be notified whenever anyone reports something.",
                 )
 
             elif args[0] in ("no", "off"):
-                sql.set_user_setting(chat.id, False)
+                sql.set_user_setting(int(chat.id), False)
                 await msg.reply_text("Turned off reporting! You wont get any reports.")
         else:
             await msg.reply_text(
@@ -80,14 +80,14 @@ async def report_setting(update: Update, context: CallbackContext):
 
     elif len(args) >= 1:
         if args[0] in ("yes", "on"):
-            sql.set_chat_setting(chat.id, True)
+            sql.set_chat_setting(int(chat.id), True)
             await msg.reply_text(
                 "Turned on reporting! Admins who have turned on reports will be notified when /report "
                 "or @admin is called.",
             )
 
         elif args[0] in ("no", "off"):
-            sql.set_chat_setting(chat.id, False)
+            sql.set_chat_setting(int(chat.id), False)
             await msg.reply_text(
                 "Turned off reporting! No admins will be notified on /report or @admin.",
             )
@@ -110,7 +110,7 @@ async def report(update: Update, context: CallbackContext) -> str:
 
     log_setting = logsql.get_chat_setting(chat.id)
     if not log_setting:
-        logsql.set_chat_setting(logsql.LogChannelSettings(chat.id, True, True, True, True, True))
+        logsql.set_chat_setting(logsql.LogChannelSettings(int(chat.id), True, True, True, True, True))
         log_setting = logsql.get_chat_setting(chat.id)
 
     if message.sender_chat:

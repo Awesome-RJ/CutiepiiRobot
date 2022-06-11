@@ -97,7 +97,7 @@ class CustomFilters(BASE):
         return "<Permissions for %s>" % self.chat_id
 
     def __eq__(self, other):
-        return bool(
+        return (
             isinstance(other, CustomFilters)
             and self.chat_id == other.chat_id
             and self.keyword == other.keyword,

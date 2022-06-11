@@ -205,7 +205,7 @@ async def ban(update: Update, context: CallbackContext) -> Optional[str]:  # sou
 
             await message.reply_text(
                 f"Channel {html.escape(message.reply_to_message.sender_chat.title)} was banned successfully from {html.escape(chat.title)}",
-                parse_mode="html",
+                parse_mode=ParseMode.HTML,
             )
 
 
@@ -242,7 +242,7 @@ async def ban(update: Update, context: CallbackContext) -> Optional[str]:  # sou
 
             await message.reply_text(
                 f"Channel {html.escape(chan.title)} was banned successfully from {html.escape(chat.title)}",
-                parse_mode="html",
+                parse_mode=ParseMode.HTML,
             )
 
 
@@ -300,7 +300,7 @@ async def ban(update: Update, context: CallbackContext) -> Optional[str]:  # sou
         await message.delete()
     elif delban and message.reply_to_message:
         await message.reply_to_message.delete()
-    context.bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
+    context.bot.send_sticker(int(chat.id), BAN_STICKER)  # banhammer marie sticker
 
     return logmsg
 
@@ -364,7 +364,7 @@ async def temp_ban(update: Update, context: CallbackContext) -> str:
 
     try:
         chat.ban_member(user_id, until_date=bantime)
-        await bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
+        await bot.send_sticker(int(chat.id), BAN_STICKER)  # banhammer marie sticker
 
         reply_msg = (
             f"<b>╔━「 ❕ Temp Banned</b>\n"
@@ -452,7 +452,7 @@ async def kick(update: Update, context: CallbackContext) -> str:
         return log_message
 
     if chat.unban_member(user_id):
-        await bot.send_sticker(chat.id, BAN_STICKER)  # banhammer marie sticker
+        await bot.send_sticker(int(chat.id), BAN_STICKER)  # banhammer marie sticker
 
         if reason:
 
@@ -537,7 +537,7 @@ async def unban(update: Update, context: CallbackContext) -> Optional[str]:  # s
 
             await message.reply_text(
                 f"Channel {html.escape(message.reply_to_message.sender_chat.title)} was unbanned successfully from {html.escape(chat.title)}",
-                parse_mode="html",
+                parse_mode=ParseMode.HTML,
             )
 
 
@@ -574,7 +574,7 @@ async def unban(update: Update, context: CallbackContext) -> Optional[str]:  # s
 
             await message.reply_text(
                 f"Channel {html.escape(chan.title)} was unbanned successfully from {html.escape(chat.title)}",
-                parse_mode="html",
+                parse_mode=ParseMode.HTML,
             )
 
 
@@ -603,7 +603,7 @@ async def unban(update: Update, context: CallbackContext) -> Optional[str]:  # s
 
         await message.reply_text(
             f"User {mention_html(member.user.id, member.user.first_name)} was unbanned successfully from {html.escape(chat.title)}",
-            parse_mode="html",
+            parse_mode=ParseMode.HTML,
         )
 
 

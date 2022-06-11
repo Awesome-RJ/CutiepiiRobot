@@ -120,7 +120,7 @@ async def error_callback(update: Update, context: CallbackContext):
             ERROR_LOGS,
                 open("error.txt", "rb"),
                 caption=f"#{context.error.identifier}\n<b>An unknown error occured:</b>\n<code>{e}</code>",
-                parse_mode="html",
+                parse_mode=ParseMode.HTML,
         )
         return
     key = key.get("key")
@@ -131,7 +131,7 @@ async def error_callback(update: Update, context: CallbackContext):
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Show ERROR", url=url)]],
             ),
-        parse_mode="html",
+        parse_mode=ParseMode.HTML,
     )
 
 
@@ -150,10 +150,10 @@ async def list_errors(update: Update, context: CallbackContext):
             update.effective_chat.id,
             open("errors_msg.txt", "rb"),
             caption="Too many errors have occured..",
-            parse_mode="html",
+            parse_mode=ParseMode.HTML,
         )
         return
-    await update.effective_message.reply_text(msg, parse_mode="html")
+    await update.effective_message.reply_text(msg, parse_mode=ParseMode.HTML)
 
 
 CUTIEPII_PTB.add_error_handler(error_callback)
