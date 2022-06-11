@@ -168,7 +168,7 @@ def user_can_promote(func):
             if not update.callback_query:
                 await update.effective_message.reply_text(no_rights)
             else:
-                update.callback_query.answer(no_rights, show_alert=True)
+                await update.callback_query.answer(no_rights, show_alert=True)
             return ""
         return func(update, context, *args, **kwargs)
 
