@@ -73,7 +73,7 @@ def can_manage_video_chats(chat_id, user_id):
 def is_anon(user: User, chat: Chat):
     return chat.get_member(user.id).is_anonymous
 
-def is_whitelist_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
+def is_whitelist_plus(_: Chat, user_id: int) -> bool:
     return any(user_id in user for user in [WHITELIST_USERS, TIGER_USERS, SUPPORT_USERS, SUDO_USERS, DEV_USERS])
 
 
@@ -263,25 +263,7 @@ def is_user_in_chat(chat: Chat, user_id: int) -> bool:
     return member.status not in ("left", "kicked")
 
 def is_user_ban_protected(update: Update, user_id: int, member: ChatMember = None) -> bool:
-    chat = update.effective_chat
-    msg = update.effective_message
-    if (
-        chat.type == "private"
-        or user_id in SUDO_USERS
-        or user_id in DEV_USERS
-        or user_id in WHITELIST_USERS
-        or user_id in TIGER_USERS
-        or is_modd(chat.id, user_id)
-        or chat.all_members_are_administrators
-        or (msg.reply_to_message and msg.reply_to_message.sender_chat is not None and 
-	    msg.reply_to_message.sender_chat.type != "channel")
-    ):
-        return True
-
-    if not member:
-        member = chat.get_member(user_id)
-
-    return member.status in ("administrator", "creator")
+    return is_user_admin(update, user_id, member)
 
 def dev_plus(func):
     @wraps(func)
