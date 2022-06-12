@@ -141,7 +141,6 @@ async def report(update: Update, context: CallbackContext) -> str:
         if user.id == bot.id:
             await update.effective_message.reply_text("Nice try.")
             return ""
-
 #        if reported_user.id in REPORT_IMMUNE_USERS:
 #            await update.effective_message.reply_text("Uh? You reporting a disaster?")
 #            return ""

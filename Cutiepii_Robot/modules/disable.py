@@ -123,7 +123,7 @@ if is_module_loaded(FILENAME):
                 )
 
     @user_admin
-    
+
     async def disable(update: Update, context: CallbackContext):
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
@@ -166,7 +166,7 @@ if is_module_loaded(FILENAME):
             send_message(update.effective_message, "What should I disable?")
 
     @user_admin
-    
+
     async def enable(update: Update, context: CallbackContext):
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user

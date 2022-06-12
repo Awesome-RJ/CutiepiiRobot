@@ -159,7 +159,7 @@ def chats(update: Update, _: CallbackContext):
     chatfile = "List of chats.\n0. Chat name | Chat ID | Members count\n"
     P = 1
     for chat in all_chats:
-        try:
+        with contextlib.suppress(Exception):
             curr_chat = await context.bot.getChat(chat.chat_id)
             bot_member = curr_chat.get_member(context.bot.id)
             chat_members = curr_chat.get_member_count(context.bot.id)
@@ -167,9 +167,6 @@ def chats(update: Update, _: CallbackContext):
                 P, chat.chat_name, chat.chat_id, chat_members
             )
             P += 1
-        except Exception:
-            pass
-
     with BytesIO(str.encode(chatfile)) as output:
         output.name = "glist.txt"
         await update.effective_message.reply_document(
