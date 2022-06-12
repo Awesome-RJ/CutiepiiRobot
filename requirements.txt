@@ -36,7 +36,6 @@ tswift==0.7.0
 lyricsgenius==3.0.1
 envparse==0.2.0
 cryptg==0.3.1
-aioredis==2.0.1
 odmantic==0.4.0
 pykeyboard==0.1.5
 aiofiles==0.8.0
@@ -98,4 +97,4 @@ moviepy
 pytimeparse
 APScheduler==3.9.1
 CloudScraper
-async-timeout<=4.0.2
+async-timeout>=3.0
