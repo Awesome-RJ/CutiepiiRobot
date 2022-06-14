@@ -271,8 +271,6 @@ async def apk(e):
         page = requests.get(
             f"https://play.google.com/store/search?q={final_name}&c=apps"
         )
-
-        lnk = str(page.status_code)
         soup = bs4.BeautifulSoup(page.content, "lxml", from_encoding="utf-8")
         results = soup.findAll("div", "ZmHEEd")
         app_name = (

@@ -19,8 +19,6 @@ file5 = "https://telegra.ph/file/401cb7f6216764ebab161.jpg"
 
 @register(pattern="/myinfo")
 async def proboyx(event):
-    chat = await event.get_chat()
-    current_time = datetime.utcnow()
     betsy = event.sender.first_name
     button = [[custom.Button.inline("Click Here",data="information")]]
     on = await bot.send_file(event.chat_id, file=file2,caption= f"♡ Hey {betsy}, I'm Cutiepii\n♡ I'm Created By [Black Knights Union](https://t.me/Black_Knights_Union_Support)\n♡ Click The Button Below To Get Your Info", buttons=button)

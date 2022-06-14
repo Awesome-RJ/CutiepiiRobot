@@ -772,7 +772,7 @@ async def get_anime(vars_, auth: bool = False, user: int = None):
     duration = data.get("duration")
     country = data.get("countryOfOrigin")
     c_flag = cflag(country)
-    source = data.get("source")
+
     prqlsql = data.get("relations").get("edges")
     adult = data.get("isAdult")
     url = data.get("siteUrl")
@@ -968,7 +968,6 @@ async def get_character(query, page, auth: bool = False, user: int = None):
     # Character Data
     id_ = data["id"]
     name = data["name"]["full"]
-    native = data["name"]["native"]
     img = data["image"]["large"]
     site_url = data["siteUrl"]
     isfav = data.get("isFavourite")
@@ -1022,7 +1021,6 @@ async def get_manga(qdb, page, auth: bool = False, user: int = None):
     format_ = data.get("format")
     country = data.get("countryOfOrigin")
     source = data.get("source")
-    c_flag = cflag(country)
     isfav = data.get("isFavourite")
     adult = data.get("isAdult")
     fav = ", in Favourites" if isfav is True else ""
@@ -1068,7 +1066,6 @@ async def get_airing(vars_, auth: bool = False, user: int = None):
     english = data["title"]["english"]
     status = data.get("status")
     country = data.get("countryOfOrigin")
-    c_flag = cflag(country)
     coverImg = f"https://img.anili.st/media/{mid}"
     isfav = data.get("isFavourite")
     in_ls = False
@@ -1107,7 +1104,6 @@ async def toggle_favourites(id_: int, media: str, user: int):
     )
     k = await return_json_senpai(query=query, vars_=vars_, auth=True, user=int(user))
     try:
-        kek = k['data']['ToggleFavourite']
         return "ok"
     except KeyError:
         return "failed"

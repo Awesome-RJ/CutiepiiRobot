@@ -112,8 +112,6 @@ async def send_rules(update, chat_id, from_pm=False):
 async def set_rules(update: Update):
     chat_id = update.effective_chat.id
     msg = update.effective_message  # type: Optional[Message]
-    chat = update.effective_chat  # type: Optional[Chat]
-    user = update.effective_user  # type: Optional[User]
 
     raw_text = msg.text
     args = raw_text.split(None, 1)  # use python's maxsplit to separate cmd and args
@@ -132,8 +130,6 @@ async def set_rules(update: Update):
 async def clear_rules(update: Update):
     chat_id = update.effective_chat.id
     chat = update.effective_chat  # type: Optional[Chat]
-    msg = update.effective_message  # type: Optional[Message]
-    user = update.effective_user  # type: Optional[User]
 
     sql.set_rules(chat_id, "")
     await update.effective_message.reply_text(f"Rules for {chat.title} were successfully cleared!")

@@ -35,7 +35,7 @@ import datetime
 from datetime import datetime
 from telethon import Button, __version__ as tlhver
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import telethn as borg
+from Cutiepii_Robot import telethn as telethn
 from platform import python_version
 from pyrogram import __version__ as pyrover
 
@@ -80,7 +80,6 @@ def _human_time_duration(seconds):
 
 @register(pattern=("/alive"))
 async def hmm(yes):
-    chat = await yes.get_chat()
     current_time = datetime.utcnow()
     uptime_sec = (current_time - START_TIME).total_seconds()
     uptime = await _human_time_duration(int(uptime_sec))
@@ -96,33 +95,33 @@ async def hmm(yes):
             Button.url("【► Support ◄】", "https://t.me/Black_Knights_Union_Support"),
         ]
     ]
-    on = await borg.send_file(
+    on = await telethn.send_file(
         yes.chat_id, file=file1, caption=pm_caption, buttons=BUTTON, reply_to=yes
     )
 
     await asyncio.sleep(edit_time)
-    ok = await borg.edit_message(yes.chat_id, on, file=file2, buttons=BUTTON)
+    ok = await telethn.edit_message(yes.chat_id, on, file=file2, buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok2 = await borg.edit_message(yes.chat_id, ok, file=file3, buttons=BUTTON)
+    ok2 = await telethn.edit_message(yes.chat_id, ok, file=file3, buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok3 = await borg.edit_message(yes.chat_id, ok2, file=file4, buttons=BUTTON)
+    ok3 = await telethn.edit_message(yes.chat_id, ok2, file=file4, buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok4 = await borg.edit_message(yes.chat_id, ok3, file=file5, buttons=BUTTON)
+    ok4 = await telethn.edit_message(yes.chat_id, ok3, file=file5, buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok5 = await borg.edit_message(yes.chat_id, ok4, file=file1, buttons=BUTTON)
+    ok5 = await telethn.edit_message(yes.chat_id, ok4, file=file1, buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok6 = await borg.edit_message(yes.chat_id, ok5, file=file2, buttons=BUTTON)
+    ok6 = await telethn.edit_message(yes.chat_id, ok5, file=file2, buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok7 = await borg.edit_message(yes.chat_id, ok6, file=file3, buttons=BUTTON)
+    ok7 = await telethn.edit_message(yes.chat_id, ok6, file=file3, buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok8 = await borg.edit_message(yes.chat_id, ok7, file=file4, buttons=BUTTON)
+    ok8 = await telethn.edit_message(yes.chat_id, ok7, file=file4, buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok9 = await borg.edit_message(yes.chat_id, ok8, file=file5, buttons=BUTTON)
+    ok9 = await telethn.edit_message(yes.chat_id, ok8, file=file5, buttons=BUTTON)

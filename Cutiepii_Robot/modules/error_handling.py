@@ -77,9 +77,6 @@ async def error_callback(update: Update, context: CallbackContext):
     try:
         stringio = io.StringIO()
         pretty_errors.output_stderr = stringio
-        output = pretty_errors.excepthook(
-            type(context.error), context.error, context.error.__traceback__,
-        )
         pretty_errors.output_stderr = sys.stderr
         pretty_error = stringio.getvalue()
         stringio.close()

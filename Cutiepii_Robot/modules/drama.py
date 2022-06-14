@@ -58,7 +58,6 @@ async def drama(update: Update):
 # Callback Data
 @cutiepii_callback(pattern=r"drama-detail.*")
 async def drama_button(update: Update, context: CallbackContext):
-    chat = update.effective_chat
     query = update.callback_query
     message = update.effective_message
 
@@ -113,7 +112,6 @@ async def drama_button(update: Update, context: CallbackContext):
 
 @cutiepii_callback(pattern=r"drama-cast-detail.*")
 async def casts_button(update: Update, context: CallbackContext):
-    chat = update.effective_chat
     query = update.callback_query
     message = update.effective_message
 

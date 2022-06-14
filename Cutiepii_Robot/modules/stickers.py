@@ -748,9 +748,7 @@ async def delsticker(update: Update, context: CallbackContext):
 
 
 async def add_fvrtsticker(update: Update, context: CallbackContext):
-    bot = context.bot
     message = update.effective_message
-    chat = update.effective_chat
     user = update.effective_user
     args = context.args
     query = " ".join(args)
@@ -789,7 +787,6 @@ async def add_fvrtsticker(update: Update, context: CallbackContext):
 
 async def list_fvrtsticker(update: Update):
     message = update.effective_message
-    chat = update.effective_chat
     user = update.effective_user
     fvrt_stickers_list = REDIS.hvals(f"fvrt_stickers2_{user.id}")
     fvrt_stickers_list.sort()
@@ -808,7 +805,6 @@ async def list_fvrtsticker(update: Update):
 
 async def remove_fvrtsticker(update: Update, context: CallbackContext):
     message = update.effective_message
-    chat = update.effective_chat
     user = update.effective_user
     args = context.args
     del_stick = " ".join(args)
@@ -864,7 +860,6 @@ async def handler(event):
 async def drawText(image_path, text):
     img = Image.open(image_path)
     os.remove(image_path)
-    shadowcolor = "black"
     i_width, i_height = img.size
     if os.name == "nt":
         fnt = "ariel.ttf"

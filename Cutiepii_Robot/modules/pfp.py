@@ -51,7 +51,6 @@ if 1 == 1:
 #        """Gets the profile photos of replied users, channels or chats"""
         id = "".join(event.raw_text.split(maxsplit=2)[1:])
         user = await event.get_reply_message()
-        chat = await event.get_chat()
         if user:
             photos = await event.client.get_profile_photos(user.sender)
         else:

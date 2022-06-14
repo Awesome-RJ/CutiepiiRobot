@@ -47,7 +47,6 @@ trans = SyncTranslator()
 
 async def translate(update: Update, context: CallbackContext) -> None:
     global to_translate
-    bot = context.bot
     message = update.effective_message
     reply_msg = message.reply_to_message
 

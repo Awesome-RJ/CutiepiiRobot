@@ -165,7 +165,6 @@ async def export_data(update: Update, context: CallbackContext):
             return ""
         chat = update.effective_chat
         chat_id = update.effective_chat.id
-        chat_name = update.effective_message.chat.title
 
     jam = time.time()
     new_jam = jam + 10800
@@ -185,7 +184,6 @@ async def export_data(update: Update, context: CallbackContext):
         put_chat(chat_id, new_jam, chat_data)
     note_list = sql.get_all_chat_notes(chat_id)
     backup = {}
-    button = ""
     buttonlist = []
     namacat = ""
     isicat = ""
@@ -195,11 +193,9 @@ async def export_data(update: Update, context: CallbackContext):
     # Notes
     for note in note_list:
         count += 1
-        getnote = sql.get_note(chat_id, note.name)
         namacat += "{}<###splitter###>".format(note.name)
         if note.msgtype == 1:
             tombol = sql.get_buttons(chat_id, note.name)
-            keyb = []
             for btn in tombol:
                 countbtn += 1
                 if btn.same_line:

@@ -58,7 +58,6 @@ async def telegrap(event):
                 TMP_DOWNLOAD_DIRECTORY
             )
             end = datetime.now()
-            ms = (end - start).seconds
             if not downloaded_file_name:
                 await telethn.send_message(
                     event.chat_id,
@@ -75,7 +74,6 @@ async def telegrap(event):
                 os.remove(downloaded_file_name)
             else:
                 end = datetime.now()
-                ms_two = (end - start).seconds
                 os.remove(downloaded_file_name)
                 await telethn.send_message(
                     event.chat_id,
@@ -116,12 +114,7 @@ async def telegrap(event):
                     page_content += m.decode("UTF-8") + "\n"
                 os.remove(downloaded_file_name)
             page_content = page_content.replace("\n", "<br>")
-            response = telegraph.create_page(
-                title_of_page,
-                html_content=page_content
-            )
             end = datetime.now()
-            ms = (end - start).seconds
             await telethn.send_message(
                 event.chat_id,
                 "Your telegraph is complete uploaded!",

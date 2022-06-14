@@ -45,8 +45,6 @@ async def is_register_admin(chat, user):
 
 @register(pattern="^/unbanall$")
 async def _(event):
-    chat_id = event.chat_id
-    user = event.sender_id
     chat = await event.get_chat()
     admin = chat.admin_rights.ban_users
     creator = chat.creator
@@ -104,7 +102,6 @@ async def _(event):
 
 @register(pattern="^/unmuteall$")
 async def _(event):
-    chat_id = event.chat_id
     if event.is_private:
       return await event.respond("__This command can be use in groups and channels!__")
 

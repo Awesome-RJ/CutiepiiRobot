@@ -105,7 +105,8 @@ async def tsh(event):
 
         try:
             orta = await event.respond("Uploading to TransferSh...")
-            download_link, final_date, size = await send_to_transfersh_async(file_path)
+            download_link, final_date
+            await send_to_transfersh_async(file_path)
 
             str(time.time() - start)
             await orta.edit(

@@ -48,11 +48,6 @@ async def _(event):
     lin = "https://b-ok.cc/s/"
     text = input_str
     link = lin + text
-
-    headers = [
-        "User-Agent",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:74.0) Gecko/20100101 Firefox/74.0",
-    ]
     page = requests.get(link)
     soup = BeautifulSoup(page.content, "html.parser")
     f = open("book.txt", "w")
@@ -78,7 +73,6 @@ async def _(event):
 
         f.write(f"By @{CUTIEPII_PTB.bot.username}.")
         f.close()
-        caption = f"A collabration with Friday.\n Join Support @{SUPPORT_CHAT}"
 
         await telethn.send_file(
             event.chat_id,

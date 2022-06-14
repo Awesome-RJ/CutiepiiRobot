@@ -161,7 +161,6 @@ def chats(update: Update, context: CallbackContext):
     for chat in all_chats:
         with contextlib.suppress(Exception):
             curr_chat = await context.bot.getChat(chat.chat_id)
-            bot_member = curr_chat.get_member(context.bot.id)
             chat_members = curr_chat.get_member_count(context.bot.id)
             chatfile += "{}. {} | {} | {}\n".format(
                 P, chat.chat_name, chat.chat_id, chat_members

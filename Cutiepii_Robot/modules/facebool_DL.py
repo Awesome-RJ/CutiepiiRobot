@@ -65,7 +65,7 @@ async def _(event):
         return
     if await is_admin(event, event.message.sender_id):
         url = event.pattern_match.group(1)
-        if x := re.match(r"^(https:|)[/][/]www.([^/]+[.])*facebook.com", url):
+        if re.match(r"^(https:|)[/][/]www.([^/]+[.])*facebook.com", url):
             html = requests.get(url).content.decode("utf-8")
             await event.reply(
                 "Starting Video download... \n Please note: FBDL is not for big files."
@@ -82,14 +82,12 @@ async def _(event):
         _sd = re.search("sd_src:null", html)
 
         _thelist = [_qualityhd, _qualitysd, _hd, _sd]
-        list = [id for id, val in enumerate(_thelist) if val is not None]
         filename = datetime.strftime(datetime.now(), "%Y-%m-%d-%H-%M-%S")
 
         main(url, filename)
         await event.reply("Video Downloaded Successfully. Starting To Upload.")
 
         kk = f"{filename}.mp4"
-        caption = f"Facebook Video downloaded Successfully by @{CUTIEPII_PTB.bot.username}.\nSay hi to devs @{SUPPORT_CHAT}."
 
         await telethn.send_file(
             event.chat_id,

@@ -76,7 +76,7 @@ async def __(event):
         accentuate_db = 2
     lel = await event.reply("`Downloading This File...`")
     # fname = await telethn.download_media(message=reply.media)
-    r_message = message = reply.media
+    r_message = reply.media
     fname = await telethn.download_media(r_message, TMP_DOWNLOAD_DIRECTORY)
     await lel.edit("`BassBoosting In Progress..`")
     if fname.endswith(".oga") or fname.endswith(".ogg"):

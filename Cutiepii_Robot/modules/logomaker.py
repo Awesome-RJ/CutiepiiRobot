@@ -1281,15 +1281,11 @@ async def lego(event):
     img = Image.open(io.BytesIO(requests.get(randc).content))
     draw = ImageDraw.Draw(img)
     image_widthz, image_heightz = img.size
-    pointsize = 500
-    fillcolor = "black"
-    shadowcolor = "blue"
     fnt = glob.glob("./Cutiepii_Robot/utils/Logo/*")
     randf = random.choice(fnt)
     font = ImageFont.truetype(randf, 120)
     w, h = draw.textsize(text, font=font)
     h += int(h*0.21)
-    image_width, image_height = img.size
     draw.text(((image_widthz-w)/2, (image_heightz-h)/2), text, font=font, fill=(255, 255, 255))
     x = (image_widthz-w)/2
     y = ((image_heightz-h)/2+6)

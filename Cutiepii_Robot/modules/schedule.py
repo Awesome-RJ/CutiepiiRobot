@@ -84,7 +84,6 @@ def callbackk(_, query):
 
     if query.data == "fk":
         mm = latest()
-        time_ = datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M")
 
         try:
             query.message.edit(f"Today\'s Schedule:\nTZ: Japan\n{mm}",

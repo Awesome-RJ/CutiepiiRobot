@@ -153,7 +153,6 @@ async def delete_messages(event):
 @user_admin
 async def purgefrom(update: Update, context: CallbackContext):
     msg = update.effective_message
-    user = update.effective_user
     chat = update.effective_chat
     bot = context.bot
 
