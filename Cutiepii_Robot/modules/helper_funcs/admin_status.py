@@ -144,15 +144,13 @@ async def get_mem_from_cache(user_id: int, chat_id: int) -> ChatMember:
 	with RLOCK:
 		try:
 			for i in A_CACHE[chat_id]:
-				if i.user.id == user_id:
-					return i
+				if i.user.id == user_id: return i
 
 		except KeyError:
 			admins = await CUTIEPII_PTB.bot.getChatAdministrators(chat_id)
 			A_CACHE[chat_id] = admins
 			for i in admins:
-				if i.user.id == user_id:
-					return 
+				if i.user.id == user_id: return i
 
 def user_admin_check(permission: AdminPerms):
     def wrapper(func):
