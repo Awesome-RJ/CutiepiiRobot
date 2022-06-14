@@ -58,7 +58,7 @@ def bot_admin_check(permission: AdminPerms = None):
 			try:  # try to get from cache
 				bot_member = B_CACHE[chat.id]
 			except KeyError:  # if not in cache, get from API and save to cache
-				bot_member = CUTIEPII_PTB.bot.getChatMember(int(chat.id), bot_id)
+				bot_member = CUTIEPII_PTB.bot.getChatMember(chat.id), bot_id)
 				B_CACHE[chat.id] = bot_member
 
 			if permission:  # if a perm is required, check for it

@@ -229,7 +229,7 @@ async def weather(update: Update, context: CallbackContext):
         disable_web_page_preview=True,
     )
 
-    cleartime = get_clearcmd(int(chat.id), "weather")
+    cleartime = get_clearcmd(chat.id), "weather")
 """
     if cleartime:
         context.bot.run_async(delete, delmsg, cleartime.time)

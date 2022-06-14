@@ -64,13 +64,13 @@ async def allow_connections(update, context) -> str:
     elif len(args) >= 1:
         var = args[0]
         if var == "no":
-            sql.set_allow_connect_to_chat(int(chat.id), False)
+            sql.set_allow_connect_to_chat(chat.id), False)
             send_message(
                 update.effective_message,
                 "Connection has been disabled for this chat",
             )
         elif var == "yes":
-            sql.set_allow_connect_to_chat(int(chat.id), True)
+            sql.set_allow_connect_to_chat(chat.id), True)
             send_message(
                 update.effective_message,
                 "Connection has been enabled for this chat",

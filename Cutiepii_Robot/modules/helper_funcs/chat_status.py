@@ -250,7 +250,7 @@ def is_user_ban_protected(chat: Chat, user_id: int, member: ChatMember = None) -
         or user_id in SUDO_USERS
         or user_id in DEV_USERS
         or user_id in WHITELIST_USERS
-	or is_modd(int(chat.id), user_id)
+	or is_modd(chat.id), user_id)
     ):
         return True
 

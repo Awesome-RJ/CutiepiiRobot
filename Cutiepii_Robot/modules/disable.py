@@ -99,7 +99,7 @@ if is_module_loaded(FILENAME):
                         chat = update.effective_chat
                         user = update.effective_user
                         # disabled, admincmd, user admin
-                        if sql.is_command_disabled(int(chat.id), command[0].lower()):
+                        if sql.is_command_disabled(chat.id), command[0].lower()):
                             # check if command was disabled
                             is_ad = asyncio.ensure_future(is_user_admin(
                                 update, user.id
@@ -149,7 +149,7 @@ if is_module_loaded(FILENAME):
                 disable_cmd = disable_cmd[1:]
 
             if disable_cmd in set(DISABLE_CMDS + DISABLE_OTHER):
-                sql.disable_command(int(chat.id), disable_cmd)
+                sql.disable_command(chat.id), disable_cmd)
                 if conn:
                     text = f"Disabled the use of `{disable_cmd}` command in *{chat_name}*!"
                 else:
@@ -193,7 +193,7 @@ if is_module_loaded(FILENAME):
             if enable_cmd.startswith(CMD_STARTERS):
                 enable_cmd = enable_cmd[1:]
 
-            if sql.enable_command(int(chat.id), enable_cmd):
+            if sql.enable_command(chat.id), enable_cmd):
                 if conn:
                     text = f"Enabled the use of `{enable_cmd}` command in *{chat_name}*!"
                 else:

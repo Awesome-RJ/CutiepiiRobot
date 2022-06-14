@@ -134,7 +134,7 @@ async def warn(
         for warn_reason in reasons:
             reply += f"\n - {html.escape(warn_reason)}"
 
-        message.bot.send_sticker(int(chat.id), BAN_STICKER)  # Saitama's sticker
+        message.bot.send_sticker(chat.id), BAN_STICKER)  # Saitama's sticker
         keyboard = None
         log_reason = (
             f"<b>{html.escape(chat.title)}:</b>\n"
@@ -229,7 +229,7 @@ async def swarn(
         for warn_reason in reasons:
             reply += f"\n - {html.escape(warn_reason)}"
 
-        message.bot.send_sticker(int(chat.id), BAN_STICKER)  # Saitama's sticker
+        message.bot.send_sticker(chat.id), BAN_STICKER)  # Saitama's sticker
         keyboard = None
         log_reason = (
             f"<b>{html.escape(chat.title)}:</b>\n"
@@ -331,7 +331,7 @@ async def dwarn(
         for warn_reason in reasons:
             reply += f"\n - {html.escape(warn_reason)}"
 
-        message.bot.send_sticker(int(chat.id), BAN_STICKER)  # Saitama's sticker
+        message.bot.send_sticker(chat.id), BAN_STICKER)  # Saitama's sticker
         keyboard = None
         log_reason = (
             f"<b>{html.escape(chat.title)}:</b>\n"
@@ -605,7 +605,7 @@ async def add_warn_filter(update: Update, context: CallbackContext):
         if handler.filters == (keyword, chat.id):
             CUTIEPII_PTB.remove_handler(handler, WARN_HANDLER_GROUP)
 
-    sql.add_warn_filter(int(chat.id), keyword, content)
+    sql.add_warn_filter(chat.id), keyword, content)
 
     await update.effective_message.reply_text(f"Warn handler added for '{keyword}'!")
 
@@ -638,7 +638,7 @@ async def remove_warn_filter(update: Update, context: CallbackContext):
 
     for filt in chat_filters:
         if filt == to_remove:
-            sql.remove_warn_filter(int(chat.id), to_remove)
+            sql.remove_warn_filter(chat.id), to_remove)
             await msg.reply_text("Okay, I'll stop warning people for that.")
 
     await msg.reply_text(
@@ -677,7 +677,7 @@ async def reply_filter(update: Update, context: CallbackContext) -> Optional[str
 
     if user.id == 777000:
         return
-    if is_approved(int(chat.id), user.id):
+    if is_approved(chat.id), user.id):
         return
 
     chat_warn_filters = sql.get_chat_warn_triggers(chat.id)
@@ -689,7 +689,7 @@ async def reply_filter(update: Update, context: CallbackContext) -> Optional[str
         pattern = r"( |^|[^\w])" + re.escape(keyword) + r"( |$|[^\w])"
         if re.search(pattern, to_match, flags=re.IGNORECASE):
             user: Optional[User] = update.effective_user
-            warn_filter = sql.get_warn_filter(int(chat.id), keyword)
+            warn_filter = sql.get_warn_filter(chat.id), keyword)
             return await warn(user, update, warn_filter.reply, message)
     return ""
 
@@ -705,7 +705,7 @@ async def set_warn_limit(update: Update, context: CallbackContext) -> str:
             if int(args[0]) < 3:
                 await msg.reply_text("The minimum warn limit is 3!")
             else:
-                sql.set_warn_limit(int(chat.id), int(args[0]))
+                sql.set_warn_limit(chat.id), int(args[0]))
                 await msg.reply_text(f"Updated the warn limit to {args[0]}")
                 return (
                     f"<b>{html.escape(chat.title)}:</b>\n"
@@ -732,7 +732,7 @@ async def set_warn_strength(update: Update, context: CallbackContext):
 
     if args:
         if args[0].lower() in ("on", "yes"):
-            sql.set_warn_strength(int(chat.id), False)
+            sql.set_warn_strength(chat.id), False)
             await msg.reply_text("Too many warns will now result in a Ban!")
             return (
                 f"<b>{html.escape(chat.title)}:</b>\n"
@@ -741,7 +741,7 @@ async def set_warn_strength(update: Update, context: CallbackContext):
             )
 
         if args[0].lower() in ("off", "no"):
-            sql.set_warn_strength(int(chat.id), True)
+            sql.set_warn_strength(chat.id), True)
             await msg.reply_text(
                 "Too many warns will now result in a kick! Users will be able to join again after."
             )

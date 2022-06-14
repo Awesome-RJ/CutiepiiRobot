@@ -300,7 +300,7 @@ async def ban(update: Update, context: CallbackContext) -> Optional[str]:  # sou
         await message.delete()
     elif delban and message.reply_to_message:
         await message.reply_to_message.delete()
-    context.bot.send_sticker(int(chat.id), BAN_STICKER)  # banhammer marie sticker
+    context.bot.send_sticker(chat.id), BAN_STICKER)  # banhammer marie sticker
 
     return logmsg
 
@@ -364,7 +364,7 @@ async def temp_ban(update: Update, context: CallbackContext) -> str:
 
     try:
         chat.ban_member(user_id, until_date=bantime)
-        await bot.send_sticker(int(chat.id), BAN_STICKER)  # banhammer marie sticker
+        await bot.send_sticker(chat.id), BAN_STICKER)  # banhammer marie sticker
 
         reply_msg = (
             f"<b>╔━「 ❕ Temp Banned</b>\n"
@@ -452,7 +452,7 @@ async def kick(update: Update, context: CallbackContext) -> str:
         return log_message
 
     if chat.unban_member(user_id):
-        await bot.send_sticker(int(chat.id), BAN_STICKER)  # banhammer marie sticker
+        await bot.send_sticker(chat.id), BAN_STICKER)  # banhammer marie sticker
 
         if reason:
 

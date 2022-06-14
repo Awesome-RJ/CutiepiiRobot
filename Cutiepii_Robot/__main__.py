@@ -479,7 +479,7 @@ async def get_help(update: Update, context: CallbackContext):
         )
 
     else:
-        send_help(int(chat.id), HELP_STRINGS)
+        send_help(chat.id), HELP_STRINGS)
 
 
 
@@ -612,7 +612,7 @@ async def get_settings(update: Update, context: CallbackContext):
 
     # ONLY send settings in PM
     if chat.type == chat.PRIVATE:
-        send_settings(int(chat.id), user.id, True)
+        send_settings(chat.id), user.id, True)
 
     elif await is_user_admin(update, user.id):
         text = "Click here to get this chat's settings, as well as yours."
