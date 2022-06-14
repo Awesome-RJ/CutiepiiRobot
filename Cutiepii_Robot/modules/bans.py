@@ -33,7 +33,7 @@ import html
 from typing import Optional, Union
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Bot, Chat, ChatMember, Update
-from telegram.error import BadRequest
+from telegram.error import BadRequest, TelegramError
 from telegram.ext import filters, CallbackContext
 from telegram.helpers import mention_html
 from telegram.constants import ParseMode
@@ -48,7 +48,7 @@ from Cutiepii_Robot import (
     LOGGER
 )
 
-from Cutiepii_Robot.modules.helper_funcs.chat_status import connection_status, dev_plus
+from Cutiepii_Robot.modules.helper_funcs.chat_status import connection_status, dev_plus, is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user_and_text
 from Cutiepii_Robot.modules.helper_funcs.string_handling import extract_time
 from Cutiepii_Robot.modules.log_channel import loggable, gloggable

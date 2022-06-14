@@ -2,7 +2,7 @@ from functools import wraps
 from typing import Optional
 from threading import RLock
 
-from telegram import Chat, Update, ChatMember
+from telegram import Chat, Update, ChatMember, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
 from telegram.ext import CallbackContext as Ctx, CallbackQueryHandler as CBHandler, CallbackContext
 
@@ -21,6 +21,7 @@ from .admin_status_helpers import (
 )
 
 anon_callbacks = {}
+anon_callback_messages = {}
 
 def bot_is_admin(chat: Chat, bot_id: int, bot_member: ChatMember = None) -> bool:
     if chat.type == "private" or chat.all_members_are_administrators:
@@ -86,7 +87,7 @@ async def user_is_admin(chat: Chat,
 	if chat.type == "private" or user_id in (SUDO_USERS if allow_moderators else SUDO_USERS):
 		return True
 
-	if channels and (message.sender_chat is not None and message.sender_chat.type != "channel"):
+	if channels and (update.effective_message.sender_chat is not None and update.effective_message.sender_chat.type != "channel"):
 		return True  # return true if user is anonymous
 
 	member: ChatMember = get_mem_from_cache(user_id, chat.id)

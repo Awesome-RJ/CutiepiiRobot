@@ -30,6 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import html
+import contextlib
 import Cutiepii_Robot.modules.sql.log_channel_sql as logsql
 
 from Cutiepii_Robot import LOGGER, CUTIEPII_PTB

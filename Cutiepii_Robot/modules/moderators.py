@@ -30,6 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import html
+import contextlib
 import Cutiepii_Robot.modules.sql.moderators_sql as sql
 
 from Cutiepii_Robot import CUTIEPII_PTB
@@ -164,10 +165,10 @@ async def modr(update: Update, context: CallbackContext):
 
 __mod_name__ = "Moderation" 
 
-CUTIEPII_PTB.add_handler(ADDMODDisableAbleCommandHandler("addmod", mod))
-CUTIEPII_PTB.add_handler(ADDMODDisableAbleCommandHandler("rmmod", dismod))
-CUTIEPII_PTB.add_handler(ADDMODDisableAbleCommandHandler("modlist", modd))
-CUTIEPII_PTB.add_handler(ADDMODDisableAbleCommandHandler("modcheck", modr))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("addmod", mod))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("rmmod", dismod))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("modlist", modd))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("modcheck", modr))
 
 __command_list__ = ["addmod", 
                     "rmmod", 

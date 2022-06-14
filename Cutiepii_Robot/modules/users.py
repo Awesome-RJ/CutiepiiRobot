@@ -36,7 +36,7 @@ from time import sleep
 
 from telegram import TelegramError, Update
 from telegram.error import BadRequest
-from telegram.ext import MessageHandler, CommandHandler, CallbackContext
+from telegram.ext import MessageHandler, CommandHandler, CallbackContext, filters
 
 import Cutiepii_Robot.modules.no_sql.sql as sql
 import Cutiepii_Robot.modules.sql.users_sql as sql
@@ -154,7 +154,7 @@ def log_user(update: Update, _: CallbackContext):
         )
 
 
-def chats(update: Update, _: CallbackContext):
+def chats(update: Update, context: CallbackContext):
     all_chats = sql.get_all_chats() or []
     chatfile = "List of chats.\n0. Chat name | Chat ID | Members count\n"
     P = 1

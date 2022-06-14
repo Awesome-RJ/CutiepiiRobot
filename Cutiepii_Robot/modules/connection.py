@@ -37,6 +37,7 @@ from telegram.error import BadRequest, Forbidden
 from telegram.ext import (
     CommandHandler,
     CallbackQueryHandler,
+    CallbackContext
 )
 
 import Cutiepii_Robot.modules.sql.connection_sql as sql

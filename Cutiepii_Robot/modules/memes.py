@@ -38,6 +38,7 @@ import re
 import string
 import subprocess
 import textwrap
+import contextlib
 import nltk
 
 from random import randint, randrange, uniform

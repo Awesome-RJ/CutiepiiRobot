@@ -56,7 +56,7 @@ class CleanerBlueTextChat(BASE):
 
     def __init__(self, chat_id, command):
         self.chat_id = chat_id
-        self.commands = commands
+        self.command = command
 
 
 class CleanerBlueTextGlobal(BASE):
@@ -64,7 +64,7 @@ class CleanerBlueTextGlobal(BASE):
     command = Column(UnicodeText, primary_key=True)
 
     def __init__(self, command):
-        self.commands = commands
+        self.command = command
 
 
 CleanerBlueTextChatSettings.__table__.create(checkfirst=True)

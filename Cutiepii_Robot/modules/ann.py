@@ -335,7 +335,7 @@ async def chatmemberupdates(update: Update, context: CallbackContext) -> Optiona
             )
             return log_message
 
-async def mychatmemberupdates(update: Update, _: CallbackContext):
+async def mychatmemberupdates(update: Update, context: CallbackContext):
     result = extract_status_change(update.my_chat_member)
     status_change, _1 = result
     chat = update.effective_chat

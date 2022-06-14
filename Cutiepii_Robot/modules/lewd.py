@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import os
 import html
 import nekos
+import asyncio
 import requests
 
 from PIL import Image
@@ -39,6 +40,7 @@ from nekos.errors import InvalidArgument
 from telegram import Update
 from telegram.error import BadRequest, RetryAfter, Forbidden
 from telegram.ext import CallbackContext, CommandHandler, filters
+from telegram.constants import ParseMode
 from telegram.helpers import mention_html
 
 
@@ -101,7 +103,7 @@ async def list_nsfw_chats(update: Update, context: CallbackContext):
             sql.rem_nsfw(*chat)
         except RetryAfter as e:
             sleep(e.retry_after)
-    await message.reply_text(text, parse_mode=ParseMode.HTML)
+    await update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
 

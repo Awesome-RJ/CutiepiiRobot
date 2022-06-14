@@ -33,6 +33,7 @@ import contextlib
 import random
 import requests
 import time
+import re
 import psutil
 import platform
 import sqlalchemy
@@ -46,6 +47,7 @@ from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot import CUTIEPII_PTB, pgram, StartTime
 from Cutiepii_Robot.__main__ import GDPR
 
+from bs4 import BeautifulSoup
 from datetime import datetime
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, __version__ as ptbver
 from telegram.constants import ParseMode, ChatAction

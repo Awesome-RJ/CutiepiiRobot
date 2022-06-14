@@ -1,7 +1,9 @@
 import requests
+import contextlib
 import time
+
 from bs4 import BeautifulSoup
-from Cutiepii_Robot.utils.helper import cflag, make_it_rw, pos_no, return_json_senpai, day_
+from Cutiepii_Robot.utils.helper import cflag, make_it_rw, pos_no, return_json_senpai, day_, season_
 from Cutiepii_Robot import CUTIEPII_PTB
 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup

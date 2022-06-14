@@ -58,7 +58,7 @@ tomorrow = str(dt_tom())
 @capture_err
 async def couple(_, message):
     if message.chat.type == "private":
-        await update.effective_message.reply_text("This command only works in groups.")
+        await message.reply_text("This command only works in groups.")
         return
     try:
         chat_id = message.chat.id
@@ -69,7 +69,7 @@ async def couple(_, message):
                 if not i.user.is_bot:
                     list_of_users.append(i.user.id)
             if len(list_of_users) < 2:
-                await update.effective_message.reply_text("Not enough users")
+                await message.reply_text("Not enough users")
                 return
             c1_id = random.choice(list_of_users)
             c2_id = random.choice(list_of_users)

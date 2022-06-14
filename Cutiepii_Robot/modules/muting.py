@@ -31,6 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import html
 import re
+import contextlib
+import sys
 
 from typing import Optional
 from telegram import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, User, Bot, Chat, ChatPermissions, Update
@@ -46,10 +48,13 @@ from Cutiepii_Robot import (
     OWNER_ID,
     WHITELIST_USERS,
     CUTIEPII_PTB,
+    LOGGER,
 )
 from Cutiepii_Robot.modules.log_channel import loggable
+from Cutiepii_Robot.modules.connection import connected
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot.modules.helper_funcs.chat_status import connection_status
+from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
+from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin, connection_status
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user_and_text
 from Cutiepii_Robot.modules.helper_funcs.string_handling import extract_time
 from Cutiepii_Robot.modules.helper_funcs.admin_status import (
@@ -391,7 +396,7 @@ async def temp_nomedia(update: Update, context: CallbackContext) -> str:
     user_id, reason = await extract_user_and_text(message, args)
 
     if not user_id:
-        await message.reply_text(tld(int(chat.id), "You don't seem to be referring to a user."))
+        await message.reply_text(int(chat.id), "You don't seem to be referring to a user.")
         return ""
 
     try:
@@ -400,18 +405,18 @@ async def temp_nomedia(update: Update, context: CallbackContext) -> str:
         if excp.message != "User not found":
             raise
 
-        await message.reply_text(tld(int(chat.id), "I can't seem to find this user"))
+        await message.reply_text(int(chat.id), "I can't seem to find this user")
         return ""
     if await is_user_admin(update, user_id, member):
-        await message.reply_text(tld(int(chat.id), "I really wish I could restrict admins..."))
+        await message.reply_text(int(chat.id), "I really wish I could restrict admins...")
         return ""
 
     if user_id == bot.id:
-        await message.reply_text(tld(int(chat.id), "I'm not gonna RESTRICT myself, are you crazy?"))
+        await message.reply_text(int(chat.id), "I'm not gonna RESTRICT myself, are you crazy?")
         return ""
 
     if not reason:
-        await message.reply_text(tld(int(chat.id), "You haven't specified a time to restrict this user for!"))
+        await message.reply_text(int(chat.id), "You haven't specified a time to restrict this user for!")
         return ""
 
     split_reason = reason.split(None, 1)

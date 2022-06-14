@@ -116,7 +116,7 @@ async def downvote(_, message):
 @capture_err
 async def command_karma(_, message):
     chat_id = message.chat.id
-    if not update.effective_message.reply_to_message:
+    if not message.reply_to_message:
         m = await message.reply_text(
             "Getting Karma list of top 10 users wait..."
         )

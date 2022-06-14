@@ -31,15 +31,17 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import os
 import html
+import contextlib
 import requests
 import Cutiepii_Robot.modules.sql.pin_sql as sql
 
 from html import escape
+from io import BytesIO
 from typing import Optional
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.error import BadRequest
-from telegram.constants import ParseMode
+from telegram.constants import ParseMode, ChatType
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler, filters as PTB_Cutiepii_Filters
 from telegram.helpers import mention_html
 from telethon import events
@@ -51,7 +53,8 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 
 
-from Cutiepii_Robot import SUDO_USERS, TOKEN, CUTIEPII_PTB, pgram, telethn
+from Cutiepii_Robot import SUDO_USERS, TOKEN, CUTIEPII_PTB, LOGGER, pgram, telethn
+from Cutiepii_Robot.modules.msg_types import get_message_type
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.connection import connected
@@ -145,7 +148,7 @@ async def  get_users(show):
 
     with open("userslist.txt", "w+") as file:
         file.write(mentions)
-    await bot.send_file(
+    await telethn.send_file(
         show.chat_id,
         "userslist.txt",
         caption=f"Users in {title}",
@@ -1292,6 +1295,7 @@ async def unpin(update: Update, context: CallbackContext):
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
+    bot = context.bot
     msg_id = msg.reply_to_message.message_id if msg.reply_to_message else msg.message_id
     unpinner = chat.get_member(user.id)
 

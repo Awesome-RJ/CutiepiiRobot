@@ -34,7 +34,7 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
             (
-                await tbot(functions.channels.GetParticipantRequest(chat, user))
+                await telethn(functions.channels.GetParticipantRequest(chat, user))
             ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
@@ -55,7 +55,7 @@ async def _(event):
 
     is_admin = False
     try:
-      zaid = await tbot(GetParticipantRequest(
+      cutiepii = await telethn(GetParticipantRequest(
         event.chat_id,
         event.sender_id
       ))
@@ -64,7 +64,7 @@ async def _(event):
     else:
       if (
         isinstance(
-          zaid.participant,
+          cutiepii.participant,
           (
             ChannelParticipantAdmin,
             ChannelParticipantCreator,
@@ -81,12 +81,12 @@ async def _(event):
 
     done = await event.reply("Searching Participant Lists.")
     p = 0
-    async for i in tbot.iter_participants(
+    async for i in telethn.iter_participants(
         event.chat_id, filter=ChannelParticipantsKicked, aggressive=True
     ):
         rights = ChatBannedRights(until_date=0, view_messages=False)
         try:
-            await tbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
+            await telethn(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
             LOGGER.warn(f"sleeping for {ex.seconds} seconds")
             sleep(ex.seconds)
@@ -110,7 +110,7 @@ async def _(event):
 
     is_admin = False
     try:
-      zaid = await tbot(GetParticipantRequest(
+      cutiepii = await telethn(GetParticipantRequest(
         event.chat_id,
         event.sender_id
       ))
@@ -119,7 +119,7 @@ async def _(event):
     else:
       if (
         isinstance(
-          zaid.participant,
+          cutiepii.participant,
           (
             ChannelParticipantAdmin,
             ChannelParticipantCreator,
@@ -140,7 +140,7 @@ async def _(event):
 
     done = await event.reply("Working ...")
     p = 0
-    async for i in tbot.iter_participants(
+    async for i in telethn.iter_participants(
         event.chat_id, filter=ChannelParticipantsBanned, aggressive=True
     ):
         rights = ChatBannedRights(
@@ -148,7 +148,7 @@ async def _(event):
             send_messages=False,
         )
         try:
-            await tbot(functions.channels.EditBannedRequest(event.chat_id, i, rights))
+            await telethn(functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
             LOGGER.warn(f"sleeping for {ex.seconds} seconds")
             sleep(ex.seconds)
@@ -172,10 +172,10 @@ async def get_users(show):
         return
     if not await is_register_admin(show.input_chat, show.sender_id):
         return
-    info = await tbot.get_entity(show.chat_id)
+    info = await telethn.get_entity(show.chat_id)
     title = info.title or "this chat"
     mentions = "Users in {}: \n".format(title)
-    async for user in tbot.iter_participants(show.chat_id):
+    async for user in telethn.iter_participants(show.chat_id):
         mentions += (
             f"\nDeleted Account {user.id}"
             if user.deleted
@@ -184,7 +184,7 @@ async def get_users(show):
 
     with open("userslist.txt", "w+") as file:
         file.write(mentions)
-    await tbot.send_file(
+    await telethn.send_file(
         show.chat_id,
         "userslist.txt",
         caption=f"Users in {title}",

@@ -215,7 +215,7 @@ async def clearallremindersbtn(update: Update, context: CallbackContext):
     )
 
 
-async def check_reminds():
+async def check_reminds(update: Update, context: CallbackContext):
     while True:
         t = round(time.time())
         if t in sql.REMINDERS:

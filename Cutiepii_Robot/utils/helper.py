@@ -3,6 +3,7 @@ import requests
 import asyncio
 import os
 import shlex
+import contextlib
 
 from datetime import datetime
 from os.path import basename

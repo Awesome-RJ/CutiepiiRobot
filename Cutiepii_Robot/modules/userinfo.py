@@ -34,6 +34,7 @@ import os
 import requests
 import datetime
 import asyncio
+import contextlib
 
 from pyrogram import filters
 from pyrogram.errors import PeerIdInvalid
@@ -44,7 +45,7 @@ from telethon.tl.types import ChannelParticipantsAdmins, InputMessagesFilterCont
 from telethon import events
 
 from telegram import Update, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.constants import ParseMode, MessageLimit
+from telegram.constants import ParseMode, MessageLimit, ChatType
 from telegram.ext import CallbackContext
 from telegram.error import BadRequest
 from telegram.helpers import escape_markdown, mention_html

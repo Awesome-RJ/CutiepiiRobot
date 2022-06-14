@@ -78,7 +78,7 @@ async def lyrics_func(answers, text):
 @pgram.on_message(filters.command("lyrics"))
 async def lyrics_func(_, message):
     if len(message.command) < 2:
-        return await update.effective_message.reply_text("**Usage:**\n/lyrics [QUERY]")
+        return await message.reply_text("**Usage:**\n/lyrics [QUERY]")
     m = await message.reply_text("**Searching**")
     query = message.text.strip().split(None, 1)[1]
     song = await arq.lyrics(query)

@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import io
-import time
+import contextlib
 import aiohttp
 
 from telethon.tl import functions

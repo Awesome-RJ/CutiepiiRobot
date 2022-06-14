@@ -6,6 +6,7 @@ import time
 import Cutiepii_Robot.modules.sql.welcome_sql as sql
 
 from functools import partial
+from contextlib import suppress
 from io import BytesIO
 from Cutiepii_Robot import (
     DEV_USERS,
@@ -17,6 +18,7 @@ from Cutiepii_Robot import (
     sw,
     JOIN_LOGGER,
     CUTIEPII_PTB,
+    SUPPORT_CHAT
 )
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_user_ban_protected,

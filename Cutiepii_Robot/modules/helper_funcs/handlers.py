@@ -125,7 +125,7 @@ class CustomCommandHandler(tg.CommandHandler):
                 return False
 
 
-    async def collect_additional_context(self, context, chat, CUTIEPII_PTB, check_result):
+    async def collect_additional_context(self, context, update, CUTIEPII_PTB, check_result):
         if isinstance(check_result, bool):
             context.args = update.effective_message.text.split()[1:]
         else:
