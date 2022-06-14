@@ -63,13 +63,13 @@ THREAD_LOCK = RLock()
 anonymous_data = {}
 
 def can_manage_video_chats(chat_id, user_id):
-	result = requests.post(f"https://api.telegram.org/bot{TOKEN}/getChatMember?chat_id={chat_id}&user_id={user_id}")
-	status = result.json()["ok"]
-
-	if status is True:
-		data = result.json()["result"]["can_manage_video_chats"]
-		return data
-	return False
+    result = requests.post(f"https://api.telegram.org/bot{TOKEN}/getChatMember?chat_id={chat_id}&user_id={user_id}")
+    status = result.json()["ok"]
+    if status is True:
+        data = result.json()["result"]["can_manage_video_chats"]
+        return data
+        
+    return False
 
 def is_anon(user: User, chat: Chat):
     return chat.get_member(user.id).is_anonymous
