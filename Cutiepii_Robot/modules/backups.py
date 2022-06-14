@@ -122,7 +122,7 @@ async def import_data(update: Update, context: CallbackContext):
 
         try:
             for mod in DATA_IMPORT:
-                mod.__import_data__(str(chat.id), data)
+                mod.__import_data__(str(chat.id, data)
         except Exception:
             await msg.reply_text(
                 f"An error occurred while recovering your data. The process failed. If you experience a problem with this, please take it to @{SUPPORT_CHAT}",
@@ -130,7 +130,7 @@ async def import_data(update: Update, context: CallbackContext):
 
             LOGGER.exception(
                 "Imprt for the chat %s with the name %s failed.",
-                str(chat.id),
+                str(chat.id,
                 str(chat.title),
             )
             return

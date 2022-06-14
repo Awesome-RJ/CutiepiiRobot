@@ -159,7 +159,7 @@ if is_module_loaded(FILENAME):
             )
 
         elif message.forward_from_chat:
-            sql.set_chat_log_channel(chat.id), message.forward_from_chat.id)
+            sql.set_chat_log_channel(chat.id, message.forward_from_chat.id)
             try:
                 await message.delete()
             except BadRequest as excp:
@@ -175,11 +175,11 @@ if is_module_loaded(FILENAME):
                 )
             except Forbidden as excp:
                 if excp.message == "Forbidden: bot is not a member of the channel chat":
-                    await bot.send_message(chat.id), "Successfully set log channel!")
+                    await bot.send_message(chat.id, "Successfully set log channel!")
                 else:
                     LOGGER.exception("ERROR in setting the log channel.")
 
-            await bot.send_message(chat.id), "Successfully set log channel!")
+            await bot.send_message(chat.id, "Successfully set log channel!")
 
         else:
             await message.reply_text(
@@ -246,7 +246,7 @@ async def log_settings(update: Update, _: CallbackContext):
     chat_set = sql.get_chat_setting(chat_id=chat.id)
     if not chat_set:
         sql.set_chat_setting(
-            setting=sql.LogChannelSettings(chat.id), True, True, True, True, True)
+            setting=sql.LogChannelSettings(chat.id, True, True, True, True, True)
         )
     btn = InlineKeyboardMarkup(
         [
@@ -280,7 +280,7 @@ async def log_setting_callback(update: Update, context: CallbackContext):
     chat_set = sql.get_chat_setting(chat_id=chat.id)
     if not chat_set:
         sql.set_chat_setting(
-            setting=sql.LogChannelSettings(chat.id), True, True, True, True, True)
+            setting=sql.LogChannelSettings(chat.id, True, True, True, True, True)
         )
 
     t = sql.get_chat_setting(chat.id)

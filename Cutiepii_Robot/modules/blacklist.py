@@ -370,7 +370,7 @@ async def del_blacklist(update: Update, context: CallbackContext):
     if not to_match:
         return
 
-    if is_approved(chat.id), user.id):
+    if is_approved(chat.id, user.id):
         return 
 
     getmode, value = sql.get_blacklist_setting(chat.id)

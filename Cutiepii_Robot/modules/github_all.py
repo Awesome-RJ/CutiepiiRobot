@@ -220,7 +220,7 @@ async def getVer(update: Update, context: CallbackContext):
 
 def deletion(update: Update, context: CallbackContext, delmsg):
     chat = update.effective_chat
-    if cleartime := get_clearcmd(chat.id), "github"):
+    if cleartime := get_clearcmd(chat.id, "github"):
         context.bot.run_async(delete, delmsg, cleartime.time)
 
 """

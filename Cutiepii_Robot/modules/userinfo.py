@@ -302,7 +302,7 @@ def info(update: Update, context: CallbackContext):
     ):
         delmsg = await message.reply_text("I can't extract a user from this.")
 
-        cleartime = get_clearcmd(chat.id), "info")
+        cleartime = get_clearcmd(chat.id, "info")
 
         if cleartime:
             context.bot.run_async(delete, delmsg, cleartime.time)
@@ -362,7 +362,7 @@ else:return
                      if afk_st:
                         text += _stext.format("AFK")
                         else:
-                           status = status = bot.get_chat_member(chat.id), user.id).status
+                           status = status = bot.get_chat_member(chat.id, user.id).status
                            if status:
                               if status in {"left", "kicked"}:
                                  text += _stext.format("Not here")
@@ -433,7 +433,7 @@ else:return
         try:
 
             profile = context.bot.get_user_profile_photos(user.id).photos[0][-1]
-            await context.bot.sendChatAction(chat.id), "upload_photo")
+            await context.bot.sendChatAction(chat.id, "upload_photo")
             context.bot.reply_document(
                 chat.id,
                 photo=profile,
@@ -521,7 +521,7 @@ async def info(update: Update, context: CallbackContext):
     ):
         delmsg = await message.reply_text("I can't extract a user from this.")
 
-        if cleartime := get_clearcmd(chat.id), "info"):
+        if cleartime := get_clearcmd(chat.id, "info"):
             context.bot.run_async(delete, delmsg, cleartime.time)
 
         return
@@ -585,7 +585,7 @@ async def info(update: Update, context: CallbackContext):
 
             if afk_st := is_user_afk(user.id):
                 text += _stext.format("AFK")
-            elif status := bot.get_chat_member(chat.id), user.id).status:
+            elif status := bot.get_chat_member(chat.id, user.id).status:
                 if status == "left":
                     text += _stext.format("Not here")
                 if status == "kicked":
@@ -701,7 +701,7 @@ async def info(update: Update, context: CallbackContext):
 
     rep.delete()
 """
-    if cleartime := get_clearcmd(chat.id), "info"):
+    if cleartime := get_clearcmd(chat.id, "info"):
         context.bot.run_async(delete, delmsg, cleartime.time)
 """
 

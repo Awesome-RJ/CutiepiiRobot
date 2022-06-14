@@ -89,7 +89,7 @@ async def clean_blue_text_must_click(update: Update, context: CallbackContext):
             command = fst_word[1:].split("@")
             chat = update.effective_chat
 
-            if sql.is_command_ignored(chat.id), command[0]):
+            if sql.is_command_ignored(chat.id, command[0]):
                 return
 
             if command[0] not in command_list:
@@ -107,13 +107,13 @@ async def set_blue_text_must_click(update: Update, context: CallbackContext):
     if len(args) >= 1:
         val = args[0].lower()
         if val in ("off", "no"):
-            sql.set_cleanbt(chat.id), False)
+            sql.set_cleanbt(chat.id, False)
             reply = f"Bluetext cleaning has been disabled for <b>{html.escape(chat.title)}</b>"
 
             await message.reply_text(reply, parse_mode=ParseMode.HTML)
 
         elif val in ("yes", "on"):
-            sql.set_cleanbt(chat.id), True)
+            sql.set_cleanbt(chat.id, True)
             reply = f"Bluetext cleaning has been enabled for <b>{html.escape(chat.title)}</b>"
 
             await message.reply_text(reply, parse_mode=ParseMode.HTML)
@@ -136,7 +136,7 @@ async def add_bluetext_ignore(update: Update, context: CallbackContext):
     args = context.args
     if len(args) >= 1:
         val = args[0].lower()
-        if added := sql.chat_ignore_command(chat.id), val):
+        if added := sql.chat_ignore_command(chat.id, val):
             reply = f"<b>{args[0]}</b> has been added to bluetext cleaner ignore list."
         else:
             reply = "Command is already ignored."
@@ -154,7 +154,7 @@ async def remove_bluetext_ignore(update: Update, context: CallbackContext):
     args = context.args
     if len(args) >= 1:
         val = args[0].lower()
-        if removed := sql.chat_unignore_command(chat.id), val):
+        if removed := sql.chat_unignore_command(chat.id, val):
             reply = f"<b>{args[0]}</b> has been removed from bluetext cleaner ignore list."
         else:
             reply = "Command isn't ignored currently."

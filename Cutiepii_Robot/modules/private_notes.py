@@ -24,10 +24,10 @@ async def privatenotes(update: Update, context: CallbackContext):
     elif len(args) >= 1:
         val = args[0].lower()
         if val in ["off", "no", "0", "disable", "false"]:
-            setprivatenotes(chat.id), False)
+            setprivatenotes(chat.id, False)
             msg = f"Private notes has been disabled in *{chat.title}*"
         elif val in ["on", "yes", "1", "enable", "true"]:
-            setprivatenotes(chat.id), True)
+            setprivatenotes(chat.id, True)
             msg = f"Private notes has been enabled in *{chat.title}*"
         else: 
             msg = "Sorry, wrong value"

@@ -91,7 +91,7 @@ async def remind(update: Update, context: CallbackContext):
         await msg.reply_text(f"You can set {REMINDER_LIMIT} reminders in a chat.")
         return
 
-    sql.set_remind(chat.id), t, text[:512], user.id)
+    sql.set_remind(chat.id, t, text[:512], user.id)
 
     confirmation = f"Noted! I'll remind you after {args[1]}.\nThis reminder's timestamp is <code>{t}</code>."
     if len(text) > 512:
@@ -153,12 +153,12 @@ async def clearreminder(update: Update, context: CallbackContext):
         except:
             timestamp = 0
 
-        remind = sql.get_remind_in_chat(chat.id), timestamp)
+        remind = sql.get_remind_in_chat(chat.id, timestamp)
         if not remind:
             await msg.reply_text("This time stamp doesn't seem to be valid.")
             return
 
-        sql.rem_remind(chat.id), timestamp, remind.remind_message, remind.user_id)
+        sql.rem_remind(chat.id, timestamp, remind.remind_message, remind.user_id)
         await msg.reply_text("I've deleted this reminder.")
         user = update.effective_user
         return (

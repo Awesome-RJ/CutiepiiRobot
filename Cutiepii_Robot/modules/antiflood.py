@@ -70,13 +70,13 @@ async def check_flood(update: Update, context: CallbackContext) -> str:
 
     # ignore admins and whitelists
     if await is_user_admin(update, user.id):
-        sql.update_flood(chat.id), None)
+        sql.update_flood(chat.id, None)
         return ""
     # ignore approved users
-    if is_approved(chat.id), user.id):
-        sql.update_flood(chat.id), None)
+    if is_approved(chat.id, user.id):
+        sql.update_flood(chat.id, None)
         return
-    should_ban = sql.update_flood(chat.id), user.id)
+    should_ban = sql.update_flood(chat.id, user.id)
     if not should_ban:
         return ""
 
@@ -128,7 +128,7 @@ async def check_flood(update: Update, context: CallbackContext) -> str:
         await msg.reply_text(
             "I can't restrict people here, give me permissions first! Until then, I'll disable anti-flood.",
         )
-        sql.set_flood(chat.id), 0)
+        sql.set_flood(chat.id, 0)
         return (
             "<b>{}:</b>"
             "\n#INFO"

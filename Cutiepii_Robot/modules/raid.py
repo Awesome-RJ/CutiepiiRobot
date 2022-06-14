@@ -54,7 +54,7 @@ async def setRaid(update: Update, context: CallbackContext) -> Optional[str]:
     msg = update.effective_message
     user = update.effective_user
     if chat.type == "private":
-        await context.bot.sendMessage(chat.id), "This command is not available in PMs.")
+        await context.bot.sendMessage(chat.id, "This command is not available in PMs.")
         return
     stat, time, acttime = sql.getRaidStatus(chat.id)
     readable_time = get_readable_time(time)
@@ -93,7 +93,7 @@ async def setRaid(update: Update, context: CallbackContext) -> Optional[str]:
 
     elif args[0] == "off":
         if stat:
-            sql.setRaidStatus(chat.id), False, time, acttime)
+            sql.setRaidStatus(chat.id, False, time, acttime)
             j.scheduler.remove_job(RUNNING_RAIDS.pop(chat.id)))
             text = "Raid mode has been <code>Disabled</code>, members that join will no longer be kicked."
             await msg.reply_text(text, parse_mode=ParseMode.HTML)
@@ -228,7 +228,7 @@ async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
             text = f"Raid mode is currently set to {readable_time}\nWhen toggled, the raid mode will last for " \
                    f"{readable_time} then turn off automatically"
             await msg.reply_text(text, parse_mode=ParseMode.HTML)
-            sql.setRaidStatus(chat.id), what, time, acttime)
+            sql.setRaidStatus(chat.id, what, time, acttime)
             return (f"<b>{html.escape(chat.title)}:</b>\n"
                     f"#RAID\n"
                     f"Set Raid mode time to {readable_time}\n"
@@ -263,7 +263,7 @@ async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
             text = f"Raid action time is currently set to {get_readable_time(time)}\nWhen toggled, the members that" \
                    f" join will be temp banned for {readable_time}"
             await msg.reply_text(text, parse_mode=ParseMode.HTML)
-            sql.setRaidStatus(chat.id), what, t, time)
+            sql.setRaidStatus(chat.id, what, t, time)
             return (f"<b>{html.escape(chat.title)}:</b>\n"
                     f"#RAID\n"
                     f"Set Raid mode action time to {readable_time}\n"
