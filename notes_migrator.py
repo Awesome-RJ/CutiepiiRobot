@@ -39,7 +39,7 @@ def replacer(text: str) -> str:
 	return text
 
 
-def  parser(
+def parser(
 		txt: str, reply_markup: InlineKeyboardMarkup = None
 ) -> tuple[str, Union[str, list[Optional[tuple[str, Optional[str], bool]]]]]:
 	markdown_note = txt
@@ -68,7 +68,7 @@ def  parser(
 	return final_text, buttons
 
 
-def  Md2HTML(text: str) -> str:
+def Md2HTML(text: str) -> str:
     _whitespace_re = re.compile(
             r"(?<!<)(?P<t_b><[^></]*?>)(?P<str>[^<>](?:.*?\s*?)*?(?P<ws>\s*?))(?P<t_e></[^<>]*?>)(?!>)")
     _pre_re = re.compile(r'`{3}(.*?[^\s].*?)(\s*?)`{3}', re.DOTALL)
@@ -79,28 +79,28 @@ def  Md2HTML(text: str) -> str:
     _strike_re = re.compile(r'~(.*?[^\s].*?)(\s*?)~', re.DOTALL)
     _spoiler_re = re.compile(r'\|\|(.*?[^\s].*?)(\s*?)\|\|', re.DOTALL)
 
-    def  repl_whitespace(match):
+    def repl_whitespace(match):
         return f"{match.group('t_b')}{match.group('str')}{match.group('t_e')}{match.group('ws')}"
 
-    def  _pre_repl(match):
+    def _pre_repl(match):
         return f'<pre>{match[1]}</pre>{match[2]}'
 
-    def  _code_repl(match):
+    def _code_repl(match):
         return f'<code>{match[1]}</code>{match[2]}'
 
-    def  _bold_repl(match):
+    def _bold_repl(match):
         return f'<b>{match[1]}</b>{match[2]}'
 
-    def  _underline_repl(match):
+    def _underline_repl(match):
         return f'<u>{match[1]}</u>{match[2]}'
 
-    def  _italic_repl(match):
+    def _italic_repl(match):
         return f'<i>{match[1]}</i>{match[2]}'
 
-    def  _strike_repl(match):
+    def _strike_repl(match):
         return f'<s>{match[1]}</s>{match[2]}'
 
-    def  _spoiler_repl(match):
+    def _spoiler_repl(match):
         return f'<span class="tg-spoiler">{match[1]}</span>{match[2]}'
 
     text = _whitespace_re.sub(repl_whitespace, text)
@@ -115,11 +115,11 @@ def  Md2HTML(text: str) -> str:
     return text
 
 
-def  update_note(text: str) -> str:
+def update_note(text: str) -> str:
 	return parser(replacer(text))[0]
 
 
-def  migrate_notes():
+def migrate_notes():
 	print("starting notes migration")
 	with threading.RLock():
 

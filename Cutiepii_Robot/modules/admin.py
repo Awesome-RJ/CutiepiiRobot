@@ -76,7 +76,7 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import (
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.events import register as CUTIEPII
 
-async def  can_promote_users(message):
+async def can_promote_users(message):
     result = await telethn(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
@@ -89,7 +89,7 @@ async def  can_promote_users(message):
     )
 
 
-async def  is_register_admin(chat, user):
+async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
             (
@@ -100,7 +100,7 @@ async def  is_register_admin(chat, user):
     if isinstance(chat, types.InputPeerUser):
         return True
 
-async def  can_promote_users(message):
+async def can_promote_users(message):
     result = await telethn(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
@@ -112,7 +112,7 @@ async def  can_promote_users(message):
         isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.ban_users
     )
 
-async def  can_ban_users(message):
+async def can_ban_users(message):
     result = await telethn(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
@@ -125,13 +125,13 @@ async def  can_ban_users(message):
     )
 
 @CUTIEPII(pattern=("/reload"))
-async def  reload(event):
+async def reload(event):
   text = "✅ **bot restarted successfully**\n\n• Admin list has been **updated**"
   await telethn.send_message(event.chat_id, text)
 
 
 @telethn.on(events.NewMessage(pattern="/users$"))
-async def  get_users(show):
+async def get_users(show):
     if not show.is_group:
         return
     if not await is_register_admin(show.input_chat, show.sender_id):
