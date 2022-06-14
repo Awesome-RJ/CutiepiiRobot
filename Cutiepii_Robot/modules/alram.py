@@ -84,7 +84,7 @@ async def _(event):
     await event.reply("Alarm set successfully !")
 
 @telethn.on(events.NewMessage(pattern=None))
-async def tikclock(event):
+async def tikclock():
     chats = alarms.find({})
     for c in chats:
         #print(c)

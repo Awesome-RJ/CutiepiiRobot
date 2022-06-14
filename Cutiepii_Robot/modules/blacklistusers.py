@@ -140,7 +140,7 @@ async def unbl_user(update: Update, context: CallbackContext) -> str:
 
 
 @dev_plus
-async def bl_users(update: Update, context: CallbackContext):
+async def bl_users(context: CallbackContext):
     users = []
     bot = context.bot
     for each_user in sql.BLACKLIST_USERS:

@@ -89,7 +89,7 @@ def separate_sed(sed_string):
     return replace, replace_with, flags.lower()
 
 
-async def sed(update: Update, context: CallbackContext):
+async def sed(update: Update):
     sed_result = separate_sed(update.effective_message.text)
     if sed_result and update.effective_update.effective_message.reply_to_message:
         if update.effective_message.reply_to_message.text:

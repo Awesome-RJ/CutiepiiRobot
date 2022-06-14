@@ -9,7 +9,7 @@ from Cutiepii_Robot.utils.pluginhelpers import admins_only, get_text
     filters.command("captedit") & ~filters.bot & ~filters.private
 )
 @admins_only
-async def loltime(client, message):
+async def loltime(message):
     lol = await message.reply("Processing please wait")
     cap = get_text(message)
     if not message.reply_to_message:

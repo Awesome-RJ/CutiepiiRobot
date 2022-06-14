@@ -133,7 +133,7 @@ async def slcheck(_,message):
        reason = res["reason"]
        await message.reply_text(f"**Enforcer**: {enf}\n**User** : {user}\n**Reason**: {reason}")
 
-async def gdpr(update: Update, context: CallbackContext):
+async def gdpr(update: Update, _: CallbackContext):
     await update.effective_message.reply_text("Deleting identifiable data...")
     for mod in GDPR:
         mod.__gdpr__(update.effective_user.id)
@@ -150,7 +150,7 @@ async def gdpr(update: Update, context: CallbackContext):
     )
 
 @user_admin
-async def echo(update: Update, context: CallbackContext):
+async def echo(update: Update):
     args = update.effective_message.text.split(None, 1)
     message = update.effective_message
 
@@ -264,7 +264,7 @@ async def mkdown_btn(update: Update, context: CallbackContext):
 
 
 
-async def src(update: Update, context: CallbackContext) -> None:
+async def src(update: Update) -> None:
     await update.effective_message.reply_text(
         "old Unmaintained Source Code Are Public. Click Below For The Source.",
         reply_markup=InlineKeyboardMarkup(
@@ -418,7 +418,7 @@ async def imdb(update: Update, context: CallbackContext):
         await update.effective_message.reply_text("Plox enter **Valid movie name** kthx")
 
 @sudo_plus
-async def status(update: Update, context: CallbackContext):
+async def status(update: Update):
     message = update.effective_message
     chat = update.effective_chat
     query = update.callback_query

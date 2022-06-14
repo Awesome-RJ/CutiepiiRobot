@@ -17,7 +17,7 @@ def shorten(des: str = '', short: int = 500):
 
 # Drama
 @cutiepii_cmd(command="drama")
-async def drama(update: Update, context: CallbackContext):
+async def drama(update: Update):
     message = update.effective_message
     search = await message.text.split(" ", 1)
     if len(search) == 1:

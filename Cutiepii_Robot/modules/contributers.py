@@ -35,7 +35,7 @@ from Cutiepii_Robot import pgram
 
 
 @pgram.on_edited_message(filters.command("repo"))
-async def give_repo(c, m):
+async def give_repo(m):
     g = github.Github()
     repo = g.get_repo("Awesome-RJ/CutiepiiRobot")
     list_of_users = "".join(

@@ -242,7 +242,7 @@ reactions = [
 ]
 
 
-async def react(update: Update, context: CallbackContext):
+async def react(update: Update):
     message = update.effective_message
     react = random.choice(reactions)
     if message.reply_to_message:

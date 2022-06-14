@@ -72,7 +72,7 @@ def get_readable_time(seconds: int) -> str:
     return ping_time
 
 @sudo_plus
-async def stats(update: Update, context: CallbackContext):
+async def stats(update: Update):
     message = update.effective_message
     db_size = SESSION.execute(
         "SELECT pg_size_pretty(pg_database_size(current_database()))"
@@ -140,7 +140,7 @@ async def ping(update: Update, _):
 
 
 
-async def pingCallback(update: Update, context: CallbackContext):
+async def pingCallback(update: Update):
     query = update.callback_query
     start_time = time.time()
     requests.get("https://api.telegram.org")

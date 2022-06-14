@@ -98,7 +98,7 @@ async def bug(_, msg: Message):
 
 
 @pgram.on_callback_query(filters.regex("close_reply"))
-async def close_reply(msg, CallbackQuery):
+async def close_reply(CallbackQuery):
     await CallbackQuery.message.delete()
 
 @pgram.on_callback_query(filters.regex("close_send_photo"))

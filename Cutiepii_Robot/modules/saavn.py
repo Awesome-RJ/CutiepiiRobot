@@ -40,7 +40,7 @@ from Cutiepii_Robot.utils.saavnhelp import get_arg
 
 
 @pgram.on_message(filters.command("saavn", "saavn@Cutiepii_Robot"))
-async def song(client, message):
+async def song(message):
     args = f"{get_arg(message)} song"
     if args.startswith(" "):
         await message.reply("<b> Song name required!! </b>")

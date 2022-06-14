@@ -37,7 +37,7 @@ from .tools import humanbytes, time_formatter
 
 
 async def progress(
-    current, total, gdrive, start, prog_type, file_name=None, is_cancelled=False
+    current, total, gdrive, start, prog_type, is_cancelled=False
 ):
     now = time.time()
     diff = now - start

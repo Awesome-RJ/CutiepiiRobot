@@ -42,7 +42,7 @@ class Disable(BASE):
 
     def __init__(self, chat_id, command):
         self.chat_id = chat_id
-        self.commands = commands
+        self.command = command
 
     def __repr__(self):
         return "Disabled cmd {} in {}".format(self.commands, self.chat_id)

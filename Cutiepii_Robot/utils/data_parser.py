@@ -711,7 +711,7 @@ async def get_featured_in_lists(idm, req, auth: bool = False, user: int = None, 
     return ([out+out_, total] if len(out_) != 0 else False), result["data"]["Character"]["image"]["large"]
 
 
-async def get_additional_info(idm, req, ctgry, auth: bool = False, user: int = None, page: int = 0):
+async def get_additional_info(idm, req, ctgry, page: int = 0):
     vars_ = {"id": int(idm)}
     if req=='char':
         vars_['page'] = page

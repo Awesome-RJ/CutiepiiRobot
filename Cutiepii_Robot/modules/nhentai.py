@@ -42,7 +42,7 @@ from Cutiepii_Robot.utils.errors import capture_err
 
 @pgram.on_message(~filters.me & filters.command("nhentai", prefixes="/"), group=8)
 @capture_err
-async def nhentai(client, message):
+async def nhentai(message):
     query = message.text.split(" ")[1]
     title, tags, artist, total_pages, post_url, cover_image = nhentai_data(query)
     await message.reply_text(

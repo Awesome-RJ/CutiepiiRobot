@@ -128,7 +128,7 @@ async def dismod(update: Update, context: CallbackContext):
     return log_message
 
 @user_admin
-async def modd(update: Update, context: CallbackContext):
+async def modd(update: Update, _: CallbackContext):
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat

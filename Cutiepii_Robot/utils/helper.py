@@ -68,7 +68,7 @@ def check_user(func):
     return wrapper
 
 
-async def media_to_image(client: pgram, message: Message, x: Message, replied: Message):
+async def media_to_image(client: pgram, x: Message, replied: Message):
     if not (
         replied.photo
         or replied.sticker

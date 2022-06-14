@@ -56,7 +56,7 @@ def get_cbs_data(query, page, user_id):
     return text, buttons
 
 
-async def stickerid(update: Update, context: CallbackContext):
+async def stickerid(update: Update):
     msg = update.effective_message
     if msg.reply_to_message and msg.reply_to_message.sticker:
         await msg.reply_text(
@@ -534,7 +534,6 @@ async def kang(update: Update, context: CallbackContext):
 
 
 async def makepack_internal(
-    update,
     context,
     msg,
     user,
@@ -680,7 +679,7 @@ async def cb_sticker(update: Update, context: CallbackContext):
     await msg.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=buttons)
 
 
-async def cbs_callback(update: Update, context: CallbackContext):
+async def cbs_callback(update: Update):
     query = update.callback_query
     _, page, user_id = query.data.split("_", 2)
     if int(user_id) != query.from_user.id:
@@ -788,7 +787,7 @@ async def add_fvrtsticker(update: Update, context: CallbackContext):
         )
 
 
-async def list_fvrtsticker(update: Update, context: CallbackContext):
+async def list_fvrtsticker(update: Update):
     message = update.effective_message
     chat = update.effective_chat
     user = update.effective_user

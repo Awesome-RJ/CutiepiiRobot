@@ -50,7 +50,7 @@ CHATBOT_ENABLED_CHATS = []
 
 
 @user_admin
-async def chatbot_toggle(update: Update, context: CallbackContext):
+async def chatbot_toggle(update: Update):
     keyboard = [
         [
             InlineKeyboardButton("Enable", callback_data="chatbot_enable"),
@@ -62,7 +62,7 @@ async def chatbot_toggle(update: Update, context: CallbackContext):
     await update.effective_message.reply_text("Choose an option:", reply_markup=reply_markup)
 
 
-async def chatbot_handle_callq(update: Update, context: CallbackContext):
+async def chatbot_handle_callq(update: Update, _: CallbackContext):
     query = update.callback_query
     user = update.effective_user
     chat = update.effective_chat
@@ -92,14 +92,14 @@ async def chatbot_handle_callq(update: Update, context: CallbackContext):
         await query.answer()
 
 
-def chatbot_response(query: str, user_id: int) -> str:
+def chatbot_response(query: str) -> str:
     data = requests.get(
         f"https://www.kukiapi.xyz/api/apikey=5349869477-KUKIhU1ygu8mm0/Cutiepii/@Awesome_RJ/message={query}"
     )
     return data.json()["reply"]
 
 
-def check_message(context: CallbackContext, message):
+def check_message(_: CallbackContext, message):
     reply_msg = message.reply_to_message
     text = message.text
     if re.search("[.|\n]{0,}"+CUTIEPII_PTB.bot.first_name+"[.|\n]{0,}", text, flags=re.IGNORECASE):

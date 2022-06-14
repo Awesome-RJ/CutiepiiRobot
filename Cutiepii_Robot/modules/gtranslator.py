@@ -79,7 +79,7 @@ async def translate(update: Update, context: CallbackContext) -> None:
     await update.effective_message.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-async def languages(update: Update, context: CallbackContext) -> None:
+async def languages(update: Update) -> None:
     await update.effective_message.reply_text(
         "Click on the button below to see the list of supported language codes.",
         reply_markup=InlineKeyboardMarkup(
@@ -123,7 +123,7 @@ URL = "http://services.gingersoftware.com/Ginger/correct/json/GingerTheText"
 
 
 
-async def spellcheck(update: Update, context: CallbackContext):
+async def spellcheck(update: Update):
     if update.effective_update.effective_message.reply_to_message:
         msg = update.effective_message.reply_to_message
 

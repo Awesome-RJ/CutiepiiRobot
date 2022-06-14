@@ -42,7 +42,7 @@ from telegram.ext import CallbackContext, CommandHandler
 
 
 @dev_plus
-async def load(update: Update, context: CallbackContext):
+async def load(update: Update):
     message = update.effective_message
     text = await message.text.split(" ", 1)[1]
     load_messasge = await message.reply_text(
@@ -112,7 +112,7 @@ async def load(update: Update, context: CallbackContext):
 
 
 @dev_plus
-async def unload(update: Update, context: CallbackContext):
+async def unload(update: Update):
     message = update.effective_message
     text = await message.text.split(" ", 1)[1]
     unload_messasge = await message.reply_text(
@@ -182,7 +182,7 @@ async def unload(update: Update, context: CallbackContext):
 
 
 @sudo_plus
-async def listmodules(update: Update, context: CallbackContext):
+async def listmodules(update: Update):
     message = update.effective_message
     module_list = []
 

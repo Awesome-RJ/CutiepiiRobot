@@ -189,7 +189,7 @@ async def iter_chats(client):
     return chats
 
 
-async def fetch_audio(client, message):
+async def fetch_audio(message):
     time.time()
     if not message.reply_to_message:
         await message.reply("`Reply To A Video / Audio.`")

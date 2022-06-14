@@ -52,7 +52,7 @@ from Cutiepii_Robot.modules.log_channel import gloggable
 
 @user_admin
 @gloggable
-async def add_nsfw(update: Update, context: CallbackContext):
+async def add_nsfw(update: Update):
     chat = update.effective_chat
     msg = update.effective_message
     user = update.effective_user
@@ -73,7 +73,7 @@ async def add_nsfw(update: Update, context: CallbackContext):
 
 @user_admin
 @gloggable
-async def rem_nsfw(update: Update, context: CallbackContext):
+async def rem_nsfw(update: Update):
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -91,7 +91,7 @@ async def rem_nsfw(update: Update, context: CallbackContext):
     return message
 
 
-async def list_nsfw_chats(update: Update, context: CallbackContext):
+async def list_nsfw_chats(update: Update):
     chats = sql.get_all_nsfw_chats()
     text = "<b>NSFW Activated Chats</b>\n"
     for chat in chats:
@@ -107,7 +107,7 @@ async def list_nsfw_chats(update: Update, context: CallbackContext):
 
 
 
-async def neko(update: Update, context: CallbackContext):
+async def neko(update: Update):
     message = update.effective_message
     args = context.args
     flag = args[0]
@@ -136,7 +136,7 @@ async def neko(update: Update, context: CallbackContext):
         await message.reply_text(f"Failed to find image. Error: {excp}")
 
 
-async def cuddle(update: Update, context: CallbackContext):
+async def cuddle(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -147,7 +147,7 @@ async def cuddle(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def feet(update: Update, context: CallbackContext):
+async def feet(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -158,7 +158,7 @@ async def feet(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def yuri(update: Update, context: CallbackContext):
+async def yuri(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -169,7 +169,7 @@ async def yuri(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def trap(update: Update, context: CallbackContext):
+async def trap(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -180,7 +180,7 @@ async def trap(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def futanari(update: Update, context: CallbackContext):
+async def futanari(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -191,7 +191,7 @@ async def futanari(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def hololewd(update: Update, context: CallbackContext):
+async def hololewd(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -202,7 +202,7 @@ async def hololewd(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def lewdkemo(update: Update, context: CallbackContext):
+async def lewdkemo(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -214,7 +214,7 @@ async def lewdkemo(update: Update, context: CallbackContext):
 
 
 
-async def sologif(update: Update, context: CallbackContext):
+async def sologif(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -226,7 +226,7 @@ async def sologif(update: Update, context: CallbackContext):
 
 
 
-async def feetgif(update: Update, context: CallbackContext):
+async def feetgif(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -237,7 +237,7 @@ async def feetgif(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def cumgif(update: Update, context: CallbackContext):
+async def cumgif(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -248,7 +248,7 @@ async def cumgif(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def erokemo(update: Update, context: CallbackContext):
+async def erokemo(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -259,7 +259,7 @@ async def erokemo(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def lesbian(update: Update, context: CallbackContext):
+async def lesbian(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -270,13 +270,13 @@ async def lesbian(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def wallpaper(update: Update, context: CallbackContext):
+async def wallpaper(update: Update):
     msg = update.effective_message
     target = "wallpaper"
     await msg.reply_photo(nekos.img(target))
 
 
-async def lewdk(update: Update, context: CallbackContext):
+async def lewdk(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -287,7 +287,7 @@ async def lewdk(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def ngif(update: Update, context: CallbackContext):
+async def ngif(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -299,13 +299,13 @@ async def ngif(update: Update, context: CallbackContext):
 
 
 
-async def tickle(update: Update, context: CallbackContext):
+async def tickle(update: Update):
      msg = update.effective_message
      target = "tickle"
      await msg.reply_photo(nekos.img(target))
 
 
-async def lewd(update: Update, context: CallbackContext):
+async def lewd(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -317,14 +317,14 @@ async def lewd(update: Update, context: CallbackContext):
 
 
 
-async def feed(update: Update, context: CallbackContext):
+async def feed(update: Update):
     msg = update.effective_message
     target = "feed"
     await msg.reply_photo(nekos.img(target))
 
 
 
-async def eroyuri(update: Update, context: CallbackContext):
+async def eroyuri(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -335,7 +335,7 @@ async def eroyuri(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def eron(update: Update, context: CallbackContext):
+async def eron(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -346,7 +346,7 @@ async def eron(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def cum(update: Update, context: CallbackContext):
+async def cum(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -357,7 +357,7 @@ async def cum(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def bjgif(update: Update, context: CallbackContext):
+async def bjgif(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -368,7 +368,7 @@ async def bjgif(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def bj(update: Update, context: CallbackContext):
+async def bj(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -379,7 +379,7 @@ async def bj(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def nekonsfw(update: Update, context: CallbackContext):
+async def nekonsfw(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -390,7 +390,7 @@ async def nekonsfw(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def solo(update: Update, context: CallbackContext):
+async def solo(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -401,7 +401,7 @@ async def solo(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def kemonomimi(update: Update, context: CallbackContext):
+async def kemonomimi(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -412,7 +412,7 @@ async def kemonomimi(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def avatarlewd(update: Update, context: CallbackContext):
+async def avatarlewd(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -428,7 +428,7 @@ async def avatarlewd(update: Update, context: CallbackContext):
     os.remove("temp.webp")
 
 
-async def gasm(update: Update, context: CallbackContext):
+async def gasm(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -445,14 +445,14 @@ async def gasm(update: Update, context: CallbackContext):
 
 
 
-async def poke(update: Update, context: CallbackContext):
+async def poke(update: Update):
     msg = update.effective_message
     target = "poke"
     await msg.reply_photo(nekos.img(target))
 
 
 
-async def anal(update: Update, context: CallbackContext):
+async def anal(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -463,7 +463,7 @@ async def anal(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def hentai(update: Update, context: CallbackContext):
+async def hentai(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -474,7 +474,7 @@ async def hentai(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def avatar(update: Update, context: CallbackContext):
+async def avatar(update: Update):
     msg = update.effective_message
     target = "nsfw_avatar"
     with open("temp.png", "wb") as f:
@@ -485,7 +485,7 @@ async def avatar(update: Update, context: CallbackContext):
     os.remove("temp.webp")
 
 
-async def erofeet(update: Update, context: CallbackContext):
+async def erofeet(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -496,13 +496,13 @@ async def erofeet(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def holo(update: Update, context: CallbackContext):
+async def holo(update: Update):
     msg = update.effective_message
     target = "holo"
     await msg.reply_photo(nekos.img(target))
 
 
-async def keta(update: Update, context: CallbackContext):
+async def keta(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -516,7 +516,7 @@ async def keta(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def pussygif(update: Update, context: CallbackContext):
+async def pussygif(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -527,7 +527,7 @@ async def pussygif(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def tits(update: Update, context: CallbackContext):
+async def tits(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -538,7 +538,7 @@ async def tits(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def holoero(update: Update, context: CallbackContext):
+async def holoero(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -549,7 +549,7 @@ async def holoero(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def pussy(update: Update, context: CallbackContext):
+async def pussy(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -560,7 +560,7 @@ async def pussy(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def hentaigif(update: Update, context: CallbackContext):
+async def hentaigif(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -571,7 +571,7 @@ async def hentaigif(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def classic(update: Update, context: CallbackContext):
+async def classic(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -582,7 +582,7 @@ async def classic(update: Update, context: CallbackContext):
     await msg.reply_photo(nekos.img(target))
 
 
-async def kuni(update: Update, context: CallbackContext):
+async def kuni(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -594,7 +594,7 @@ async def kuni(update: Update, context: CallbackContext):
 
 
 
-async def waifu(update: Update, context: CallbackContext):
+async def waifu(update: Update):
     msg = update.effective_message
     target = "waifu"
     with open("temp.png", "wb") as f:
@@ -606,14 +606,14 @@ async def waifu(update: Update, context: CallbackContext):
 
 
 
-async def kiss(update: Update, context: CallbackContext):
+async def kiss(update: Update):
     msg = update.effective_message
     target = "kiss"
     await msg.reply_photo(nekos.img(target))
 
 
 
-async def femdom(update: Update, context: CallbackContext):
+async def femdom(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -625,14 +625,14 @@ async def femdom(update: Update, context: CallbackContext):
 
 
 
-async def hug(update: Update, context: CallbackContext):
+async def hug(update: Update):
     msg = update.effective_message
     target = "cuddle"
     await msg.reply_photo(nekos.img(target))
 
 
 
-async def erok(update: Update, context: CallbackContext):
+async def erok(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -644,7 +644,7 @@ async def erok(update: Update, context: CallbackContext):
 
 
 
-async def foxgirl(update: Update, context: CallbackContext):
+async def foxgirl(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -656,7 +656,7 @@ async def foxgirl(update: Update, context: CallbackContext):
 
 
 
-async def titsgif(update: Update, context: CallbackContext):
+async def titsgif(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -668,7 +668,7 @@ async def titsgif(update: Update, context: CallbackContext):
 
 
 
-async def ero(update: Update, context: CallbackContext):
+async def ero(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
         is_nsfw = sql.is_nsfw(chat_id)
@@ -680,14 +680,14 @@ async def ero(update: Update, context: CallbackContext):
 
 
 
-async def smug(update: Update, context: CallbackContext):
+async def smug(update: Update):
     msg = update.effective_message
     target = "smug"
     await msg.reply_photo(nekos.img(target))
 
 
 
-async def baka(update: Update, context: CallbackContext):
+async def baka(update: Update):
     msg = update.effective_message
     target = "baka"
     await msg.reply_photo(nekos.img(target))

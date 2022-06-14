@@ -85,7 +85,7 @@ def is_support_plus(_: Chat, user_id: int) -> bool:
 def is_sudo_plus(_: Chat, user_id: int) -> bool:
     return user_id in SUDO_USERS or user_id in DEV_USERS
 
-def is_stats_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
+def is_stats_plus(_: Chat, user_id: int) -> bool:
     return user_id in DEV_USERS
 
 def user_can_changeinfo(chat: Chat, user: User, _: int) -> bool:

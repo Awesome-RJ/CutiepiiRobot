@@ -164,7 +164,7 @@ async def leave(update: Update, context: CallbackContext):
         await update.effective_message.reply_text(f"I'm going to leave {chat.title}, press the button below to confirm", reply_markup=InlineKeyboardMarkup(kb))
 
 @dev_plus
-async def gitpull(update: Update, context: CallbackContext):
+async def gitpull(update: Update):
     sent_msg = await update.effective_message.reply_text(
         "Pulling all changes from remote and then attempting to restart."
     )
@@ -183,7 +183,7 @@ async def gitpull(update: Update, context: CallbackContext):
 
 
 @dev_plus
-async def restart(update: Update, context: CallbackContext):
+async def restart(update: Update):
     await update.effective_message.reply_text(
 	"Exiting all Processes and starting a new Instance!"
     )

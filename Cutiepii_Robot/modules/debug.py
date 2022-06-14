@@ -41,7 +41,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 DEBUG_MODE = False
 
 @dev_plus
-async def debug(update: Update, context: CallbackContext):
+async def debug(update: Update):
     global DEBUG_MODE
     args = update.effective_message.text.split(None, 1)
     message = update.effective_message

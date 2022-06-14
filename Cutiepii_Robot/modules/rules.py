@@ -109,7 +109,7 @@ async def send_rules(update, chat_id, from_pm=False):
 
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def set_rules(update: Update, context: CallbackContext):
+async def set_rules(update: Update):
     chat_id = update.effective_chat.id
     msg = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat  # type: Optional[Chat]
@@ -129,7 +129,7 @@ async def set_rules(update: Update, context: CallbackContext):
 
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def clear_rules(update: Update, context: CallbackContext):
+async def clear_rules(update: Update):
     chat_id = update.effective_chat.id
     chat = update.effective_chat  # type: Optional[Chat]
     msg = update.effective_message  # type: Optional[Message]
@@ -153,7 +153,7 @@ def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
 
 
-def __chat_settings__(chat_id, user_id):
+def __chat_settings__(chat_id):
     return f"This chat has had it's rules set: `{bool(sql.get_rules(chat_id))}`"
 
 

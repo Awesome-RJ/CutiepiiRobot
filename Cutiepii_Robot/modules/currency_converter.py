@@ -38,7 +38,7 @@ from telegram.ext import CallbackContext, CommandHandler
 
 
 
-async def convert(update: Update, context: CallbackContext):
+async def convert(update: Update):
     args = await update.effective_message.text.split(" ")
     message = update.effective_message      
 
