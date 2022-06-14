@@ -75,7 +75,7 @@ if is_module_loaded(FILENAME):
                 if admin_ok:
                     ADMIN_CMDS.extend(command)
 
-        async def check_update(self, update):
+        def check_update(self, update):
             if not isinstance(update, Update) or not update.effective_message:
                 return
             message = update.effective_message

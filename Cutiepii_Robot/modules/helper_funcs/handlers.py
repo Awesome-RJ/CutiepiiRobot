@@ -90,7 +90,7 @@ class CustomCommandHandler(tg.CommandHandler):
             del kwargs["admin_ok"]
         super().__init__(command, callback, **kwargs)
 
-    async def check_update(self, update):
+    def check_update(self, update):
         if not isinstance(update, Update) or not update.effective_message:
             return
         message = update.effective_message
@@ -125,7 +125,7 @@ class CustomCommandHandler(tg.CommandHandler):
                 return False
 
 
-    async def collect_additional_context(self, context, update, CUTIEPII_PTB, check_result):
+    def collect_additional_context(self, context, update, CUTIEPII_PTB, check_result):
         if isinstance(check_result, bool):
             context.args = update.effective_message.text.split()[1:]
         else:
