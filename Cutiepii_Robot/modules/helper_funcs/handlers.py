@@ -32,12 +32,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import Cutiepii_Robot.modules.sql.blacklistusers_sql as sql
 
 from Cutiepii_Robot import ALLOW_EXCL
-from Cutiepii_Robot import DEV_USERS, SUDO_USERS, SUPPORT_USERS, TIGER_USERS, WHITELIST_USERS
+from Cutiepii_Robot import DEV_USERS, SUDO_USERS, SUPPORT_USERS, TIGER_USERS, WHITELIST_USERS, CUTIEPII_PTB
 
 from telegram import Update
 import telegram.ext as tg
 from pyrate_limiter import (
-    BucketFullException,
     Duration,
     RequestRate,
     Limiter,
@@ -128,7 +127,7 @@ class CustomCommandHandler(tg.CommandHandler):
 
     async def collect_additional_context(self, context, chat, CUTIEPII_PTB, check_result):
         if isinstance(check_result, bool):
-            context.args = await update.effective_message.text.split()[1:]
+            context.args = update.effective_message.text.split()[1:]
         else:
             context.args = check_result[0]
             if isinstance(check_result[1], dict):
