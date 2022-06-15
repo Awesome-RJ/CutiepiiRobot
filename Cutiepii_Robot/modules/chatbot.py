@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -111,7 +111,7 @@ def check_message(_: ContextTypes, message):
     )
 
 
-async def chatbot(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def chatbot(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat_id = update.effective_chat.id
     is_chat = chat_id in CHATBOT_ENABLED_CHATS
@@ -139,7 +139,7 @@ async def chatbot(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-async def list_chatbot_chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def list_chatbot_chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     text = "<b>AI-Enabled Chats</b>\n"
     for chat in CHATBOT_ENABLED_CHATS:
         x = await context.bot.get_chat(chat)

@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -57,7 +57,7 @@ REPORT_GROUP = 12
 
 
 @user_admin
-async def report_setting(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def report_setting(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     chat = update.effective_chat
     msg = update.effective_message
@@ -269,7 +269,7 @@ def __user_settings__(user_id):
     )
 
 
-async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     query = update.callback_query
     splitter = query.data.replace("report_", "").split("=")

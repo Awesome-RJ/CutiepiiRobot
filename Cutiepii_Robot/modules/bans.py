@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -222,7 +222,7 @@ async def ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[st
     member = None
     chan = None
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest:
         try:
             chan = await bot.get_chat(user_id)
@@ -325,7 +325,7 @@ async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         return log_message
 
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message != 'User not found':
             raise
@@ -437,7 +437,7 @@ async def kick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         return log_message
 
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message != 'User not found':
             raise
@@ -554,7 +554,7 @@ async def unban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[
     member = None
     chan = None
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest:
         try:
             chan = await bot.get_chat(user_id)
@@ -676,7 +676,7 @@ async def unbanb_btn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
             user_id = splitter[1]
             log_message = ""
             try:
-                member = chat.get_member(user_id)
+                member = await chat.get_member(user_id)
             except BadRequest:
                 pass
             chat.unban_member(user_id)
@@ -700,7 +700,7 @@ async def unbanb_btn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def banme(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def banme(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.effective_message.from_user.id
     chat = update.effective_chat
     user = update.effective_user
@@ -721,7 +721,7 @@ async def banme(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @cutiepii_cmd(command='snipe', can_disable=False, filters=filters.User(SUDO_USERS))
 @dev_plus
-async def snipe(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def snipe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     bot = context.bot
     try:

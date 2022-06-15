@@ -84,7 +84,7 @@ def getRepo(bot, update, reponame):
     return None, None
 
 
-async def getRelease(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def getRelease(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     if len(args) == 0:
@@ -104,7 +104,7 @@ async def getRelease(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return
 
 
-async def hashFetch(update: Update, context: ContextTypes.DEFAULT_TYPE):  # kanged from notes
+async def hashFetch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:  # kanged from notes
     bot, args = context.bot, context.args
     message = update.effective_message.text
     msg = update.effective_message
@@ -123,7 +123,7 @@ async def hashFetch(update: Update, context: ContextTypes.DEFAULT_TYPE):  # kang
     return
 
 
-async def cmdFetch(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def cmdFetch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     if len(args) != 1:
@@ -142,7 +142,7 @@ async def cmdFetch(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return
 
 
-async def changelog(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def changelog(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     if len(args) != 1:
@@ -160,7 +160,7 @@ async def changelog(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @user_admin
-async def saveRepo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def saveRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     chat_id = update.effective_chat.id
     msg = update.effective_message
@@ -178,7 +178,7 @@ async def saveRepo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @user_admin
-async def delRepo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def delRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     chat_id = update.effective_chat.id
     msg = update.effective_message
@@ -190,7 +190,7 @@ async def delRepo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return
 
 
-async def listRepo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def listRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
     chat = update.effective_chat
     chat_name = chat.title or chat.first_name or chat.username
@@ -211,7 +211,7 @@ async def listRepo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ))
 
 
-async def getVer(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def getVer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     ver = api.vercheck()
     deletion(update, context, await msg.reply_text(f"GitHub API version: {ver}"))

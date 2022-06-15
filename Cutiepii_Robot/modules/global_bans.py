@@ -68,7 +68,7 @@ UNGBAN_ERRORS = {
 
 
 @support_plus
-async def gban(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def gban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     user = update.effective_user
@@ -83,29 +83,29 @@ async def gban(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    if int(user_id) in DEV_USERS:
+    if (user_id) in DEV_USERS:
         await message.reply_text(
             "That user is a Destroyers",
         )
         return
 
-    if int(user_id) in SUDO_USERS:
+    if (user_id) in SUDO_USERS:
         await message.reply_text(
             "I spy, with my little eye... a Shadow Slayer! Why are you guys turning on each other?",
         )
         return
 
-    if int(user_id) in SUPPORT_USERS:
+    if (user_id) in SUPPORT_USERS:
         await message.reply_text(
             "OOOH someone's trying to gban a Guardian! *Grabs Popcorn*",
         )
         return
 
-    if int(user_id) in TIGER_USERS:
+    if (user_id) in TIGER_USERS:
         await message.reply_text("That's a Light Shooters! They cannot be banned!")
         return
 
-    if int(user_id) in WHITELIST_USERS:
+    if (user_id) in WHITELIST_USERS:
         await message.reply_text("That's a Villain! They have a immune for ban and gban!")
         return
 
@@ -267,7 +267,7 @@ async def gban(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @support_plus
-async def ungban(update: Update, context: ContextTypes.DEFAULT_TYPE):  # sourcery no-metrics
+async def ungban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
     bot, args = context.bot, context.args
     message = update.effective_message
     user = update.effective_user
@@ -382,7 +382,7 @@ async def ungban(update: Update, context: ContextTypes.DEFAULT_TYPE):  # sourcer
 
 
 @support_plus
-async def gbanlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def gbanlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     banned_users = sql.get_gban_list()
 
     if not banned_users:
@@ -429,7 +429,7 @@ async def check_and_ban(update, user_id, should_message=True):
     (filters.ALL & filters.ChatType.GROUPS), can_disable=False, group=GBAN_ENFORCE_GROUP
 )
 @bot_admin
-async def enforce_gban(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def enforce_gban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # Not using @restrict handler to avoid spamming - just ignore if cant gban.
     bot = context.bot
     if (
@@ -455,7 +455,7 @@ async def enforce_gban(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @user_admin
-async def gbanstat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def gbanstat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     if len(args) > 0:
         if args[0].lower() in ["on", "yes"]:
@@ -494,7 +494,7 @@ async def clear_gbans(bot: Bot, update: Update):
         except BadRequest:
             deleted += 1
             sql.ungban_user(id)
-    await update.message.reply_text(
+    await update.effective_message.reply_text(
         f"Done! `{deleted}` deleted accounts were removed from the gbanlist.",
         parse_mode=ParseMode.MARKDOWN,
     )
@@ -514,13 +514,13 @@ async def check_gbans(bot: Bot, update: Update):
         except BadRequest:
             deleted += 1
     if deleted:
-        await update.message.reply_text(
+        await update.effective_message.reply_text(
             f"`{deleted}` deleted accounts found in the gbanlist! Run /cleangb to remove them from the database!",
             parse_mode=ParseMode.MARKDOWN,
         )
 
     else:
-        await update.message.reply_text("No deleted accounts in the gbanlist!")
+        await update.effective_message.reply_text("No deleted accounts in the gbanlist!")
 
 
 def __stats__():
@@ -534,7 +534,7 @@ def __user_info__(user_id):
         return ""
     if user_id == CUTIEPII_PTB.bot.id:
         return ""
-    if int(user_id) in SUDO_USERS + TIGER_USERS + WHITELIST_USERS:
+    if (user_id) in SUDO_USERS + TIGER_USERS + WHITELIST_USERS:
         return ""
     if is_gbanned:
         text = text.format("Yes")

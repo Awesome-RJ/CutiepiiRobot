@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -212,7 +212,7 @@ async def markdown_help_sender(update: Update):
     else:
         await update.effective_message.reply_text(FORMATTING_HELP, parse_mode=ParseMode.MARKDOWN, reply_markup=markup)
 
-async def markdown_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def markdown_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
             "Contact me in pm",
@@ -231,7 +231,7 @@ async def markdown_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     markdown_help_sender(update)
 
 
-async def mkdown_btn(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def mkdown_btn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     query = update.callback_query
     match = query.data.split("_")[1]
@@ -281,7 +281,7 @@ async def src(update: Update) -> None:
     )
 
 @send_action(ChatAction.UPLOAD_PHOTO)
-async def rmemes(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def rmemes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat = update.effective_chat
 
@@ -330,7 +330,7 @@ async def rmemes(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return await msg.reply_text(f"Error! {excp.message}")
 
 
-async def markdown_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def markdown_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
             "Contact me in pm",
@@ -348,7 +348,7 @@ async def markdown_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     markdown_help_sender(update)
 
-async def imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def imdb(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         args = context.args
         movie_name = " ".join(args)

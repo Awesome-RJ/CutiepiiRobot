@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -41,7 +41,7 @@ from telegram.constants import ParseMode
 
 
 @cutiepii_cmd(command='wiki', can_disable=True)
-async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     kueri = re.split(pattern="wiki", string = update.effective_message.text)
     message = update.effective_message
     wikipedia.set_lang("en")

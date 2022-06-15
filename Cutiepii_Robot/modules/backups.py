@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -56,7 +56,7 @@ from Cutiepii_Robot.modules.connection import connected
 
 
 @user_admin
-async def import_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def import_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -147,7 +147,7 @@ async def import_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @user_admin
-async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_data = context.chat_data
     msg = update.effective_message  # type: Optional[Message]
     user = update.effective_user  # type: Optional[User]

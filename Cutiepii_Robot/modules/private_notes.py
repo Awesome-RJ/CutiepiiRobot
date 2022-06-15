@@ -8,7 +8,7 @@ from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 
 @cutiepii_cmd(command="privatenotes")
 @user_admin
-async def privatenotes(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def privatenotes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     message = update.effective_message
     args = context.args

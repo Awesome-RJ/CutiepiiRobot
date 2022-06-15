@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -74,7 +74,7 @@ for handler_list in CUTIEPII_PTB.handlers:
             command_list += handler.command
 
 
-async def clean_blue_text_must_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clean_blue_text_must_click(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     chat = update.effective_chat
     message = update.effective_message
@@ -100,7 +100,7 @@ async def clean_blue_text_must_click(update: Update, context: ContextTypes.DEFAU
 @connection_status
 @bot_can_delete
 @user_admin
-async def set_blue_text_must_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_blue_text_must_click(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     message = update.effective_message
     bot, args = context.bot, context.args
@@ -130,7 +130,7 @@ async def set_blue_text_must_click(update: Update, context: ContextTypes.DEFAULT
 
 
 @user_admin
-async def add_bluetext_ignore(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def add_bluetext_ignore(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -148,7 +148,7 @@ async def add_bluetext_ignore(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 @user_admin
-async def remove_bluetext_ignore(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def remove_bluetext_ignore(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -166,7 +166,7 @@ async def remove_bluetext_ignore(update: Update, context: ContextTypes.DEFAULT_T
 
 
 @user_admin
-async def add_bluetext_ignore_global(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def add_bluetext_ignore_global(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     args = context.args
     if len(args) >= 1:
@@ -184,7 +184,7 @@ async def add_bluetext_ignore_global(update: Update, context: ContextTypes.DEFAU
 
 
 @dev_plus
-async def remove_bluetext_ignore_global(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def remove_bluetext_ignore_global(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     args = context.args
     if len(args) >= 1:
@@ -202,7 +202,7 @@ async def remove_bluetext_ignore_global(update: Update, context: ContextTypes.DE
 
 
 @dev_plus
-async def bluetext_ignore_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def bluetext_ignore_list(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     message = update.effective_message
     chat = update.effective_chat

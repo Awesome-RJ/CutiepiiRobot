@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -60,7 +60,7 @@ REMINDER_LIMIT = 20
 
 @user_admin
 @loggable
-async def remind(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def remind(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -109,7 +109,7 @@ async def remind(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @user_admin
-async def reminders(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def reminders(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     msg = update.effective_message
     chat.title = "your private chat" if chat.type == "private" else chat.title
@@ -142,7 +142,7 @@ async def reminders(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @user_admin
 @loggable
-async def clearreminder(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clearreminder(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -174,7 +174,7 @@ async def clearreminder(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @user_admin
-async def clearallreminders(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clearallreminders(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     member = await update.effective_chat.get_member(update.effective_user.id)
     if update.effective_chat.type != "private" and member.status != "creator" and member.user.id not in SUDO_USERS:
         return await update.effective_message.reply_text("Only group owner can do this!")
@@ -191,7 +191,7 @@ async def clearallreminders(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @user_admin
 @loggable
-async def clearallremindersbtn(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clearallremindersbtn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     chat = update.effective_chat
     option = query.data.split("_")[1]
@@ -215,7 +215,7 @@ async def clearallremindersbtn(update: Update, context: ContextTypes.DEFAULT_TYP
     )
 
 
-async def check_reminds(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def check_reminds(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     while True:
         t = round(time.time())
         if t in sql.REMINDERS:

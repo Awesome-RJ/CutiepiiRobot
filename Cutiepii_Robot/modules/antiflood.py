@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -141,7 +141,7 @@ async def check_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
 
 @user_admin_no_reply
 @bot_admin
-async def flood_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def flood_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     query = update.callback_query
     user = update.effective_user
@@ -151,7 +151,7 @@ async def flood_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         with contextlib.suppress(Exception):
             await bot.restrict_chat_member(
                 chat,
-                int(user_id),
+                (user_id),
                 permissions=ChatPermissions(
                     can_send_messages=True,
                     can_send_media_messages=True,
@@ -248,7 +248,7 @@ async def set_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
 
 
-async def flood(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message
@@ -285,7 +285,7 @@ async def flood(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @user_admin
-async def set_flood_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_flood_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]

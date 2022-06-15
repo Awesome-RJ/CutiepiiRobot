@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -43,7 +43,7 @@ from telegram.error import BadRequest, RetryAfter, Forbidden
 from telegram.ext import ContextTypes, CommandHandler
 
 @dev_plus
-async def get_user_common_chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def get_user_common_chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     user = extract_user(msg, args)

@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -178,7 +178,7 @@ def make_bar(per):
     done = min(round(per / 10), 10)
     return "■" * done + "□" * (10 - done)
 
-async def get_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def get_id(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     chat = update.effective_chat
@@ -255,7 +255,7 @@ async def group_info(event) -> None:
 
 
 
-async def gifid(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def gifid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     if await msg.reply_to_message and await msg.reply_to_message.animation:
         await update.effective_message.reply_text(
@@ -266,20 +266,20 @@ async def gifid(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.effective_message.reply_text("Please reply to a gif to get its ID.")
 
 """
-def info(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     chat = update.effective_chat
     user_id = extract_user(update.effective_message, args)
 
-    if user_id and int(user_id) != 777000 and int(user_id) != 1087968824:
+    if user_id and (user_id) != 777000 and (user_id) != 1087968824:
         user = await bot.get_chat(user_id)
-         elif user_id and int(user_id) == 777000:
+         elif user_id and (user_id) == 777000:
             await message.reply_text(
                 "This is Telegram. Unless you manually entered this reserved account's ID, it is likely a old broadcast from a linked channel."
                 )
                 return
-         elif user_id and int(user_id) == 1087968824:
+         elif user_id and (user_id) == 1087968824:
                         await message.reply_text(
                             "This is Group Anonymous Bot. Unless you manually entered this reserved account's ID, it is likely a broadcast from a linked channel or anonymously sent message."
                             )
@@ -486,16 +486,16 @@ else:return
     rep.delete()
 
 """
-async def info(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     chat = update.effective_chat
     user_id = extract_user(update.effective_message, args)
 
-    if user_id and int(user_id) != 777000 and int(user_id) != 1087968824:
+    if user_id and (user_id) != 777000 and (user_id) != 1087968824:
         user = await bot.get_chat(user_id)
 
-    elif user_id and int(user_id) == 777000:
+    elif user_id and (user_id) == 777000:
         await message.reply_text(
             "This is Telegram. Unless you manually entered this reserved account's ID, it is likely a old broadcast from a linked channel."
         )
@@ -705,7 +705,7 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.bot.run_async(delete, delmsg, cleartime.time)
 """
 
-async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     user_id = extract_user(message, args)
@@ -725,7 +725,7 @@ async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.effective_message.reply_text("There isnt one, use /setme to set one.")
 
-async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     user_id = extract_user(message, args)
@@ -747,7 +747,7 @@ async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
-async def set_about_me(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     user_id = message.from_user.id
     if user_id in [777000, 1087968824]:
@@ -775,7 +775,7 @@ async def set_about_me(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f"The info needs to be under {MessageLimit.TEXT_LENGTH // 4} characters! You have {len(info[1])}."
             )
 
-async def about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -798,7 +798,7 @@ async def about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-async def set_about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     sender_id = update.effective_user.id
     bot = context.bot

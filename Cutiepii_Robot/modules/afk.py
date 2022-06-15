@@ -14,7 +14,7 @@ from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepi
 
 @cutiepii_msg(filters.Regex("(?i)^brb"), friendly="afk", group=3)
 @cutiepii_cmd(command="afk", group=3)
-async def afk(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def afk(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = update.effective_message.text.split(None, 1)
     user = update.effective_user
 
@@ -40,7 +40,7 @@ async def afk(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_msg((filters.ALL & filters.ChatType.GROUPS), friendly="afk", group=1)
-async def no_longer_afk(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def no_longer_afk(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     message = update.effective_message
 
@@ -78,7 +78,7 @@ async def no_longer_afk(update: Update, context: ContextTypes.DEFAULT_TYPE):
     friendly="afk",
     group=8,
 )
-async def reply_afk(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def reply_afk(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     message = update.effective_message
     userc = update.effective_user

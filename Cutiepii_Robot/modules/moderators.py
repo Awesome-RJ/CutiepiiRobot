@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -49,7 +49,7 @@ from telegram.helpers import mention_html
 
 @loggable
 @user_admin
-async def mod(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def mod(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -62,7 +62,7 @@ async def mod(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return ""
     with contextlib.suppress(BadRequest):
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
 
     if member.status in ("administrator", "creator"):
         await message.reply_text(
@@ -92,7 +92,7 @@ async def mod(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @loggable
 @user_admin
-async def dismod(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def dismod(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -105,7 +105,7 @@ async def dismod(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return ""
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest:
         return ""
     if member.status in ("administrator", "creator"):
@@ -143,12 +143,12 @@ async def modd(update: Update):
     await message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
-async def modr(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def modr(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
     user_id = extract_user(message, args)
-    member = chat.get_member(user_id)
+    member = await chat.get_member(user_id)
     if not user_id:
         await message.reply_text(
             "I don't know who you're talking about, you're going to need to specify a user!"

@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -40,9 +40,9 @@ class Disable(BASE):
     chat_id = Column(String(14), primary_key=True)
     command = Column(UnicodeText, primary_key=True)
 
-    def __init__(self, chat_id, command):
+    def __init__(self, chat_id, commands):
         self.chat_id = chat_id
-        self.command = command
+        self.commands = commands
 
     def __repr__(self):
         return "Disabled cmd {} in {}".format(self.commands, self.chat_id)
@@ -125,7 +125,7 @@ def __load_disabled_commands():
     try:
         all_chats = SESSION.query(Disable).all()
         for chat in all_chats:
-            DISABLED.setdefault(chat.chat_id, set()).add(chat.command)
+            DISABLED.setdefault(chat.chat_id, set()).add(chat.commands)
 
     finally:
         SESSION.close()

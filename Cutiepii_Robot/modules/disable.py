@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -124,7 +124,7 @@ if is_module_loaded(FILENAME):
 
     @user_admin
 
-    async def disable(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def disable(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
         args = context.args
@@ -167,7 +167,7 @@ if is_module_loaded(FILENAME):
 
     @user_admin
 
-    async def enable(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def enable(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
         args = context.args
@@ -211,7 +211,7 @@ if is_module_loaded(FILENAME):
 
     @user_admin
     
-    async def list_cmds(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def list_cmds(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if DISABLE_CMDS + DISABLE_OTHER:
             result = "".join(
                 " - `{}`\n".format(escape_markdown(str(cmd)))
@@ -235,7 +235,7 @@ if is_module_loaded(FILENAME):
         return "The following commands are currently restricted:\n{}".format(result)
 
     
-    async def commands(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def commands(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         chat = update.effective_chat
         user = update.effective_user
         conn = await connected(context.bot, update, chat, user.id, need_admin=True)

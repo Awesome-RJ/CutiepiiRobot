@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot
 
 All rights reserved.
@@ -61,12 +61,12 @@ from Cutiepii_Robot.modules.connection import connected
 from Cutiepii_Robot.modules.users import build_keyboard_alternate
 from Cutiepii_Robot.modules.helper_funcs.admin_status import user_admin_check, bot_admin_check, AdminPerms, get_bot_member
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
-    bot_admin,
-    can_promote,
     ADMIN_CACHE,
     connection_status,
     is_user_admin,
     can_manage_video_chats,
+    bot_admin,
+    can_promote,
     )
 
 from Cutiepii_Robot.modules.helper_funcs.extraction import (
@@ -358,7 +358,7 @@ async def setchat_title(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
 @loggable
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
-async def promote_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def promote_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     user = update.effective_user
     chat = update.effective_chat
@@ -369,7 +369,7 @@ async def promote_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if await is_user_admin(update, user.id):
             if mode == "demote":
                 user_id = query.data.split("_")[2]
-                user_member = chat.get_member(user_id)
+                user_member = await chat.get_member(user_id)
                 await CUTIEPII_PTB.bot.promote_chat_member(
                     chat.id,
                     user_id,
@@ -405,7 +405,7 @@ async def promote_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @loggable
 @user_admin
-async def refresh_admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def refresh_admin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     with contextlib.suppress(KeyError):
         ADMIN_CACHE.pop(update.effective_chat.id)
     await update.effective_message.reply_text("Admins cache refreshed!")
@@ -433,7 +433,7 @@ async def promoteanon(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Opt
         title = " ".join(args)
 
     try:
-        user_member = chat.get_member(user_id)
+        user_member = await chat.get_member(user_id)
     except Exception as e:
         await message.reply_text("Error:\n`{}`".format(e))
         return
@@ -453,7 +453,7 @@ async def promoteanon(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Opt
     # set same perms as bot - bot can't assign higher perms than itself!
     bot_member = get_bot_member(chat.id)
     # set same perms as user -  to keep the other perms untouched!
-    u_member = chat.get_member(user_id)
+    u_member = await chat.get_member(user_id)
     # the perms may be not same as old ones if the bot doesn't have the rights to change them but can't do anything about it
 
     try:
@@ -526,7 +526,7 @@ async def promote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         return
 
     try:
-        user_member = chat.get_member(user_id)
+        user_member = await chat.get_member(user_id)
     except Exception as e:
         await message.reply_text(f"Error: {e}")
         return
@@ -540,7 +540,7 @@ async def promote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         return
 
     # set same perms as bot - bot can't assign higher perms than itself!
-    bot_member = get_bot_member(bot.id)
+    bot_member = await chat.get_member(bot.id)
     #can_promote_members = False
     #if "all" in permissions and bot_member.can_promote_members:
     #    can_promote_members = True
@@ -632,7 +632,7 @@ async def midpromote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         return
 
     try:
-        user_member = chat.get_member(user_id)
+        user_member = await chat.get_member(user_id)
     except Exception as e:
         await message.reply_text(f"Error: {e}")
         return
@@ -646,7 +646,7 @@ async def midpromote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         return
 
     # set same perms as bot - bot can't assign higher perms than itself!
-    bot_member = get_bot_member(bot.id)
+    bot_member = await chat.get_member(bot.id)
     #can_promote_members = False
     #if "all" in permissions and bot_member.can_promote_members:
     #    can_promote_members = True
@@ -733,7 +733,7 @@ async def lowpromote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         return
 
     try:
-        user_member = chat.get_member(user_id)
+        user_member = await chat.get_member(user_id)
     except Exception as e:
         await message.reply_text(f"Error: {e}")
         return
@@ -747,7 +747,7 @@ async def lowpromote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         return
 
     # set same perms as bot - bot can't assign higher perms than itself!
-    bot_member = get_bot_member(bot.id)
+    bot_member = await chat.get_member(bot.id)
     #can_promote_members = False
     #if "all" in permissions and bot_member.can_promote_members:
     #    can_promote_members = True
@@ -833,7 +833,7 @@ async def fullpromote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Opt
         return
 
     try:
-        user_member = chat.get_member(user_id)
+        user_member = await chat.get_member(user_id)
     except Exception as e:
         await message.reply_text(f"Error: {e}")
         return
@@ -1103,7 +1103,7 @@ async def demoteanon(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Opti
     # set same perms as bot - bot can't assign higher perms than itself!
     bot_member = get_bot_member(chat.id)
     # set same perms as user -  to keep the other perms untouched!
-    u_member = chat.get_member(user_id)
+    u_member = await chat.get_member(user_id)
     # the perms may be not same as old ones if the bot doesn't have the rights to change them but can't do anything about it
 
     try:
@@ -1148,7 +1148,7 @@ async def demoteanon(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Opti
 
 
 @user_admin
-async def refresh_admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def refresh_admin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     with contextlib.suppress(KeyError):
         ADMIN_CACHE.pop(update.effective_chat.id)
     await update.effective_message.reply_text("Admins cache refreshed!")
@@ -1157,7 +1157,7 @@ async def refresh_admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @loggable
-async def set_title(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_title(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     args = context.args
 
@@ -1291,7 +1291,7 @@ async def pin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @loggable
-async def unpin(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def unpin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
@@ -1398,7 +1398,7 @@ async def pinned(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @bot_admin_check(AdminPerms.CAN_INVITE_USERS)
 @user_admin_check(AdminPerms.CAN_INVITE_USERS)
 @connection_status
-async def invite(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def invite(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     message = update.effective_message  
     chat = update.effective_chat
@@ -1406,7 +1406,7 @@ async def invite(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if chat.username:
         await message.reply_text(f"https://telegram.dog/{chat.username}")
     elif chat.type in [chat.SUPERGROUP, chat.CHANNEL]:
-        bot_member = get_bot_member(bot.id)
+        bot_member = await chat.get_member(bot.id)
         if bot_member.can_invite_users:
             invitelink = await bot.exportChatInviteLink(chat.id)
             await update.effective_message.reply_text(invitelink)
@@ -1491,7 +1491,7 @@ def staff(client: Client, message: Message):
 @connection_status
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
-async def permapin(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def permapin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     message = update.effective_message  # type: Optional[Message]
     u = update.effective_user  # type: Optional[User]
@@ -1599,7 +1599,7 @@ async def permanent_pin_set(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
-async def unpinall(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def unpinall(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     member = await update.effective_chat.get_member(update.effective_user.id)
     if member.status != "creator" and member.user.id not in SUDO_USERS:
         return await update.effective_message.reply_text("Only group owner can do this!")
@@ -1613,7 +1613,7 @@ async def unpinall(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ]]),
     )
 
-async def permanent_pin(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def permanent_pin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user  # type: Optional[User]
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message
@@ -1644,7 +1644,7 @@ async def permanent_pin(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @loggable
-async def unpinallbtn(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def unpinallbtn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     query = update.callback_query
     user = update.effective_user

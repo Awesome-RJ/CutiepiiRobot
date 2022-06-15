@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -372,7 +372,6 @@ ELEVATED_USERS_FILE = os.path.join(os.getcwd(), "Cutiepii_Robot/elevated_users.j
 
 # Load at end to ensure all prev variables have been set
 from Cutiepii_Robot.modules.helper_funcs.handlers import CustomCommandHandler
-
 
 # make sure the regex handler can take extra kwargs
 tg.CommandHandler = CustomCommandHandler

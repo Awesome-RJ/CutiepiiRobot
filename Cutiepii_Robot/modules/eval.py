@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -81,8 +81,8 @@ async def send(msg, bot, update):
         LOGGER.info(f"OUT: '{msg}'")
         await bot.send_message(
             chat_id=update.effective_chat.id,
-            text=f"<b>Result</b>:\n<code>{msg}</code>",
-            parse_mode=ParseMode.HTML,
+            text=f"`{msg}`",
+            parse_mode=ParseMode.MARKDOWN,
         )
 
 
@@ -101,7 +101,7 @@ async def edit_or_reply(msg: Message, **kwargs):
 
 
 @dev_plus
-async def execute(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def execute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     await send((await do(exec, bot, update)), bot, update)
 
@@ -234,7 +234,7 @@ async def runtime_func_cq(_, cq):
 
 
 @dev_plus
-async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     log_input(update)
     if update.message.chat_id in namespaces:

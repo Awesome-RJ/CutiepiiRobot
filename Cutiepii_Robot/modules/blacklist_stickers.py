@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -51,7 +51,7 @@ from telegram.constants import ParseMode, ChatType
 
 
 
-def blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     global text
     msg = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat  # type: Optional[Chat]
@@ -88,7 +88,7 @@ def blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @user_admin
-async def add_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def add_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     msg = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat  # type: Optional[Chat]
@@ -177,7 +177,7 @@ async def add_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 @user_admin
-async def unblackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def unblackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     msg = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat  # type: Optional[Chat]
@@ -264,7 +264,7 @@ async def unblackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 @loggable
 @user_admin
-async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -367,7 +367,7 @@ async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @user_not_admin
-async def del_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def del_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]

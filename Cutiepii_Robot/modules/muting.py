@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -122,7 +122,7 @@ async def mute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await message.reply_text(reply)
         return ""
 
-    member = chat.get_member(user_id)
+    member = await chat.get_member(user_id)
 
     log = (
         f"<b>{html.escape(chat.title)}:</b>\n"
@@ -185,7 +185,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         bot = context.bot
         user_id = match[1]
         chat: Optional[Chat] = update.effective_chat
-        user_member = chat.get_member(user_id)
+        user_member = await chat.get_member(user_id)
 
         if user_member.status in ["kicked", "left"]:
             user_member.reply_text(
@@ -212,7 +212,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                 can_add_web_page_previews=True,
             )
             try:
-                await bot.restrict_chat_member(chat.id, int(user_id), chat_permissions)
+                await bot.restrict_chat_member(chat.id, (user_id), chat_permissions)
             except BadRequest:
                 pass
 
@@ -274,7 +274,7 @@ async def unmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
             can_add_web_page_previews=True,
         )
         with contextlib.suppress(BadRequest):
-            await bot.restrict_chat_member(chat.id, int(user_id), chat_permissions)
+            await bot.restrict_chat_member(chat.id, (user_id), chat_permissions)
         unmutemsg = "{} was unmuted by {} in <b>{}</b>".format(
             mention_html(member.user.id, member.user.first_name), user.first_name, message.chat.title
         )
@@ -312,7 +312,7 @@ async def temp_mute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await message.reply_text(reply)
         return ""
 
-    member = chat.get_member(user_id)
+    member = await chat.get_member(user_id)
 
     if not reason:
         await message.reply_text("You haven't specified a time to mute this user for!")
@@ -400,7 +400,7 @@ async def temp_nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> st
         return ""
 
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message != "User not found":
             raise
@@ -482,7 +482,7 @@ async def media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await message.reply_text(chat.id, "You'll need to either give me a username to unrestrict, or reply to someone to be unrestricted.")
         return ""
 
-    member = chatD.get_member(int(user_id))
+    member = chatD.get_member((user_id))
 
     if member.status in ['kicked', 'left']:
         await message.reply_text(chat.id, "This user isn't even in the chat, unrestricting them won't make them send anything than they "
@@ -492,7 +492,7 @@ async def media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                 and member.can_send_other_messages and member.can_add_web_page_previews:
         await message.reply_text(chat.id, "This user already has the rights to send anything in {}.").format(chatD.title)
     else:
-        await context.bot.restrict_chat_member(chatD.id, int(user_id), NOMEDIA_PERMISSIONS)
+        await context.bot.restrict_chat_member(chatD.id, (user_id), NOMEDIA_PERMISSIONS)
         keyboard = []
         reply = (chat.id, "Yep, {} can send media again in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
         await message.reply_text(reply,  parse_mode=ParseMode.HTML)
@@ -534,7 +534,7 @@ async def nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await message.reply_text(chat.id, "I'm not restricting myself!")
         return ""
 
-    if member := chatD.get_member(int(user_id)):
+    if member := chatD.get_member((user_id)):
         if await is_user_admin(update, user_id, member=member):
             await message.reply_text(chat.id, "Afraid I can't restrict admins!")
 

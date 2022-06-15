@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -225,7 +225,7 @@ async def get(update: Update, context: ContextTypes.DEFAULT_TYPE, notename: str,
 
 
 @connection_status
-async def cmd_get(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def cmd_get(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     if len(args) >= 2 and args[1].lower() == "noformat":
         await get(update, context, args[0].lower(), show_none=True, no_format=True)
@@ -236,7 +236,7 @@ async def cmd_get(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @connection_status
-async def hash_get(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def hash_get(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message.text
     fst_word = message.split()[0]
     no_hash = fst_word[1:].lower()
@@ -244,7 +244,7 @@ async def hash_get(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @connection_status
-async def slash_get(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def slash_get(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message, chat_id = update.effective_message.text, update.effective_chat.id
     no_slash = message[1:]
     note_list = sql.get_all_chat_notes(chat_id)
@@ -259,7 +259,7 @@ async def slash_get(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @user_admin
 @connection_status
-async def save(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def save(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
     msg = update.effective_message  # type: Optional[Message]
 
@@ -303,7 +303,7 @@ async def save(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @user_admin
 @connection_status
-async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     if len(args) >= 1:
         chat_id = update.effective_chat.id
@@ -315,7 +315,7 @@ async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.effective_message.reply_text("That's not a note in my database!")
 
 
-async def clearall(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clearall(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     user = update.effective_user
     member = chat.get_member(user.id)
@@ -342,7 +342,7 @@ async def clearall(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-async def clearall_btn(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clearall_btn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     chat = update.effective_chat
     message = update.effective_message
@@ -374,7 +374,7 @@ async def clearall_btn(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @connection_status
-async def list_notes(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def list_notes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
     note_list = sql.get_all_chat_notes(chat_id)
     notes = len(note_list) + 1

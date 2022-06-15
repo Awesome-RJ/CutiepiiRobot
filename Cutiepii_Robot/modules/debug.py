@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -79,7 +79,7 @@ support_chat = os.getenv("SUPPORT_CHAT")
 
 
 @dev_plus
-def logs(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def logs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     with open("log.txt", "rb") as f:
         context.bot.send_document(document=f, filename=f.name, chat_id=user.id)

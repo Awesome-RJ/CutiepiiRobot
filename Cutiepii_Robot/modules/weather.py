@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -72,7 +72,7 @@ def get_tz(con):
         if c_n[con]:
             return tz(c_tz[con][0])
 
-async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     chat = update.effective_chat
     message = update.effective_message

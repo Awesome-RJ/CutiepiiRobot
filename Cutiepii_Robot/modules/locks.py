@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -170,7 +170,7 @@ async def unrestr_members(
             )
 
 
-async def locktypes(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def locktypes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(
         "\n ➛ ".join(
             ["Locks available: "]
@@ -312,7 +312,7 @@ def unlock(update, context) -> str:  # sourcery no-metrics
 
 
 @user_not_admin_check
-async def del_lockables(update: Update, context: ContextTypes.DEFAULT_TYPE):  # sourcery no-metrics
+async def del_lockables(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
     user = message.sender_chat or update.effective_user
@@ -439,7 +439,7 @@ async def build_lock_message(chat_id):
 @connection_status
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 
-def list_locks(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def list_locks(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
 
     res = build_lock_message(chat.id)

@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -230,7 +230,7 @@ async def test(update: Update):
 
 
 @cutiepii_cmd(command="start")
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     uptime = get_readable_time((time.time() - StartTime))
     if update.effective_chat.type == "private":
@@ -326,7 +326,7 @@ async def error_handler(_: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 # for test purposes
-async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         raise context.error
     except (BadRequest):
@@ -346,7 +346,7 @@ async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # handle all other telegram related errors
 
 @cutiepii_callback(pattern=r"help_.")
-async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     prev_match = re.match(r"help_prev\((.+?)\)", query.data)
@@ -407,7 +407,7 @@ async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_callback(pattern=r"cutiepii_")
-async def cutiepii_callback_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def cutiepii_callback_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     uptime = get_readable_time((time.time() - StartTime))
     if query.data == "cutiepii_":
@@ -440,7 +440,7 @@ async def cutiepii_callback_data(update: Update, context: ContextTypes.DEFAULT_T
 
 
 @cutiepii_cmd(command="help")
-async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     args = update.effective_message.text.split(None, 1)
 
@@ -521,7 +521,7 @@ async def send_settings(chat_id, user_id, user=False):
         )
 
 @cutiepii_callback(pattern=r"stngs_")
-async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     user = update.effective_user
     bot = context.bot
@@ -605,7 +605,7 @@ async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
             LOGGER.exception("Exception in settings buttons. %s", str(query.data))
 
 @cutiepii_cmd(command="settings")
-async def get_settings(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def get_settings(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -635,7 +635,7 @@ async def get_settings(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text = "Click here to check your settings."
 
 @cutiepii_cmd(command="donate")
-async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_message.from_user
     chat = update.effective_chat  # type: Optional[Chat]
     bot = context.bot
@@ -685,7 +685,7 @@ async def migrate_chats(update: Update):
     else:
         return
 
-    LOGGER.info("Migrating from %s, to %s", str(old_chat), str(new_chat))
+    LOGGER.info("Migrating from %s, to %s", old_chat, new_chat)
     for mod in MIGRATEABLE:
         with contextlib.suppress(KeyError, AttributeError):
             mod.__migrate__(old_chat, new_chat)

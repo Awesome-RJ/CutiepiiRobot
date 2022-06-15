@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -44,7 +44,7 @@ from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 
 @cutiepii_cmd(command="wall")
 @send_action(ChatAction.UPLOAD_PHOTO)
-async def wall(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def wall(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
     msg = update.effective_message
     args = context.args

@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -411,7 +411,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                 parse_mode=ParseMode.HTML,
             )
 
-            user_member = chat.get_member(user_id)
+            user_member = await chat.get_member(user_id)
             return "<b>{}:</b>" \
                    "\n#UNWARN" \
                    "\n<b>Admin:</b> {}" \
@@ -537,7 +537,7 @@ async def reset_warns(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
     if user_id:= extract_user(message, args):
         sql.reset_warns(user_id, chat.id)
         await message.reply_text("NWarns have been reset!")
-        warned = chat.get_member(user_id).user
+        warned = await chat.get_member(user_id).user
         return (
             f"<b>{html.escape(chat.title)}:</b>\n"
             f"#RESETWARNS\n"
@@ -548,7 +548,7 @@ async def reset_warns(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
     await message.reply_text("NNo user has been designated!")
     return ""
 
-async def warns(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def warns(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     message: Optional[Message] = update.effective_message
     chat: Optional[Chat] = update.effective_chat
@@ -579,7 +579,7 @@ async def warns(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 # CUTIEPII_PTB handler stop - do not async
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def add_warn_filter(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def add_warn_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat: Optional[Chat] = update.effective_chat
     msg: Optional[Message] = update.effective_message
     user = update.effective_user
@@ -611,7 +611,7 @@ async def add_warn_filter(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def remove_warn_filter(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def remove_warn_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat: Optional[Chat] = update.effective_chat
     msg: Optional[Message] = update.effective_message
     user = update.effective_user
@@ -645,7 +645,7 @@ async def remove_warn_filter(update: Update, context: ContextTypes.DEFAULT_TYPE)
         "That's not a current warning filter - run /warnlist for all active warning filters."
     )
 
-async def list_warn_filters(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def list_warn_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat: Optional[Chat] = update.effective_chat
     all_handlers = sql.get_chat_warn_triggers(chat.id)
 
@@ -723,7 +723,7 @@ async def set_warn_limit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def set_warn_strength(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_warn_strength(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     chat: Optional[Chat] = update.effective_chat
     user: Optional[User] = update.effective_user

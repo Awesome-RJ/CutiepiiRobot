@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -164,7 +164,7 @@ async def get_invalid_gban(update: Update, context: ContextTypes.DEFAULT_TYPE, r
 
 
 @dev_plus
-async def dbcleanup(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def dbcleanup(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
 
     await msg.reply_text("Getting invalid chat count ...")
@@ -184,7 +184,7 @@ async def dbcleanup(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
-async def callback_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def callback_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     query = update.callback_query
     message = query.message

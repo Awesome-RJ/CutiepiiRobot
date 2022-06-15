@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -131,7 +131,7 @@ if is_module_loaded(FILENAME):
 
     @cutiepii_cmd(command="logchannel")
     @u_admin
-    async def logging(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def logging(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -149,7 +149,7 @@ if is_module_loaded(FILENAME):
 
     @cutiepii_cmd(command="setlog")
     @user_admin(AdminPerms.CAN_CHANGE_INFO)
-    async def setlog(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def setlog(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -191,7 +191,7 @@ if is_module_loaded(FILENAME):
 
     @cutiepii_cmd(command="unsetlog")
     @user_admin(AdminPerms.CAN_CHANGE_INFO)
-    async def unsetlog(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def unsetlog(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -269,7 +269,7 @@ from Cutiepii_Robot.modules.sql import log_channel_sql as sql
 
 
 @cutiepii_callback(pattern=r"log_tog_.*")
-async def log_setting_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def log_setting_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     cb = update.callback_query
     user = cb.from_user
     chat = cb.message.chat

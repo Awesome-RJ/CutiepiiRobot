@@ -239,7 +239,7 @@ def removewhitelist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
 
 @whitelist_plus
-def devlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def devlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     message = update.effective_message
     true_dev = list(set(DEV_USERS) - {OWNER_ID})
@@ -255,7 +255,7 @@ def devlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @whitelist_plus
-def sudolist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def sudolist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     message = update.effective_message
     true_sudo = list(set(SUDO_USERS) - set(DEV_USERS))
@@ -271,7 +271,7 @@ def sudolist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @whitelist_plus
-def supportlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def supportlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     message = update.effective_message
     msg = "<b>Support users:</b>\n"
@@ -286,7 +286,7 @@ def supportlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @whitelist_plus
-def whitelistlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def whitelistlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     message = update.effective_message
     msg = "<b>Whitelist users:</b>\n"

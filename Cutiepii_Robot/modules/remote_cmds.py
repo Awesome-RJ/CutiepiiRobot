@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -114,7 +114,7 @@ RUNMUTE_ERRORS = {
 
 @cutiepii_cmd(command='rban')
 @dev_plus
-async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -154,7 +154,7 @@ async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message != 'User not found':
             raise
@@ -190,7 +190,7 @@ async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @cutiepii_cmd(command='runban')
 @dev_plus
-async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -230,7 +230,7 @@ async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message != 'User not found':
             raise
@@ -268,7 +268,7 @@ async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @cutiepii_cmd(command=['rpunch', 'rkick'])
 @dev_plus
-async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -308,7 +308,7 @@ async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message != "User not found":
             raise
@@ -345,7 +345,7 @@ async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @cutiepii_cmd(command='rmute')
 @dev_plus
-async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -385,7 +385,7 @@ async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message != "User not found":
             raise
@@ -424,7 +424,7 @@ async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @cutiepii_cmd(command='runmute')
 @dev_plus
-async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -464,7 +464,7 @@ async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest as excp:
         if excp.message != "User not found":
             raise
@@ -487,7 +487,7 @@ async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         await bot.restrict_chat_member(
             chat.id,
-            int(user_id),
+            (user_id),
             permissions=ChatPermissions(
                 can_send_messages=True,
                 can_send_media_messages=True,
@@ -517,7 +517,7 @@ async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # ported from tgbot, thanks to el0xren
 @cutiepii_cmd(command='recho')
 @dev_plus
-async def recho(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def recho(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     args = context.args
     message = update.effective_message

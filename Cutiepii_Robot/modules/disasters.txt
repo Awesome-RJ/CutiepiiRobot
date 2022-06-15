@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -498,7 +498,7 @@ def removetiger(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
 
 @whitelist_plus
-def whitelistlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def whitelistlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply = "<b>Known Wolf Disasters 🐺:</b>\n"
     m = await update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
@@ -517,7 +517,7 @@ def whitelistlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @whitelist_plus
-def tigerlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def tigerlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply = "<b>Known Tiger Disasters 🐯:</b>\n"
     m = await update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
@@ -535,7 +535,7 @@ def tigerlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @whitelist_plus
-def supportlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def supportlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     m = await update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
@@ -553,7 +553,7 @@ def supportlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @whitelist_plus
-def sudolist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def sudolist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     m = await update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
@@ -572,7 +572,7 @@ def sudolist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @whitelist_plus
-def devlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def devlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     m = await update.effective_message.reply_text(
         "<code>Gathering intel..</code>", parse_mode=ParseMode.HTML,
@@ -589,7 +589,7 @@ def devlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
     m.edit_text(reply, parse_mode=ParseMode.HTML)
 
 
-def disasters(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def disasters(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     reply_text = (
         msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text

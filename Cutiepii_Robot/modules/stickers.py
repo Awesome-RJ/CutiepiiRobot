@@ -76,7 +76,7 @@ async def stickerid(update: Update):
         )
 
 
-async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     user = update.effective_user
     args = context.args
@@ -632,7 +632,7 @@ async def makepack_internal(
         await msg.reply_text("Failed to create sticker pack. Possibly due to blek mejik.")
 
 
-async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat_id = update.effective_chat.id
     if msg.reply_to_message and msg.reply_to_message.sticker:
@@ -662,7 +662,7 @@ async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-async def cb_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def cb_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     query = "".join(msg.text.split()[1:])
     if not query:
@@ -682,7 +682,7 @@ async def cb_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def cbs_callback(update: Update):
     query = update.callback_query
     _, page, user_id = query.data.split("_", 2)
-    if int(user_id) != query.from_user.id:
+    if (user_id) != query.from_user.id:
         await query.answer("Not for you", cache_time=60 * 60)
         return
     search_query = query.message.text.split(
@@ -693,7 +693,7 @@ async def cbs_callback(update: Update):
     await query.answer()
 
 
-async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     msg = update.effective_message
     chat_id = update.effective_chat.id
@@ -735,7 +735,7 @@ async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-async def delsticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def delsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     if msg.reply_to_message and msg.reply_to_message.sticker:
         file_id = msg.reply_to_message.sticker.file_id
@@ -747,7 +747,7 @@ async def delsticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-async def add_fvrtsticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def add_fvrtsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     user = update.effective_user
     args = context.args
@@ -803,7 +803,7 @@ async def list_fvrtsticker(update: Update):
         )
 
 
-async def remove_fvrtsticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def remove_fvrtsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     user = update.effective_user
     args = context.args

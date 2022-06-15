@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -256,7 +256,7 @@ async def hmeme(_,message):
 	pgram.send_photo(message.chat.id , pic , caption=title)
 
 @cutiepii_cmd(command='runs')
-async def runs(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def runs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     temp = random.choice(fun_strings.RUN_STRINGS)
     if update.effective_user.id == 1170714920:
         temp = "Run everyone, they just dropped a bomb 💣💣"
@@ -264,7 +264,7 @@ async def runs(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
-async def goodnight(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def goodnight(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     first_name = update.effective_user.first_name
     reply = f"Good Night! {escape_markdown(first_name)}" 
@@ -272,7 +272,7 @@ async def goodnight(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
-async def goodmorning(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def goodmorning(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     first_name = update.effective_user.first_name
     reply = f"Good Morning! {escape_markdown(first_name)}"
@@ -280,7 +280,7 @@ async def goodmorning(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='sanitize')
-async def sanitize(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def sanitize(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     name = (
         message.reply_to_message.from_user.first_name
@@ -295,7 +295,7 @@ async def sanitize(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_animation(random.choice(fun_strings.GIFS), caption=f"*Sanitizes {name}*")
 
 @cutiepii_cmd(command='slap')
-async def slap(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def slap(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 	bot: telegram.Bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -355,7 +355,7 @@ async def slap(update: Update, context: ContextTypes.DEFAULT_TYPE):
 	reply_text(reply, parse_mode=ParseMode.HTML)
 
 @cutiepii_cmd(command='hug')
-async def hug(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def hug(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_animation = (
         update.effective_message.reply_to_message.reply_text
         if update.effective_message.reply_to_message
@@ -366,7 +366,7 @@ async def hug(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='pat')
-async def pat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def pat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_animation = (
         update.effective_message.reply_to_message.reply_text
         if update.effective_message.reply_to_message
@@ -377,12 +377,12 @@ async def pat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='roll')
-async def roll(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(random.choice(range(1, 7)))
+async def roll(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.effective_message.reply_text(random.choice(range(1, 7)))
 
 
 @cutiepii_cmd(command='shout')
-async def shout(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def shout(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 	args = context.args
 	text = " ".join(args)
 	result = [" ".join(list(text))]
@@ -396,12 +396,12 @@ async def shout(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='toss')
-async def toss(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(random.choice(fun_strings.TOSS))
+async def toss(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.effective_message.reply_text(random.choice(fun_strings.TOSS))
 
 
 @cutiepii_cmd(command='shrug')
-async def shrug(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def shrug(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     reply_text = (
         msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -409,7 +409,7 @@ async def shrug(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_text(r"¯\_(ツ)_/¯")
 
 
-async def bluetext(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def bluetext(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     reply_text = (
         msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -419,7 +419,7 @@ async def bluetext(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 @cutiepii_cmd(command='rlg')
-async def rlg(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def rlg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     eyes = random.choice(fun_strings.EYES)
     mouth = random.choice(fun_strings.MOUTHS)
     ears = random.choice(fun_strings.EARS)
@@ -428,11 +428,11 @@ async def rlg(update: Update, context: ContextTypes.DEFAULT_TYPE):
         repl = ears[0] + eyes[0] + mouth[0] + eyes[1] + ears[1]
     else:
         repl = ears[0] + eyes[0] + mouth[0] + eyes[0] + ears[1]
-    await update.message.reply_text(repl)
+    await update.effective_message.reply_text(repl)
 
 
 @cutiepii_cmd(command='decide')
-async def decide(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def decide(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat = update.effective_chat
     res = requests.get("https://yesno.wtf/api")
@@ -448,7 +448,7 @@ async def decide(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
 @cutiepii_cmd(command='8ball')
-async def eightball(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def eightball(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_text = (
         update.effective_message.reply_to_message.reply_text
         if update.effective_message.reply_to_message
@@ -457,7 +457,7 @@ async def eightball(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_text(random.choice(fun_strings.EIGHTBALL))
 
 
-async def table(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def table(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_text = (
         update.effective_message.reply_to_message.reply_text
         if update.effective_message.reply_to_message
@@ -524,7 +524,7 @@ weebyfont = [
 ]
 
 @cutiepii_cmd(command='weebify')
-async def weebify(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def weebify(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     message = update.effective_message
     string = ""
@@ -552,7 +552,7 @@ async def weebify(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await message.reply_text(string)
 
 @cutiepii_cmd(command='gbum')
-async def gbun(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def gbun(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     chat = update.effective_chat
 
@@ -563,7 +563,7 @@ async def gbun(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='gbam')
-async def gbam(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def gbam(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 	user = update.effective_user
 	chat = update.effective_chat
 	bot, args = context.bot, context.args
@@ -589,7 +589,7 @@ async def gbam(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='cuddle')
-async def cuddle(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def cuddle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 	bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -621,12 +621,12 @@ async def cuddle(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='flirt')
-async def flirt(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def flirt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
     reply_text(random.choice(fun_strings.FLIRT_TEXT))
 
 @cutiepii_cmd(command='lewd')
-async def lewd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def lewd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 	bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -665,7 +665,7 @@ async def lewd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='romance')
-async def romance(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def romance(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 	bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -704,7 +704,7 @@ async def romance(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='owo')
-async def owo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def owo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 	bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -738,7 +738,7 @@ async def owo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='uwu')
-async def uwu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def uwu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 	bot = context.bot
 	args = context.args
 	message = update.effective_message
@@ -772,7 +772,7 @@ async def uwu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='blockanimation')
-async def blockanimation(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def blockanimation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('⬜') 
     for x in range(EDIT_TIMES):
@@ -781,7 +781,7 @@ async def blockanimation(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg.edit_text('🟥')
 
 @cutiepii_cmd(command='clockanimation')
-async def clockanimation(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def clockanimation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -792,7 +792,7 @@ async def clockanimation(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='earthanimation')
-async def earthanimation(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def earthanimation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -803,7 +803,7 @@ async def earthanimation(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='moonanimation')
-async def moonanimation(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def moonanimation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('🌚') 
     for x in range(EDIT_TIMES):
@@ -822,7 +822,7 @@ async def bombs(bot: Bot, update: Update):
 
 
 @cutiepii_cmd(command='hack')
-async def hack(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def hack(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('Target selected') 
     for x in range(EDIT_TIMES):
@@ -832,7 +832,7 @@ async def hack(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='love')
-async def love(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def love(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('❣️') 
     for x in range(EDIT_TIMES):
@@ -842,7 +842,7 @@ async def love(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_cmd(command='kill')
-async def kill(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def kill(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('🔫') 
     for x in range(EDIT_TIMES):
@@ -850,7 +850,7 @@ async def kill(update: Update, context: ContextTypes.DEFAULT_TYPE):
         time.sleep(EDIT_SLEEP)
     msg.edit_text('⚰')
 
-async def cutiepii(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def cutiepii(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_text = (
         update.effective_message.reply_to_message.reply_text
         if update.effective_message.reply_to_message

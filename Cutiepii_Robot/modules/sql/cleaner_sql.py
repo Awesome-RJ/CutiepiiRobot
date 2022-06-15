@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -54,17 +54,17 @@ class CleanerBlueTextChat(BASE):
     chat_id = Column(UnicodeText, primary_key=True)
     command = Column(UnicodeText, primary_key=True)
 
-    def __init__(self, chat_id, command):
+    def __init__(self, chat_id, commands):
         self.chat_id = chat_id
-        self.command = command
+        self.commands = commands
 
 
 class CleanerBlueTextGlobal(BASE):
     __tablename__ = "cleaner_bluetext_global_ignore_commands"
     command = Column(UnicodeText, primary_key=True)
 
-    def __init__(self, command):
-        self.command = command
+    def __init__(self, commands):
+        self.commands = commands
 
 
 CleanerBlueTextChatSettings.__table__.create(checkfirst=True)
@@ -135,15 +135,15 @@ def chat_unignore_command(chat_id, unignore):
         return False
 
 
-def global_ignore_command(command):
-    command = command.lower()
+def global_ignore_command(commands):
+    commands = frozenset({command.lower()})
     with CLEANER_GLOBAL_LOCK:
-        ignored = SESSION.query(CleanerBlueTextGlobal).get(str(command))
+        ignored = SESSION.query(CleanerBlueTextGlobal).get(str(commands))
 
         if not ignored:
-            GLOBAL_IGNORE_COMMANDS.add(command)
+            GLOBAL_IGNORE_COMMANDS.add(commands)
 
-            ignored = CleanerBlueTextGlobal(str(command))
+            ignored = CleanerBlueTextGlobal(str(commands))
             SESSION.add(ignored)
             SESSION.commit()
             return True
@@ -152,16 +152,16 @@ def global_ignore_command(command):
         return False
 
 
-def global_unignore_command(command):
-    command = command.lower()
+def global_unignore_command(commands):
+    commands = frozenset({command.lower()})
     with CLEANER_GLOBAL_LOCK:
-        unignored = SESSION.query(CleanerBlueTextGlobal).get(str(command))
+        unignored = SESSION.query(CleanerBlueTextGlobal).get(str(commands))
 
         if unignored:
             if command in GLOBAL_IGNORE_COMMANDS:
-                GLOBAL_IGNORE_COMMANDS.remove(command)
+                GLOBAL_IGNORE_COMMANDS.remove(commands)
 
-            SESSION.delete(command)
+            SESSION.delete(commands)
             SESSION.commit()
             return True
 
@@ -169,11 +169,11 @@ def global_unignore_command(command):
         return False
 
 
-def is_command_ignored(chat_id, command):
-    if command.lower() in GLOBAL_IGNORE_COMMANDS:
+def is_command_ignored(chat_id, commands):
+    if frozenset({command.lower()}) in GLOBAL_IGNORE_COMMANDS:
         return True
 
-    if str(chat_id) in CLEANER_CHATS and command.lower() in CLEANER_CHATS.get(
+    if str(chat_id) in CLEANER_CHATS and frozenset({command.lower()}) in CLEANER_CHATS.get(
         str(chat_id)
     ).get("commands"):
         return True
@@ -220,7 +220,7 @@ def __load_cleaner_list():
     try:
         for x in SESSION.query(CleanerBlueTextChat).all():
             CLEANER_CHATS.setdefault(x.chat_id, {"setting": False, "commands": set()})
-            CLEANER_CHATS[x.chat_id]["commands"].add(x.command)
+            CLEANER_CHATS[x.chat_id]["commands"].add(x.commands)
     finally:
         SESSION.close()
 

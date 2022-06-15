@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -42,7 +42,7 @@ import Cutiepii_Robot.modules.sql.antilinkedchannel_sql as sql
 
 @bot_can_delete
 @user_admin
-async def set_antilinkedchannel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_antilinkedchannel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -80,7 +80,7 @@ async def eliminate_linked_channel_msg(update: Update):
 
 @bot_admin
 @user_admin
-async def set_antipinchannel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def set_antipinchannel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args

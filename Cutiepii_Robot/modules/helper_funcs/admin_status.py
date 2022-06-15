@@ -33,15 +33,6 @@ def bot_is_admin(chat: Chat, bot_id: int, bot_member: ChatMember = None) -> bool
     return bot_member.status in ("administrator", "creator")
 
 
-def get_bot_member(chat_id: int) -> ChatMember:
-	try:
-		return B_CACHE[chat_id]
-	except KeyError:
-		mem = CUTIEPII_PTB.bot.getChatMember(chat_id, CUTIEPII_PTB.bot.id)
-		B_CACHE[chat_id] = mem
-		return mem
-
-
 # decorator, can be used as
 # @bot_perm_check() with no perm to check for admin-ship only
 # or as @bot_perm_check(AdminPerms.value) to check for a specific permission

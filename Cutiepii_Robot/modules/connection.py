@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -96,7 +96,7 @@ async def allow_connections(update, context) -> str:
 
 
 
-async def connection_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def connection_chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     chat = update.effective_chat
     user = update.effective_user
@@ -120,7 +120,7 @@ async def connection_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
-async def connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):  # sourcery no-metrics
+async def connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
 
     chat = update.effective_chat
     user = update.effective_user
@@ -274,7 +274,7 @@ async def connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):  # s
             )
 
 
-async def disconnect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def disconnect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if update.effective_chat.type == "private":
         if disconnection_status := sql.disconnect(
@@ -345,7 +345,7 @@ CONN_HELP = """
  """
 
 
-async def help_connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def help_connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     args = context.args
 
@@ -356,7 +356,7 @@ async def help_connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         send_message(update.effective_message, CONN_HELP, parse_mode="markdown")
 
 
-async def connect_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def connect_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     chat = update.effective_chat
     user = update.effective_user

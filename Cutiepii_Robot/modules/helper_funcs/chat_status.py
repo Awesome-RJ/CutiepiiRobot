@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -253,12 +253,12 @@ def is_user_ban_protected(chat: Chat, user_id: int, member: ChatMember = None) -
         return True
 
     if not member:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     return member.status in ("administrator", "creator")
 """
 
 def is_user_in_chat(chat: Chat, user_id: int) -> bool:
-    member = chat.get_member(user_id)
+    member = await chat.get_member(user_id)
     return member.status not in ("left", "kicked")
 
 def is_user_ban_protected(update: Update, user_id: int, member: ChatMember = None) -> bool:

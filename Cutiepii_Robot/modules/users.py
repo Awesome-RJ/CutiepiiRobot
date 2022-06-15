@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -74,7 +74,7 @@ def get_user_id(username):
     return None
 
 
-def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     to_send = await update.effective_message.text.split(None, 1)
     if len(to_send) >= 2:
         chats_ = sql.get_all_chats() or []
@@ -154,7 +154,7 @@ def log_user(update: Update):
         )
 
 
-def chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     all_chats = sql.get_all_chats() or []
     chatfile = "List of chats.\n0. Chat name | Chat ID | Members count\n"
     P = 1
@@ -175,7 +175,7 @@ def chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 """
-async def chat_checker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def chat_checker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     if (
         await update.effective_message.chat.get_member(bot.id).can_send_messages

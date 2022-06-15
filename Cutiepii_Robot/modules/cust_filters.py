@@ -47,7 +47,7 @@ ENUM_FUNC_MAP = {
 
 @cutiepii_cmd(command='filters', admin_ok=True)
 
-async def list_handlers(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def list_handlers(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     user = update.effective_user
 
@@ -269,7 +269,7 @@ async def stop_filter(update, context) -> str:
     )
 
 @cutiepii_msg((PTB_Cutiepii_Filters.TEXT & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE))
-async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE):  # sourcery no-metrics
+async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
 
@@ -403,7 +403,7 @@ async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE):  # s
             break
 
 @cutiepii_cmd(command=["removeallfilters", "stopall"], filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-async def rmall_filters(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def rmall_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     user = update.effective_user
     member = chat.get_member(user.id)
@@ -430,7 +430,7 @@ async def rmall_filters(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @cutiepii_callback(pattern=r"filters_.*")
 @loggable
-async def rmall_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def rmall_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     chat = update.effective_chat
     msg = update.effective_message

@@ -52,7 +52,7 @@ async def chatmemberupdates(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     if title_change is not None and status_change is None:  # extract title changes for admins
         oldtitle, newtitle = title_change
         cause_name = await update.chat_member.from_user.mention_html()
-        member_name = update.chat_member.new_chat_member.user.mention_html()
+        member_name = await update.chat_member.new_chat_member.user.mention_html()
         if oldtitle != newtitle:
 
             if str(update.chat_member.from_user.id) == str(bot.id):  # bot action
@@ -115,7 +115,7 @@ async def chatmemberupdates(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             return ''  # we handle these in their respective modules same as before
 
         cause_name = await update.chat_member.from_user.mention_html()
-        member_name = update.chat_member.new_chat_member.user.mention_html()
+        member_name = await update.chat_member.new_chat_member.user.mention_html()
 
         if oldstat == "administrator":
             if newstat == "member":
@@ -244,7 +244,7 @@ async def chatmemberupdates(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             return log_message
 
         if str(update.chat_member.from_user.id) == str(bot.id):
-            cause_name = message.from_user.mention_html()
+            cause_name = await message.from_user.mention_html()
         else:
             cause_name = await update.chat_member.from_user.mention_html()
 
@@ -335,7 +335,7 @@ async def chatmemberupdates(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             )
             return log_message
 
-async def mychatmemberupdates(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def mychatmemberupdates(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     result = extract_status_change(update.my_chat_member)
     status_change, _1 = result
     chat = update.effective_chat
@@ -369,14 +369,14 @@ async def admincacheupdates(update: Update):
         and newstat == "administrator"
     ):
 
-        A_CACHE[update.effective_chat.id] = await update.effective_chat.get_administrators()
-        # B_CACHE[update.effective_chat.id] = await update.effective_chat.get_member(CUTIEPII_PTB.bot.id)
+        A_CACHE[update.effective_chat.id] = update.effective_chat.get_administrators()
+        # B_CACHE[update.effective_chat.id] = update.effective_chat.get_member(CUTIEPII_PTB.bot.id)
 
 
 async def botstatchanged(update: Update):
     if update.effective_chat.type != "private":
         with contextlib.suppress(TelegramError):
-            B_CACHE[update.effective_chat.id] = await update.effective_chat.get_member(CUTIEPII_PTB.bot.id)
+            B_CACHE[update.effective_chat.id] = update.effective_chat.get_member(CUTIEPII_PTB.bot.id)
 
 
 CUTIEPII_PTB.add_handler(ChatMemberHandler(chatmemberupdates, ChatMemberHandler.CHAT_MEMBER), group=-21)

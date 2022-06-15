@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -47,7 +47,7 @@ from time import sleep
 from telethon import events
 
 
-async def leave_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def leave_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     callback = update.callback_query
     if callback.from_user.id not in DEV_USERS:
@@ -60,7 +60,7 @@ async def leave_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     callback.answer(text="Left chat")
 
 @dev_plus
-async def allow_groups(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def allow_groups(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     if not args:
         state = "off" if ALLOW_CHATS else "Lockdown is " + "on"
@@ -122,7 +122,7 @@ async def getstats(event):
     )
 
 @dev_plus
-async def pip_install(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def pip_install(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     args = context.args
     if not args:
@@ -145,7 +145,7 @@ async def pip_install(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @dev_plus
-async def leave(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def leave(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     if args := context.args:
         chat_id = str(args[0])

@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -61,7 +61,7 @@ BLACKLIST_GROUP = 11
 
 @user_admin
 
-async def blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     user = update.effective_user
     args = context.args
@@ -106,7 +106,7 @@ async def blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @cutiepii_cmd(command="addblacklist")
 @user_admin(AdminPerms.CAN_DELETE_MESSAGES)
 
-async def add_blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def add_blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -149,7 +149,7 @@ async def add_blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @user_admin
 
-async def unblacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def unblacklist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -222,7 +222,7 @@ async def unblacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @loggable
 @user_admin
 
-async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
@@ -360,7 +360,7 @@ def findall(p, s):
 
 
 @user_not_admin
-async def del_blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def del_blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     message = update.effective_message
     user = update.effective_user

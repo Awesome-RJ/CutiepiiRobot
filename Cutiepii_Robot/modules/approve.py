@@ -2,7 +2,7 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
 Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
 
 All rights reserved.
@@ -48,7 +48,7 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import AdminPerms, user_ad
 
 @loggable
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def approve(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def approve(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -61,7 +61,7 @@ async def approve(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return ""
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest:
         return ""
     if member.status in ("administrator", "creator"):
@@ -92,7 +92,7 @@ async def approve(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @loggable
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def disapprove(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def disapprove(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -105,7 +105,7 @@ async def disapprove(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return ""
     try:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
     except BadRequest:
         return ""
     if member.status in ("administrator", "creator"):
@@ -143,7 +143,7 @@ async def approved(update: Update):
 
 
 @user_admin
-async def approval(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def approval(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -153,7 +153,7 @@ async def approval(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "I don't know who you're talking about, you're going to need to specify a user!"
         )
         return ""
-    member = chat.get_member(user_id)
+    member = await chat.get_member(user_id)
 
     if sql.is_approved(message.chat_id, user_id):
         await message.reply_text(

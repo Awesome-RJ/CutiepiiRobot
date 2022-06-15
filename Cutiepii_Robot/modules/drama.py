@@ -57,7 +57,7 @@ async def drama(update: Update):
 
 # Callback Data
 @cutiepii_callback(pattern=r"drama-detail.*")
-async def drama_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def drama_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     message = update.effective_message
 
@@ -68,7 +68,7 @@ async def drama_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id = splitter[1]
         slug = splitter[2]
 
-        if int(query.from_user.id) != int(user_id):
+        if int(query.from_user.id) != (user_id):
             await query.answer("You Aren't Allowed!")
             return
 
@@ -111,7 +111,7 @@ async def drama_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 @cutiepii_callback(pattern=r"drama-cast-detail.*")
-async def casts_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def casts_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     message = update.effective_message
 
@@ -122,7 +122,7 @@ async def casts_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id = splitter[1]
         slug = splitter[2]
 
-        if int(query.from_user.id) != int(user_id):
+        if int(query.from_user.id) != (user_id):
             await query.answer("You Aren't Allowed!")
             return
 
