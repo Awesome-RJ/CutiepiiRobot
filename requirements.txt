@@ -72,7 +72,7 @@ multicolorcaptcha==1.2.0
 launchpadlib==1.10.16
 google-trans-new==1.1.9
 jikanpy==4.3.2
-future
+future>=0.10.0
 psycopg2-binary==2.9.3
 geopy>=2.0.0
 humanize>=3.0.0
