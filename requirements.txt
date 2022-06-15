@@ -79,7 +79,7 @@ humanize
 beautifulsoup4
 pyrogram==2.0.26
 python-arq
-aiohttp
+aiohttp>=3.0.0
 carbonnow
 search_engine_parser
 googletrans
