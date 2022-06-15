@@ -4,7 +4,7 @@ from threading import RLock
 
 from telegram import Chat, Update, ChatMember, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext as Ctx, CallbackQueryHandler as CBHandler, CallbackContext
+from telegram.ext import CallbackContext as Ctx, CallbackQueryHandler as CBHandler
 
 from Cutiepii_Robot import CUTIEPII_PTB, DEV_USERS
 
@@ -155,7 +155,7 @@ async def get_mem_from_cache(user_id: int, chat_id: int) -> ChatMember:
 def user_admin_check(permission: AdminPerms):
     def wrapper(func):
         @wraps(func)
-        async def awrapper(update: Update, context: CallbackContext, *args, **kwargs):
+        async def awrapper(update: Update, context: Ctx, *args, **kwargs):
             nonlocal permission
             if update.effective_chat.type == "private":
                 return func(update, context, *args, **kwargs)
