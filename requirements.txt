@@ -74,8 +74,8 @@ google-trans-new==1.1.9
 jikanpy==4.3.2
 future
 psycopg2-binary==2.9.3
-geopy
-humanize
+geopy>=2.0.0
+humanize>=3.0.0
 beautifulsoup4
 pyrogram==2.0.26
 python-arq>6.0.0
