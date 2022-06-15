@@ -3,12 +3,10 @@ import re
 import time
 import urllib.request
 import requests
+import aiohttp
 
 from datetime import datetime
 from typing import List
-
-import aiohttp
-import requests
 from bs4 import BeautifulSoup
 from countryinfo import CountryInfo
 from faker import Faker

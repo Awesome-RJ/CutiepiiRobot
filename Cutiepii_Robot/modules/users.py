@@ -40,7 +40,7 @@ from telegram.ext import MessageHandler, CommandHandler, CallbackContext, filter
 
 import Cutiepii_Robot.modules.no_sql.sql as sql
 import Cutiepii_Robot.modules.sql.users_sql as sql
-from Cutiepii_Robot import CUTIEPII_PTB, LOGGER, CUTIEPII_PTB
+from Cutiepii_Robot import CUTIEPII_PTB, LOGGER
 
 USERS_GROUP = 4
 CHAT_GROUP = 10
