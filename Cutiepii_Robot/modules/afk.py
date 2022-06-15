@@ -5,7 +5,7 @@ import logging
 import random
 
 from telegram import Update, MessageEntity
-from telegram.ext import filters, CallbackContext
+from telegram.ext import filters, ContextTypes
 from telegram.error import BadRequest
 from Cutiepii_Robot.modules.sql import afk_sql as sql
 from Cutiepii_Robot.modules.users import get_user_id
@@ -14,7 +14,7 @@ from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepi
 
 @cutiepii_msg(filters.Regex("(?i)^brb"), friendly="afk", group=3)
 @cutiepii_cmd(command="afk", group=3)
-async def afk(update: Update, context: CallbackContext):
+async def afk(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = update.effective_message.text.split(None, 1)
     user = update.effective_user
 
@@ -40,7 +40,7 @@ async def afk(update: Update, context: CallbackContext):
 
 
 @cutiepii_msg((filters.ALL & filters.ChatType.GROUPS), friendly="afk", group=1)
-async def no_longer_afk(update: Update, context: CallbackContext):
+async def no_longer_afk(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     message = update.effective_message
 
@@ -78,7 +78,7 @@ async def no_longer_afk(update: Update, context: CallbackContext):
     friendly="afk",
     group=8,
 )
-async def reply_afk(update: Update, context: CallbackContext):
+async def reply_afk(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     message = update.effective_message
     userc = update.effective_user
@@ -127,7 +127,7 @@ async def reply_afk(update: Update, context: CallbackContext):
         await check_afk(update, context, user_id, fst_name, userc_id)
 
 
-async def check_afk(update: Update, _: CallbackContext, user_id: int, fst_name: int, userc_id: int
+async def check_afk(update: Update, user_id: int, fst_name: int, userc_id: int
     if userc_id == user_id:
         return
     is_afk, reason = sql.check_afk_status(user_id)

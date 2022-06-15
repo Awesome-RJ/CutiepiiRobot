@@ -37,7 +37,7 @@ from Cutiepii_Robot.__main__ import CHAT_SETTINGS, DATA_EXPORT, DATA_IMPORT, HEL
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus, sudo_plus
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import ContextTypes, CommandHandler
 
 
 

@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 import html
 from telegram import Update
-from telegram.ext import filters, CallbackContext
+from telegram.ext import filters, ContextTypes
 
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
@@ -38,7 +38,7 @@ from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.sql.antichannel_sql import antichannel_status, disable_antichannel, enable_antichannel
 
 @user_admin
-async def set_antichannel(update: Update, context: CallbackContext):
+async def set_antichannel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -58,7 +58,7 @@ async def set_antichannel(update: Update, context: CallbackContext):
     )
 
 
-async def eliminate_channel(update: Update, context: CallbackContext):
+async def eliminate_channel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     chat = update.effective_chat
     bot = context.bot

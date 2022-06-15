@@ -37,7 +37,7 @@ from telegram.error import BadRequest, Forbidden
 from telegram.ext import (
     CommandHandler,
     CallbackQueryHandler,
-    CallbackContext
+    ContextTypes
 )
 
 import Cutiepii_Robot.modules.sql.connection_sql as sql
@@ -96,7 +96,7 @@ async def allow_connections(update, context) -> str:
 
 
 
-async def connection_chat(update: Update, context: CallbackContext):
+async def connection_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     chat = update.effective_chat
     user = update.effective_user
@@ -120,7 +120,7 @@ async def connection_chat(update: Update, context: CallbackContext):
 
 
 
-async def connect_chat(update: Update, context: CallbackContext):  # sourcery no-metrics
+async def connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):  # sourcery no-metrics
 
     chat = update.effective_chat
     user = update.effective_user
@@ -274,7 +274,7 @@ async def connect_chat(update: Update, context: CallbackContext):  # sourcery no
             )
 
 
-async def disconnect_chat(update: Update, context: CallbackContext):
+async def disconnect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if update.effective_chat.type == "private":
         if disconnection_status := sql.disconnect(
@@ -345,7 +345,7 @@ CONN_HELP = """
  """
 
 
-async def help_connect_chat(update: Update, context: CallbackContext):
+async def help_connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     args = context.args
 
@@ -356,7 +356,7 @@ async def help_connect_chat(update: Update, context: CallbackContext):
         send_message(update.effective_message, CONN_HELP, parse_mode="markdown")
 
 
-async def connect_button(update: Update, context: CallbackContext):
+async def connect_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     chat = update.effective_chat
     user = update.effective_user

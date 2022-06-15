@@ -38,7 +38,7 @@ from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleMessageHandler
 from Cutiepii_Robot.modules.helper_funcs.regex_helper import infinite_loop_check
 from telegram import Update
-from telegram.ext import CallbackContext, filters
+from telegram.ext import ContextTypes, filters
 
 DELIMITERS = ("/", ":", "|", "_")
 

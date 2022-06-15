@@ -39,7 +39,7 @@ from telegram import (
     )
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext, filters, CommandHandler
+from telegram.ext import ContextTypes, filters, CommandHandler
 from telegram.helpers import escape_markdown
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.string_handling import markdown_parser
@@ -50,7 +50,7 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import (
 
 
 
-def get_rules(update: Update, _: CallbackContext):
+def get_rules(update: Update):
     chat_id = update.effective_chat.id
     send_rules(update, chat_id)
 

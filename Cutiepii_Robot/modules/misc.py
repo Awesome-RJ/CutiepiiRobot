@@ -52,7 +52,7 @@ from datetime import datetime
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, __version__ as ptbver
 from telegram.constants import ParseMode, ChatAction
 from telegram.error import BadRequest
-from telegram.ext import filters as PTB_Cutiepii_Filters, CommandHandler, CallbackQueryHandler, CallbackContext
+from telegram.ext import filters as PTB_Cutiepii_Filters, CommandHandler, CallbackQueryHandler, ContextTypes
 from platform import python_version
 from telethon import version as tlthn
 from pyrogram import filters
@@ -133,7 +133,7 @@ async def slcheck(_,message):
        reason = res["reason"]
        await message.reply_text(f"**Enforcer**: {enf}\n**User** : {user}\n**Reason**: {reason}")
 
-async def gdpr(update: Update, _: CallbackContext):
+async def gdpr(update: Update):
     await update.effective_message.reply_text("Deleting identifiable data...")
     for mod in GDPR:
         mod.__gdpr__(update.effective_user.id)
@@ -212,7 +212,7 @@ async def markdown_help_sender(update: Update):
     else:
         await update.effective_message.reply_text(FORMATTING_HELP, parse_mode=ParseMode.MARKDOWN, reply_markup=markup)
 
-async def markdown_help(update: Update, context: CallbackContext):
+async def markdown_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
             "Contact me in pm",
@@ -231,7 +231,7 @@ async def markdown_help(update: Update, context: CallbackContext):
     markdown_help_sender(update)
 
 
-async def mkdown_btn(update: Update, context: CallbackContext):
+async def mkdown_btn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     query = update.callback_query
     match = query.data.split("_")[1]
@@ -281,7 +281,7 @@ async def src(update: Update) -> None:
     )
 
 @send_action(ChatAction.UPLOAD_PHOTO)
-async def rmemes(update: Update, context: CallbackContext):
+async def rmemes(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     chat = update.effective_chat
 
@@ -330,7 +330,7 @@ async def rmemes(update: Update, context: CallbackContext):
         return await msg.reply_text(f"Error! {excp.message}")
 
 
-async def markdown_help(update: Update, context: CallbackContext):
+async def markdown_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
             "Contact me in pm",
@@ -348,7 +348,7 @@ async def markdown_help(update: Update, context: CallbackContext):
         return
     markdown_help_sender(update)
 
-async def imdb(update: Update, context: CallbackContext):
+async def imdb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         args = context.args
         movie_name = " ".join(args)

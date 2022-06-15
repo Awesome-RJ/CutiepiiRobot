@@ -36,7 +36,7 @@ from time import sleep
 
 from telegram import TelegramError, Update
 from telegram.error import BadRequest
-from telegram.ext import MessageHandler, CommandHandler, CallbackContext, filters
+from telegram.ext import MessageHandler, CommandHandler, ContextTypes, filters
 
 import Cutiepii_Robot.modules.no_sql.sql as sql
 import Cutiepii_Robot.modules.sql.users_sql as sql
@@ -74,7 +74,7 @@ def get_user_id(username):
     return None
 
 
-def broadcast(update: Update, context: CallbackContext):
+def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     to_send = await update.effective_message.text.split(None, 1)
     if len(to_send) >= 2:
         chats_ = sql.get_all_chats() or []
@@ -96,7 +96,7 @@ def broadcast(update: Update, context: CallbackContext):
         )
 
 
-def log_user(update: Update, _: CallbackContext):
+def log_user(update: Update):
     chat = update.effective_chat
     msg = update.effective_message
 
@@ -154,7 +154,7 @@ def log_user(update: Update, _: CallbackContext):
         )
 
 
-def chats(update: Update, context: CallbackContext):
+def chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     all_chats = sql.get_all_chats() or []
     chatfile = "List of chats.\n0. Chat name | Chat ID | Members count\n"
     P = 1
@@ -175,7 +175,7 @@ def chats(update: Update, context: CallbackContext):
         )
 
 """
-async def chat_checker(update: Update, context: CallbackContext):
+async def chat_checker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     if (
         await update.effective_message.chat.get_member(bot.id).can_send_messages

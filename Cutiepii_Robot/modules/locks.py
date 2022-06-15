@@ -38,7 +38,7 @@ from telegram import MessageEntity, ChatPermissions, Update
 from telegram.constants import ParseMode
 from telegram.error import BadRequest, TelegramError
 from telegram.ext import filters, CommandHandler, MessageHandler
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 from telegram.helpers import mention_html
 from alphabet_detector import AlphabetDetector
 
@@ -170,7 +170,7 @@ async def unrestr_members(
             )
 
 
-async def locktypes(update: Update, context: CallbackContext):
+async def locktypes(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text(
         "\n ➛ ".join(
             ["Locks available: "]
@@ -312,7 +312,7 @@ def unlock(update, context) -> str:  # sourcery no-metrics
 
 
 @user_not_admin_check
-async def del_lockables(update: Update, context: CallbackContext):  # sourcery no-metrics
+async def del_lockables(update: Update, context: ContextTypes.DEFAULT_TYPE):  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
     user = message.sender_chat or update.effective_user
@@ -439,7 +439,7 @@ async def build_lock_message(chat_id):
 @connection_status
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 
-def list_locks(update: Update, context: CallbackContext):
+def list_locks(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat  # type: Optional[Chat]
 
     res = build_lock_message(chat.id)

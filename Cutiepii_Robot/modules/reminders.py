@@ -49,7 +49,7 @@ from telegram import (
 )
 from telegram.constants import ParseMode
 from telegram.ext import (
-    CallbackContext, CallbackQueryHandler,
+    ContextTypes, CallbackQueryHandler,
     CommandHandler,
 )
 from telegram.helpers import mention_html
@@ -60,7 +60,7 @@ REMINDER_LIMIT = 20
 
 @user_admin
 @loggable
-async def remind(update: Update, context: CallbackContext):
+async def remind(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -109,7 +109,7 @@ async def remind(update: Update, context: CallbackContext):
 
 
 @user_admin
-async def reminders(update: Update, context: CallbackContext):
+async def reminders(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     msg = update.effective_message
     chat.title = "your private chat" if chat.type == "private" else chat.title
@@ -142,7 +142,7 @@ async def reminders(update: Update, context: CallbackContext):
 
 @user_admin
 @loggable
-async def clearreminder(update: Update, context: CallbackContext):
+async def clearreminder(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -174,7 +174,7 @@ async def clearreminder(update: Update, context: CallbackContext):
 
 
 @user_admin
-async def clearallreminders(update: Update, context: CallbackContext):
+async def clearallreminders(update: Update, context: ContextTypes.DEFAULT_TYPE):
     member = await update.effective_chat.get_member(update.effective_user.id)
     if update.effective_chat.type != "private" and member.status != "creator" and member.user.id not in SUDO_USERS:
         return await update.effective_message.reply_text("Only group owner can do this!")
@@ -191,7 +191,7 @@ async def clearallreminders(update: Update, context: CallbackContext):
 
 @user_admin
 @loggable
-async def clearallremindersbtn(update: Update, context: CallbackContext):
+async def clearallremindersbtn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     chat = update.effective_chat
     option = query.data.split("_")[1]
@@ -215,7 +215,7 @@ async def clearallremindersbtn(update: Update, context: CallbackContext):
     )
 
 
-async def check_reminds(update: Update, context: CallbackContext):
+async def check_reminds(update: Update, context: ContextTypes.DEFAULT_TYPE):
     while True:
         t = round(time.time())
         if t in sql.REMINDERS:

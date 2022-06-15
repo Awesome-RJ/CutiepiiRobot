@@ -44,7 +44,7 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import ContextTypes, CommandHandler
 
 from Cutiepii_Robot import DEV_USERS, LOGGER, CUTIEPII_PTB
 from Cutiepii_Robot import pgram as app
@@ -101,7 +101,7 @@ async def edit_or_reply(msg: Message, **kwargs):
 
 
 @dev_plus
-async def execute(update: Update, context: CallbackContext):
+async def execute(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     await send((await do(exec, bot, update)), bot, update)
 
@@ -234,7 +234,7 @@ async def runtime_func_cq(_, cq):
 
 
 @dev_plus
-async def clear(update: Update, context: CallbackContext):
+async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     log_input(update)
     if update.message.chat_id in namespaces:

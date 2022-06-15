@@ -34,7 +34,7 @@ import random
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import Update
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 
 reactions = [
     "( ͡° ͜ʖ ͡°)",

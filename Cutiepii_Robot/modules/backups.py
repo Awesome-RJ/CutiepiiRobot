@@ -38,7 +38,7 @@ from io import BytesIO
 from telegram import Update
 from telegram.constants import ParseMode, ChatType
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import ContextTypes, CommandHandler
 
 
 import Cutiepii_Robot.modules.sql.notes_sql as sql
@@ -56,7 +56,7 @@ from Cutiepii_Robot.modules.connection import connected
 
 
 @user_admin
-async def import_data(update: Update, context: CallbackContext):
+async def import_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -147,7 +147,7 @@ async def import_data(update: Update, context: CallbackContext):
 
 
 @user_admin
-async def export_data(update: Update, context: CallbackContext):
+async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_data = context.chat_data
     msg = update.effective_message  # type: Optional[Message]
     user = update.effective_user  # type: Optional[User]

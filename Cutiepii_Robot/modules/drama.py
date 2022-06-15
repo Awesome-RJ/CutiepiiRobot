@@ -3,7 +3,7 @@ from requests import get
 from json import JSONDecodeError
 
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_callback
@@ -57,7 +57,7 @@ async def drama(update: Update):
 
 # Callback Data
 @cutiepii_callback(pattern=r"drama-detail.*")
-async def drama_button(update: Update, context: CallbackContext):
+async def drama_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     message = update.effective_message
 
@@ -111,7 +111,7 @@ async def drama_button(update: Update, context: CallbackContext):
 
 
 @cutiepii_callback(pattern=r"drama-cast-detail.*")
-async def casts_button(update: Update, context: CallbackContext):
+async def casts_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     message = update.effective_message
 

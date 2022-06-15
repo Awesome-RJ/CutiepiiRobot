@@ -34,14 +34,14 @@ import re
 
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 
 from telegram.constants import ParseMode
 
 
 @cutiepii_cmd(command='wiki', can_disable=True)
-async def wiki(update: Update, context: CallbackContext):
+async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE):
     kueri = re.split(pattern="wiki", string = update.effective_message.text)
     message = update.effective_message
     wikipedia.set_lang("en")

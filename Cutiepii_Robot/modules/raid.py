@@ -8,7 +8,7 @@ from datetime import timedelta
 from pytimeparse.timeparse import timeparse
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 from telegram.helpers import mention_html
 
@@ -48,7 +48,7 @@ def get_readable_time(time: int) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def setRaid(update: Update, context: CallbackContext) -> Optional[str]:
+async def setRaid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     args = context.args
     chat = update.effective_chat
     msg = update.effective_message
@@ -135,7 +135,7 @@ async def setRaid(update: Update, context: CallbackContext) -> Optional[str]:
 @connection_status
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def enable_raid_cb(update: Update, ctx: CallbackContext) -> Optional[str]:
+async def enable_raid_cb(update: Update, ctx: ContextTypes) -> Optional[str]:
     args = await update.callback_query.data.replace("enable_raid=", "").split("=")
     chat = update.effective_chat
     user = update.effective_user
@@ -170,7 +170,7 @@ async def enable_raid_cb(update: Update, ctx: CallbackContext) -> Optional[str]:
 @connection_status
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def disable_raid_cb(update: Update, _: CallbackContext) -> Optional[str]:
+async def disable_raid_cb(update: Update) -> Optional[str]:
     args = await update.callback_query.data.replace("disable_raid=", "").split("=")
     chat = update.effective_chat
     user = update.effective_user
@@ -195,7 +195,7 @@ async def disable_raid_cb(update: Update, _: CallbackContext) -> Optional[str]:
 @cutiepii_callback(pattern="cancel_raid=")
 @connection_status
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-async def disable_raid_cb(update: Update, _: CallbackContext):
+async def disable_raid_cb(update: Update):
     args = update.callback_query.data.split("=")
     what = args[0]
     await update.effective_message.edit_text(
@@ -208,7 +208,7 @@ async def disable_raid_cb(update: Update, _: CallbackContext):
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
+async def raidtime(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     what, time, acttime = sql.getRaidStatus(update.effective_chat.id)
     args = context.args
     msg = update.effective_message
@@ -243,7 +243,7 @@ async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
+async def raidtime(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     what, t, time = sql.getRaidStatus(update.effective_chat.id)
     args = context.args
     msg = update.effective_message

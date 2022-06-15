@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import html
 from telegram.error import TelegramError
 from telegram import Update
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 from telegram.ext import filters
 
 from Cutiepii_Robot import CUTIEPII_PTB
@@ -42,7 +42,7 @@ import Cutiepii_Robot.modules.sql.antilinkedchannel_sql as sql
 
 @bot_can_delete
 @user_admin
-async def set_antilinkedchannel(update: Update, context: CallbackContext):
+async def set_antilinkedchannel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -68,7 +68,7 @@ async def set_antilinkedchannel(update: Update, context: CallbackContext):
     )
 
 
-async def eliminate_linked_channel_msg(update: Update, _: CallbackContext):
+async def eliminate_linked_channel_msg(update: Update):
     message = update.effective_message
     chat = update.effective_chat
     if not sql.status(chat.id):
@@ -80,7 +80,7 @@ async def eliminate_linked_channel_msg(update: Update, _: CallbackContext):
 
 @bot_admin
 @user_admin
-async def set_antipinchannel(update: Update, context: CallbackContext):
+async def set_antipinchannel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -113,7 +113,7 @@ async def set_antipinchannel(update: Update, context: CallbackContext):
         f"Linked channel message unpin is currently {sql.status_pin(chat.id)} in {html.escape(chat.title)}"
     )
 
-def eliminate_linked_channel_msg(update: Update, _: CallbackContext):
+def eliminate_linked_channel_msg(update: Update):
     message = update.effective_message
     chat = update.effective_chat
     if not sql.status_pin(chat.id):

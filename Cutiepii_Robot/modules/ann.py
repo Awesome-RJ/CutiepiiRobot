@@ -6,7 +6,7 @@ from telegram.error import TelegramError
 from .helper_funcs.admin_status import A_CACHE, B_CACHE
 from telegram import Update, ChatMemberUpdated
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext, ChatMemberHandler
+from telegram.ext import ContextTypes, ChatMemberHandler
 
 import Cutiepii_Robot.modules.sql.log_channel_sql as logsql
 from Cutiepii_Robot import OWNER_ID, CUTIEPII_PTB
@@ -37,7 +37,7 @@ def do_announce(chat):  # announce to chat or only to log channel?
 
 
 @loggable
-async def chatmemberupdates(update: Update, context: CallbackContext) -> Optional[str]:
+async def chatmemberupdates(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     bot = context.bot
     chat = update.effective_chat
     message = update.effective_message
@@ -335,7 +335,7 @@ async def chatmemberupdates(update: Update, context: CallbackContext) -> Optiona
             )
             return log_message
 
-async def mychatmemberupdates(update: Update, context: CallbackContext):
+async def mychatmemberupdates(update: Update, context: ContextTypes.DEFAULT_TYPE):
     result = extract_status_change(update.my_chat_member)
     status_change, _1 = result
     chat = update.effective_chat
@@ -356,7 +356,7 @@ async def mychatmemberupdates(update: Update, context: CallbackContext):
             )
             await context.bot.send_message(OWNER_ID, new_group, parse_mode=ParseMode.HTML)
 
-async def admincacheupdates(update: Update, _: CallbackContext):
+async def admincacheupdates(update: Update):
     try:
         oldstat = update.chat_member.old_chat_member.status
         newstat = update.chat_member.new_chat_member.status
@@ -373,7 +373,7 @@ async def admincacheupdates(update: Update, _: CallbackContext):
         # B_CACHE[update.effective_chat.id] = await update.effective_chat.get_member(CUTIEPII_PTB.bot.id)
 
 
-async def botstatchanged(update: Update, _: CallbackContext):
+async def botstatchanged(update: Update):
     if update.effective_chat.type != "private":
         with contextlib.suppress(TelegramError):
             B_CACHE[update.effective_chat.id] = await update.effective_chat.get_member(CUTIEPII_PTB.bot.id)

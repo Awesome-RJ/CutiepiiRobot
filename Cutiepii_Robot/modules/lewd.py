@@ -39,7 +39,7 @@ from PIL import Image
 from nekos.errors import InvalidArgument
 from telegram import Update
 from telegram.error import BadRequest, RetryAfter, Forbidden
-from telegram.ext import CallbackContext, CommandHandler, filters
+from telegram.ext import ContextTypes, CommandHandler, filters
 from telegram.constants import ParseMode
 from telegram.helpers import mention_html
 

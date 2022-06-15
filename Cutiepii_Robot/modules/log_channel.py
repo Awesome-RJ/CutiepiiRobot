@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from datetime import datetime
 from functools import wraps
 import asyncio
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_callback
 from Cutiepii_Robot.modules.helper_funcs.misc import is_module_loaded
 from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
@@ -102,7 +102,7 @@ if is_module_loaded(FILENAME):
         return glog_action
 
     async def send_log(
-        context: CallbackContext, log_chat_id: str, orig_chat_id: str, result: str
+        context: ContextTypes.DEFAULT_TYPE, log_chat_id: str, orig_chat_id: str, result: str
     ):
         bot = context.bot
         try:
@@ -131,7 +131,7 @@ if is_module_loaded(FILENAME):
 
     @cutiepii_cmd(command="logchannel")
     @u_admin
-    async def logging(update: Update, context: CallbackContext):
+    async def logging(update: Update, context: ContextTypes.DEFAULT_TYPE):
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -149,7 +149,7 @@ if is_module_loaded(FILENAME):
 
     @cutiepii_cmd(command="setlog")
     @user_admin(AdminPerms.CAN_CHANGE_INFO)
-    async def setlog(update: Update, context: CallbackContext):
+    async def setlog(update: Update, context: ContextTypes.DEFAULT_TYPE):
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -191,7 +191,7 @@ if is_module_loaded(FILENAME):
 
     @cutiepii_cmd(command="unsetlog")
     @user_admin(AdminPerms.CAN_CHANGE_INFO)
-    async def unsetlog(update: Update, context: CallbackContext):
+    async def unsetlog(update: Update, context: ContextTypes.DEFAULT_TYPE):
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -241,7 +241,7 @@ else:
 
 @cutiepii_cmd("logsettings")
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
-async def log_settings(update: Update, _: CallbackContext):
+async def log_settings(update: Update):
     chat = update.effective_chat
     chat_set = sql.get_chat_setting(chat_id=chat.id)
     if not chat_set:
@@ -269,7 +269,7 @@ from Cutiepii_Robot.modules.sql import log_channel_sql as sql
 
 
 @cutiepii_callback(pattern=r"log_tog_.*")
-async def log_setting_callback(update: Update, context: CallbackContext):
+async def log_setting_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     cb = update.callback_query
     user = cb.from_user
     chat = cb.message.chat

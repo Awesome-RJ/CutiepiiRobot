@@ -60,7 +60,7 @@ from telegram import (
 from telegram.error import BadRequest
 from telegram.constants import ParseMode, MessageLimit
 from telegram.ext import (
-    CallbackContext,
+    ContextTypes,
     filters,
     CallbackQueryHandler,
     CommandHandler,
@@ -396,7 +396,7 @@ async def dwarn(
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def button(update: Update, context: CallbackContext) -> str:
+async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     query = update.callback_query  # type: Optional[CallbackQuery]
     user = update.effective_user  # type: Optional[User]
     if match := re.match(r"rm_warn\((.+?)\)", query.data):
@@ -429,7 +429,7 @@ async def button(update: Update, context: CallbackContext) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def warn_user(update: Update, context: CallbackContext) -> str:
+async def warn_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     args = context.args
     message: Optional[Message] = update.effective_message
     chat: Optional[Chat] = update.effective_chat
@@ -528,7 +528,7 @@ async def warn_user(update: Update, context: CallbackContext) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def reset_warns(update: Update, context: CallbackContext) -> str:
+async def reset_warns(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     args = context.args
     message: Optional[Message] = update.effective_message
     chat: Optional[Chat] = update.effective_chat
@@ -548,7 +548,7 @@ async def reset_warns(update: Update, context: CallbackContext) -> str:
     await message.reply_text("NNo user has been designated!")
     return ""
 
-async def warns(update: Update, context: CallbackContext):
+async def warns(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
     message: Optional[Message] = update.effective_message
     chat: Optional[Chat] = update.effective_chat
@@ -579,7 +579,7 @@ async def warns(update: Update, context: CallbackContext):
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 # CUTIEPII_PTB handler stop - do not async
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def add_warn_filter(update: Update, context: CallbackContext):
+async def add_warn_filter(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat: Optional[Chat] = update.effective_chat
     msg: Optional[Message] = update.effective_message
     user = update.effective_user
@@ -611,7 +611,7 @@ async def add_warn_filter(update: Update, context: CallbackContext):
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def remove_warn_filter(update: Update, context: CallbackContext):
+async def remove_warn_filter(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat: Optional[Chat] = update.effective_chat
     msg: Optional[Message] = update.effective_message
     user = update.effective_user
@@ -645,7 +645,7 @@ async def remove_warn_filter(update: Update, context: CallbackContext):
         "That's not a current warning filter - run /warnlist for all active warning filters."
     )
 
-async def list_warn_filters(update: Update, context: CallbackContext):
+async def list_warn_filters(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat: Optional[Chat] = update.effective_chat
     all_handlers = sql.get_chat_warn_triggers(chat.id)
 
@@ -667,7 +667,7 @@ async def list_warn_filters(update: Update, context: CallbackContext):
 
 
 @loggable
-async def reply_filter(update: Update, context: CallbackContext) -> Optional[str]:
+async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     chat: Optional[Chat] = update.effective_chat
     message: Optional[Message] = update.effective_message
     user: Optional[User] = update.effective_user
@@ -695,7 +695,7 @@ async def reply_filter(update: Update, context: CallbackContext) -> Optional[str
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
-async def set_warn_limit(update: Update, context: CallbackContext) -> str:
+async def set_warn_limit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     args = context.args
     chat: Optional[Chat] = update.effective_chat
     user = update.effective_user
@@ -723,7 +723,7 @@ async def set_warn_limit(update: Update, context: CallbackContext) -> str:
 
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def set_warn_strength(update: Update, context: CallbackContext):
+async def set_warn_strength(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
     chat: Optional[Chat] = update.effective_chat
     user: Optional[User] = update.effective_user

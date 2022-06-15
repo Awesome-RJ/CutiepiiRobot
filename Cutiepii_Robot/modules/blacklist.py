@@ -33,7 +33,7 @@ import html
 import re
 from telegram import ChatPermissions, Update
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext, CommandHandler, filters, MessageHandler
+from telegram.ext import ContextTypes, CommandHandler, filters, MessageHandler
 from telegram.helpers import mention_html
 from telegram.constants import ParseMode, ChatType
 
@@ -61,7 +61,7 @@ BLACKLIST_GROUP = 11
 
 @user_admin
 
-async def blacklist(update: Update, context: CallbackContext):
+async def blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     user = update.effective_user
     args = context.args
@@ -106,7 +106,7 @@ async def blacklist(update: Update, context: CallbackContext):
 @cutiepii_cmd(command="addblacklist")
 @user_admin(AdminPerms.CAN_DELETE_MESSAGES)
 
-async def add_blacklist(update: Update, context: CallbackContext):
+async def add_blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -149,7 +149,7 @@ async def add_blacklist(update: Update, context: CallbackContext):
 
 @user_admin
 
-async def unblacklist(update: Update, context: CallbackContext):
+async def unblacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -222,7 +222,7 @@ async def unblacklist(update: Update, context: CallbackContext):
 @loggable
 @user_admin
 
-async def blacklist_mode(update: Update, context: CallbackContext):
+async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
@@ -360,7 +360,7 @@ def findall(p, s):
 
 
 @user_not_admin
-async def del_blacklist(update: Update, context: CallbackContext):
+async def del_blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     message = update.effective_message
     user = update.effective_user

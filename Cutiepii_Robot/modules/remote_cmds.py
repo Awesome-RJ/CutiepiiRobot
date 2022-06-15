@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from telegram import Update, ChatPermissions
 from telegram.error import BadRequest, TelegramError
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 
 from Cutiepii_Robot import LOGGER
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
@@ -114,7 +114,7 @@ RUNMUTE_ERRORS = {
 
 @cutiepii_cmd(command='rban')
 @dev_plus
-async def rban(update: Update, context: CallbackContext):
+async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -190,7 +190,7 @@ async def rban(update: Update, context: CallbackContext):
 
 @cutiepii_cmd(command='runban')
 @dev_plus
-async def runban(update: Update, context: CallbackContext):
+async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -268,7 +268,7 @@ async def runban(update: Update, context: CallbackContext):
 
 @cutiepii_cmd(command=['rpunch', 'rkick'])
 @dev_plus
-async def rkick(update: Update, context: CallbackContext):
+async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -345,7 +345,7 @@ async def rkick(update: Update, context: CallbackContext):
 
 @cutiepii_cmd(command='rmute')
 @dev_plus
-async def rmute(update: Update, context: CallbackContext):
+async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -424,7 +424,7 @@ async def rmute(update: Update, context: CallbackContext):
 
 @cutiepii_cmd(command='runmute')
 @dev_plus
-async def runmute(update: Update, context: CallbackContext):
+async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -517,7 +517,7 @@ async def runmute(update: Update, context: CallbackContext):
 # ported from tgbot, thanks to el0xren
 @cutiepii_cmd(command='recho')
 @dev_plus
-async def recho(update: Update, context: CallbackContext):
+async def recho(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     args = context.args
     message = update.effective_message

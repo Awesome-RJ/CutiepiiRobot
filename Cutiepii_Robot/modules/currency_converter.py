@@ -34,7 +34,7 @@ import requests
 from Cutiepii_Robot import CASH_API_KEY, CUTIEPII_PTB
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import ContextTypes, CommandHandler
 
 
 

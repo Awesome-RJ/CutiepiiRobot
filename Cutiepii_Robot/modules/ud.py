@@ -31,13 +31,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from requests import get
 from telegram import Update
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 from telegram.error import BadRequest
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 
-async def ud(update: Update, context: CallbackContext):
+async def ud(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     args = context.args
     text = " ".join(args).lower()

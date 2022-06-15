@@ -39,7 +39,7 @@ from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from Cutiepii_Robot.modules.log_channel import loggable
 from telegram import Update
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.helpers import mention_html
@@ -49,7 +49,7 @@ from telegram.helpers import mention_html
 
 @loggable
 @user_admin
-async def mod(update: Update, context: CallbackContext):
+async def mod(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -92,7 +92,7 @@ async def mod(update: Update, context: CallbackContext):
 
 @loggable
 @user_admin
-async def dismod(update: Update, context: CallbackContext):
+async def dismod(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -128,7 +128,7 @@ async def dismod(update: Update, context: CallbackContext):
     return log_message
 
 @user_admin
-async def modd(update: Update, _: CallbackContext):
+async def modd(update: Update):
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -143,7 +143,7 @@ async def modd(update: Update, _: CallbackContext):
     await message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
 
 
-async def modr(update: Update, context: CallbackContext):
+async def modr(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     chat = update.effective_chat
     args = context.args

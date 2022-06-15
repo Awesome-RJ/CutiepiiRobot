@@ -42,7 +42,7 @@ from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import (
-    CallbackContext, CallbackQueryHandler,
+    ContextTypes, CallbackQueryHandler,
     CommandHandler, filters, MessageHandler,
 )
 
@@ -62,7 +62,7 @@ async def chatbot_toggle(update: Update):
     await update.effective_message.reply_text("Choose an option:", reply_markup=reply_markup)
 
 
-async def chatbot_handle_callq(update: Update, _: CallbackContext):
+async def chatbot_handle_callq(update: Update):
     query = update.callback_query
     user = update.effective_user
     chat = update.effective_chat
@@ -99,7 +99,7 @@ def chatbot_response(query: str) -> str:
     return data.json()["reply"]
 
 
-def check_message(_: CallbackContext, message):
+def check_message(_: ContextTypes, message):
     reply_msg = message.reply_to_message
     text = message.text
     if re.search("[.|\n]{0,}"+CUTIEPII_PTB.bot.first_name+"[.|\n]{0,}", text, flags=re.IGNORECASE):
@@ -111,7 +111,7 @@ def check_message(_: CallbackContext, message):
     )
 
 
-async def chatbot(update: Update, context: CallbackContext):
+async def chatbot(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     chat_id = update.effective_chat.id
     is_chat = chat_id in CHATBOT_ENABLED_CHATS
@@ -139,7 +139,7 @@ async def chatbot(update: Update, context: CallbackContext):
         )
 
 
-async def list_chatbot_chats(update: Update, context: CallbackContext):
+async def list_chatbot_chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = "<b>AI-Enabled Chats</b>\n"
     for chat in CHATBOT_ENABLED_CHATS:
         x = await context.bot.get_chat(chat)

@@ -35,7 +35,7 @@ import Cutiepii_Robot.modules.sql.approve_sql as sql
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update
 from telegram.error import BadRequest
 from telegram.constants import ParseMode
-from telegram.ext import CallbackQueryHandler, CallbackContext
+from telegram.ext import CallbackQueryHandler, ContextTypes
 from telegram.helpers import mention_html
 
 from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS
@@ -48,7 +48,7 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import AdminPerms, user_ad
 
 @loggable
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def approve(update: Update, context: CallbackContext):
+async def approve(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -92,7 +92,7 @@ async def approve(update: Update, context: CallbackContext):
 
 @loggable
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def disapprove(update: Update, context: CallbackContext):
+async def disapprove(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -127,7 +127,7 @@ async def disapprove(update: Update, context: CallbackContext):
 
 
 @user_admin
-async def approved(update: Update, _: CallbackContext):
+async def approved(update: Update):
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -143,7 +143,7 @@ async def approved(update: Update, _: CallbackContext):
 
 
 @user_admin
-async def approval(update: Update, context: CallbackContext):
+async def approval(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -165,7 +165,7 @@ async def approval(update: Update, context: CallbackContext):
         )
 
 
-async def unapproveall(update: Update, _: CallbackContext):
+async def unapproveall(update: Update):
     chat = update.effective_chat
     user = update.effective_user
     member = chat.get_member(user.id)
@@ -191,7 +191,7 @@ async def unapproveall(update: Update, _: CallbackContext):
         )
 
 
-async def unapproveall_btn(update: Update, _: CallbackContext):
+async def unapproveall_btn(update: Update):
     query = update.callback_query
     chat = update.effective_chat
     message = update.effective_message

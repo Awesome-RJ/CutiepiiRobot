@@ -35,11 +35,11 @@ from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import ContextTypes, CommandHandler
 
 
 @dev_plus
-async def shell(update: Update, context: CallbackContext):
+async def shell(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     cmd = await message.text.split(" ", 1)
     if len(cmd) == 1:

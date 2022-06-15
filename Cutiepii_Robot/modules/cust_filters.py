@@ -7,7 +7,7 @@ from telegram.error import BadRequest
 from telegram.constants import MessageLimit, ParseMode
 from telegram.ext import (
     filters as PTB_Cutiepii_Filters,
-    CallbackContext,
+    ContextTypes,
 )
 from telegram.helpers import escape_markdown, mention_html
 
@@ -47,7 +47,7 @@ ENUM_FUNC_MAP = {
 
 @cutiepii_cmd(command='filters', admin_ok=True)
 
-async def list_handlers(update: Update, context: CallbackContext):
+async def list_handlers(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     user = update.effective_user
 
@@ -269,7 +269,7 @@ async def stop_filter(update, context) -> str:
     )
 
 @cutiepii_msg((PTB_Cutiepii_Filters.TEXT & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE))
-async def reply_filter(update: Update, context: CallbackContext):  # sourcery no-metrics
+async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE):  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
 
@@ -403,7 +403,7 @@ async def reply_filter(update: Update, context: CallbackContext):  # sourcery no
             break
 
 @cutiepii_cmd(command=["removeallfilters", "stopall"], filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-async def rmall_filters(update: Update, context: CallbackContext):
+async def rmall_filters(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     user = update.effective_user
     member = chat.get_member(user.id)
@@ -430,7 +430,7 @@ async def rmall_filters(update: Update, context: CallbackContext):
 
 @cutiepii_callback(pattern=r"filters_.*")
 @loggable
-async def rmall_callback(update: Update, context: CallbackContext):
+async def rmall_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     chat = update.effective_chat
     msg = update.effective_message

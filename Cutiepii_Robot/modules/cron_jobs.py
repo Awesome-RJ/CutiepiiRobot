@@ -36,28 +36,28 @@ import subprocess
 
 from time import sleep
 from telegram import Update
-from telegram.ext import CommandHandler, CallbackContext
+from telegram.ext import CommandHandler, ContextTypes
 
 from Cutiepii_Robot import DATABASE_NAME, OWNER_ID, CUTIEPII_PTB, LOGGER, BACKUP_PASS
 from Cutiepii_Robot.modules.helper_funcs.chat_status import owner_plus
 
 @owner_plus
-def backup_now(_: Update, ctx: CallbackContext):
+def backup_now(_: Update, ctx: ContextTypes):
     cronjob.run(CUTIEPII_PTB=CUTIEPII_PTB)
 
 @owner_plus
-async def stop_jobs(update: Update, _: CallbackContext):
+async def stop_jobs(update: Update):
     print(j.stop())
     await update.effective_message.reply_text("Scheduler has been shut down")
 
 @owner_plus
-async def start_jobs(update: Update, _: CallbackContext):
+async def start_jobs(update: Update):
     print(j.start())
     await update.effective_message.reply_text("Scheduler started")
 
 zip_pass = BACKUP_PASS
 
-async def backup_db(_: CallbackContext):
+async def backup_db(_: ContextTypes):
     bot = CUTIEPII_PTB.bot
     tmpmsg = "Performing backup, Please wait..."
     tmp = await bot.send_message(OWNER_ID, tmpmsg)
@@ -106,7 +106,7 @@ async def backup_db(_: CallbackContext):
     tmp.delete()
 
 @owner_plus
-async def del_bkp_fldr(update: Update, _: CallbackContext):
+async def del_bkp_fldr(update: Update):
     shutil.rmtree("backups")
     await update.effective_message.reply_text("'backups' directory has been purged!")
 

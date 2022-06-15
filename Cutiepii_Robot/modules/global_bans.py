@@ -6,7 +6,7 @@ from io import BytesIO
 from telegram import Update, Bot
 from telegram.constants import ParseMode
 from telegram.error import BadRequest, TelegramError, Unauthorized
-from telegram.ext import CallbackContext, CommandHandler, filters, MessageHandler
+from telegram.ext import ContextTypes, CommandHandler, filters, MessageHandler
 from telegram.helpers import mention_html
 
 import Cutiepii_Robot.modules.sql.global_bans_sql as sql
@@ -68,7 +68,7 @@ UNGBAN_ERRORS = {
 
 
 @support_plus
-async def gban(update: Update, context: CallbackContext):
+async def gban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot, args = context.bot, context.args
     message = update.effective_message
     user = update.effective_user
@@ -267,7 +267,7 @@ async def gban(update: Update, context: CallbackContext):
 
 
 @support_plus
-async def ungban(update: Update, context: CallbackContext):  # sourcery no-metrics
+async def ungban(update: Update, context: ContextTypes.DEFAULT_TYPE):  # sourcery no-metrics
     bot, args = context.bot, context.args
     message = update.effective_message
     user = update.effective_user
@@ -382,7 +382,7 @@ async def ungban(update: Update, context: CallbackContext):  # sourcery no-metri
 
 
 @support_plus
-async def gbanlist(update: Update, context: CallbackContext):
+async def gbanlist(update: Update, context: ContextTypes.DEFAULT_TYPE):
     banned_users = sql.get_gban_list()
 
     if not banned_users:
@@ -429,7 +429,7 @@ async def check_and_ban(update, user_id, should_message=True):
     (filters.ALL & filters.ChatType.GROUPS), can_disable=False, group=GBAN_ENFORCE_GROUP
 )
 @bot_admin
-async def enforce_gban(update: Update, context: CallbackContext):
+async def enforce_gban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Not using @restrict handler to avoid spamming - just ignore if cant gban.
     bot = context.bot
     if (
@@ -455,7 +455,7 @@ async def enforce_gban(update: Update, context: CallbackContext):
 
 
 @user_admin
-async def gbanstat(update: Update, context: CallbackContext):
+async def gbanstat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
     if len(args) > 0:
         if args[0].lower() in ["on", "yes"]:

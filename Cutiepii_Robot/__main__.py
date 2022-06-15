@@ -76,7 +76,7 @@ from telegram.error import (
     TimedOut,
 )
 from telegram.ext import (
-    CallbackContext,
+    ContextTypes,
     filters,
 )
 
@@ -222,7 +222,7 @@ async def send_help(chat_id, text, keyboard=None):
 
 
 @cutiepii_cmd(command="test")
-async def test(update: Update, _: CallbackContext):
+async def test(update: Update):
     # pprint(eval(str(update)))
     # await update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
     await update.effective_message.reply_text("This person edited a message")
@@ -230,7 +230,7 @@ async def test(update: Update, _: CallbackContext):
 
 
 @cutiepii_cmd(command="start")
-async def start(update: Update, context: CallbackContext):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
     uptime = get_readable_time((time.time() - StartTime))
     if update.effective_chat.type == "private":
@@ -297,7 +297,7 @@ async def start(update: Update, context: CallbackContext):
         )
 
 
-async def error_handler(_: Update, context: CallbackContext):
+async def error_handler(_: Update, context: ContextTypes.DEFAULT_TYPE):
     """Log the error and send a telegram message to notify the developer."""
     # Log the error before we do anything else, so we can see it even if something breaks.
     LOGGER.error(msg="Exception while handling an update:", exc_info=context.error)
@@ -326,7 +326,7 @@ async def error_handler(_: Update, context: CallbackContext):
 
 
 # for test purposes
-async def error_callback(update: Update, context: CallbackContext):
+async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         raise context.error
     except (BadRequest):
@@ -346,7 +346,7 @@ async def error_callback(update: Update, context: CallbackContext):
         # handle all other telegram related errors
 
 @cutiepii_callback(pattern=r"help_.")
-async def help_button(update: Update, context: CallbackContext):
+async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     prev_match = re.match(r"help_prev\((.+?)\)", query.data)
@@ -407,7 +407,7 @@ async def help_button(update: Update, context: CallbackContext):
 
 
 @cutiepii_callback(pattern=r"cutiepii_")
-async def cutiepii_callback_data(update: Update, context: CallbackContext):
+async def cutiepii_callback_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     uptime = get_readable_time((time.time() - StartTime))
     if query.data == "cutiepii_":
@@ -440,7 +440,7 @@ async def cutiepii_callback_data(update: Update, context: CallbackContext):
 
 
 @cutiepii_cmd(command="help")
-async def get_help(update: Update, context: CallbackContext):
+async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat  # type: Optional[Chat]
     args = update.effective_message.text.split(None, 1)
 
@@ -521,7 +521,7 @@ async def send_settings(chat_id, user_id, user=False):
         )
 
 @cutiepii_callback(pattern=r"stngs_")
-async def settings_button(update: Update, context: CallbackContext):
+async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     user = update.effective_user
     bot = context.bot
@@ -605,7 +605,7 @@ async def settings_button(update: Update, context: CallbackContext):
             LOGGER.exception("Exception in settings buttons. %s", str(query.data))
 
 @cutiepii_cmd(command="settings")
-async def get_settings(update: Update, context: CallbackContext):
+async def get_settings(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -635,7 +635,7 @@ async def get_settings(update: Update, context: CallbackContext):
         text = "Click here to check your settings."
 
 @cutiepii_cmd(command="donate")
-async def donate(update: Update, context: CallbackContext):
+async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_message.from_user
     chat = update.effective_chat  # type: Optional[Chat]
     bot = context.bot
@@ -674,7 +674,7 @@ async def donate(update: Update, context: CallbackContext):
 
 
 @cutiepii_msg(filters.StatusUpdate.MIGRATE)
-async def migrate_chats(update: Update, _: CallbackContext):
+async def migrate_chats(update: Update):
     msg = update.effective_message  # type: Optional[Message]
     if msg.migrate_to_chat_id:
         old_chat = update.effective_chat.id

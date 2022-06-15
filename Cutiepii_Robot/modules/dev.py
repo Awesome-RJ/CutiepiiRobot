@@ -38,7 +38,7 @@ from Cutiepii_Robot import CUTIEPII_PTB, DEV_USERS, telethn, OWNER_ID
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.error import TelegramError
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import ContextTypes, CommandHandler
 from telegram.constants import ParseMode
 from telegram.ext import CallbackQueryHandler
 from statistics import mean
@@ -47,7 +47,7 @@ from time import sleep
 from telethon import events
 
 
-async def leave_cb(update: Update, context: CallbackContext):
+async def leave_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     callback = update.callback_query
     if callback.from_user.id not in DEV_USERS:
@@ -60,7 +60,7 @@ async def leave_cb(update: Update, context: CallbackContext):
     callback.answer(text="Left chat")
 
 @dev_plus
-async def allow_groups(update: Update, context: CallbackContext):
+async def allow_groups(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
     if not args:
         state = "off" if ALLOW_CHATS else "Lockdown is " + "on"
@@ -122,7 +122,7 @@ async def getstats(event):
     )
 
 @dev_plus
-async def pip_install(update: Update, context: CallbackContext):
+async def pip_install(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     args = context.args
     if not args:
@@ -145,7 +145,7 @@ async def pip_install(update: Update, context: CallbackContext):
 
 
 @dev_plus
-async def leave(update: Update, context: CallbackContext):
+async def leave(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     if args := context.args:
         chat_id = str(args[0])

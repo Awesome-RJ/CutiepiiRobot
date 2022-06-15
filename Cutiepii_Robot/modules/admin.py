@@ -42,7 +42,7 @@ from typing import Optional
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.error import BadRequest
 from telegram.constants import ParseMode, ChatType
-from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler, filters as PTB_Cutiepii_Filters
+from telegram.ext import ContextTypes, CallbackQueryHandler, CommandHandler, filters as PTB_Cutiepii_Filters
 from telegram.helpers import mention_html
 from telethon import events
 from telethon.tl import functions, types
@@ -160,7 +160,7 @@ async def get_users(show):
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def set_sticker(update: Update, context: CallbackContext) -> str:
+async def set_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     chat = update.effective_chat
     msg = update.effective_message
@@ -202,7 +202,7 @@ async def set_sticker(update: Update, context: CallbackContext) -> str:
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def setchatpic(update: Update, context: CallbackContext) -> str:
+async def setchatpic(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     chat = update.effective_chat
     msg = update.effective_message
@@ -247,7 +247,7 @@ async def setchatpic(update: Update, context: CallbackContext) -> str:
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def rmchatpic(update: Update, context: CallbackContext) -> str:
+async def rmchatpic(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     chat = update.effective_chat
     msg = update.effective_message
@@ -275,7 +275,7 @@ async def rmchatpic(update: Update, context: CallbackContext) -> str:
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def set_desc(update: Update, context: CallbackContext) -> str:
+async def set_desc(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     chat = update.effective_chat
     msg = update.effective_message
@@ -317,7 +317,7 @@ async def set_desc(update: Update, context: CallbackContext) -> str:
 @connection_status
 @bot_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def setchat_title(update: Update, context: CallbackContext) -> str:
+async def setchat_title(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     chat = update.effective_chat
     msg = update.effective_message
@@ -358,7 +358,7 @@ async def setchat_title(update: Update, context: CallbackContext) -> str:
 @loggable
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
-async def promote_button(update: Update, context: CallbackContext):
+async def promote_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     user = update.effective_user
     chat = update.effective_chat
@@ -405,7 +405,7 @@ async def promote_button(update: Update, context: CallbackContext):
 
 @loggable
 @user_admin
-async def refresh_admin(update: Update, context: CallbackContext):
+async def refresh_admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with contextlib.suppress(KeyError):
         ADMIN_CACHE.pop(update.effective_chat.id)
     await update.effective_message.reply_text("Admins cache refreshed!")
@@ -415,7 +415,7 @@ async def refresh_admin(update: Update, context: CallbackContext):
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @loggable
-async def promoteanon(update: Update, context: CallbackContext) -> Optional[str]:
+async def promoteanon(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     bot = context.bot
     args = context.args
 
@@ -507,7 +507,7 @@ async def promoteanon(update: Update, context: CallbackContext) -> Optional[str]
 @can_promote
 @user_admin
 @loggable
-async def promote(update: Update, context: CallbackContext) -> str:
+async def promote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     args = context.args
 
@@ -613,7 +613,7 @@ async def promote(update: Update, context: CallbackContext) -> str:
 @can_promote
 @user_admin
 @loggable
-async def midpromote(update: Update, context: CallbackContext) -> str:
+async def midpromote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     args = context.args
 
@@ -714,7 +714,7 @@ async def midpromote(update: Update, context: CallbackContext) -> str:
 @can_promote
 @user_admin
 @loggable
-async def lowpromote(update: Update, context: CallbackContext) -> str:
+async def lowpromote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     args = context.args
 
@@ -814,7 +814,7 @@ async def lowpromote(update: Update, context: CallbackContext) -> str:
 @can_promote
 @user_admin
 @loggable
-async def fullpromote(update: Update, context: CallbackContext) -> Optional[str]:
+async def fullpromote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     bot = context.bot
     args = context.args
 
@@ -904,7 +904,7 @@ async def fullpromote(update: Update, context: CallbackContext) -> Optional[str]
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @loggable
-async def middemote(update: Update, context: CallbackContext) -> Optional[str]:
+async def middemote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     bot = context.bot
     args = context.args
 
@@ -981,7 +981,7 @@ async def middemote(update: Update, context: CallbackContext) -> Optional[str]:
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @loggable
-async def demote(update: Update, context: CallbackContext) -> Optional[str]:
+async def demote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     bot = context.bot
     args = context.args
 
@@ -1058,7 +1058,7 @@ async def demote(update: Update, context: CallbackContext) -> Optional[str]:
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @loggable
-async def demoteanon(update: Update, context: CallbackContext) -> Optional[str]:
+async def demoteanon(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     bot = context.bot
     args = context.args
 
@@ -1148,7 +1148,7 @@ async def demoteanon(update: Update, context: CallbackContext) -> Optional[str]:
 
 
 @user_admin
-async def refresh_admin(update: Update, context: CallbackContext):
+async def refresh_admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with contextlib.suppress(KeyError):
         ADMIN_CACHE.pop(update.effective_chat.id)
     await update.effective_message.reply_text("Admins cache refreshed!")
@@ -1157,7 +1157,7 @@ async def refresh_admin(update: Update, context: CallbackContext):
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @loggable
-async def set_title(update: Update, context: CallbackContext):
+async def set_title(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     args = context.args
 
@@ -1222,7 +1222,7 @@ async def set_title(update: Update, context: CallbackContext):
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @loggable
-async def pin(update: Update, context: CallbackContext) -> str:
+async def pin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot, args = context.bot, context.args
     user = update.effective_user
     chat = update.effective_chat
@@ -1291,7 +1291,7 @@ async def pin(update: Update, context: CallbackContext) -> str:
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @loggable
-async def unpin(update: Update, context: CallbackContext):
+async def unpin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
@@ -1352,7 +1352,7 @@ async def unpin(update: Update, context: CallbackContext):
 
 
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
-async def pinned(update: Update, context: CallbackContext) -> str:
+async def pinned(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     msg = update.effective_message
     msg_id = (
@@ -1398,7 +1398,7 @@ async def pinned(update: Update, context: CallbackContext) -> str:
 @bot_admin_check(AdminPerms.CAN_INVITE_USERS)
 @user_admin_check(AdminPerms.CAN_INVITE_USERS)
 @connection_status
-async def invite(update: Update, context: CallbackContext):
+async def invite(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     message = update.effective_message  
     chat = update.effective_chat
@@ -1491,7 +1491,7 @@ def staff(client: Client, message: Message):
 @connection_status
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
-async def permapin(update: Update, context: CallbackContext):
+async def permapin(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     message = update.effective_message  # type: Optional[Message]
     u = update.effective_user  # type: Optional[User]
@@ -1525,7 +1525,7 @@ async def permapin(update: Update, context: CallbackContext):
 @connection_status
 @bot_admin_check(AdminPerms.CAN_DELETE_MESSAGES)
 @user_admin
-async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
+async def permanent_pin_set(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     u = update.effective_user  # type: Optional[User]
     chat = update.effective_chat  # type: Optional[Chat]
     args = context.args
@@ -1599,7 +1599,7 @@ async def permanent_pin_set(update: Update, context: CallbackContext) -> str:
 
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
-async def unpinall(update: Update, context: CallbackContext):
+async def unpinall(update: Update, context: ContextTypes.DEFAULT_TYPE):
     member = await update.effective_chat.get_member(update.effective_user.id)
     if member.status != "creator" and member.user.id not in SUDO_USERS:
         return await update.effective_message.reply_text("Only group owner can do this!")
@@ -1613,7 +1613,7 @@ async def unpinall(update: Update, context: CallbackContext):
         ]]),
     )
 
-async def permanent_pin(update: Update, context: CallbackContext):
+async def permanent_pin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user  # type: Optional[User]
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message
@@ -1644,7 +1644,7 @@ async def permanent_pin(update: Update, context: CallbackContext):
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @user_admin_check(AdminPerms.CAN_PIN_MESSAGES)
 @loggable
-async def unpinallbtn(update: Update, context: CallbackContext):
+async def unpinallbtn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat = update.effective_chat
     query = update.callback_query
     user = update.effective_user
