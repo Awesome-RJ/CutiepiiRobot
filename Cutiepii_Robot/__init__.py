@@ -118,7 +118,7 @@ if ENV:
     WEBHOOK = bool(os.environ.get("WEBHOOK", False))
     URL = os.environ.get("URL", "")  # If You Deploy On Heraku. [URL PERTEN:- https://{App Name}.herokuapp.com/ || EXP:- https://yuki-cutiepii-robot.herokuapp.com/]
     PORT = int(os.environ.get("PORT", 8443)) 
-
+    CUSTOM_CMD = os.environ.get("CUSTOM_CMD", False)
     API_ID = os.environ.get("API_ID") # Bot Owner's API_ID (From:- https://my.telegram.org/auth)
     API_HASH = os.environ.get("API_HASH") # Bot Owner's API_HASH (From:- https://my.telegram.org/auth)
     DATABASE_URL = os.environ.get("DATABASE_URL")  # Any SQL Database Link (RECOMMENDED:- PostgreSQL & https://www.elephantsql.com)
