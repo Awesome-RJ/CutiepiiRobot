@@ -43,7 +43,7 @@ bing_image_downloader==1.1.2
 pytz==2022.1
 html2text==2020.1.16
 NumPy==1.22.4
-opencv-python-headless==4.5.5.64
+opencv-python-headless==4.6.0.66
 uvloop==0.16.0
 python-dotenv==0.20.0
 gpytranslate==1.4.0
