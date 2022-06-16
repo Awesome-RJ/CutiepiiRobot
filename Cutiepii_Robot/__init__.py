@@ -309,7 +309,7 @@ CUTIEPII_PTB = (
     .token(TOKEN)
     .build()
 )
-asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
+# asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
 #------------------------------------------------------------------    
 print("[CUTIEPII]: PYROGRAM CLIENT STARTING")
 session_name = TOKEN.split(":")[0]
