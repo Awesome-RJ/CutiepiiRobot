@@ -16,13 +16,11 @@ class Cutiepii_TG_Handler:
         command: str,
         filters: Optional[BaseFilter] = None,
         admin_ok: bool = False,
-#        pass_args: bool = False,
         pass_chat_data: bool = False,
-#        run_async: bool = True,
+        run_async: bool = True,
         can_disable: bool = True,
         group: Optional[int] = 40,
     ):
-            
         def _command(func):
             try:
                 if can_disable:
@@ -79,7 +77,7 @@ class Cutiepii_TG_Handler:
         self,
         pattern: Optional[BaseFilter] = None,
         can_disable: bool = True,
-#        run_async: bool = True,
+        block: bool = True,
         group: Optional[int] = 60,
         friendly=None,
     ):

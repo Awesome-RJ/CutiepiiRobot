@@ -64,7 +64,6 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     ADMIN_CACHE,
     connection_status,
     is_user_admin,
-    can_manage_video_chats,
     bot_admin,
     can_promote,
     )

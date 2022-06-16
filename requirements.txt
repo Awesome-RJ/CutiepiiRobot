@@ -71,7 +71,7 @@ multicolorcaptcha==1.2.0
 launchpadlib==1.10.16
 google-trans-new==1.1.9
 jikanpy==4.3.2
-future>=0.10.0
+future>=0.18.0
 psycopg2-binary==2.9.3
 geopy>=2.0.0
 humanize>=3.0.0
@@ -87,7 +87,7 @@ httpx
 httpx[http2]
 pyYAML==6.0
 gitpython
-pygithub
+pygithub>=1.55
 flask
 gunicorn
 dateparser

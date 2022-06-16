@@ -62,12 +62,12 @@ anon_callback_messages = {}
 def user_admin(permission: AdminPerms):
     def wrapper(func):
         @functools.wraps(func)
-        async def awrapper(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+        async def awrapper(update: Update, context: CallbackContext, *args, **kwargs):
             nonlocal permission
             if update.effective_chat.type == "private":
                 return func(update, context, *args, **kwargs)
             message = update.effective_message
-            if update.effective_message.sender_chat:
+            if is_anon := update.effective_message.sender_chat:
                 callback_id = (
                     f"anoncb/{message.chat.id}/{message.message_id}/{permission.value}"
                 )
@@ -113,7 +113,7 @@ def user_admin(permission: AdminPerms):
 
 
 @cutiepii_callback(pattern="anoncb")
-async def anon_callback_handler1(upd: Update):
+async def anon_callback_handler1(upd: Update, _: CallbackContext):
     callback = upd.callback_query
     perm = callback.data.split("/")[3]
     chat_id = int(callback.data.split("/")[1])

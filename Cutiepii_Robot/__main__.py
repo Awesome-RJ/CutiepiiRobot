@@ -692,7 +692,7 @@ async def migrate_chats(update: Update):
     LOGGER.info("Successfully migrated!")
     
       
-def main():
+def main() -> int:
     CUTIEPII_PTB.add_error_handler(error_callback)
 
     if WEBHOOK:

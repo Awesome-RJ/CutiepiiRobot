@@ -426,7 +426,7 @@ async def kick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     log_message = ""
     bot, args = context.bot, context.args
 
-    if message.reply_to_message.sender_chat:
+    if message.reply_to_message and message.reply_to_message.sender_chat:
         await message.reply_text("This command doesn't work on channels, but I can ban them if u want.")
         return log_message
 

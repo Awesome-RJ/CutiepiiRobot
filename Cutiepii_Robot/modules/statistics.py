@@ -103,8 +103,14 @@ async def stats(update: Update):
           ]
     ]
     try:
+        repo = git.Repo(search_parent_directories=True)
+        sha = repo.head.object.hexsha
+        status += f"*➛ Commit*: `{sha[:9]}`\n"
+    except Exception as e:
+        status += f"*➛ Commit*: `{str(e)}`\\n"
+    try:
         await message.reply_text(status +
-            "\n*Bot statistics*:\n"
+            "\n*╔═━「 Bot statistics*: 」\n"
             + "\n".join([mod.__stats__() for mod in STATS]) +
             "\n\n✦ [Support](https://telegram.dog/Black_Knights_Union_Support) | ✦ [Updates](https://telegram.dog/Black_Knights_Union)\n\n" +
             "╘═━「 by [Awesome-RJ](https://github.com/Awesome-RJ) 」\n",
@@ -114,7 +120,7 @@ async def stats(update: Update):
             (
                 (
                     (
-                        "\n*Bot statistics*:\n"
+                        "\n*╔═━「 Bot statistics*: 」\n"
                         + "\n".join(mod.__stats__() for mod in STATS)
                     )
                     + "\n\n✦ [Support](https://telegram.dog/Black_Knights_Union_Support) | ✦ [Updates](https://telegram.dog/Black_Knights_Union)\n\n"

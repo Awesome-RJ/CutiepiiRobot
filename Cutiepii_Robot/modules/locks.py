@@ -440,10 +440,28 @@ async def build_lock_message(chat_id):
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 
 def list_locks(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def list_locks(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
+    user = update.effective_user
 
-    res = build_lock_message(chat.id)
+    # Connection check
+    conn = await connected(context.bot, update, chat, user.id, need_admin=True)
+    if conn:
+        chat = await CUTIEPII_PTB.bot.getChat(conn)
+        chat_name = chat.title
+    else:
+        if update.effective_message.chat.type == "private":
+            send_message(
+                update.effective_message,
+                "This command is meant to use in group not in PM",
+            )
+            return ""
+        chat = update.effective_chat
+        chat_name = update.effective_message.chat.title
 
+    res = await build_lock_message(chat.id)
+    if conn:
+        res = res.replace("Locks in", f"*{chat_name}*")
 
     send_message(update.effective_message, res, parse_mode=ParseMode.MARKDOWN)
 

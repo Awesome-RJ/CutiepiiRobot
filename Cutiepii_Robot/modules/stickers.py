@@ -688,7 +688,7 @@ async def cbs_callback(update: Update):
     search_query = query.message.text.split(
         "\n", 1)[0].split(maxsplit=2)[2][:-1]
     text, buttons = get_cbs_data(search_query, int(page), query.from_user.id)
-    query.edit_message_text(
+    await query.edit_message_text(
         text, parse_mode=ParseMode.HTML, reply_markup=buttons)
     await query.answer()
 
