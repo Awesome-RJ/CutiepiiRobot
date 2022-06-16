@@ -76,8 +76,8 @@ psycopg2-binary==2.9.3
 geopy>=2.0.0
 humanize>=3.0.0
 beautifulsoup4
-pyrogram==2.0.26
-python-arq>6.0.0
+pyrogram
+python-arq>=6.0.2
 aiohttp>=3.0.0
 carbonnow
 search_engine_parser
