@@ -75,7 +75,6 @@ future>=0.18.0
 psycopg2-binary==2.9.3
 geopy>=2.0.0
 humanize>=3.0.0
-beautifulsoup4
 pyrogram
 python-arq>=6.0.2
 aiohttp>=3.0.0
