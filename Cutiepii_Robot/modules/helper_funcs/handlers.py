@@ -113,7 +113,7 @@ class CustomCommandHandler(tg.CommandHandler):
 
                 if not (
                     frozenset({command[0].lower()}) in self.commands
-                    and command[1].lower() == await message._bot.username.lower()
+                    and command[1].lower() == message._bot.username.lower()
                 ):
                     return None
 
