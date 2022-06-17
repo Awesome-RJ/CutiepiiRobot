@@ -18,9 +18,9 @@ zalgo-text==0.6
 nekos.py==1.1.0
 telegraph==2.1.0
 tgcrypto==1.2.3
-pymongo
+pymongo==4.1.1
 motor>==2.3.1
-redis
+redis==4.3.3
 gtts==2.2.4
 wget==3.2
 tswift==0.7.0
