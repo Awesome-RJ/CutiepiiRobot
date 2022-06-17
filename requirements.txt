@@ -63,7 +63,7 @@ flask
 gunicorn
 dateparser
 python-barcode==0.14.0
-pytimeparse
+pytimeparse2==1.4.0
 APScheduler==3.9.1
 CloudScraper
 dnspython==2.2.1
