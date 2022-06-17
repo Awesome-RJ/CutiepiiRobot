@@ -47,7 +47,7 @@ multicolorcaptcha==1.2.0
 jikanpy==4.3.2
 future>=0.18.0
 geopy>=2.2.0
-humanize>=4.0.0
+humanize>=4.1.0
 pyrogram>=2.0.20
 python-arq>=6.0.2
 aiohttp>=3.0.0
