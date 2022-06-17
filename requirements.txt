@@ -73,8 +73,8 @@ google-trans-new==1.1.9
 jikanpy==4.3.2
 future>=0.18.0
 psycopg2-binary==2.9.3
-geopy>=2.0.0
-humanize>=3.0.0
+geopy>=2.2.0
+humanize>=4.0.0
 pyrogram
 python-arq>=6.0.2
 aiohttp>=3.0.0
