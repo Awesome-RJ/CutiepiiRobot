@@ -55,12 +55,7 @@ async def addsudo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         f"Successfully promoted {user_member.user.first_name} to sudo!"
     )
 
-    return "<b>{}:</b>" \
-           "\n#SUDO" \
-           "\n<b>Admin:</b> {}" \
-           "\n<b>User:</b> {}".format(html.escape(update.effective_chat.title),
-                                      mention_html(user.id, user.first_name),
-                                      mention_html(user_member.user.id, user_member.user.first_name))
+    return f"<b>{html.escape(update.effective_chat.title)}:</b>\n#SUDO\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
 
 
 @sudo_plus
@@ -99,12 +94,7 @@ async def addsupport(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         f"Successfully promoted {user_member.user.first_name} to support!"
     )
 
-    return "<b>{}:</b>" \
-           "\n#SUPPORT" \
-           "\n<b>Admin:</b> {}" \
-           "\n<b>User:</b> {}".format(html.escape(update.effective_chat.title),
-                                      mention_html(user.id, user.first_name),
-                                      mention_html(user_member.user.id, user_member.user.first_name))
+    return f"<b>{html.escape(update.effective_chat.title)}:</b>\n#SUPPORT\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
 
 
 @sudo_plus
@@ -143,12 +133,7 @@ async def addwhitelist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> st
         f"Successfully promoted {user_member.user.first_name} to whitelist!"
     )
 
-    return "<b>{}:</b>" \
-           "\n#WHITELIST" \
-           "\n<b>Admin:</b> {}" \
-           "\n<b>User:</b> {}".format(html.escape(update.effective_chat.title),
-                                      mention_html(user.id, user.first_name),
-                                      mention_html(user_member.user.id, user_member.user.first_name))
+    return f"<b>{html.escape(update.effective_chat.title)}:</b>\n#WHITELIST\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
 
 
 @dev_plus
@@ -167,12 +152,8 @@ async def removesudo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await message.reply_text("Demoting to normal user")
         SUDO_USERS.remove(user_id)
         sql.remove_superuser(user_id)
-        return "<b>{}:</b>" \
-           "\n#UNSUDO" \
-           "\n<b>Admin:</b> {}" \
-           "\n<b>User:</b> {}".format(html.escape(update.effective_chat.title),
-                                      mention_html(user.id, user.first_name),
-                                      mention_html(user_member.user.id, user_member.user.first_name))
+        return f"<b>{html.escape(update.effective_chat.title)}:</b>\n#UNSUDO\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
+
     await message.reply_text("This user is not a sudo!")
     return ""
 
@@ -193,12 +174,8 @@ async def removesupport(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
         await message.reply_text("Demoting to normal user")
         SUPPORT_USERS.remove(user_id)
         sql.remove_superuser(user_id)
-        return "<b>{}:</b>" \
-           "\n#UNSUPPORT" \
-           "\n<b>Admin:</b> {}" \
-           "\n<b>User:</b> {}".format(html.escape(update.effective_chat.title),
-                                      mention_html(user.id, user.first_name),
-                                      mention_html(user_member.user.id, user_member.user.first_name))
+        return f"<b>{html.escape(update.effective_chat.title)}:</b>\n#UNSUPPORT\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
+
     await message.reply_text("This user is not a support user!")
     return ""
 
@@ -219,12 +196,8 @@ async def removewhitelist(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         await message.reply_text("Demoting to normal user")
         WHITELIST_USERS.remove(user_id)
         sql.remove_superuser(user_id)
-        return "<b>{}:</b>" \
-           "\n#UNWHITELIST" \
-           "\n<b>Admin:</b> {}" \
-           "\n<b>User:</b> {}".format(html.escape(update.effective_chat.title),
-                                      mention_html(user.id, user.first_name),
-                                      mention_html(user_member.user.id, user_member.user.first_name))
+        return f"<b>{html.escape(update.effective_chat.title)}:</b>\n#UNWHITELIST\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
+
     await message.reply_text("This user is not a whitelisted user!")
     return ""
 

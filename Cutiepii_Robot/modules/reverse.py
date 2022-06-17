@@ -121,10 +121,12 @@ async def reverse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if imgspage:
             buttuns.append([InlineKeyboardButton(text="Similar Images", url=imgspage)])
 
-        MsG.edit_text("*Search Results*: \n\n`{}`".format(search_result),
-                      parse_mode=ParseMode.MARKDOWN,
-                      reply_markup=InlineKeyboardMarkup(buttuns),
+        MsG.edit_text(
+            f"*Search Results*: \n\n`{search_result}`",
+            parse_mode=ParseMode.MARKDOWN,
+            reply_markup=InlineKeyboardMarkup(buttuns),
         )
+
 
     except BadRequest as Bdr:
         MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: BadRequest!\n\n{Bdr}", parse_mode=ParseMode.MARKDOWN)

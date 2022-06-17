@@ -74,11 +74,6 @@ class AntiSpam:
         Return True if user is to be ignored else False
         """
         return bool(sql.is_user_blacklisted(user))
-        '''try: # this should be enabled but it disables the bot
-            self.limiter.try_acquire(user)
-            return False
-        except BucketFullException:
-            return True'''
 
 SpamChecker = AntiSpam()
 MessageHandlerChecker = AntiSpam()

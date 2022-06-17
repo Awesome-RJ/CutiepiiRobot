@@ -59,7 +59,7 @@ async def send_to_transfersh_async(file):
     final_date = get_date_in_two_weeks()
     file_name = os.path.basename(file)
 
-    print("\nUploading file: {} (size of the file: {})".format(file_name, size_of_file))
+    print(f"\nUploading file: {file_name} (size of the file: {size_of_file})")
     url = "https://transfer.sh/"
 
     with open(file, "rb") as f:
@@ -67,10 +67,9 @@ async def send_to_transfersh_async(file):
             download_link = await response.text()
 
     print(
-        "Link to download file(will be saved till {}):\n{}".format(
-            final_date, download_link
-        )
+        f"Link to download file(will be saved till {final_date}):\n{download_link}"
     )
+
     return download_link, final_date, size_of_file
 
 

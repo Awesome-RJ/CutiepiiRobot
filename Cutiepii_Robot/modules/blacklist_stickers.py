@@ -58,9 +58,7 @@ def blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     user = update.effective_user  # type: Optional[User]
     bot, args = context.bot, context.args
 
-    sticker_list = "<b>List blacklisted stickers currently in {}:</b>\n".format(
-        chat.title,
-    )
+    sticker_list = f"<b>List blacklisted stickers currently in {chat.title}:</b>\n"
 
     all_stickerlist = sql.get_chat_stickers(chat.id)
 
@@ -73,9 +71,12 @@ def blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
 
     split_text = split_message(sticker_list)
     for text in split_text:
-        if sticker_list == "<b>List blacklisted stickers currently in {}:</b>\n".format(
-                chat.title,
-        ).format(html.escape(chat.title)):
+        if (
+            sticker_list
+            == f"<b>List blacklisted stickers currently in {chat.title}:</b>\n".format(
+                html.escape(chat.title)
+            )
+        ):
             send_message(
                 update.effective_message,
                 f"There are no blacklist stickers in <b>{html.escape(chat.title)}</b>!",
@@ -331,15 +332,8 @@ async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         else:
             text = f"Blacklist sticker mode changed, users will be `{settypeblacklist}`!"
         send_message(msg, text, parse_mode=ParseMode.MARKDOWN)
-        return (
-            "<b>{}:</b>\n"
-            "<b>Admin:</b> {}\n"
-            "Changed sticker blacklist mode. users will be {}.".format(
-                html.escape(chat.title),
-                mention_html(user.id, html.escape(user.first_name)),
-                settypeblacklist,
-            )
-        )
+        return f"<b>{html.escape(chat.title)}:</b>\n<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\nChanged sticker blacklist mode. users will be {settypeblacklist}."
+
     getmode, getvalue = sql.get_blacklist_setting(chat.id)
     if getmode == 0:
         settypeblacklist = "not active"

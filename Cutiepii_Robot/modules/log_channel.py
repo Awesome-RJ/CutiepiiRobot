@@ -88,9 +88,8 @@ if is_module_loaded(FILENAME):
 
             if result:
                 datetime_fmt = "%H:%M - %d-%m-%Y"
-                result += "\n<b>Event Stamp</b>: <code>{}</code>".format(
-                    datetime.utcnow().strftime(datetime_fmt)
-                )
+                result += f"\n<b>Event Stamp</b>: <code>{datetime.utcnow().strftime(datetime_fmt)}</code>"
+
 
                 if message.chat.type == chat.SUPERGROUP and message.chat.username:
                     result += f'\n<b>Link:</b> <a href="https://t.me/{chat.username}/{message.message_id}">click here</a>'

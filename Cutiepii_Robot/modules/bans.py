@@ -360,7 +360,7 @@ async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         f"<b>Time:</b> {time_val}"
     )
     if reason:
-        log += "\n<b>Reason:</b> {}".format(reason)
+        log += f"\n<b>Reason:</b> {reason}"
 
     try:
         chat.ban_member(user_id, until_date=bantime)
@@ -706,16 +706,8 @@ async def banme(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     if res := update.effective_chat.ban_member(user_id):
         await update.effective_message.reply_text("Yes, you're right! GTFO..")
-        return (
-            "<b>{}:</b>"
-            "\n#BANME"
-            "\n<b>User:</b> {}"
-            "\n<b>ID:</b> <code>{}</code>".format(
-                html.escape(chat.title),
-                mention_html(user.id, user.first_name),
-                user_id,
-            )
-        )
+        return f"<b>{html.escape(chat.title)}:</b>\n#BANME\n<b>User:</b> {mention_html(user.id, user.first_name)}\n<b>ID:</b> <code>{user_id}</code>"
+
     await update.effective_message.reply_text("Huh? I can't :/")
 
 

@@ -46,7 +46,6 @@ ENUM_FUNC_MAP = {
 }
 
 @cutiepii_cmd(command='filters', admin_ok=True)
-
 async def list_handlers(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     user = update.effective_user
@@ -72,7 +71,7 @@ async def list_handlers(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         return
 
     for keyword in all_handlers:
-        entry = "➛ `{}`\n".format(escape_markdown(keyword))
+        entry = f"➛ `{escape_markdown(keyword)}`\n"
         if len(entry) + len(filter_list) > MessageLimit.TEXT_LENGTH:
             send_message(
                 update.effective_message,

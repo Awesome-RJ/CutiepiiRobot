@@ -223,7 +223,8 @@ async def check_reminds(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
             for a in r:
                 try:
                     user = await CUTIEPII_PTB.bot.get_chat(a["user_id"])
-                    text = "{}'s reminder:\n{}".format(mention_html(user.id, user.first_name), markdown_to_html(a["message"]))
+                    text = f"""{mention_html(user.id, user.first_name)}'s reminder:\n{markdown_to_html(a["message"])}"""
+
                     await context.bot.send_message(a["chat_id"], text, parse_mode=ParseMode.HTML)
                     sql.rem_remind(a["chat_id"], t, a["message"], a["user_id"])
                 except:

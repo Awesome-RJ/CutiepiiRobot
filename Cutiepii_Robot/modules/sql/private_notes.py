@@ -20,8 +20,7 @@ PRIVATE_NOTES_INSERTION_LOCK = threading.RLock()
 
 def get_private_notes(chat_id) -> bool:
     try:
-        private_notes = SESSION.query(PrivateNotes).get(str(chat_id))
-        if private_notes:
+        if private_notes := SESSION.query(PrivateNotes).get(str(chat_id)):
             return private_notes.setting
         return False
     finally:

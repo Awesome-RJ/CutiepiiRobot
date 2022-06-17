@@ -48,7 +48,7 @@ class LoggerSettings(BASE):
         self.setting = disabled
 
     def __repr__(self):
-        return "<Chat log setting {} ({})>".format(self.chat_id, self.setting)
+        return f"<Chat log setting {self.chat_id} ({self.setting})>"
 
 
 LoggerSettings.__table__.create(checkfirst=True)
@@ -99,8 +99,7 @@ def __load_chat_log_stat_list():
 
 def migrate_chat(old_chat_id, new_chat_id):
     with LOG_SETTING_LOCK:
-        chat = SESSION.query(LoggerSettings).get(str(old_chat_id))
-        if chat:
+        if chat := SESSION.query(LoggerSettings).get(str(old_chat_id)):
             chat.chat_id = new_chat_id
             SESSION.add(chat)
 

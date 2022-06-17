@@ -62,8 +62,7 @@ def set_kuki(chat_id):
 
 def rem_kuki(chat_id):
     with INSERTION_LOCK:
-        kukichat = SESSION.query(KukiChats).get(str(chat_id))
-        if kukichat:
+        if kukichat := SESSION.query(KukiChats).get(str(chat_id)):
             SESSION.delete(kukichat)
         SESSION.commit()
 

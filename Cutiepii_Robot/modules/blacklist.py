@@ -60,7 +60,6 @@ BLACKLIST_GROUP = 11
 
 
 @user_admin
-
 async def blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     user = update.effective_user
@@ -75,24 +74,26 @@ async def blacklist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         chat_id = update.effective_chat.id
         chat_name = chat.title
 
-    filter_list = "Current blacklisted words in <b>{}</b>:\n".format(chat_name)
+    filter_list = f"Current blacklisted words in <b>{chat_name}</b>:\n"
 
     all_blacklisted = sql.get_chat_blacklist(chat_id)
 
     if len(args) > 0 and args[0].lower() == "copy":
         for trigger in all_blacklisted:
-            filter_list += "<code>{}</code>\n".format(html.escape(trigger))
+            filter_list += f"<code>{html.escape(trigger)}</code>\n"
     else:
         for trigger in all_blacklisted:
-            filter_list += " - <code>{}</code>\n".format(html.escape(trigger))
+            filter_list += f" - <code>{html.escape(trigger)}</code>\n"
 
     # for trigger in all_blacklisted:
     #     filter_list += " - <code>{}</code>\n".format(html.escape(trigger))
 
     split_text = split_message(filter_list)
     for text in split_text:
-        if filter_list == "Current blacklisted words in <b>{}</b>:\n".format(
-                html.escape(chat_name)):
+        if (
+            filter_list
+            == f"Current blacklisted words in <b>{html.escape(chat_name)}</b>:\n"
+        ):
             send_message(
                 update.effective_message,
                 f"No blacklisted words in <b>{html.escape(chat_name)}</b>!",

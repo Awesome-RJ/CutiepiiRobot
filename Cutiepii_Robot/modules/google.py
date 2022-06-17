@@ -331,11 +331,7 @@ async def apk(e):
 
 def progress(current, total):
     """Calculate and return the download progress with given arguments."""
-    print(
-        "Downloaded {} of {}\nCompleted {}".format(
-            current, total, (current / total) * 100
-        )
-    )
+    print(f"Downloaded {current} of {total}\nCompleted {current / total * 100}")
 
 
 async def is_register_admin(chat, user):
@@ -378,7 +374,7 @@ async def parseqr(qr_e):
     end = datetime.now()
     duration = (end - start).seconds
     await qr_e.reply(
-        "Obtained QRCode contents in {} seconds, Inside the QR Code was:\n{}".format(duration, qr_contents)
+        f"Obtained QRCode contents in {duration} seconds, Inside the QR Code was:\n{qr_contents}"
     )
 
 

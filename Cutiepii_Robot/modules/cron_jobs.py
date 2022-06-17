@@ -92,7 +92,7 @@ async def backup_db(_: ContextTypes):
     LOGGER.info("zip done")
     sleep(1)
     with open(f'backups/{datenow}.zip', 'rb') as bkp:
-        nm = "{} backup \n".format(bot.username) + datenow
+        nm = f"{bot.username} backup \n" + datenow
         await bot.send_document(OWNER_ID,
                         document=bkp,
                         caption=nm,

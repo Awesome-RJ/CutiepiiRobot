@@ -107,9 +107,7 @@ async def ping(update: Update):
     uptime = get_readable_time((time.time() - StartTime))
 
     await message.edit_text(
-        "PONG!!\n"
-        "<b>Time Taken:</b> <code>{}</code>\n"
-        "<b>Service uptime:</b> <code>{}</code>".format(telegram_ping, uptime),
+        f"PONG!!\n<b>Time Taken:</b> <code>{telegram_ping}</code>\n<b>Service uptime:</b> <code>{uptime}</code>",
         parse_mode=ParseMode.HTML,
     )
 
@@ -122,7 +120,7 @@ async def pingall(update: Update):
     uptime = get_readable_time((time.time() - StartTime))
 
     reply_msg = "⏱Ping results are:\n" + "\n".join(pinged_list)
-    reply_msg += "\n<b>Service uptime:</b> <code>{}</code>".format(uptime)
+    reply_msg += f"\n<b>Service uptime:</b> <code>{uptime}</code>"
 
     await update.effective_message.reply_text(
         reply_msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True,

@@ -77,15 +77,26 @@ def split_message(msg: str) -> List[str]:
 def paginate_modules(_: int, module_dict: Dict, prefix, chat=None) -> List[List[EqInlineKeyboardButton]]:
     modules = (
         sorted(
-            [EqInlineKeyboardButton(x.__mod_name__,
-                                    callback_data="{}_module({})".format(prefix, x.__mod_name__.lower())) for x
-             in module_dict.values()])
+            [
+                EqInlineKeyboardButton(
+                    x.__mod_name__,
+                    callback_data=f"{prefix}_module({x.__mod_name__.lower()})",
+                )
+                for x in module_dict.values()
+            ]
+        )
         if chat
         else sorted(
-            [EqInlineKeyboardButton(x.__mod_name__,
-                                    callback_data="{}_module({},{})".format(prefix, chat, x.__mod_name__.lower())) for x
-             in module_dict.values()])
+            [
+                EqInlineKeyboardButton(
+                    x.__mod_name__,
+                    callback_data=f"{prefix}_module({chat},{x.__mod_name__.lower()})",
+                )
+                for x in module_dict.values()
+            ]
+        )
     )
+
 
     pairs = [list (a) for a in zip(modules[::3], modules[1::3], modules[2::3])]
 
@@ -126,9 +137,9 @@ def build_keyboard(buttons):
 
 def revert_buttons(buttons):
     return "".join(
-        "\n[{}](buttonurl://{}:same)".format(btn.name, btn.url)
+        f"\n[{btn.name}](buttonurl://{btn.url}:same)"
         if btn.same_line
-        else "\n[{}](buttonurl://{})".format(btn.name, btn.url)
+        else f"\n[{btn.name}](buttonurl://{btn.url})"
         for btn in buttons
     )
 
@@ -137,7 +148,7 @@ def build_keyboard_parser(bot, chat_id, buttons):
     keyb = []
     for btn in buttons:
         if btn.url == "{rules}":
-            btn.url = "http://https://telegram.dog/{}?start={}".format(bot.username, chat_id)
+            btn.url = f"http://https://telegram.dog/{bot.username}?start={chat_id}"
         if btn.same_line and keyb:
             keyb[-1].append(InlineKeyboardButton(btn.name, url=btn.url))
         else:

@@ -47,7 +47,7 @@ class Mods(BASE):
         self.user_id = user_id
 
     def __repr__(self):
-        return "<Mod %s>" % self.user_id
+        return f"<Mod {self.user_id}>"
 
 
 Mods.__table__.create(checkfirst=True)
@@ -71,8 +71,7 @@ def is_modd(chat_id, user_id):
 
 def dismod(chat_id, user_id):
     with MOD_INSERTION_LOCK:
-        dismod_user = SESSION.query(Mods).get((str(chat_id), user_id))
-        if dismod_user:
+        if dismod_user := SESSION.query(Mods).get((str(chat_id), user_id)):
             SESSION.delete(dismod_user)
             SESSION.commit()
             return True

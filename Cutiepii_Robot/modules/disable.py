@@ -210,18 +210,19 @@ if is_module_loaded(FILENAME):
             send_message(update.effective_message, "What should I enable?")
 
     @user_admin
-    
     async def list_cmds(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if DISABLE_CMDS + DISABLE_OTHER:
             result = "".join(
-                " - `{}`\n".format(escape_markdown(str(cmd)))
+                f" - `{escape_markdown(str(cmd))}`\n"
                 for cmd in set(DISABLE_CMDS + DISABLE_OTHER)
             )
 
+
             await update.effective_message.reply_text(
-                "The following commands are toggleable:\n{}".format(result),
+                f"The following commands are toggleable:\n{result}",
                 parse_mode=ParseMode.MARKDOWN,
             )
+
         else:
             await update.effective_message.reply_text("No commands can be disabled.")
 
@@ -231,8 +232,8 @@ if is_module_loaded(FILENAME):
         if not disabled:
             return "No commands are disabled!"
 
-        result = "".join(" - `{}`\n".format(escape_markdown(cmd)) for cmd in disabled)
-        return "The following commands are currently restricted:\n{}".format(result)
+        result = "".join(f" - `{escape_markdown(cmd)}`\n" for cmd in disabled)
+        return f"The following commands are currently restricted:\n{result}"
 
     
     async def commands(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
