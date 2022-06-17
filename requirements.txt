@@ -52,7 +52,7 @@ countryinfo==0.1.2
 faker==13.12.0
 PyDictionary==2.0.1
 python-rapidjson==1.6
-markdown2
+markdown2>=2.4.0
 cowpy==1.1.5
 selenium==4.1.5
 hiredis==2.0.0
