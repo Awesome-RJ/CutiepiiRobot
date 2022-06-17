@@ -75,7 +75,7 @@ if is_module_loaded(FILENAME):
                 if admin_ok:
                     ADMIN_CMDS.extend(command)
 
-        async def check_update(self, update):
+        def check_update(self, update):
             if not isinstance(update, Update) or not update.effective_message:
                 return
             message = update.effective_message
@@ -85,7 +85,7 @@ if is_module_loaded(FILENAME):
                 if len(fst_word) > 1 and any(
                     fst_word.startswith(start) for start in CMD_STARTERS
                 ):
-                    args = await message.text.split()[1:]
+                    args = message.text.split()[1:]
                     command = fst_word[1:].split("@")
                     command.append(message._bot.username)
 
