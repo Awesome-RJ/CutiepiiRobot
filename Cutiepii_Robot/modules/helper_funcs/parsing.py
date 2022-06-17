@@ -63,8 +63,8 @@ def get_data(
     content: Optional[str] = None
     text: str = ""
     raw_text: str = msg.text_html or msg.caption_html
-    args: list[str] = raw_text.split(None, 2 if not welcome else 1)  # use python's maxsplit to separate cmd and args
-    note_name: str = args[1] if not welcome else ""
+    args: list[str] = raw_text.split(None, 1 if welcome else 2)
+    note_name: str = "" if welcome else args[1]
 
     buttons: Union[str, list[Optional[tuple[str, Optional[str], bool]]]] = []
     # determine what the contents of the filter are - text, image, sticker, etc
@@ -78,7 +78,10 @@ def get_data(
 
     elif rep := msg.reply_to_message:
         msgtext = msg.reply_to_message.text_html or msg.reply_to_message.caption_html
-        if len(args) >= (2 if not welcome else 1) and msg.reply_to_message.text_html:  # not caption, text
+        if (
+            len(args) >= (1 if welcome else 2)
+            and msg.reply_to_message.text_html
+        ):  # not caption, text
             text, buttons = parser(msgtext, reply_markup=msg.reply_to_message.reply_markup)
             data_type = Types.BUTTON_TEXT if buttons else Types.TEXT
         elif rep.sticker:

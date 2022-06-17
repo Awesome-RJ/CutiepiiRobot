@@ -137,7 +137,7 @@ async def get_users(show):
         return
     info = await telethn.get_entity(show.chat_id)
     title = info.title or "this chat"
-    mentions = "Users in {}: \n".format(title)
+    mentions = f"Users in {title}: \n"
     async for user in telethn.iter_participants(show.chat_id):
         mentions += (
             f"\nDeleted Account {user.id}"
@@ -389,10 +389,8 @@ async def promote_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
                     show_alert=True,
                 )
             elif mode == "refresh":
-                try:
+                with contextlib.suppress(KeyError):
                     ADMIN_CACHE.pop(update.effective_chat.id)
-                except KeyError:
-                    pass
                 await bot.answer_callback_query(query.id, "Admins cache refreshed!")
     except BadRequest as excp:
         if excp.message not in [

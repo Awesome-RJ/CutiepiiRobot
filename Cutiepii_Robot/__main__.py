@@ -170,7 +170,10 @@ USER_SETTINGS = {}
 GDPR = []
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module("Cutiepii_Robot.modules." + module_name)
+    imported_module = importlib.import_module(
+        f"Cutiepii_Robot.modules.{module_name}"
+    )
+
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
 
@@ -276,9 +279,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
     else:
         update.effective_message.reply_animation(
-            GROUP_START_IMG, caption= "<b>Yes, Darling I'm alive!\nHaven't sleep since</b>: <code>{}</code>".format(
-                uptime
-            ),
+            GROUP_START_IMG,
+            caption=f"<b>Yes, Darling I'm alive!\nHaven't sleep since</b>: <code>{uptime}</code>",
             parse_mode=ParseMode.HTML,
             reply_markup=InlineKeyboardMarkup(
                 [
@@ -310,14 +312,8 @@ async def error_handler(_: Update, context: ContextTypes.DEFAULT_TYPE):
     tb = "".join(tb_list)
 
     # Build the message with some markup and additional information about what happened.
-    message = (
-        "An exception was raised while handling an update\n"
-        "<pre>update = {}</pre>\n\n"
-        "<pre>{}</pre>"
-    ).format(
-        html.escape(json.dumps(update.to_dict(), indent=2, ensure_ascii=False)),
-        html.escape(tb),
-    )
+    message = f"An exception was raised while handling an update\n<pre>update = {html.escape(json.dumps(update.to_dict(), indent=2, ensure_ascii=False))}</pre>\n\n<pre>{html.escape(tb)}</pre>"
+
 
     if len(message) >= 4096:
         message = message[:4096]
@@ -357,11 +353,10 @@ async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         if mod_match:
             module = mod_match[1]
             text = (
-                "╔═━「 *{}* module: 」\n".format(
-                    HELPABLE[module].__mod_name__
-                )
+                f"╔═━「 *{HELPABLE[module].__mod_name__}* module: 」\n"
                 + HELPABLE[module].__help__
             )
+
             await query.message.edit_text(
                 text=text,
                 parse_mode=ParseMode.MARKDOWN,
@@ -448,28 +443,29 @@ async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if chat.type != chat.PRIVATE:
 
         update.effective_message.reply_photo(
-            HELP_IMG, HELP_MSG,
+            HELP_IMG,
+            HELP_MSG,
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
                         InlineKeyboardButton(
                             text="Open In Private Chat",
-                            url="t.me/{}?start=help".format(context.bot.username),
+                            url=f"t.me/{context.bot.username}?start=help",
                         )
                     ]
                 ]
             ),
         )
+
         return
 
     if len(args) >= 2 and any(args[1].lower() == x for x in HELPABLE):
         module = args[1].lower()
         text = (
-            " 〔 *{}* 〕\n".format(
-                HELPABLE[module].__mod_name__
-            )
+            f" 〔 *{HELPABLE[module].__mod_name__}* 〕\n"
             + HELPABLE[module].__help__
         )
+
         send_help(
             chat.id,
             text,
@@ -487,9 +483,10 @@ async def send_settings(chat_id, user_id, user=False):
     if user:
         if USER_SETTINGS:
             settings = "\n\n".join(
-                "*{}*:\n{}".format(mod.__mod_name__, mod.__user_settings__(user_id))
+                f"*{mod.__mod_name__}*:\n{mod.__user_settings__(user_id)}"
                 for mod in USER_SETTINGS.values()
             )
+
             await context.bot.send_message(
                 user_id,
                 "These are your current settings:" + "\n\n" + settings,
@@ -621,14 +618,13 @@ async def get_settings(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                     [
                         InlineKeyboardButton(
                             text="Settings",
-                            url="https://telegram.dog/{}?start=stngs_{}".format(
-                                context.bot.username, chat.id
-                            ),
+                            url=f"https://telegram.dog/{context.bot.username}?start=stngs_{chat.id}",
                         )
                     ]
                 ]
             ),
         )
+
     else:
         text = "Click here to check your settings."
 
@@ -644,10 +640,10 @@ async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
         if OWNER_ID != 2131857711 and DONATION_LINK:
             await update.effective_message.reply_text(
-                "You can also donate to the person currently running me "
-                "[here]({})".format(DONATION_LINK),
+                f"You can also donate to the person currently running me [here]({DONATION_LINK})",
                 parse_mode=ParseMode.MARKDOWN,
             )
+
 
     else:
         try:

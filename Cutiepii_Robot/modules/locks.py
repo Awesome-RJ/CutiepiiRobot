@@ -179,7 +179,6 @@ async def locktypes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
 @connection_status
-
 @bot_admin_check()
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
@@ -199,16 +198,8 @@ async def lock(update, context) -> str:  # sourcery no-metrics
                 sql.update_lock(chat.id, ltype, locked=True)
                 send_message(update.effective_message, text, parse_mode="markdown")
 
-                return (
-                    "<b>{}:</b>"
-                    "\n#LOCK"
-                    "\n<b>Admin:</b> {}"
-                    "\nLocked <code>{}</code>.".format(
-                        html.escape(chat.title),
-                        mention_html(user.id, user.first_name),
-                        ltype,
-                    )
-                )
+                return f"<b>{html.escape(chat.title)}:</b>\n#LOCK\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nLocked <code>{ltype}</code>."
+
 
             if ltype in LOCK_CHAT_RESTRICTION:
                 text = f"Locked {ltype} for all non-admins!"
@@ -222,16 +213,8 @@ async def lock(update, context) -> str:  # sourcery no-metrics
                 )
 
                 send_message(update.effective_message, text, parse_mode="markdown")
-                return (
-                    "<b>{}:</b>"
-                    "\n#Permission_LOCK"
-                    "\n<b>Admin:</b> {}"
-                    "\nLocked <code>{}</code>.".format(
-                        html.escape(chat.title),
-                        mention_html(user.id, user.first_name),
-                        ltype,
-                    )
-                )
+                return f"<b>{html.escape(chat.title)}:</b>\n#Permission_LOCK\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nLocked <code>{ltype}</code>."
+
             send_message(
                 update.effective_message,
                 "What are you trying to lock...? Try /locktypes for the list of lockables",
@@ -265,16 +248,8 @@ def unlock(update, context) -> str:  # sourcery no-metrics
                 text = f"Unlocked {ltype} for everyone!"
                 sql.update_lock(chat.id, ltype, locked=False)
                 send_message(update.effective_message, text, parse_mode="markdown")
-                return (
-                    "<b>{}:</b>"
-                    "\n#UNLOCK"
-                    "\n<b>Admin:</b> {}"
-                    "\nUnlocked <code>{}</code>.".format(
-                        html.escape(chat.title),
-                        mention_html(user.id, user.first_name),
-                        ltype,
-                    )
-                )
+                return f"<b>{html.escape(chat.title)}:</b>\n#UNLOCK\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nUnlocked <code>{ltype}</code>."
+
 
             if ltype in UNLOCK_CHAT_RESTRICTION:
                 text = f"Unlocked {ltype} for everyone!"
@@ -290,16 +265,8 @@ def unlock(update, context) -> str:  # sourcery no-metrics
 
                 send_message(update.effective_message, text, parse_mode="markdown")
 
-                return (
-                    "<b>{}:</b>"
-                    "\n#UNLOCK"
-                    "\n<b>Admin:</b> {}"
-                    "\nUnlocked <code>{}</code>.".format(
-                        html.escape(chat.title),
-                        mention_html(user.id, user.first_name),
-                        ltype,
-                    )
-                )
+                return f"<b>{html.escape(chat.title)}:</b>\n#UNLOCK\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nUnlocked <code>{ltype}</code>."
+
             send_message(
                 update.effective_message,
                 "What are you trying to unlock...? Try /locktypes for the list of lockables.",
@@ -429,10 +396,10 @@ async def build_lock_message(chat_id):
         locklist.sort()
         # Building lock list string
         for x in locklist:
-            res += "\n ➛ {}".format(x)
+            res += f"\n ➛ {x}"
     res += "\n\n*" + "These are the current chat permissions:" + "*"
     for x in permslist:
-        res += "\n ➛ {}".format(x)
+        res += f"\n ➛ {x}"
     return res
 
 

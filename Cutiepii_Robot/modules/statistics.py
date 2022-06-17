@@ -141,7 +141,7 @@ async def ping(update: Update, _):
     end_time = time.time()
     ping_time = round((end_time - start_time) * 1000, 3)
     await message.edit_text(
-        "*Pong!!!*\n`{}ms`".format(ping_time), parse_mode=ParseMode.MARKDOWN
+        f"*Pong!!!*\n`{ping_time}ms`", parse_mode=ParseMode.MARKDOWN
     )
 
 

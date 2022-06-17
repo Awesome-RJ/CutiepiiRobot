@@ -20,7 +20,7 @@ class GitHub(BASE):
         self.backoffset = backoffset
 
     def __repr__(self):
-        return "<Git Repo %s>" % self.name
+        return f"<Git Repo {self.name}>"
 
 
 GitHub.__table__.create(checkfirst=True)
@@ -30,8 +30,7 @@ GIT_LOCK = threading.RLock()
 
 def add_repo_to_db(chat_id, name, value, backoffset):
     with GIT_LOCK:
-        prev = SESSION.query(GitHub).get((str(chat_id), name))
-        if prev:
+        if prev := SESSION.query(GitHub).get((str(chat_id), name)):
             SESSION.delete(prev)
         repo = GitHub(str(chat_id), name, value, backoffset)
         SESSION.add(repo)
@@ -47,8 +46,7 @@ def get_repo(chat_id, name):
 
 def rm_repo(chat_id, name):
     with GIT_LOCK:
-        repo = SESSION.query(GitHub).get((str(chat_id), name))
-        if repo:
+        if repo := SESSION.query(GitHub).get((str(chat_id), name)):
             SESSION.delete(repo)
             SESSION.commit()
             return True

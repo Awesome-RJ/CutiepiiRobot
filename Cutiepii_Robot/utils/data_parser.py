@@ -578,16 +578,17 @@ query{
 async def get_all_tags(text: str = None):
     vars_ = {}
     result = await return_json_senpai(GET_TAGS, vars_, auth=False, user=None)
-    msg = "**Tags List:**\n\n`"
-    kek = []
-    for i in result['data']['MediaTagCollection']:
-        if text is not None and 'nsfw' in text:
-            if str(i['isAdult'])!='False':
-                kek.append(i['name'])
-        else:
-            if str(i['isAdult'])=='False':
-                kek.append(i['name'])
-    msg += ", ".join(kek)
+    kek = [
+        i['name']
+        for i in result['data']['MediaTagCollection']
+        if text is not None
+        and 'nsfw' in text
+        and str(i['isAdult']) != 'False'
+        or (text is None or 'nsfw' not in text)
+        and str(i['isAdult']) == 'False'
+    ]
+
+    msg = "**Tags List:**\n\n`" + ", ".join(kek)
     msg += "`"
     return msg
 
@@ -636,7 +637,7 @@ async def get_top_animes(gnr: str, page, user):
         msg = f"Top animes for tag `{gnr.capitalize()}`:\n\n"
         result = await return_json_senpai(query, vars_, auth=False, user=user)
         if len(result['data']['Page']['media'])==0:
-            return [f"No results Found"]
+            return ["No results Found"]
         nsls = await get_all_tags('nsfw')
         nsfw = gnr.lower() in nsls.lower()
     data = result["data"]["Page"]
@@ -654,7 +655,7 @@ async def get_top_animes(gnr: str, page, user):
             InlineKeyboardButton("Prev", callback_data=f"topanimu_{gnr}_{int(page)-1}_{user}"),
             InlineKeyboardButton("Next", callback_data=f"topanimu_{gnr}_{int(page)+1}_{user}")
         ])
-    return [msg, nsfw], InlineKeyboardMarkup(btn) if len(btn)!=0 else ""
+    return [msg, nsfw], InlineKeyboardMarkup(btn) if btn else ""
 
 
 async def get_user_favourites(id_, user, req, page, sighs):
@@ -688,9 +689,9 @@ async def get_featured_in_lists(idm, req, auth: bool = False, user: int = None, 
     vars_ = {"id": int(idm)}
     result = await return_json_senpai(LS_INFO_QUERY, vars_, auth=auth, user=user)
     data = result["data"]["Character"]["media"]["nodes"]
+    out_ = []
     if req == "ANI":
         out = "ANIMES:\n\n"
-        out_ = []
         for ani in data:
             k = ani["title"]["english"] or ani["title"]["romaji"]
             kk = ani["type"]
@@ -698,7 +699,6 @@ async def get_featured_in_lists(idm, req, auth: bool = False, user: int = None, 
                 out_.append(f"➛ __{k}__\n")
     else:
         out = "MANGAS:\n\n"
-        out_ = []
         for ani in data:
             k = ani["title"]["english"] or ani["title"]["romaji"]
             kk = ani["type"]
@@ -708,7 +708,9 @@ async def get_featured_in_lists(idm, req, auth: bool = False, user: int = None, 
     for _ in range(15*page):
         out_.pop(0)
     out_ = "".join(out_[:15])
-    return ([out+out_, total] if len(out_) != 0 else False), result["data"]["Character"]["image"]["large"]
+    return [out + out_, total] if out_ != "" else False, result["data"][
+        "Character"
+    ]["image"]["large"]
 
 
 async def get_additional_info(idm, req, ctgry, page: int = 0):
@@ -735,25 +737,28 @@ async def get_additional_info(idm, req, ctgry, page: int = 0):
         synopsis = data.get("description")
         return (pic if ctgry == "ANI" else data["image"]["large"]), synopsis
     elif req == "char":
-        charlist = []
-        for char in data["characters"]['edges']:
-            charlist.append(f"`➛ {char['node']['name']['full']} `({char['role']})")
+        charlist = [
+            f"`➛ {char['node']['name']['full']} `({char['role']})"
+            for char in data["characters"]['edges']
+        ]
+
         chrctrs = ("\n").join(charlist)
-        charls = f"`{chrctrs}`" if len(charlist) != 0 else ""
+        charls = f"`{chrctrs}`" if charlist else ""
         return pic, charls, data["characters"]['pageInfo']
     else:
         prqlsql = data.get("relations").get("edges")
-        ps = ""
-        for i in prqlsql:
-            ps += f'➛ {i["node"]["title"]["romaji"]} `{i["relationType"]}`\n'
+        ps = "".join(
+            f'➛ {i["node"]["title"]["romaji"]} `{i["relationType"]}`\n'
+            for i in prqlsql
+        )
+
         return pic, ps
 
 
 async def get_anime(vars_, auth: bool = False, user: int = None):
     result = await return_json_senpai(ANIME_QUERY, vars_, auth=auth, user=user)
 
-    error = result.get("errors")
-    if error:
+    if error := result.get("errors"):
         error_sts = error[0].get("message")
         return [f"[{error_sts}]"]
 
@@ -780,20 +785,16 @@ async def get_anime(vars_, auth: bool = False, user: int = None):
     gnrs = ", ".join(data['genres'])
     score = data['averageScore']
     avscd = f"\n➛ **SCORE:** `{score}%` 🌟" if score is not None else ""
-    tags = []
-    for i in data['tags']:
-        tags.append(i["name"])
+    tags = [i["name"] for i in data['tags']]
     tags_ = f"\n➛ **TAGS:** `{', '.join(tags[:5])}`" if tags != [] else ""
     bot = {CUTIEPII_PTB.bot.username}
-    gnrs_ = ""
-    if len(gnrs)!=0:
-        gnrs_ = f"\n➛ **GENRES:** `{gnrs}`"
+    gnrs_ = f"\n➛ **GENRES:** `{gnrs}`" if gnrs != "" else ""
     isfav = data.get("isFavourite")
     fav = ", in Favourites" if isfav is True else ""
     user_data = ""
     in_ls = False
     in_ls_id = ""
-    if auth is True:
+    if auth:
         in_list = data.get("mediaListEntry")
         if in_list is not None:
             in_ls = True

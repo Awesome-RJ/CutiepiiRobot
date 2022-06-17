@@ -385,22 +385,14 @@ def get_message_type(msg: Message):
         offset = len(args[1]) - len(raw_text)  # set correct offset relative to command + notename
         text, buttons = button_markdown_parser(args[1], entities=msg.parse_entities() or msg.parse_caption_entities(),
                                                offset=offset)
-        if buttons:
-            data_type = Types.BUTTON_TEXT
-        else:
-            data_type = Types.TEXT
-
+        data_type = Types.BUTTON_TEXT if buttons else Types.TEXT
     elif msg.reply_to_message:
         entities = msg.reply_to_message.parse_entities()
         msgtext = msg.reply_to_message.text or msg.reply_to_message.caption
         if len(args) >= 1 and msg.reply_to_message.text:  # not caption, text
             text, buttons = button_markdown_parser(msgtext,
                                                    entities=entities)
-            if buttons:
-                data_type = Types.BUTTON_TEXT
-            else:
-                data_type = Types.TEXT
-
+            data_type = Types.BUTTON_TEXT if buttons else Types.TEXT
         elif msg.reply_to_message.sticker:
             content = msg.reply_to_message.sticker.file_id
             data_type = Types.STICKER

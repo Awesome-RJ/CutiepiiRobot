@@ -65,8 +65,7 @@ def set_nsfw(chat_id):
 
 def rem_nsfw(chat_id):
     with INSERTION_LOCK:
-        nsfwchat = SESSION.query(NSFWChats).get(str(chat_id))
-        if nsfwchat:
+        if nsfwchat := SESSION.query(NSFWChats).get(str(chat_id)):
             SESSION.delete(nsfwchat)
         SESSION.commit()
 

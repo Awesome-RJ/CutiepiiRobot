@@ -68,7 +68,6 @@ def add_channel(chat_id, channel):
     SESSION.commit()
 
 def disapprove(chat_id):
-    rem = SESSION.query(forceSubscribe).get(chat_id)
-    if rem:
+    if rem := SESSION.query(forceSubscribe).get(chat_id):
         SESSION.delete(rem)
         SESSION.commit()

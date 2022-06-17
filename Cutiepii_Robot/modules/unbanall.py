@@ -171,7 +171,7 @@ async def get_users(show):
         return
     info = await telethn.get_entity(show.chat_id)
     title = info.title or "this chat"
-    mentions = "Users in {}: \n".format(title)
+    mentions = f"Users in {title}: \n"
     async for user in telethn.iter_participants(show.chat_id):
         mentions += (
             f"\nDeleted Account {user.id}"

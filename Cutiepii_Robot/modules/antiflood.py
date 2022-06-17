@@ -113,29 +113,15 @@ async def check_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
             execstrings = f"Muted for {getvalue}"
             tag = "TMUTE"
         send_message(msg, f"Beep Boop! Boop Beep!\n{execstrings}!")
-        return (
-            "<b>{}:</b>"
-            "\n#{}"
-            "\n<b>User:</b> {}"
-            "\nFlooded the group.".format(
-                tag,
-                html.escape(chat.title),
-                mention_html(user.id, user.first_name),
-            )
-        )
+        return f"<b>{tag}:</b>\n#{html.escape(chat.title)}\n<b>User:</b> {mention_html(user.id, user.first_name)}\nFlooded the group."
+
 
     except BadRequest:
         await msg.reply_text(
             "I can't restrict people here, give me permissions first! Until then, I'll disable anti-flood.",
         )
         sql.set_flood(chat.id, 0)
-        return (
-            "<b>{}:</b>"
-            "\n#INFO"
-            "\nDon't have enough permission to restrict users so automatically disabled anti-flood".format(
-                chat.title,
-            )
-        )
+        return f"<b>{chat.title}:</b>\n#INFO\nDon't have enough permission to restrict users so automatically disabled anti-flood"
 
 
 
@@ -205,15 +191,8 @@ async def set_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
                 else:
                     await update.effective_message.reply_text("Antiflood has been disabled.")
-                return (
-                    "<b>{}:</b>"
-                    "\n#SETFLOOD"
-                    "\n<b>Admin:</b> {}"
-                    "\nDisable antiflood.".format(
-                        html.escape(chat_name),
-                        mention_html(user.id, user.first_name),
-                    )
-                )
+                return f"<b>{html.escape(chat_name)}:</b>\n#SETFLOOD\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nDisable antiflood."
+
 
             if amount <= 3:
                 send_message(
@@ -226,16 +205,8 @@ async def set_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                 await message.reply_text(f"Anti-flood has been set to {amount} in chat: {chat_name}")
             else:
                 await message.reply_text(f"Successfully updated anti-flood limit to {amount}!")
-            return (
-                "<b>{}:</b>"
-                "\n#SETFLOOD"
-                "\n<b>Admin:</b> {}"
-                "\nSet antiflood to <code>{}</code>.".format(
-                    html.escape(chat_name),
-                    mention_html(user.id, user.first_name),
-                    amount,
-                )
-            )
+            return f"<b>{html.escape(chat_name)}:</b>\n#SETFLOOD\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nSet antiflood to <code>{amount}</code>."
+
 
         else:
             await update.effective_message.reply_text("Invalid argument please use a number, 'off' or 'no'")
@@ -355,15 +326,8 @@ async def set_flood_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
                 f"Exceeding consecutive flood limit will result in {settypeflood}!"
             )
 
-        return (
-            "<b>{}:</b>\n"
-            "<b>Admin:</b> {}\n"
-            "Has changed antiflood mode. User will {}.".format(
-                settypeflood,
-                html.escape(chat.title),
-                mention_html(user.id, user.first_name),
-            )
-        )
+        return f"<b>{settypeflood}:</b>\n<b>Admin:</b> {html.escape(chat.title)}\nHas changed antiflood mode. User will {mention_html(user.id, user.first_name)}."
+
     getmode, getvalue = sql.get_flood_setting(chat.id)
     if getmode == 1:
         settypeflood = "ban"

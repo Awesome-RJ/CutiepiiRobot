@@ -143,13 +143,10 @@ async def gban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             reason,
         ):
             await message.reply_text(
-                "This user is already gbanned, for the following reason:\n"
-                "<code>{}</code>\n"
-                "I've gone and updated it with your new reason!".format(
-                    html.escape(old_reason),
-                ),
+                f"This user is already gbanned, for the following reason:\n<code>{html.escape(old_reason)}</code>\nI've gone and updated it with your new reason!",
                 parse_mode=ParseMode.HTML,
             )
+
 
         else:
             await message.reply_text(
@@ -165,9 +162,9 @@ async def gban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     current_time = datetime.utcnow().strftime(datetime_fmt)
 
     if ChatType.PRIVATE:
-        chat_origin = "<b>{} ({})</b>\n".format(html.escape(chat.title), chat.id)
+        chat_origin = f"<b>{html.escape(chat.title)} ({chat.id})</b>\n"
     else:
-        chat_origin = "<b>{}</b>\n".format(chat.id)
+        chat_origin = f"<b>{chat.id}</b>\n"
 
     log_message = (
         f"#GBANNED\n"
@@ -472,11 +469,7 @@ async def gbanstat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
     else:
         await update.effective_message.reply_text(
-            "Give me some arguments to choose a setting! on/off, yes/no!\n\n"
-            "Your current setting is: {}\n"
-            "When True, any gbans that happen will also happen in your group. "
-            "When False, they won't, leaving you at the possible mercy of "
-            "spammers.".format(sql.does_chat_gban(update.effective_chat.id)),
+            f"Give me some arguments to choose a setting! on/off, yes/no!\n\nYour current setting is: {sql.does_chat_gban(update.effective_chat.id)}\nWhen True, any gbans that happen will also happen in your group. When False, they won't, leaving you at the possible mercy of spammers."
         )
 
 
