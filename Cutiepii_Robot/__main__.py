@@ -556,7 +556,7 @@ async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=keyboard
             )
-
+            )
         elif prev_match:
             chat_id = prev_match[1]
             curr_page = int(prev_match[2])
