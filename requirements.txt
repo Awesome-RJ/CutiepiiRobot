@@ -67,4 +67,4 @@ pytimeparse
 APScheduler==3.9.1
 CloudScraper
 dnspython==2.2.1
-async-timeout=1.2
+async-timeout>=1.2
