@@ -35,7 +35,6 @@ import requests
 from typing import List
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes
 
 from Cutiepii_Robot import StartTime, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.chat_status import sudo_plus
