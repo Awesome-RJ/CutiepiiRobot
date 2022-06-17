@@ -68,4 +68,4 @@ APScheduler==3.9.1
 CloudScraper
 dnspython==2.2.1
 async-timeout>=1.2
-psycopg==3.0.15
+psycopg2
