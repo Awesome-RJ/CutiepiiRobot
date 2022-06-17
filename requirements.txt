@@ -66,3 +66,4 @@ python-barcode==0.14.0
 pytimeparse
 APScheduler==3.9.1
 CloudScraper
+dnspython==2.2.1
