@@ -525,7 +525,7 @@ def __user_info__(user_id):
     text = "Gbanned: <b>{}</b>"
     if user_id in [777000, 1087968824]:
         return ""
-    if user_id == CUTIEPII_PTB.bot_id:
+    if user_id == 1241223850:
         return ""
     if (user_id) in SUDO_USERS + TIGER_USERS + WHITELIST_USERS:
         return ""

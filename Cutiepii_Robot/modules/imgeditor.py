@@ -480,7 +480,7 @@ async def cb_handler(client: pgram, query: CallbackQuery):
 
 __mod_name__ = "Image Editor"
 __help__ = f"""
-{CUTIEPII_PTB.bot.first_name} have some advanced image editing tools inbuilt
+{context.bot.first_name} have some advanced image editing tools inbuilt
 Bright, Circle, RemBG, Blur, Border, Flip, Glitch, Sticker maker and more
 ➛ /edit [reply to image]*:* Open the image editor
 ➛ /rmbg [REPLY]*:* Revove BG of replied image/sticker.

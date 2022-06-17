@@ -149,7 +149,7 @@ def _check_member(client, message):
                         )
                     except ChatAdminRequired:
                         sent_message.edit(
-                            f"❗ **{CUTIEPII_PTB.bot.first_name} is not an admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
+                            f"❗ **{context.bot.first_name} is not an admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
                         )
                     except RPCError:
                         return
@@ -224,7 +224,7 @@ def config(client, message):
 
 __help__ = f"""
 *Force Subscribe*:
-- {CUTIEPII_PTB.bot.first_name} can mute members who are not subscribed your channel until they subscribe
+- {context.bot.first_name} can mute members who are not subscribed your channel until they subscribe
 - When enabled I will mute unsubscribed members and show them a unmute button. When they pressed the button I will unmute them
 
 *Setup*

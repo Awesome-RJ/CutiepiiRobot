@@ -64,7 +64,7 @@ Main Help Here
 """
 MARKDOWN_HELP = f"""
 
-Markdown is a very powerful formatting tool supported by telegram. {CUTIEPII_PTB.bot.first_name} has some enhancements, to make sure that \
+Markdown is a very powerful formatting tool supported by telegram. {context.bot.first_name} has some enhancements, to make sure that \
 saved messages are correctly parsed, and to allow you to create buttons.
 
 ➛ <code>_italic_</code>: wrapping text with '_' will produce italic text
@@ -116,7 +116,7 @@ For example:
 <code>hello
 %%%
 how are you</code>
-This will randomly choose between sending the first message, "hello", or the second message, "how are you". Use this to make {CUTIEPII_PTB.bot.first_name} feel a bit more customised! (only works in notes/filters/greetings)
+This will randomly choose between sending the first message, "hello", or the second message, "how are you". Use this to make {context.bot.first_name} feel a bit more customised! (only works in notes/filters/greetings)
 
 <b>Example welcome message</b>:
 - Every time a new user joins, they'll be presented with one of the three messages shown here.

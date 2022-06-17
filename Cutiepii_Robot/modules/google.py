@@ -321,7 +321,7 @@ async def apk(e):
             + app_link
             + "'>View in Play Store</a>"
         )
-        app_details += f"\n\n===> *{CUTIEPII_PTB.bot.first_name}* <==="
+        app_details += f"\n\n===> *{context.bot.first_name}* <==="
         await e.reply(app_details, parse_mode="HTML")
     except IndexError:
         await e.reply("No result found in search. Please enter **Valid app name**")

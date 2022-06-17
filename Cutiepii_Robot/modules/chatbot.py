@@ -102,7 +102,7 @@ def chatbot_response(query: str) -> str:
 def check_message(_: ContextTypes, message):
     reply_msg = message.reply_to_message
     text = message.text
-    if re.search("[.|\n]{0,}"+CUTIEPII_PTB.bot.first_name+"[.|\n]{0,}", text, flags=re.IGNORECASE):
+    if re.search("[.|\n]{0,}"+context.bot.first_name+"[.|\n]{0,}", text, flags=re.IGNORECASE):
         return True
     return bool(
         reply_msg
@@ -149,7 +149,7 @@ async def list_chatbot_chats(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 
 __help__ = f"""
-Chatbot utilizes the Brainshop's API and allows {CUTIEPII_PTB.bot.first_name} to talk and provides a more interactive group chat experience.
+Chatbot utilizes the Brainshop's API and allows {context.bot.first_name} to talk and provides a more interactive group chat experience.
 
 *Commands:*
 *Admins only:*

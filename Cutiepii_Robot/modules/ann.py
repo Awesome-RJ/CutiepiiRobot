@@ -370,13 +370,13 @@ async def admincacheupdates(update: Update):
     ):
 
         A_CACHE[update.effective_chat.id] = update.effective_chat.get_administrators()
-        # B_CACHE[update.effective_chat.id] = update.effective_chat.get_member(CUTIEPII_PTB.bot_id)
+        # B_CACHE[update.effective_chat.id] = update.effective_chat.get_member(1241223850)
 
 
 async def botstatchanged(update: Update):
     if update.effective_chat.type != "private":
         with contextlib.suppress(TelegramError):
-            B_CACHE[update.effective_chat.id] = update.effective_chat.get_member(CUTIEPII_PTB.bot_id)
+            B_CACHE[update.effective_chat.id] = update.effective_chat.get_member(1241223850)
 
 
 CUTIEPII_PTB.add_handler(ChatMemberHandler(chatmemberupdates, ChatMemberHandler.CHAT_MEMBER), group=-21)

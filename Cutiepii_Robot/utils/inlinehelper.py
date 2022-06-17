@@ -78,7 +78,7 @@ async def paste(content):
 async def inline_help_func(__HELP__):
     buttons = InlineKeyboard(row_width=2)
     buttons.add(
-        InlineKeyboardButton("Get More Help.", url=f"https://telegram.dog/{CUTIEPII_PTB.bot_username}?start=start"),
+        InlineKeyboardButton("Get More Help.", url=f"https://telegram.dog/{Cutiepii_Robot}?start=start"),
         InlineKeyboardButton("Go Inline!", switch_inline_query_current_chat=""),
     )
     answerss = [
@@ -111,7 +111,7 @@ async def alive_function(answers):
 **Pyrogram:** `{pyrover}`
 **MongoDB:** `{mongover}`
 **Platform:** `{sys.platform}`
-**Profiles:** [BOT](https://telegram.dog/{CUTIEPII_PTB.bot_username}) | [UBOT](https://telegram.dog/Awesome_Cutiepii)
+**Profiles:** [BOT](https://telegram.dog/{Cutiepii_Robot}) | [UBOT](https://telegram.dog/Awesome_Cutiepii)
 """
     answers.append(
         InlineQueryResultArticle(

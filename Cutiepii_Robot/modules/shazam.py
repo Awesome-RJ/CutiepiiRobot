@@ -51,7 +51,7 @@ async def shazamm(client, message):
     kkk = await fetch_audio(client, message)
     downloaded_file_name = kkk
     f = {"file": (downloaded_file_name, open(downloaded_file_name, "rb"))}
-    await kek.edit(f"**Searching For This Song In {CUTIEPII_PTB.bot.first_name}'s DataBase.**")
+    await kek.edit(f"**Searching For This Song In {context.bot.first_name}'s DataBase.**")
     r = requests.post("https://starkapi.herokuapp.com/shazam/", files=f)
     try:
         xo = r.json()
@@ -75,7 +75,7 @@ async def shazamm(client, message):
     messageo = f"""<b>Song Shazamed.</b>
 <b>Song Name : </b>{title}
 <b>Song By : </b>{by}
-<u><b>Identified Using @{CUTIEPII_PTB.bot_username} - Join our support @{SUPPORT_CHAT}</b></u>
+<u><b>Identified Using @{Cutiepii_Robot} - Join our support @{SUPPORT_CHAT}</b></u>
 <i>Powered by @Yuki_Netowrk</i>
 """
     await client.send_photo(message.chat.id, image, messageo, parse_mode="HTML")

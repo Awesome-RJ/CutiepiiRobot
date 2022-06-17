@@ -877,12 +877,12 @@ __help__ = f"""
 ➛ /meme*:* sends random anime memes
 ➛ /hmeme*:* sends random hentai memes
 ➛ /cuddle*:* cuddle someone by replying to his/her message or get cuddled
-➛ /hug*:* hug someone or get hugged by {CUTIEPII_PTB.bot.first_name}
+➛ /hug*:* hug someone or get hugged by {context.bot.first_name}
 ➛ /love*:* Checks Love in your heart weather it's true or fake
 ➛ /kiss*:* Kiss someone or get kissed 
-➛ /flirt*:* {CUTIEPII_PTB.bot.first_name} will flirt to the replied person or with you
-➛ /lewd*:* {CUTIEPII_PTB.bot.first_name} will act lewd with you or with the replied person
-➛ /romance*:* {CUTIEPII_PTB.bot.first_name} will act all romantic with you or replied person
+➛ /flirt*:* {context.bot.first_name} will flirt to the replied person or with you
+➛ /lewd*:* {context.bot.first_name} will act lewd with you or with the replied person
+➛ /romance*:* {context.bot.first_name} will act all romantic with you or replied person
 ➛ /couples*:* To Choose Couple Of The Day
 ➛ /owo*:* OWO de text
 ➛ /stretch*:* STRETCH de text

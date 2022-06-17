@@ -158,7 +158,7 @@ async def warn(
             keyboard[0].append(
                 InlineKeyboardButton(
                     "📝 Rules",
-                    url=f"t.me/{CUTIEPII_PTB.bot_username}?start={chat.id}",
+                    url=f"t.me/{Cutiepii_Robot}?start={chat.id}",
                 )
             )
 
@@ -254,7 +254,7 @@ async def swarn(
             keyboard[0].append(
                 InlineKeyboardButton(
                     "📝 Rules",
-                    url=f"t.me/{CUTIEPII_PTB.bot_username}?start={chat.id}",
+                    url=f"t.me/{Cutiepii_Robot}?start={chat.id}",
                 )
             )
 
@@ -355,7 +355,7 @@ async def dwarn(
             keyboard[0].append(
                 InlineKeyboardButton(
                     "📝 Rules",
-                    url=f"t.me/{CUTIEPII_PTB.bot_username}?start={chat.id}",
+                    url=f"t.me/{Cutiepii_Robot}?start={chat.id}",
                 )
             )
 
