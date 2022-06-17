@@ -3,7 +3,6 @@ import re
 import datetime
 
 from telethon import events, custom
-from datetime import datetime
 from Cutiepii_Robot import telethn as bot
 from Cutiepii_Robot.events import register
 

@@ -29,13 +29,11 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 import contextlib
-import requests
 
 from time import perf_counter
 from functools import wraps
 from cachetools import TTLCache
 from threading import RLock
-from Cutiepii_Robot.modules.sql.moderators_sql import is_modd
 from Cutiepii_Robot import (
     DEL_CMDS,
     DEV_USERS,
@@ -45,7 +43,6 @@ from Cutiepii_Robot import (
     TIGER_USERS,
     WHITELIST_USERS,
     CUTIEPII_PTB,
-    TOKEN,
     OWNER_ID,
 
 )
