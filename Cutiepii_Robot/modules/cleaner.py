@@ -78,8 +78,8 @@ async def clean_blue_text_must_click(update: Update, context: ContextTypes.DEFAU
     bot = context.bot
     chat = update.effective_chat
     message = update.effective_message
-#    if (chat.get_member(CUTIEPII_PTB.bot.id)).can_delete_messages and sql.is_enabled(chat.id):
-    if (chat.get_member(CUTIEPII_PTB.bot.id)).can_delete_messages and sql.is_enabled(chat.id):    
+#    if (chat.get_member(CUTIEPII_PTB.bot_id)).can_delete_messages and sql.is_enabled(chat.id):
+    if (chat.get_member(CUTIEPII_PTB.bot_id)).can_delete_messages and sql.is_enabled(chat.id):    
         fst_word = await message.text.strip().split(None, 1)[0]
 
         if len(fst_word) > 1 and any(

@@ -92,7 +92,7 @@ async def _(event):
         await telethn.send_file(
             event.chat_id,
             kk,
-            caption = f"Facebook Video downloaded Successfully by @{CUTIEPII_PTB.bot.username}.\nSay hi to devs @{SUPPORT_CHAT}.",
+            caption = f"Facebook Video downloaded Successfully by @{CUTIEPII_PTB.bot_username}.\nSay hi to devs @{SUPPORT_CHAT}.",
         )
         os.system(f"rm {kk}")
     else:

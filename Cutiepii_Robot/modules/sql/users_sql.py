@@ -108,7 +108,7 @@ INSERTION_LOCK = threading.RLock()
 
 def ensure_bot_in_db():
     with INSERTION_LOCK:
-        bot = Users(CUTIEPII_PTB.bot.id, CUTIEPII_PTB.bot.username)
+        bot = Users(CUTIEPII_PTB.bot_id, CUTIEPII_PTB.bot_username)
         SESSION.merge(bot)
         SESSION.commit()
 

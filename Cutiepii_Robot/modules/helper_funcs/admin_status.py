@@ -41,7 +41,7 @@ def bot_admin_check(permission: AdminPerms = None):
 			chat = update.effective_chat
 			if chat.type == "private" or chat.all_members_are_administrators:
 				return func(update, context, *args, **kwargs)
-			bot_id = CUTIEPII_PTB.bot.id
+			bot_id = CUTIEPII_PTB.bot_id
 
 			try:  # try to get from cache
 				bot_member = B_CACHE[chat.id]

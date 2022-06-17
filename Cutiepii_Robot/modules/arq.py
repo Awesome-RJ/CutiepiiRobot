@@ -64,7 +64,7 @@ async def arq_stats(_, message):
 **ARQ Statistics:**
 **Users:** `{users}`
 
-**@{CUTIEPII_PTB.bot.username} Some Modules Running On ARQ**
+**@{CUTIEPII_PTB.bot_username} Some Modules Running On ARQ**
 """
     await message.reply_text(
         statistics, disable_web_page_preview=True

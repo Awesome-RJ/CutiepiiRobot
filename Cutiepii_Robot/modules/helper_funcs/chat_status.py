@@ -350,7 +350,7 @@ def can_promote(func):
                 f"Make sure I'm admin there and have the permission to appoint new admins."
             )
 
-        if chat.get_member(CUTIEPII_PTB.bot.id).can_promote_members:
+        if chat.get_member(CUTIEPII_PTB.bot_id).can_promote_members:
             return func(update, context, *args, **kwargs)
         await update.effective_message.reply_text(cant_promote, parse_mode=ParseMode.HTML)
 
