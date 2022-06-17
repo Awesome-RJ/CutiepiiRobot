@@ -543,11 +543,10 @@ async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
                 keyboard = []
             kbrd = InlineKeyboardMarkup(InlineKeyboardButton(text="Back", callback_data=f"stngs_back({chat_id}"))
             keyboard.append(kbrd)
-            query.message.edit_text(
+            await query.message.edit_text(
                 text=text,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=keyboard
-            )
             )
         elif prev_match:
             chat_id = prev_match[1]
