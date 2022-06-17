@@ -32,14 +32,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import os
 import html
 import nekos
-import asyncio
 import requests
 
 from PIL import Image
 from nekos.errors import InvalidArgument
 from telegram import Update
 from telegram.error import BadRequest, RetryAfter, Forbidden
-from telegram.ext import ContextTypes, CommandHandler, filters
+from telegram.ext import CommandHandler, filters
 from telegram.constants import ParseMode
 from telegram.helpers import mention_html
 

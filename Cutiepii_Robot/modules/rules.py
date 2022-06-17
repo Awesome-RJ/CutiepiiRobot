@@ -39,7 +39,7 @@ from telegram import (
     )
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
-from telegram.ext import ContextTypes, filters, CommandHandler
+from telegram.ext import filters, CommandHandler
 from telegram.helpers import escape_markdown
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.string_handling import markdown_parser

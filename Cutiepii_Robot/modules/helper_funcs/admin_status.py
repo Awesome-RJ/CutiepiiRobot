@@ -6,17 +6,14 @@ from telegram import Chat, Update, ChatMember, InlineKeyboardButton, InlineKeybo
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes as Ctx, CallbackQueryHandler as CBHandler
 
-from Cutiepii_Robot import CUTIEPII_PTB, DEV_USERS
+from Cutiepii_Robot import CUTIEPII_PTB
 
 from .admin_status_helpers import (
 	ADMINS_CACHE as A_CACHE,
 	BOT_ADMIN_CACHE as B_CACHE,
 	SUDO_USERS,
 	AdminPerms,
-	anon_reply_markup as arm,
-	anon_reply_text as art,
 	anon_callbacks as a_cb,
-	user_is_not_admin_errmsg as u_na_errmsg,
 	edit_anon_msg as eam,
 )
 

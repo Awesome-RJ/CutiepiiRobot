@@ -62,7 +62,6 @@ from telegram import Update
 from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
 from .sql.clear_cmd_sql import get_clearcmd
-from .helper_funcs.misc import delete
 
 def get_tz(con):
     for c_code in c_n:

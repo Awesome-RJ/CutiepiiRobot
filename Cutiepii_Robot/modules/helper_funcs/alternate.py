@@ -30,7 +30,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 from functools import wraps
 from telegram import error
-from urllib.parse import quote
 
 
 async def send_message(message, *args, **kwargs):

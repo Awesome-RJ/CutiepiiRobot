@@ -35,7 +35,7 @@ import datetime
 from datetime import datetime
 from telethon import Button, __version__ as tlhver
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import telethn as telethn
+from Cutiepii_Robot import telethn
 from platform import python_version
 from pyrogram import __version__ as pyrover
 
