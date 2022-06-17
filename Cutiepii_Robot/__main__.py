@@ -542,14 +542,12 @@ async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             except AttributeError:
                 keyboard = []
             kbrd = InlineKeyboardMarkup(
-                    [
                         [
                             InlineKeyboardButton(
                                 text="Back",
                                 callback_data=f"stngs_back({chat_id})",
                             )
                         ]
-                    ]
             keyboard.append(kbrd)
             query.message.edit_text(
                 text=text,
