@@ -783,10 +783,11 @@ async def about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = await bot.get_chat(user_id) if user_id else message.from_user
     if info := sql.get_user_bio(user.id):
         await message.reply_text(
-            "*{}*:\n{}".format(user.first_name, escape_markdown(info)),
+            f"*{user.first_name}*:\n{escape_markdown(info)}",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
         )
+
     elif update.effective_message.reply_to_message:
         username = user.first_name
         await message.reply_text(
@@ -902,10 +903,8 @@ async def whois(client, message):
         get_user = message.reply_to_message.from_user.id
     elif len(cmd) > 1:
         get_user = cmd[1]
-        try:
+        with contextlib.suppress(ValueError):
             get_user = int(cmd[1])
-        except ValueError:
-            pass
     try:
         user = await client.get_users(get_user)
     except PeerIdInvalid:

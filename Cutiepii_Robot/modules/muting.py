@@ -211,12 +211,8 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                 can_send_other_messages=True,
                 can_add_web_page_previews=True,
             )
-            try:
+            with contextlib.suppress(BadRequest):
                 await bot.restrict_chat_member(chat.id, (user_id), chat_permissions)
-            except BadRequest:
-                pass
-
-
             await update.effective_message.edit_text(
                 f"Yep! User {mention_html(admeme.user.id, admeme.user.first_name)} can start talking again in {chat.title}!",
                 parse_mode=ParseMode.HTML,
@@ -428,15 +424,10 @@ async def temp_nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> st
     if not mutetime:
         return ""
 
-    log = "<b>{}:</b>" \
-          "\n#TEMP RESTRICTED" \
-          "\n<b>➛ Admin:</b> {}" \
-          "\n<b>➛ User:</b> {}" \
-          "\n<b>➛ ID:</b> <code>{}</code>" \
-          "\n<b>➛ Time:</b> {}".format(html.escape(chat.title), mention_html(user.id, user.first_name),
-                                       mention_html(member.user.id, member.user.first_name), user_id, time_val)
+    log = f"<b>{html.escape(chat.title)}:</b>\n#TEMP RESTRICTED\n<b>➛ Admin:</b> {mention_html(user.id, user.first_name)}\n<b>➛ User:</b> {mention_html(member.user.id, member.user.first_name)}\n<b>➛ ID:</b> <code>{user_id}</code>\n<b>➛ Time:</b> {time_val}"
+
     if reason:
-        log += "\n<b>➛ Reason:</b> {}".format(reason)
+        log += f"\n<b>➛ Reason:</b> {reason}"
 
     try:
         if member.can_send_messages is None or member.can_send_messages:
@@ -496,13 +487,8 @@ async def media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         keyboard = []
         reply = (chat.id, "Yep, {} can send media again in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
         await message.reply_text(reply,  parse_mode=ParseMode.HTML)
-        return "<b>{}:</b>" \
-               "\n#UNRESTRICTED" \
-               "\n<b>➛ Admin:</b> {}" \
-               "\n<b>➛ User:</b> {}" \
-               "\n<b>➛ ID:</b> <code>{}</code>".format(html.escape(chatD.title),
-                                                       mention_html(user.id, user.first_name),
-                                                       mention_html(member.user.id, member.user.first_name), user_id)
+        return f"<b>{html.escape(chatD.title)}:</b>\n#UNRESTRICTED\n<b>➛ Admin:</b> {mention_html(user.id, user.first_name)}\n<b>➛ User:</b> {mention_html(member.user.id, member.user.first_name)}\n<b>➛ ID:</b> <code>{user_id}</code>"
+
     return ""
 
 
@@ -543,13 +529,8 @@ async def nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
             keyboard = []
             reply = (chat.id, "{} is restricted from sending media in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
             await message.reply_text(reply, parse_mode=ParseMode.HTML)
-            return "<b>{}:</b>" \
-                   "\n#RESTRICTED" \
-                   "\n<b>➛ Admin:</b> {}" \
-                   "\n<b>➛ User:</b> {}" \
-                   "\n<b>➛ ID:</b> <code>{}</code>".format(html.escape(chatD.title),
-                                              mention_html(user.id, user.first_name),
-                                              mention_html(member.user.id, member.user.first_name), user_id)
+            return f"<b>{html.escape(chatD.title)}:</b>\n#RESTRICTED\n<b>➛ Admin:</b> {mention_html(user.id, user.first_name)}\n<b>➛ User:</b> {mention_html(member.user.id, member.user.first_name)}\n<b>➛ ID:</b> <code>{user_id}</code>"
+
 
         else:
             await message.reply_text(chat.id, "This user is already restricted in {}!")

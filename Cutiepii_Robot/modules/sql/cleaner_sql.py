@@ -46,7 +46,7 @@ class CleanerBlueTextChatSettings(BASE):
         self.is_enable = is_enable
 
     def __repr__(self):
-        return "clean blue text for {}".format(self.chat_id)
+        return f"clean blue text for {self.chat_id}"
 
 
 class CleanerBlueTextChat(BASE):
@@ -81,8 +81,9 @@ GLOBAL_IGNORE_COMMANDS = set()
 
 def set_cleanbt(chat_id, is_enable):
     with CLEANER_CHAT_SETTINGS:
-        curr = SESSION.query(CleanerBlueTextChatSettings).get(str(chat_id))
-        if curr:
+        if curr := SESSION.query(CleanerBlueTextChatSettings).get(
+            str(chat_id)
+        ):
             SESSION.delete(curr)
 
         newcurr = CleanerBlueTextChatSettings(str(chat_id), is_enable)
@@ -116,10 +117,9 @@ def chat_ignore_command(chat_id, ignore):
 def chat_unignore_command(chat_id, unignore):
     unignore = unignore.lower()
     with CLEANER_CHAT_LOCK:
-        unignored = SESSION.query(CleanerBlueTextChat).get((str(chat_id), unignore))
-
-        if unignored:
-
+        if unignored := SESSION.query(CleanerBlueTextChat).get(
+            (str(chat_id), unignore)
+        ):
             if str(chat_id) not in CLEANER_CHATS:
                 CLEANER_CHATS.setdefault(
                     str(chat_id), {"setting": False, "commands": set()}
@@ -155,9 +155,9 @@ def global_ignore_command(commands):
 def global_unignore_command(commands):
     commands = frozenset({command.lower()})
     with CLEANER_GLOBAL_LOCK:
-        unignored = SESSION.query(CleanerBlueTextGlobal).get(str(commands))
-
-        if unignored:
+        if unignored := SESSION.query(CleanerBlueTextGlobal).get(
+            str(commands)
+        ):
             if command in GLOBAL_IGNORE_COMMANDS:
                 GLOBAL_IGNORE_COMMANDS.remove(commands)
 
@@ -183,8 +183,9 @@ def is_command_ignored(chat_id, commands):
 
 def is_enabled(chat_id):
     try:
-        resultcurr = SESSION.query(CleanerBlueTextChatSettings).get(str(chat_id))
-        if resultcurr:
+        if resultcurr := SESSION.query(CleanerBlueTextChatSettings).get(
+            str(chat_id)
+        ):
             return resultcurr.is_enable
         return False #default
     finally:

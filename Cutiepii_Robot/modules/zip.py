@@ -96,16 +96,18 @@ async def _(event):
             directory_name = downloaded_file_name
         except Exception as e:  # pylint:disable=C0103,W0703
             await mone.reply(str(e))
-    zipfile.ZipFile(directory_name + ".zip", "w", zipfile.ZIP_DEFLATED).write(
+    zipfile.ZipFile(f"{directory_name}.zip", "w", zipfile.ZIP_DEFLATED).write(
         directory_name
     )
+
     await event.telethn.send_file(
         event.chat_id,
-        directory_name + ".zip",
+        f"{directory_name}.zip",
         force_document=True,
         allow_cache=False,
         reply_to=event.message.id,
     )
+
     await mone.delete()
 
 
@@ -116,8 +118,8 @@ def zipdir(path, ziph):
             ziph.write(os.path.join(root, file))
             os.remove(os.path.join(root, file))
 
-extracted = TEMP_DOWNLOAD_DIRECTORY + "extracted/"
-thumb_image_path = TEMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
+extracted = f"{TEMP_DOWNLOAD_DIRECTORY}extracted/"
+thumb_image_path = f"{TEMP_DOWNLOAD_DIRECTORY}/thumb_image.jpg"
 if not os.path.isdir(extracted):
     os.makedirs(extracted)
 
@@ -221,9 +223,10 @@ async def _(event):
                 except Exception as e:
                     await telethn.send_message(
                         event.chat_id,
-                        "{} caused `{}`".format(caption_rts, str(e)),
+                        f"{caption_rts} caused `{str(e)}`",
                         reply_to=event.message.id,
                     )
+
                     continue
                 await mone.delete()
                 os.remove(single_file)

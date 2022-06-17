@@ -70,8 +70,9 @@ USER_LOCK = threading.RLock()
 
 def chat_should_report(chat_id: Union[str, int]) -> bool:
     try:
-        chat_setting = SESSION.query(ReportingChatSettings).get(str(chat_id))
-        if chat_setting:
+        if chat_setting := SESSION.query(ReportingChatSettings).get(
+            str(chat_id)
+        ):
             return chat_setting.should_report
         return False
     finally:
@@ -80,8 +81,7 @@ def chat_should_report(chat_id: Union[str, int]) -> bool:
 
 def user_should_report(user_id: int) -> bool:
     try:
-        user_setting = SESSION.query(ReportingUserSettings).get(user_id)
-        if user_setting:
+        if user_setting := SESSION.query(ReportingUserSettings).get(user_id):
             return user_setting.should_report
         return True
     finally:

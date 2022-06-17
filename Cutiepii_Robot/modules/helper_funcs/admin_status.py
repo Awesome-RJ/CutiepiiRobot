@@ -174,35 +174,38 @@ def user_not_admin_check(func):
 
 
 def perm_callback_check(upd: Update, _: Ctx):
-	callback = upd.callback_query
-	chat_id = int(callback.data.split('/')[1])
-	message_id = int(callback.data.split('/')[2])
-	perm = callback.data.split('/')[3]
-	user_id = callback.from_user.id
-	msg = upd.effective_message
+    callback = upd.callback_query
+    chat_id = int(callback.data.split('/')[1])
+    message_id = int(callback.data.split('/')[2])
+    perm = callback.data.split('/')[3]
+    user_id = callback.from_user.id
+    msg = upd.effective_message
 
-	mem = user_is_admin(upd, user_id, perm = perm if perm != 'None' else None)
+    mem = user_is_admin(upd, user_id, perm = perm if perm != 'None' else None)
 
-	if not mem:  # not admin or doesn't have the required perm
-		eam(msg,
-			"You need to be an admin to perform this action!"
-			if not perm == 'None'
-			else f"You lack the permission: `{perm}`!")
-		return
+    if not mem:  # not admin or doesn't have the required perm
+        eam(
+            msg,
+            "You need to be an admin to perform this action!"
+            if perm != 'None'
+            else f"You lack the permission: `{perm}`!",
+        )
 
-	try:
-		cb = a_cb.pop((chat_id, message_id), None)
-	except KeyError:
-		eam(msg, "This message is no longer valid.")
-		return
+        return
 
-	msg.delete()
+    try:
+    	cb = a_cb.pop((chat_id, message_id), None)
+    except KeyError:
+    	eam(msg, "This message is no longer valid.")
+    	return
 
-	# update the `Update` and `ContextTypes` attributes by the correct values, so they can be used properly
-	setattr(cb[0][0], "_effective_user", upd.effective_user)
-	setattr(cb[0][0], "_effective_message", cb[2][0])
+    msg.delete()
 
-	return cb[1](cb[0][0], cb[0][1])  # return func(update, context)
+    # update the `Update` and `ContextTypes` attributes by the correct values, so they can be used properly
+    setattr(cb[0][0], "_effective_user", upd.effective_user)
+    setattr(cb[0][0], "_effective_message", cb[2][0])
+
+    return cb[1](cb[0][0], cb[0][1])  # return func(update, context)
 
 
 CUTIEPII_PTB.add_handler(CBHandler(perm_callback_check, pattern = "anonCB"))

@@ -98,7 +98,7 @@ class FedsUserSettings(BASE):
         self.user_id = user_id
 
     def __repr__(self):
-        return "<Feds report settings ({})>".format(self.user_id)
+        return f"<Feds report settings ({self.user_id})>"
 
 
 class FedSubs(BASE):
@@ -111,7 +111,7 @@ class FedSubs(BASE):
         self.fed_subs = fed_subs
 
     def __repr__(self):
-        return "<Fed {} subscribes for {}>".format(self.fed_id, self.fed_subs)
+        return f"<Fed {self.fed_id} subscribes for {self.fed_subs}>"
 
 
 # Dropping db
@@ -279,39 +279,30 @@ def del_fed(fed_id):
         FEDERATION_BYNAME.pop(fed_name)
         if FEDERATION_CHATS_BYID.get(fed_id):
             for x in FEDERATION_CHATS_BYID[fed_id]:
-                delchats = SESSION.query(ChatF).get(str(x))
-                if delchats:
+                if delchats := SESSION.query(ChatF).get(str(x)):
                     SESSION.delete(delchats)
                     SESSION.commit()
                 FEDERATION_CHATS.pop(x)
             FEDERATION_CHATS_BYID.pop(fed_id)
-        # Delete fedban users
-        getall = FEDERATION_BANNED_USERID.get(fed_id)
-        if getall:
+        if getall := FEDERATION_BANNED_USERID.get(fed_id):
             for x in getall:
-                banlist = SESSION.query(BansF).get((fed_id, str(x)))
-                if banlist:
+                if banlist := SESSION.query(BansF).get((fed_id, str(x))):
                     SESSION.delete(banlist)
                     SESSION.commit()
         if FEDERATION_BANNED_USERID.get(fed_id):
             FEDERATION_BANNED_USERID.pop(fed_id)
         if FEDERATION_BANNED_FULL.get(fed_id):
             FEDERATION_BANNED_FULL.pop(fed_id)
-        # Delete fedsubs
-        getall = MYFEDS_SUBSCRIBER.get(fed_id)
-        if getall:
+        if getall := MYFEDS_SUBSCRIBER.get(fed_id):
             for x in getall:
-                getsubs = SESSION.query(FedSubs).get((fed_id, str(x)))
-                if getsubs:
+                if getsubs := SESSION.query(FedSubs).get((fed_id, str(x))):
                     SESSION.delete(getsubs)
                     SESSION.commit()
         if FEDS_SUBSCRIBER.get(fed_id):
             FEDS_SUBSCRIBER.pop(fed_id)
         if MYFEDS_SUBSCRIBER.get(fed_id):
             MYFEDS_SUBSCRIBER.pop(fed_id)
-        # Delete from database
-        curr = SESSION.query(Federations).get(fed_id)
-        if curr:
+        if curr := SESSION.query(Federations).get(fed_id):
             SESSION.delete(curr)
             SESSION.commit()
         return True
@@ -632,8 +623,7 @@ def get_all_fban_users_target(fed_id, user_id):
 def get_all_fban_users_global():
     total = []
     for x in list(FEDERATION_BANNED_USERID):
-        for y in FEDERATION_BANNED_USERID[x]:
-            total.append(y)
+        total.extend(iter(FEDERATION_BANNED_USERID[x]))
     return total
 
 
@@ -705,8 +695,7 @@ def set_fed_log(fed_id, chat_id):
 
 
 def subs_fed(fed_id, my_fed):
-    check = get_spec_subs(fed_id, my_fed)
-    if check:
+    if check := get_spec_subs(fed_id, my_fed):
         return False
     with FEDS_SUBSCRIBER_LOCK:
         subsfed = FedSubs(fed_id, my_fed)
@@ -728,8 +717,7 @@ def subs_fed(fed_id, my_fed):
 
 def unsubs_fed(fed_id, my_fed):
     with FEDS_SUBSCRIBER_LOCK:
-        getsubs = SESSION.query(FedSubs).get((fed_id, my_fed))
-        if getsubs:
+        if getsubs := SESSION.query(FedSubs).get((fed_id, my_fed)):
             if my_fed in FEDS_SUBSCRIBER.get(fed_id, set()):  # sanity check
                 FEDS_SUBSCRIBER.get(fed_id, set()).remove(my_fed)
             if fed_id in MYFEDS_SUBSCRIBER.get(my_fed, set()):  # sanity check
@@ -873,8 +861,9 @@ def __load_feds_subscriber():
             try:
                 MYFEDS_SUBSCRIBER[x.fed_subs] += [x.fed_id]
             except KeyError:
-                getsubs = SESSION.query(FedSubs).get((x.fed_id, x.fed_subs))
-                if getsubs:
+                if getsubs := SESSION.query(FedSubs).get(
+                    (x.fed_id, x.fed_subs)
+                ):
                     SESSION.delete(getsubs)
                     SESSION.commit()
 

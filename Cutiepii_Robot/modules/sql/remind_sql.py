@@ -49,9 +49,7 @@ class Reminds(BASE):
         self.time_seconds = int(time_seconds)
 
     def __repr__(self):
-        return "<remind in {} for time {}>".format(
-            self.chat_id, self.time_seconds,
-        )
+        return f"<remind in {self.chat_id} for time {self.time_seconds}>"
 
 # Reminds.__table__.drop()
 Reminds.__table__.create(checkfirst=True)
@@ -69,14 +67,13 @@ def set_remind(chat_id, time_sec, remind_message, user_id):
         reminds.user_id = user_id
         SESSION.add(reminds)
         SESSION.commit()
-        if not time_sec in REMINDERS:
+        if time_sec not in REMINDERS:
             REMINDERS[time_sec] = []
         REMINDERS[time_sec].append({"chat_id": str(chat_id), "message": remind_message, "user_id": user_id})
 
 def rem_remind(chat_id, time_sec, remind_message, user_id):
     with INSERTION_LOCK:
-        reminds = SESSION.query(Reminds).get((str(chat_id), time_sec))
-        if reminds:
+        if reminds := SESSION.query(Reminds).get((str(chat_id), time_sec)):
             SESSION.delete(reminds)
             SESSION.commit()
             REMINDERS[time_sec].remove({"chat_id": str(chat_id), "message": remind_message, "user_id": user_id})

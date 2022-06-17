@@ -32,7 +32,7 @@ def getphh(index):
     name = api.getReleaseName(recentRelease)
     assets = api.getAssets(recentRelease)
     releaseName = api.getReleaseName(recentRelease)
-    message = "<b>Author:</b> <a href='{}'>{}</a>\n".format(authorUrl, author)
+    message = f"<b>Author:</b> <a href='{authorUrl}'>{author}</a>\n"
     message += f"<b>Release Name:</b> <code>{releaseName}" + "</code>\n\n"
     message += "<b>Assets:</b>\n"
     for asset in assets:
@@ -60,7 +60,7 @@ def getData(url, index):
     name = api.getReleaseName(recentRelease)
     assets = api.getAssets(recentRelease)
     releaseName = api.getReleaseName(recentRelease)
-    message = "*Author:* [{}]({})\n".format(author, authorUrl)
+    message = f"*Author:* [{author}]({authorUrl})\n"
     message += f"*Release Name:* {releaseName}" + "\n\n"
     for asset in assets:
         message += "*Asset:* \n"
@@ -198,7 +198,7 @@ async def listRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = "*List of repo shotcuts in {}:*\n"
     des = "You can get repo shortcuts by using `/fetch repo`, or `&repo`.\n"
     for repo in repo_list:
-        repo_name = " • `{}`\n".format(repo.name)
+        repo_name = f" • `{repo.name}`\n"
         if len(msg) + len(repo_name) > MessageLimit.TEXT_LENGTH:
             deletion(update, context, await update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN))
             msg = ""

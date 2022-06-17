@@ -290,9 +290,6 @@ def user_not_admin(func):
         if user and not (await is_user_admin(update, user.id)):
             return func(update, context, *args, **kwargs)
 
-        if not user:
-            pass
-
     return is_not_admin
 
 

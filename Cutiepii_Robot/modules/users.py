@@ -162,9 +162,7 @@ def chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         with contextlib.suppress(Exception):
             curr_chat = await context.bot.getChat(chat.chat_id)
             chat_members = curr_chat.get_member_count(context.bot.id)
-            chatfile += "{}. {} | {} | {}\n".format(
-                P, chat.chat_name, chat.chat_id, chat_members
-            )
+            chatfile += f"{P}. {chat.chat_name} | {chat.chat_id} | {chat_members}\n"
             P += 1
     with BytesIO(str.encode(chatfile)) as output:
         output.name = "glist.txt"

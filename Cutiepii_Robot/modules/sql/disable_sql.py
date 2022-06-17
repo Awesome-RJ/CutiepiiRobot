@@ -45,7 +45,7 @@ class Disable(BASE):
         self.commands = commands
 
     def __repr__(self):
-        return "Disabled cmd {} in {}".format(self.commands, self.chat_id)
+        return f"Disabled cmd {self.commands} in {self.chat_id}"
 
 
 Disable.__table__.create(checkfirst=True)
@@ -72,9 +72,7 @@ def disable_command(chat_id, disable):
 
 def enable_command(chat_id, enable):
     with DISABLE_INSERTION_LOCK:
-        disabled = SESSION.query(Disable).get((str(chat_id), enable))
-
-        if disabled:
+        if disabled := SESSION.query(Disable).get((str(chat_id), enable)):
             if enable in DISABLED.get(str(chat_id)):  # sanity check
                 DISABLED.setdefault(str(chat_id), set()).remove(enable)
 
