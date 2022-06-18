@@ -41,7 +41,7 @@ from telegram.constants import ParseMode, ChatType
 from telegram.ext import ContextTypes, CallbackQueryHandler, CommandHandler, filters, MessageHandler
 from telegram.helpers import mention_html
 
-from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot import CUTIEPII_PTB, WHITELIST_USERS
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_admin,
@@ -69,7 +69,10 @@ async def check_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
         return ""
 
     # ignore admins and whitelists
-    if await is_user_admin(update, user.id):
+    if (
+        (await is_user_admin(update, user.id))
+        or user.id in WHITELIST_USERS
+    ):
         sql.update_flood(chat.id, None)
         return ""
     # ignore approved users
@@ -98,12 +101,12 @@ async def check_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
             execstrings = "Muted"
             tag = "MUTED"
         elif getmode == 4:
-            bantime = extract_time(msg, getvalue)
+            bantime = await extract_time(msg, getvalue)
             chat.ban_member(user.id, until_date=bantime)
             execstrings = f"Banned for {getvalue}"
             tag = "TBAN"
         elif getmode == 5:
-            mutetime = extract_time(msg, getvalue)
+            mutetime = await extract_time(msg, getvalue)
             await context.bot.restrict_chat_member(
                 chat.id,
                 user.id,
