@@ -118,7 +118,7 @@ async def gban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
 
     try:
-        user_chat = bot.get_chat(user_id)
+        user_chat = await bot.get_chat(user_id)
     except BadRequest as excp:
         if excp.message == "User not found":
             await message.reply_text("I can't seem to find this user.")

@@ -88,7 +88,7 @@ async def rem_nsfw(update: Update):
     return message
 
 
-async def list_nsfw_chats(update: Update):
+async def list_nsfw_chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chats = sql.get_all_nsfw_chats()
     text = "<b>NSFW Activated Chats</b>\n"
     for chat in chats:

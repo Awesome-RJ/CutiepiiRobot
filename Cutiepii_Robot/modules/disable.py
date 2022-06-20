@@ -78,7 +78,7 @@ if is_module_loaded(FILENAME):
                 if admin_ok:
                     ADMIN_CMDS.extend(command)
 
-        def check_update(self, update):
+        def check_update(self, update: object) -> Any:
             if not isinstance(update, Update) or not update.effective_message:
                 return
             message = update.effective_message
@@ -123,7 +123,7 @@ if is_module_loaded(FILENAME):
             DISABLE_OTHER.append(friendly or pattern)
             self.friendly = friendly or pattern
 
-        def check_update(self, update):
+        def check_update(self, update: object) -> Any:
             if isinstance(update, Update) and update.effective_message:
                 chat = update.effective_chat
                 return self.filters.check_update(
