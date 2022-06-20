@@ -1,5 +1,4 @@
 import asyncio
-from re import compile as check
 
 from telethon import events, Button
 from telethon.tl.functions.channels import EditBannedRequest
@@ -38,16 +37,16 @@ async def demons(event):
            [Button.inline("Yes", data="demons yes")],
            [Button.inline("No", data="demons no")],
         ]
-        demon = f"Found **{demons}** Demon{'s' if demons > 1 else ''} In This Chat!\n\nWould You Like To Hunt {'Them All' if demons > 1 else 'That Demon'} ?"
+        text = f"Found **{0}** Demon{1} In This Chat!\n\nWould You Like To Hunt {2} ?".format(demons, 's' if demons > 1 else '', 'Them All' if demons > 1 else 'That Demon')
         await X.edit(
-            demon,
-            buttons=markup,
+            text,
+            buttons=markup
         )
     else:
         await X.edit("There Are No Demons!\nThis Chat Is Safe For Now!")
 
 
-@telethn.on(events.CallbackQuery(data=check(r"demons (yes|no)")))
+@telethn.on(events.CallbackQuery(data=r"demons (yes|no)"))
 async def dimonhandler(event):
     if event.data == "demons yes":
         # Here laying the sanity check
@@ -82,9 +81,9 @@ async def dimonhandler(event):
 
         demon = ""
         if normy_demons > 0:
-            demon += f"**{normy_demons}** - Hunted Demon{'s' if normy_demons > 1 else ''}!"
+            demon += f"**{0}** - Demon{1} Hunted!".format(normy_demons, 's' if normy_demons > 1 else '')
         if pro_demons > 0:
-            demon += f"\n**{pro_demons}** - Upper Level Demon{'s' if pro_demons > 1 else ''} {'Are' if pro_demons > 1 else 'Is'} Escaped!"
+            demon += f"\n**{0}** - Upper Level Demon{1} {2} Escaped!".format(pro_demons, 's' if pro_demons > 1 else '', 'Are' if pro_demons > 1 else 'Is')
 
         await event.edit(demon)
         await event.answer("Demon Hunted!")
