@@ -36,7 +36,6 @@ import time
 import spamwatch
 import telegram.ext as tg
 
-
 from pyrogram import Client
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
 from telegram import Chat
@@ -54,14 +53,17 @@ from httpx import AsyncClient, Timeout
 
 StartTime = time.time()
 
+
 def get_user_list(__init__, key):
     with open(f"{os.getcwd()}/Cutiepii_Robot/{__init__}", "r") as json_file:
         return json.load(json_file)[key]
 
+
 # enable logging
 FORMAT = "[CUTIEPII ROBOT] %(message)s"
 logging.basicConfig(
-    handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
+    handlers=[logging.FileHandler("log.txt"),
+              logging.StreamHandler()],
     level=logging.INFO,
     format=FORMAT,
     datefmt="[%X]",
@@ -94,62 +96,104 @@ if ENV:
         SUDO_USERS = {int(x) for x in os.environ.get("SUDO_USERS", "").split()}
         DEV_USERS = {int(x) for x in os.environ.get("DEV_USERS", "").split()}
     except ValueError:
-        raise Exception("Your sudo or dev users list does not contain valid integers.")
+        raise Exception(
+            "Your sudo or dev users list does not contain valid integers.")
 
     try:
-        SUPPORT_USERS = {int(x) for x in os.environ.get("SUPPORT_USERS", "").split()}
+        SUPPORT_USERS = {
+            int(x)
+            for x in os.environ.get("SUPPORT_USERS", "").split()
+        }
     except ValueError:
-        raise Exception("Your support users list does not contain valid integers.")
+        raise Exception(
+            "Your support users list does not contain valid integers.")
 
     try:
-        WHITELIST_USERS = {int(x) for x in os.environ.get("WHITELIST_USERS", "").split()}
+        WHITELIST_USERS = {
+            int(x)
+            for x in os.environ.get("WHITELIST_USERS", "").split()
+        }
     except ValueError:
-        raise Exception("Your whitelisted users list does not contain valid integers.")
+        raise Exception(
+            "Your whitelisted users list does not contain valid integers.")
 
     try:
-        TIGER_USERS = {int(x) for x in os.environ.get("TIGER_USERS", "").split()}
+        TIGER_USERS = {
+            int(x)
+            for x in os.environ.get("TIGER_USERS", "").split()
+        }
     except ValueError:
-        raise Exception("Your scout users list does not contain valid integers.")
+        raise Exception(
+            "Your scout users list does not contain valid integers.")
 
-    INFOPIC = bool(os.environ.get("INFOPIC", False)) # Info Pic (use True[Value] If You Want To Show In /info.)
-    GBAN_LOGS = os.environ.get("GBAN_LOGS") # G-Ban Logs (Channel) (-100)
-    ERROR_LOGS = os.environ.get("ERROR_LOGS") # Error Logs (Channel Ya Group Choice Is Yours) (-100)
+    INFOPIC = bool(os.environ.get(
+        "INFOPIC",
+        False))  # Info Pic (use True[Value] If You Want To Show In /info.)
+    GBAN_LOGS = os.environ.get("GBAN_LOGS")  # G-Ban Logs (Channel) (-100)
+    ERROR_LOGS = os.environ.get(
+        "ERROR_LOGS")  # Error Logs (Channel Ya Group Choice Is Yours) (-100)
     WEBHOOK = bool(os.environ.get("WEBHOOK", False))
-    URL = os.environ.get("URL", "")  # If You Deploy On Heraku. [URL PERTEN:- https://{App Name}.herokuapp.com/ || EXP:- https://yuki-cutiepii-robot.herokuapp.com/]
-    PORT = int(os.environ.get("PORT", 8443)) 
+    URL = os.environ.get(
+        "URL", ""
+    )  # If You Deploy On Heraku. [URL PERTEN:- https://{App Name}.herokuapp.com/ || EXP:- https://yuki-cutiepii-robot.herokuapp.com/]
+    PORT = int(os.environ.get("PORT", 8443))
     CUSTOM_CMD = os.environ.get("CUSTOM_CMD", False)
-    API_ID = os.environ.get("API_ID") # Bot Owner's API_ID (From:- https://my.telegram.org/auth)
-    API_HASH = os.environ.get("API_HASH") # Bot Owner's API_HASH (From:- https://my.telegram.org/auth)
-    DATABASE_URL = os.environ.get("DATABASE_URL")  # Any SQL Database Link (RECOMMENDED:- PostgreSQL & https://www.elephantsql.com)
-    DONATION_LINK = os.environ.get("DONATION_LINK") # Donation Link (ANY)
-    LOAD = os.environ.get("LOAD", "").split() # Don't Change
-    NO_LOAD = os.environ.get("NO_LOAD", "translation").split() # Don't Change
-    DEL_CMDS = bool(os.environ.get("DEL_CMDS", False)) # Don't Change
-    STRICT_GBAN = bool(os.environ.get("STRICT_GBAN", False)) # Use `True` Value
-    BAN_STICKER = os.environ.get("BAN_STICKER", "CAADAgADOwADPPEcAXkko5EB3YGYAg") # Don't Change
-    ALLOW_EXCL = os.environ.get("ALLOW_EXCL", False) # Don't Change
-    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./") # Don't Change
-    CASH_API_KEY = os.environ.get("CASH_API_KEY") # From:- https://www.alphavantage.co/support/#api-key
-    TIME_API_KEY = os.environ.get("TIME_API_KEY") # From:- https://timezonedb.com/api
-    WALL_API = os.environ.get("WALL_API") # From:- https://wall.alphacoders.com/api.php
-    REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY") # From:- https://www.remove.bg/
-    OPENWEATHERMAP_ID = os.environ.get("OPENWEATHERMAP_ID", "") # From:- https://openweathermap.org/api
-    GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN") # From:- http://genius.com/api-clients
-    MONGO_DB_URL = os.environ.get("MONGO_DB_URL") # MongoDB URL (From:- https://www.mongodb.com/)
-    REDIS_URL = os.environ.get("REDIS_URL") # REDIS URL (Take it from redislabs.com and the format should be redis://username:password@publicendpoint:port/)
-    SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT") # Support Chat Group Link (Use @Black_Knights_Union_Support || Dont Use https://telegram.dog/Black_Knights_Union_Support)
-    SPAMWATCH_API = os.environ.get("SPAMWATCH_API") # From https://telegram.dog/SpamWatchBot 
-    STRING_SESSION = os.environ.get("STRING_SESSION") # Telethon Based String Session (2nd ID) [ From https://repl.it/@SpEcHiDe/GenerateStringSession ]
-    APP_ID = os.environ.get("APP_ID") # 2nd ID 
-    APP_HASH = os.environ.get("APP_HASH") # 2nd ID
-    ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True) # Don't Change
-    DATABASE_NAME = os.environ.get("DATABASE_NAME", True)  # needed for cron_jobs module, use same databasename from SQLALCHEMY_DATABASE_URI
-    BACKUP_PASS = os.environ.get("BACKUP_PASS", True) # The password used for the cron backups zip
+    API_ID = os.environ.get(
+        "API_ID")  # Bot Owner's API_ID (From:- https://my.telegram.org/auth)
+    API_HASH = os.environ.get(
+        "API_HASH"
+    )  # Bot Owner's API_HASH (From:- https://my.telegram.org/auth)
+    DATABASE_URL = os.environ.get(
+        "DATABASE_URL"
+    )  # Any SQL Database Link (RECOMMENDED:- PostgreSQL & https://www.elephantsql.com)
+    DONATION_LINK = os.environ.get("DONATION_LINK")  # Donation Link (ANY)
+    LOAD = os.environ.get("LOAD", "").split()  # Don't Change
+    NO_LOAD = os.environ.get("NO_LOAD", "translation").split()  # Don't Change
+    DEL_CMDS = bool(os.environ.get("DEL_CMDS", False))  # Don't Change
+    STRICT_GBAN = bool(os.environ.get("STRICT_GBAN",
+                                      False))  # Use `True` Value
+    BAN_STICKER = os.environ.get(
+        "BAN_STICKER", "CAADAgADOwADPPEcAXkko5EB3YGYAg")  # Don't Change
+    ALLOW_EXCL = os.environ.get("ALLOW_EXCL", False)  # Don't Change
+    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY",
+                                             "./")  # Don't Change
+    CASH_API_KEY = os.environ.get(
+        "CASH_API_KEY")  # From:- https://www.alphavantage.co/support/#api-key
+    TIME_API_KEY = os.environ.get(
+        "TIME_API_KEY")  # From:- https://timezonedb.com/api
+    WALL_API = os.environ.get(
+        "WALL_API")  # From:- https://wall.alphacoders.com/api.php
+    REM_BG_API_KEY = os.environ.get(
+        "REM_BG_API_KEY")  # From:- https://www.remove.bg/
+    OPENWEATHERMAP_ID = os.environ.get(
+        "OPENWEATHERMAP_ID", "")  # From:- https://openweathermap.org/api
+    GENIUS_API_TOKEN = os.environ.get(
+        "GENIUS_API_TOKEN")  # From:- http://genius.com/api-clients
+    MONGO_DB_URL = os.environ.get(
+        "MONGO_DB_URL")  # MongoDB URL (From:- https://www.mongodb.com/)
+    REDIS_URL = os.environ.get(
+        "REDIS_URL"
+    )  # REDIS URL (Take it from redislabs.com and the format should be redis://username:password@publicendpoint:port/)
+    SUPPORT_CHAT = os.environ.get(
+        "SUPPORT_CHAT"
+    )  # Support Chat Group Link (Use @Black_Knights_Union_Support || Dont Use https://telegram.dog/Black_Knights_Union_Support)
+    SPAMWATCH_API = os.environ.get(
+        "SPAMWATCH_API")  # From https://telegram.dog/SpamWatchBot
+    STRING_SESSION = os.environ.get(
+        "STRING_SESSION"
+    )  # Telethon Based String Session (2nd ID) [ From https://repl.it/@SpEcHiDe/GenerateStringSession ]
+    APP_ID = os.environ.get("APP_ID")  # 2nd ID
+    APP_HASH = os.environ.get("APP_HASH")  # 2nd ID
+    ALLOW_CHATS = os.environ.get("ALLOW_CHATS", True)  # Don't Change
+    DATABASE_NAME = os.environ.get(
+        "DATABASE_NAME", True
+    )  # needed for cron_jobs module, use same databasename from SQLALCHEMY_DATABASE_URI
+    BACKUP_PASS = os.environ.get(
+        "BACKUP_PASS", True)  # The password used for the cron backups zip
     MONGO_DB = "Cutiepii"
     BOT_API_FILE_URL = "https://api.telegram.org/file/bot"
     BOT_API_URL = "https://api.telegram.org/bot"
     BOT_ID = int(TOKEN.split(":")[0])
-
 
     HELP_IMG = os.environ.get("HELP_IMG", True)
     GROUP_START_IMG = os.environ.get("GROUP_START_IMG", True)
@@ -157,7 +201,8 @@ if ENV:
     try:
         BL_CHATS = {int(x) for x in os.environ.get("BL_CHATS", "").split()}
     except ValueError:
-        raise Exception("Your blacklisted chats list does not contain valid integers.")
+        raise Exception(
+            "Your blacklisted chats list does not contain valid integers.")
 
 else:
     from Cutiepii_Robot.config import Development as Config
@@ -172,7 +217,8 @@ else:
     try:
         REMINDER_LIMIT = int(os.environ.get("REMINDER_LIMIT", 20))
     except ValueError:
-        raise Exception("Your REMINDER_LIMIT env variable is not a valid integer.")
+        raise Exception(
+            "Your REMINDER_LIMIT env variable is not a valid integer.")
 
     JOIN_LOGGER = Config.JOIN_LOGGER
     OWNER_USERNAME = Config.OWNER_USERNAME
@@ -181,26 +227,29 @@ else:
         SUDO_USERS = {int(x) for x in Config.SUDO_USERS or []}
         DEV_USERS = {int(x) for x in Config.DEV_USERS or []}
     except ValueError:
-        raise Exception("Your sudo or dev users list does not contain valid integers.")
+        raise Exception(
+            "Your sudo or dev users list does not contain valid integers.")
 
     try:
         SUPPORT_USERS = {int(x) for x in Config.SUPPORT_USERS or []}
     except ValueError:
-        raise Exception("Your support users list does not contain valid integers.")
+        raise Exception(
+            "Your support users list does not contain valid integers.")
 
     try:
         WHITELIST_USERS = {int(x) for x in Config.WHITELIST_USERS or []}
     except ValueError:
-        raise Exception("Your whitelisted users list does not contain valid integers.")
+        raise Exception(
+            "Your whitelisted users list does not contain valid integers.")
 
     try:
         TIGER_USERS = {int(x) for x in Config.TIGER_USERS or []}
     except ValueError:
-        raise Exception("Your tiger users list does not contain valid integers.")
-
+        raise Exception(
+            "Your tiger users list does not contain valid integers.")
 
     INFOPIC = Config.INFOPIC
-    GBAN_LOGS = Config.GBAN_LOGS 
+    GBAN_LOGS = Config.GBAN_LOGS
     ERROR_LOGS = Config.ERROR_LOGS
     WEBHOOK = Config.WEBHOOK
     URL = Config.URL
@@ -242,8 +291,8 @@ else:
     try:
         BL_CHATS = {int(x) for x in Config.BL_CHATS or []}
     except ValueError:
-        raise Exception("Your blacklisted chats list does not contain valid integers.")
-
+        raise Exception(
+            "Your blacklisted chats list does not contain valid integers.")
 
 SUDO_USERS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
@@ -256,22 +305,28 @@ try:
 
     REDIS.ping()
 
-    LOGGER.info("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • Redis Database")
+    LOGGER.info(
+        "[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • Redis Database"
+    )
 
 except BaseException:
 
-    raise Exception("[CUTIEPII ERROR]: Your Yūki • Data Center • Mumbai • Redis Database Is Not Alive, Please Check Again.")
+    raise Exception(
+        "[CUTIEPII ERROR]: Your Yūki • Data Center • Mumbai • Redis Database Is Not Alive, Please Check Again."
+    )
 
 finally:
 
-   REDIS.ping()
+    REDIS.ping()
 
-   LOGGER.info("[CUTIEPII]: Connection To The Yūki • Data Center • Mumbai • Redis Database Established Successfully!")
-
+    LOGGER.info(
+        "[CUTIEPII]: Connection To The Yūki • Data Center • Mumbai • Redis Database Established Successfully!"
+    )
 
 if not SPAMWATCH_API:
     sw = None
-    LOGGER.warning("[CUTIEPII ERROR]: SpamWatch API key Is Missing! Recheck Your Config.")
+    LOGGER.warning(
+        "[CUTIEPII ERROR]: SpamWatch API key Is Missing! Recheck Your Config.")
 else:
     try:
         sw = spamwatch.Client(SPAMWATCH_API)
@@ -279,12 +334,16 @@ else:
         sw = None
         LOGGER.warning("[CUTIEPII ERROR]: Can't connect to SpamWatch!")
 
-
 # Credits Logger
-print("[CUTIEPII] CUTIEPII Is Starting. | Yūki • Black Knights Union Project | Licensed Under GPLv3.")
-print("[CUTIEPII] Cutie Cutie! Successfully Connected With A  Yūki • Data Center • Mumbai")
-print("[CUTIEPII] Project Maintained By: github.com/Awesome-RJ (https://telegram.dog/Awesome_Rj)")
-
+print(
+    "[CUTIEPII] CUTIEPII Is Starting. | Yūki • Black Knights Union Project | Licensed Under GPLv3."
+)
+print(
+    "[CUTIEPII] Cutie Cutie! Successfully Connected With A  Yūki • Data Center • Mumbai"
+)
+print(
+    "[CUTIEPII] Project Maintained By: github.com/Awesome-RJ (https://telegram.dog/Awesome_Rj)"
+)
 
 print("[CUTIEPII]: Telegraph Installing")
 telegraph = Telegraph()
@@ -303,13 +362,9 @@ CUTIEPII_PTB = (
     .build()
 )
 """
-CUTIEPII_PTB = (
-    tg.Application.builder()
-    .token(TOKEN)
-    .build()
-)
+CUTIEPII_PTB = (tg.Application.builder().token(TOKEN).build())
 # asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
-#------------------------------------------------------------------    
+#------------------------------------------------------------------
 print("[CUTIEPII]: PYROGRAM CLIENT STARTING")
 session_name = TOKEN.split(":")[0]
 pgram = Client(
@@ -317,9 +372,11 @@ pgram = Client(
     api_id=API_ID,
     api_hash=API_HASH,
     bot_token=TOKEN,
-    workers=min(32, os.cpu_count() + 4),
+    workers=min(32,
+                os.cpu_count() + 4),
 )
-print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
+print(
+    "[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
 mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
 motor = AsyncIOMotorClient(MONGO_DB_URL)
 db = motor[MONGO_DB]
@@ -328,12 +385,18 @@ print("[INFO]: INITIALZING AIOHTTP SESSION")
 aiohttpsession = ClientSession()
 # ARQ Client
 print("[INFO]: INITIALIZING ARQ CLIENT")
-arq = ARQ("https://arq.hamker.in", "ERUOGT-KHSTDT-RUYZKQ-FZNSHO-ARQ", aiohttpsession)
-print("[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database")
+arq = ARQ("https://arq.hamker.in", "ERUOGT-KHSTDT-RUYZKQ-FZNSHO-ARQ",
+          aiohttpsession)
+print(
+    "[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database"
+)
 ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
-print("[CUTIEPII]: Connecting To Yūki • Cutiepii Userbot (https://telegram.dog/Awesome_Cutiepii)")
+print(
+    "[CUTIEPII]: Connecting To Yūki • Cutiepii Userbot (https://telegram.dog/Awesome_Cutiepii)"
+)
 timeout = Timeout(40)
 http = AsyncClient(http2=True, timeout=timeout)
+
 
 async def get_entity(client, entity):
     entity_client = client
@@ -361,13 +424,15 @@ async def get_entity(client, entity):
                 entity_client = pgram
     return entity, entity_client
 
+
 apps = [pgram]
 SUDO_USERS = list(SUDO_USERS) + list(DEV_USERS)
 DEV_USERS = list(DEV_USERS)
 WHITELIST_USERS = list(WHITELIST_USERS)
 SUPPORT_USERS = list(SUPPORT_USERS)
 TIGER_USERS = list(TIGER_USERS)
-ELEVATED_USERS_FILE = os.path.join(os.getcwd(), "Cutiepii_Robot/elevated_users.json")
+ELEVATED_USERS_FILE = os.path.join(os.getcwd(),
+                                   "Cutiepii_Robot/elevated_users.json")
 
 # Load at end to ensure all prev variables have been set
 from Cutiepii_Robot.modules.helper_funcs.handlers import CustomCommandHandler

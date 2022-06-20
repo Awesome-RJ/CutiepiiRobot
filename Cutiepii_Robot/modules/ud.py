@@ -45,10 +45,13 @@ async def ud(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await msg.reply_text("Please enter keywords to search on ud!")
         return
     if text == "Cutiepii":
-        await msg.reply_text("Cutiepii is my owner so if you search him on urban dictionary you can't find the meaning because he is my husband and only me who know what's the meaning of!")
+        await msg.reply_text(
+            "Cutiepii is my owner so if you search him on urban dictionary you can't find the meaning because he is my husband and only me who know what's the meaning of!"
+        )
         return
     try:
-        results = get(f"http://api.urbandictionary.com/v0/define?term={text}").json()
+        results = get(
+            f"http://api.urbandictionary.com/v0/define?term={text}").json()
         reply_text = f'Word: {text}\n\nDefinition: \n{results["list"][0]["definition"]}'
         reply_text += f'\n\nExample: \n{results["list"][0]["example"]}'
     except IndexError:

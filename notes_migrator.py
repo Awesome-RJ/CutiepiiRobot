@@ -8,73 +8,76 @@ from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
 from Cutiepii_Robot.modules.sql.notes_sql import SESSION, Notes
 
 BTN_LINK_REGEX = re.compile(
-        r"(?<!\\)\[(.+?)\]\(((?!b(?:utto|t)nurl:).+?)\)|(?m)^(\n?\[(.+?)\]\(b(?:utto|t)nurl:(?:/*)?(.+?)(:same)?\))$"
+    r"(?<!\\)\[(.+?)\]\(((?!b(?:utto|t)nurl:).+?)\)|(?m)^(\n?\[(.+?)\]\(b(?:utto|t)nurl:(?:/*)?(.+?)(:same)?\))$"
 )
 
 
 @unique
 class Types(IntEnum):
-	TEXT = 0
-	BUTTON_TEXT = 1
-	STICKER = 2
-	DOCUMENT = 3
-	PHOTO = 4
-	AUDIO = 5
-	VOICE = 6
-	VIDEO = 7
-	VIDEO_NOTE = 8
+    TEXT = 0
+    BUTTON_TEXT = 1
+    STICKER = 2
+    DOCUMENT = 3
+    PHOTO = 4
+    AUDIO = 5
+    VOICE = 6
+    VIDEO = 7
+    VIDEO_NOTE = 8
 
 
 def replacer(text: str) -> str:
-	text = text.replace("\\{first\\}", '{first}').replace("\\{last\\}", '{last}').replace("\\{fullname\\}", '{fullname}') \
-		.replace("\\{username\\}", '{username}').replace("\\{id\\}", '{id}').replace("\\{chatname\\}", '{chatname}') \
-		.replace("\\{mention\\}", '{mention}').replace("\\{user\\}", '{user}').replace("\\{admin\\}", '{admin}') \
-		.replace("\\{preview\\}", '{preview}').replace("\\{protect\\}", '{protect}')
+    text = text.replace("\\{first\\}", '{first}').replace("\\{last\\}", '{last}').replace("\\{fullname\\}", '{fullname}') \
+     .replace("\\{username\\}", '{username}').replace("\\{id\\}", '{id}').replace("\\{chatname\\}", '{chatname}') \
+     .replace("\\{mention\\}", '{mention}').replace("\\{user\\}", '{user}').replace("\\{admin\\}", '{admin}') \
+     .replace("\\{preview\\}", '{preview}').replace("\\{protect\\}", '{protect}')
 
-	text = text.replace("\*", "*").replace("\[", "[").replace("\]", "]").replace("\(", "(").replace("\)", ")") \
-		.replace("\+", "+").replace("\|", "|").replace("\{", "{").replace("\}", "}").replace("\.", ".").replace("\-", "-") \
-		.replace("\'", "'").replace("\_", "_").replace("\~", "~").replace("\`", "`").replace("\>", ">").replace("\#", "#") \
-		.replace("\-", "-").replace("\=", "=").replace("\!", "!").replace("\\\\", "\\")
+    text = text.replace("\*", "*").replace("\[", "[").replace("\]", "]").replace("\(", "(").replace("\)", ")") \
+     .replace("\+", "+").replace("\|", "|").replace("\{", "{").replace("\}", "}").replace("\.", ".").replace("\-", "-") \
+     .replace("\'", "'").replace("\_", "_").replace("\~", "~").replace("\`", "`").replace("\>", ">").replace("\#", "#") \
+     .replace("\-", "-").replace("\=", "=").replace("\!", "!").replace("\\\\", "\\")
 
-	return text
+    return text
 
 
 def parser(
-		txt: str, reply_markup: InlineKeyboardMarkup = None
+    txt: str,
+    reply_markup: InlineKeyboardMarkup = None
 ) -> tuple[str, Union[str, list[Optional[tuple[str, Optional[str], bool]]]]]:
-	markdown_note = txt
-	buttons: Union[str, list[Optional[tuple[str, Optional[str], bool]]]] = []
-	prev = 0
-	note_data = ""
-	if reply_markup:
-		for btn in reply_markup.inline_keyboard:
-			buttons.append((btn[0].text, btn[0].url, False))
-			if len(btn) >= 2:
-				buttons.extend((a.text, a.url, True) for a in btn[1:])
+    markdown_note = txt
+    buttons: Union[str, list[Optional[tuple[str, Optional[str], bool]]]] = []
+    prev = 0
+    note_data = ""
+    if reply_markup:
+        for btn in reply_markup.inline_keyboard:
+            buttons.append((btn[0].text, btn[0].url, False))
+            if len(btn) >= 2:
+                buttons.extend((a.text, a.url, True) for a in btn[1:])
 
-	for match in BTN_LINK_REGEX.finditer(markdown_note):
-		if match[1]:
-			note_data += markdown_note[prev:match.start(1) - 1]
-			note_data += f"<a href=\"{match[2]}\">{match[1]}</a>"
-			prev = match.end(2) + 1
-		else:
-			buttons.append((match[4], match[5], bool(match[5])))
-			note_data += markdown_note[prev: match.start(3)].rstrip()
-			prev = match.end(3)
+    for match in BTN_LINK_REGEX.finditer(markdown_note):
+        if match[1]:
+            note_data += markdown_note[prev:match.start(1) - 1]
+            note_data += f"<a href=\"{match[2]}\">{match[1]}</a>"
+            prev = match.end(2) + 1
+        else:
+            buttons.append((match[4], match[5], bool(match[5])))
+            note_data += markdown_note[prev:match.start(3)].rstrip()
+            prev = match.end(3)
 
-	note_data += markdown_note[prev:]
-	final_text = Md2HTML(note_data)
+    note_data += markdown_note[prev:]
+    final_text = Md2HTML(note_data)
 
-	return final_text, buttons
+    return final_text, buttons
 
 
 def Md2HTML(text: str) -> str:
     _whitespace_re = re.compile(
-            r"(?<!<)(?P<t_b><[^></]*?>)(?P<str>[^<>](?:.*?\s*?)*?(?P<ws>\s*?))(?P<t_e></[^<>]*?>)(?!>)")
+        r"(?<!<)(?P<t_b><[^></]*?>)(?P<str>[^<>](?:.*?\s*?)*?(?P<ws>\s*?))(?P<t_e></[^<>]*?>)(?!>)"
+    )
     _pre_re = re.compile(r'`{3}(.*?[^\s].*?)(\s*?)`{3}', re.DOTALL)
     _code_re = re.compile(r'`(.*?[^\s].*?)(\s*?)`', re.DOTALL)
     _bold_re = re.compile(r'\*(.*?[^\s].*?)(\s*?)\*', re.DOTALL)
-    _underline_re = re.compile(r'(?<!_)__(.*?[^\s].*?)(\s*?)__(?!_)', re.DOTALL)
+    _underline_re = re.compile(r'(?<!_)__(.*?[^\s].*?)(\s*?)__(?!_)',
+                               re.DOTALL)
     _italic_re = re.compile(r'_(.*?[^\s].*?)(\s*?)_', re.DOTALL)
     _strike_re = re.compile(r'~(.*?[^\s].*?)(\s*?)~', re.DOTALL)
     _spoiler_re = re.compile(r'\|\|(.*?[^\s].*?)(\s*?)\|\|', re.DOTALL)
@@ -116,18 +119,18 @@ def Md2HTML(text: str) -> str:
 
 
 def update_note(text: str) -> str:
-	return parser(replacer(text))[0]
+    return parser(replacer(text))[0]
 
 
 def migrate_notes():
-	print("starting notes migration")
-	with threading.RLock():
+    print("starting notes migration")
+    with threading.RLock():
 
-		all_notes = SESSION.query(Notes).all()
+        all_notes = SESSION.query(Notes).all()
 
-		for note in all_notes:
-			note.value = update_note(note.value)
+        for note in all_notes:
+            note.value = update_note(note.value)
 
-		SESSION.commit()
+        SESSION.commit()
 
-	print("finished notes migration")
+    print("finished notes migration")

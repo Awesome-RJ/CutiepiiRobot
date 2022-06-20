@@ -36,9 +36,12 @@ from .exceptions import CancelProcess
 from .tools import humanbytes, time_formatter
 
 
-async def progress(
-    current, total, gdrive, start, prog_type, is_cancelled=False
-):
+async def progress(current,
+                   total,
+                   gdrive,
+                   start,
+                   prog_type,
+                   is_cancelled=False):
     now = time.time()
     diff = now - start
     if is_cancelled is True:
@@ -61,11 +64,10 @@ async def progress(
             "".join("○" for i in range(10 - math.floor(percentage / 10))),
             round(percentage, 2),
         )
-        tmp = (
-            f"{progress_str}\n"
-            f"`{humanbytes(current)} of {humanbytes(total)}"
-            f" @ {humanbytes(speed)}`\n"
-            f"`ETA` -> {time_formatter(eta)}\n"
-            f"`Duration` -> {time_formatter(elapsed_time)}"
-        )
-        await gdrive.edit(f"`{prog_type}`\n\n" f"`Status`\n{tmp}")
+        tmp = (f"{progress_str}\n"
+               f"`{humanbytes(current)} of {humanbytes(total)}"
+               f" @ {humanbytes(speed)}`\n"
+               f"`ETA` -> {time_formatter(eta)}\n"
+               f"`Duration` -> {time_formatter(elapsed_time)}")
+        await gdrive.edit(f"`{prog_type}`\n\n"
+                          f"`Status`\n{tmp}")

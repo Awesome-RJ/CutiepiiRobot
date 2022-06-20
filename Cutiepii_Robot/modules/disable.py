@@ -43,17 +43,14 @@ from Cutiepii_Robot.modules.helper_funcs.misc import is_module_loaded
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 from Cutiepii_Robot.modules.connection import connected
 
-
 CMD_STARTERS = tuple(CMD_STARTERS)
-
 
 FILENAME = __name__.rsplit(".", 1)[-1]
 
 # If module is due to be loaded, then setup all the magical handlers
 if is_module_loaded(FILENAME):
     from Cutiepii_Robot.modules.helper_funcs.chat_status import (
-        is_user_admin,
-    )
+        is_user_admin, )
     from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 
     from Cutiepii_Robot.modules.sql import disable_sql as sql
@@ -63,7 +60,13 @@ if is_module_loaded(FILENAME):
     ADMIN_CMDS = []
 
     class DisableAbleCommandHandler(CommandHandler):
-        def __init__(self, command, callback, block=False, admin_ok=False, **kwargs):
+
+        def __init__(self,
+                     command,
+                     callback,
+                     block=False,
+                     admin_ok=False,
+                     **kwargs):
             super().__init__(command, callback, **kwargs)
             self.admin_ok = admin_ok
             if isinstance(command, string_types):
@@ -83,34 +86,39 @@ if is_module_loaded(FILENAME):
             if message.text and len(message.text) > 1:
                 fst_word = message.text.split(None, 1)[0]
                 if len(fst_word) > 1 and any(
-                    fst_word.startswith(start) for start in CMD_STARTERS
-                ):
+                        fst_word.startswith(start) for start in CMD_STARTERS):
                     args = message.text.split()[1:]
                     command = fst_word[1:].split("@")
                     command.append(message._bot.username)
 
-                    if not (
-                        frozenset({command[0].lower()}) in self.commands
-                        and command[1].lower() == message._bot.username.lower()
-                    ):
+                    if not (frozenset({command[0].lower()}) in self.commands
+                            and command[1].lower()
+                            == message._bot.username.lower()):
                         return None
 
                     if filter_result := self.filters.check_update(update):
                         chat = update.effective_chat
                         user = update.effective_user
                         # disabled, admincmd, user admin
-                        if sql.is_command_disabled(chat.id, command[0].lower()):
+                        if sql.is_command_disabled(chat.id,
+                                                   command[0].lower()):
                             # check if command was disabled
-                            is_ad = asyncio.ensure_future(is_user_admin(
-                                update, user.id
-                            ))
+                            is_ad = asyncio.ensure_future(
+                                is_user_admin(update, user.id))
                             is_disabled = command[0] in ADMIN_CMDS and is_ad
-                            return (args, filter_result) if is_disabled else None
+                            return (args,
+                                    filter_result) if is_disabled else None
                         return args, filter_result
                     return False
 
     class DisableAbleMessageHandler(MessageHandler):
-        def __init__(self, pattern, callback, block=False, friendly="", **kwargs):
+
+        def __init__(self,
+                     pattern,
+                     callback,
+                     block=False,
+                     friendly="",
+                     **kwargs):
             super().__init__(pattern, callback, **kwargs)
             DISABLE_OTHER.append(friendly or pattern)
             self.friendly = friendly or pattern
@@ -118,18 +126,22 @@ if is_module_loaded(FILENAME):
         def check_update(self, update):
             if isinstance(update, Update) and update.effective_message:
                 chat = update.effective_chat
-                return self.filters.check_update(update) and not sql.is_command_disabled(
-                    chat.id, self.friendly
-                )
+                return self.filters.check_update(
+                    update) and not sql.is_command_disabled(
+                        chat.id, self.friendly)
 
     @user_admin
-
-    async def disable(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    async def disable(update: Update,
+                      context: ContextTypes.DEFAULT_TYPE) -> None:
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
         args = context.args
 
-        conn = await connected(context.bot, update, chat, user.id, need_admin=True)
+        conn = await connected(context.bot,
+                               update,
+                               chat,
+                               user.id,
+                               need_admin=True)
         if conn:
             chat = CUTIEPII_PTB.bot.getChat(conn)
             chat_name = CUTIEPII_PTB.bot.getChat(conn).title
@@ -160,19 +172,24 @@ if is_module_loaded(FILENAME):
                     parse_mode=ParseMode.MARKDOWN,
                 )
             else:
-                send_message(update.effective_message, "This command can't be disabled")
+                send_message(update.effective_message,
+                             "This command can't be disabled")
 
         else:
             send_message(update.effective_message, "What should I disable?")
 
     @user_admin
-
-    async def enable(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    async def enable(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
         args = context.args
 
-        conn = await connected(context.bot, update, chat, user.id, need_admin=True)
+        conn = await connected(context.bot,
+                               update,
+                               chat,
+                               user.id,
+                               need_admin=True)
         if conn:
             chat = CUTIEPII_PTB.bot.getChat(conn)
             chat_id = conn
@@ -204,19 +221,18 @@ if is_module_loaded(FILENAME):
                     parse_mode=ParseMode.MARKDOWN,
                 )
             else:
-                send_message(update.effective_message, "Is that even disabled?")
+                send_message(update.effective_message,
+                             "Is that even disabled?")
 
         else:
             send_message(update.effective_message, "What should I enable?")
 
     @user_admin
-    async def list_cmds(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    async def list_cmds(update: Update,
+                        context: ContextTypes.DEFAULT_TYPE) -> None:
         if DISABLE_CMDS + DISABLE_OTHER:
-            result = "".join(
-                f" - `{escape_markdown(str(cmd))}`\n"
-                for cmd in set(DISABLE_CMDS + DISABLE_OTHER)
-            )
-
+            result = "".join(f" - `{escape_markdown(str(cmd))}`\n"
+                             for cmd in set(DISABLE_CMDS + DISABLE_OTHER))
 
             await update.effective_message.reply_text(
                 f"The following commands are toggleable:\n{result}",
@@ -224,7 +240,8 @@ if is_module_loaded(FILENAME):
             )
 
         else:
-            await update.effective_message.reply_text("No commands can be disabled.")
+            await update.effective_message.reply_text(
+                "No commands can be disabled.")
 
     # do not async
     def build_curr_disabled(chat_id: Union[str, int]) -> str:
@@ -235,11 +252,15 @@ if is_module_loaded(FILENAME):
         result = "".join(f" - `{escape_markdown(cmd)}`\n" for cmd in disabled)
         return f"The following commands are currently restricted:\n{result}"
 
-    
-    async def commands(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    async def commands(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> None:
         chat = update.effective_chat
         user = update.effective_user
-        conn = await connected(context.bot, update, chat, user.id, need_admin=True)
+        conn = await connected(context.bot,
+                               update,
+                               chat,
+                               user.id,
+                               need_admin=True)
         if conn:
             chat = CUTIEPII_PTB.bot.getChat(conn)
             chat_id = conn
@@ -254,7 +275,9 @@ if is_module_loaded(FILENAME):
             chat_id = update.effective_chat.id
 
         text = build_curr_disabled(chat.id)
-        send_message(update.effective_message, text, parse_mode=ParseMode.MARKDOWN)
+        send_message(update.effective_message,
+                     text,
+                     parse_mode=ParseMode.MARKDOWN)
 
     def __import_data__(chat_id, data):
         disabled = data.get("disabled", {})
@@ -283,17 +306,13 @@ if is_module_loaded(FILENAME):
     """
 
     CUTIEPII_PTB.add_handler(CommandHandler(
-        "disable", disable
-    ))  # , filters=filters.ChatType.GROUPS)
+        "disable", disable))  # , filters=filters.ChatType.GROUPS)
     CUTIEPII_PTB.add_handler(CommandHandler(
-        "enable", enable
-    ))  # , filters=filters.ChatType.GROUPS)
+        "enable", enable))  # , filters=filters.ChatType.GROUPS)
     CUTIEPII_PTB.add_handler(CommandHandler(
-        ["cmds", "disabled"], commands
-    ))  # , filters=filters.ChatType.GROUPS)
+        ["cmds", "disabled"], commands))  # , filters=filters.ChatType.GROUPS)
     CUTIEPII_PTB.add_handler(CommandHandler(
-        "listcmds", list_cmds
-    ))  # , filters=filters.ChatType.GROUPS)
+        "listcmds", list_cmds))  # , filters=filters.ChatType.GROUPS)
 
 else:
     DisableAbleCommandHandler = CommandHandler

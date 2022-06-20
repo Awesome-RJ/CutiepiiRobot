@@ -42,7 +42,6 @@ from telegram.ext import CommandHandler, filters
 from telegram.constants import ParseMode
 from telegram.helpers import mention_html
 
-
 import Cutiepii_Robot.modules.sql.nsfw_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB, DEV_USERS
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
@@ -67,7 +66,6 @@ async def add_nsfw(update: Update):
         return message
     await msg.reply_text("NSFW Mode is already Activated for this chat!")
     return ""
-
 
 
 @user_admin
@@ -105,7 +103,6 @@ async def list_nsfw_chats(update: Update):
     await update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
-
 async def neko(update: Update):
     message = update.effective_message
     args = context.args
@@ -114,13 +111,15 @@ async def neko(update: Update):
     try:
         img = nekos.img(query)
     except InvalidArgument:
-        await message.reply_text(f"{query} are'nt available! check available query on help!")
+        await message.reply_text(
+            f"{query} are'nt available! check available query on help!")
         return
     try:
         if flag == "-i":
             await message.reply_photo(photo=img, parse_mode=ParseMode.MARKDOWN)
         elif flag == "-d":
-            await message.reply_document(document=img, parse_mode=ParseMode.MARKDOWN)
+            await message.reply_document(document=img,
+                                         parse_mode=ParseMode.MARKDOWN)
         elif flag == "-s":
             stkr = "sticker.webp"
             x = open(stkr, "wb")
@@ -212,7 +211,6 @@ async def lewdkemo(update: Update):
     await msg.reply_photo(nekos.img(target))
 
 
-
 async def sologif(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
@@ -222,7 +220,6 @@ async def sologif(update: Update):
     msg = update.effective_message
     target = "solog"
     await msg.reply_photo(nekos.img(target))
-
 
 
 async def feetgif(update: Update):
@@ -297,11 +294,10 @@ async def ngif(update: Update):
     await msg.reply_photo(nekos.img(target))
 
 
-
 async def tickle(update: Update):
-     msg = update.effective_message
-     target = "tickle"
-     await msg.reply_photo(nekos.img(target))
+    msg = update.effective_message
+    target = "tickle"
+    await msg.reply_photo(nekos.img(target))
 
 
 async def lewd(update: Update):
@@ -315,12 +311,10 @@ async def lewd(update: Update):
     await msg.reply_photo(nekos.img(target))
 
 
-
 async def feed(update: Update):
     msg = update.effective_message
     target = "feed"
     await msg.reply_photo(nekos.img(target))
-
 
 
 async def eroyuri(update: Update):
@@ -443,12 +437,10 @@ async def gasm(update: Update):
     os.remove("temp.webp")
 
 
-
 async def poke(update: Update):
     msg = update.effective_message
     target = "poke"
     await msg.reply_photo(nekos.img(target))
-
 
 
 async def anal(update: Update):
@@ -592,7 +584,6 @@ async def kuni(update: Update):
     await msg.reply_photo(nekos.img(target))
 
 
-
 async def waifu(update: Update):
     msg = update.effective_message
     target = "waifu"
@@ -604,12 +595,10 @@ async def waifu(update: Update):
     os.remove("temp.webp")
 
 
-
 async def kiss(update: Update):
     msg = update.effective_message
     target = "kiss"
     await msg.reply_photo(nekos.img(target))
-
 
 
 async def femdom(update: Update):
@@ -623,12 +612,10 @@ async def femdom(update: Update):
     await msg.reply_photo(nekos.img(target))
 
 
-
 async def hug(update: Update):
     msg = update.effective_message
     target = "cuddle"
     await msg.reply_photo(nekos.img(target))
-
 
 
 async def erok(update: Update):
@@ -642,7 +629,6 @@ async def erok(update: Update):
     await msg.reply_photo(nekos.img(target))
 
 
-
 async def foxgirl(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
@@ -652,7 +638,6 @@ async def foxgirl(update: Update):
     msg = update.effective_message
     target = "fox_girl"
     await msg.reply_photo(nekos.img(target))
-
 
 
 async def titsgif(update: Update):
@@ -666,7 +651,6 @@ async def titsgif(update: Update):
     await msg.reply_photo(nekos.img(target))
 
 
-
 async def ero(update: Update):
     chat_id = update.effective_chat.id
     if update.effective_message.chat.type != "private":
@@ -678,12 +662,10 @@ async def ero(update: Update):
     await msg.reply_photo(nekos.img(target))
 
 
-
 async def smug(update: Update):
     msg = update.effective_message
     target = "smug"
     await msg.reply_photo(nekos.img(target))
-
 
 
 async def baka(update: Update):
@@ -692,10 +674,13 @@ async def baka(update: Update):
     await msg.reply_photo(nekos.img(target))
 
 
-
 CUTIEPII_PTB.add_handler(CommandHandler("addnsfw", add_nsfw, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("rmnsfw", rem_nsfw, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("nsfwchats", list_nsfw_chats, filters=filters.User(DEV_USERS), block=False))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("nsfwchats",
+                   list_nsfw_chats,
+                   filters=filters.User(DEV_USERS),
+                   block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("lewdkemo", lewdkemo, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("neko", neko, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("feet", feet, block=False))
@@ -748,7 +733,6 @@ CUTIEPII_PTB.add_handler(CommandHandler("titsgif", titsgif, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("ero", ero, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("smug", smug, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("baka", baka, block=False))
-
 
 __help__ = """
 Usage*:*

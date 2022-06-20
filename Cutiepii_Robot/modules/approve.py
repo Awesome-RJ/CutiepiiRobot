@@ -92,7 +92,8 @@ async def approve(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 @loggable
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def disapprove(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def disapprove(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -109,10 +110,12 @@ async def disapprove(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     except BadRequest:
         return ""
     if member.status in ("administrator", "creator"):
-        await message.reply_text("This user is an admin, they can't be unapproved.")
+        await message.reply_text(
+            "This user is an admin, they can't be unapproved.")
         return ""
     if not sql.is_approved(message.chat_id, user_id):
-        await message.reply_text(f"{member.user['first_name']} isn't approved yet!")
+        await message.reply_text(
+            f"{member.user['first_name']} isn't approved yet!")
         return ""
     sql.disapprove(message.chat_id, user_id)
     await message.reply_text(
@@ -175,13 +178,12 @@ async def unapproveall(update: Update):
     else:
         buttons = InlineKeyboardMarkup([
             [
-                InlineKeyboardButton(
-                    text="Unapprove all users",
-                    callback_data="unapproveall_user")
+                InlineKeyboardButton(text="Unapprove all users",
+                                     callback_data="unapproveall_user")
             ],
             [
-                InlineKeyboardButton(
-                    text="Cancel", callback_data="unapproveall_cancel")
+                InlineKeyboardButton(text="Cancel",
+                                     callback_data="unapproveall_cancel")
             ],
         ])
         await update.effective_message.reply_text(
@@ -204,7 +206,8 @@ async def unapproveall_btn(update: Update):
             users = [int(i.user_id) for i in approved_users]
             for user_id in users:
                 sql.disapprove(chat_id, user_id)
-            await message.edit_text("Successfully Unapproved all user in this Chat.")
+            await message.edit_text(
+                "Successfully Unapproved all user in this Chat.")
             return
 
         if member.status == "administrator":
@@ -222,12 +225,15 @@ async def unapproveall_btn(update: Update):
         if member.status == "member":
             await query.answer("You need to be admin to do this.")
 
+
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approve", approve))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unapprove", disapprove))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approved", approved))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approval", approval))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unapproveall", unapproveall))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(unapproveall_btn, pattern=r"unapproveall_.*"))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("unapproveall", unapproveall))
+CUTIEPII_PTB.add_handler(
+    CallbackQueryHandler(unapproveall_btn, pattern=r"unapproveall_.*"))
 
 __help__ = """
 Sometimes, you might trust a user not to send unwanted content.

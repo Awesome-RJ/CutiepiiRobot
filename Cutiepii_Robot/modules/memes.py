@@ -71,7 +71,8 @@ async def _(event):
     stuber = await event.reply(
         f"Ok ! Fectching {infintyvar} From inshortsapi Server And Sending To News Channel",
     )
-    await stuber.edit("All News Has Been Sucessfully fetched, sendning to you.")
+    await stuber.edit("All News Has Been Sucessfully fetched, sendning to you."
+                      )
     starknews = requests.get(main_url).json()
     for item in starknews["data"]:
         sedlyf = item["content"]
@@ -102,10 +103,12 @@ async def _(event):
                 await r.delete()
                 r = await event.reply(file=InputMediaDice("🏀"))
 
+
 @register(pattern="^/asupan ?(.*)")
 async def asupan(event):
     try:
-        resp = requests.get("https://tede-api.herokuapp.com/api/asupan/ptl").json()
+        resp = requests.get(
+            "https://tede-api.herokuapp.com/api/asupan/ptl").json()
         asupannya = f"{resp['url']}"
         return await telethn.send_file(event.chat_id, asupannya)
     except Exception:
@@ -115,7 +118,8 @@ async def asupan(event):
 @register(pattern="^/wibu ?(.*)")
 async def wibu(event):
     try:
-        resp = requests.get("https://tede-api.herokuapp.com/api/asupan/wibu").json()
+        resp = requests.get(
+            "https://tede-api.herokuapp.com/api/asupan/wibu").json()
         wibunya = f"{resp['url']}"
         return await telethn.send_file(event.chat_id, wibunya)
     except Exception:
@@ -135,7 +139,8 @@ async def chika(event):
 @register(pattern="^/truth ?(.*)")
 async def _(td):
     try:
-        resp = requests.get("https://api-tede.herokuapp.com/api/truth-en").json()
+        resp = requests.get(
+            "https://api-tede.herokuapp.com/api/truth-en").json()
         results = f"{resp['message']}"
         return await td.reply(results)
     except Exception:
@@ -145,7 +150,8 @@ async def _(td):
 @register(pattern="^/dare ?(.*)")
 async def _(dr):
     try:
-        resp = requests.get("https://api-tede.herokuapp.com/api/dare-en").json()
+        resp = requests.get(
+            "https://api-tede.herokuapp.com/api/dare-en").json()
         results = f"{resp['message']}"
         return await dr.reply(results)
     except Exception:
@@ -243,7 +249,8 @@ async def msg(event):
         elif c.lower() == b_char:
             reply_text += "🅱️"
         else:
-            reply_text += c.upper() if bool(random.getrandbits(1)) else c.lower()
+            reply_text += c.upper() if bool(
+                random.getrandbits(1)) else c.lower()
     reply_text += random.choice(emojis)
     await event.reply(reply_text)
 
@@ -340,6 +347,7 @@ async def msg(event):
     reply_text = string.capwords(" ".join(reply_text))
     await event.reply(reply_text)
 
+
 @register(pattern="^/angrymoji$")
 async def msg(event):
 
@@ -375,12 +383,10 @@ async def msg(event):
 async def carbon_func(_, message):
     if not message.reply_to_message:
         return await message.reply_text(
-            "Reply to a text message to make carbon."
-        )
+            "Reply to a text message to make carbon.")
     if not message.reply_to_message.text:
         return await message.reply_text(
-            "Reply to a text message to make carbon."
-        )
+            "Reply to a text message to make carbon.")
     m = await message.reply_text("Preparing Carbon.")
     carbon = await make_carbon(message.reply_to_message.text)
     await m.edit("Uploading...")
@@ -430,15 +436,15 @@ async def deepfry(img: Image) -> Image:
     img = img.convert("RGB")
     width, height = img.width, img.height
     img = img.resize(
-        (int(width ** uniform(0.8, 0.9)), int(height ** uniform(0.8, 0.9))),
+        (int(width**uniform(0.8, 0.9)), int(height**uniform(0.8, 0.9))),
         resample=Image.LANCZOS,
     )
     img = img.resize(
-        (int(width ** uniform(0.85, 0.95)), int(height ** uniform(0.85, 0.95))),
+        (int(width**uniform(0.85, 0.95)), int(height**uniform(0.85, 0.95))),
         resample=Image.BILINEAR,
     )
     img = img.resize(
-        (int(width ** uniform(0.89, 0.98)), int(height ** uniform(0.89, 0.98))),
+        (int(width**uniform(0.89, 0.98)), int(height**uniform(0.89, 0.98))),
         resample=Image.BICUBIC,
     )
     img = img.resize((width, height), resample=Image.BICUBIC)
@@ -458,17 +464,11 @@ async def check_media(reply_message):
     if reply_message.photo:
         data = reply_message.photo
     elif reply_message.document:
-        if (
-            DocumentAttributeFilename(file_name="AnimatedSticker.tgs")
-            in reply_message.media.document.attributes
-        ):
+        if (DocumentAttributeFilename(file_name="AnimatedSticker.tgs")
+                in reply_message.media.document.attributes):
             return False
-        if (
-            reply_message.gif
-            or reply_message.video
-            or reply_message.audio
-            or reply_message.voice
-        ):
+        if (reply_message.gif or reply_message.video or reply_message.audio
+                or reply_message.voice):
             return False
         data = reply_message.media.document
     else:
@@ -531,9 +531,10 @@ async def sticklet(event):
         font = ImageFont.truetype(FONT_FILE, size=fontsize)
 
     width, height = draw.multiline_textsize(sticktext, font=font)
-    draw.multiline_text(
-        ((512 - width) / 2, (512 - height) / 2), sticktext, font=font, fill=(R, G, B)
-    )
+    draw.multiline_text(((512 - width) / 2, (512 - height) / 2),
+                        sticktext,
+                        font=font,
+                        fill=(R, G, B))
 
     image_stream = io.BytesIO()
     image_stream.name = "@Julia.webp"
@@ -541,7 +542,8 @@ async def sticklet(event):
     image_stream.seek(0)
 
     # finally, reply the sticker
-    await event.reply(file=image_stream, reply_to=event.message.reply_to_msg_id)
+    await event.reply(file=image_stream,
+                      reply_to=event.message.reply_to_msg_id)
     # replacing upper line with this to get reply tags
 
     # cleanup
@@ -567,7 +569,6 @@ async def get_font_file(client, channel_id):
 
 @register(pattern=r"^/(\w+)say (.*)")
 async def univsaye(cowmsg):
-
     """For .cowsay module, uniborg wrapper for cow which says things."""
     if cowmsg.text[0].isalpha() or cowmsg.text[0] in ("#", "@"):
         return
@@ -640,7 +641,6 @@ COLORS = [
     "#E181AC",
 ]
 
-
 EMOJI_PATTERN = re.compile(
     "["
     "\U0001F1E0-\U0001F1FF"  # flags (iOS)
@@ -654,8 +654,7 @@ EMOJI_PATTERN = re.compile(
     "\U0001FA00-\U0001FA6F"  # Chess Symbols
     "\U0001FA70-\U0001FAFF"  # Symbols and Pictographs Extended-A
     "\U00002702-\U000027B0"  # Dingbats
-    "]+"
-)
+    "]+")
 
 
 def deEmojify(inputString: str) -> str:
@@ -672,8 +671,7 @@ async def stickerizer(event):
     newtext = event.pattern_match.group(1)
     animus = [20, 32, 33, 40, 41, 42, 58]
     sticcers = await ubot.inline_query(
-        "stickerizerbot", f"#{random.choice(animus)}{(deEmojify(newtext))}"
-    )
+        "stickerizerbot", f"#{random.choice(animus)}{(deEmojify(newtext))}")
     null = await sticcers[0].download_media(TEMP_DOWNLOAD_DIRECTORY)
     bara = str(null)
     await event.client.send_file(event.chat_id, bara, reply_to=event.id)
@@ -978,7 +976,9 @@ async def _(event):
         replyto = reply.sender_id
     else:
         replyto = event.sender_id
-    await telethn.send_message(event.chat_id, random.choice(SFW_STRINGS), reply_to=replyto)
+    await telethn.send_message(event.chat_id,
+                               random.choice(SFW_STRINGS),
+                               reply_to=replyto)
 
 
 reactionhappy = [

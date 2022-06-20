@@ -36,7 +36,7 @@ from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     Update,
-    )
+)
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import filters, CommandHandler
@@ -47,7 +47,6 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import (
     user_admin_check,
     AdminPerms,
 )
-
 
 
 def get_rules(update: Update):
@@ -76,9 +75,10 @@ async def send_rules(update, chat_id, from_pm=False):
     text = f"The rules for *{escape_markdown(chat.title)}* are:\n\n{rules}"
 
     if from_pm and rules:
-        await bot.send_message(
-            user.id, text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True
-        )
+        await bot.send_message(user.id,
+                               text,
+                               parse_mode=ParseMode.MARKDOWN,
+                               disable_web_page_preview=True)
     elif from_pm:
         await bot.send_message(
             user.id,
@@ -86,15 +86,10 @@ async def send_rules(update, chat_id, from_pm=False):
             "This probably doesn't mean it's lawless though...!",
         )
     elif rules:
-        btn = InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="Rules", url=f"t.me/{bot.username}?start={chat_id}"
-                        )
-                    ]
-                ]
-        )
+        btn = InlineKeyboardMarkup([[
+            InlineKeyboardButton(text="Rules",
+                                 url=f"t.me/{bot.username}?start={chat_id}")
+        ]])
         txt = "Please click the button below to see the rules."
         if not message.reply_to_message:
             await message.reply_text(txt, reply_markup=btn)
@@ -104,8 +99,7 @@ async def send_rules(update, chat_id, from_pm=False):
     else:
         await update.effective_message.reply_text(
             "The group admins haven't set any rules for this chat yet. "
-            "This probably doesn't mean it's lawless though...!"
-        )
+            "This probably doesn't mean it's lawless though...!")
 
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
@@ -114,16 +108,19 @@ async def set_rules(update: Update):
     msg = update.effective_message  # type: Optional[Message]
 
     raw_text = msg.text
-    args = raw_text.split(None, 1)  # use python's maxsplit to separate cmd and args
+    args = raw_text.split(None,
+                          1)  # use python's maxsplit to separate cmd and args
     if len(args) == 2:
         txt = args[1]
-        offset = len(txt) - len(raw_text)  # set correct offset relative to command
-        markdown_rules = markdown_parser(
-            txt, entities=msg.parse_entities(), offset=offset
-        )
+        offset = len(txt) - len(
+            raw_text)  # set correct offset relative to command
+        markdown_rules = markdown_parser(txt,
+                                         entities=msg.parse_entities(),
+                                         offset=offset)
 
         sql.set_rules(chat_id, markdown_rules)
-        await update.effective_message.reply_text("Successfully set rules for this group.")
+        await update.effective_message.reply_text(
+            "Successfully set rules for this group.")
 
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
@@ -132,7 +129,8 @@ async def clear_rules(update: Update):
     chat = update.effective_chat  # type: Optional[Chat]
 
     sql.set_rules(chat_id, "")
-    await update.effective_message.reply_text(f"Rules for {chat.title} were successfully cleared!")
+    await update.effective_message.reply_text(
+        f"Rules for {chat.title} were successfully cleared!")
 
 
 def __stats__():
@@ -155,7 +153,18 @@ def __chat_settings__(chat_id):
 
 __mod_name__ = "Rules"
 
-CUTIEPII_PTB.add_handler(CommandHandler("rules", get_rules, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("setrules", set_rules, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("clearrules", clear_rules, filters=filters.ChatType.GROUPS, block=False))
-
+CUTIEPII_PTB.add_handler(
+    CommandHandler("rules",
+                   get_rules,
+                   filters=filters.ChatType.GROUPS,
+                   block=False))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("setrules",
+                   set_rules,
+                   filters=filters.ChatType.GROUPS,
+                   block=False))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("clearrules",
+                   clear_rules,
+                   filters=filters.ChatType.GROUPS,
+                   block=False))

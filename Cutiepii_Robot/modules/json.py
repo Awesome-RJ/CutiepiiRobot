@@ -34,7 +34,6 @@ import io
 from telethon import types
 from telethon.tl import functions
 
-
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn
 
@@ -43,17 +42,16 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (
-                await telethn(functions.channels.GetParticipantRequest(chat, user))
-            ).participant,
+            (await
+             telethn(functions.channels.GetParticipantRequest(chat, user)
+                     )).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await telethn.get_peer_id(user)
-        ps = (
-            await telethn(functions.messages.GetFullChatRequest(chat.chat_id))
-        ).full_chat.participants.participants
+        ps = (await telethn(functions.messages.GetFullChatRequest(chat.chat_id)
+                            )).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),

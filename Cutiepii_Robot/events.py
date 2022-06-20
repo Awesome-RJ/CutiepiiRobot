@@ -53,6 +53,7 @@ def register(**args):
 
 def chataction(**args):
     """ Registers chat actions. """
+
     def decorator(func):
         telethn.add_event_handler(func, events.ChatAction(**args))
         return func
@@ -62,6 +63,7 @@ def chataction(**args):
 
 def userupdate(**args):
     """ Registers user updates. """
+
     def decorator(func):
         telethn.add_event_handler(func, events.UserUpdate(**args))
         return func
@@ -85,6 +87,7 @@ def inlinequery(**args):
 
 def callbackquery(**args):
     """ Registers inline query. """
+
     def decorator(func):
         telethn.add_event_handler(func, events.CallbackQuery(**args))
         return func

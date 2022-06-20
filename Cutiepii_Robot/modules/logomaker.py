@@ -39,135 +39,136 @@ from Cutiepii_Robot import OWNER_ID, SUPPORT_CHAT, telethn
 from Cutiepii_Robot.events import register
 from PIL import Image, ImageDraw, ImageFont
 
-LOGO_LINKS1 = [ "https://telegra.ph/file/cecce411e88f00a5bfd99.jpg",
-               "https://telegra.ph/file/e999fbca16d7fd9995d2a.jpg",
-               "https://telegra.ph/file/973d830501725e170acf8.jpg",
-               "https://telegra.ph/file/a6468482197bdd0b28c2f.jpg",
-               "https://telegra.ph/file/bea4c385a300ea6361a2e.jpg",
-               "https://telegra.ph/file/5dbda3a87be3d7c479e30.jpg",
-               "https://telegra.ph/file/031ac36905d0c56b651e8.jpg",
-               "https://telegra.ph/file/1f4c66fffc9da615593da.jpg",
-               "https://telegra.ph/file/b1258759a8e78c9e3875f.jpg",
-               "https://telegra.ph/file/e3019f8d56c36a7aea553.jpg",
-               "https://telegra.ph/file/5503a333443322535011c.jpg",
-               "https://telegra.ph/file/81b1dde32ad5f1866b4ad.jpg",
-               "https://telegra.ph/file/cc3e2c7a1c1aa3e5c9b65.jpg",
-               "https://telegra.ph/file/56af4060217c28d7a2876.jpg",
-               "https://telegra.ph/file/667bf9f9906b153c98a97.jpg",
-               "https://telegra.ph/file/c755afd9993a26c0e083e.jpg",
-               "https://telegra.ph/file/559cd6cf75024c200930a.jpg",
-               "https://telegra.ph/file/beb3b5cd1345e83572e04.jpg",
-               "https://telegra.ph/file/a879aa2817227f329509e.jpg",
-               "https://telegra.ph/file/fe190ea385f90cf5c8ded.jpg",
-               "https://telegra.ph/file/9c9c66fc2f155f64538ba.jpg",
-               "https://telegra.ph/file/8cd004ee7fa37f83e2536.jpg",
-               "https://telegra.ph/file/6fe1670a547c4c213b20c.jpg",
-               "https://telegra.ph/file/a1e1e15d1c7e109bcbf06.jpg",
-               "https://telegra.ph/file/5103238687aee154ea1b7.jpg",
-               "https://telegra.ph/file/cb923f740b7ff7083e41c.jpg",
-               "https://telegra.ph/file/d807fe3840c964e99c490.jpg",
-               "https://telegra.ph/file/90c858c3becdf9e2f1852.jpg",
-               "https://telegra.ph/file/77f85981c8ea7e224d2b3.jpg",
-               "https://telegra.ph/file/6eba4fab043f95d0f040d.jpg",
-               "https://telegra.ph/file/4fe3b7ccdfbfe72ef16a1.jpg",
-               "https://telegra.ph/file/7cc9ba4bf1235f77e024b.jpg",
-               "https://telegra.ph/file/24468d310be55228feed2.jpg",
-               "https://telegra.ph/file/29ec2c988009075c38a77.jpg",
-               "https://telegra.ph/file/b6f9d956c2e8280b5751a.jpg",
-               "https://telegra.ph/file/a0e276f1d9499c7323475.jpg",
-               "https://telegra.ph/file/a25dbc5301c2a2d89f2ae.jpg",
-               "https://telegra.ph/file/da4a7fb76c542bd655ae3.jpg",
-               "https://telegra.ph/file/ac7dcbaf77a02dfb612b1.jpg",
-               "https://telegra.ph/file/94d15438bc440b307399c.jpg",
-               "https://telegra.ph/file/41b28f1f71dd151879a58.jpg",
-               "https://telegra.ph/file/fb4859d7da4ec6bcba9a5.jpg",
-               "https://telegra.ph/file/206254c31e36fcd3d5db8.jpg",
-               "https://telegra.ph/file/e08db741f783a8ede7f1b.jpg",
-               "https://telegra.ph/file/3c8a8f5a86e9cdcf454e0.jpg",
-               "https://telegra.ph/file/d7171b332f796367b864b.jpg",
-               "https://telegra.ph/file/90af83c74d4a7aa4886dc.jpg",
-               "https://telegra.ph/file/fecd9ca5cc43ca219f767.jpg",
-               "https://telegra.ph/file/c3c16d073ce2ff17ff1b9.jpg",
-               "https://telegra.ph/file/2d436ea65189b4a0e2058.jpg",
-               "https://telegra.ph/file/1c1854c11fdc1b9468be0.jpg",
-               "https://telegra.ph/file/75f507a6c2796bf828186.jpg",
-               "https://telegra.ph/file/ef36d66ce31e7805554fd.jpg",
-               "https://telegra.ph/file/f0dbdcafaea14b3f8f1c6.jpg",
-               "https://telegra.ph/file/b9cf16b5d81578aae3881.jpg",
-               "https://telegra.ph/file/a143b18b772401a6a524e.jpg",
-               "https://telegra.ph/file/36bf2e1171b44f777f58d.jpg",
-               "https://telegra.ph/file/0f9d2d6047cab848ad44c.jpg",
-               "https://telegra.ph/file/456a71fc90e1eb9b98109.jpg",
-               "https://telegra.ph/file/e56f2572915703424738b.jpg",
-               "https://telegra.ph/file/f5f90261f7506fa5b4766.jpg",
-               "https://telegra.ph/file/d7e49a357a9bc1f59fde2.jpg",
-               "https://telegra.ph/file/9f07ebeb13b0ca9d3f2a1.jpg",
-               "https://telegra.ph/file/b1ae47176479c8d5b9713.jpg",
-               "https://telegra.ph/file/82ce624aff169a47fa66e.jpg",
-               "https://telegra.ph/file/cea0b13774b1d5118cf9d.jpg",
-               "https://telegra.ph/file/09cf5e5ceb85f2978dde4.jpg",
-               "https://telegra.ph/file/01e7470fe2f9e2ba7281a.jpg",
-               "https://telegra.ph/file/17e09e6d5f38938b5666e.jpg",
-               "https://telegra.ph/file/64b5814fecf04d37286f2.jpg",
-               "https://telegra.ph/file/c6a2dd78c3ab15b49228e.jpg",
-               "https://telegra.ph/file/fc0bb4f263aeb6737fe02.jpg",
-               "https://telegra.ph/file/d772dbf56675b0632cd8f.jpg",
-               "https://telegra.ph/file/d6a4f1a6a898abfe65e21.jpg",
-               "https://telegra.ph/file/568ee935709d2e312eaa3.jpg",
-               "https://telegra.ph/file/eccfb77d1380ddd3b0363.jpg",
-               "https://telegra.ph/file/ba7c525015c259cc474eb.jpg",
-               "https://telegra.ph/file/f4068858a842549e25c1f.jpg",
-               "https://telegra.ph/file/f1bddef5b2496050c0931.jpg",
-               "https://telegra.ph/file/bd6b7493d4b5beb0c116c.jpg",
-               "https://telegra.ph/file/77f73079bee231fee9b6f.jpg",
-               "https://telegra.ph/file/52a8dfa226ca417916d86.jpg",
-               "https://telegra.ph/file/b1c3dcc72216e12cf989a.jpg",
-               "https://telegra.ph/file/6f6be563ac4647bcedc43.jpg",
-               "https://telegra.ph/file/2735d2c9dad2d2bd86160.jpg",
-               "https://telegra.ph/file/30d594f70e2e8e0e80e23.jpg",
-               "https://telegra.ph/file/24826ea7d58f44a36fd14.jpg",
-               "https://telegra.ph/file/b8ccbd79cc7a5591f7a6e.jpg",
-               "https://telegra.ph/file/59cfa7f35533f2563eb8e.jpg",
-               "https://telegra.ph/file/dfd842b31706b23170f9d.jpg",
-               "https://telegra.ph/file/e4d920897863dddb6f586.jpg",
-               "https://telegra.ph/file/e63f991df36839849064b.jpg",
-               "https://telegra.ph/file/af15efbaa212f18c17d08.jpg",
-               "https://telegra.ph/file/b83c85c52b497cc25d9d7.jpg",
-               "https://telegra.ph/file/ed5d19166cca90cf02f3e.jpg",
-               "https://telegra.ph/file/2303c4a4a3d41f1531e3e.jpg",
-               "https://telegra.ph/file/7d4152dd4c9e8150f0717.jpg",
-               "https://telegra.ph/file/f4905f5bab3dfc7aed145.jpg",
-               "https://telegra.ph/file/d80154c9508777093654e.jpg",
-               "https://telegra.ph/file/b9c49c1d72f8057adc03d.jpg",
-               "https://telegra.ph/file/a3af436f2e0e76eda47d9.jpg",
-               "https://telegra.ph/file/91ab92895eba337e38f1c.jpg",
-               "https://telegra.ph/file/eaf496c3bb1b637103985.jpg",
-               "https://telegra.ph/file/7503016b471a092ec2003.jpg",
-               "https://telegra.ph/file/2d2d8cf41e3146b6f31f4.jpg",
-               "https://telegra.ph/file/418c0f9a5dbb63c493840.jpg",
-               "https://telegra.ph/file/c380a60255706ade8662c.jpg",
-               "https://telegra.ph/file/21b5bf4c8d2872b499fb0.jpg",
-               "https://telegra.ph/file/6f51b9215f4d5dac79102.jpg",
-               "https://telegra.ph/file/c3e8ab0ac88f303a4c2e3.jpg",
-               "https://telegra.ph/file/2d9accf761a99f8972824.jpg",
-               "https://telegra.ph/file/245f539f6701b4530eab9.jpg",
-               "https://telegra.ph/file/e73a8be6ed6136865741a.jpg",
-               "https://telegra.ph/file/39a9b6f487edf10e07222.jpg",
-               "https://telegra.ph/file/2c3e389e4eaf0b952b817.jpg",
-               "https://telegra.ph/file/5dc0bfe4c8c34dc980879.jpg",
-               "https://telegra.ph/file/b6830b97207b9b743ec2d.jpg",
-               "https://telegra.ph/file/2ed967a134f78894c845e.jpg",
-               "https://telegra.ph/file/0859c9235f44d774ec11d.jpg",
-               "https://telegra.ph/file/d90610f30e2d7adb25938.jpg",
-               "https://telegra.ph/file/639fdd9f760861bfb20d4.jpg",
-               "https://telegra.ph/file/a7d454b97edfa01a586c7.jpg",
-               "https://telegra.ph/file/4cb6230c6485ee3ed5cf7.jpg",
-               "https://telegra.ph/file/46c4fde58d80f04c7316c.jpg",
-               "https://telegra.ph/file/71b3c347050c5b1320d0b.jpg",
-               "https://telegra.ph/file/2fd14298a3d395d804062.jpg",
-               "https://telegra.ph/file/e56d5462b78457bcf7082.jpg",
-               "https://telegra.ph/file/b0988d2c3903bf208286d.jpg",
-               "https://telegra.ph/file/85d64e47fddf0b0393617.jpg",
+LOGO_LINKS1 = [
+    "https://telegra.ph/file/cecce411e88f00a5bfd99.jpg",
+    "https://telegra.ph/file/e999fbca16d7fd9995d2a.jpg",
+    "https://telegra.ph/file/973d830501725e170acf8.jpg",
+    "https://telegra.ph/file/a6468482197bdd0b28c2f.jpg",
+    "https://telegra.ph/file/bea4c385a300ea6361a2e.jpg",
+    "https://telegra.ph/file/5dbda3a87be3d7c479e30.jpg",
+    "https://telegra.ph/file/031ac36905d0c56b651e8.jpg",
+    "https://telegra.ph/file/1f4c66fffc9da615593da.jpg",
+    "https://telegra.ph/file/b1258759a8e78c9e3875f.jpg",
+    "https://telegra.ph/file/e3019f8d56c36a7aea553.jpg",
+    "https://telegra.ph/file/5503a333443322535011c.jpg",
+    "https://telegra.ph/file/81b1dde32ad5f1866b4ad.jpg",
+    "https://telegra.ph/file/cc3e2c7a1c1aa3e5c9b65.jpg",
+    "https://telegra.ph/file/56af4060217c28d7a2876.jpg",
+    "https://telegra.ph/file/667bf9f9906b153c98a97.jpg",
+    "https://telegra.ph/file/c755afd9993a26c0e083e.jpg",
+    "https://telegra.ph/file/559cd6cf75024c200930a.jpg",
+    "https://telegra.ph/file/beb3b5cd1345e83572e04.jpg",
+    "https://telegra.ph/file/a879aa2817227f329509e.jpg",
+    "https://telegra.ph/file/fe190ea385f90cf5c8ded.jpg",
+    "https://telegra.ph/file/9c9c66fc2f155f64538ba.jpg",
+    "https://telegra.ph/file/8cd004ee7fa37f83e2536.jpg",
+    "https://telegra.ph/file/6fe1670a547c4c213b20c.jpg",
+    "https://telegra.ph/file/a1e1e15d1c7e109bcbf06.jpg",
+    "https://telegra.ph/file/5103238687aee154ea1b7.jpg",
+    "https://telegra.ph/file/cb923f740b7ff7083e41c.jpg",
+    "https://telegra.ph/file/d807fe3840c964e99c490.jpg",
+    "https://telegra.ph/file/90c858c3becdf9e2f1852.jpg",
+    "https://telegra.ph/file/77f85981c8ea7e224d2b3.jpg",
+    "https://telegra.ph/file/6eba4fab043f95d0f040d.jpg",
+    "https://telegra.ph/file/4fe3b7ccdfbfe72ef16a1.jpg",
+    "https://telegra.ph/file/7cc9ba4bf1235f77e024b.jpg",
+    "https://telegra.ph/file/24468d310be55228feed2.jpg",
+    "https://telegra.ph/file/29ec2c988009075c38a77.jpg",
+    "https://telegra.ph/file/b6f9d956c2e8280b5751a.jpg",
+    "https://telegra.ph/file/a0e276f1d9499c7323475.jpg",
+    "https://telegra.ph/file/a25dbc5301c2a2d89f2ae.jpg",
+    "https://telegra.ph/file/da4a7fb76c542bd655ae3.jpg",
+    "https://telegra.ph/file/ac7dcbaf77a02dfb612b1.jpg",
+    "https://telegra.ph/file/94d15438bc440b307399c.jpg",
+    "https://telegra.ph/file/41b28f1f71dd151879a58.jpg",
+    "https://telegra.ph/file/fb4859d7da4ec6bcba9a5.jpg",
+    "https://telegra.ph/file/206254c31e36fcd3d5db8.jpg",
+    "https://telegra.ph/file/e08db741f783a8ede7f1b.jpg",
+    "https://telegra.ph/file/3c8a8f5a86e9cdcf454e0.jpg",
+    "https://telegra.ph/file/d7171b332f796367b864b.jpg",
+    "https://telegra.ph/file/90af83c74d4a7aa4886dc.jpg",
+    "https://telegra.ph/file/fecd9ca5cc43ca219f767.jpg",
+    "https://telegra.ph/file/c3c16d073ce2ff17ff1b9.jpg",
+    "https://telegra.ph/file/2d436ea65189b4a0e2058.jpg",
+    "https://telegra.ph/file/1c1854c11fdc1b9468be0.jpg",
+    "https://telegra.ph/file/75f507a6c2796bf828186.jpg",
+    "https://telegra.ph/file/ef36d66ce31e7805554fd.jpg",
+    "https://telegra.ph/file/f0dbdcafaea14b3f8f1c6.jpg",
+    "https://telegra.ph/file/b9cf16b5d81578aae3881.jpg",
+    "https://telegra.ph/file/a143b18b772401a6a524e.jpg",
+    "https://telegra.ph/file/36bf2e1171b44f777f58d.jpg",
+    "https://telegra.ph/file/0f9d2d6047cab848ad44c.jpg",
+    "https://telegra.ph/file/456a71fc90e1eb9b98109.jpg",
+    "https://telegra.ph/file/e56f2572915703424738b.jpg",
+    "https://telegra.ph/file/f5f90261f7506fa5b4766.jpg",
+    "https://telegra.ph/file/d7e49a357a9bc1f59fde2.jpg",
+    "https://telegra.ph/file/9f07ebeb13b0ca9d3f2a1.jpg",
+    "https://telegra.ph/file/b1ae47176479c8d5b9713.jpg",
+    "https://telegra.ph/file/82ce624aff169a47fa66e.jpg",
+    "https://telegra.ph/file/cea0b13774b1d5118cf9d.jpg",
+    "https://telegra.ph/file/09cf5e5ceb85f2978dde4.jpg",
+    "https://telegra.ph/file/01e7470fe2f9e2ba7281a.jpg",
+    "https://telegra.ph/file/17e09e6d5f38938b5666e.jpg",
+    "https://telegra.ph/file/64b5814fecf04d37286f2.jpg",
+    "https://telegra.ph/file/c6a2dd78c3ab15b49228e.jpg",
+    "https://telegra.ph/file/fc0bb4f263aeb6737fe02.jpg",
+    "https://telegra.ph/file/d772dbf56675b0632cd8f.jpg",
+    "https://telegra.ph/file/d6a4f1a6a898abfe65e21.jpg",
+    "https://telegra.ph/file/568ee935709d2e312eaa3.jpg",
+    "https://telegra.ph/file/eccfb77d1380ddd3b0363.jpg",
+    "https://telegra.ph/file/ba7c525015c259cc474eb.jpg",
+    "https://telegra.ph/file/f4068858a842549e25c1f.jpg",
+    "https://telegra.ph/file/f1bddef5b2496050c0931.jpg",
+    "https://telegra.ph/file/bd6b7493d4b5beb0c116c.jpg",
+    "https://telegra.ph/file/77f73079bee231fee9b6f.jpg",
+    "https://telegra.ph/file/52a8dfa226ca417916d86.jpg",
+    "https://telegra.ph/file/b1c3dcc72216e12cf989a.jpg",
+    "https://telegra.ph/file/6f6be563ac4647bcedc43.jpg",
+    "https://telegra.ph/file/2735d2c9dad2d2bd86160.jpg",
+    "https://telegra.ph/file/30d594f70e2e8e0e80e23.jpg",
+    "https://telegra.ph/file/24826ea7d58f44a36fd14.jpg",
+    "https://telegra.ph/file/b8ccbd79cc7a5591f7a6e.jpg",
+    "https://telegra.ph/file/59cfa7f35533f2563eb8e.jpg",
+    "https://telegra.ph/file/dfd842b31706b23170f9d.jpg",
+    "https://telegra.ph/file/e4d920897863dddb6f586.jpg",
+    "https://telegra.ph/file/e63f991df36839849064b.jpg",
+    "https://telegra.ph/file/af15efbaa212f18c17d08.jpg",
+    "https://telegra.ph/file/b83c85c52b497cc25d9d7.jpg",
+    "https://telegra.ph/file/ed5d19166cca90cf02f3e.jpg",
+    "https://telegra.ph/file/2303c4a4a3d41f1531e3e.jpg",
+    "https://telegra.ph/file/7d4152dd4c9e8150f0717.jpg",
+    "https://telegra.ph/file/f4905f5bab3dfc7aed145.jpg",
+    "https://telegra.ph/file/d80154c9508777093654e.jpg",
+    "https://telegra.ph/file/b9c49c1d72f8057adc03d.jpg",
+    "https://telegra.ph/file/a3af436f2e0e76eda47d9.jpg",
+    "https://telegra.ph/file/91ab92895eba337e38f1c.jpg",
+    "https://telegra.ph/file/eaf496c3bb1b637103985.jpg",
+    "https://telegra.ph/file/7503016b471a092ec2003.jpg",
+    "https://telegra.ph/file/2d2d8cf41e3146b6f31f4.jpg",
+    "https://telegra.ph/file/418c0f9a5dbb63c493840.jpg",
+    "https://telegra.ph/file/c380a60255706ade8662c.jpg",
+    "https://telegra.ph/file/21b5bf4c8d2872b499fb0.jpg",
+    "https://telegra.ph/file/6f51b9215f4d5dac79102.jpg",
+    "https://telegra.ph/file/c3e8ab0ac88f303a4c2e3.jpg",
+    "https://telegra.ph/file/2d9accf761a99f8972824.jpg",
+    "https://telegra.ph/file/245f539f6701b4530eab9.jpg",
+    "https://telegra.ph/file/e73a8be6ed6136865741a.jpg",
+    "https://telegra.ph/file/39a9b6f487edf10e07222.jpg",
+    "https://telegra.ph/file/2c3e389e4eaf0b952b817.jpg",
+    "https://telegra.ph/file/5dc0bfe4c8c34dc980879.jpg",
+    "https://telegra.ph/file/b6830b97207b9b743ec2d.jpg",
+    "https://telegra.ph/file/2ed967a134f78894c845e.jpg",
+    "https://telegra.ph/file/0859c9235f44d774ec11d.jpg",
+    "https://telegra.ph/file/d90610f30e2d7adb25938.jpg",
+    "https://telegra.ph/file/639fdd9f760861bfb20d4.jpg",
+    "https://telegra.ph/file/a7d454b97edfa01a586c7.jpg",
+    "https://telegra.ph/file/4cb6230c6485ee3ed5cf7.jpg",
+    "https://telegra.ph/file/46c4fde58d80f04c7316c.jpg",
+    "https://telegra.ph/file/71b3c347050c5b1320d0b.jpg",
+    "https://telegra.ph/file/2fd14298a3d395d804062.jpg",
+    "https://telegra.ph/file/e56d5462b78457bcf7082.jpg",
+    "https://telegra.ph/file/b0988d2c3903bf208286d.jpg",
+    "https://telegra.ph/file/85d64e47fddf0b0393617.jpg",
     "https://telegra.ph/file/98bf31ab534bbaf75267a.jpg",
     "https://telegra.ph/file/d1838efdafce9fe611d0c.jpg",
     "https://telegra.ph/file/c1ff2d5ec5e1b5bd1b200.jpg",
@@ -1030,7 +1031,7 @@ LOGO_LINKS1 = [ "https://telegra.ph/file/cecce411e88f00a5bfd99.jpg",
     "https://telegra.ph/file/b958155e1e8e9ab9a0416.jpg",
     "https://telegra.ph/file/24fff051c39b815e5078a.jpg",
     "https://telegra.ph/file/258c02c002e89287d5d9b.jpg",
-    "https://telegra.ph/file/d2abc99773a9d4954c2ba.jpg",                       
+    "https://telegra.ph/file/d2abc99773a9d4954c2ba.jpg",
     "https://telegra.ph/file/9849b3940f063b065f4e3.jpg"
     "https://telegra.ph/file/d1838efdafce9fe611d0c.jpg",
     "https://telegra.ph/file/c1ff2d5ec5e1b5bd1b200.jpg",
@@ -1259,42 +1260,52 @@ LOGO_LINKS1 = [ "https://telegra.ph/file/cecce411e88f00a5bfd99.jpg",
     "https://telegra.ph/file/b958155e1e8e9ab9a0416.jpg",
     "https://telegra.ph/file/24fff051c39b815e5078a.jpg",
     "https://telegra.ph/file/258c02c002e89287d5d9b.jpg",
-    "https://telegra.ph/file/d2abc99773a9d4954c2ba.jpg",                       
+    "https://telegra.ph/file/d2abc99773a9d4954c2ba.jpg",
     "https://telegra.ph/file/9849b3940f063b065f4e3.jpg"
-                         ]
+]
 
 
 @register(pattern="^/logo ?(.*)")
 async def lego(event):
- quew = event.pattern_match.group(1)
- if event.sender_id == OWNER_ID:
-     pass
- else:
+    quew = event.pattern_match.group(1)
+    if event.sender_id == OWNER_ID:
+        pass
+    else:
 
-  if not quew:
-     await event.reply("Please Gimmie A Text For The Logo.")
-     return
- pesan = await event.reply("Logo In A Process. Please Wait.")
- try:
-    text = event.pattern_match.group(1)
-    randc = random.choice(LOGO_LINKS1)
-    img = Image.open(io.BytesIO(requests.get(randc).content))
-    draw = ImageDraw.Draw(img)
-    image_widthz, image_heightz = img.size
-    fnt = glob.glob("./Cutiepii_Robot/utils/Logo/*")
-    randf = random.choice(fnt)
-    font = ImageFont.truetype(randf, 120)
-    w, h = draw.textsize(text, font=font)
-    h += int(h*0.21)
-    draw.text(((image_widthz-w)/2, (image_heightz-h)/2), text, font=font, fill=(255, 255, 255))
-    x = (image_widthz-w)/2
-    y = ((image_heightz-h)/2+6)
-    draw.text((x, y), text, font=font, fill="black", stroke_width=1, stroke_fill="white")
-    fname = "Cutiepii.png"
-    img.save(fname, "png")
-    await telethn.send_file(event.chat_id, file=fname, caption = f"Made by @Cutiepii_Robot")         
-    await pesan.delete()
-    if os.path.exists(fname):
+        if not quew:
+            await event.reply("Please Gimmie A Text For The Logo.")
+            return
+    pesan = await event.reply("Logo In A Process. Please Wait.")
+    try:
+        text = event.pattern_match.group(1)
+        randc = random.choice(LOGO_LINKS1)
+        img = Image.open(io.BytesIO(requests.get(randc).content))
+        draw = ImageDraw.Draw(img)
+        image_widthz, image_heightz = img.size
+        fnt = glob.glob("./Cutiepii_Robot/utils/Logo/*")
+        randf = random.choice(fnt)
+        font = ImageFont.truetype(randf, 120)
+        w, h = draw.textsize(text, font=font)
+        h += int(h * 0.21)
+        draw.text(((image_widthz - w) / 2, (image_heightz - h) / 2),
+                  text,
+                  font=font,
+                  fill=(255, 255, 255))
+        x = (image_widthz - w) / 2
+        y = ((image_heightz - h) / 2 + 6)
+        draw.text((x, y),
+                  text,
+                  font=font,
+                  fill="black",
+                  stroke_width=1,
+                  stroke_fill="white")
+        fname = "Cutiepii.png"
+        img.save(fname, "png")
+        await telethn.send_file(event.chat_id,
+                                file=fname,
+                                caption=f"Made by @Cutiepii_Robot")
+        await pesan.delete()
+        if os.path.exists(fname):
             os.remove(fname)
- except Exception as e:
-    await event.reply(f"Error, Report @{SUPPORT_CHAT}, {e}")
+    except Exception as e:
+        await event.reply(f"Error, Report @{SUPPORT_CHAT}, {e}")

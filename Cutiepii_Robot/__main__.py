@@ -39,7 +39,6 @@ import sys
 import traceback
 import Cutiepii_Robot.modules.sql.users_sql as sql
 
-
 from sys import argv
 from typing import Optional
 
@@ -57,7 +56,7 @@ from Cutiepii_Robot import (
     StartTime,
     pgram,
     ubot,
-    )
+)
 
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
@@ -83,7 +82,7 @@ from telegram.ext import (
 from telegram.helpers import escape_markdown
 from pyrogram import idle
 
-  
+
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -92,7 +91,8 @@ def get_readable_time(seconds: int) -> str:
 
     while count < 4:
         count += 1
-        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(
+            seconds, 24)
         if seconds == 0 and remainder == 0:
             break
         time_list.append(int(result))
@@ -107,6 +107,7 @@ def get_readable_time(seconds: int) -> str:
     ping_time += ":".join(time_list)
 
     return ping_time
+
 
 HELP_MSG = "Click the button below to get help manu in your pm."
 START_MSG = "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>"
@@ -125,25 +126,24 @@ PM_START_TEXT = """
 
 buttons = [
     [
-                        InlineKeyboardButton(
-                            text=f"Add {context.bot.first_name} To Your Group",
-                            url=f"https://telegram.dog/{Cutiepii_Robot}?startgroup=true")
-                    ],
-                   [
-                       InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
-                       InlineKeyboardButton(text="❔ Chit Chat", url="https://telegram.dog/GIrlsBoysXD"),
-                       InlineKeyboardButton(text="[► Inline ◄]", switch_inline_query_current_chat=""),
-                     ],
-                    [                  
-                       InlineKeyboardButton(
-                             text="🚑 Support",
+        InlineKeyboardButton(
+            text=f"Add {context.bot.first_name} To Your Group",
+            url=f"https://telegram.dog/{Cutiepii_Robot}?startgroup=true")
+    ],
+    [
+        InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
+        InlineKeyboardButton(text="❔ Chit Chat",
+                             url="https://telegram.dog/GIrlsBoysXD"),
+        InlineKeyboardButton(text="[► Inline ◄]",
+                             switch_inline_query_current_chat=""),
+    ],
+    [
+        InlineKeyboardButton(text="🚑 Support",
                              url=f"https://telegram.dog/{SUPPORT_CHAT}"),
-                       InlineKeyboardButton(
-                             text="📢 Updates",
+        InlineKeyboardButton(text="📢 Updates",
                              url="https://telegram.dog/Black_Knights_Union")
-                     ], 
-    ]
-
+    ],
+]
 
 HELP_STRINGS = """
 *Main* commands available:
@@ -156,7 +156,6 @@ HELP_STRINGS = """
 """
 
 DONATE_STRING = """❂ I'm Free for Everyone ❂"""
-
 
 IMPORTED = {}
 MIGRATEABLE = []
@@ -171,8 +170,7 @@ GDPR = []
 
 for module_name in ALL_MODULES:
     imported_module = importlib.import_module(
-        f"Cutiepii_Robot.modules.{module_name}"
-    )
+        f"Cutiepii_Robot.modules.{module_name}")
 
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
@@ -180,7 +178,8 @@ for module_name in ALL_MODULES:
     if imported_module.__mod_name__.lower() not in IMPORTED:
         IMPORTED[imported_module.__mod_name__.lower()] = imported_module
     else:
-        raise Exception("Can't have two modules with the same name! Please change one")
+        raise Exception(
+            "Can't have two modules with the same name! Please change one")
 
     if hasattr(imported_module, "__help__") and imported_module.__help__:
         HELPABLE[imported_module.__mod_name__.lower()] = imported_module
@@ -247,9 +246,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 send_help(
                     update.effective_chat.id,
                     HELPABLE[mod].__help__,
-                    InlineKeyboardMarkup(
-                        [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
-                    ),
+                    InlineKeyboardMarkup([[
+                        InlineKeyboardButton(text="[► Back ◄]",
+                                             callback_data="help_back")
+                    ]]),
                 )
 
             elif args[0].lower().startswith("stngs_"):
@@ -267,12 +267,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         else:
             first_name = update.effective_user.first_name
             await update.effective_message.reply_text(
-                PM_START_TEXT.format(
-                    escape_markdown(context.bot.first_name),
-                    escape_markdown(first_name),
-                    escape_markdown(uptime),
-                    sql.num_users(),
-                    sql.num_chats()),                        
+                PM_START_TEXT.format(escape_markdown(context.bot.first_name),
+                                     escape_markdown(first_name),
+                                     escape_markdown(uptime), sql.num_users(),
+                                     sql.num_chats()),
                 reply_markup=InlineKeyboardMarkup(buttons),
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
@@ -280,49 +278,48 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     else:
         update.effective_message.reply_animation(
             GROUP_START_IMG,
-            caption=f"<b>Yes, Darling I'm alive!\nHaven't sleep since</b>: <code>{uptime}</code>",
+            caption=
+            f"<b>Yes, Darling I'm alive!\nHaven't sleep since</b>: <code>{uptime}</code>",
             parse_mode=ParseMode.HTML,
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="🚑 Support",
-                            url=f"https://telegram.dog/{SUPPORT_CHAT}",
-                        ),
-                        InlineKeyboardButton(
-                            text="📢 Updates",
-                            url="https://telegram.dog/Black_Knights_Union",
-                        ),
-                    ]
-                ]
-            ),
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(
+                    text="🚑 Support",
+                    url=f"https://telegram.dog/{SUPPORT_CHAT}",
+                ),
+                InlineKeyboardButton(
+                    text="📢 Updates",
+                    url="https://telegram.dog/Black_Knights_Union",
+                ),
+            ]]),
         )
 
 
 async def error_handler(_: Update, context: ContextTypes.DEFAULT_TYPE):
     """Log the error and send a telegram message to notify the developer."""
     # Log the error before we do anything else, so we can see it even if something breaks.
-    LOGGER.error(msg="Exception while handling an update:", exc_info=context.error)
+    LOGGER.error(msg="Exception while handling an update:",
+                 exc_info=context.error)
 
     # traceback.format_exception returns the usual python message about an exception, but as a
     # list of strings rather than a single string, so we have to join them together.
-    tb_list = traceback.format_exception(
-        None, context.error, context.error.__traceback__
-    )
+    tb_list = traceback.format_exception(None, context.error,
+                                         context.error.__traceback__)
     tb = "".join(tb_list)
 
     # Build the message with some markup and additional information about what happened.
     message = f"An exception was raised while handling an update\n<pre>update = {html.escape(json.dumps(update.to_dict(), indent=2, ensure_ascii=False))}</pre>\n\n<pre>{html.escape(tb)}</pre>"
 
-
     if len(message) >= 4096:
         message = message[:4096]
     # Finally, send the message
-    await context.bot.send_message(chat_id=OWNER_ID, text=message, parse_mode=ParseMode.HTML)
+    await context.bot.send_message(chat_id=OWNER_ID,
+                                   text=message,
+                                   parse_mode=ParseMode.HTML)
 
 
 # for test purposes
-async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def error_callback(update: Update,
+                         context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         raise context.error
     except (BadRequest):
@@ -341,8 +338,10 @@ async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         pass
         # handle all other telegram related errors
 
+
 @cutiepii_callback(pattern=r"help_.")
-async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def help_button(update: Update,
+                      context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     prev_match = re.match(r"help_prev\((.+?)\)", query.data)
@@ -352,19 +351,20 @@ async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     with contextlib.suppress(BadRequest):
         if mod_match:
             module = mod_match[1]
-            text = (
-                f"╔═━「 *{HELPABLE[module].__mod_name__}* module: 」\n"
-                + HELPABLE[module].__help__
-            )
+            text = (f"╔═━「 *{HELPABLE[module].__mod_name__}* module: 」\n" +
+                    HELPABLE[module].__help__)
 
             await query.message.edit_text(
                 text=text,
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
-                reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back"),
-                    InlineKeyboardButton(text="[► Support ◄]", url="https://t.me/Black_Knights_Union_Support")]]
-                ),
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton(text="[► Back ◄]",
+                                         callback_data="help_back"),
+                    InlineKeyboardButton(
+                        text="[► Support ◄]",
+                        url="https://t.me/Black_Knights_Union_Support")
+                ]]),
             )
 
         elif prev_match:
@@ -373,8 +373,7 @@ async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(curr_page - 1, HELPABLE, "help")
-                ),
+                    paginate_modules(curr_page - 1, HELPABLE, "help")),
             )
 
         elif next_match:
@@ -383,8 +382,7 @@ async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(next_page + 1, HELPABLE, "help")
-                ),
+                    paginate_modules(next_page + 1, HELPABLE, "help")),
             )
 
         elif back_match:
@@ -392,8 +390,7 @@ async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
                 text=HELP_STRINGS,
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(0, HELPABLE, "help")
-                ),
+                    paginate_modules(0, HELPABLE, "help")),
             )
 
         # ensure no spinny white circle
@@ -402,7 +399,8 @@ async def help_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
 
 @cutiepii_callback(pattern=r"cutiepii_")
-async def cutiepii_callback_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def cutiepii_callback_data(update: Update,
+                                 context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     uptime = get_readable_time((time.time() - StartTime))
     if query.data == "cutiepii_":
@@ -410,27 +408,22 @@ async def cutiepii_callback_data(update: Update, context: ContextTypes.DEFAULT_T
             text="""CallBackQueriesData Here""",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup(
-                [
-                 [
-                    InlineKeyboardButton(text="[► Back ◄]", callback_data="cutiepii_back")
-                 ]
-                ]
-            ),
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(text="[► Back ◄]",
+                                     callback_data="cutiepii_back")
+            ]]),
         )
     elif query.data == "cutiepii_back":
         first_name = update.effective_user.first_name
         await query.message.edit_text(
-                PM_START_TEXT.format(
-                    escape_markdown(context.bot.first_name),
-                    escape_markdown(first_name),
-                    escape_markdown(uptime),
-                    sql.num_users(),
-                    sql.num_chats()),
-                reply_markup=InlineKeyboardMarkup(buttons),
-                parse_mode=ParseMode.MARKDOWN,
-                timeout=60,
-                disable_web_page_preview=False,
+            PM_START_TEXT.format(escape_markdown(context.bot.first_name),
+                                 escape_markdown(first_name),
+                                 escape_markdown(uptime), sql.num_users(),
+                                 sql.num_chats()),
+            reply_markup=InlineKeyboardMarkup(buttons),
+            parse_mode=ParseMode.MARKDOWN,
+            timeout=60,
+            disable_web_page_preview=False,
         )
 
 
@@ -445,38 +438,32 @@ async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         update.effective_message.reply_photo(
             HELP_IMG,
             HELP_MSG,
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="Open In Private Chat",
-                            url=f"t.me/{context.bot.username}?start=help",
-                        )
-                    ]
-                ]
-            ),
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(
+                    text="Open In Private Chat",
+                    url=f"t.me/{context.bot.username}?start=help",
+                )
+            ]]),
         )
 
         return
 
     if len(args) >= 2 and any(args[1].lower() == x for x in HELPABLE):
         module = args[1].lower()
-        text = (
-            f" 〔 *{HELPABLE[module].__mod_name__}* 〕\n"
-            + HELPABLE[module].__help__
-        )
+        text = (f" 〔 *{HELPABLE[module].__mod_name__}* 〕\n" +
+                HELPABLE[module].__help__)
 
         send_help(
             chat.id,
             text,
-            InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text="[► Back ◄]", callback_data="help_back")]]
-            ),
+            InlineKeyboardMarkup([[
+                InlineKeyboardButton(text="[► Back ◄]",
+                                     callback_data="help_back")
+            ]]),
         )
 
     else:
         send_help(chat.id, HELP_STRINGS)
-
 
 
 async def send_settings(chat_id, user_id, user=False):
@@ -484,8 +471,7 @@ async def send_settings(chat_id, user_id, user=False):
         if USER_SETTINGS:
             settings = "\n\n".join(
                 f"*{mod.__mod_name__}*:\n{mod.__user_settings__(user_id)}"
-                for mod in USER_SETTINGS.values()
-            )
+                for mod in USER_SETTINGS.values())
 
             await context.bot.send_message(
                 user_id,
@@ -504,10 +490,10 @@ async def send_settings(chat_id, user_id, user=False):
         chat_name = await CUTIEPII_PTB.bot.getChat(chat_id).title
         await context.bot.send_message(
             user_id,
-            text=f"Which module would you like to check {chat_name}'s settings for?",
+            text=
+            f"Which module would you like to check {chat_name}'s settings for?",
             reply_markup=InlineKeyboardMarkup(
-                paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
-            ),
+                paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)),
         )
     else:
         await context.bot.send_message(
@@ -517,8 +503,10 @@ async def send_settings(chat_id, user_id, user=False):
             parse_mode=ParseMode.MARKDOWN,
         )
 
+
 @cutiepii_callback(pattern=r"stngs_")
-async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def settings_button(update: Update,
+                          context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     user = update.effective_user
     bot = context.bot
@@ -535,16 +523,17 @@ async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
                 escape_markdown(chat.title), CHAT_SETTINGS[module].__mod_name__
             ) + CHAT_SETTINGS[module].__chat_settings__(chat_id, user.id)
             try:
-                keyboard = CHAT_SETTINGS[module].__chat_settings_buttons__(chat_id, user.id)
+                keyboard = CHAT_SETTINGS[module].__chat_settings_buttons__(
+                    chat_id, user.id)
             except AttributeError:
                 keyboard = []
-            kbrd = InlineKeyboardMarkup(InlineKeyboardButton(text="Back", callback_data=f"stngs_back({chat_id}"))
+            kbrd = InlineKeyboardMarkup(
+                InlineKeyboardButton(text="Back",
+                                     callback_data=f"stngs_back({chat_id}"))
             keyboard.append(kbrd)
-            await query.message.edit_text(
-                text=text,
-                parse_mode=ParseMode.MARKDOWN,
-                reply_markup=keyboard
-            )
+            await query.message.edit_text(text=text,
+                                          parse_mode=ParseMode.MARKDOWN,
+                                          reply_markup=keyboard)
         elif prev_match:
             chat_id = prev_match[1]
             curr_page = int(prev_match[2])
@@ -552,10 +541,10 @@ async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             await query.message.reply_text(
                 f"Hi there! There are quite a few settings for {chat.title} - go ahead and pick what you're interested in.",
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(
-                        curr_page - 1, CHAT_SETTINGS, "stngs", chat=chat_id
-                    )
-                ),
+                    paginate_modules(curr_page - 1,
+                                     CHAT_SETTINGS,
+                                     "stngs",
+                                     chat=chat_id)),
             )
 
         elif next_match:
@@ -565,35 +554,38 @@ async def settings_button(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             await query.message.edit_text(
                 f"Hi there! There are quite a few settings for {chat.title} - go ahead and pick what you're interested in.",
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(
-                        next_page + 1, CHAT_SETTINGS, "stngs", chat=chat_id
-                    )
-                ),
+                    paginate_modules(next_page + 1,
+                                     CHAT_SETTINGS,
+                                     "stngs",
+                                     chat=chat_id)),
             )
 
         elif back_match:
             chat_id = back_match[1]
             chat = await bot.get_chat(chat_id)
             await query.message.edit_text(
-                text=f"Hi there! There are quite a few settings for {escape_markdown(chat.title)} - go ahead and pick what you're interested in.",
+                text=
+                f"Hi there! There are quite a few settings for {escape_markdown(chat.title)} - go ahead and pick what you're interested in.",
                 parse_mode=ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup(
-                    paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)
-                ),
+                    paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)),
             )
 
         # ensure no spinny white circle
         await bot.answer_callback_query(query.id)
     except BadRequest as excp:
         if excp.message not in [
-            "Message is not modified",
-            "Query_id_invalid",
-            "Message can't be deleted",
+                "Message is not modified",
+                "Query_id_invalid",
+                "Message can't be deleted",
         ]:
-            LOGGER.exception("Exception in settings buttons. %s", str(query.data))
+            LOGGER.exception("Exception in settings buttons. %s",
+                             str(query.data))
+
 
 @cutiepii_cmd(command="settings")
-async def get_settings(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def get_settings(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -606,20 +598,18 @@ async def get_settings(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         text = "Click here to get this chat's settings, as well as yours."
         await msg.reply_text(
             text,
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="Settings",
-                            url=f"https://telegram.dog/{context.bot.username}?start=stngs_{chat.id}",
-                        )
-                    ]
-                ]
-            ),
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(
+                    text="Settings",
+                    url=
+                    f"https://telegram.dog/{context.bot.username}?start=stngs_{chat.id}",
+                )
+            ]]),
         )
 
     else:
         text = "Click here to check your settings."
+
 
 @cutiepii_cmd(command="donate")
 async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -628,15 +618,15 @@ async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     if chat.type == "private":
         await update.effective_message.reply_text(
-            DONATE_STRING, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True
-        )
+            DONATE_STRING,
+            parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=True)
 
         if OWNER_ID != 2131857711 and DONATION_LINK:
             await update.effective_message.reply_text(
                 f"You can also donate to the person currently running me [here]({DONATION_LINK})",
                 parse_mode=ParseMode.MARKDOWN,
             )
-
 
     else:
         try:
@@ -648,16 +638,20 @@ async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
 
             await update.effective_message.reply_text(
-                text="I'm free for everyone❤️\njust donate by subs channel, Don't forget to join the support group.",
-                reply_markup=InlineKeyboardMarkup(
-                    [[InlineKeyboardButton(text="📢 Updates", url="https://telegram.dog/Black_Knights_Union"),
-                      InlineKeyboardButton(text="🚑 Support", url="https://telegram.dog/Black_Knights_Union_Support")]]
-                ),
-            )       
+                text=
+                "I'm free for everyone❤️\njust donate by subs channel, Don't forget to join the support group.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton(
+                        text="📢 Updates",
+                        url="https://telegram.dog/Black_Knights_Union"),
+                    InlineKeyboardButton(
+                        text="🚑 Support",
+                        url="https://telegram.dog/Black_Knights_Union_Support")
+                ]]),
+            )
         except Forbidden:
             await update.effective_message.reply_text(
-                "Contact me in PM first to get donation information."
-            )
+                "Contact me in PM first to get donation information.")
 
 
 @cutiepii_msg(filters.StatusUpdate.MIGRATE)
@@ -677,8 +671,8 @@ async def migrate_chats(update: Update):
         with contextlib.suppress(KeyError, AttributeError):
             mod.__migrate__(old_chat, new_chat)
     LOGGER.info("Successfully migrated!")
-    
-      
+
+
 def main() -> int:
     CUTIEPII_PTB.add_error_handler(error_callback)
 
@@ -688,14 +682,18 @@ def main() -> int:
 
     else:
         CUTIEPII_PTB.run_polling(drop_pending_updates=True, stop_signals=None)
-        LOGGER.info(f"Cutiepii Robot started, Using long polling. | BOT: [@{Cutiepii_Robot}]")
+        LOGGER.info(
+            f"Cutiepii Robot started, Using long polling. | BOT: [@{Cutiepii_Robot}]"
+        )
+
+
 """
 try:
     ubot.start()
 except BaseException:
     print("Userbot Error! Have you added a STRING_SESSION in deploying??")
     sys.exit(1)
-"""    
+"""
 
 if __name__ == "__main__":
     LOGGER.info(f"Successfully loaded modules: {str(ALL_MODULES)}")

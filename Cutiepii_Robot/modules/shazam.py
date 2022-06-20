@@ -39,7 +39,8 @@ from Cutiepii_Robot.utils.pluginhelpers import admins_only, edit_or_reply, fetch
 from Cutiepii_Robot import pgram, SUPPORT_CHAT, CUTIEPII_PTB
 
 
-@pgram.on_message(filters.command(["identify", "shazam", "shazam@Cutiepii_Robot"]))
+@pgram.on_message(
+    filters.command(["identify", "shazam", "shazam@Cutiepii_Robot"]))
 @admins_only
 async def shazamm(client, message):
     kek = await edit_or_reply(message, "`Shazaming In Progress!`")
@@ -51,14 +52,14 @@ async def shazamm(client, message):
     kkk = await fetch_audio(client, message)
     downloaded_file_name = kkk
     f = {"file": (downloaded_file_name, open(downloaded_file_name, "rb"))}
-    await kek.edit(f"**Searching For This Song In {context.bot.first_name}'s DataBase.**")
+    await kek.edit(
+        f"**Searching For This Song In {context.bot.first_name}'s DataBase.**")
     r = requests.post("https://starkapi.herokuapp.com/shazam/", files=f)
     try:
         xo = r.json()
     except JSONDecodeError:
         await kek.edit(
-            "`Seems Like Our Server Has Some Issues, Please Try Again Later!`"
-        )
+            "`Seems Like Our Server Has Some Issues, Please Try Again Later!`")
         return
     if xo.get("success") is False:
         await kek.edit("`Song Not Found In Database. Please Try Again.`")
@@ -78,6 +79,9 @@ async def shazamm(client, message):
 <u><b>Identified Using @{Cutiepii_Robot} - Join our support @{SUPPORT_CHAT}</b></u>
 <i>Powered by @Yuki_Netowrk</i>
 """
-    await client.send_photo(message.chat.id, image, messageo, parse_mode="HTML")
+    await client.send_photo(message.chat.id,
+                            image,
+                            messageo,
+                            parse_mode="HTML")
     os.remove(downloaded_file_name)
     await kek.delete()

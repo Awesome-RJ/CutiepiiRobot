@@ -42,6 +42,7 @@ from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 
 async def dot(number, thousand_separator="."):
+
     def reverse(string):
         string = "".join(reversed(string))
         return string
@@ -80,7 +81,8 @@ async def covid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await message.reply_text("Make sure you have input correct country")
         return
     float_date = float(json_date) / 1000.0
-    date = datetime.datetime.fromtimestamp(float_date).strftime("%d %b %Y %I:%M:%S %p")
+    date = datetime.datetime.fromtimestamp(float_date).strftime(
+        "%d %b %Y %I:%M:%S %p")
     try:
         flag = case["countryInfo"]["flag"]
     except KeyError:
@@ -93,7 +95,9 @@ async def covid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         await message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
     except Exception:
-        await message.reply_text("Try again in few times, maybe API are go down")
+        await message.reply_text(
+            "Try again in few times, maybe API are go down")
 
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["covid", "corona"], covid, block=False))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["covid", "corona"], covid, block=False))

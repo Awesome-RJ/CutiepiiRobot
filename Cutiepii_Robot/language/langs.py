@@ -4,6 +4,7 @@ from typing import Dict
 
 
 class Language:
+
     def __init__(self) -> None:
         self.languages: Dict = {}
         self.reload_strings()
@@ -23,8 +24,7 @@ class Language:
             if filename.endswith(".yaml"):
                 language_name = filename[:-5]
                 self.languages[language_name] = yaml.safe_load(
-                    open(f"./SeiraRobot/language/{filename}", encoding="utf8")
-                )
+                    open(f"./SeiraRobot/language/{filename}", encoding="utf8"))
 
     def get_languages(self) -> Dict:
         return {

@@ -45,11 +45,9 @@ async def circle_with_bg(client, message):
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
-                "Downloading image", quote=True
-            )
-            a = await client.download_media(
-                message=message.reply_to_message, file_name=download_location
-            )
+                "Downloading image", quote=True)
+            a = await client.download_media(message=message.reply_to_message,
+                                            file_name=download_location)
             await msg.edit("Processing Image...")
             img = Image.open(a).convert("RGB")
             npImage = np.array(img)
@@ -62,7 +60,8 @@ async def circle_with_bg(client, message):
             edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "circle.png"
             Image.fromarray(npImage).save(edit_img_loc)
             await message.reply_chat_action("upload_photo")
-            await message.reply_to_message.reply_photo(edit_img_loc, quote=True)
+            await message.reply_to_message.reply_photo(edit_img_loc,
+                                                       quote=True)
             await msg.delete()
         else:
             await message.reply_text("Why did you delete that??")
@@ -75,9 +74,8 @@ async def circle_with_bg(client, message):
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
+            await message.reply_to_message.reply_text("Something went wrong!",
+                                                      quote=True)
         except Exception:
             return
 
@@ -90,11 +88,9 @@ async def circle_without_bg(client, message):
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
-                "Downloading image", quote=True
-            )
-            a = await client.download_media(
-                message=message.reply_to_message, file_name=download_location
-            )
+                "Downloading image", quote=True)
+            a = await client.download_media(message=message.reply_to_message,
+                                            file_name=download_location)
             await msg.edit("Processing Image...")
             img = Image.open(a).convert("RGB")
             npImage = np.array(img)
@@ -107,7 +103,8 @@ async def circle_without_bg(client, message):
             edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "circle.png"
             Image.fromarray(npImage).save(edit_img_loc)
             await message.reply_chat_action("upload_document")
-            await message.reply_to_message.reply_document(edit_img_loc, quote=True)
+            await message.reply_to_message.reply_document(edit_img_loc,
+                                                          quote=True)
             await msg.delete()
         else:
             await message.reply_text("Why did you delete that??")
@@ -120,9 +117,8 @@ async def circle_without_bg(client, message):
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
+            await message.reply_to_message.reply_text("Something went wrong!",
+                                                      quote=True)
         except Exception:
             return
 
@@ -136,14 +132,13 @@ async def sticker(client, message):
         edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "sticker.webp"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
-                "Downloading image", quote=True
-            )
-            a = await client.download_media(
-                message=message.reply_to_message, file_name=download_location
-            )
+                "Downloading image", quote=True)
+            a = await client.download_media(message=message.reply_to_message,
+                                            file_name=download_location)
             await msg.edit("Processing Image...")
             os.rename(a, edit_img_loc)
-            await message.reply_to_message.reply_sticker(edit_img_loc, quote=True)
+            await message.reply_to_message.reply_sticker(edit_img_loc,
+                                                         quote=True)
             await msg.delete()
         else:
             await message.reply_text("Why did you delete that??")
@@ -156,9 +151,8 @@ async def sticker(client, message):
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
+            await message.reply_to_message.reply_text("Something went wrong!",
+                                                      quote=True)
         except Exception:
             return
 
@@ -185,18 +179,17 @@ async def edge_curved(client, message):
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
-                "Downloading image", quote=True
-            )
-            a = await client.download_media(
-                message=message.reply_to_message, file_name=download_location
-            )
+                "Downloading image", quote=True)
+            a = await client.download_media(message=message.reply_to_message,
+                                            file_name=download_location)
             await msg.edit("Processing Image...")
             im = Image.open(a)
             im = add_corners(im, 100)
             edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "edge_curved.webp"
             im.save(edit_img_loc)
             await message.reply_chat_action("upload_photo")
-            await message.reply_to_message.reply_sticker(edit_img_loc, quote=True)
+            await message.reply_to_message.reply_sticker(edit_img_loc,
+                                                         quote=True)
             await msg.delete()
         else:
             await message.reply_text("Why did you delete that??")
@@ -209,9 +202,8 @@ async def edge_curved(client, message):
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
+            await message.reply_to_message.reply_text("Something went wrong!",
+                                                      quote=True)
         except Exception:
             return
 
@@ -224,18 +216,17 @@ async def contrast(client, message):
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
-                "Downloading image", quote=True
-            )
-            a = await client.download_media(
-                message=message.reply_to_message, file_name=download_location
-            )
+                "Downloading image", quote=True)
+            a = await client.download_media(message=message.reply_to_message,
+                                            file_name=download_location)
             await msg.edit("Processing Image...")
             image = Image.open(a)
             contrast = ImageEnhance.Contrast(image)
             edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "contrast.jpg"
             contrast.enhance(1.5).save(edit_img_loc)
             await message.reply_chat_action("upload_photo")
-            await message.reply_to_message.reply_photo(edit_img_loc, quote=True)
+            await message.reply_to_message.reply_photo(edit_img_loc,
+                                                       quote=True)
             await msg.delete()
         else:
             await message.reply_text("Why did you delete that??")
@@ -248,9 +239,8 @@ async def contrast(client, message):
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
+            await message.reply_to_message.reply_text("Something went wrong!",
+                                                      quote=True)
         except Exception:
             return
 
@@ -282,18 +272,17 @@ async def sepia_mode(client, message):
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
-                "Downloading image", quote=True
-            )
-            a = await client.download_media(
-                message=message.reply_to_message, file_name=download_location
-            )
+                "Downloading image", quote=True)
+            a = await client.download_media(message=message.reply_to_message,
+                                            file_name=download_location)
             await msg.edit("Processing Image...")
             image = Image.open(a)
             new_img = sepia(image)
             edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "sepia.jpg"
             new_img.save(edit_img_loc)
             await message.reply_chat_action("upload_photo")
-            await message.reply_to_message.reply_photo(edit_img_loc, quote=True)
+            await message.reply_to_message.reply_photo(edit_img_loc,
+                                                       quote=True)
             await msg.delete()
         else:
             await message.reply_text("Why did you delete that??")
@@ -306,9 +295,8 @@ async def sepia_mode(client, message):
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
+            await message.reply_to_message.reply_text("Something went wrong!",
+                                                      quote=True)
         except Exception:
             return
 
@@ -326,20 +314,21 @@ async def pencil(client, message):
         edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "pencil.jpg"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
-                "Downloading image", quote=True
-            )
-            a = await client.download_media(
-                message=message.reply_to_message, file_name=download_location
-            )
+                "Downloading image", quote=True)
+            a = await client.download_media(message=message.reply_to_message,
+                                            file_name=download_location)
             await msg.edit("Processing Image...")
             img = cv2.imread(a)
             img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             img_invert = cv2.bitwise_not(img_gray)
-            img_smoothing = cv2.GaussianBlur(img_invert, (21, 21), sigmaX=0, sigmaY=0)
+            img_smoothing = cv2.GaussianBlur(img_invert, (21, 21),
+                                             sigmaX=0,
+                                             sigmaY=0)
             final_img = dodgeV2(img_gray, img_smoothing)
             cv2.imwrite(edit_img_loc, final_img)
             await message.reply_chat_action("upload_photo")
-            await message.reply_to_message.reply_photo(edit_img_loc, quote=True)
+            await message.reply_to_message.reply_photo(edit_img_loc,
+                                                       quote=True)
             await msg.delete()
         else:
             await message.reply_text("Why did you delete that??")
@@ -352,9 +341,8 @@ async def pencil(client, message):
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
+            await message.reply_to_message.reply_text("Something went wrong!",
+                                                      quote=True)
         except Exception:
             return
 
@@ -362,9 +350,8 @@ async def pencil(client, message):
 def color_quantization(img, k):
     data = np.float32(img).reshape((-1, 3))
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 20, 1.0)
-    _, label, center = cv2.kmeans(
-        data, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS
-    )
+    _, label, center = cv2.kmeans(data, k, None, criteria, 10,
+                                  cv2.KMEANS_RANDOM_CENTERS)
     center = np.uint8(center)
     result = center[label.flatten()]
     result = result.reshape(img.shape)
@@ -380,25 +367,27 @@ async def cartoon(client, message):
         edit_img_loc = "./DOWNLOADS" + "/" + userid + "/" + "kang.jpg"
         if not message.reply_to_message.empty:
             msg = await message.reply_to_message.reply_text(
-                "Downloading image", quote=True
-            )
-            a = await client.download_media(
-                message=message.reply_to_message, file_name=download_location
-            )
+                "Downloading image", quote=True)
+            a = await client.download_media(message=message.reply_to_message,
+                                            file_name=download_location)
             await msg.edit("Processing Image...")
             img = cv2.imread(a)
             edges = cv2.Canny(img, 100, 200)
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            edges = cv2.adaptiveThreshold(
-                gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 5
-            )
-            color = cv2.bilateralFilter(img, d=9, sigmaColor=200, sigmaSpace=200)
+            edges = cv2.adaptiveThreshold(gray, 255,
+                                          cv2.ADAPTIVE_THRESH_MEAN_C,
+                                          cv2.THRESH_BINARY, 9, 5)
+            color = cv2.bilateralFilter(img,
+                                        d=9,
+                                        sigmaColor=200,
+                                        sigmaSpace=200)
 
             cv2.bitwise_and(color, color, mask=edges)
             img_1 = color_quantization(img, 7)
             cv2.imwrite(edit_img_loc, img_1)
             await message.reply_chat_action("upload_photo")
-            await message.reply_to_message.reply_photo(edit_img_loc, quote=True)
+            await message.reply_to_message.reply_photo(edit_img_loc,
+                                                       quote=True)
             await msg.delete()
         else:
             await message.reply_text("Why did you delete that??")
@@ -411,8 +400,7 @@ async def cartoon(client, message):
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
-            await message.reply_to_message.reply_text(
-                "Something went wrong!", quote=True
-            )
+            await message.reply_to_message.reply_text("Something went wrong!",
+                                                      quote=True)
         except Exception:
             return

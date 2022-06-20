@@ -44,9 +44,9 @@ from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
-            (
-                await tbot(functions.channels.GetParticipantRequest(chat, user))
-            ).participant,
+            (await
+             tbot(functions.channels.GetParticipantRequest(chat,
+                                                           user))).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerUser):
@@ -63,6 +63,7 @@ from telegram.constants import ParseMode
 from telegram.ext import ContextTypes
 from .sql.clear_cmd_sql import get_clearcmd
 
+
 def get_tz(con):
     for c_code in c_n:
         if con == c_n[c_code]:
@@ -71,19 +72,19 @@ def get_tz(con):
         if c_n[con]:
             return tz(c_tz[con][0])
 
+
 async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     chat = update.effective_chat
     message = update.effective_message
-    city = message.text[len("/weather ") :]
+    city = message.text[len("/weather "):]
 
     if city:
         APPID = OPENWEATHERMAP_ID
         result = None
         timezone_countries = {
             timezone: country
-            for country, timezones in c_tz.items()
-            for timezone in timezones
+            for country, timezones in c_tz.items() for timezone in timezones
         }
 
         if "," in city:
@@ -103,7 +104,8 @@ async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             request = get(url)
             result = json.loads(request.text)
         except ConnectionError:
-            return message.reply_text("Connection timed out! please try again later.")
+            return message.reply_text(
+                "Connection timed out! please try again later.")
 
         if request.status_code != 200:
             msg = "No weather information for this location!"
@@ -148,12 +150,8 @@ async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 icon = "☁️"
 
             ctimezone = tz(c_tz[country][0])
-            time = (
-                datetime.now(ctimezone)
-                .strftime("%A %d %b, %H:%M")
-                .lstrip("0")
-                .replace(" 0", " ")
-            )
+            time = (datetime.now(ctimezone).strftime("%A %d %b, %H:%M").lstrip(
+                "0").replace(" 0", " "))
             fullc_n = c_n[f"{country}"]
             dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 
@@ -169,28 +167,22 @@ async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 return temp[0]
 
             def sun(unix):
-                return (
-                    datetime.fromtimestamp(unix, tz=ctimezone)
-                    .strftime("%H:%M")
-                    .lstrip("0")
-                    .replace(" 0", " ")
-                )
-
+                return (datetime.fromtimestamp(
+                    unix, tz=ctimezone).strftime("%H:%M").lstrip("0").replace(
+                        " 0", " "))
 
             ## AirQuality
             air_url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={latitude}&lon={longitude}&appid={APPID}"
             air_data = json.loads(get(air_url).text)
 
-            into_dicts = air_data['list'][0]          
+            into_dicts = air_data['list'][0]
             air_qi = into_dicts['main']
             aqi = int(air_qi['aqi'])
 
-
-            ## Pollutant concentration 
-            # airinfo = into_dicts['components'] 
+            ## Pollutant concentration
+            # airinfo = into_dicts['components']
             # components_co   = airinfo["co"]
             # components_no   = airinfo["no"]
-
 
             def air_qual(aqin):
                 if aqin == 1:
@@ -198,12 +190,11 @@ async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 if aqin == 2:
                     return "Fair"
                 if aqin == 3:
-                    return 'Moderate'                
+                    return 'Moderate'
                 if aqin == 4:
-                    return  'Poor'
+                    return 'Poor'
                 if aqin == 5:
                     return "Very Poor"
-
 
             msg = f"*{cityname}, {fullc_n}*\n"
             msg += f"`Longitude: {longitude}`\n"
@@ -219,8 +210,7 @@ async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             msg += f"➛ **Air Quality**: `{air_qual(aqi)}`"
 
     else:
-        msg =  "Please specify a city or country"
-
+        msg = "Please specify a city or country"
 
     delmsg = await message.reply_text(
         text=msg,
@@ -229,10 +219,13 @@ async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
     cleartime = get_clearcmd(chat.id, "weather")
+
+
 """
     if cleartime:
         context.bot.run_async(delete, delmsg, cleartime.time)
 """
+
 
 @register(pattern="^/wttr (.*)")
 async def _(event):
@@ -248,5 +241,6 @@ async def _(event):
         response_api = await response_api_zero.read()
         with io.BytesIO(response_api) as out_file:
             await event.reply(file=out_file)
+
 
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("weather", weather))
