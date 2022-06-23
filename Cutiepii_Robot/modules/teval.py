@@ -5,7 +5,6 @@ import traceback
 from Cutiepii_Robot import telethn
 from telethon.sync import events
 
-
 # telethon eval
 
 
@@ -16,7 +15,9 @@ async def eval(event):
     cmd = "".join(event.message.message.split(maxsplit=1)[1:])
     if not cmd:
         return
-    catevent = await telethn.send_message(event.chat.id, "`Running ...`", reply_to=event)
+    catevent = await telethn.send_message(event.chat.id,
+                                          "`Running ...`",
+                                          reply_to=event)
     old_stderr = sys.stderr
     old_stdout = sys.stdout
     redirected_output = sys.stdout = io.StringIO()
@@ -62,9 +63,7 @@ async def aexec(code, smessatatus):
         return print(slitu.yaml_format(_x))
 
     reply = await event.get_reply_message()
-    exec(
-        "async def __aexec(message, reply, telethn, p): "
-        + "\n event = smessatatus = message"
-        + "".join(f"\n {l}" for l in code.split("\n"))
-    )
+    exec("async def __aexec(message, reply, telethn, p): " +
+         "\n event = smessatatus = message" +
+         "".join(f"\n {l}" for l in code.split("\n")))
     return await locals()["__aexec"](message, reply, telethn, p)

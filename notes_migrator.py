@@ -59,8 +59,9 @@ def parser(
                 note_data += f"<a href=\"{match.group(2)}\">{match.group(1)}</a>"
                 prev = match.end(2) + 1
             else:
-                buttons.append((match.group(4), match.group(5), bool(match.group(6))))
-                note_data += txt[prev: match.start(3)].rstrip()
+                buttons.append(
+                    (match.group(4), match.group(5), bool(match.group(6))))
+                note_data += txt[prev:match.start(3)].rstrip()
                 prev = match.end(3)
         note_data += txt[prev:]
 
