@@ -43,7 +43,6 @@ def parser(
     txt: str,
     reply_markup: InlineKeyboardMarkup = None
 ) -> tuple[str, Union[str, list[Optional[tuple[str, Optional[str], bool]]]]]:
-    markdown_note = txt
     buttons: Union[str, list[Optional[tuple[str, Optional[str], bool]]]] = []
     prev = 0
     note_data = ""
@@ -53,17 +52,18 @@ def parser(
             if len(btn) >= 2:
                 buttons.extend((a.text, a.url, True) for a in btn[1:])
 
-    for match in BTN_LINK_REGEX.finditer(markdown_note):
-        if match[1]:
-            note_data += markdown_note[prev:match.start(1) - 1]
-            note_data += f"<a href=\"{match[2]}\">{match[1]}</a>"
-            prev = match.end(2) + 1
-        else:
-            buttons.append((match[4], match[5], bool(match[5])))
-            note_data += markdown_note[prev:match.start(3)].rstrip()
-            prev = match.end(3)
+    if txt:
+        for match in BTN_LINK_REGEX.finditer(txt):
+            if match.group(1):
+                note_data += txt[prev:match.start(1) - 1]
+                note_data += f"<a href=\"{match.group(2)}\">{match.group(1)}</a>"
+                prev = match.end(2) + 1
+            else:
+                buttons.append((match.group(4), match.group(5), bool(match.group(6))))
+                note_data += txt[prev: match.start(3)].rstrip()
+                prev = match.end(3)
+        note_data += txt[prev:]
 
-    note_data += markdown_note[prev:]
     final_text = Md2HTML(note_data)
 
     return final_text, buttons
