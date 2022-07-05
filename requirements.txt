@@ -7,7 +7,7 @@ lxml==4.8.0
 nltk==3.7
 pretty-errors==1.2.25
 psutil==5.9.1
-python-telegram-bot==20.0a1
+python-telegram-bot==20.0a2
 regex==2022.4.24
 requests==2.27.1
 spamwatch==0.3.0
