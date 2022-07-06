@@ -3,7 +3,7 @@ bleach==5.0.0
 cachetools~=5.2.0
 emoji==1.6.1
 pyrate-limiter==2.8.1
-lxml==4.8.0
+lxml==4.9.1
 nltk==3.7
 pretty-errors==1.2.25
 psutil==5.9.1
