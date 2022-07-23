@@ -60,7 +60,6 @@ from Cutiepii_Robot import (
     WHITELIST_USERS,
     INFOPIC,
     CUTIEPII_PTB,
-    sw,
     ubot,
     telethn,
     pgram,
@@ -373,15 +372,6 @@ else:return
                                        if user_id not in [bot.id, 777000, 1087968824]:
                                           userhp = hpmanager(user)
                                           text += f"\n\n<b>Health:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[<i>{make_bar(int(userhp['percentage']))} </i>{userhp['percentage']}%]"
-
-                                          try:
-                                             spamwtc = sw.get_ban(int(user.id))
-                                             if spamwtc:
-                                                text += "\n\n<b>This person is Spamwatched!</b>"
-                                                text += f"\nReason: <pre>{spamwtc.reason}</pre>"
-                                                text += "\nAppeal at @SpamWatchSupport"
-                                                except:
-                                                   pass
                                                 # don't crash if api is down somehow...
 
     disaster_level_present = False
@@ -596,10 +586,6 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     text += _stext.format("Admin")
 
         with contextlib.suppress(Exception):
-            if spamwtc := sw.get_ban(int(user.id)):
-                text += "\n\n<b>➛ This person is Spamwatched!</b>"
-                text += f"\n➛ Reason: <pre>{spamwtc.reason}</pre>"
-                text += "\n➛ Appeal at @SpamWatchSupport"
         disaster_level_present = False
 
         if user.id == OWNER_ID:

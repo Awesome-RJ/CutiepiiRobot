@@ -33,7 +33,7 @@ import logging
 import os
 import sys
 import time
-import spamwatch
+
 import telegram.ext as tg
 
 from pyrogram import Client
@@ -177,8 +177,6 @@ if ENV:
     SUPPORT_CHAT = os.environ.get(
         "SUPPORT_CHAT"
     )  # Support Chat Group Link (Use @Black_Knights_Union_Support || Dont Use https://telegram.dog/Black_Knights_Union_Support)
-    SPAMWATCH_API = os.environ.get(
-        "SPAMWATCH_API")  # From https://telegram.dog/SpamWatchBot
     STRING_SESSION = os.environ.get(
         "STRING_SESSION"
     )  # Telethon Based String Session (2nd ID) [ From https://repl.it/@SpEcHiDe/GenerateStringSession ]
@@ -269,7 +267,6 @@ else:
     MONGO_DB_URL = Config.MONGO_DB_URL
     REDIS_URL = Config.REDIS_URL
     SUPPORT_CHAT = Config.SUPPORT_CHAT
-    SPAMWATCH_API = Config.SPAMWATCH_API
     REM_BG_API_KEY = Config.REM_BG_API_KEY
     OPENWEATHERMAP_ID = Config.OPENWEATHERMAP_ID
     APP_ID = Config.APP_ID
@@ -323,16 +320,6 @@ finally:
         "[CUTIEPII]: Connection To The Yūki • Data Center • Mumbai • Redis Database Established Successfully!"
     )
 
-if not SPAMWATCH_API:
-    sw = None
-    LOGGER.warning(
-        "[CUTIEPII ERROR]: SpamWatch API key Is Missing! Recheck Your Config.")
-else:
-    try:
-        sw = spamwatch.Client(SPAMWATCH_API)
-    except:
-        sw = None
-        LOGGER.warning("[CUTIEPII ERROR]: Can't connect to SpamWatch!")
 
 # Credits Logger
 print(

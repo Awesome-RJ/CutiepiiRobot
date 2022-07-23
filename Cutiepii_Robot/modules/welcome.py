@@ -15,7 +15,7 @@ from Cutiepii_Robot import (
     SUDO_USERS,
     SUPPORT_USERS,
     WHITELIST_USERS,
-    sw,
+
     JOIN_LOGGER,
     CUTIEPII_PTB,
     SUPPORT_CHAT
@@ -668,12 +668,6 @@ async def left_member(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
         left_mem = update.effective_message.left_chat_member
         if left_mem:
-
-            # Thingy for spamwatched users
-            if sw:
-                sw_ban = sw.get_ban(left_mem.id)
-                if sw_ban:
-                    return
 
             # Dont say goodbyes to gbanned users
             if is_user_gbanned(left_mem.id):

@@ -459,13 +459,12 @@ async def gbanstat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             sql.enable_gbans(update.effective_chat.id)
             await update.effective_message.reply_text(
                 "» Antispam is now enabled\n"
-                "» Spamwatch is now enabled\n\n"
                 "I am now protecting your group from potential remote threats!",
             )
         elif args[0].lower() in ["off", "no"]:
             sql.disable_gbans(update.effective_chat.id)
             await update.effective_message.reply_text(
-                "» Antispan is now disabled\n" "» Spamwatch is now disabled\n"
+                "» Antispan is now disabled"
             )
     else:
         await update.effective_message.reply_text(
@@ -555,12 +554,6 @@ __help__ = f"""
 Anti-Spam, used by bot devs to ban spammers across all groups. This helps protect \
 you and your groups by removing spam flooders as quickly as possible.
 *Note:* Users can appeal gbans or report spammers at @{SUPPORT_CHAT}
-
-This also integrates @Spamwatch API to remove Spammers as much as possible from your chatroom!
-*What is SpamWatch?*
-SpamWatch maintains a large constantly updated ban-list of spambots, trolls, bitcoin spammers and unsavoury characters[.](https://telegra.ph/file/f584b643c6f4be0b1de53.jpg)
-Constantly help banning spammers off from your group automatically So, you wont have to worry about spammers storming your group.
-*Note:* Users can appeal spamwatch bans at @SpamwatchSupport
 """
 
 CUTIEPII_PTB.add_handler(CommandHandler("gban", gban))
