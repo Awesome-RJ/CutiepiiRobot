@@ -1,5 +1,5 @@
 alphabet-detector==0.0.7
-bleach==5.0.0
+bleach==5.0.1
 cachetools~=5.2.0
 emoji==1.6.1
 pyrate-limiter==2.8.1
