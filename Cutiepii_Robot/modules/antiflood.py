@@ -388,7 +388,7 @@ will result in restricting that user.
 
 __mod_name__ = "Anti-Flood"
 
-CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & ~filters.StatusUpdate.ALL & filters.ChatType.GROUPS, check_flood))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & (~filters.StatusUpdate.ALL) & filters.ChatType.GROUPS, check_flood))
 CUTIEPII_PTB.add_handler(CommandHandler("setflood", set_flood, filters=filters.ChatType.GROUPS))
 CUTIEPII_PTB.add_handler(CommandHandler("setfloodmode", set_flood_mode))  # , filters.ChatType.GROUPS)
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(flood_button, pattern=r"unmute_flooder"))

@@ -813,6 +813,6 @@ CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("warns", warns, filters=filte
 CUTIEPII_PTB.add_handler(CommandHandler("addwarn", add_warn_filter, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler(["nowarn", "stopwarn"], remove_warn_filter, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["warnlist", "warnfilters"], list_warn_filters, filters=filters.ChatType.GROUPS,admin_ok=True))
-CUTIEPII_PTB.add_handler(MessageHandler(filters.TEXT & filters.ChatType.GROUPS & ~filters.UpdateType.EDITED_MESSAGE, reply_filter))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.TEXT & filters.ChatType.GROUPS & (~filters.UpdateType.EDITED_MESSAGE), reply_filter))
 CUTIEPII_PTB.add_handler(CommandHandler("warnlimit", set_warn_limit, filters=filters.ChatType.GROUPS,block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("strongwarn", set_warn_strength, filters=filters.ChatType.GROUPS, block=False))

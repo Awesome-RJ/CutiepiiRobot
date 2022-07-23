@@ -70,7 +70,7 @@ LOCK_TYPES = {
     "url": filters.Entity(MessageEntity.URL)
     | filters.CaptionEntity(MessageEntity.URL),
     "bots": filters.StatusUpdate.NEW_CHAT_MEMBERS,
-    "forward": filters.FORWARDED & ~filters.IS_AUTOMATIC_FORWARD,
+    "forward": filters.FORWARDED & (~filters.IS_AUTOMATIC_FORWARD),
     "game": filters.GAME,
     "location": filters.LOCATION,
     "egame": filters.Dice.ALL,
