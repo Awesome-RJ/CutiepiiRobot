@@ -11,7 +11,7 @@ python-telegram-bot==20.0a2
 regex==2022.4.24
 requests==2.27.1
 spamwatch==0.3.0
-SQLAlchemy==1.4.36
+SQLAlchemy==1.4.39
 telethon==1.24.0
 wikipedia==1.4.0
 zalgo-text==0.6
