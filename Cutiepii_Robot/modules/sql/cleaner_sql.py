@@ -173,12 +173,9 @@ def is_command_ignored(chat_id, commands):
     if frozenset({command.lower()}) in GLOBAL_IGNORE_COMMANDS:
         return True
 
-    if str(chat_id) in CLEANER_CHATS and frozenset({command.lower()}) in CLEANER_CHATS.get(
-        str(chat_id)
-    ).get("commands"):
-        return True
-
-    return False
+    return str(chat_id) in CLEANER_CHATS and frozenset(
+        {command.lower()}
+    ) in CLEANER_CHATS.get(str(chat_id)).get("commands")
 
 
 def is_enabled(chat_id):

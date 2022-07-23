@@ -90,7 +90,7 @@ async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if "," in city:
             newcity = city.split(",")
             if len(newcity[1]) == 2:
-                city = newcity[0].strip() + "," + newcity[1].strip()
+                city = f"{newcity[0].strip()},{newcity[1].strip()}"
             else:
                 country = get_tz((newcity[1].strip()).title())
                 try:
@@ -98,7 +98,7 @@ async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 except KeyError:
                     weather.edit("`Invalid country.`")
                     return
-                city = newcity[0].strip() + "," + countrycode.strip()
+                city = f"{newcity[0].strip()},{countrycode.strip()}"
         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={APPID}"
         try:
             request = get(url)
