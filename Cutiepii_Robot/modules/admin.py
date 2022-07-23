@@ -75,6 +75,17 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import (
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.events import register as CUTIEPII
 
+ENUM_FUNC_MAP = {
+    'Types.TEXT': CUTIEPII_PTB.bot.send_message,
+    'Types.BUTTON_TEXT': CUTIEPII_PTB.bot.send_message,
+    'Types.STICKER': CUTIEPII_PTB.bot.send_sticker,
+    'Types.DOCUMENT': CUTIEPII_PTB.bot.send_document,
+    'Types.PHOTO': CUTIEPII_PTB.bot.send_photo,
+    'Types.AUDIO': CUTIEPII_PTB.bot.send_audio,
+    'Types.VOICE': CUTIEPII_PTB.bot.send_voice,
+    'Types.VIDEO': CUTIEPII_PTB.bot.send_video,
+}
+
 async def can_promote_users(message):
     result = await telethn(
         functions.channels.GetParticipantRequest(

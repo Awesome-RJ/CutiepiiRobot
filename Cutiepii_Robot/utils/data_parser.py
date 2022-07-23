@@ -819,7 +819,7 @@ async def get_anime(vars_, auth: bool = False, user: int = None):
     for i in data['tags']:
         tags.append(i["name"])
     tags_ = f"\n➛ **TAGS:** `{', '.join(tags[:5])}`" if tags != [] else ""
-    bot = {Cutiepii_Robot}
+    bot = "Cutiepii_Robot"
     gnrs_ = ""
     if len(gnrs) != 0:
         gnrs_ = f"\n➛ **GENRES:** `{gnrs}`"
@@ -896,7 +896,7 @@ async def get_anilist(qdb, page, auth: bool = False, user: int = None):
     # Data of all fields in returned json
     # pylint: disable=possibly-unused-variable
     idm = data.get("id")
-    bot = {Cutiepii_Robot}
+    bot = "Cutiepii_Robot"
     idmal = data.get("idMal")
     romaji = data["title"]["romaji"]
     english = data["title"]["english"]
@@ -1042,7 +1042,7 @@ async def get_manga(qdb, page, auth: bool = False, user: int = None):
     synopsis = data.get("description")
     description = synopsis[:500]
     if len(synopsis) > 500:
-        description += f"...`\n\n[For more info click here](https://t.me/{Cutiepii_Robot}/?start=des_ANI_{idm})`"
+        description += f"...`\n\n[For more info click here](https://t.me/Cutiepii_Robot/?start=des_ANI_{idm})`"
     volumes = data.get("volumes")
     chapters = data.get("chapters")
     score = data.get("averageScore")

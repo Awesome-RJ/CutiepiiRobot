@@ -33,7 +33,9 @@ import time
 import requests
 import datetime
 import platform
+import git
 import Cutiepii_Robot.modules.sql.users_sql as sql
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, __version__ as ptbver
 from telegram.constants import ParseMode
 from telegram.ext import CommandHandler, CallbackQueryHandler

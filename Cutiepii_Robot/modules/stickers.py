@@ -599,7 +599,7 @@ async def makepack_internal(
             )
         elif e.message == "Peer_id_invalid" or "bot was blocked by the user":
             await msg.reply_text(
-                f"{context.bot.first_name} was blocked by you.",
+                f"Cutiepii Robot 愛 was blocked by you.",
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
@@ -838,7 +838,7 @@ async def handler(event):
     if not reply_message.media:
         await event.reply("Provide some Text please")
         return
-    file = await bot.download_media(reply_message)
+    file = await Cutiepii.download_media(reply_message)
     msg = await event.reply("Memifying this image! Please wait")
 
     if "Kittu" not in Credit: 

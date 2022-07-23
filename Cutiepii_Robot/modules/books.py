@@ -71,7 +71,7 @@ async def _(event):
                 f.write("\n" + title)
                 f.write("\nBook link:- " + link + "\n\n")
 
-        f.write(f"By @{Cutiepii_Robot}.")
+        f.write(f"By @Cutiepii_Robot.")
         f.close()
 
         await telethn.send_file(

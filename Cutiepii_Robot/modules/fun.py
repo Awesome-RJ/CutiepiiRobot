@@ -33,8 +33,8 @@ import html
 import random
 import time
 import requests
+import asyncio
 import telegram
-
 import Cutiepii_Robot.modules.fun_strings as fun_strings
 
 from pyrogram import filters as cutiepii_pyro
@@ -437,7 +437,7 @@ async def decide(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     res = requests.get("https://yesno.wtf/api")
     if res.status_code != 200:
-         await msg.reply_text(random.choice(fun.DECIDE))
+         await msg.reply_text(random.choice(fun_strings.DECIDE))
          return
     res = res.json()
     try:
@@ -856,7 +856,7 @@ async def cutiepii(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if update.effective_message.reply_to_message
         else update.effective_message.reply_text
     )
-    reply_text(random.choice(fun.DECIDE))
+    reply_text(random.choice(fun_strings.DECIDE))
 
 __help__ = f"""
 ➛ /runs*:* reply a random string from an array of replies
@@ -877,12 +877,12 @@ __help__ = f"""
 ➛ /meme*:* sends random anime memes
 ➛ /hmeme*:* sends random hentai memes
 ➛ /cuddle*:* cuddle someone by replying to his/her message or get cuddled
-➛ /hug*:* hug someone or get hugged by {context.bot.first_name}
+➛ /hug*:* hug someone or get hugged by Cutiepii Robot 愛
 ➛ /love*:* Checks Love in your heart weather it's true or fake
 ➛ /kiss*:* Kiss someone or get kissed 
-➛ /flirt*:* {context.bot.first_name} will flirt to the replied person or with you
-➛ /lewd*:* {context.bot.first_name} will act lewd with you or with the replied person
-➛ /romance*:* {context.bot.first_name} will act all romantic with you or replied person
+➛ /flirt*:* Cutiepii Robot 愛 will flirt to the replied person or with you
+➛ /lewd*:* Cutiepii Robot 愛 will act lewd with you or with the replied person
+➛ /romance*:* Cutiepii Robot 愛 will act all romantic with you or replied person
 ➛ /couples*:* To Choose Couple Of The Day
 ➛ /owo*:* OWO de text
 ➛ /stretch*:* STRETCH de text

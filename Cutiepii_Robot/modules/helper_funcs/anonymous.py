@@ -31,9 +31,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from enum import Enum
 import functools
 
-from telegram import Update#, ParseMode
-from telegram import InlineKeyboardButton
-from telegram import InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton
+from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
+from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
 from Cutiepii_Robot import DEV_USERS, SUDO_USERS, CUTIEPII_PTB

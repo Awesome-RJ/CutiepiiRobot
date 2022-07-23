@@ -278,7 +278,7 @@ async def new_member(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
             if new_mem.id == bot.id:
 
                 await update.effective_message.reply_text(
-                    f"Hey {user.first_name}, I'm {context.bot.first_name}! Thank you for adding me to {chat.title}\n"
+                    f"Hey {user.first_name}, I'm Cutiepii Robot 愛! Thank you for adding me to {chat.title}\n"
                     "Join support and channel update with clicking button below!",
                     reply_to_message_id=reply,
                     reply_markup=InlineKeyboardMarkup(

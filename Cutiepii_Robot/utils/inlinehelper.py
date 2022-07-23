@@ -80,7 +80,7 @@ async def inline_help_func(__HELP__):
     buttons.add(
         InlineKeyboardButton(
             "Get More Help.",
-            url=f"https://telegram.dog/{Cutiepii_Robot}?start=start"),
+            url=f"https://telegram.dog/Cutiepii_Robot?start=start"),
         InlineKeyboardButton("Go Inline!",
                              switch_inline_query_current_chat=""),
     )
@@ -116,7 +116,7 @@ async def alive_function(answers):
 **Pyrogram:** `{pyrover}`
 **MongoDB:** `{mongover}`
 **Platform:** `{sys.platform}`
-**Profiles:** [BOT](https://telegram.dog/{Cutiepii_Robot}) | [UBOT](https://telegram.dog/Awesome_Cutiepii)
+**Profiles:** [BOT](https://telegram.dog/Cutiepii_Robot) | [UBOT](https://telegram.dog/Awesome_Cutiepii)
 """
     answers.append(
         InlineQueryResultArticle(

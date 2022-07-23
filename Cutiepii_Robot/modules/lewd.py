@@ -35,10 +35,11 @@ import nekos
 import requests
 
 from PIL import Image
+from time import sleep
 from nekos.errors import InvalidArgument
 from telegram import Update
 from telegram.error import BadRequest, RetryAfter, Forbidden
-from telegram.ext import CommandHandler, filters
+from telegram.ext import CommandHandler, filters, ContextTypes
 from telegram.constants import ParseMode
 from telegram.helpers import mention_html
 
@@ -103,7 +104,7 @@ async def list_nsfw_chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
-async def neko(update: Update):
+async def neko(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
     args = context.args
     flag = args[0]
