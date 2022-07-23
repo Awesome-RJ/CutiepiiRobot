@@ -217,7 +217,7 @@ async def send_help(chat_id, text, keyboard=None):
     await context.bot.send_message(
         chat_id=chat_id,
         text=text,
-        parse_mode=ParseMode.MARKDOWN,
+        parse_mode=ParseMode.MARKDOWN_V2,
         disable_web_page_preview=True,
         reply_markup=keyboard,
     )
@@ -226,7 +226,7 @@ async def send_help(chat_id, text, keyboard=None):
 @cutiepii_cmd(command="test")
 async def test(update: Update):
     # pprint(eval(str(update)))
-    # await update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
+    # await update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN_V2)
     await update.effective_message.reply_text("This person edited a message")
     print(update.effective_message)
 
@@ -272,7 +272,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                                      escape_markdown(uptime), sql.num_users(),
                                      sql.num_chats()),
                 reply_markup=InlineKeyboardMarkup(buttons),
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 timeout=60,
             )
     else:
@@ -356,7 +356,7 @@ async def help_button(update: Update,
 
             await query.message.edit_text(
                 text=text,
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup([[
                     InlineKeyboardButton(text="[► Back ◄]",
@@ -371,7 +371,7 @@ async def help_button(update: Update,
             curr_page = int(prev_match[1])
             await query.message.edit_text(
                 text=HELP_STRINGS,
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(curr_page - 1, HELPABLE, "help")),
             )
@@ -380,7 +380,7 @@ async def help_button(update: Update,
             next_page = int(next_match[1])
             await query.message.edit_text(
                 text=HELP_STRINGS,
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(next_page + 1, HELPABLE, "help")),
             )
@@ -388,7 +388,7 @@ async def help_button(update: Update,
         elif back_match:
             await query.message.edit_text(
                 text=HELP_STRINGS,
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(0, HELPABLE, "help")),
             )
@@ -406,7 +406,7 @@ async def cutiepii_callback_data(update: Update,
     if query.data == "cutiepii_":
         await query.message.edit_text(
             text="""CallBackQueriesData Here""",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[
                 InlineKeyboardButton(text="[► Back ◄]",
@@ -421,7 +421,7 @@ async def cutiepii_callback_data(update: Update,
                                  escape_markdown(uptime), sql.num_users(),
                                  sql.num_chats()),
             reply_markup=InlineKeyboardMarkup(buttons),
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
             timeout=60,
             disable_web_page_preview=False,
         )
@@ -476,14 +476,14 @@ async def send_settings(chat_id, user_id, user=False):
             await context.bot.send_message(
                 user_id,
                 "These are your current settings:" + "\n\n" + settings,
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
 
         else:
             await context.bot.send_message(
                 user_id,
                 "Seems like there aren't any user specific settings available :'(",
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
 
     elif CHAT_SETTINGS:
@@ -500,7 +500,7 @@ async def send_settings(chat_id, user_id, user=False):
             user_id,
             "Seems like there aren't any chat settings available :'(\nSend this "
             "in a group chat you're admin in to find its current settings!",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
 
 
@@ -532,7 +532,7 @@ async def settings_button(update: Update,
                                      callback_data=f"stngs_back({chat_id}"))
             keyboard.append(kbrd)
             await query.message.edit_text(text=text,
-                                          parse_mode=ParseMode.MARKDOWN,
+                                          parse_mode=ParseMode.MARKDOWN_V2,
                                           reply_markup=keyboard)
         elif prev_match:
             chat_id = prev_match[1]
@@ -566,7 +566,7 @@ async def settings_button(update: Update,
             await query.message.edit_text(
                 text=
                 f"Hi there! There are quite a few settings for {escape_markdown(chat.title)} - go ahead and pick what you're interested in.",
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 reply_markup=InlineKeyboardMarkup(
                     paginate_modules(0, CHAT_SETTINGS, "stngs", chat=chat_id)),
             )
@@ -619,13 +619,13 @@ async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if chat.type == "private":
         await update.effective_message.reply_text(
             DONATE_STRING,
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
             disable_web_page_preview=True)
 
         if OWNER_ID != 2131857711 and DONATION_LINK:
             await update.effective_message.reply_text(
                 f"You can also donate to the person currently running me [here]({DONATION_LINK})",
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
 
     else:
@@ -633,7 +633,7 @@ async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await bot.send_message(
                 user.id,
                 DONATE_STRING,
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 disable_web_page_preview=True,
             )
 

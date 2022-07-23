@@ -52,7 +52,7 @@ def __list_all_modules():
             if not all(
                     any(mod == module_name for module_name in all_modules)
                     for mod in to_load):
-                LOGGER.error("Invalid loadorder names. Quitting.")
+                LOGGER.error("Invalid load order names, Quitting...")
                 sys.exit(1)
 
             all_modules = sorted(set(all_modules) - set(to_load))

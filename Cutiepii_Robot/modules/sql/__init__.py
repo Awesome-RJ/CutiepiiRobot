@@ -28,19 +28,27 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
+import sys
 
-from Cutiepii_Robot import DATABASE_URL
+from Cutiepii_Robot import DATABASE_URL, LOGGER
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 
 def start() -> scoped_session:
     engine = create_engine(DATABASE_URL, client_encoding="utf8")
+    LOGGER.info("PostgreSQL Connecting to database......")
     BASE.metadata.bind = engine
     BASE.metadata.create_all(engine)
     return scoped_session(sessionmaker(bind=engine, autoflush=True))
 
 
 BASE = declarative_base()
-SESSION = start()
+try:
+    SESSION: scoped_session = start()
+except Exception as e:
+    LOGGER.exception(f"PostgreSQL Failed to connect due to {e}")
+    sys.exit()
+
+LOGGER.info("PostgreSQL Connection successful, session started.")

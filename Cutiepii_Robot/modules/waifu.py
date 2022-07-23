@@ -42,7 +42,7 @@ async def ok(event):
     e = r.json()
     await event.reply(
         "**A waifu appeared!** \nAdd them to your harem by sending /protecc character name",
-        parse_mode=ParseMode.MARKDOWN,
+        parse_mode=ParseMode.MARKDOWN_V2,
         file=e["url"])
 
 

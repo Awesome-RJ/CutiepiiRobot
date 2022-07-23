@@ -60,7 +60,7 @@ async def purge_messages(event):
             user_id=event.sender_id, message=event) and event.sender_id not in [
                 1087968824
             ]:
-        await event.reply("Only Admins are allowed to use this command")
+        await event.reply("ou Don't Have Permission To Delete Messages")
         return
 
     if not await user_can_purge(user_id=event.sender_id, message=event):
@@ -94,7 +94,7 @@ async def purge_messages(event):
         pass
     time_ = time.perf_counter() - start
     text = f"Purged Successfully in {time_:0.2f} Second(s)"
-    prmsg = await event.respond(text, parse_mode='markdown')
+    prmsg = await event.respond(text, parse_mode='MarkdownV2')
 
     if cleartime := get_clearcmd(event.chat_id, "purge"):
         await sleep(cleartime.time)
@@ -115,7 +115,7 @@ async def delete_messages(event):
             user_id=event.sender_id, message=event) and event.sender_id not in [
                 1087968824
             ]:
-        await event.reply("Only Admins are allowed to use this command")
+        await event.reply("ou Don't Have Permission To Delete Messages")
         return
 
     if not await user_can_purge(user_id=event.sender_id, message=event):
@@ -183,7 +183,7 @@ async def purgeto_messages(event):
     if not await user_is_admin(
         user_id=event.sender_id, message=event,
     ) and event.sender_id not in [1087968824]:
-        await event.reply("Only Admins are allowed to use this command")
+        await event.reply("ou Don't Have Permission To Delete Messages")
         return
 
     if not await can_delete_messages(message=event):
@@ -217,7 +217,7 @@ async def purgeto_messages(event):
         pass
     time_ = time.perf_counter() - start
     text = f"Purged Successfully in {time_:0.2f}s"
-    await event.respond(text, parse_mode=ParseMode.MARKDOWN)
+    await event.respond(text, parse_mode=ParseMode.MARKDOWN_V2)
 
 __help__ = """
 *Admins only:*

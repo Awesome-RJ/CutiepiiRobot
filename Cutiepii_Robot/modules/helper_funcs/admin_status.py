@@ -15,6 +15,7 @@ from .admin_status_helpers import (
 	AdminPerms,
 	anon_callbacks as a_cb,
 	edit_anon_msg as eam,
+    button_expired_error as bxp,
 )
 
 anon_callbacks = {}
@@ -84,7 +85,11 @@ async def user_is_admin(chat: Chat,
 		return False
 
 	if perm:  # check perm if its required
-		return getattr(member, perm.value) or member.status == "creator"
+		try:
+			the_perm = perm.value
+		except AttributeError:
+			return bxp(update)
+		return getattr(member, the_perm) or member.status == "creator"
 
 	return member.status in ["administrator", "creator"]  # check if user is admin
 
@@ -149,7 +154,7 @@ def user_admin_check(permission: AdminPerms):
                 else:
                     return await message.reply_text(
                         f"You lack the permission: `{permission.name}`",
-                        parse_mode=ParseMode.MARKDOWN,
+                        parse_mode=ParseMode.MARKDOWN_V2,
                     )
 
         return awrapper

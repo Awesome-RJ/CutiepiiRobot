@@ -50,8 +50,8 @@ class AdminPerms(Enum):
 
 
 class ChatStatus(Enum):
-    CREATOR = "creator"
-    ADMIN = "administrator"
+    OWNER = "creator"
+    ADMINISTRATOR = "administrator"
 
 
 anon_callbacks = {}
@@ -103,7 +103,7 @@ def user_admin(permission: AdminPerms):
                 else:
                     return await message.reply_text(
                         f"You lack the permission: `{permission.name}`",
-                        parse_mode=ParseMode.MARKDOWN,
+                        parse_mode=ParseMode.MARKDOWN_V2,
                     )
 
         return awrapper
@@ -122,7 +122,7 @@ async def anon_callback_handler1(upd: Update):
     except BaseException as e:
         callback.answer(f"Error: {e}", show_alert=True)
         return
-    if mem.status not in [ChatStatus.ADMIN.value, ChatStatus.CREATOR.value]:
+    if mem.status not in [ChatStatus.ADMINISTRATOR.value, ChatStatus.OWNER.value]:
         callback.answer("You're aren't admin.")
         await CUTIEPII_PTB.bot.delete_message(
             chat_id, anon_callback_messages.pop((chat_id, message_id), None)

@@ -2,7 +2,7 @@ from enum import Enum
 from cachetools import TTLCache
 from time import perf_counter
 
-from telegram import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, Message
+from telegram import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, Update, Message
 from telegram.constants import ParseMode
 
 from Cutiepii_Robot import DEV_USERS, SUDO_USERS, SUPPORT_USERS, WHITELIST_USERS
@@ -65,14 +65,21 @@ def edit_anon_msg(msg: Message, text: str):
 	"""
 	edit anon check message and remove the button
 	"""
-	msg.edit_text(text, parse_mode = ParseMode.MARKDOWN, reply_markup = None)
+	msg.edit_text(text, parse_mode = ParseMode.MARKDOWN_V2, reply_markup = None)
 
 
 async def user_is_not_admin_errmsg(msg: Message, permission: AdminPerms = None, cb: CallbackQuery = None):
 	errmsg = f"You lack the following permission for this command:\n`{permission.value}`!"
 	if cb:
 		return cb.answer(errmsg, show_alert = True)
-	return await msg.reply_text(errmsg, parse_mode = ParseMode.MARKDOWN)
+	return await msg.reply_text(errmsg, parse_mode = ParseMode.MARKDOWN_V2)
 
+def button_expired_error(u: Update):
+	errmsg = f"This button has expired!"
+	if u.callback_query:
+		u.callback_query.answer(errmsg, show_alert = True)
+		u.effective_message.delete()
+		return
+	return u.effective_message.edit_text(errmsg, parse_mode = ParseMode.MARKDOWN_V2)
 
 anon_callbacks = {}

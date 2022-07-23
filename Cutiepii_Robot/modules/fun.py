@@ -268,7 +268,7 @@ async def goodnight(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     first_name = update.effective_user.first_name
     reply = f"Good Night! {escape_markdown(first_name)}" 
-    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
+    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 
@@ -276,7 +276,7 @@ async def goodmorning(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     message = update.effective_message
     first_name = update.effective_user.first_name
     reply = f"Good Morning! {escape_markdown(first_name)}"
-    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
+    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 @cutiepii_cmd(command='sanitize')
@@ -537,7 +537,7 @@ async def weebify(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if not string:
         await message.reply_text(
-            "Usage is `/weebify <text>`", parse_mode=ParseMode.MARKDOWN
+            "Usage is `/weebify <text>`", parse_mode=ParseMode.MARKDOWN_V2
         )
         return
 
@@ -777,7 +777,7 @@ async def blockanimation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     msg = await update.effective_message.reply_text('⬜') 
     for x in range(EDIT_TIMES):
         msg.edit_text(block_chain[x%18])
-        time.sleep(EDIT_SLEEP)
+        await asyncio.sleep(EDIT_SLEEP)
     msg.edit_text('🟥')
 
 @cutiepii_cmd(command='clockanimation')
@@ -787,7 +787,7 @@ async def clockanimation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
     for x in range(EDIT_TIMES):
         msg.edit_text(clock_ani[x%11])
-        time.sleep(EDIT_SLEEP)
+        await asyncio.sleep(EDIT_SLEEP)
     msg.edit_text('🕚')
 
 
@@ -798,7 +798,7 @@ async def earthanimation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
     for x in range(EDIT_TIMES):
         msg.edit_text(earth_ani[x%18])
-        time.sleep(EDIT_SLEEP)
+        await asyncio.sleep(EDIT_SLEEP)
     msg.edit_text('🌍')
 
 
@@ -808,7 +808,7 @@ async def moonanimation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     msg = await update.effective_message.reply_text('🌚') 
     for x in range(EDIT_TIMES):
         msg.edit_text(moon_ani[x%32])
-        time.sleep(EDIT_SLEEP)
+        await asyncio.sleep(EDIT_SLEEP)
     msg.edit_text('🌙')
 
 
@@ -817,7 +817,7 @@ async def bombs(bot: Bot, update: Update):
     await update.effective_message.reply_text('💣') 
     for x in range(EDIT_TIMES):
         await update.effective_message.edit_text(bomb_ettu[x%9])
-        time.sleep(EDIT_SLEEP)
+        await asyncio.sleep(EDIT_SLEEP)
     await update.effective_message.edit_text('RIP PLOX...')
 
 
@@ -827,7 +827,7 @@ async def hack(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = await update.effective_message.reply_text('Target selected') 
     for x in range(EDIT_TIMES):
         msg.edit_text(hack_you[x%5])
-        time.sleep(EDIT_SLEEP)
+        await asyncio.sleep(EDIT_SLEEP)
     msg.edit_text('successful hacked all data send on my Database')
 
 
@@ -837,7 +837,7 @@ async def love(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = await update.effective_message.reply_text('❣️') 
     for x in range(EDIT_TIMES):
         msg.edit_text(love_siren[x%5])
-        time.sleep(EDIT_SLEEP)
+        await asyncio.sleep(EDIT_SLEEP)
     msg.edit_text('True Love💞')
 
 
@@ -847,7 +847,7 @@ async def kill(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = await update.effective_message.reply_text('🔫') 
     for x in range(EDIT_TIMES):
         msg.edit_text(kill_you[x%12])
-        time.sleep(EDIT_SLEEP)
+        await asyncio.sleep(EDIT_SLEEP)
     msg.edit_text('⚰')
 
 async def cutiepii(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

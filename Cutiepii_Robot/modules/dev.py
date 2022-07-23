@@ -141,7 +141,7 @@ async def pip_install(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         if stderr:
             reply += f"*Stderr*\n`{stderr}`\n"
 
-        await message.reply_text(text=reply, parse_mode=ParseMode.MARKDOWN)
+        await message.reply_text(text=reply, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 @dev_plus

@@ -75,7 +75,7 @@ async def reverse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         image_file.download(imagename)
     else:
         await msg.reply_text(
-            "Please Reply To A Sticker, Or An Image To Search It!", parse_mode=ParseMode.MARKDOWN,
+            "Please Reply To A Sticker, Or An Image To Search It!", parse_mode=ParseMode.MARKDOWN_V2,
         )
         return
 
@@ -123,17 +123,17 @@ async def reverse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
         MsG.edit_text(
             f"*Search Results*: \n\n`{search_result}`",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
             reply_markup=InlineKeyboardMarkup(buttuns),
         )
 
 
     except BadRequest as Bdr:
-        MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: BadRequest!\n\n{Bdr}", parse_mode=ParseMode.MARKDOWN)
+        MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: BadRequest!\n\n{Bdr}", parse_mode=ParseMode.MARKDOWN_V2)
     except TelegramError as Tge:
-        MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: TelegramError!\n\n{Tge}", parse_mode=ParseMode.MARKDOWN)
+        MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: TelegramError!\n\n{Tge}", parse_mode=ParseMode.MARKDOWN_V2)
     except Exception as Exp:
-        MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: Exception!\n\n{Exp}", parse_mode=ParseMode.MARKDOWN)
+        MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: Exception!\n\n{Exp}", parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def ParseSauce(googleurl):

@@ -430,7 +430,7 @@ async def list_locks(update, context):
     if conn:
         res = res.replace("Locks in", f"*{chat_name}*")
 
-    send_message(update.effective_message, res, parse_mode=ParseMode.MARKDOWN)
+    send_message(update.effective_message, res, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def get_permission_list(current, new):

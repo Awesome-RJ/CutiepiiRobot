@@ -79,19 +79,19 @@ async def allow_connections(update, context) -> str:
             send_message(
                 update.effective_message,
                 "Please enter `yes` or `no`!",
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
     elif get_settings := sql.allow_connect_to_chat(chat.id):
         send_message(
             update.effective_message,
             "Connections to this group are *Allowed* for members!",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
     else:
         send_message(
             update.effective_message,
             "Connection to this group are *Not Allowed* for members!",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
 
 
@@ -165,7 +165,7 @@ async def connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                         "Successfully connected to *{}*. \nUse /helpconnect to check available commands.".format(
                             chat_name
                         ),
-                        parse_mode=ParseMode.MARKDOWN,
+                        parse_mode=ParseMode.MARKDOWN_V2,
                     )
                     sql.add_history_conn(user.id, str(conn_chat.id), chat_name)
                 else:
@@ -252,7 +252,7 @@ async def connect_chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                 send_message(
                     update.effective_message,
                     f"Successfully connected to *{chat_name}*.",
-                    parse_mode=ParseMode.MARKDOWN,
+                    parse_mode=ParseMode.MARKDOWN_V2,
                 )
 
                 try:
@@ -387,7 +387,7 @@ async def connect_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
                     "Successfully connected to *{}*. \nUse `/helpconnect` to check available commands.".format(
                         chat_name
                     ),
-                    parse_mode=ParseMode.MARKDOWN,
+                    parse_mode=ParseMode.MARKDOWN_V2,
                 )
                 sql.add_history_conn(user.id, str(conn_chat.id), chat_name)
             else:

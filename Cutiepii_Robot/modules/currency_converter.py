@@ -75,12 +75,12 @@ async def convert(update: Update):
         )
 
     elif len(args) == 1:
-        await message.reply_text(_help_, parse_mode=ParseMode.MARKDOWN)
+        await message.reply_text(_help_, parse_mode=ParseMode.MARKDOWN_V2)
 
     else:
         await message.reply_text(
             f"*Invalid Args!!:* Required 3 But Passed {len(args) -1}",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
 
 _help_ = """

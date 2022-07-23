@@ -1503,13 +1503,13 @@ async def permapin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await message.delete()
     if str(data_type) in {"Types.BUTTON_TEXT", "Types.TEXT"}:
         try:
-            sendingmsg = await context.bot.send_message(chat_id, text, parse_mode=ParseMode.MARKDOWN,
+            sendingmsg = await context.bot.send_message(chat_id, text, parse_mode=ParseMode.MARKDOWN_V2,
                                  reply_markup=InlineKeyboardMarkup(tombol))
         except BadRequest:
-            await context.bot.send_message(chat_id, "Incorrect markdown text!\nIf you don't know what markdown is, please send `/markdownhelp` in PM.", parse_mode=ParseMode.MARKDOWN)
+            await context.bot.send_message(chat_id, "Incorrect markdown text!\nIf you don't know what markdown is, please send `/markdownhelp` in PM.", parse_mode=ParseMode.MARKDOWN_V2)
             return
     else:
-        sendingmsg = ENUM_FUNC_MAP[str(data_type)](chat_id, content, caption=text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(tombol))
+        sendingmsg = ENUM_FUNC_MAP[str(data_type)](chat_id, content, caption=text, parse_mode=ParseMode.MARKDOWN_V2, disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(tombol))
     if sendingmsg is None:
         await context.bot.send_message(chat_id, "Specify what to pin!")
 
@@ -1544,7 +1544,7 @@ async def permanent_pin_set(update: Update, context: ContextTypes.DEFAULT_TYPE) 
                     old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
                 text_maker += "\nTo disable cleanlinked send: `/cleanlinked off`"
                 text_maker += "\n\n[The permanent pinned message is here]({})".format(old_pin)
-            await context.bot.send_message(chat_id, text_maker, parse_mode=ParseMode.MARKDOWN)
+            await context.bot.send_message(chat_id, text_maker, parse_mode=ParseMode.MARKDOWN_V2)
             return ""
         prev_message = args[0]
         if prev_message == "off":
@@ -1580,7 +1580,7 @@ async def permanent_pin_set(update: Update, context: ContextTypes.DEFAULT_TYPE) 
                     old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
                 text_maker += "\nTo disable cleanlinked send: `/cleanlinked off`"
                 text_maker += "\n\n[The permanent pinned message is here]({})".format(old_pin)
-            await context.bot.send_message(chat_id, text_maker, parse_mode=ParseMode.MARKDOWN)
+            await context.bot.send_message(chat_id, text_maker, parse_mode=ParseMode.MARKDOWN_V2)
             return ""
 
     is_group = chat.type not in ("private", "channel")
@@ -1627,7 +1627,7 @@ async def permanent_pin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
             else:
                 old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
                 print(old_pin)
-            await context.bot.send_message(chat.id, "*Cleanlinked error:*\nI can't pin messages here!\nMake sure I'm an admin and can pin messages.\n\nClean linked has been disabled, [The old permanent pinned message is here]({})".format(old_pin), parse_mode=ParseMode.MARKDOWN)
+            await context.bot.send_message(chat.id, "*Cleanlinked error:*\nI can't pin messages here!\nMake sure I'm an admin and can pin messages.\n\nClean linked has been disabled, [The old permanent pinned message is here]({})".format(old_pin), parse_mode=ParseMode.MARKDOWN_V2)
             return
 
         if to_del:

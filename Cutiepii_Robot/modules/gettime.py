@@ -30,6 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import datetime
+import pycountry
 from typing import List
 
 from requests import get
@@ -99,8 +100,11 @@ async def gettime(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
     query_timezone = query.lower()
+    py_country = pycountry.countries.search_fuzzy(query)
     if len(query_timezone) == 2:
         result = generate_time(query_timezone, ["countryCode"])
+    elif py_country:
+        result = generate_time(py_country[0].alpha_2.lower(), ["countryCode"])
     else:
         result = generate_time(query_timezone, ["zoneName", "countryName"])
 

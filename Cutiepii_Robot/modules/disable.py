@@ -169,7 +169,7 @@ if is_module_loaded(FILENAME):
                 send_message(
                     update.effective_message,
                     text,
-                    parse_mode=ParseMode.MARKDOWN,
+                    parse_mode=ParseMode.MARKDOWN_V2,
                 )
             else:
                 send_message(update.effective_message,
@@ -218,7 +218,7 @@ if is_module_loaded(FILENAME):
                 send_message(
                     update.effective_message,
                     text,
-                    parse_mode=ParseMode.MARKDOWN,
+                    parse_mode=ParseMode.MARKDOWN_V2,
                 )
             else:
                 send_message(update.effective_message,
@@ -236,7 +236,7 @@ if is_module_loaded(FILENAME):
 
             await update.effective_message.reply_text(
                 f"The following commands are toggleable:\n{result}",
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
 
         else:
@@ -277,7 +277,7 @@ if is_module_loaded(FILENAME):
         text = build_curr_disabled(chat.id)
         send_message(update.effective_message,
                      text,
-                     parse_mode=ParseMode.MARKDOWN)
+                     parse_mode=ParseMode.MARKDOWN_V2)
 
     def __import_data__(chat_id, data):
         disabled = data.get("disabled", {})

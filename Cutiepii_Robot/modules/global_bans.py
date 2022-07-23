@@ -478,7 +478,7 @@ async def clear_gbans(bot: Bot, update: Update):
     deleted = 0
     for user in banned:
         id = user["user_id"]
-        time.sleep(0.1) # Reduce floodwait
+        await asyncio.sleep(0.1) # Reduce floodwait
         try:
             acc = await bot.get_chat(id)
             if not acc.first_name:
@@ -489,7 +489,7 @@ async def clear_gbans(bot: Bot, update: Update):
             sql.ungban_user(id)
     await update.effective_message.reply_text(
         f"Done! `{deleted}` deleted accounts were removed from the gbanlist.",
-        parse_mode=ParseMode.MARKDOWN,
+        parse_mode=ParseMode.MARKDOWN_V2,
     )
 
 
@@ -499,7 +499,7 @@ async def check_gbans(bot: Bot, update: Update):
     deleted = 0
     for user in banned:
         id = user["user_id"]
-        time.sleep(0.1) # Reduce floodwait
+        await asyncio.sleep(0.1) # Reduce floodwait
         try:
             acc = await bot.get_chat(id)
             if not acc.first_name:
@@ -509,7 +509,7 @@ async def check_gbans(bot: Bot, update: Update):
     if deleted:
         await update.effective_message.reply_text(
             f"`{deleted}` deleted accounts found in the gbanlist! Run /cleangb to remove them from the database!",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
 
     else:

@@ -77,7 +77,7 @@ async def send_rules(update, chat_id, from_pm=False):
     if from_pm and rules:
         await bot.send_message(user.id,
                                text,
-                               parse_mode=ParseMode.MARKDOWN,
+                               parse_mode=ParseMode.MARKDOWN_V2,
                                disable_web_page_preview=True)
     elif from_pm:
         await bot.send_message(

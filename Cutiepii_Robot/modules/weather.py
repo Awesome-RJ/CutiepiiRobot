@@ -214,7 +214,7 @@ async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     delmsg = await message.reply_text(
         text=msg,
-        parse_mode=ParseMode.MARKDOWN,
+        parse_mode=ParseMode.MARKDOWN_V2,
         disable_web_page_preview=True,
     )
 

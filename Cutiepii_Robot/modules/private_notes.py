@@ -34,7 +34,7 @@ async def privatenotes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
     await message.reply_text(
         text = msg,
-        parse_mode = ParseMode.MARKDOWN
+        parse_mode = ParseMode.MARKDOWN_V2
     )
 
 def setprivatenotes(chat_id, setting):

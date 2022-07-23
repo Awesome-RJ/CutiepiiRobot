@@ -121,7 +121,7 @@ async def add_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
                 send_message(
                     msg,
                     f"Sticker `{trigger}` can not be found!",
-                    parse_mode=ParseMode.MARKDOWN,
+                    parse_mode=ParseMode.MARKDOWN_V2,
                 )
 
 
@@ -156,7 +156,7 @@ async def add_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
             send_message(
                 msg,
                 f"Sticker `{trigger}` can not be found!",
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
 
 
@@ -308,7 +308,7 @@ async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             if len(args) == 1:
                 teks = """It looks like you are trying to set a temporary value to blacklist, but has not determined the time; use `/blstickermode tban <timevalue>`.
                                               Examples of time values: 4m = 4 minute, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
-                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN)
+                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN_V2)
                 return
             settypeblacklist = f"temporary banned for {args[1]}"
             sql.set_blacklist_strength(chat_id, 6, str(args[1]))
@@ -316,7 +316,7 @@ async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             if len(args) == 1:
                 teks = """It looks like you are trying to set a temporary value to blacklist, but has not determined the time; use `/blstickermode tmute <timevalue>`.
                                               Examples of time values: 4m = 4 minute, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."""
-                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN)
+                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN_V2)
                 return
             settypeblacklist = f"temporary muted for {args[1]}"
             sql.set_blacklist_strength(chat_id, 7, str(args[1]))
@@ -331,7 +331,7 @@ async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
         else:
             text = f"Blacklist sticker mode changed, users will be `{settypeblacklist}`!"
-        send_message(msg, text, parse_mode=ParseMode.MARKDOWN)
+        send_message(msg, text, parse_mode=ParseMode.MARKDOWN_V2)
         return f"<b>{html.escape(chat.title)}:</b>\n<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\nChanged sticker blacklist mode. users will be {settypeblacklist}."
 
     getmode, getvalue = sql.get_blacklist_setting(chat.id)
@@ -356,7 +356,7 @@ async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     else:
         text = f"Blacklist sticker mode is currently set to *{settypeblacklist}*."
-    send_message(msg, text, parse_mode=ParseMode.MARKDOWN)
+    send_message(msg, text, parse_mode=ParseMode.MARKDOWN_V2)
     return ""
 
 
@@ -405,7 +405,7 @@ async def del_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
                     await bot.sendMessage(
                         chat.id,
                         f"{mention_markdown(user.id, user.first_name)} muted because using '{trigger}' which in blacklist stickers",
-                        parse_mode=ParseMode.MARKDOWN,
+                        parse_mode=ParseMode.MARKDOWN_V2,
                     )
 
                     return
@@ -415,7 +415,7 @@ async def del_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
                         await bot.sendMessage(
                             chat.id,
                             f"{mention_markdown(user.id, user.first_name)} kicked because using '{trigger}' which in blacklist stickers",
-                            parse_mode=ParseMode.MARKDOWN,
+                            parse_mode=ParseMode.MARKDOWN_V2,
                         )
 
                     return
@@ -425,7 +425,7 @@ async def del_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
                     await bot.sendMessage(
                         chat.id,
                         f"{mention_markdown(user.id, user.first_name)} banned because using '{trigger}' which in blacklist stickers",
-                        parse_mode=ParseMode.MARKDOWN,
+                        parse_mode=ParseMode.MARKDOWN_V2,
                     )
 
                     return
@@ -436,7 +436,7 @@ async def del_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
                     await bot.sendMessage(
                         chat.id,
                         f"{mention_markdown(user.id, user.first_name)} banned for {value} because using '{trigger}' which in blacklist stickers",
-                        parse_mode=ParseMode.MARKDOWN,
+                        parse_mode=ParseMode.MARKDOWN_V2,
                     )
 
                     return
@@ -452,7 +452,7 @@ async def del_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
                     await bot.sendMessage(
                         chat.id,
                         f"{mention_markdown(user.id, user.first_name)} muted for {value} because using '{trigger}' which in blacklist stickers",
-                        parse_mode=ParseMode.MARKDOWN,
+                        parse_mode=ParseMode.MARKDOWN_V2,
                     )
 
                     return

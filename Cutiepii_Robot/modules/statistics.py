@@ -114,7 +114,7 @@ async def stats(update: Update):
             + "\n".join([mod.__stats__() for mod in STATS]) +
             "\n\n✦ [Support](https://telegram.dog/Black_Knights_Union_Support) | ✦ [Updates](https://telegram.dog/Black_Knights_Union)\n\n" +
             "╘═━「 by [Awesome-RJ](https://github.com/Awesome-RJ) 」\n",
-        parse_mode=ParseMode.MARKDOWN, reply_markup=InlineKeyboardMarkup(kb), disable_web_page_preview=True, allow_sending_without_reply=True)
+        parse_mode=ParseMode.MARKDOWN_V2, reply_markup=InlineKeyboardMarkup(kb), disable_web_page_preview=True, allow_sending_without_reply=True)
     except BaseException:
         await message.reply_text(
             (
@@ -127,7 +127,7 @@ async def stats(update: Update):
                 )
                 + "╘═━「 by [Awesome-RJ](https://github.com/Awesome-RJ) 」\n"
             ),
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
             reply_markup=InlineKeyboardMarkup(kb),
             disable_web_page_preview=True,
             allow_sending_without_reply=True,
@@ -141,7 +141,7 @@ async def ping(update: Update, _):
     end_time = time.time()
     ping_time = round((end_time - start_time) * 1000, 3)
     await message.edit_text(
-        f"*Pong!!!*\n`{ping_time}ms`", parse_mode=ParseMode.MARKDOWN
+        f"*Pong!!!*\n`{ping_time}ms`", parse_mode=ParseMode.MARKDOWN_V2
     )
 
 

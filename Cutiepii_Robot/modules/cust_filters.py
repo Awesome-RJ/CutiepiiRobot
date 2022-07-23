@@ -76,7 +76,7 @@ async def list_handlers(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
             send_message(
                 update.effective_message,
                 filter_list.format(chat_name),
-                parse_mode=telegram.ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
             filter_list = entry
         else:
@@ -85,7 +85,7 @@ async def list_handlers(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     send_message(
         update.effective_message,
         filter_list.format(chat_name),
-        parse_mode=telegram.ParseMode.MARKDOWN,
+        parse_mode=ParseMode.MARKDOWN_V2,
     )
 
 
@@ -210,7 +210,7 @@ async def filters(update, context) -> None:  # sourcery no-metrics
         send_message(
             update.effective_message,
             f"Saved filter '{keyword}' in *{chat_name}*!",
-            parse_mode=telegram.ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
 
         return f"<b>{escape(chat.title or chat.id)}:</b>\n"
@@ -251,7 +251,7 @@ async def stop_filter(update, context) -> str:
             send_message(
                 update.effective_message,
                 f"Okay, I'll stop replying to that filter in *{chat_name}*.",
-                parse_mode=telegram.ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
             logmsg = (
                     f"<b>{escape(chat.title or chat.id)}:</b>\n"
@@ -367,7 +367,7 @@ async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                     send_message(
                         update.effective_message,
                         filt.reply,
-                        parse_mode=ParseMode.MARKDOWN,
+                        parse_mode=ParseMode.MARKDOWN_V2,
                         disable_web_page_preview=True,
                         reply_markup=keyboard,
                     )
@@ -380,7 +380,7 @@ async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                             LOGGER.exception(f"Error in filters: {excp.message}")
                     elif excp.message == "Reply message not found":
                         try:
-                            await context.bot.send_message(chat.id, filt.reply, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True, reply_markup=keyboard)
+                            await context.bot.send_message(chat.id, filt.reply, parse_mode=ParseMode.MARKDOWN_V2, disable_web_page_preview=True, reply_markup=keyboard)
 
                         except BadRequest as excp:
                             LOGGER.exception(f"Error in filters: {excp.message}")
@@ -424,7 +424,7 @@ async def rmall_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         await update.effective_message.reply_text(
             f"Are you sure you would like to stop ALL filters in {chat.title}? This action cannot be undone.",
             reply_markup=buttons,
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
 
 @cutiepii_callback(pattern=r"filters_.*")

@@ -422,8 +422,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await update.effective_message.edit_text(
             "User has already has no warns.".format(mention_html(user.id, user.first_name)),
             parse_mode=ParseMode.HTML)
-
-    return ""
+            return ""
 
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
@@ -756,12 +755,12 @@ async def set_warn_strength(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         if soft_warn:
             await msg.reply_text(
                 "Warns are currently set to *kick* users when they exceed the limits.",
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
         else:
             await msg.reply_text(
                 "Warns are currently set to *Ban* users when they exceed the limits.",
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
     return ""
 

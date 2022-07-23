@@ -72,13 +72,13 @@ async def mod(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if sql.is_modd(message.chat_id, user_id):
         await message.reply_text(
             f"[{member.user['first_name']}](tg://user?id={member.user['id']}) is already moderator in {chat_title}",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
         return ""
     sql.mod(message.chat_id, user_id)
     await message.reply_text(
         f"[{member.user['first_name']}](tg://user?id={member.user['id']}) has been moderator in {chat_title}",
-        parse_mode=ParseMode.MARKDOWN,
+        parse_mode=ParseMode.MARKDOWN_V2,
     )
     log_message = (
         f"<b>{html.escape(chat.title)}:</b>\n"
@@ -140,7 +140,7 @@ async def modd(update: Update):
     if msg.endswith("moderator.\n"):
         await message.reply_text(f"No users are Moderator in {chat_title}.")
         return ""
-    await message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+    await message.reply_text(msg, parse_mode=ParseMode.MARKDOWN_V2)
 
 
 async def modr(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

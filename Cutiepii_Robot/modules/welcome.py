@@ -98,7 +98,7 @@ async def send(update, message, keyboard, backup_message):
     try:
         msg = await update.effective_message.reply_text(
             message,
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
             reply_markup=keyboard,
             reply_to_message_id=reply,
             allow_sending_without_reply=True,
@@ -112,7 +112,7 @@ async def send(update, message, keyboard, backup_message):
                         + "\nNote: the current message has an invalid url in one of its buttons. Please update."
                     )
                 ),
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 reply_to_message_id=reply,
             )
 
@@ -121,7 +121,7 @@ async def send(update, message, keyboard, backup_message):
         elif excp.message == "Reply message not found":
             msg = await update.effective_message.reply_text(
                 message,
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 reply_markup=keyboard,
                 quote=False,
             )
@@ -135,7 +135,7 @@ async def send(update, message, keyboard, backup_message):
                         "telegram. Please update. "
                     )
                 ),
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 reply_to_message_id=reply,
             )
 
@@ -147,7 +147,7 @@ async def send(update, message, keyboard, backup_message):
                         + "\nNote: the current message has some bad urls. Please update."
                     )
                 ),
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 reply_to_message_id=reply,
             )
 
@@ -162,7 +162,7 @@ async def send(update, message, keyboard, backup_message):
                         + "\nNote: An error occured when sending the custom message. Please update."
                     )
                 ),
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 reply_to_message_id=reply,
             )
 
@@ -294,24 +294,36 @@ async def new_member(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
                         ],
                     ),
                 )
-
-                chet_name = f"<a href='t.me/{chat.username}'>{html.escape(chat.title)}</a>" if chat.username else html.escape(chat.title)
                 creator = None
 
-                for x in bot.get_chat_administrators(chat.id):
+                for x in bot.get_chat_administrators(update.effective_chat.id):
                     if x.status == "creator":
-                        creator = mention_html(x.user.id, html.escape(x.user.first_name) or "Creator") + f" (<code>{x.user.id}</code>)"
+                        creator = x.user
                         break
+                if creator:
+                    bot.send_message(
+                        JOIN_LOGGER,
+                        f"""
+                        \\#NEWGROUP \
+                        \nGroup Name:   **\\{chat.title}** \
+                        \nID:   `\\{chat.id}` \
+                        \nCreator ID:   `\\{creator.id}` \
+                        \nCreator Username:   \@{creator.username} \
+                        """,
+                        parse_mode=ParseMode.MARKDOWN_V2,
+                    )
+                else:
+                    bot.send_message(
+                        JOIN_LOGGER,
+                        "#NEW_GROUP\n<b>Group name:</b> {}\n<b>ID:</b> <code>{}</code>".format(
+                            html.escape(chat.title),
+                            chat.id,
+                        ),
+                        parse_mode=ParseMode.HTML,
+                    )
 
-                await bot.send_message(
-                     JOIN_LOGGER,
-                     "#NEW_GROUP\n\n"
-                     "<b>Group Members:</b> {}\n<b>Group Name:</b> {} (<code>{}</code>) {}\n<b>Bot Added By:</b> {} (<code>{}</code>)".
-                     format(chat.get_member_count(), chat.title, chat.id, ('\n<b>Group Founder:</b> ' + creator) if creator is not None else '', mention_html(user.id, html.escape(user.first_name) or "Adder"), user.id),
-                     parse_mode=ParseMode.HTML, 
-                     disable_web_page_preview=True,
-                )
                 continue
+
             buttons = sql.get_welc_buttons(chat.id)
             keyb = build_keyboard(buttons)
 
@@ -445,7 +457,7 @@ async def new_member(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
                             ]
                         ]
                     ),
-                    parse_mode=ParseMode.MARKDOWN,
+                    parse_mode=ParseMode.MARKDOWN_V2,
                     reply_to_message_id=reply,
                     allow_sending_without_reply=True,
                 )
@@ -548,7 +560,7 @@ async def new_member(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
                     caption=f"Welcome [{escape_markdown(new_mem.first_name)}](tg://user?id={user.id}). Click the correct button to get unmuted!\n"
                     f"You got 120 seconds for this.",
                     reply_markup=InlineKeyboardMarkup(btn),
-                    parse_mode=ParseMode.MARKDOWN,
+                    parse_mode=ParseMode.MARKDOWN_V2,
                     reply_to_message_id=reply,
                     allow_sending_without_reply=True,
                 )
@@ -753,7 +765,7 @@ async def welcome(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.effective_message.reply_text(
             f"This chat has it's welcome setting set to: `{pref}`.\n"
             f"*The welcome message (not filling the {{}}) is:*",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
 
         if welcome_type in [sql.Types.BUTTON_TEXT, sql.Types.TEXT]:
@@ -785,7 +797,7 @@ async def welcome(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     cust_content,
                     caption=welcome_m,
                     reply_markup=keyboard,
-                    parse_mode=ParseMode.MARKDOWN,
+                    parse_mode=ParseMode.MARKDOWN_V2,
                     **kwargs,
                 )
 
@@ -819,7 +831,7 @@ async def goodbye(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.effective_message.reply_text(
             f"This chat has it's goodbye setting set to: `{pref}`.\n"
             f"*The goodbye  message (not filling the {{}}) is:*",
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
 
         if goodbye_type == sql.Types.BUTTON_TEXT:
@@ -839,7 +851,7 @@ async def goodbye(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
         else:
             ENUM_FUNC_MAP[goodbye_type](
-                chat.id, goodbye_m, parse_mode=ParseMode.MARKDOWN
+                chat.id, goodbye_m, parse_mode=ParseMode.MARKDOWN_V2
             )
 
     elif len(args) >= 1:
@@ -998,7 +1010,7 @@ async def welcomemute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
         else:
             await msg.reply_text(
                 "Please enter `off`/`no`/`soft`/`strong`/`captcha`!",
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
             return ""
     else:
@@ -1007,7 +1019,7 @@ async def welcomemute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
             f"\n Give me a setting!\nChoose one out of: `off`/`no` or `soft`, `strong` or `captcha` only! \n"
             f"Current setting: `{curr_setting}`"
         )
-        await msg.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
+        await msg.reply_text(reply, parse_mode=ParseMode.MARKDOWN_V2)
         return ""
 
 
@@ -1067,11 +1079,11 @@ async def cleanservice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> st
         curr = sql.clean_service(chat.id)
         if curr:
             await update.effective_message.reply_text(
-                "Welcome clean service is : on", parse_mode=ParseMode.MARKDOWN
+                "Welcome clean service is : on", parse_mode=ParseMode.MARKDOWN_V2
             )
         else:
             await update.effective_message.reply_text(
-                "Welcome clean service is : off", parse_mode=ParseMode.MARKDOWN
+                "Welcome clean service is : off", parse_mode=ParseMode.MARKDOWN_V2
             )
 
     elif len(args) >= 1:
@@ -1084,11 +1096,11 @@ async def cleanservice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> st
             await update.effective_message.reply_text("Welcome clean service is : on")
         else:
             await update.effective_message.reply_text(
-                "Invalid option", parse_mode=ParseMode.MARKDOWN
+                "Invalid option", parse_mode=ParseMode.MARKDOWN_V2
             )
     else:
         await update.effective_message.reply_text(
-            "Usage is on/yes or off/no", parse_mode=ParseMode.MARKDOWN
+            "Usage is on/yes or off/no", parse_mode=ParseMode.MARKDOWN_V2
         )
 
 
@@ -1226,7 +1238,7 @@ async def user_captcha_button(update: Update, context: ContextTypes.DEFAULT_TYPE
             res = chat.unban_member(join_user)
             if res:
                 await bot.sendMessage(
-                    chat_id=chat.id, text=kicked_msg, parse_mode=ParseMode.MARKDOWN
+                    chat_id=chat.id, text=kicked_msg, parse_mode=ParseMode.MARKDOWN_V2
                 )
 
     else:
@@ -1273,14 +1285,14 @@ WELC_MUTE_HELP_TXT = (
 @u_admin
 async def welcome_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(
-        WELC_HELP_TXT, parse_mode=ParseMode.MARKDOWN
+        WELC_HELP_TXT, parse_mode=ParseMode.MARKDOWN_V2
     )
 
 
 @u_admin
 async def welcome_mute_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(
-        WELC_MUTE_HELP_TXT, parse_mode=ParseMode.MARKDOWN
+        WELC_MUTE_HELP_TXT, parse_mode=ParseMode.MARKDOWN_V2
     )
 
 

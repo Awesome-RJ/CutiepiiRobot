@@ -117,7 +117,7 @@ async def send_to_list(
     for user_id in set(send_to):
         with contextlib.suppress(TelegramError):
             if markdown:
-                await bot.send_message(user_id, message, parse_mode=ParseMode.MARKDOWN)
+                await bot.send_message(user_id, message, parse_mode=ParseMode.MARKDOWN_V2)
             elif html:
                 await bot.send_message(user_id, message, parse_mode=ParseMode.HTML)
             else:

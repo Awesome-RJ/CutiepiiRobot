@@ -21,7 +21,7 @@ async def drama(update: Update):
     message = update.effective_message
     search = await message.text.split(" ", 1)
     if len(search) == 1:
-        await message.reply_text('Format: `/drama <query>`', parse_mode=ParseMode.MARKDOWN)
+        await message.reply_text('Format: `/drama <query>`', parse_mode=ParseMode.MARKDOWN_V2)
         return
 
     Dramas = {}
