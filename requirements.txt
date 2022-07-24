@@ -70,4 +70,4 @@ dnspython==2.2.1
 async-timeout>=1.2
 psycopg2
 pycountry
-opencv-python
+opencv-python==4.6.0.66
