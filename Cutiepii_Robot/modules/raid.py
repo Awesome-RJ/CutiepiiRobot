@@ -94,7 +94,7 @@ async def setRaid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optiona
     elif args[0] == "off":
         if stat:
             sql.setRaidStatus(chat.id, False, time, acttime)
-            j.scheduler.remove_job(RUNNING_RAIDS.pop(chat.id)))
+            j.scheduler.remove_job(RUNNING_RAIDS.pop(chat.id))
             text = "Raid mode has been <code>Disabled</code>, members that join will no longer be kicked."
             await msg.reply_text(text, parse_mode=ParseMode.HTML)
             return (
