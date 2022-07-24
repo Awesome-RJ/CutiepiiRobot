@@ -32,7 +32,7 @@ from enum import Enum
 import functools
 
 from telegram import Update, InlineKeyboardButton
-from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
+from telegram import InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 

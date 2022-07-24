@@ -3,7 +3,7 @@ import threading
 from enum import IntEnum, unique
 from typing import Optional, Union
 
-from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
+from telegram import InlineKeyboardMarkup
 
 from Cutiepii_Robot.modules.sql.notes_sql import SESSION, Notes
 
