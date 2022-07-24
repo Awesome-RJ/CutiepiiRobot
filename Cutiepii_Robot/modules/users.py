@@ -38,7 +38,6 @@ from telegram import TelegramError, Update
 from telegram.error import BadRequest
 from telegram.ext import MessageHandler, CommandHandler, ContextTypes, filters
 
-import Cutiepii_Robot.modules.no_sql.sql as sql
 import Cutiepii_Robot.modules.sql.users_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB, LOGGER
 
@@ -46,7 +45,7 @@ USERS_GROUP = 4
 CHAT_GROUP = 10
 
 
-def get_user_id(username):
+async def get_user_id(username):
     # ensure valid userid
     if len(username) <= 5:
         return None
@@ -74,7 +73,7 @@ def get_user_id(username):
     return None
 
 
-def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     to_send = await update.effective_message.text.split(None, 1)
     if len(to_send) >= 2:
         chats_ = sql.get_all_chats() or []
@@ -154,7 +153,7 @@ def log_user(update: Update):
         )
 
 
-def chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     all_chats = sql.get_all_chats() or []
     chatfile = "List of chats.\n0. Chat name | Chat ID | Members count\n"
     P = 1
