@@ -231,8 +231,10 @@ async def check_reminds(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                     continue
         await asyncio.sleep(1)
 
+"""
 #starts the reminder
 asyncio.get_event_loop().create_task(check_reminds())
+"""
 
 
 __mod_name__ = "Reminders"
