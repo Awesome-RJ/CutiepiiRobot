@@ -37,7 +37,7 @@ from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
 from Cutiepii_Robot import DEV_USERS, SUDO_USERS, CUTIEPII_PTB
-from .decorators import cutiepii_callback
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_callback
 
 
 class AdminPerms(Enum):
