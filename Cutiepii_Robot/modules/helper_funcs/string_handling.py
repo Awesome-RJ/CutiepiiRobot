@@ -180,7 +180,7 @@ def markdown_parser(
 
 def button_markdown_parser(
     txt: str, entities: Dict[MessageEntity, str] = None, offset: int = 0
-) -> typing.Tuple("str, List"):
+) -> typing.Tuple[str, List]:
     markdown_note = markdown_parser(txt, entities, offset)
     prev = 0
     note_data = ""
@@ -196,7 +196,7 @@ def button_markdown_parser(
         # if even, not escaped -> create button
         if n_escapes % 2 == 0:
             # create a thruple with button label, url, and newline status
-            buttons.append((match[2], match[3], bool(match.group(4))))
+            buttons.append((match.group(2), match.group(3), bool(match.group(4))))
             note_data += markdown_note[prev : match.start(1)]
             prev = match.end(1)
         # if odd, escaped -> move along
