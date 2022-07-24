@@ -71,7 +71,7 @@ command_list = [
 for handler_list in CUTIEPII_PTB.handlers:
     for handler in CUTIEPII_PTB.handlers[handler_list]:
         if any(isinstance(handler, cmd_handler) for cmd_handler in CommandHandlerList):
-            command_list += handler.command
+            command_list += handler.commands
 
 
 async def clean_blue_text_must_click(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

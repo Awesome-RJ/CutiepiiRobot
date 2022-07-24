@@ -404,9 +404,8 @@ async def gbanlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def check_and_ban(update, user_id, should_message=True):
-    with contextlib.suppress(BadRequest, TelegramError, Unauthorized):
     if sql.is_user_gbanned(user_id):
-        update.effective_chat.ban_member(user_id)
+        await update.effective_chat.ban_member(user_id)
         if should_message:
             text = (
                 f"<b>Alert</b>: this user is globally banned.\n"
@@ -415,10 +414,8 @@ async def check_and_ban(update, user_id, should_message=True):
                 f"<b>User ID</b>: <code>{user_id}</code>"
             )
             user = sql.get_gbanned_user(user_id)
-            if user["reason"]:
-                text += (
-                    f"\n<b>Ban Reason:</b> <code>{html.escape(user['reason'])}</code>"
-                )
+            if user.reason:
+                text += f"\n<b>Ban Reason:</b> <code>{html.escape(user.reason)}</code>"
             await update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
