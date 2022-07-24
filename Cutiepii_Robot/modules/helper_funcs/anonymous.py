@@ -37,7 +37,6 @@ from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
 from Cutiepii_Robot import DEV_USERS, SUDO_USERS, CUTIEPII_PTB
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_callback
 
 
 class AdminPerms(Enum):
@@ -111,7 +110,6 @@ def user_admin(permission: AdminPerms):
     return wrapper
 
 
-@cutiepii_callback(pattern="anoncb")
 async def anon_callback_handler1(upd: Update):
     callback = upd.callback_query
     perm = callback.data.split("/")[3]
@@ -142,3 +140,5 @@ async def anon_callback_handler1(upd: Update):
             return cb[1](cb[0][0], cb[0][1])
     else:
         callback.answer("This isn't for ya")
+
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(anon_callback_handler1, pattern=r"anoncb"))
