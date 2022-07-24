@@ -221,7 +221,7 @@ def __load_cleaner_list():
     try:
         for x in SESSION.query(CleanerBlueTextChat).all():
             CLEANER_CHATS.setdefault(x.chat_id, {"setting": False, "commands": set()})
-            CLEANER_CHATS[x.chat_id]["commands"].add(x.commands)
+            CLEANER_CHATS[x.chat_id]["commands"].add(x.command)
     finally:
         SESSION.close()
 
