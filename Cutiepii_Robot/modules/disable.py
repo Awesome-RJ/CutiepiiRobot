@@ -123,7 +123,7 @@ if is_module_loaded(FILENAME):
             DISABLE_OTHER.append(friendly or pattern)
             self.friendly = friendly or pattern
 
-        def check_update(self, update: object) -> Any:
+        def check_update(self, update: object):
             if isinstance(update, Update) and update.effective_message:
                 chat = update.effective_chat
                 return self.filters.check_update(
