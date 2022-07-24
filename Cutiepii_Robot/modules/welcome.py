@@ -797,13 +797,13 @@ async def welcome(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     elif len(args) >= 1:
         if args[0].lower() in ("on", "yes"):
-            sql.set_welc_preference(str(chat.id, True)
+            sql.set_welc_preference(str(chat.id), True)
             await update.effective_message.reply_text(
                 "Okay! I'll greet members when they join."
             )
 
         elif args[0].lower() in ("off", "no"):
-            sql.set_welc_preference(str(chat.id, False)
+            sql.set_welc_preference(str(chat.id), False)
             await update.effective_message.reply_text(
                 "I'll go loaf around and not welcome anyone then."
             )
