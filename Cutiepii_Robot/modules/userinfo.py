@@ -361,7 +361,7 @@ else:return
                      if afk_st:
                         text += _stext.format("AFK")
                         else:
-                           status = status = bot.get_chat_member(chat.id, user.id).status
+                           status = bot.get_chat_member(chat.id, user.id).status
                            if status:
                               if status in {"left", "kicked"}:
                                  text += _stext.format("Not here")
@@ -559,7 +559,7 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         text = (
             f"<b>╔═━「 User info: 」</b>\n"
             f"➛ ID: <code>{user.id}</code>\n"
-            f"➛ First Name: {mention_html(user.id, user.first_name or 'None')}"
+            f"➛ First Name: {mention_html(user.id, user.first_name) or '<code>Deleted Account</code>')}"
         )
 
         if user.last_name:
@@ -614,10 +614,10 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 result = requests.post(
                     f"https://api.telegram.org/bot{TOKEN}/getChatMember?chat_id={chat.id}&user_id={user.id}"
                 )
-                result = result.json()["result"]
+                result = result.json().get("result")
                 if "custom_title" in result.keys():
-                    custom_title = result["custom_title"]
-                    text += f"\n\nTitle:\n<b>{custom_title}</b>"
+                    custom_title = result.get("custom_title")
+                    text += f"\n\nAdmin Title:\n<b>{custom_title}</b>"
 
         for mod in USER_INFO:
             try:

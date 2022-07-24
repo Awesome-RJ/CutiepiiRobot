@@ -43,8 +43,8 @@ DEBUG_MODE = False
 @dev_plus
 async def debug(update: Update):
     global DEBUG_MODE
-    args = update.effective_message.text.split(None, 1)
     message = update.effective_message
+    args = message.text.split(" " or None, 1)
     print(DEBUG_MODE)
     if len(args) > 1:
         if args[1] in ("yes", "on"):

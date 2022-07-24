@@ -15,8 +15,8 @@ from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepi
 @cutiepii_msg(filters.Regex("(?i)^brb"), friendly="afk", group=3)
 @cutiepii_cmd(command="afk", group=3)
 async def afk(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    args = update.effective_message.text.split(None, 1)
     user = update.effective_user
+    args = update.effective_message.text.split(" " or None, 1)
 
     if not user:  # ignore channels
         return

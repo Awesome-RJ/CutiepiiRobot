@@ -151,8 +151,8 @@ async def gdpr(update: Update):
 
 @user_admin
 async def echo(update: Update):
-    args = update.effective_message.text.split(None, 1)
     message = update.effective_message
+    args = message.text.split(" " or None, 1)
 
     if update.effective_message.reply_to_message:
         message.reply_to_message.reply_text(
