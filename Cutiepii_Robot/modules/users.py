@@ -34,8 +34,8 @@ import contextlib
 from io import BytesIO
 from time import sleep
 
-from telegram import TelegramError, Update
-from telegram.error import BadRequest
+from telegram import Update
+from telegram.error import BadRequest, TelegramError
 from telegram.ext import MessageHandler, CommandHandler, ContextTypes, filters
 
 import Cutiepii_Robot.modules.sql.users_sql as sql
