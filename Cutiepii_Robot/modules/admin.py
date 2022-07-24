@@ -54,7 +54,7 @@ from pyrogram.types import Message
 
 
 from Cutiepii_Robot import SUDO_USERS, TOKEN, CUTIEPII_PTB, LOGGER, pgram, telethn
-from Cutiepii_Robot.modules.msg_types import get_message_type
+from Cutiepii_Robot.modules.helper_funcs.msg_types import get_message_type
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.connection import connected
