@@ -123,7 +123,7 @@ def __load_disabled_commands():
     try:
         all_chats = SESSION.query(Disable).all()
         for chat in all_chats:
-            DISABLED.setdefault(chat.chat_id, set()).add(chat.commands)
+            DISABLED.setdefault(chat.chat_id, set()).add(chat.command)
 
     finally:
         SESSION.close()
