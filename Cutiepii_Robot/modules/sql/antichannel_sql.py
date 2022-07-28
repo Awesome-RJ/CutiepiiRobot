@@ -79,9 +79,7 @@ def disable_antichannel(chat_id: int):
 def antichannel_status(chat_id: int) -> bool:
     with ANTICHANNEL_SETTING_LOCK:
         d = SESSION.query(AntiChannelSettings).get(str(chat_id))
-        if not d:
-            return False
-        return d.setting
+        return d.setting if d else False
 
 
 

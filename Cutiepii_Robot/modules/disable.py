@@ -91,9 +91,10 @@ if is_module_loaded(FILENAME):
                     command = fst_word[1:].split("@")
                     command.append(message._bot.username)
 
-                    if not (frozenset({command[0].lower()}) in self.commands
-                            and command[1].lower()
-                            == message._bot.username.lower()):
+                    if (
+                        frozenset({command[0].lower()}) not in self.commands
+                        or command[1].lower() != message._bot.username.lower()
+                    ):
                         return None
 
                     if filter_result := self.filters.check_update(update):

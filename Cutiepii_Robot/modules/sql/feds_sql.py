@@ -148,32 +148,28 @@ MYFEDS_SUBSCRIBER = {}
 
 def get_fed_info(fed_id):
     get = FEDERATION_BYFEDID.get(str(fed_id))
-    if get is None:
-        return False
-    return get
+    return False if get is None else get
 
 
 def get_fed_id(chat_id):
     get = FEDERATION_CHATS.get(str(chat_id))
-    if get is None:
-        return False
-    return get["fid"]
+    return False if get is None else get["fid"]
 
 
 def get_fed_name(chat_id):
     get = FEDERATION_CHATS.get(str(chat_id))
-    if get is None:
-        return False
-    return get["chat_name"]
+    return False if get is None else get["chat_name"]
 
 
 def get_user_fban(fed_id, user_id):
     if not FEDERATION_BANNED_FULL.get(fed_id):
         return False, False, False
     user_info = FEDERATION_BANNED_FULL[fed_id].get(user_id)
-    if not user_info:
-        return None, None, None
-    return user_info["first_name"], user_info["reason"], user_info["time"]
+    return (
+        (user_info["first_name"], user_info["reason"], user_info["time"])
+        if user_info
+        else (None, None, None)
+    )
 
 
 def get_user_admin_fed_name(user_id):
@@ -342,9 +338,7 @@ def chat_join_fed(fed_id, chat_name, chat_id):
 
 def search_fed_by_name(fed_name):
     allfed = FEDERATION_BYNAME.get(fed_name)
-    if allfed is None:
-        return False
-    return allfed
+    return False if allfed is None else allfed
 
 
 def search_user_in_fed(fed_id, user_id):
@@ -451,9 +445,7 @@ def chat_leave_fed(chat_id):
 def all_fed_chats(fed_id):
     with FEDS_LOCK:
         getfed = FEDERATION_CHATS_BYID.get(fed_id)
-        if getfed is None:
-            return []
-        return getfed
+        return [] if getfed is None else getfed
 
 
 def all_fed_users(fed_id):

@@ -37,16 +37,12 @@ coupledb = db.couple
 
 async def _get_lovers(chat_id: int):
     lovers = await coupledb.find_one({"chat_id": chat_id})
-    if not lovers:
-        return {}
-    return lovers["couple"]
+    return lovers["couple"] if lovers else {}
 
 
 async def get_couple(chat_id: int, date: str):
     lovers = await _get_lovers(chat_id)
-    if date in lovers:
-        return lovers[date]
-    return False
+    return lovers[date] if date in lovers else False
 
 
 async def save_couple(chat_id: int, date: str, couple: dict):
