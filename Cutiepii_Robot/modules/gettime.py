@@ -126,4 +126,4 @@ CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("time", gettime))
 
 
 __mod_name__ = "Time"
-__command_list__ = ["time"
+__command_list__ = ["time"]
