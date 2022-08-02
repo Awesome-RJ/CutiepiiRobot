@@ -365,9 +365,12 @@ def capture_err(func):
 # Special credits to TheHamkerCat
 
 
-async def member_permissions(chat_id, user_id):
+async def member_permissions(chat_id: int, user_id: int):
     perms = []
-    member = await pgram.get_chat_member(chat_id, user_id)
+    try:
+        member = await pgram.get_chat_member(chat_id, user_id)
+    except Exception:
+        return []
     if member.can_post_messages:
         perms.append("can_post_messages")
     if member.can_edit_messages:
@@ -384,6 +387,8 @@ async def member_permissions(chat_id, user_id):
         perms.append("can_invite_users")
     if member.can_pin_messages:
         perms.append("can_pin_messages")
+    if member.can_manage_voice_chats:
+        perms.append("can_manage_voice_chats")
     return perms
 
 
