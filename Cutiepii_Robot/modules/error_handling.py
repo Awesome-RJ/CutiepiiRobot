@@ -29,31 +29,25 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import html
-import io
-import random
-import sys
 import traceback
-import pretty_errors
-import requests
+import html
+import random
 
+from Cutiepii_Robot.modules.helper_funcs.misc import upload_text
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.constants import ParseMode
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes, CommandHandler
-from Cutiepii_Robot import CUTIEPII_PTB, DEV_USERS, ERROR_LOGS
+from psycopg2 import errors as sqlerrors
 
-pretty_errors.mono()
-
+from Cutiepii_Robot import TOKEN, CUTIEPII_PTB, DEV_USERS, OWNER_ID, LOGGER
 
 class ErrorsDict(dict):
-    """A custom dict to store errors and their count"""
+    "A custom dict to store errors and their count"
 
     def __init__(self, *args, **kwargs):
-        self.raw = []
         super().__init__(*args, **kwargs)
 
     def __contains__(self, error):
-        self.raw.append(error)
         error.identifier = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ", k=5))
         for e in self:
             if type(e) is type(error) and e.args == error.args:
@@ -62,9 +56,6 @@ class ErrorsDict(dict):
         self[error] = 0
         return False
 
-    def __len__(self):
-        return len(self.raw)
-
 
 errors = ErrorsDict()
 
@@ -72,23 +63,26 @@ errors = ErrorsDict()
 async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if not update:
         return
+
+    e = html.escape(f"{context.error}")
+    if e.find(TOKEN) != -1:
+        e = e.replace(TOKEN, "TOKEN")
+
+    if update.effective_chat.type != "channel":
+        try:
+            await context.bot.send_message(update.effective_chat.id, 
+            f"<b>Sorry I ran into an error!</b>\n<b>Error</b>: <code>{e}</code>\n<i>This incident has been logged. No further action is required.</i>",
+            parse_mode=ParseMode.HTML)
+        except BaseException as e:
+            LOGGER.exception(e)
+
     if context.error in errors:
         return
-    try:
-        stringio = io.StringIO()
-        pretty_errors.output_stderr = stringio
-        pretty_errors.output_stderr = sys.stderr
-        pretty_error = stringio.getvalue()
-        stringio.close()
-    except:
-        pretty_error = "Failed to create pretty error."
     tb_list = traceback.format_exception(
-        None, context.error, context.error.__traceback__,
+        None, context.error, context.error.__traceback__
     )
     tb = "".join(tb_list)
     pretty_message = (
-        "{}\n"
-        "-------------------------------------------------------------------------------\n"
         "An exception was raised while handling an update\n"
         "User: {}\n"
         "Chat: {} {}\n"
@@ -96,41 +90,33 @@ async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         "Message: {}\n\n"
         "Full Traceback: {}"
     ).format(
-            pretty_error,
-        update.effective_user.id if update.effective_user else 
-        update.effective_message.sender_chat.id if update.effective_message and update.effective_message.sender_chat 
-       else None,
+        update.effective_user.id,
         update.effective_chat.title if update.effective_chat else "",
         update.effective_chat.id if update.effective_chat else "",
         update.callback_query.data if update.callback_query else "None",
         update.effective_message.text if update.effective_message else "No message",
         tb,
     )
-    key = requests.post(
-        "https://www.toptal.com/developers/hastebin/documents",
-        data=pretty_message.encode("UTF-8"),
-    ).json()
-    e = html.escape(f"{context.error}")
-    if not key.get("key"):
-        with open("error.txt", "w+") as f:
+    paste_url = upload_text(pretty_message)
+
+
+    if not paste_url:
+        with open("Cutiepii_error.txt", "w+") as f:
             f.write(pretty_message)
-        context.bot.send_document(
-            ERROR_LOGS,
-                open("error.txt", "rb"),
-                caption=f"#{context.error.identifier}\n<b>An unknown error occured:</b>\n<code>{e}</code>",
-                parse_mode=ParseMode.HTML,
+        await context.bot.send_document(
+            OWNER_ID,
+            open("Cutiepii_error.txt", "rb"),
+            caption=f"#{context.error.identifier}\n<b>Your sugar mommy got an error for you, you cute guy:</b>\n<code>{e}</code>",
+            parse_mode=ParseMode.HTML,
         )
         return
-    key = key.get("key")
-    url = f"https://www.toptal.com/developers/hastebin/{key}"
     await context.bot.send_message(
-        ERROR_LOGS,
-            text=f"#{context.error.identifier}\n<b>An unknown error occured:</b>\n<code>{e}</code>",
-            reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Show ERROR", url=url)]],
-            ),
+        OWNER_ID,
+        text=f"#{context.error.identifier}\n<b>Your sugar mommy got an error for you, you cute guy:</b>\n<code>{e}</code>",
+        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("PrivateBin", url=paste_url)]]),
         parse_mode=ParseMode.HTML,
     )
+    
 
 
 async def list_errors(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -139,20 +125,21 @@ async def list_errors(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     e = dict(sorted(errors.items(), key=lambda item: item[1], reverse=True))
     msg = "<b>Errors List:</b>\n"
     for x, value in e.items():
-        msg += f"➛ <code>{x}:</code> <b>{value}</b> #{x.identifier}\n"
+        msg += f"➛ <code>{x}:</code> <b>{e[x]}</b> #{x.identifier}\n"
+
     msg += f"{len(errors)} have occurred since startup."
     if len(msg) > 4096:
-        with open("errors_msg.txt", "w+") as f:
+        with open("Cutiepii_errors_msg.txt", "w+") as f:
             f.write(msg)
-        context.bot.send_document(
+        await context.bot.send_document(
             update.effective_chat.id,
-            open("errors_msg.txt", "rb"),
-            caption="Too many errors have occured..",
+            open("Cutiepii_errors_msg.txt", "rb"),
+            caption='Too many errors have occured..',
             parse_mode=ParseMode.HTML,
         )
+
         return
     await update.effective_message.reply_text(msg, parse_mode=ParseMode.HTML)
-
 
 CUTIEPII_PTB.add_error_handler(error_callback)
 CUTIEPII_PTB.add_handler(CommandHandler("errors", list_errors))
