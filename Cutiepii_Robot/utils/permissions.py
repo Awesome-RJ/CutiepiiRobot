@@ -88,7 +88,7 @@ def adminsOnly(permission):
                 return await unauthorised(message, permission, subFunc2)
             userID = message.from_user.id
             permissions = await member_permissions(chatID, userID)
-            if userID not in SUDOERS and permission not in permissions:
+            if userID not in SUDO_USERS and permission not in permissions:
                 return await unauthorised(message, permission, subFunc2)
             return await authorised(
                 func, subFunc2, client, message, *args, **kwargs
