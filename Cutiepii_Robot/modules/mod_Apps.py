@@ -42,8 +42,10 @@ from Cutiepii_Robot.utils.pluginhelpers import admins_only
 from Cutiepii_Robot.utils.progress import progress
 from Cutiepii_Robot import pgram
 
+Cutiepii_PYRO_Mod = filters.command("mod")
 
-@pgram.on_edited_message(filters.command("mod") & ~filters.bot)
+@pgram.on_message(Cutiepii_PYRO_Mod & ~filters.bot)
+@pgram.on_edited_message(Cutiepii_PYRO_Mod)
 @admins_only
 async def mudapk(client, message):
     pablo = await client.send_message(message.chat.id, "`Searching For Mod App.....`")

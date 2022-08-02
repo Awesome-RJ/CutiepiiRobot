@@ -80,6 +80,7 @@ async def upvote(_, message):
     )
 
 
+
 @pgram.on_edited_message(filters.text & filters.group & filters.incoming & filters.reply & filters.regex(regex_downvote, re.IGNORECASE) & ~filters.via_bot & ~filters.bot, group=karma_negative_group)
 @capture_err
 async def downvote(_, message):

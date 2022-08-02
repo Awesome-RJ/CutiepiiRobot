@@ -74,6 +74,42 @@ from Cutiepii_Robot.modules.sql.users_sql import get_user_num_chats
 from Cutiepii_Robot.modules.sql.clear_cmd_sql import get_clearcmd
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 
+Cutiepii_PYRO_Whois = filters.command("whois")
+
+@pgram.on_message(Cutiepii_PYRO_Whois)
+@pgram.on_edited_message(Cutiepii_PYRO_Whois)
+async def whois(client, message):
+    cmd = message.command
+    if not message.reply_to_message and len(cmd) == 1:
+        get_user = message.from_user.id
+    elif len(cmd) == 1:
+        get_user = message.reply_to_message.from_user.id
+    elif len(cmd) > 1:
+        get_user = cmd[1]
+        with contextlib.suppress(ValueError):
+            get_user = int(cmd[1])
+    try:
+        user = await client.get_users(get_user)
+    except PeerIdInvalid:
+        await message.reply("I don't know that User.")
+        return
+    desc = await client.get_chat(get_user)
+    desc = desc.description
+    await message.reply_text(
+        infotext.format(
+            full_name=FullName(user),
+            user_id=user.id,
+            user_dc=user.dc_id,
+            first_name=user.first_name,
+            last_name=user.last_name or "",
+            username=user.username or "",
+            last_online=LastOnline(user),
+            bio=desc or "`No bio set up.`",
+        ),
+        disable_web_page_preview=True,
+    )
+
+
 def biome(user_id):
     bio = html.escape(sql.get_user_bio(user_id) or "")
     me = html.escape(sql.get_user_me_info(user_id) or "")
@@ -829,17 +865,6 @@ async def set_about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     else:
         await update.effective_message.reply_text("Reply to someone to set their bio!")
 
-# whois
-def ReplyCheck(update: Update, message: Message):
-    reply_id = None
-
-    if update.effective_message.reply_to_message:
-        reply_id = message.reply_to_message.message_id
-
-    elif not message.from_user.is_self:
-        reply_id = message.message_id
-
-    return reply_id
 
 
 infotext = (
@@ -879,38 +904,6 @@ def FullName(user: User):
         else user.first_name
     )
 
-
-@pgram.on_edited_message(filters.command("whois") & ~filters.bot)
-async def whois(client, message):
-    cmd = message.command
-    if not message.reply_to_message and len(cmd) == 1:
-        get_user = message.from_user.id
-    elif len(cmd) == 1:
-        get_user = message.reply_to_message.from_user.id
-    elif len(cmd) > 1:
-        get_user = cmd[1]
-        with contextlib.suppress(ValueError):
-            get_user = int(cmd[1])
-    try:
-        user = await client.get_users(get_user)
-    except PeerIdInvalid:
-        await message.reply("I don't know that User.")
-        return
-    desc = await client.get_chat(get_user)
-    desc = desc.description
-    await message.reply_text(
-        infotext.format(
-            full_name=FullName(user),
-            user_id=user.id,
-            user_dc=user.dc_id,
-            first_name=user.first_name,
-            last_name=user.last_name or "",
-            username=user.username or "",
-            last_online=LastOnline(user),
-            bio=desc or "`No bio set up.`",
-        ),
-        disable_web_page_preview=True,
-    )
 
 async def get_chat_info(chat, already=False):
     if not already:

@@ -39,7 +39,7 @@ from Cutiepii_Robot import arq
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot import pgram
 
-
+Cutiepii_PYRO_Q = filters.command("q")
 
 async def quotify(messages: list):
     response = await arq.quotly(messages)
@@ -64,7 +64,8 @@ def isArgInt(message: Message) -> list:
         return [False, 0]
 
 
-@pgram.on_edited_message(filters.command("q") & ~filters.forwarded & ~filters.bot)
+@pgram.on_message(Cutiepii_PYRO_Q & ~filters.forwarded & ~filters.bot)
+@pgram.on_edited_message(Cutiepii_PYRO_Q)
 @capture_err
 async def quotly_func(client, message: Message):
     if not message.reply_to_message:

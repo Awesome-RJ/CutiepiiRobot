@@ -146,14 +146,14 @@ async def progress(current, total, message, start, type_of_ps, file_name=None):
                 await message.edit("{}\n**File Name:** `{}`\n{}".format(
                     type_of_ps, file_name, tmp))
             except FloodWait as e:
-                await asyncio.sleep(e.x)
+                await asyncio.sleep(e.value)
             except MessageNotModified:
                 pass
         else:
             try:
                 await message.edit("{}\n{}".format(type_of_ps, tmp))
             except FloodWait as e:
-                await asyncio.sleep(e.x)
+                await asyncio.sleep(e.value)
             except MessageNotModified:
                 pass
 

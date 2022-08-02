@@ -47,9 +47,11 @@ from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CommandHandler
 
 from Cutiepii_Robot import DEV_USERS, LOGGER, CUTIEPII_PTB
-from Cutiepii_Robot import pgram as app
+from Cutiepii_Robot import pgram
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 
+
+Cutiepii_PYRO_Eval = filters.command(["eval", "e"])
 namespaces = {}
 
 
@@ -152,13 +154,8 @@ async def do(func, bot, update):
         if result:
             return result
 
-
-@app.on_edited_message(
-    filters.user(DEV_USERS)
-    & (~filters.forwarded)
-    & (~filters.via_bot)
-    & filters.command(["eval", "e"])
-)
+@pgram.on_message(Cutiepii_PYRO_Eval & filters.user(DEV_USERS) & (~filters.forwarded) & (~filters.via_bot))
+@pgram.on_edited_message(Cutiepii_PYRO_Eval)
 async def executor(client, message):
     try:
         cmd = message.text.split(" ", maxsplit=1)[1]
@@ -227,7 +224,7 @@ async def executor(client, message):
         await edit_or_reply(message, text=final_output, reply_markup=keyboard)
 
 
-@app.on_callback_query(filters.regex(r"runtime"))
+@pgram.on_callback_query(filters.regex(r"runtime"))
 async def runtime_func_cq(_, cq):
     runtime = cq.data.split(None, 1)[1]
     await cq.answer(runtime, show_alert=True)

@@ -353,14 +353,15 @@ CUTIEPII_PTB = (tg.Application.builder().token(TOKEN).build())
 # asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
 #------------------------------------------------------------------
 print("[CUTIEPII]: PYROGRAM CLIENT STARTING")
-session_name = TOKEN.split(":")[0]
+name = TOKEN.split(":")[0]
 pgram = Client(
-    session_name,
+    name,
     api_id=API_ID,
     api_hash=API_HASH,
     bot_token=TOKEN,
     workers=min(32,
                 os.cpu_count() + 4),
+    in_memory=True,
 )
 print(
     "[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")

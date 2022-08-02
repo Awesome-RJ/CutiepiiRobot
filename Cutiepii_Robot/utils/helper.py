@@ -51,7 +51,7 @@ def control_user(func):
         try:
             await func(_, message, msg)
         except FloodWait as e:
-            await asyncio.sleep(e.x + 5)
+            await asyncio.sleep(e.value + 5)
         except MessageNotModified:
             pass
 
@@ -67,7 +67,7 @@ def check_user(func):
             try:
                 await func(_, c_q, cq)
             except FloodWait as e:
-                await asyncio.sleep(e.x + 5)
+                await asyncio.sleep(e.value + 5)
             except MessageNotModified:
                 pass
         else:

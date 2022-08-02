@@ -45,6 +45,7 @@ from Cutiepii_Robot.utils.pastebin import paste
 pattern = re.compile(
     r"^text/|json$|yaml$|xml$|toml$|x-sh$|x-shellscript$"
 )
+Cutiepii_PYRO_Paste = filters.command("paste")
 
 
 async def isPreviewUp(preview: str) -> bool:
@@ -62,7 +63,8 @@ async def isPreviewUp(preview: str) -> bool:
     return False
 
 
-@pgram.on_edited_message(filters.command("paste"))
+@pgram.on_message(Cutiepii_PYRO_Paste)
+@pgram.on_edited_message(Cutiepii_PYRO_Paste)
 @capture_err
 async def paste_func(_, message):
     if not message.reply_to_message:
