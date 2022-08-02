@@ -37,7 +37,7 @@ from PIL import Image, ImageOps
 
 async def black_border(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -74,7 +74,7 @@ async def black_border(client, message):
 
 async def green_border(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -111,7 +111,7 @@ async def green_border(client, message):
 
 async def blue_border(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -148,7 +148,7 @@ async def blue_border(client, message):
 
 async def red_border(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"

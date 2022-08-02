@@ -39,7 +39,8 @@ from Cutiepii_Robot import arq
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot import pgram
 
-Cutiepii_PYRO_Q = filters.command("q")
+Cutiepii_PYRO_Q = filters.command(["quote", "q"])
+
 
 async def quotify(messages: list):
     response = await arq.quotly(messages)
@@ -50,10 +51,9 @@ async def quotify(messages: list):
     sticker.name = "sticker.webp"
     return [True, sticker]
 
-
 def getArg(message: Message) -> str:
-    return message.text.strip().split(None, 1)[1].strip()
-
+    arg = message.text.strip().split(None, 1)[1].strip()
+    return arg
 
 def isArgInt(message: Message) -> list:
     count = getArg(message)
@@ -67,47 +67,33 @@ def isArgInt(message: Message) -> list:
 @pgram.on_message(Cutiepii_PYRO_Q & ~filters.forwarded & ~filters.bot)
 @pgram.on_edited_message(Cutiepii_PYRO_Q)
 @capture_err
-async def quotly_func(client, message: Message):
+async def quote(client, message: Message):
+    await message.delete()
     if not message.reply_to_message:
         return await message.reply_text("Reply to a message to quote it.")
     if not message.reply_to_message.text:
-        return await message.reply_text(
-            "Replied message has no text, can't quote it."
-        )
+        return await message.reply_text("Replied message has no text, can't quote it.")
     m = await message.reply_text("Quoting Messages Please wait....")
     if len(message.command) < 2:
         messages = [message.reply_to_message]
-
     elif len(message.command) == 2:
         arg = isArgInt(message)
         if arg[0]:
             if arg[1] < 2 or arg[1] > 10:
                 return await m.edit("Argument must be between 2-10.")
             count = arg[1]
-            messages = await client.get_messages(
-                message.chat.id,
-                list(range(
-                        message.reply_to_message.message_id,
-                        message.reply_to_message.message_id + (count + 5),
-                    )),
-                replies=0,
-            )
+            messages = [i for i in await client.get_messages(message.chat.id,range(message.reply_to_message.message_id,message.reply_to_message.message_id + (count + 5)),replies=0)if not i.empty and not i.media]
+            messages = messages[:count]
         else:
             if getArg(message) != "r":
-                return await m.edit(
-                    "Incorrect Argument, Pass **'r'** or **'INT'**, **EX:** __/q 2__"
-                )
-            reply_message = await client.get_messages(
-                message.chat.id,
-                message.reply_to_message.message_id,
-                replies=1,
-            )
+                return await m.edit("Incorrect Argument, Pass **'r'** or **'INT'**, **EX:** __/q 2__")
+            reply_message = await client.get_messages(message.chat.id,message.reply_to_message.message_id,replies=1,)
             messages = [reply_message]
     else:
-        return await m.edit(
-            "Incorrect argument, check quotly module in help section."
-        )
+        return await m.edit("Incorrect argument, check quotly module in help section.")
     try:
+        if not message:
+            return await m.edit("Something went wrong.")
         sticker = await quotify(messages)
         if not sticker[0]:
             await message.reply_text(sticker[1])
@@ -117,11 +103,7 @@ async def quotly_func(client, message: Message):
         await m.delete()
         sticker.close()
     except Exception as e:
-        await m.edit(
-            "Something wrong happened while quoting messages,"
-            + " This error usually happens when there's a "
-            + " message containing something other than text."
-        )
+        await m.edit("Something went wrong while quoting messages,"+ " This error usually happens when there's a "+ " message containing something other than text,"+ " or one of the messages in-between are deleted.")
         e = format_exc()
         print(e)
 

@@ -62,7 +62,7 @@ def capture_err(func):
         try:
             return await func(client, message, *args, **kwargs)
         except ChatWriteForbidden:
-            await pgram.leave_chat(message.chat.id)
+            await pgram.leave_chat(chat_id)
             return
         except Exception as err:
             exc_type, exc_obj, exc_tb = sys.exc_info()

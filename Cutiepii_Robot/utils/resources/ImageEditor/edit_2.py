@@ -39,7 +39,7 @@ from PIL import Image, ImageDraw, ImageEnhance
 
 async def circle_with_bg(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -82,7 +82,7 @@ async def circle_with_bg(client, message):
 
 async def circle_without_bg(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -125,7 +125,7 @@ async def circle_without_bg(client, message):
 
 async def sticker(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -173,7 +173,7 @@ def add_corners(im, rad):
 
 async def edge_curved(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -210,7 +210,7 @@ async def edge_curved(client, message):
 
 async def contrast(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -266,7 +266,7 @@ def sepia(img):
 
 async def sepia_mode(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -307,7 +307,7 @@ def dodgeV2(x, y):
 
 async def pencil(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -360,7 +360,7 @@ def color_quantization(img, k):
 
 async def cartoon(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"

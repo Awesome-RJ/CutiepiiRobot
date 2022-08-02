@@ -38,7 +38,7 @@ from PIL import Image, ImageEnhance, ImageFilter
 
 async def bright(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -75,7 +75,7 @@ async def bright(client, message):
 
 async def mix(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -113,7 +113,7 @@ async def mix(client, message):
 
 async def black_white(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -150,7 +150,7 @@ async def black_white(client, message):
 
 async def normal_blur(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -187,7 +187,7 @@ async def normal_blur(client, message):
 
 async def g_blur(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -224,7 +224,7 @@ async def g_blur(client, message):
 
 async def box_blur(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"

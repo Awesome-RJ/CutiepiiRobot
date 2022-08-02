@@ -76,6 +76,53 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 
 Cutiepii_PYRO_Whois = filters.command("whois")
 
+# whois
+def ReplyCheck(message: Message):
+    reply_id = None
+    if message.reply_to_message:
+        reply_id = message.reply_to_message.message_id
+    elif not message.from_user.is_self:
+        reply_id = message.message_id
+    return reply_id
+
+infotext = (
+    "**[{full_name}](tg://user?id={user_id})**\n"
+    " * UserID: `{user_id}`\n"
+    " * First Name: `{first_name}`\n"
+    " * Last Name: `{last_name}`\n"
+    " * Username: `{username}`\n"
+    " * Last Online: `{last_online}`\n"
+    " * Bio: {bio}"
+)
+
+
+def LastOnline(user: User):
+    if user.is_bot:
+        return ""
+    if user.status == "recently":
+        return "Recently"
+    if user.status == "within_week":
+        return "Within the last week"
+    if user.status == "within_month":
+        return "Within the last month"
+    if user.status == "long_time_ago":
+        return "A long time ago :("
+    if user.status == "online":
+        return "Currently Online"
+    if user.status == "offline":
+        return datetime.fromtimestamp(user.status.date).strftime(
+            "%a, %d %b %Y, %H:%M:%S"
+        )
+
+
+def FullName(user: User):
+    return (
+        f"{user.first_name} {user.last_name}"
+        if user.last_name
+        else user.first_name
+    )
+
+
 @pgram.on_message(Cutiepii_PYRO_Whois)
 @pgram.on_edited_message(Cutiepii_PYRO_Whois)
 async def whois(client, message):
@@ -864,46 +911,6 @@ async def set_about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
     else:
         await update.effective_message.reply_text("Reply to someone to set their bio!")
-
-
-
-infotext = (
-    "**[{full_name}](tg://user?id={user_id})**\n"
-    " * UserID: `{user_id}`\n"
-    " * First Name: `{first_name}`\n"
-    " * Last Name: `{last_name}`\n"
-    " * Username: `{username}`\n"
-    " * Last Online: `{last_online}`\n"
-    " * Bio: {bio}"
-)
-
-
-def LastOnline(user: User):
-    if user.is_bot:
-        return ""
-    if user.status == "recently":
-        return "Recently"
-    if user.status == "within_week":
-        return "Within the last week"
-    if user.status == "within_month":
-        return "Within the last month"
-    if user.status == "long_time_ago":
-        return "A long time ago :("
-    if user.status == "online":
-        return "Currently Online"
-    if user.status == "offline":
-        return datetime.fromtimestamp(user.status.date).strftime(
-            "%a, %d %b %Y, %H:%M:%S"
-        )
-
-
-def FullName(user: User):
-    return (
-        f"{user.first_name} {user.last_name}"
-        if user.last_name
-        else user.first_name
-    )
-
 
 async def get_chat_info(chat, already=False):
     if not already:

@@ -10,7 +10,7 @@ from pymongo import MongoClient
 async def is_admins(chat_id: int):
     return [
         member.user.id
-        async for member in pgram.iter_chat_members(
+        async for member in pgram.get_chat_members(
             chat_id, filter="administrators"
         )
     ]

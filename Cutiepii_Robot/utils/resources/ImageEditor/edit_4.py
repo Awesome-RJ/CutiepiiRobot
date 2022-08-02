@@ -43,7 +43,7 @@ from Cutiepii_Robot import REM_BG_API_KEY
 
 async def rotate_90(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -80,7 +80,7 @@ async def rotate_90(client, message):
 
 async def rotate_180(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -117,7 +117,7 @@ async def rotate_180(client, message):
 
 async def rotate_270(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -166,7 +166,7 @@ def resize_photo(photo: str, userid: str) -> io.BytesIO:
 
 async def round_sticker(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -210,7 +210,7 @@ async def round_sticker(client, message):
 
 async def inverted(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -248,7 +248,7 @@ async def inverted(client, message):
 async def removebg_plain(client, message):
     try:
         if REM_BG_API_KEY != "":
-            userid = str(message.chat.id)
+            userid = str(chat_id)
             if not os.path.isdir(f"./DOWNLOADS/{userid}"):
                 os.makedirs(f"./DOWNLOADS/{userid}")
             download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -304,7 +304,7 @@ async def removebg_plain(client, message):
 async def removebg_white(client, message):
     try:
         if REM_BG_API_KEY != "":
-            userid = str(message.chat.id)
+            userid = str(chat_id)
             if not os.path.isdir(f"./DOWNLOADS/{userid}"):
                 os.makedirs(f"./DOWNLOADS/{userid}")
             download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -360,7 +360,7 @@ async def removebg_white(client, message):
 async def removebg_sticker(client, message):
     try:
         if REM_BG_API_KEY != "":
-            userid = str(message.chat.id)
+            userid = str(chat_id)
             if not os.path.isdir(f"./DOWNLOADS/{userid}"):
                 os.makedirs(f"./DOWNLOADS/{userid}")
             download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"

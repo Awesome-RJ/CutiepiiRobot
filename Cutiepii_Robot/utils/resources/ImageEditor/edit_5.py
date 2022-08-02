@@ -36,7 +36,7 @@ import shutil
 
 async def normalglitch_1(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -78,7 +78,7 @@ async def normalglitch_1(client, message):
 
 async def normalglitch_2(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -120,7 +120,7 @@ async def normalglitch_2(client, message):
 
 async def normalglitch_3(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -162,7 +162,7 @@ async def normalglitch_3(client, message):
 
 async def normalglitch_4(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -204,7 +204,7 @@ async def normalglitch_4(client, message):
 
 async def normalglitch_5(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -246,7 +246,7 @@ async def normalglitch_5(client, message):
 
 async def scanlineglitch_1(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -289,7 +289,7 @@ async def scanlineglitch_1(client, message):
 
 async def scanlineglitch_2(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -332,7 +332,7 @@ async def scanlineglitch_2(client, message):
 
 async def scanlineglitch_3(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -375,7 +375,7 @@ async def scanlineglitch_3(client, message):
 
 async def scanlineglitch_4(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"
@@ -418,7 +418,7 @@ async def scanlineglitch_4(client, message):
 
 async def scanlineglitch_5(client, message):
     try:
-        userid = str(message.chat.id)
+        userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
             os.makedirs(f"./DOWNLOADS/{userid}")
         download_location = "./DOWNLOADS" + "/" + userid + "/" + userid + ".jpg"

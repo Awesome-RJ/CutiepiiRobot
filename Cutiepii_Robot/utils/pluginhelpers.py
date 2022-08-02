@@ -388,8 +388,8 @@ async def member_permissions(chat_id: int, user_id: int):
         perms.append("can_invite_users")
     if member.can_pin_messages:
         perms.append("can_pin_messages")
-    if member.can_manage_voice_chats:
-        perms.append("can_manage_voice_chats")
+    if member.can_manage_video_chats:
+        perms.append("can_manage_video_chats")
     return perms
 
 

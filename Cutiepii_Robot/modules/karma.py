@@ -52,7 +52,7 @@ regex_downvote = r"^(\-|\-\-|\-1|👎)$"
 @pgram.on_edited_message(filters.text & filters.group & filters.incoming & filters.reply & filters.regex(regex_upvote, re.IGNORECASE) & ~filters.via_bot & ~filters.bot, group=karma_positive_group)
 @capture_err
 async def upvote(_, message):
-    if not await is_karma_on(message.chat.id):
+    if not await is_karma_on(chat_id):
         return
     if not message.reply_to_message.from_user:
         return
@@ -84,7 +84,7 @@ async def upvote(_, message):
 @pgram.on_edited_message(filters.text & filters.group & filters.incoming & filters.reply & filters.regex(regex_downvote, re.IGNORECASE) & ~filters.via_bot & ~filters.bot, group=karma_negative_group)
 @capture_err
 async def downvote(_, message):
-    if not await is_karma_on(message.chat.id):
+    if not await is_karma_on(chat_id):
         return
     if not message.reply_to_message.from_user:
         return
