@@ -130,7 +130,9 @@ async def reply_afk(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def check_afk(update: Update, user_id: int, fst_name: int, userc_id: int
     if userc_id == user_id:
         return
-    is_afk, reason = sql.check_afk_status(user_id)
+    afk_D = sql.check_afk_status(user_id)
+    is_afk = afk_D.is_afk 
+    reason = afk_D.reason
     if is_afk:
         if not reason:
             res = f"{fst_name} is afk"

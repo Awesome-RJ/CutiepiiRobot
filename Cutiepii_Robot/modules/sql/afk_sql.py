@@ -1,4 +1,5 @@
 import threading
+import typing
 
 from sqlalchemy import Column, UnicodeText, Boolean, BigInteger
 
@@ -31,8 +32,10 @@ def is_afk(user_id):
     return user_id in AFK_USERS
 
 
-def check_afk_status(user_id):
-    return (True, AFK_USERS[user_id]) if user_id in AFK_USERS else (False, "")
+def check_afk_status(user_id) -> typing.Optional[AFK]:
+        return SESSION.query(AFK).get(user_id)
+    finally:
+        SESSION.close()
 
 
 def set_afk(user_id, reason=""):
@@ -42,13 +45,23 @@ def set_afk(user_id, reason=""):
             curr = AFK(user_id, reason, True)
         else:
             curr.is_afk = True
-            curr.reason = reason
 
         AFK_USERS[user_id] = reason
 
         SESSION.add(curr)
         SESSION.commit()
 
+def toggle_afk(user_id, reason=""):
+    with INSERTION_LOCK:
+        curr = SESSION.query(AFK).get(user_id)
+        if not curr:
+            curr = AFK(user_id, reason, True)
+        elif curr.is_afk:
+            curr.is_afk = False
+        else:
+            curr.is_afk = True
+        SESSION.add(curr)
+        SESSION.commit()
 
 def rm_afk(user_id):
     with INSERTION_LOCK:
