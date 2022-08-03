@@ -642,7 +642,7 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         text = (
             f"<b>╔═━「 User info: 」</b>\n"
             f"➛ ID: <code>{user.id}</code>\n"
-            f"➛ First Name: {mention_html(user.id, user.first_name) or '<code>Deleted Account</code>')}"
+            f"➛ First Name: {mention_html(user.id, user.first_name)} or '<code>Deleted Account</code>'"
         )
 
         if user.last_name:
