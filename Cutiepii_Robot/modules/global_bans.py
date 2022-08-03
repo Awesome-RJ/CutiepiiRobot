@@ -565,4 +565,3 @@ __mod_name__ = "Anti-Spam"
 
 if STRICT_GBAN:  # enforce GBANS if this is set
     CUTIEPII_PTB.add_handler(GBAN_ENFORCER, GBAN_ENFORCE_GROUP)
-    __handlers__.append((GBAN_ENFORCER, GBAN_ENFORCE_GROUP))
