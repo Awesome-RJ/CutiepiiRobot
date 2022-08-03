@@ -59,7 +59,7 @@ from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.connection import connected
 from Cutiepii_Robot.modules.users import build_keyboard_alternate
-from Cutiepii_Robot.modules.helper_funcs.admin_status import user_admin_check, bot_admin_check, AdminPerms, get_bot_member
+from Cutiepii_Robot.modules.helper_funcs.admin_status import user_admin_check, bot_admin_check, AdminPerms
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     ADMIN_CACHE,
     connection_status,
