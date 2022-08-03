@@ -36,7 +36,7 @@ import zlib
 import base64
 import base58
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 from asyncio import sleep
 from urllib.parse import urlparse, urljoin, urlunparse
 from Crypto import Random, Hash, Protocol
@@ -171,7 +171,7 @@ def is_module_loaded(name):
     return name not in NO_LOAD
 
 
-def upload_text(data: str) -> typing.Optional[str]:
+def upload_text(data: str) -> Optional[str]:
     passphrase = Random.get_random_bytes(32)
     salt = Random.get_random_bytes(8)
     key = Protocol.KDF.PBKDF2(
