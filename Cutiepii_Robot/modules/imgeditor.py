@@ -1,4 +1,5 @@
 """
+"""
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
@@ -430,4 +431,5 @@ Cutiepii Robot 愛 have some advanced image editing tools inbuilt
 Bright, Circle, RemBG, Blur, Border, Flip, Glitch, Sticker maker and more
 ➛ /edit [reply to image]*:* Open the image editor
 ➛ /rmbg [REPLY]*:* Revove BG of replied image/sticker.
+"""
 """
