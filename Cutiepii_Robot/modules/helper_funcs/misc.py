@@ -30,7 +30,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import contextlib
-from typing import Dict, List
+
+from typing import Dict, List, Optional
 from asyncio import sleep
 
 from Cutiepii_Robot import NO_LOAD
@@ -161,7 +162,7 @@ def is_module_loaded(name):
     return name not in NO_LOAD
 
 
-def upload_text(data: str) -> typing.Optional[str]:
+def upload_text(data: str) -> Optional[str]:
     passphrase = Random.get_random_bytes(32)
     salt = Random.get_random_bytes(8)
     key = Protocol.KDF.PBKDF2(passphrase, salt, 32, 100000, hmac_hash_module=Hash.SHA256)
