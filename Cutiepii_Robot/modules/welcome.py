@@ -1054,7 +1054,7 @@ async def clean_welcome(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
             f"Has toggled clean welcomes to <code>ON</code>."
         )
     elif args[0].lower() in ("off", "no"):
-        sql.set_clean_welcome(str(chat.id, False)
+        sql.set_clean_welcome(str(chat.id, False))
         await update.effective_message.reply_text(
             "I won't delete old welcome messages."
         )
