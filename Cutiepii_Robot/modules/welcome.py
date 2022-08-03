@@ -32,6 +32,7 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import (
     markdown_parser,
 )
 from Cutiepii_Robot.modules.log_channel import loggable
+import Cutiepii_Robot.modules.sql.feds_sql as fed_sql
 from Cutiepii_Robot.modules.sql.global_bans_sql import is_user_gbanned
 from telegram import (
     ChatPermissions,
@@ -220,6 +221,11 @@ async def new_member(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
                 chat.ban_member(new_mem.id, until_date=bantime)
             return
 
+        if fed_id:
+            fban = fed_sql.get_fban_user(fed_id, user.id)
+            if fban[0]:
+                await msg.reply_text("This user is banned in current federation! I will remove them.", reply_to_message_id=msg.message_id, allow_sending_without_reply=True)
+                await context.bot.ban_chat_member(chat.id, user.id)
 
         reply = update.message.message_id
         cleanserv = sql.clean_service(chat.id)
