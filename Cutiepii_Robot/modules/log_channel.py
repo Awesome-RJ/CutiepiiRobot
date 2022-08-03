@@ -92,7 +92,7 @@ if is_module_loaded(FILENAME):
 
 
                 if message.chat.type == chat.SUPERGROUP and message.chat.username:
-                    result += f'\n<b>Link:</b> <a href='https://t.me/{chat.username}/{message.message_id}''>click here</a>'
+                    result += f"\n<b>Link:</b> <a href='https://t.me/{chat.username}/{message.message_id}'>click here</a>"
                 if log_chat := str(GBAN_LOGS):
                     send_log(context, log_chat, chat.id, result)
 
