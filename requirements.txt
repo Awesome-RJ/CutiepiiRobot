@@ -71,3 +71,5 @@ async-timeout>=1.2
 psycopg2
 pycountry
 opencv-python-headless==4.5.4.60
+pycryptodome
+base58
