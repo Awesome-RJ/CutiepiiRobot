@@ -171,6 +171,16 @@ async def chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             caption="Here be the list of groups in my database.",
         )
 
+def build_keyboard_alternate(buttons):
+    keyb = []
+    for btn in buttons:
+        if btn[2] and keyb:
+            keyb[-1].append(InlineKeyboardButton(btn[0], url=btn[1]))
+        else:
+            keyb.append([InlineKeyboardButton(btn[0], url=btn[1])])
+
+    return keyb
+
 """
 async def chat_checker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
