@@ -222,5 +222,5 @@ CUTIEPII_PTB.add_handler(DB_CLEANUP_HANDLER)
 CUTIEPII_PTB.add_handler(BUTTON_HANDLER)
 
 __mod_name__ = "DB Cleanup"
-__handlers__ = [DB_CLEANUP_HANDLER, BUTTON_HANDLER]
+
 """
