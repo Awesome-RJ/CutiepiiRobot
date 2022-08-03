@@ -1,4 +1,4 @@
-"""
+
 """
 BSD 2-Clause License
 
@@ -28,6 +28,7 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
 """
 from pyrogram import filters
 from pyrogram.types import (
@@ -423,13 +424,14 @@ async def cb_handler(client: pgram, query: CallbackQuery):
 
         elif query.data == "rmbgsticker":
             await removebg_sticker(client, query.message)
+"""
 
-
+"""
 __mod_name__ = "Image Editor"
-__help__ = f"""
+__help__ = f
 Cutiepii Robot 愛 have some advanced image editing tools inbuilt
 Bright, Circle, RemBG, Blur, Border, Flip, Glitch, Sticker maker and more
 ➛ /edit [reply to image]*:* Open the image editor
 ➛ /rmbg [REPLY]*:* Revove BG of replied image/sticker.
-"""
+
 """
