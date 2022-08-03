@@ -140,8 +140,8 @@ async def chika(event):
 async def _(td):
     try:
         resp = requests.get(
-            "https://api-tede.herokuapp.com/api/truth-en").json()
-        results = f"{resp['message']}"
+            "https://api.safone.tech/truth").json()
+        results = f"{resp['truth']}"
         return await td.reply(results)
     except Exception:
         await td.reply(f"Error Report @{SUPPORT_CHAT}")
@@ -151,13 +151,63 @@ async def _(td):
 async def _(dr):
     try:
         resp = requests.get(
-            "https://api-tede.herokuapp.com/api/dare-en").json()
-        results = f"{resp['message']}"
+            "https://api.safone.tech/dare").json()
+        results = f"{resp['dare']}"
+        return await dr.reply(results)
+    except Exception:
+        await dr.reply(f"Error Report @{SUPPORT_CHAT}")
+      
+@register(pattern="^/fact ?(.*)")
+async def _(dr):
+    try:
+        resp = requests.get(
+            "https://api.safone.tech/fact").json()
+        results = f"{resp['fact']}"
         return await dr.reply(results)
     except Exception:
         await dr.reply(f"Error Report @{SUPPORT_CHAT}")
 
-
+      
+@register(pattern="^/quotes ?(.*)")
+async def _(dr):
+    try:
+        resp = requests.get(
+            "https://api.safone.tech/quote").json()
+        results = f"{resp['quote']}"
+        return await dr.reply(results)
+    except Exception:
+        await dr.reply(f"Error Report @{SUPPORT_CHAT}")
+      
+@register(pattern="^/joke ?(.*)")
+async def _(dr):
+    try:
+        resp = requests.get(
+            "https://api.safone.tech/joke").json()
+        results = f"{resp['joke']}"
+        return await dr.reply(results)
+    except Exception:
+        await dr.reply(f"Error Report @{SUPPORT_CHAT}")
+      
+@register(pattern="^/bully ?(.*)")
+async def _(dr):
+    try:
+        resp = requests.get(
+            "https://api.safone.tech/bully").json()
+        results = f"{resp['bully']}"
+        return await dr.reply(results)
+    except Exception:
+        await dr.reply(f"Error Report @{SUPPORT_CHAT}")
+      
+@register(pattern="^/advice ?(.*)")
+async def _(dr):
+    try:
+        resp = requests.get(
+            "https://api.safone.tech/advice").json()
+        results = f"{resp['advice']}"
+        return await dr.reply(results)
+    except Exception:
+        await dr.reply(f"Error Report @{SUPPORT_CHAT}")
+      
 @register(pattern="^/owu$")
 async def msg(event):
 
