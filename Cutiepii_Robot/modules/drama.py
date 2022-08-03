@@ -10,10 +10,12 @@ from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepi
 
 url = "https://mydramalist.com/"
 
+
 # Text Shorter
 def shorten(des: str = '', short: int = 500):
     msg = des[:short] if len(des) > short else des
     return escape(msg)
+
 
 # Drama
 @cutiepii_cmd(command="drama")
@@ -21,13 +23,14 @@ async def drama(update: Update):
     message = update.effective_message
     search = await message.text.split(" ", 1)
     if len(search) == 1:
-        await message.reply_text('Format: `/drama <query>`', parse_mode=ParseMode.MARKDOWN_V2)
+        await message.reply_text('Format: `/drama <query>`',
+                                 parse_mode=ParseMode.MARKDOWN_V2)
         return
 
     Dramas = {}
     buttons = []
     try:
-       res = get(f'{url}/search/q/{search[1]}').json()
+        res = get(f'{url}/search/q/{search[1]}').json()
     except JSONDecodeError as J:
         await message.reply_text(f"No Results Found!\n {J}")
         return
@@ -35,14 +38,18 @@ async def drama(update: Update):
     data = res['results'].get('dramas')
 
     for x in data:
-       Dramas[x.get('slug')] = x.get('title')
-       if len(Dramas) > 4:
-           break
+        Dramas[x.get('slug')] = x.get('title')
+        if len(Dramas) > 4:
+            break
 
     for slug, title in Dramas.items():
-       buttons.append([InlineKeyboardButton(text=title, callback_data=f"drama-detail {message.from_user.id} {slug}")])
-       if len(buttons) > 4:
-           break
+        buttons.append([
+            InlineKeyboardButton(
+                text=title,
+                callback_data=f"drama-detail {message.from_user.id} {slug}")
+        ])
+        if len(buttons) > 4:
+            break
 
     if not buttons:
         await message.reply_text("No Results Found!")
@@ -57,7 +64,8 @@ async def drama(update: Update):
 
 # Callback Data
 @cutiepii_callback(pattern=r"drama-detail.*")
-async def drama_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def drama_button(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     message = update.effective_message
 
@@ -82,14 +90,14 @@ async def drama_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         country = res['data']['details'].get('country')
         episodes = res['data']['details'].get('episodes') or 'N/A'
         duration = res['data']['details'].get('duration')
-        aired = res['data']['details'].get('aired') or res['data']['details'].get('release_date')
+        aired = res['data']['details'].get(
+            'aired') or res['data']['details'].get('release_date')
         content_rating = res['data']['details'].get('content_rating') or 'N/A'
         title = res['data'].get('title')
         native = res['data']['others'].get('native_title')
         also_known_as = res['data']['others'].get('also_known_as')
         genres = res['data']['others'].get('genres')
         description = shorten(res['data'].get('synopsis'))
-
 
         txt = f"<b>{title} - ({native})</b>\n"
         txt += f"\n<b>Type</b>: {type} ({content_rating.split(None, 1)[0] if content_rating != ('Not Yet Rated', '', None) else 'N/A'})"
@@ -104,14 +112,23 @@ async def drama_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             text=txt,
             parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('More', url=f"https://mydramalist.com/{slug}")], [InlineKeyboardButton("Casts", callback_data=f"drama-cast-detail {user_id} {slug}")]]),
+            reply_markup=InlineKeyboardMarkup(
+                [[
+                    InlineKeyboardButton('More',
+                                         url=f"https://mydramalist.com/{slug}")
+                ],
+                 [
+                     InlineKeyboardButton(
+                         "Casts",
+                         callback_data=f"drama-cast-detail {user_id} {slug}")
+                 ]]),
         )
         await context.bot.answer_callback_query(query.id)
 
 
-
 @cutiepii_callback(pattern=r"drama-cast-detail.*")
-async def casts_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def casts_button(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     message = update.effective_message
 
@@ -139,19 +156,22 @@ async def casts_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
         txt = f"List Casts Of <a href='https://mydramalist.com/{slug}'>{title}</a>\n"
         if mainroles:
-          txt += f"\n\n● <u><b>Main</b></u>"
-          for cast in mainroles:
-             txt += f"\n⚬ {cast['role']['name'].replace('[', '').replace(']', '')}\n   (<a href='{cast['link']}'>{cast['name']}</a>)"
+            txt += f"\n\n● <u><b>Main</b></u>"
+            for cast in mainroles:
+                txt += f"\n⚬ {cast['role']['name'].replace('[', '').replace(']', '')}\n   (<a href='{cast['link']}'>{cast['name']}</a>)"
 
         if supportroles:
-          txt += f"\n\n● <u><b>Support</b></u>"
-          for cast in supportroles:
-             txt += f"\n⚬ {cast['role']['name'].replace('[', '').replace(']', '')}\n   (<a href='{cast['link']}'>{cast['name']}</a>)"
+            txt += f"\n\n● <u><b>Support</b></u>"
+            for cast in supportroles:
+                txt += f"\n⚬ {cast['role']['name'].replace('[', '').replace(']', '')}\n   (<a href='{cast['link']}'>{cast['name']}</a>)"
 
         await query.message.edit_text(
             text=txt,
             parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Back", callback_data=f"drama-detail {user_id} {slug}")]]),
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(
+                    "Back", callback_data=f"drama-detail {user_id} {slug}")
+            ]]),
         )
         await context.bot.answer_callback_query(query.id)

@@ -8,7 +8,7 @@ nltk==3.7
 pretty-errors==1.2.25
 psutil==5.9.1
 python-telegram-bot==20.0a2
-regex==2022.4.24
+regex==2022.7.25
 requests==2.28.1
 SQLAlchemy==1.4.36
 telethon==1.24.0

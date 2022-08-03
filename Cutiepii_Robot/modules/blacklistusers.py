@@ -53,9 +53,10 @@ from telegram.constants import ParseMode
 from telegram.ext import ContextTypes, CommandHandler, filters
 from telegram.helpers import mention_html
 
-BLACKLISTWHITELIST = [OWNER_ID] + DEV_USERS + SUDO_USERS + WHITELIST_USERS + SUPPORT_USERS
+BLACKLISTWHITELIST = [
+    OWNER_ID
+] + DEV_USERS + SUDO_USERS + WHITELIST_USERS + SUPPORT_USERS
 BLABLEUSERS = [OWNER_ID] + DEV_USERS
-
 
 
 @dev_plus
@@ -71,23 +72,27 @@ async def bl_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         return ""
 
     if user_id == bot.id:
-        await update.effective_message.reply_text("How am I supposed to do my work if I am ignoring myself?")
+        await update.effective_message.reply_text(
+            "How am I supposed to do my work if I am ignoring myself?")
         return ""
 
     if user_id in BLACKLISTWHITELIST:
-        await update.effective_message.reply_text("No!\nNoticing Disasters is my job.")
+        await update.effective_message.reply_text(
+            "No!\nNoticing Disasters is my job.")
         return ""
 
     try:
         target_user = await bot.get_chat(user_id)
     except BadRequest as excp:
         if excp.message == "User not found":
-            await update.effective_message.reply_text("I can't seem to find this user.")
+            await update.effective_message.reply_text(
+                "I can't seem to find this user.")
             return ""
         raise
 
     sql.blacklist_user(user_id, reason)
-    await update.effective_message.reply_text("I shall ignore the existence of this user!")
+    await update.effective_message.reply_text(
+        "I shall ignore the existence of this user!")
     log_message = (
         f"#BLACKLIST\n"
         f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
@@ -97,7 +102,6 @@ async def bl_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         log_message += f"\n<b>Reason:</b> {reason}"
 
     return log_message
-
 
 
 @dev_plus
@@ -120,7 +124,8 @@ async def unbl_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         target_user = await bot.get_chat(user_id)
     except BadRequest as excp:
         if excp.message == "User not found":
-            await update.effective_message.reply_text("I can't seem to find this user.")
+            await update.effective_message.reply_text(
+                "I can't seem to find this user.")
             return ""
         raise
 
@@ -135,7 +140,8 @@ async def unbl_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         )
 
         return log_message
-    await update.effective_message.reply_text("I am not ignoring them at all though!")
+    await update.effective_message.reply_text(
+        "I am not ignoring them at all though!")
     return ""
 
 
@@ -150,11 +156,11 @@ async def bl_users(context: ContextTypes.DEFAULT_TYPE):
                 f"➛ {mention_html(user.id, html.escape(user.first_name))} :- {reason}",
             )
         else:
-            users.append(f"➛ {mention_html(user.id, html.escape(user.first_name))}")
+            users.append(
+                f"➛ {mention_html(user.id, html.escape(user.first_name))}")
 
     message = "<b>Blacklisted Users</b>\n" + (
-        "\n".join(users) if users else "Noone is being ignored as of yet."
-    )
+        "\n".join(users) if users else "Noone is being ignored as of yet.")
 
     await message.reply_text(message, parse_mode=ParseMode.HTML)
 
@@ -179,8 +185,11 @@ def __user_info__(user_id):
     return text
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("ignore", unbl_user, filters=filters.User(OWNER_ID)))
-CUTIEPII_PTB.add_handler(CommandHandler("notice", unbl_user, filters=filters.User(OWNER_ID)))
-CUTIEPII_PTB.add_handler(CommandHandler("ignoredlist", bl_users, filters=filters.User(OWNER_ID)))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("ignore", unbl_user, filters=filters.User(OWNER_ID)))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("notice", unbl_user, filters=filters.User(OWNER_ID)))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("ignoredlist", bl_users, filters=filters.User(OWNER_ID)))
 
 __mod_name__ = "Blacklisting Users"

@@ -57,9 +57,8 @@ def latest():
             aired = bool(x['aired'])
             title = (
                 f"**~~[{title}](https://subsplease.org/shows/{x['page']})~~**"
-                if aired
-                else f"**[{title}](https://subsplease.org/shows/{x['page']})**"
-            )
+                if aired else
+                f"**[{title}](https://subsplease.org/shows/{x['page']})**")
 
         except KeyError:
             title = f"**[{title}](https://subsplease.org/shows/{x['page']})**"
@@ -73,7 +72,7 @@ def latest():
 def lates(_, message):
     mm = latest()
     message.reply_text(f"Today's Schedule:\nTZ: Japan\n{mm}",
-                           reply_markup=InlineKeyboardMarkup([[
+                       reply_markup=InlineKeyboardMarkup([[
                            InlineKeyboardButton("Refresh", callback_data="fk")
                        ]]))
 
@@ -94,4 +93,3 @@ def callbackk(_, query):
 
         except:
             query.answer("Refreshed!")
-

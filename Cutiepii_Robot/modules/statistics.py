@@ -41,13 +41,13 @@ from telegram.constants import ParseMode
 from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram.helpers import escape_markdown
 
-
 from Cutiepii_Robot import StartTime, CUTIEPII_PTB
 from Cutiepii_Robot.__main__ import STATS
 from Cutiepii_Robot.modules.sql import SESSION
 from Cutiepii_Robot.modules.helper_funcs.chat_status import sudo_plus
 from psutil import cpu_percent, virtual_memory, disk_usage, boot_time
 from platform import python_version
+
 
 def get_readable_time(seconds: int) -> str:
     count = 0
@@ -57,7 +57,8 @@ def get_readable_time(seconds: int) -> str:
 
     while count < 4:
         count += 1
-        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(
+            seconds, 24)
         if seconds == 0 and remainder == 0:
             break
         time_list.append(int(result))
@@ -73,13 +74,15 @@ def get_readable_time(seconds: int) -> str:
 
     return ping_time
 
+
 @sudo_plus
 async def stats(update: Update):
     message = update.effective_message
     db_size = SESSION.execute(
         "SELECT pg_size_pretty(pg_database_size(current_database()))"
     ).scalar_one_or_none()
-    uptime = datetime.datetime.fromtimestamp(boot_time()).strftime("%Y-%m-%d %H:%M:%S")
+    uptime = datetime.datetime.fromtimestamp(
+        boot_time()).strftime("%Y-%m-%d %H:%M:%S")
     botuptime = get_readable_time((time.time() - StartTime))
     status = "*╔═━「 System statistics: 」*\n\n"
     status += f"*➛ System Start time:* {str(uptime)}" + "\n"
@@ -99,11 +102,7 @@ async def stats(update: Update):
     status += f"*➛ python-telegram-bot:* {str(ptbver)}" + "\n"
     status += f"*➛ Uptime:* {str(botuptime)}" + "\n"
     status += f"*➛ Database size:* {str(db_size)}" + "\n"
-    kb = [
-          [
-           InlineKeyboardButton("Ping", callback_data="pingCB")
-          ]
-    ]
+    kb = [[InlineKeyboardButton("Ping", callback_data="pingCB")]]
     try:
         repo = git.Repo(search_parent_directories=True)
         sha = repo.head.object.hexsha
@@ -111,24 +110,21 @@ async def stats(update: Update):
     except Exception as e:
         status += f"*➛ Commit*: `{str(e)}`\\n"
     try:
-        await message.reply_text(status +
-            "\n*╔═━「 Bot statistics*: 」\n"
-            + "\n".join([mod.__stats__() for mod in STATS]) +
-            "\n\n✦ [Support](https://telegram.dog/Black_Knights_Union_Support) | ✦ [Updates](https://telegram.dog/Black_Knights_Union)\n\n" +
-            "╘═━「 by [Awesome-RJ](https://github.com/Awesome-RJ) 」\n",
-        parse_mode=ParseMode.MARKDOWN_V2, reply_markup=InlineKeyboardMarkup(kb), disable_web_page_preview=True, allow_sending_without_reply=True)
+        await message.reply_text(
+            status + "\n*╔═━「 Bot statistics*: 」\n" +
+            "\n".join([mod.__stats__() for mod in STATS]) +
+            "\n\n✦ [Support](https://telegram.dog/Black_Knights_Union_Support) | ✦ [Updates](https://telegram.dog/Black_Knights_Union)\n\n"
+            + "╘═━「 by [Awesome-RJ](https://github.com/Awesome-RJ) 」\n",
+            parse_mode=ParseMode.MARKDOWN_V2,
+            reply_markup=InlineKeyboardMarkup(kb),
+            disable_web_page_preview=True,
+            allow_sending_without_reply=True)
     except BaseException:
         await message.reply_text(
-            (
-                (
-                    (
-                        "\n*╔═━「 Bot statistics*: 」\n"
-                        + "\n".join(mod.__stats__() for mod in STATS)
-                    )
-                    + "\n\n✦ [Support](https://telegram.dog/Black_Knights_Union_Support) | ✦ [Updates](https://telegram.dog/Black_Knights_Union)\n\n"
-                )
-                + "╘═━「 by [Awesome-RJ](https://github.com/Awesome-RJ) 」\n"
-            ),
+            ((("\n*╔═━「 Bot statistics*: 」\n" + "\n".join(mod.__stats__()
+                                                          for mod in STATS)) +
+              "\n\n✦ [Support](https://telegram.dog/Black_Knights_Union_Support) | ✦ [Updates](https://telegram.dog/Black_Knights_Union)\n\n"
+              ) + "╘═━「 by [Awesome-RJ](https://github.com/Awesome-RJ) 」\n"),
             parse_mode=ParseMode.MARKDOWN_V2,
             reply_markup=InlineKeyboardMarkup(kb),
             disable_web_page_preview=True,
@@ -142,10 +138,8 @@ async def ping(update: Update, _):
     message = await msg.reply_text("Pinging...")
     end_time = time.time()
     ping_time = round((end_time - start_time) * 1000, 3)
-    await message.edit_text(
-        f"*Pong!!!*\n`{ping_time}ms`", parse_mode=ParseMode.MARKDOWN_V2
-    )
-
+    await message.edit_text(f"*Pong!!!*\n`{ping_time}ms`",
+                            parse_mode=ParseMode.MARKDOWN_V2)
 
 
 async def pingCallback(update: Update):
@@ -159,6 +153,5 @@ async def pingCallback(update: Update):
 
 CUTIEPII_PTB.add_handler(CommandHandler(["stats", "statistics"], stats))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(pingCallback, pattern=r"pingCB"))
-
 
 __mod_name__ = "statistics"

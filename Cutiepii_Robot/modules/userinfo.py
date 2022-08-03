@@ -76,6 +76,7 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 
 Cutiepii_PYRO_Whois = filters.command("whois")
 
+
 # whois
 def ReplyCheck(message: Message):
     reply_id = None
@@ -85,15 +86,14 @@ def ReplyCheck(message: Message):
         reply_id = message.message_id
     return reply_id
 
-infotext = (
-    "**[{full_name}](tg://user?id={user_id})**\n"
-    " * UserID: `{user_id}`\n"
-    " * First Name: `{first_name}`\n"
-    " * Last Name: `{last_name}`\n"
-    " * Username: `{username}`\n"
-    " * Last Online: `{last_online}`\n"
-    " * Bio: {bio}"
-)
+
+infotext = ("**[{full_name}](tg://user?id={user_id})**\n"
+            " * UserID: `{user_id}`\n"
+            " * First Name: `{first_name}`\n"
+            " * Last Name: `{last_name}`\n"
+            " * Username: `{username}`\n"
+            " * Last Online: `{last_online}`\n"
+            " * Bio: {bio}")
 
 
 def LastOnline(user: User):
@@ -110,17 +110,13 @@ def LastOnline(user: User):
     if user.status == "online":
         return "Currently Online"
     if user.status == "offline":
-        return datetime.fromtimestamp(user.status.date).strftime(
-            "%a, %d %b %Y, %H:%M:%S"
-        )
+        return datetime.fromtimestamp(
+            user.status.date).strftime("%a, %d %b %Y, %H:%M:%S")
 
 
 def FullName(user: User):
-    return (
-        f"{user.first_name} {user.last_name}"
-        if user.last_name
-        else user.first_name
-    )
+    return (f"{user.first_name} {user.last_name}"
+            if user.last_name else user.first_name)
 
 
 @pgram.on_message(Cutiepii_PYRO_Whois)
@@ -168,6 +164,7 @@ def biome(user_id):
     result = result.strip("\n")
     return result
 
+
 def no_by_per(totalhp, percentage):
     """
     rtype: num of `percentage` from total
@@ -187,6 +184,7 @@ def get_percentage(totalhp, earnedhp):
     per_of_totalhp = str(int(per_of_totalhp))
     return per_of_totalhp
 
+
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -195,7 +193,8 @@ def get_readable_time(seconds: int) -> str:
 
     while count < 4:
         count += 1
-        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(
+            seconds, 24)
         if seconds == 0 and remainder == 0:
             break
         time_list.append(int(result))
@@ -211,6 +210,7 @@ def get_readable_time(seconds: int) -> str:
 
     return ping_time
 
+
 def hpmanager(user):
     total_hp = (get_user_num_chats(user.id) + 10) * 10
 
@@ -219,7 +219,6 @@ def hpmanager(user):
         # Assign new var `new_hp` since we need `total_hp` in
         # end to calculate percentage.
         new_hp = total_hp
-
 
         # if no username decrease 25% of hp.
         if not user.username:
@@ -240,11 +239,12 @@ def hpmanager(user):
             afkst = afk_reason(user.id)
             # if user is afk and no reason then decrease 7%
             # else if reason exist decrease 5%
-            new_hp -= no_by_per(total_hp, 5) if afkst else no_by_per(total_hp, 7)
-                    # fbanned users will have (2*number of fbans) less from max HP
-                    # Example: if HP is 100 but user has 5 diff fbans
-                    # Available HP is (2*5) = 10% less than Max HP
-                    # So.. 10% of 100HP = 90HP
+            new_hp -= no_by_per(total_hp, 5) if afkst else no_by_per(
+                total_hp, 7)
+            # fbanned users will have (2*number of fbans) less from max HP
+            # Example: if HP is 100 but user has 5 diff fbans
+            # Available HP is (2*5) = 10% less than Max HP
+            # So.. 10% of 100HP = 90HP
 
     else:
         new_hp = no_by_per(total_hp, 5)
@@ -259,6 +259,7 @@ def hpmanager(user):
 def make_bar(per):
     done = min(round(per / 10), 10)
     return "■" * done + "□" * (10 - done)
+
 
 async def get_id(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -287,28 +288,29 @@ async def get_id(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
 
     elif chat.type == "private":
-        await msg.reply_text(
-            f"➛ Your id is <code>{chat.id}</code>.", parse_mode=ParseMode.HTML
-        )
+        await msg.reply_text(f"➛ Your id is <code>{chat.id}</code>.",
+                             parse_mode=ParseMode.HTML)
 
     else:
         await msg.reply_text(
-            f"➛ <b>User:</b> {mention_html(msg.from_user.id, msg.from_user.first_name)}\n➛ <b>From User ID:</b> <code>{update.effective_message.from_user.id}</code>\n➛ <b>This Group ID:</b> <code>{chat.id}</code>", 
+            f"➛ <b>User:</b> {mention_html(msg.from_user.id, msg.from_user.first_name)}\n➛ <b>From User ID:</b> <code>{update.effective_message.from_user.id}</code>\n➛ <b>This Group ID:</b> <code>{chat.id}</code>",
             parse_mode=ParseMode.HTML,
         )
 
 
 @telethn.on(
     events.NewMessage(
-        pattern="/ginfo ", from_users=(TIGER_USERS or []) + (SUDO_USERS or []) + (SUPPORT_USERS or []),
-    ),
-)
+        pattern="/ginfo ",
+        from_users=(TIGER_USERS or []) + (SUDO_USERS or []) +
+        (SUPPORT_USERS or []),
+    ), )
 async def group_info(event) -> None:
     chat = event.text.split(" ", 1)[1]
     try:
         entity = await event.client.get_entity(chat)
         totallist = await event.client.get_participants(
-            entity, filter=ChannelParticipantsAdmins,
+            entity,
+            filter=ChannelParticipantsAdmins,
         )
         ch_full = await event.client(GetFullChannelRequest(channel=entity))
     except:
@@ -336,7 +338,6 @@ async def group_info(event) -> None:
     await event.reply(msg)
 
 
-
 async def gifid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     if await msg.reply_to_message and await msg.reply_to_message.animation:
@@ -345,7 +346,9 @@ async def gifid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             parse_mode=ParseMode.HTML,
         )
     else:
-        await update.effective_message.reply_text("Please reply to a gif to get its ID.")
+        await update.effective_message.reply_text(
+            "Please reply to a gif to get its ID.")
+
 
 """
 def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -559,6 +562,8 @@ else:return
     rep.delete()
 
 """
+
+
 async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
@@ -584,14 +589,10 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         user = message.from_user
 
     elif not message.reply_to_message and (
-        not args
-        or (
-            len(args) >= 1
-            and not args[0].startswith("@")
-            and not args[0].lstrip("-").isdigit()
-            and not await message.parse_entities([MessageEntity.TEXT_MENTION])
-        )
-    ):
+            not args or
+        (len(args) >= 1 and not args[0].startswith("@")
+         and not args[0].lstrip("-").isdigit()
+         and not await message.parse_entities([MessageEntity.TEXT_MENTION]))):
         delmsg = await message.reply_text("I can't extract a user from this.")
 
         if cleartime := get_clearcmd(chat.id, "info"):
@@ -602,14 +603,13 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     else:
         return
 
-    rep = await message.reply_text("<code>Appraising...</code>", parse_mode=ParseMode.HTML)  
+    rep = await message.reply_text("<code>Appraising...</code>",
+                                   parse_mode=ParseMode.HTML)
 
     if hasattr(user, 'type') and user.type != "private":
-        text = (
-            f"<b>Chat Info: </b>"
-            f"\nID: <code>{user.id}</code>"
-            f"\nTitle: {user.title}"
-        )
+        text = (f"<b>Chat Info: </b>"
+                f"\nID: <code>{user.id}</code>"
+                f"\nTitle: {user.title}")
         if user.username:
             text += f"\nUsername: @{html.escape(user.username)}"
         text += f"\nChat Type: {user.type.capitalize()}"
@@ -630,13 +630,14 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             # Incase chat don't have profile pic, send normal text
             except:
                 delmsg = await message.reply_text(
-                    text, parse_mode=ParseMode.HTML, disable_web_page_preview=True
-                )
+                    text,
+                    parse_mode=ParseMode.HTML,
+                    disable_web_page_preview=True)
 
         else:
-            delmsg = await message.reply_text(
-                text, parse_mode=ParseMode.HTML, disable_web_page_preview=True
-            )
+            delmsg = await message.reply_text(text,
+                                              parse_mode=ParseMode.HTML,
+                                              disable_web_page_preview=True)
 
     else:
         text = (
@@ -670,19 +671,18 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
         if user.id == OWNER_ID:
             text += "\n\n➛ User level: <b>god</b>"
-            
+
         elif user.id in DEV_USERS:
             text += "\n\n➛ User level: <b>developer</b>"
-            
+
         elif user.id in SUDO_USERS:
             text += "\n\n➛ User level: <b>sudo</b>"
-            
+
         elif user.id in SUPPORT_USERS:
             text += "\n\n➛ User level: <b>support</b>"
-            
+
         elif user.id in WHITELIST_USERS:
             text += "\n\n➛ User level: <b>whitelist</b>"
-            
 
         # if disaster_level_present:
         #     text += ' [<a href="https://t.me/OnePunchUpdates/155">?</a>]'.format(
@@ -711,65 +711,67 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
         if INFOPIC:
             try:
-                profile = context.bot.get_user_profile_photos(user.id).photos[0][-1]
+                profile = context.bot.get_user_profile_photos(
+                    user.id).photos[0][-1]
                 _file = await bot.get_file(profile["file_id"])
                 _file.download(f"{user.id}.png")
 
                 delmsg = message.reply_document(
                     document=open(f"{user.id}.png", "rb"),
                     caption=(text),
-                    reply_markup=InlineKeyboardMarkup(
-                    [
+                    reply_markup=InlineKeyboardMarkup([
                         [
                             InlineKeyboardButton(
-                                "Health", url="https://t.me/Black_Knights_Union/33"
-                            ),
+                                "Health",
+                                url="https://t.me/Black_Knights_Union/33"),
                             InlineKeyboardButton(
-                                "Disaster", url="https://t.me/Black_Knights_Union/35"
-                            ),
+                                "Disaster",
+                                url="https://t.me/Black_Knights_Union/35"),
                         ],
                         [
-                            InlineKeyboardButton(" [❌] ", callback_data="close"),
+                            InlineKeyboardButton(" [❌] ",
+                                                 callback_data="close"),
                         ],
-                    ]
-                ),
-                parse_mode=ParseMode.HTML,
-            )
+                    ]),
+                    parse_mode=ParseMode.HTML,
+                )
 
                 os.remove(f"{user.id}.png")
             # Incase user don't have profile pic, send normal text
             except IndexError:
                 delmsg = await message.reply_text(
                     text,
-                    reply_markup=InlineKeyboardMarkup(
-                    [
+                    reply_markup=InlineKeyboardMarkup([
                         [
                             InlineKeyboardButton(
-                                "Health", url="https://t.me/Black_Knights_Union/33"
-                            ),
+                                "Health",
+                                url="https://t.me/Black_Knights_Union/33"),
                             InlineKeyboardButton(
-                                "Disaster", url="https://t.me/Black_Knights_Union/35"
-                            ),
+                                "Disaster",
+                                url="https://t.me/Black_Knights_Union/35"),
                         ],
                         [
-                            InlineKeyboardButton(" [❌] ", callback_data="close"),
+                            InlineKeyboardButton(" [❌] ",
+                                                 callback_data="close"),
                         ],
-                    ]
-                ),
-                parse_mode=ParseMode.HTML,
-                disable_web_page_preview=True,
-            )
+                    ]),
+                    parse_mode=ParseMode.HTML,
+                    disable_web_page_preview=True,
+                )
 
         else:
-            delmsg = await message.reply_text(
-                text, parse_mode=ParseMode.HTML, disable_web_page_preview=True
-            )    
+            delmsg = await message.reply_text(text,
+                                              parse_mode=ParseMode.HTML,
+                                              disable_web_page_preview=True)
 
     rep.delete()
+
+
 """
     if cleartime := get_clearcmd(chat.id, "info"):
         context.bot.run_async(delete, delmsg, cleartime.time)
 """
+
 
 async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -786,10 +788,11 @@ async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     elif message.reply_to_message:
         username = message.reply_to_message.from_user.first_name
         await update.effective_message.reply_text(
-            f"{username} hasn't set an info message about themselves yet!",
-        )
+            f"{username} hasn't set an info message about themselves yet!", )
     else:
-        await update.effective_message.reply_text("There isnt one, use /setme to set one.")
+        await update.effective_message.reply_text(
+            "There isnt one, use /setme to set one.")
+
 
 async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -806,14 +809,14 @@ async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     elif update.effective_message.reply_to_message:
         username = message.reply_to_message.from_user.first_name
         await message.reply_text(
-            f"{username} hasn't set an info message about themselves yet!",
-        )
+            f"{username} hasn't set an info message about themselves yet!", )
     else:
-        await update.effective_message.reply_text("There isnt one, use /setme to set one.")
+        await update.effective_message.reply_text(
+            "There isnt one, use /setme to set one.")
 
 
-
-async def set_about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def set_about_me(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     user_id = message.from_user.id
     if user_id in [777000, 1087968824]:
@@ -823,7 +826,8 @@ async def set_about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     if update.effective_message.reply_to_message:
         repl_message = message.reply_to_message
         repl_user_id = repl_message.from_user.id
-        if repl_user_id in [bot.id, 777000, 1087968824] and (user_id in DEV_USERS):
+        if repl_user_id in [bot.id, 777000, 1087968824] and (user_id
+                                                             in DEV_USERS):
             user_id = repl_user_id
     text = message.text
     info = text.split(None, 1)
@@ -831,17 +835,22 @@ async def set_about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         if len(info[1]) < MessageLimit.TEXT_LENGTH // 4:
             sql.set_user_me_info(user_id, info[1])
             if user_id in [777000, 1087968824]:
-                await update.effective_message.reply_text("Authorized...Information updated!")
+                await update.effective_message.reply_text(
+                    "Authorized...Information updated!")
             elif user_id == bot.id:
-                await update.effective_message.reply_text("I have updated my info with the one you provided!")
+                await update.effective_message.reply_text(
+                    "I have updated my info with the one you provided!")
             else:
-                await update.effective_message.reply_text("Information updated!")
+                await update.effective_message.reply_text(
+                    "Information updated!")
         else:
             await message.reply_text(
                 f"The info needs to be under {MessageLimit.TEXT_LENGTH // 4} characters! You have {len(info[1])}."
             )
 
-async def about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+async def about_bio(update: Update,
+                    context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -861,11 +870,11 @@ async def about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         )
     else:
         await message.reply_text(
-            "You haven't had a bio set about yourself yet!",
-        )
+            "You haven't had a bio set about yourself yet!", )
 
 
-async def set_about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def set_about_bio(update: Update,
+                        context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     sender_id = update.effective_user.id
     bot = context.bot
@@ -886,28 +895,29 @@ async def set_about_bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
         if user_id == bot.id and sender_id not in DEV_USERS:
             await message.reply_text(
-                "Erm... yeah, I only trust the Ackermans to set my bio.",
-            )
+                "Erm... yeah, I only trust the Ackermans to set my bio.", )
             return
 
         text = message.text
         bio = text.split(
-            None, 1,
+            None,
+            1,
         )  # use python's maxsplit to only remove the cmd, hence keeping newlines.
 
         if len(bio) == 2:
             if len(bio[1]) < MessageLimit.TEXT_LENGTH // 4:
                 sql.set_user_bio(user_id, bio[1])
                 await message.reply_text(
-                    f"Updated {repl_message.from_user.first_name}'s bio!",
-                )
+                    f"Updated {repl_message.from_user.first_name}'s bio!", )
             else:
                 await message.reply_text(
                     f"Bio needs to be under {MessageLimit.TEXT_LENGTH // 4} characters! You tried to set {len(bio[1])}."
                 )
 
     else:
-        await update.effective_message.reply_text("Reply to someone to set their bio!")
+        await update.effective_message.reply_text(
+            "Reply to someone to set their bio!")
+
 
 async def get_chat_info(chat, already=False):
     if not already:
@@ -939,11 +949,13 @@ async def get_chat_info(chat, already=False):
     caption = section("Chat info", body)
     return [caption, photo_id]
 
+
 @pgram.on_message(filters.command("cinfo"))
 async def chat_info_func(_, message: Message):
     try:
         if len(message.command) > 2:
-            return await message.reply_text("**Usage:**cinfo <chat id/username>")
+            return await message.reply_text(
+                "**Usage:**cinfo <chat id/username>")
 
         if len(message.command) == 1:
             chat = message.chat.id
@@ -969,86 +981,55 @@ async def chat_info_func(_, message: Message):
 async def fk(m):
     lol = await m.client.send_message(m.chat.id, "Connecting To The Database")
     al = str((await ubot.get_messages(m.chat_id, limit=0)).total)
-    ph = str(
-        (
-            await ubot.get_messages(
-                m.chat_id, limit=0, filter=InputMessagesFilterPhotos()
-            )
-        ).total
-    )
-    vi = str(
-        (
-            await ubot.get_messages(
-                m.chat_id, limit=0, filter=InputMessagesFilterVideo()
-            )
-        ).total
-    )
-    mu = str(
-        (
-            await ubot.get_messages(
-                m.chat_id, limit=0, filter=InputMessagesFilterMusic()
-            )
-        ).total
-    )
-    vo = str(
-        (
-            await ubot.get_messages(
-                m.chat_id, limit=0, filter=InputMessagesFilterVideo()
-            )
-        ).total
-    )
-    vv = str(
-        (
-            await ubot.get_messages(
-                m.chat_id, limit=0, filter=InputMessagesFilterRoundVideo()
-            )
-        ).total
-    )
-    do = str(
-        (
-            await ubot.get_messages(
-                m.chat_id, limit=0, filter=InputMessagesFilterDocument()
-            )
-        ).total
-    )
-    urls = str(
-        (
-            await ubot.get_messages(m.chat_id, limit=0, filter=InputMessagesFilterUrl())
-        ).total
-    )
-    gifs = str(
-        (
-            await ubot.get_messages(m.chat_id, limit=0, filter=InputMessagesFilterGif())
-        ).total
-    )
-    geos = str(
-        (
-            await ubot.get_messages(m.chat_id, limit=0, filter=InputMessagesFilterGeo())
-        ).total
-    )
-    cont = str(
-        (
-            await ubot.get_messages(
-                m.chat_id, limit=0, filter=InputMessagesFilterContacts()
-            )
-        ).total
-    )
+    ph = str((await
+              ubot.get_messages(m.chat_id,
+                                limit=0,
+                                filter=InputMessagesFilterPhotos())).total)
+    vi = str((await
+              ubot.get_messages(m.chat_id,
+                                limit=0,
+                                filter=InputMessagesFilterVideo())).total)
+    mu = str((await
+              ubot.get_messages(m.chat_id,
+                                limit=0,
+                                filter=InputMessagesFilterMusic())).total)
+    vo = str((await
+              ubot.get_messages(m.chat_id,
+                                limit=0,
+                                filter=InputMessagesFilterVideo())).total)
+    vv = str((await
+              ubot.get_messages(m.chat_id,
+                                limit=0,
+                                filter=InputMessagesFilterRoundVideo())).total)
+    do = str((await
+              ubot.get_messages(m.chat_id,
+                                limit=0,
+                                filter=InputMessagesFilterDocument())).total)
+    urls = str((await
+                ubot.get_messages(m.chat_id,
+                                  limit=0,
+                                  filter=InputMessagesFilterUrl())).total)
+    gifs = str((await
+                ubot.get_messages(m.chat_id,
+                                  limit=0,
+                                  filter=InputMessagesFilterGif())).total)
+    geos = str((await
+                ubot.get_messages(m.chat_id,
+                                  limit=0,
+                                  filter=InputMessagesFilterGeo())).total)
+    cont = str((await
+                ubot.get_messages(m.chat_id,
+                                  limit=0,
+                                  filter=InputMessagesFilterContacts())).total)
     await asyncio.sleep(1)
     await lol.edit(
-        (
-            "✉️ Total Messages: {}\n"
-            + "🖼 Total Photos: {}\n"
-            + "📹 Total Video Messages: {}\n"
-            + "🎵 Total music Messages : {}\n"
-            + "🎶 Total Audio: {}\n"
-            + "🎥 Total Videos: {}\n"
-            + "📂 Total Files: {}\n"
-            + "🔗 Total Links: {}\n"
-            + "🎞 Total GIF: {}\n"
-            + "🗺 Total Geo Messages: {}\n"
-            + "👭 Total Contact files: {}"
-        ).format(al, ph, vi, mu, vo, vv, do, urls, gifs, geos, cont)
-    )
+        ("✉️ Total Messages: {}\n" + "🖼 Total Photos: {}\n" +
+         "📹 Total Video Messages: {}\n" + "🎵 Total music Messages : {}\n" +
+         "🎶 Total Audio: {}\n" + "🎥 Total Videos: {}\n" +
+         "📂 Total Files: {}\n" + "🔗 Total Links: {}\n" + "🎞 Total GIF: {}\n" +
+         "🗺 Total Geo Messages: {}\n" + "👭 Total Contact files: {}").format(
+             al, ph, vi, mu, vo, vv, do, urls, gifs, geos, cont))
+
 
 def __user_info__(user_id):
     bio = html.escape(sql.get_user_bio(user_id) or "")
@@ -1060,6 +1041,7 @@ def __user_info__(user_id):
         result += f"<b>What others say:</b>\n{bio}\n"
     result = result.strip("\n")
     return result
+
 
 __help__ = """
 *ID:*
@@ -1107,7 +1089,6 @@ When marked as AFK, any mentions will be replied to with a message stating that 
  Come and see [HP System explained](https://telegram.dog/Black_Knights_Union/33)
 
 """
-
 
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("setbio", set_about_bio))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("bio", about_bio))

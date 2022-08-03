@@ -33,8 +33,8 @@ import github
 from pyrogram import filters
 from Cutiepii_Robot import pgram
 
-
 Cutiepii_PYRO_Repo = filters.command("repo")
+
 
 @pgram.on_message(Cutiepii_PYRO_Repo)
 @pgram.on_edited_message(Cutiepii_PYRO_Repo)
@@ -43,8 +43,7 @@ async def give_repo(m):
     repo = g.get_repo("Awesome-RJ/CutiepiiRobot")
     list_of_users = "".join(
         f"*{count}.* [{i.login}](https://github.com/{i.login})\n"
-        for count, i in enumerate(repo.get_contributors(), start=1)
-    )
+        for count, i in enumerate(repo.get_contributors(), start=1))
 
     text = f"""[Github](https://github.com/Awesome-RJ/CutiepiiRobot) | [support group](https://t.me/Black_Knights_Union_Support)
 ```----------------

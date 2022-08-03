@@ -112,6 +112,7 @@ RUNMUTE_ERRORS = {
     "Not in the chat",
 }
 
+
 @cutiepii_cmd(command='rban')
 @dev_plus
 async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -119,7 +120,8 @@ async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
 
     if not args:
-        await message.reply_text("You don't seem to be referring to a chat/user.")
+        await message.reply_text(
+            "You don't seem to be referring to a chat/user.")
         return
 
     user_id, chat_id = await extract_user_and_text(message, args)
@@ -188,6 +190,7 @@ async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
             await message.reply_text("Well damn, I can't ban that user.")
 
+
 @cutiepii_cmd(command='runban')
 @dev_plus
 async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -195,7 +198,8 @@ async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
 
     if not args:
-        await message.reply_text("You don't seem to be referring to a chat/user.")
+        await message.reply_text(
+            "You don't seem to be referring to a chat/user.")
         return
 
     user_id, chat_id = await extract_user_and_text(message, args)
@@ -243,7 +247,8 @@ async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
 
     if user_id == bot.id:
-        await message.reply_text("I'm not gonna UNBAN myself, I'm an admin there!")
+        await message.reply_text(
+            "I'm not gonna UNBAN myself, I'm an admin there!")
         return
 
     try:
@@ -266,6 +271,7 @@ async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
             await message.reply_text("Well damn, I can't unban that user.")
 
+
 @cutiepii_cmd(command=['rpunch', 'rkick'])
 @dev_plus
 async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -273,7 +279,8 @@ async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
 
     if not args:
-        await message.reply_text("You don't seem to be referring to a chat/user.")
+        await message.reply_text(
+            "You don't seem to be referring to a chat/user.")
         return
 
     user_id, chat_id = await extract_user_and_text(message, args)
@@ -343,6 +350,7 @@ async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
             await message.reply_text("Well damn, I can't punch that user.")
 
+
 @cutiepii_cmd(command='rmute')
 @dev_plus
 async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -350,7 +358,8 @@ async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
 
     if not args:
-        await message.reply_text("You don't seem to be referring to a chat/user.")
+        await message.reply_text(
+            "You don't seem to be referring to a chat/user.")
         return
 
     user_id, chat_id = await extract_user_and_text(message, args)
@@ -402,8 +411,9 @@ async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     try:
         await bot.restrict_chat_member(
-            chat.id, user_id, permissions=ChatPermissions(can_send_messages=False)
-        )
+            chat.id,
+            user_id,
+            permissions=ChatPermissions(can_send_messages=False))
         await message.reply_text("Muted from the chat!")
     except BadRequest as excp:
         if excp.message == "Reply message not found":
@@ -422,6 +432,7 @@ async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
             await message.reply_text("Well damn, I can't mute that user.")
 
+
 @cutiepii_cmd(command='runmute')
 @dev_plus
 async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -429,7 +440,8 @@ async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
 
     if not args:
-        await message.reply_text("You don't seem to be referring to a chat/user.")
+        await message.reply_text(
+            "You don't seem to be referring to a chat/user.")
         return
 
     user_id, chat_id = await extract_user_and_text(message, args)
@@ -472,16 +484,16 @@ async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await message.reply_text("I can't seem to find this user there")
         return
     if member.status not in ("left", "kicked") and (
-        member.can_send_messages
-        and member.can_send_media_messages
-        and member.can_send_other_messages
-        and member.can_add_web_page_previews
-    ):
-        await message.reply_text("This user already has the right to speak in that chat.")
+            member.can_send_messages and member.can_send_media_messages
+            and member.can_send_other_messages
+            and member.can_add_web_page_previews):
+        await message.reply_text(
+            "This user already has the right to speak in that chat.")
         return
 
     if user_id == bot.id:
-        await message.reply_text("I'm not gonna UNMUTE myself, I'm an admin there!")
+        await message.reply_text(
+            "I'm not gonna UNMUTE myself, I'm an admin there!")
         return
 
     try:
@@ -512,6 +524,8 @@ async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 excp.message,
             )
             await message.reply_text("Well damn, I can't unmute that user.")
+
+
 """
 
 # https://github.com/el0xren/tgbot/commits/master/tg_bot/modules/misc.py

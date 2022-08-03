@@ -43,6 +43,7 @@ from Cutiepii_Robot import telethn, BOT_ID, OWNER_ID, SUPPORT_CHAT
 
 TMP_DOWNLOAD_DIRECTORY = "./"
 
+
 @telethn.on(events.NewMessage(pattern="/bassboost (.*)"))
 async def __(event):
     if not event.is_group:
@@ -67,10 +68,12 @@ async def __(event):
             if int(ar) >= 2 and int(ar) <= 100:
                 accentuate_db = int(ar)
             else:
-                await event.reply("`BassBost Level Should Be From 2 to 100 Only.`")
+                await event.reply(
+                    "`BassBost Level Should Be From 2 to 100 Only.`")
                 return
         except Exception as exx:
-            await event.reply("`SomeThing Went Wrong..` \n**Error:** " + str(exx))
+            await event.reply("`SomeThing Went Wrong..` \n**Error:** " +
+                              str(exx))
             return
     else:
         accentuate_db = 2
@@ -82,7 +85,8 @@ async def __(event):
     if fname.endswith(".oga") or fname.endswith(".ogg"):
         v = True
         audio = AudioSegment.from_file(fname)
-    elif fname.endswith(".mp3") or fname.endswith(".m4a") or fname.endswith(".wav"):
+    elif fname.endswith(".mp3") or fname.endswith(".m4a") or fname.endswith(
+            ".wav"):
         audio = AudioSegment.from_file(fname)
     else:
         await lel.edit(

@@ -57,7 +57,8 @@ def get_readable_time(seconds: int) -> str:
 
     while count < 4:
         count += 1
-        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(
+            seconds, 24)
         if seconds == 0 and remainder == 0:
             break
         time_list.append(int(result))
@@ -96,6 +97,7 @@ def ping_func(to_ping: List[str]) -> List[str]:
 
     return ping_result
 
+
 @sudo_plus
 async def ping(update: Update):
     msg = update.effective_message
@@ -123,12 +125,13 @@ async def pingall(update: Update):
     reply_msg += f"\n<b>Service uptime:</b> <code>{uptime}</code>"
 
     await update.effective_message.reply_text(
-        reply_msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True,
+        reply_msg,
+        parse_mode=ParseMode.HTML,
+        disable_web_page_preview=True,
     )
 
 
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("ping", ping))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("pingall", pingall))
-
 
 __command_list__ = ["ping", "pingall"]

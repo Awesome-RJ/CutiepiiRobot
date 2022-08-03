@@ -43,11 +43,15 @@ async def shell(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     cmd = await message.text.split(" ", 1)
     if len(cmd) == 1:
-        await update.effective_message.reply_text("No command to execute was given.")
+        await update.effective_message.reply_text(
+            "No command to execute was given.")
         return
     cmd = cmd[1]
     process = subprocess.Popen(
-        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=True,
     )
     stdout, stderr = process.communicate()
     reply = ""

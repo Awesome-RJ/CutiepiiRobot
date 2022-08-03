@@ -16,7 +16,8 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from Cutiepii_Robot.modules.sql import super_users_sql as sql
 
 
-def check_user_id(user_id: int, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
+def check_user_id(user_id: int,
+                  context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     bot = context.bot
     if not user_id:
         return "Nice try... Nope! Provide me an valid User ID."
@@ -52,15 +53,15 @@ async def addsudo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     sql.set_superuser_role(user_id, "sudos")
     SUDO_USERS.append(user_id)
     await update.effective_message.reply_text(
-        f"Successfully promoted {user_member.user.first_name} to sudo!"
-    )
+        f"Successfully promoted {user_member.user.first_name} to sudo!")
 
     return f"<b>{html.escape(update.effective_chat.title)}:</b>\n#SUDO\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
 
 
 @sudo_plus
 @gloggable
-async def addsupport(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def addsupport(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -91,15 +92,15 @@ async def addsupport(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     sql.set_superuser_role(user_id, "supports")
     SUPPORT_USERS.append(user_id)
     await update.effective_message.reply_text(
-        f"Successfully promoted {user_member.user.first_name} to support!"
-    )
+        f"Successfully promoted {user_member.user.first_name} to support!")
 
     return f"<b>{html.escape(update.effective_chat.title)}:</b>\n#SUPPORT\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
 
 
 @sudo_plus
 @gloggable
-async def addwhitelist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def addwhitelist(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -130,15 +131,15 @@ async def addwhitelist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> st
     sql.set_superuser_role(user_id, "whitelists")
     WHITELIST_USERS.append(user_id)
     await update.effective_message.reply_text(
-        f"Successfully promoted {user_member.user.first_name} to whitelist!"
-    )
+        f"Successfully promoted {user_member.user.first_name} to whitelist!")
 
     return f"<b>{html.escape(update.effective_chat.title)}:</b>\n#WHITELIST\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\n<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}"
 
 
 @dev_plus
 @gloggable
-async def removesudo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def removesudo(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -160,7 +161,8 @@ async def removesudo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
 @sudo_plus
 @gloggable
-async def removesupport(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def removesupport(update: Update,
+                        context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -182,7 +184,8 @@ async def removesupport(update: Update, context: ContextTypes.DEFAULT_TYPE) -> s
 
 @sudo_plus
 @gloggable
-async def removewhitelist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def removewhitelist(update: Update,
+                          context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -231,7 +234,8 @@ async def sudolist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 @whitelist_plus
-async def supportlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def supportlist(update: Update,
+                      context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     message = update.effective_message
     msg = "<b>Support users:</b>\n"
@@ -244,7 +248,8 @@ async def supportlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
 
 @whitelist_plus
-async def whitelistlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def whitelistlist(update: Update,
+                        context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     message = update.effective_message
     msg = "<b>Whitelist users:</b>\n"

@@ -72,8 +72,7 @@ async def _(event):
             )
         else:
             await event.reply(
-                "This Video Is Either Private Or URL Is Invalid. Exiting... "
-            )
+                "This Video Is Either Private Or URL Is Invalid. Exiting... ")
             return
 
         _qualityhd = re.search('hd_src:"https', html)
@@ -92,7 +91,8 @@ async def _(event):
         await telethn.send_file(
             event.chat_id,
             kk,
-            caption = f"Facebook Video downloaded Successfully by @Cutiepii_Robot.\nSay hi to devs @{SUPPORT_CHAT}.",
+            caption=
+            f"Facebook Video downloaded Successfully by @Cutiepii_Robot.\nSay hi to devs @{SUPPORT_CHAT}.",
         )
         os.system(f"rm {kk}")
     else:

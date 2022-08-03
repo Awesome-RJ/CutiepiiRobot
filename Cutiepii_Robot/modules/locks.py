@@ -61,32 +61,57 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import (
 ad = AlphabetDetector()
 
 LOCK_TYPES = {
-    "audio": filters.AUDIO,
-    "voice": filters.VOICE,
-    "document": filters.Document.ALL,
-    "video": filters.VIDEO,
-    "contact": filters.CONTACT,
-    "photo": filters.PHOTO,
-    "url": filters.Entity(MessageEntity.URL)
+    "audio":
+    filters.AUDIO,
+    "voice":
+    filters.VOICE,
+    "document":
+    filters.Document.ALL,
+    "video":
+    filters.VIDEO,
+    "contact":
+    filters.CONTACT,
+    "photo":
+    filters.PHOTO,
+    "url":
+    filters.Entity(MessageEntity.URL)
     | filters.CaptionEntity(MessageEntity.URL),
-    "bots": filters.StatusUpdate.NEW_CHAT_MEMBERS,
-    "forward": filters.FORWARDED & (~filters.IS_AUTOMATIC_FORWARD),
-    "game": filters.GAME,
-    "location": filters.LOCATION,
-    "egame": filters.Dice.ALL,
-    "rtl": "rtl",
-    "button": "button",
-    "inline": "inline",
-    "apk" : filters.Document.MimeType("application/vnd.android.package-archive"),
-    "doc" : filters.Document.MimeType("application/msword"),
-    "exe" : filters.Document.MimeType("application/x-ms-dos-executable"),
-    "gif" : filters.Document.MimeType("video/mp4"),
-    "jpg" : filters.Document.MimeType("image/jpeg"),
-    "mp3" : filters.Document.MimeType("audio/mpeg"),
-    "pdf" : filters.Document.MimeType("application/pdf"),
-    "txt" : filters.Document.MimeType("text/plain"),
-    "xml" : filters.Document.MimeType("application/xml"),
-    "zip" : filters.Document.MimeType("application/zip"),
+    "bots":
+    filters.StatusUpdate.NEW_CHAT_MEMBERS,
+    "forward":
+    filters.FORWARDED & (~filters.IS_AUTOMATIC_FORWARD),
+    "game":
+    filters.GAME,
+    "location":
+    filters.LOCATION,
+    "egame":
+    filters.Dice.ALL,
+    "rtl":
+    "rtl",
+    "button":
+    "button",
+    "inline":
+    "inline",
+    "apk":
+    filters.Document.MimeType("application/vnd.android.package-archive"),
+    "doc":
+    filters.Document.MimeType("application/msword"),
+    "exe":
+    filters.Document.MimeType("application/x-ms-dos-executable"),
+    "gif":
+    filters.Document.MimeType("video/mp4"),
+    "jpg":
+    filters.Document.MimeType("image/jpeg"),
+    "mp3":
+    filters.Document.MimeType("audio/mpeg"),
+    "pdf":
+    filters.Document.MimeType("application/pdf"),
+    "txt":
+    filters.Document.MimeType("text/plain"),
+    "xml":
+    filters.Document.MimeType("application/xml"),
+    "zip":
+    filters.Document.MimeType("application/zip"),
 }
 
 LOCK_CHAT_RESTRICTION = {
@@ -100,16 +125,36 @@ LOCK_CHAT_RESTRICTION = {
         "can_invite_users": False,
         "can_pin_messages": False,
     },
-    "messages": {"can_send_messages": False},
-    "media": {"can_send_media_messages": False},
-    "sticker": {"can_send_other_messages": False},
-    "gif": {"can_send_other_messages": False},
-    "poll": {"can_send_polls": False},
-    "other": {"can_send_other_messages": False},
-    "previews": {"can_add_web_page_previews": False},
-    "info": {"can_change_info": False},
-    "invite": {"can_invite_users": False},
-    "pin": {"can_pin_messages": False},
+    "messages": {
+        "can_send_messages": False
+    },
+    "media": {
+        "can_send_media_messages": False
+    },
+    "sticker": {
+        "can_send_other_messages": False
+    },
+    "gif": {
+        "can_send_other_messages": False
+    },
+    "poll": {
+        "can_send_polls": False
+    },
+    "other": {
+        "can_send_other_messages": False
+    },
+    "previews": {
+        "can_add_web_page_previews": False
+    },
+    "info": {
+        "can_change_info": False
+    },
+    "invite": {
+        "can_invite_users": False
+    },
+    "pin": {
+        "can_pin_messages": False
+    },
 }
 
 UNLOCK_CHAT_RESTRICTION = {
@@ -121,16 +166,36 @@ UNLOCK_CHAT_RESTRICTION = {
         "can_add_web_page_previews": True,
         "can_invite_users": True,
     },
-    "messages": {"can_send_messages": True},
-    "media": {"can_send_media_messages": True},
-    "sticker": {"can_send_other_messages": True},
-    "gif": {"can_send_other_messages": True},
-    "poll": {"can_send_polls": True},
-    "other": {"can_send_other_messages": True},
-    "previews": {"can_add_web_page_previews": True},
-    "info": {"can_change_info": True},
-    "invite": {"can_invite_users": True},
-    "pin": {"can_pin_messages": True},
+    "messages": {
+        "can_send_messages": True
+    },
+    "media": {
+        "can_send_media_messages": True
+    },
+    "sticker": {
+        "can_send_other_messages": True
+    },
+    "gif": {
+        "can_send_other_messages": True
+    },
+    "poll": {
+        "can_send_polls": True
+    },
+    "other": {
+        "can_send_other_messages": True
+    },
+    "previews": {
+        "can_add_web_page_previews": True
+    },
+    "info": {
+        "can_change_info": True
+    },
+    "invite": {
+        "can_invite_users": True
+    },
+    "pin": {
+        "can_pin_messages": True
+    },
 }
 
 PERM_GROUP = -8
@@ -138,9 +203,13 @@ REST_GROUP = -12
 
 
 # NOT ASYNC
-async def restr_members(
-    bot, chat_id, members, messages=False, media=False, other=False, previews=False
-):
+async def restr_members(bot,
+                        chat_id,
+                        members,
+                        messages=False,
+                        media=False,
+                        other=False,
+                        previews=False):
     for mem in members:
         with contextlib.suppress(TelegramError):
             await bot.restrict_chat_member(
@@ -151,13 +220,16 @@ async def restr_members(
                 can_send_other_messages=other,
                 can_add_web_page_previews=previews,
             )
-
 
 
 # NOT ASYNC
-async def unrestr_members(
-    bot, chat_id, members, messages=True, media=True, other=True, previews=True
-):
+async def unrestr_members(bot,
+                          chat_id,
+                          members,
+                          messages=True,
+                          media=True,
+                          other=True,
+                          previews=True):
     for mem in members:
         with contextlib.suppress(TelegramError):
             await bot.restrict_chat_member(
@@ -170,13 +242,12 @@ async def unrestr_members(
             )
 
 
-async def locktypes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def locktypes(update: Update,
+                    context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(
-        "\n ➛ ".join(
-            ["Locks available: "]
-            + sorted(list(LOCK_TYPES) + list(LOCK_CHAT_RESTRICTION))
-        )
-    )
+        "\n ➛ ".join(["Locks available: "] +
+                     sorted(list(LOCK_TYPES) + list(LOCK_CHAT_RESTRICTION))))
+
 
 @connection_status
 @bot_admin_check()
@@ -191,15 +262,18 @@ async def lock(update, context) -> str:  # sourcery no-metrics
             ltype = args[0].lower()
             if ltype == "anonchannel":
                 text = "`anonchannel` is not a lock, please use `/antichannel on` to restrict channels"
-                send_message(update.effective_message, text, parse_mode = "markdown")
+                send_message(update.effective_message,
+                             text,
+                             parse_mode="markdown")
             elif ltype in LOCK_TYPES:
 
                 text = f"Locked {ltype} for non-admins!"
                 sql.update_lock(chat.id, ltype, locked=True)
-                send_message(update.effective_message, text, parse_mode="markdown")
+                send_message(update.effective_message,
+                             text,
+                             parse_mode="markdown")
 
                 return f"<b>{html.escape(chat.title)}:</b>\n#LOCK\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nLocked <code>{ltype}</code>."
-
 
             if ltype in LOCK_CHAT_RESTRICTION:
                 text = f"Locked {ltype} for all non-admins!"
@@ -212,7 +286,9 @@ async def lock(update, context) -> str:  # sourcery no-metrics
                     ),
                 )
 
-                send_message(update.effective_message, text, parse_mode="markdown")
+                send_message(update.effective_message,
+                             text,
+                             parse_mode="markdown")
                 return f"<b>{html.escape(chat.title)}:</b>\n#Permission_LOCK\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nLocked <code>{ltype}</code>."
 
             send_message(
@@ -220,7 +296,8 @@ async def lock(update, context) -> str:  # sourcery no-metrics
                 "What are you trying to lock...? Try /locktypes for the list of lockables",
             )
         else:
-            send_message(update.effective_message, "What are you trying to lock...?")
+            send_message(update.effective_message,
+                         "What are you trying to lock...?")
 
     else:
         send_message(
@@ -243,13 +320,16 @@ def unlock(update, context) -> str:  # sourcery no-metrics
             ltype = args[0].lower()
             if ltype == "anonchannel":
                 text = "`anonchannel` is not a lock, please use `/antichannel on` to restrict channels"
-                send_message(update.effective_message, text, parse_mode = "markdown")
+                send_message(update.effective_message,
+                             text,
+                             parse_mode="markdown")
             elif ltype in LOCK_TYPES:
                 text = f"Unlocked {ltype} for everyone!"
                 sql.update_lock(chat.id, ltype, locked=False)
-                send_message(update.effective_message, text, parse_mode="markdown")
+                send_message(update.effective_message,
+                             text,
+                             parse_mode="markdown")
                 return f"<b>{html.escape(chat.title)}:</b>\n#UNLOCK\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nUnlocked <code>{ltype}</code>."
-
 
             if ltype in UNLOCK_CHAT_RESTRICTION:
                 text = f"Unlocked {ltype} for everyone!"
@@ -263,7 +343,9 @@ def unlock(update, context) -> str:  # sourcery no-metrics
                     ),
                 )
 
-                send_message(update.effective_message, text, parse_mode="markdown")
+                send_message(update.effective_message,
+                             text,
+                             parse_mode="markdown")
 
                 return f"<b>{html.escape(chat.title)}:</b>\n#UNLOCK\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nUnlocked <code>{ltype}</code>."
 
@@ -273,13 +355,16 @@ def unlock(update, context) -> str:  # sourcery no-metrics
             )
 
         else:
-            send_message(update.effective_message, "What are you trying to unlock...?")
+            send_message(update.effective_message,
+                         "What are you trying to unlock...?")
 
     return ""
 
 
 @user_not_admin_check
-async def del_lockables(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
+async def del_lockables(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
     user = message.sender_chat or update.effective_user
@@ -287,7 +372,8 @@ async def del_lockables(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         return
     for lockable, filter in LOCK_TYPES.items():
         if lockable == "rtl":
-            if sql.is_locked(chat.id, lockable) and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES):
+            if sql.is_locked(chat.id, lockable) and bot_is_admin(
+                    chat, AdminPerms.CAN_DELETE_MESSAGES):
                 if message.caption:
                     check = ad.detect_alphabet(f"{message.caption}")
                     if "ARABIC" in check:
@@ -312,12 +398,10 @@ async def del_lockables(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                         break
             continue
         if lockable == "button":
-            if (
-                sql.is_locked(chat.id, lockable)
-                and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES)
-                and message.reply_markup
-                and message.reply_markup.inline_keyboard
-            ):
+            if (sql.is_locked(chat.id, lockable)
+                    and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES)
+                    and message.reply_markup
+                    and message.reply_markup.inline_keyboard):
                 try:
                     # replyyy = "This action is restricted to admins only!"
                     # await message.reply_text(replyyy)
@@ -328,12 +412,9 @@ async def del_lockables(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                 break
             continue
         if lockable == "inline":
-            if (
-                sql.is_locked(chat.id, lockable)
-                and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES)
-                and message
-                and message.via_bot
-            ):
+            if (sql.is_locked(chat.id, lockable)
+                    and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES)
+                    and message and message.via_bot):
                 try:
                     # replyyy = "This action is restricted to admins only!"
                     # await message.reply_text(replyyy)
@@ -343,16 +424,14 @@ async def del_lockables(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                         LOGGER.exception("ERROR in lockables")
                 break
             continue
-        if (
-            filter(update)
-            and sql.is_locked(chat.id, lockable)
-            and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES)
-        ):
+        if (filter(update) and sql.is_locked(chat.id, lockable)
+                and bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES)):
             if lockable == "bots":
                 new_members = update.effective_message.new_chat_members
                 for new_mem in new_members:
                     if new_mem.is_bot:
-                        if not bot_is_admin(chat, AdminPerms.CAN_RESTRICT_MEMBERS):
+                        if not bot_is_admin(chat,
+                                            AdminPerms.CAN_RESTRICT_MEMBERS):
                             send_message(
                                 update.effective_message,
                                 "I see a bot and I've been told to stop them from joining..."
@@ -385,11 +464,32 @@ async def build_lock_message(chat_id):
     permslist = []
     if locks:
         res += "*" + "These are the current locks in this Chat:" + "*"
-        locklist.extend((f"sticker = `{locks.sticker}`", f"audio = `{locks.audio}`", f"voice = `{locks.voice}`", f"document = `{locks.document}`", f"video = `{locks.video}`", f"contact = `{locks.contact}`", f"photo = `{locks.photo}`", f"gif = `{locks.gif}`", f"url = `{locks.url}`", f"bots = `{locks.bots}`", f"forward = `{locks.forward}`", f"game = `{locks.game}`", f"location = `{locks.location}`", f"rtl = `{locks.rtl}`", f"button = `{locks.button}`", f"egame = `{locks.egame}`", f"inline = `{locks.inline}`", "apk = f`{locks.apk}`", "doc = f`{locks.doc}`", "exe = f`{locks.exe}`", "jpg = f`{locks.jpg}`", "mp3 = f`{locks.mp3}`", "pdf = f`{locks.pdf}`", "txt = f`{locks.txt}`", "xml = f`{locks.xml}`", "zip = f`{locks.zip}`"))
+        locklist.extend(
+            (f"sticker = `{locks.sticker}`", f"audio = `{locks.audio}`",
+             f"voice = `{locks.voice}`", f"document = `{locks.document}`",
+             f"video = `{locks.video}`", f"contact = `{locks.contact}`",
+             f"photo = `{locks.photo}`", f"gif = `{locks.gif}`",
+             f"url = `{locks.url}`", f"bots = `{locks.bots}`",
+             f"forward = `{locks.forward}`", f"game = `{locks.game}`",
+             f"location = `{locks.location}`", f"rtl = `{locks.rtl}`",
+             f"button = `{locks.button}`", f"egame = `{locks.egame}`",
+             f"inline = `{locks.inline}`", "apk = f`{locks.apk}`",
+             "doc = f`{locks.doc}`", "exe = f`{locks.exe}`",
+             "jpg = f`{locks.jpg}`", "mp3 = f`{locks.mp3}`",
+             "pdf = f`{locks.pdf}`", "txt = f`{locks.txt}`",
+             "xml = f`{locks.xml}`", "zip = f`{locks.zip}`"))
 
     permissions = await CUTIEPII_PTB.bot.get_chat(chat_id).permissions
-    permslist = [f"messages = `{permissions.can_send_messages}`", f"media = `{permissions.can_send_media_messages}`", f"poll = `{permissions.can_send_polls}`", f"other = `{permissions.can_send_other_messages}`", f"previews = `{permissions.can_add_web_page_previews}`", f"info = `{permissions.can_change_info}`", f"invite = `{permissions.can_invite_users}`", f"pin = `{permissions.can_pin_messages}`"]
-
+    permslist = [
+        f"messages = `{permissions.can_send_messages}`",
+        f"media = `{permissions.can_send_media_messages}`",
+        f"poll = `{permissions.can_send_polls}`",
+        f"other = `{permissions.can_send_other_messages}`",
+        f"previews = `{permissions.can_add_web_page_previews}`",
+        f"info = `{permissions.can_change_info}`",
+        f"invite = `{permissions.can_invite_users}`",
+        f"pin = `{permissions.can_pin_messages}`"
+    ]
 
     if locklist:
         # Ordering lock list
@@ -405,7 +505,8 @@ async def build_lock_message(chat_id):
 
 @connection_status
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def list_locks(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def list_locks(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user
 
@@ -428,7 +529,9 @@ async def list_locks(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     if conn:
         res = res.replace("Locks in", f"*{chat_name}*")
 
-    send_message(update.effective_message, res, parse_mode=ParseMode.MARKDOWN_V2)
+    send_message(update.effective_message,
+                 res,
+                 parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def get_permission_list(current, new):
@@ -462,8 +565,8 @@ def __migrate__(old_chat_id, new_chat_id):
 
 
 def __chat_settings__(chat_id, user_id):
-    return asyncio.get_running_loop().run_until_complete(build_lock_message(chat_id))
-
+    return asyncio.get_running_loop().run_until_complete(
+        build_lock_message(chat_id))
 
 
 __help__ = """
@@ -490,7 +593,12 @@ Locking bots will stop non-admins from adding bots to the chat.
 __mod_name__ = "Locks"
 
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("locktypes", locktypes))
-CUTIEPII_PTB.add_handler(CommandHandler("lock", lock))  # , filters=Filters.group)
-CUTIEPII_PTB.add_handler(CommandHandler("unlock", unlock))  # , filters=Filters.group)
-CUTIEPII_PTB.add_handler(CommandHandler("locks", list_locks))  # , filters=Filters.group)
-CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & filters.ChatType.GROUPS, del_lockables), PERM_GROUP)
+CUTIEPII_PTB.add_handler(CommandHandler("lock",
+                                        lock))  # , filters=Filters.group)
+CUTIEPII_PTB.add_handler(CommandHandler("unlock",
+                                        unlock))  # , filters=Filters.group)
+CUTIEPII_PTB.add_handler(CommandHandler(
+    "locks", list_locks))  # , filters=Filters.group)
+CUTIEPII_PTB.add_handler(
+    MessageHandler(filters.ALL & filters.ChatType.GROUPS, del_lockables),
+    PERM_GROUP)

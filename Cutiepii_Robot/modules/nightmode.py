@@ -31,8 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from telethon.tl.types import ChatBannedRights
 from telethon import *
-from apscheduler.schedulers.asyncio import AsyncIOScheduler 
-
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from Cutiepii_Robot.modules.sql.night_mode_sql import add_nightmode, rmnightmode, get_all_chat_id, is_nightmode_indb
 from Cutiepii_Robot.events import register
@@ -66,28 +65,29 @@ openhehe = ChatBannedRights(
     change_info=True,
 )
 
+
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
-            (
-                await telethn(functions.channels.GetParticipantRequest(chat, user))
-            ).participant,
+            (await
+             telethn(functions.channels.GetParticipantRequest(chat, user)
+                     )).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerUser):
         return True
+
 
 async def can_change_info(message):
     result = await telethn(
         functions.channels.GetParticipantRequest(
             channel=message.chat_id,
             user_id=message.sender_id,
-        )
-    )
+        ))
     p = result.participant
-    return isinstance(p, types.ChannelParticipantCreator) or (
-        isinstance(p, types.ChannelParticipantAdmin) and p.admin_rights.change_info
-    )
+    return isinstance(p, types.ChannelParticipantCreator) or (isinstance(
+        p, types.ChannelParticipantAdmin) and p.admin_rights.change_info)
+
 
 @register(pattern="^/(nightmode|Nightmode|NightMode) ?(.*)")
 async def profanity(event):
@@ -98,38 +98,29 @@ async def profanity(event):
     input = event.pattern_match.group(2)
     if event.sender_id != OWNER_ID:
         if not await is_register_admin(event.input_chat, event.sender_id):
-           await event.reply("Only admins can execute this command!")
-           return
+            await event.reply("Only admins can execute this command!")
+            return
         if not await can_change_info(message=event):
-          await event.reply("You are missing the following rights to use this command:CanChangeinfo")
-          return
+            await event.reply(
+                "You are missing the following rights to use this command:CanChangeinfo"
+            )
+            return
     if not input:
         if is_nightmode_indb(str(event.chat_id)):
-                await event.reply(
-                    "Currently NightMode is Enabled for this Chat"
-                )
-                return
-        await event.reply(
-            "Currently NightMode is Disabled for this Chat"
-        )
+            await event.reply("Currently NightMode is Enabled for this Chat")
+            return
+        await event.reply("Currently NightMode is Disabled for this Chat")
         return
     if "on" in input and event.is_group:
         if is_nightmode_indb(str(event.chat_id)):
-                await event.reply(
-                    "Night Mode is Already Turned ON for this Chat"
-                )
-                return
+            await event.reply("Night Mode is Already Turned ON for this Chat")
+            return
         add_nightmode(str(event.chat_id))
         await event.reply("NightMode turned on for this chat.")
     if "off" in input:
-        if (
-            event.is_group
-            and not is_nightmode_indb(str(event.chat_id))
-        ):
-                await event.reply(
-                    "Night Mode is Already Off for this Chat"
-                )
-                return
+        if (event.is_group and not is_nightmode_indb(str(event.chat_id))):
+            await event.reply("Night Mode is Already Off for this Chat")
+            return
         rmnightmode(str(event.chat_id))
         await event.reply("NightMode Disabled!")
     if "off" not in input and "on" not in input:
@@ -144,20 +135,21 @@ async def job_close():
     for pro in chats:
         try:
             await telethn.send_message(
-              int(pro.chat_id), "12:00 Am, Group Is Closing Till 6 Am. Night Mode Started ! \n**Powered By Yūki Network**"
+                int(pro.chat_id),
+                "12:00 Am, Group Is Closing Till 6 Am. Night Mode Started ! \n**Powered By Yūki Network**"
             )
             await telethn(
-            functions.messages.EditChatDefaultBannedRightsRequest(
-                peer=int(pro.chat_id), banned_rights=hehes
-            )
-            )
+                functions.messages.EditChatDefaultBannedRightsRequest(
+                    peer=int(pro.chat_id), banned_rights=hehes))
         except Exception as e:
             LOGGER.info(f"Unable To Close Group {chat} - {e}")
+
 
 #Run everyday at 12am
 scheduler = AsyncIOScheduler(timezone="Asia/Kolkata")
 scheduler.add_job(job_close, trigger="cron", hour=23, minute=59)
 scheduler.start()
+
 
 async def job_open():
     chats = get_all_chat_id()
@@ -166,15 +158,14 @@ async def job_open():
     for pro in chats:
         try:
             await telethn.send_message(
-              int(pro.chat_id), "06:00 Am, Group Is Opening.\n**Powered By Yūki Network**"
-            )
+                int(pro.chat_id),
+                "06:00 Am, Group Is Opening.\n**Powered By Yūki Network**")
             await telethn(
-            functions.messages.EditChatDefaultBannedRightsRequest(
-                peer=int(pro.chat_id), banned_rights=openhehe
-            )
-        )
+                functions.messages.EditChatDefaultBannedRightsRequest(
+                    peer=int(pro.chat_id), banned_rights=openhehe))
         except Exception as e:
             LOGGER.info(f"Unable To Open Group {pro.chat_id} - {e}")
+
 
 # Run everyday at 06
 scheduler = AsyncIOScheduler(timezone="Asia/Kolkata")

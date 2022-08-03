@@ -39,12 +39,13 @@ from telethon.tl import functions
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import TEMP_DOWNLOAD_DIRECTORY, REM_BG_API_KEY, telethn
 
+
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
-            (
-                await telethn(functions.channels.GetParticipantRequest(chat, user))
-            ).participant,
+            (await
+             telethn(functions.channels.GetParticipantRequest(chat, user)
+                     )).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerUser):
@@ -55,12 +56,12 @@ async def is_register_admin(chat, user):
 async def _(event):
     if event.fwd_from:
         return
-    if event.is_group and not await is_register_admin(
-        event.input_chat, event.message.sender_id
-    ):
+    if event.is_group and not await is_register_admin(event.input_chat,
+                                                      event.message.sender_id):
         return
     if REM_BG_API_KEY is None:
-        await event.reply("You need API token from remove.bg to use this plugin.")
+        await event.reply(
+            "You need API token from remove.bg to use this plugin.")
         return False
     start = datetime.now()
     message_id = event.message.id
@@ -70,8 +71,7 @@ async def _(event):
         await event.reply("Processing...")
         try:
             downloaded_file_name = await telethn.download_media(
-                reply_message, TEMP_DOWNLOAD_DIRECTORY
-            )
+                reply_message, TEMP_DOWNLOAD_DIRECTORY)
         except Exception as e:
             await event.reply(str(e))
             return

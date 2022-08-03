@@ -6,9 +6,11 @@ import Cutiepii_Robot.modules.sql.private_notes as sql
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 
+
 @cutiepii_cmd(command="privatenotes")
 @user_admin
-async def privatenotes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def privatenotes(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     message = update.effective_message
     args = context.args
@@ -29,13 +31,11 @@ async def privatenotes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         elif val in ["on", "yes", "1", "enable", "true"]:
             setprivatenotes(chat.id, True)
             msg = f"Private notes has been enabled in *{chat.title}*"
-        else: 
+        else:
             msg = "Sorry, wrong value"
 
-    await message.reply_text(
-        text = msg,
-        parse_mode = ParseMode.MARKDOWN_V2
-    )
+    await message.reply_text(text=msg, parse_mode=ParseMode.MARKDOWN_V2)
+
 
 def setprivatenotes(chat_id, setting):
     sql.set_private_notes(chat_id, setting)
@@ -47,5 +47,3 @@ def getprivatenotes(chat_id):
 
 def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
-
-

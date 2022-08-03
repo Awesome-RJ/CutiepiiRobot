@@ -44,18 +44,20 @@ from Cutiepii_Robot import pgram
 
 Cutiepii_PYRO_Mod = filters.command("mod")
 
+
 @pgram.on_message(Cutiepii_PYRO_Mod & ~filters.bot)
 @pgram.on_edited_message(Cutiepii_PYRO_Mod)
 @admins_only
 async def mudapk(client, message):
-    pablo = await client.send_message(message.chat.id, "`Searching For Mod App.....`")
+    pablo = await client.send_message(message.chat.id,
+                                      "`Searching For Mod App.....`")
     sgname = message.text
     if not sgname:
-        await pablo.edit("Invalid Command Syntax, Please Check Help Menu To Know More!")
+        await pablo.edit(
+            "Invalid Command Syntax, Please Check Help Menu To Know More!")
         return
     PabloEscobar = (
-        f"https://an1.com/tags/MOD/?story={sgname}&do=search&subaction=search"
-    )
+        f"https://an1.com/tags/MOD/?story={sgname}&do=search&subaction=search")
     r = requests.get(PabloEscobar)
     soup = BeautifulSoup(r.content, "html5lib")
     mydivs = soup.find_all("div", {"class": "search-results"})

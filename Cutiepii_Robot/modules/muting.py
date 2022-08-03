@@ -61,20 +61,19 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import (
     user_admin_check,
     bot_admin_check,
     AdminPerms,
-    )
-
+)
 
 MEDIA_PERMISSIONS = ChatPermissions(can_send_messages=True,
-                                     can_send_media_messages=True,
-                                     can_send_polls=True,
-                                     can_send_other_messages=True,
-                                     can_add_web_page_previews=True)
+                                    can_send_media_messages=True,
+                                    can_send_polls=True,
+                                    can_send_other_messages=True,
+                                    can_add_web_page_previews=True)
 
 NOMEDIA_PERMISSIONS = ChatPermissions(can_send_messages=True,
-                                     can_send_media_messages=False,
-                                     can_send_polls=False,
-                                     can_send_other_messages=False,
-                                     can_add_web_page_previews=False)
+                                      can_send_media_messages=False,
+                                      can_send_polls=False,
+                                      can_send_other_messages=False,
+                                      can_add_web_page_previews=False)
 
 
 async def check_user(user_id: int, bot: Bot, update: Update) -> Optional[str]:
@@ -90,7 +89,8 @@ async def check_user(user_id: int, bot: Bot, update: Update) -> Optional[str]:
     if user_id == bot.id:
         return "I'm not gonna MUTE myself, How high are you?"
 
-    if await is_user_admin(update, user_id, member) and user_id not in DEV_USERS:
+    if await is_user_admin(update, user_id,
+                           member) and user_id not in DEV_USERS:
         if user_id == OWNER_ID:
             return "I'd never ban my owner."
         if user_id in SUDO_USERS:
@@ -140,35 +140,25 @@ async def mute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         mutemsg = (
             f"<b>╔━「 Mute Event</b>\n"
             f"<b>➛ Admin:</b> {mention_html(user.id, user.first_name)}\n"
-            f"<b>➛ User:</b> {mention_html(member.user.id, member.user.first_name)}\n")
+            f"<b>➛ User:</b> {mention_html(member.user.id, member.user.first_name)}\n"
+        )
         if reason:
             mutemsg += f"<b>➛ Reason</b>: <code>{reason}</code>"
 
-        keyboard = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        "[► 🔊 Unmute ◄]", callback_data=f"cb_unmute({user_id})"
-                    )
-                ]
-            ]
-        )
+        keyboard = InlineKeyboardMarkup([[
+            InlineKeyboardButton("[► 🔊 Unmute ◄]",
+                                 callback_data=f"cb_unmute({user_id})")
+        ]])
 
-
-        await context.bot.send_message(
-            chat.id,
-            mutemsg,
-            reply_markup=keyboard,
-            parse_mode=ParseMode.HTML
-            )
-
-
+        await context.bot.send_message(chat.id,
+                                       mutemsg,
+                                       reply_markup=keyboard,
+                                       parse_mode=ParseMode.HTML)
 
         return log
     await message.reply_text("⚠️ This user is already muted! ⚠️")
 
     return ""
-
 
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
@@ -190,16 +180,14 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         if user_member.status in ["kicked", "left"]:
             user_member.reply_text(
                 "This user isn't even in the chat, unmuting them won't make them talk more than they "
-                "already do!"
-            )
+                "already do!")
 
-        elif (
-                user_member.can_send_messages
-                and user_member.can_send_media_messages
-                and user_member.can_send_other_messages
-                and user_member.can_add_web_page_previews
-            ):
-            update.effective_message.edit_tex("This user already has the right to speak.")
+        elif (user_member.can_send_messages
+              and user_member.can_send_media_messages
+              and user_member.can_send_other_messages
+              and user_member.can_add_web_page_previews):
+            update.effective_message.edit_tex(
+                "This user already has the right to speak.")
         else:
             chat_permissions = ChatPermissions(
                 can_send_messages=True,
@@ -212,7 +200,8 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                 can_add_web_page_previews=True,
             )
             with contextlib.suppress(BadRequest):
-                await bot.restrict_chat_member(chat.id, (user_id), chat_permissions)
+                await bot.restrict_chat_member(chat.id, (user_id),
+                                               chat_permissions)
             await update.effective_message.edit_text(
                 f"Yep! User {mention_html(admeme.user.id, admeme.user.first_name)} can start talking again in {chat.title}!",
                 parse_mode=ParseMode.HTML,
@@ -248,15 +237,11 @@ async def unmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     if member.status in ["kicked", "left"]:
         await message.reply_text(
             "This user isn't even in the chat, unmuting them won't make them talk more than they "
-            "already do!"
-        )
+            "already do!")
 
-    elif (
-            member.can_send_messages
-            and member.can_send_media_messages
-            and member.can_send_other_messages
-            and member.can_add_web_page_previews
-    ):
+    elif (member.can_send_messages and member.can_send_media_messages
+          and member.can_send_other_messages
+          and member.can_add_web_page_previews):
         await message.reply_text("This user already has the right to speak.")
     else:
         chat_permissions = ChatPermissions(
@@ -270,16 +255,17 @@ async def unmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
             can_add_web_page_previews=True,
         )
         with contextlib.suppress(BadRequest):
-            await bot.restrict_chat_member(chat.id, (user_id), chat_permissions)
+            await bot.restrict_chat_member(chat.id, (user_id),
+                                           chat_permissions)
         unmutemsg = "{} was unmuted by {} in <b>{}</b>".format(
-            mention_html(member.user.id, member.user.first_name), user.first_name, message.chat.title
-        )
+            mention_html(member.user.id, member.user.first_name),
+            user.first_name, message.chat.title)
         if reason:
             unmutemsg += "\n<b>Reason</b>: <code>{}</code>".format(reason)
         await bot.sendMessage(
-        chat.id,
-       unmutemsg,
-        parse_mode=ParseMode.HTML,
+            chat.id,
+            unmutemsg,
+            parse_mode=ParseMode.HTML,
         )
         return (
             f"<b>{html.escape(chat.title)}:</b>\n"
@@ -311,7 +297,8 @@ async def temp_mute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     member = await chat.get_member(user_id)
 
     if not reason:
-        await message.reply_text("You haven't specified a time to mute this user for!")
+        await message.reply_text(
+            "You haven't specified a time to mute this user for!")
         return ""
 
     split_reason = reason.split(None, 1)
@@ -328,22 +315,21 @@ async def temp_mute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         f"#TEMP MUTED\n"
         f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
         f"<b>User:</b> {mention_html(member.user.id, member.user.first_name)}\n"
-        f"<b>Time:</b> {time_val}"
-    )
+        f"<b>Time:</b> {time_val}")
     if reason:
         log += f"\n<b>Reason:</b> {reason}"
 
     try:
         if member.can_send_messages is None or member.can_send_messages:
             chat_permissions = ChatPermissions(can_send_messages=False)
-            await bot.restrict_chat_member(
-                chat.id, user_id, chat_permissions, until_date=mutetime
-            )
+            await bot.restrict_chat_member(chat.id,
+                                           user_id,
+                                           chat_permissions,
+                                           until_date=mutetime)
 
             msg = (
                 f"Yep! Temporary Muted {mention_html(member.user.id, member.user.first_name)} from talking for <code>{time_val}</code> in {chat.title}\n"
-                f"by {mention_html(user.id, html.escape(user.first_name))}",
-            )
+                f"by {mention_html(user.id, html.escape(user.first_name))}", )
 
             await bot.sendMessage(
                 chat.id,
@@ -370,11 +356,13 @@ async def temp_mute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
     return ""
 
+
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def temp_nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def temp_nomedia(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> str:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     message = update.effective_message  # type: Optional[Message]
@@ -392,7 +380,8 @@ async def temp_nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> st
     user_id, reason = await extract_user_and_text(message, args)
 
     if not user_id:
-        await message.reply_text(chat.id, "You don't seem to be referring to a user.")
+        await message.reply_text(chat.id,
+                                 "You don't seem to be referring to a user.")
         return ""
 
     try:
@@ -404,15 +393,18 @@ async def temp_nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> st
         await message.reply_text(chat.id, "I can't seem to find this user")
         return ""
     if await is_user_admin(update, user_id, member):
-        await message.reply_text(chat.id, "I really wish I could restrict admins...")
+        await message.reply_text(chat.id,
+                                 "I really wish I could restrict admins...")
         return ""
 
     if user_id == bot.id:
-        await message.reply_text(chat.id, "I'm not gonna RESTRICT myself, are you crazy?")
+        await message.reply_text(
+            chat.id, "I'm not gonna RESTRICT myself, are you crazy?")
         return ""
 
     if not reason:
-        await message.reply_text(chat.id, "You haven't specified a time to restrict this user for!")
+        await message.reply_text(
+            chat.id, "You haven't specified a time to restrict this user for!")
         return ""
 
     split_reason = reason.split(None, 1)
@@ -431,20 +423,31 @@ async def temp_nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> st
 
     try:
         if member.can_send_messages is None or member.can_send_messages:
-            await context.bot.restrict_chat_member(chat.id, user_id, NOMEDIA_PERMISSIONS, until_date=mutetime)
-            await message.reply_text(chat.id, "Restricted from sending media for {} in {}!").format(time_val, chatD.title)
+            await context.bot.restrict_chat_member(chat.id,
+                                                   user_id,
+                                                   NOMEDIA_PERMISSIONS,
+                                                   until_date=mutetime)
+            await message.reply_text(
+                chat.id, "Restricted from sending media for {} in {}!").format(
+                    time_val, chatD.title)
             return log
-        await message.reply_text(chat.id, "This user is already restricted in {}.").format(chatD.title)
+        await message.reply_text(
+            chat.id,
+            "This user is already restricted in {}.").format(chatD.title)
 
     except BadRequest as excp:
         if excp.message == "Reply message not found":
             # Do not reply
-            await message.reply_text(chat.id, f"Restricted for {time_val} in {chatD.title}!", quote=False)
+            await message.reply_text(
+                chat.id,
+                f"Restricted for {time_val} in {chatD.title}!",
+                quote=False)
             return log
         LOGGER.warning(update)
-        LOGGER.exception("ERROR muting user %s in chat %s (%s) due to %s", user_id, chat.title, chat.id,
-                         excp.message)
-        await message.reply_text(chat.id, "Well damn, I can't restrict that user.")
+        LOGGER.exception("ERROR muting user %s in chat %s (%s) due to %s",
+                         user_id, chat.title, chat.id, excp.message)
+        await message.reply_text(chat.id,
+                                 "Well damn, I can't restrict that user.")
 
     return ""
 
@@ -470,23 +473,33 @@ async def media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
     user_id = extract_user(message, args)
     if not user_id:
-        await message.reply_text(chat.id, "You'll need to either give me a username to unrestrict, or reply to someone to be unrestricted.")
+        await message.reply_text(
+            chat.id,
+            "You'll need to either give me a username to unrestrict, or reply to someone to be unrestricted."
+        )
         return ""
 
     member = chatD.get_member((user_id))
 
     if member.status in ['kicked', 'left']:
-        await message.reply_text(chat.id, "This user isn't even in the chat, unrestricting them won't make them send anything than they "
-                           "already do!")
+        await message.reply_text(
+            chat.id,
+            "This user isn't even in the chat, unrestricting them won't make them send anything than they "
+            "already do!")
 
     elif member.can_send_messages and member.can_send_media_messages \
                 and member.can_send_other_messages and member.can_add_web_page_previews:
-        await message.reply_text(chat.id, "This user already has the rights to send anything in {}.").format(chatD.title)
+        await message.reply_text(
+            chat.id,
+            "This user already has the rights to send anything in {}.").format(
+                chatD.title)
     else:
-        await context.bot.restrict_chat_member(chatD.id, (user_id), NOMEDIA_PERMISSIONS)
+        await context.bot.restrict_chat_member(chatD.id, (user_id),
+                                               NOMEDIA_PERMISSIONS)
         keyboard = []
-        reply = (chat.id, "Yep, {} can send media again in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
-        await message.reply_text(reply,  parse_mode=ParseMode.HTML)
+        reply = (chat.id, "Yep, {} can send media again in {}!").format(
+            mention_html(member.user.id, member.user.first_name), chatD.title)
+        await message.reply_text(reply, parse_mode=ParseMode.HTML)
         return f"<b>{html.escape(chatD.title)}:</b>\n#UNRESTRICTED\n<b>➛ Admin:</b> {mention_html(user.id, user.first_name)}\n<b>➛ User:</b> {mention_html(member.user.id, member.user.first_name)}\n<b>➛ ID:</b> <code>{user_id}</code>"
 
     return ""
@@ -513,7 +526,10 @@ async def nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
     user_id = extract_user(message, args)
     if not user_id:
-        await message.reply_text(chat.id, "You'll need to either give me a username to restrict, or reply to someone to be restricted.")
+        await message.reply_text(
+            chat.id,
+            "You'll need to either give me a username to restrict, or reply to someone to be restricted."
+        )
         return ""
 
     if user_id == bot.id:
@@ -522,20 +538,26 @@ async def nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
     if member := chatD.get_member((user_id)):
         if await is_user_admin(update, user_id, member=member):
-            await message.reply_text(chat.id, "Afraid I can't restrict admins!")
+            await message.reply_text(chat.id,
+                                     "Afraid I can't restrict admins!")
 
         elif member.can_send_messages is None or member.can_send_messages:
-            await context.bot.restrict_chat_member(chatD.id, user_id, NOMEDIA_PERMISSIONS)
+            await context.bot.restrict_chat_member(chatD.id, user_id,
+                                                   NOMEDIA_PERMISSIONS)
             keyboard = []
-            reply = (chat.id, "{} is restricted from sending media in {}!").format(mention_html(member.user.id, member.user.first_name), chatD.title)
+            reply = (chat.id,
+                     "{} is restricted from sending media in {}!").format(
+                         mention_html(member.user.id, member.user.first_name),
+                         chatD.title)
             await message.reply_text(reply, parse_mode=ParseMode.HTML)
             return f"<b>{html.escape(chatD.title)}:</b>\n#RESTRICTED\n<b>➛ Admin:</b> {mention_html(user.id, user.first_name)}\n<b>➛ User:</b> {mention_html(member.user.id, member.user.first_name)}\n<b>➛ ID:</b> <code>{user_id}</code>"
 
-
         else:
-            await message.reply_text(chat.id, "This user is already restricted in {}!")
+            await message.reply_text(chat.id,
+                                     "This user is already restricted in {}!")
     else:
-        await message.reply_text(chat.id, "This user isn't in the {}!").format(chatD.title)
+        await message.reply_text(chat.id, "This user isn't in the {}!").format(
+            chatD.title)
 
     return ""
 
@@ -543,9 +565,14 @@ async def nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 CUTIEPII_PTB.add_handler(CommandHandler("mute", mute))
 CUTIEPII_PTB.add_handler(CommandHandler("unmute", unmute))
 CUTIEPII_PTB.add_handler(CommandHandler(['tmute', 'tempmute'], temp_mute))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["trestrict", "temprestrict"], temp_nomedia, admin_ok=True))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["restrict", "nomedia"], nomedia, admin_ok=True))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unrestrict", media, admin_ok=True))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["trestrict", "temprestrict"],
+                              temp_nomedia,
+                              admin_ok=True))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["restrict", "nomedia"], nomedia, admin_ok=True))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("unrestrict", media, admin_ok=True))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"cb_unmute"))
 
 __mod_name__ = "Muting"
