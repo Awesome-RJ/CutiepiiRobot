@@ -461,19 +461,19 @@ else:return
 
     if user.id == OWNER_ID:
         text += "\n\nUser level: <b>god</b>"
-        disaster_level_present = True
+        
     elif user.id in DEV_USERS:
         text += "\n\nUser level: <b>developer</b>"
-        disaster_level_present = True
+        
     elif user.id in SUDO_USERS:
         text += "\n\nUser level: <b>sudo</b>"
-        disaster_level_present = True
+        
     elif user.id in SUPPORT_USERS:
         text += "\n\nUser level: <b>support</b>"
-        disaster_level_present = True
+        
     elif user.id in WHITELIST_USERS:
         text += "\n\nUser level: <b>whitelist</b>"
-        disaster_level_present = True
+        
     elif user.id == 1482952149:
          text += "\n\nCo-Owner Of A Bot. Queen Of @Awesome_RJ. Bot Name Inspired From 'Rabeeka'."
 
@@ -668,24 +668,21 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 elif status in {"administrator", "creator"}:
                     text += _stext.format("Admin")
 
-        with contextlib.suppress(Exception):
-        disaster_level_present = False
-
         if user.id == OWNER_ID:
             text += "\n\n➛ User level: <b>god</b>"
-            disaster_level_present = True
+            
         elif user.id in DEV_USERS:
             text += "\n\n➛ User level: <b>developer</b>"
-            disaster_level_present = True
+            
         elif user.id in SUDO_USERS:
             text += "\n\n➛ User level: <b>sudo</b>"
-            disaster_level_present = True
+            
         elif user.id in SUPPORT_USERS:
             text += "\n\n➛ User level: <b>support</b>"
-            disaster_level_present = True
+            
         elif user.id in WHITELIST_USERS:
             text += "\n\n➛ User level: <b>whitelist</b>"
-            disaster_level_present = True
+            
 
         # if disaster_level_present:
         #     text += ' [<a href="https://t.me/OnePunchUpdates/155">?</a>]'.format(
