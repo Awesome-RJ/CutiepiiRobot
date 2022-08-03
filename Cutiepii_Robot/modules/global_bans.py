@@ -5,7 +5,7 @@ from io import BytesIO
 
 from telegram import Update, Bot
 from telegram.constants import ParseMode
-from telegram.error import BadRequest, TelegramError, Unauthorized
+from telegram.error import BadRequest, TelegramError
 from telegram.ext import ContextTypes, CommandHandler, filters, MessageHandler
 from telegram.helpers import mention_html
 
