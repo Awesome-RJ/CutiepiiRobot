@@ -150,8 +150,8 @@ HELP_STRINGS = """
 ➛ /help <module name>: PM's you info about that module.
 ➛ /donate: information on how to donate!
 ➛ /settings:
-   ❍ in PM: will send you your settings for all supported modules.
-   ❍ in a group: will redirect you to pm, with all that chat's settings.
+   ➛ in PM: will send you your settings for all supported modules.
+   ➛ in a group: will redirect you to pm, with all that chat's settings.
 """
 
 DONATE_STRING = """❂ I'm Free for Everyone ❂"""
