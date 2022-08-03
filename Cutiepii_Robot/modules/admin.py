@@ -459,7 +459,7 @@ async def promoteanon(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Opt
         return
 
     # set same perms as bot - bot can't assign higher perms than itself!
-    bot_member = get_bot_member(chat.id)
+    bot_member = await chat.get_member(bot.id)
     # set same perms as user -  to keep the other perms untouched!
     u_member = await chat.get_member(user_id)
     # the perms may be not same as old ones if the bot doesn't have the rights to change them but can't do anything about it
@@ -855,7 +855,7 @@ async def fullpromote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Opt
         return
 
     # set same perms as bot - bot can't assign higher perms than itself!
-    bot_member = get_bot_member(chat.id)
+    bot_member = await chat.get_member(bot.id)
     #can_promote_members = False
     #if "all" in permissions and bot_member.can_promote_members:
     #    can_promote_members = True
@@ -1109,7 +1109,7 @@ async def demoteanon(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Opti
         return
 
     # set same perms as bot - bot can't assign higher perms than itself!
-    bot_member = get_bot_member(chat.id)
+    bot_member = await chat.get_member(bot.id)
     # set same perms as user -  to keep the other perms untouched!
     u_member = await chat.get_member(user_id)
     # the perms may be not same as old ones if the bot doesn't have the rights to change them but can't do anything about it
@@ -1414,7 +1414,7 @@ async def invite(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if chat.username:
         await message.reply_text(f"https://telegram.dog/{chat.username}")
     elif chat.type in [chat.SUPERGROUP, chat.CHANNEL]:
-        bot_member = await chat.get_member(bot.id)
+        bot_member = chat.get_member(bot.id)
         if bot_member.can_invite_users:
             invitelink = await bot.exportChatInviteLink(chat.id)
             await update.effective_message.reply_text(invitelink)
