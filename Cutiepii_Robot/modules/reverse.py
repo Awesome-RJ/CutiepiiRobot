@@ -159,6 +159,6 @@ def ParseSauce(googleurl):
     return results
 
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["grs", "reverse"], reverse))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["grs", "reverse", "pp"], reverse))
 
 __mod_name__ = "Reverse"
