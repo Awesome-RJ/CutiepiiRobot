@@ -58,6 +58,7 @@ httpx
 httpx[http2]
 pyYAML==6.0
 pygithub>=1.55
+gitpython
 flask
 gunicorn
 dateparser
