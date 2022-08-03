@@ -435,28 +435,28 @@ async def inline_query_handler(client, query):
             if response is True:
                 date = a["results"]["last_updated"]
                 stats = "**◢ Intellivoid• SpamProtection Info**:\n"
-                stats += f' ❍ **Updated on**: `{datetime.fromtimestamp(date).strftime("%Y-%m-%d %I:%M:%S %p")}`\n'
-                stats += f" ❍ **Chat Info**: [Link](https://telegram.dog/SpamProtectionBot/?start=00_{cmd})\n"
+                stats += f' ➛ **Updated on**: `{datetime.fromtimestamp(date).strftime("%Y-%m-%d %I:%M:%S %p")}`\n'
+                stats += f" ➛ **Chat Info**: [Link](https://telegram.dog/SpamProtectionBot/?start=00_{cmd})\n"
 
                 if a["results"]["attributes"]["is_potential_spammer"] is True:
-                    stats += " ❍ **User**: `USERxSPAM`\n"
+                    stats += " ➛ **User**: `USERxSPAM`\n"
                 elif a["results"]["attributes"]["is_operator"] is True:
-                    stats += " ❍ **User**: `USERxOPERATOR`\n"
+                    stats += " ➛ **User**: `USERxOPERATOR`\n"
                 elif a["results"]["attributes"]["is_agent"] is True:
-                    stats += " ❍ **User**: `USERxAGENT`\n"
+                    stats += " ➛ **User**: `USERxAGENT`\n"
                 elif a["results"]["attributes"]["is_whitelisted"] is True:
-                    stats += " ❍ **User**: `USERxWHITELISTED`\n"
+                    stats += " ➛ **User**: `USERxWHITELISTED`\n"
 
-                stats += f' ❍ **Type**: `{a["results"]["entity_type"]}`\n'
-                stats += f' ❍ **Language**: `{a["results"]["language_prediction"]["language"]}`\n'
-                stats += f' ❍ **Language Probability**: `{a["results"]["language_prediction"]["probability"]}`\n'
+                stats += f' ➛ **Type**: `{a["results"]["entity_type"]}`\n'
+                stats += f' ➛ **Language**: `{a["results"]["language_prediction"]["language"]}`\n'
+                stats += f' ➛ **Language Probability**: `{a["results"]["language_prediction"]["probability"]}`\n'
                 stats += "**Spam Prediction**:\n"
-                stats += f' ❍ **Ham Prediction**: `{a["results"]["spam_prediction"]["ham_prediction"]}`\n'
-                stats += f' ❍ **Spam Prediction**: `{a["results"]["spam_prediction"]["spam_prediction"]}`\n'
+                stats += f' ➛ **Ham Prediction**: `{a["results"]["spam_prediction"]["ham_prediction"]}`\n'
+                stats += f' ➛ **Spam Prediction**: `{a["results"]["spam_prediction"]["spam_prediction"]}`\n'
                 stats += f'**Blacklisted**: `{a["results"]["attributes"]["is_blacklisted"]}`\n'
                 if a["results"]["attributes"]["is_blacklisted"] is True:
-                    stats += f' ❍ **Reason**: `{a["results"]["attributes"]["blacklist_reason"]}`\n'
-                    stats += f' ❍ **Flag**: `{a["results"]["attributes"]["blacklist_flag"]}`\n'
+                    stats += f' ➛ **Reason**: `{a["results"]["attributes"]["blacklist_reason"]}`\n'
+                    stats += f' ➛ **Flag**: `{a["results"]["attributes"]["blacklist_flag"]}`\n'
                 stats += f'**PTID**:\n`{a["results"]["private_telegram_id"]}`\n'
                 results.append(
                     InlineQueryResultArticle(
