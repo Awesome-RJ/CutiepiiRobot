@@ -178,6 +178,35 @@ async def _(dr):
     except Exception:
         await dr.reply(f"Error Report @{SUPPORT_CHAT}")
       
+@register(pattern="^/joke ?(.*)")
+async def _(dr):
+    try:
+        resp = requests.get(
+            "https://api.safone.tech/joke").json()
+        results = f"{resp['joke']}"
+        return await dr.reply(results)
+    except Exception:
+        await dr.reply(f"Error Report @{SUPPORT_CHAT}")
+      
+@register(pattern="^/bully ?(.*)")
+async def _(dr):
+    try:
+        resp = requests.get(
+            "https://api.safone.tech/bully").json()
+        results = f"{resp['bully']}"
+        return await dr.reply(results)
+    except Exception:
+        await dr.reply(f"Error Report @{SUPPORT_CHAT}")
+      
+@register(pattern="^/advice ?(.*)")
+async def _(dr):
+    try:
+        resp = requests.get(
+            "https://api.safone.tech/advice").json()
+        results = f"{resp['advice']}"
+        return await dr.reply(results)
+    except Exception:
+        await dr.reply(f"Error Report @{SUPPORT_CHAT}")
       
 @register(pattern="^/owu$")
 async def msg(event):
