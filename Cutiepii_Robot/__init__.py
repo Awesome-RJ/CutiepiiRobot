@@ -299,23 +299,18 @@ DEV_USERS.add(1922003135)
 REDIS = StrictRedis.from_url(REDIS_URL, decode_responses=True)
 
 try:
-
     REDIS.ping()
-
     LOGGER.info(
         "[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • Redis Database"
     )
-
+    
 except BaseException:
-
     raise Exception(
         "[CUTIEPII ERROR]: Your Yūki • Data Center • Mumbai • Redis Database Is Not Alive, Please Check Again."
     )
 
 finally:
-
     REDIS.ping()
-
     LOGGER.info(
         "[CUTIEPII]: Connection To The Yūki • Data Center • Mumbai • Redis Database Established Successfully!"
     )
