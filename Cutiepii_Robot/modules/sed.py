@@ -27,7 +27,7 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
+
 
 import sre_constants
 import regex
@@ -151,9 +151,9 @@ async def sed(update: Update):
             )
         elif text:
             update.effective_message.reply_to_message.reply_text(text)
-
-
-__help__ = """
+"""
+"""
+__help__ = 
  ➛ `s/<text1>/<text2>(/<flag>)*:* Reply to a message with this to perform a sed operation on that message, replacing all \
 occurrences of 'text1' with 'text2'. Flags are optional, and currently include 'i' for ignore case, "g' for global, \
 or nothing. Delimiters include `/`, `_`, `|`, and `:`. Text grouping is supported. The resulting message cannot be \
@@ -161,9 +161,10 @@ larger than {}.
 *Reminder:* Sed uses some special characters to make matching easier, such as these: `+*.?\\`
 If you want to use these characters, make sure you escape them!
 *Example:* \\?.
-"""
+
 
 
 __mod_name__ = "Sed/Regex"
 
 CUTIEPII_PTB.add_handler(DisableAbleMessageHandler(filters.Regex(f's([{"".join(DELIMITERS)}]).*?\\1.*'), sed, friendly="sed"))
+"""
