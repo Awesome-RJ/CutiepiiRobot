@@ -37,10 +37,6 @@ from Cutiepii_Robot.modules.mongo.couples_mongo import get_couple, save_couple
 from pyrogram import filters
 from datetime import datetime
 
-today = str(dt()[0])
-tomorrow = str(dt_tom())
-Cutiepii_PYRO_Couples = filters.command("couples")
-
 # Date and time
 def dt():
     now = datetime.now()
@@ -51,6 +47,10 @@ def dt():
 def dt_tom():
     return str(int(dt()[0].split("/")[0]) + 1)+"/" + \
         dt()[0].split("/")[1]+"/" + dt()[0].split("/")[2]
+
+today = str(dt()[0])
+tomorrow = str(dt_tom())
+Cutiepii_PYRO_Couples = filters.command("couples")
 
 @pgram.on_message(Cutiepii_PYRO_Couples)
 @pgram.on_edited_message(Cutiepii_PYRO_Couples)
