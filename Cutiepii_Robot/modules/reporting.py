@@ -151,11 +151,11 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
             reported = f"{mention_html(user.id, user.first_name)} reported {mention_html(reported_user.id, reported_user.first_name)} to the admins!"
 
             msg = (
-                f"<b>⚠️ Report: </b>{html.escape(chat.title)}\n"
-                f"<b> ❍ Report by:</b> {mention_html(user.id, user.first_name)}(<code>{user.id}</code>)\n"
-                f"<b> ❍ Reported user:</b> {mention_html(reported_user.id, reported_user.first_name)} (<code>{reported_user.id}</code>)\n"
+                f"<b>⚠️ Report in {html.escape(chat.title)}</b>\n\n"
+                f"<b> ➛ Report by:</b> {mention_html(user.id, user.first_name)} (<code>{user.id}</code>)\n"
+                f"<b> ➛ Reported user:</b> {mention_html(reported_user.id, reported_user.first_name)} (<code>{reported_user.id}</code>)\n"
             )
-            link = f"<b> ❍ Reported message:</b> <a href='https://telegram.dog/{chat.username}/{message.reply_to_message.message_id}'>click here</a>"
+            link = f"<b> ➛ Reported message:</b> <a href="https://t.me/{chat.username}/{message.reply_to_message.message_id}">Click Here</a>"
             should_forward = False
             keyboard = [
                 [
