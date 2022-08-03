@@ -512,6 +512,7 @@ async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 excp.message,
             )
             await message.reply_text("Well damn, I can't unmute that user.")
+"""
 
 # https://github.com/el0xren/tgbot/commits/master/tg_bot/modules/misc.py
 # ported from tgbot, thanks to el0xren
@@ -531,3 +532,5 @@ async def recho(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await bot.sendMessage(int(chat_id), to_send)
         except TelegramError:
             await message.reply_text("Couldn't send the message. Perhaps I'm not part of that group?")
+
+"""
