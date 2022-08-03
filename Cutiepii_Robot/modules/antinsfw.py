@@ -72,13 +72,11 @@ async def get_file_id_from_message(message):
 
 
 @pgram.on_message(
-    (
-        filters.document
-        | filters.photo
-        | filters.sticker
-        | filters.animation
-        | filters.video
-    )
+    (filters.document
+     | filters.photo
+     | filters.sticker
+     | filters.animation
+     | filters.video)
     & ~filters.private,
     group=8,
 )
@@ -109,8 +107,7 @@ async def detect_nsfw(_, message):
         await message.delete()
     except Exception:
         return
-    await message.reply_text(
-        f"""
+    await message.reply_text(f"""
 **NSFW Image Detected & Deleted Successfully!
 ————————————————————**
 **User:** {message.from_user.mention} [`{message.from_user.id}`]
@@ -121,8 +118,7 @@ async def detect_nsfw(_, message):
 **Drawings:** `{results.drawings} %`
 **————————————————————**
 __Powered by__@Yuki_Network.
-"""
-    )
+""")
 
 
 @pgram.on_message(filters.command(["nsfwscan", "nsfwscan@Cutiepii_Robot"]))
@@ -130,20 +126,13 @@ __Powered by__@Yuki_Network.
 async def nsfw_scan_command(_, message):
     if not message.reply_to_message:
         await message.reply_text(
-            "Reply to an image/document/sticker/animation to scan it."
-        )
+            "Reply to an image/document/sticker/animation to scan it.")
         return
     reply = message.reply_to_message
-    if (
-        not reply.document
-        and not reply.photo
-        and not reply.sticker
-        and not reply.animation
-        and not reply.video
-    ):
+    if (not reply.document and not reply.photo and not reply.sticker
+            and not reply.animation and not reply.video):
         await message.reply_text(
-            "Reply to an image/document/sticker/animation to scan it."
-        )
+            "Reply to an image/document/sticker/animation to scan it.")
         return
     m = await message.reply_text("Scanning")
     file_id = await get_file_id_from_message(reply)
@@ -158,25 +147,23 @@ async def nsfw_scan_command(_, message):
     if not results.ok:
         return await m.edit(results.result)
     results = results.result
-    await m.edit(
-        f"""
+    await m.edit(f"""
 **Neutral:** `{results.neutral} %`
 **Porn:** `{results.porn} %`
 **Hentai:** `{results.hentai} %`
 **Sexy:** `{results.sexy} %`
 **Drawings:** `{results.drawings} %`
 **NSFW:** `{results.is_nsfw}`
-"""
-    )
+""")
 
 
-@pgram.on_message(filters.command(["antinsfw", "antinsfw@Cutiepii_Robot"]) & ~filters.private)
+@pgram.on_message(
+    filters.command(["antinsfw", "antinsfw@Cutiepii_Robot"]) & ~filters.private
+)
 @adminsOnly("can_change_info")
 async def nsfw_enable_disable(_, message):
     if len(message.command) != 2:
-        await message.reply_text(
-            "Usage: /antinsfw [on/off]"
-        )
+        await message.reply_text("Usage: /antinsfw [on/off]")
         return
     status = message.text.split(None, 1)[1].strip()
     status = status.lower()
@@ -190,6 +177,4 @@ async def nsfw_enable_disable(_, message):
         await nsfw_off(chat_id)
         await message.reply_text("Disabled AntiNSFW System.")
     else:
-        await message.reply_text(
-            "Unknown Suffix, Use /antinsfw [on/off]"
-        )
+        await message.reply_text("Unknown Suffix, Use /antinsfw [on/off]")

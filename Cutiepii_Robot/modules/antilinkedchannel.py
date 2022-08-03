@@ -40,9 +40,11 @@ from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.chat_status import bot_can_delete, bot_admin
 import Cutiepii_Robot.modules.sql.antilinkedchannel_sql as sql
 
+
 @bot_can_delete
 @user_admin
-async def set_antilinkedchannel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def set_antilinkedchannel(update: Update,
+                                context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -51,17 +53,16 @@ async def set_antilinkedchannel(update: Update, context: ContextTypes.DEFAULT_TY
         if s in ["yes", "on"]:
             sql.enable(chat.id)
             await message.reply_html(
-                f"Enabled anti linked channel in {html.escape(chat.title)}"
-            )
+                f"Enabled anti linked channel in {html.escape(chat.title)}")
 
         elif s in ["off", "no"]:
             sql.disable(chat.id)
             await message.reply_html(
-                f"Disabled anti linked channel in {html.escape(chat.title)}"
-            )
+                f"Disabled anti linked channel in {html.escape(chat.title)}")
 
         else:
-            await update.effective_message.reply_text(f"Unrecognized arguments {s}")
+            await update.effective_message.reply_text(
+                f"Unrecognized arguments {s}")
         return
     message.reply_html(
         f"Linked channel deletion is currently {sql.status(chat.id)} in {html.escape(chat.title)}"
@@ -78,9 +79,11 @@ async def eliminate_linked_channel_msg(update: Update):
     except TelegramError:
         return
 
+
 @bot_admin
 @user_admin
-async def set_antipinchannel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def set_antipinchannel(update: Update,
+                             context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -97,21 +100,21 @@ async def set_antipinchannel(update: Update, context: ContextTypes.DEFAULT_TYPE)
             else:
                 sql.enable_pin(chat.id)
                 await message.reply_html(
-                    f"Enabled anti channel pin in {html.escape(chat.title)}"
-                )
+                    f"Enabled anti channel pin in {html.escape(chat.title)}")
 
         elif s in ["off", "no"]:
             sql.disable_pin(chat.id)
             await message.reply_html(
-                f"Disabled anti channel pin in {html.escape(chat.title)}"
-            )
+                f"Disabled anti channel pin in {html.escape(chat.title)}")
 
         else:
-            await update.effective_message.reply_text(f"Unrecognized arguments {s}")
+            await update.effective_message.reply_text(
+                f"Unrecognized arguments {s}")
         return
     message.reply_html(
         f"Linked channel message unpin is currently {sql.status_pin(chat.id)} in {html.escape(chat.title)}"
     )
+
 
 def eliminate_linked_channel_msg(update: Update):
     message = update.effective_message
@@ -123,5 +126,12 @@ def eliminate_linked_channel_msg(update: Update):
     except TelegramError:
         return
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("antilinkedchan", set_antilinkedchannel, filters=filters.ChatType.GROUPS))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("antichannelpin", set_antipinchannel, filters=filters.ChatType.GROUPS))
+
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("antilinkedchan",
+                              set_antilinkedchannel,
+                              filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("antichannelpin",
+                              set_antipinchannel,
+                              filters=filters.ChatType.GROUPS))

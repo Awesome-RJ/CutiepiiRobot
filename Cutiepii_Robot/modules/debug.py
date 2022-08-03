@@ -40,6 +40,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 
 DEBUG_MODE = False
 
+
 @dev_plus
 async def debug(update: Update):
     global DEBUG_MODE
@@ -54,9 +55,11 @@ async def debug(update: Update):
             DEBUG_MODE = False
             await update.effective_message.reply_text("Debug mode is now off.")
     elif DEBUG_MODE:
-        await update.effective_message.reply_text("Debug mode is currently on.")
+        await update.effective_message.reply_text("Debug mode is currently on."
+                                                  )
     else:
-        await update.effective_message.reply_text("Debug mode is currently off.")
+        await update.effective_message.reply_text(
+            "Debug mode is currently off.")
 
 
 @telethn.on(events.NewMessage(pattern="[/!].*"))
@@ -67,7 +70,9 @@ async def i_do_nothing_yes(event):
             with open("updates.txt", "r") as f:
                 text = f.read()
             with open("updates.txt", "w+") as f:
-                f.write(f"{text}\n-{event.sender_id} ({event.chat_id}) : {event.text}")
+                f.write(
+                    f"{text}\n-{event.sender_id} ({event.chat_id}) : {event.text}"
+                )
         else:
             with open("updates.txt", "w+") as f:
                 f.write(

@@ -54,15 +54,11 @@ async def telegrap(event):
         input_str = event.pattern_match.group(1)
         if input_str == "gm":
             downloaded_file_name = await telethn.download_media(
-                reply_msg,
-                TMP_DOWNLOAD_DIRECTORY
-            )
+                reply_msg, TMP_DOWNLOAD_DIRECTORY)
             end = datetime.now()
             if not downloaded_file_name:
-                await telethn.send_message(
-                    event.chat_id,
-                    "Not Supported Format Media!"
-                )
+                await telethn.send_message(event.chat_id,
+                                           "Not Supported Format Media!")
                 return
             if downloaded_file_name.endswith((".webp")):
                 resize_image(downloaded_file_name)
@@ -78,19 +74,17 @@ async def telegrap(event):
                 await telethn.send_message(
                     event.chat_id,
                     "Your telegraph is complete uploaded!",
-                    buttons=[
-                        [
-                            types.KeyboardButtonUrl(
-                                "➡ View Telegraph",
-                                f"https://telegra.ph{media_urls[0]}",
-                            )
-                        ]
-                    ],
+                    buttons=[[
+                        types.KeyboardButtonUrl(
+                            "➡ View Telegraph",
+                            f"https://telegra.ph{media_urls[0]}",
+                        )
+                    ]],
                 )
 
         elif input_str == "gt":
             user_object = await telethn.get_entity(reply_msg.sender_id)
-            title_of_page = user_object.first_name # + " " + user_object.last_name
+            title_of_page = user_object.first_name  # + " " + user_object.last_name
             # apparently, all Users do not have last_name field
             if optional_title:
                 title_of_page = optional_title
@@ -99,14 +93,10 @@ async def telegrap(event):
                 if page_content != "":
                     title_of_page = page_content
                 else:
-                    await telethn.send_message(
-                        event.chat_id,
-                        "Not Supported Format Text!"
-                    )
+                    await telethn.send_message(event.chat_id,
+                                               "Not Supported Format Text!")
                 downloaded_file_name = await telethn.download_media(
-                    reply_msg,
-                    TMP_DOWNLOAD_DIRECTORY
-                )
+                    reply_msg, TMP_DOWNLOAD_DIRECTORY)
                 m_list = None
                 with open(downloaded_file_name, "rb") as fd:
                     m_list = fd.readlines()
@@ -118,21 +108,22 @@ async def telegrap(event):
             await telethn.send_message(
                 event.chat_id,
                 "Your telegraph is complete uploaded!",
-                buttons=[
-                    [
-                        types.KeyboardButtonUrl(
-                            "➡ View Telegraph",
-                            f"https://telegra.ph{media_urls[0]}",
-                        )
-                    ]
-                ],
+                buttons=[[
+                    types.KeyboardButtonUrl(
+                        "➡ View Telegraph",
+                        f"https://telegra.ph{media_urls[0]}",
+                    )
+                ]],
             )
 
     else:
-        await event.reply("Reply to a message to get a permanent telegra.ph link.")
+        await event.reply(
+            "Reply to a message to get a permanent telegra.ph link.")
+
 
 def resize_image(image):
     im = Image.open(image)
     im.save(image, "PNG")
+
 
 __mod_name__ = "Telegraph"

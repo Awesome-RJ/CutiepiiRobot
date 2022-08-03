@@ -30,7 +30,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 RUN_STRINGS = (
-    "Now you see me, now you don't.", "ε=ε=ε=ε=┌(;￣▽￣)┘",
+    "Now you see me, now you don't.",
+    "ε=ε=ε=ε=┌(;￣▽￣)┘",
     "Get back here!",
     "REEEEEEEEEEEEEEEEEE!!!!!!!",
     "Look out for the wall!",
@@ -482,9 +483,7 @@ GBUN = (
     "Nah, He Looks Innocent...",
 )
 
-
 GBAM = "<b>Beginning Of Global Bam For {user2}</b>  \n \nChat Id : <code>{chatid}</code> \nReason : <i>{reason}</i> \nGBammed By {user1}"
-
 
 GBAM_REASON = (
     "sasta noob",
@@ -588,7 +587,7 @@ GDMORNING = (
     "`The more you count yourself as blessed, the more blessed you will be. Thank God for this beautiful morning and let friendship and love prevail this morning.`",
     "`Wake up and sip a cup of loving friendship. Eat your heart out from a plate of hope. To top it up, a fork full of kindness and love. Enough for a happy good morning!`",
     "`It is easy to imagine the world coming to an end. But it is difficult to imagine spending a day without my friends. Good morning.`",
-    )
+)
 
 CUDDLE_GIF = [
     "CgACAgQAAxkBAAIPy2C0fJmMJlku6c-ugz7UVD-dlAdIAAIyAgACJDqUUrjsIE0L5PsMHwQ",
@@ -625,8 +624,7 @@ FLIRT_TEXT = (
     "I was wondering if you could tell me: If you’re here, who’s running Heaven?",
     "No wonder the sky is gray tonight , cause all the color is in your eyes.",
     "You’ve got everything I’ve been searching for, and believe me—I’ve been looking a long time.",
-    "Do you have a map? I just got lost in your eyes."
-)
+    "Do you have a map? I just got lost in your eyes.")
 
 ROMANCE_GIFS = [
     "CgACAgQAAxkBAAIQIWC0g6ovGy7YT-Y66XfpFVEKwTXKAAJ8AgACTu6sUN0m69FQv9tHHwQ",
@@ -635,7 +633,7 @@ ROMANCE_GIFS = [
     "CgACAgQAAxkBAAIQJGC0g8L4cYfXRxE42YOTOcTCn8d9AAIoAgACqhGMUnPCWXH2RqPwHwQ",
     "CgACAgQAAxkBAAIQJWC0g9GEFeRewmfL7Ei4ZaCdQ9p4AAIEAgAC_3xlUB5O5hIl3CbxHwQ",
     "CgACAgQAAxkBAAIQJmC0g92L9jTq89JBieJCumwYCFPwAAIiAgAC1z2UUlOhsI6CxkHXHwQ"
-] 
+]
 
 ROMANCE_STICKERS = [
     "CAACAgQAAxkBAAIQM2C0hTjoZ6imrf90bzPD6RmGkl2ZAAJaLgAClGBOA7Ky9sn-fqeXHwQ",
@@ -650,8 +648,7 @@ ROMANCE_TEMPLATES = (
     "So it’s not gonna be easy. It’s gonna be really hard. We’re gonna have to work at this every day, but I want to do that because I want you. I want all of you, forever, you and me, every day.",
     "I wish I knew how to quit you.",
     "Make me a radio and turn me up when you feel low.",
-    "I can't see anything that I don't like about you."
-)
+    "I can't see anything that I don't like about you.")
 
 UWU_GIFS = [
     "CgACAgQAAxkBAAIQQmC0hzeH3jUWqOpCnK383r-TPBwSAAJmAgACuciMUgfkgemP5m1zHwQ",

@@ -47,7 +47,6 @@ from telegram.ext import (
     CommandHandler,
     filters,
     MessageHandler,
-
 )
 from telegram.helpers import mention_html
 
@@ -55,9 +54,9 @@ REPORT_GROUP = 12
 #REPORT_IMMUNE_USERS = SUDO_USERS + TIGER_USERS + WHITELIST_USERS
 
 
-
 @user_admin
-async def report_setting(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def report_setting(update: Update,
+                         context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     chat = update.effective_chat
     msg = update.effective_message
@@ -72,7 +71,8 @@ async def report_setting(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
             elif args[0] in ("no", "off"):
                 sql.set_user_setting(chat.id, False)
-                await msg.reply_text("Turned off reporting! You wont get any reports.")
+                await msg.reply_text(
+                    "Turned off reporting! You wont get any reports.")
         else:
             await msg.reply_text(
                 f"Your current report preference is: `{sql.user_should_report(chat.id)}`",
@@ -84,8 +84,7 @@ async def report_setting(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             sql.set_chat_setting(chat.id, True)
             await msg.reply_text(
                 "Turned on reporting! Admins who have turned on reports will be notified when /report "
-                "or @admin is called.",
-            )
+                "or @admin is called.", )
 
         elif args[0] in ("no", "off"):
             sql.set_chat_setting(chat.id, False)
@@ -99,7 +98,6 @@ async def report_setting(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         )
 
 
-
 @user_not_admin
 @loggable
 async def report(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
@@ -111,7 +109,8 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
     log_setting = logsql.get_chat_setting(chat.id)
     if not log_setting:
-        logsql.set_chat_setting(logsql.LogChannelSettings(chat.id, True, True, True, True, True))
+        logsql.set_chat_setting(
+            logsql.LogChannelSettings(chat.id, True, True, True, True, True))
         log_setting = logsql.get_chat_setting(chat.id)
 
     if message.sender_chat:
@@ -132,16 +131,20 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         message = update.effective_message
 
         if not args:
-            await update.effective_message.reply_text("Add a reason for reporting first.")
+            await update.effective_message.reply_text(
+                "Add a reason for reporting first.")
             return ""
 
         if user.id == reported_user.id:
-            await update.effective_message.reply_text("Uh yeah, Sure sure...maso much?")
+            await update.effective_message.reply_text(
+                "Uh yeah, Sure sure...maso much?")
             return ""
 
         if user.id == bot.id:
             await update.effective_message.reply_text("Nice try.")
             return ""
+
+
 #        if reported_user.id in REPORT_IMMUNE_USERS:
 #            await update.effective_message.reply_text("Uh? You reporting a disaster?")
 #            return ""
@@ -161,23 +164,27 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                 [
                     InlineKeyboardButton(
                         "➡ Message",
-                        url=f"https://telegram.dog/{chat.username}/{message.reply_to_message.message_id}",
+                        url=
+                        f"https://telegram.dog/{chat.username}/{message.reply_to_message.message_id}",
                     ),
                 ],
                 [
                     InlineKeyboardButton(
                         "⚠ Kick",
-                        callback_data=f"report_{chat.id}=kick={reported_user.id}={reported_user.first_name}",
+                        callback_data=
+                        f"report_{chat.id}=kick={reported_user.id}={reported_user.first_name}",
                     ),
                     InlineKeyboardButton(
                         "⛔️ Ban",
-                        callback_data=f"report_{chat.id}=banned={reported_user.id}={reported_user.first_name}",
+                        callback_data=
+                        f"report_{chat.id}=banned={reported_user.id}={reported_user.first_name}",
                     ),
                 ],
                 [
                     InlineKeyboardButton(
                         "❎ Delete Message",
-                        callback_data=f"report_{chat.id}=delete={reported_user.id}={message.reply_to_message.message_id}",
+                        callback_data=
+                        f"report_{chat.id}=delete={reported_user.id}={message.reply_to_message.message_id}",
                     ),
                 ],
             ]
@@ -200,26 +207,30 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                 try:
                     if chat.type != Chat.SUPERGROUP:
                         await bot.send_message(
-                            admin.user.id, msg + link, parse_mode=ParseMode.HTML,
+                            admin.user.id,
+                            msg + link,
+                            parse_mode=ParseMode.HTML,
                         )
 
                         if should_forward:
                             message.reply_to_message.forward(admin.user.id)
 
                             if (
-                                len(message.text.split()) > 1
+                                    len(message.text.split()) > 1
                             ):  # If user is giving a reason, send his message too
                                 await message.forward(admin.user.id)
                     if not chat.username:
                         await bot.send_message(
-                            admin.user.id, msg + link, parse_mode=ParseMode.HTML,
+                            admin.user.id,
+                            msg + link,
+                            parse_mode=ParseMode.HTML,
                         )
 
                         if should_forward:
                             message.reply_to_message.forward(admin.user.id)
 
                             if (
-                                len(message.text.split()) > 1
+                                    len(message.text.split()) > 1
                             ):  # If user is giving a reason, send his message too
                                 await message.forward(admin.user.id)
 
@@ -235,7 +246,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                             message.reply_to_message.forward(admin.user.id)
 
                             if (
-                                len(message.text.split()) > 1
+                                    len(message.text.split()) > 1
                             ):  # If user is giving a reason, send his message too
                                 await message.forward(admin.user.id)
 
@@ -262,11 +273,9 @@ def __chat_settings__(chat_id, _):
 
 
 def __user_settings__(user_id):
-    return (
-        "You will receive reports from chats you're admin."
-        if sql.user_should_report(user_id) is True
-        else "You will *not* receive reports from chats you're admin."
-    )
+    return ("You will receive reports from chats you're admin."
+            if sql.user_should_report(user_id) is True else
+            "You will *not* receive reports from chats you're admin.")
 
 
 async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -311,6 +320,7 @@ async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
             await query.answer("🛑 Failed to delete message!")
 
+
 __help__ = """
 ➛ /report <reason>*:* reply to a message to report it to admins.
  ➛ `@admins*:* reply to a message to report it to admins.
@@ -324,9 +334,10 @@ __help__ = """
 """
 
 CUTIEPII_PTB.add_handler(CommandHandler("reports", report_setting))
-CUTIEPII_PTB.add_handler(CommandHandler("report", report, filters=filters.ChatType.GROUPS))
-CUTIEPII_PTB.add_handler(MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("report", report, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(
+    MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(buttons, pattern=r"report_"))
-
 
 __mod_name__ = "Reporting"

@@ -40,9 +40,9 @@ from Cutiepii_Robot import ubot, telethn
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
-            (
-                await telethn(functions.channels.GetParticipantRequest(chat, user))
-            ).participant,
+            (await
+             telethn(functions.channels.GetParticipantRequest(chat, user)
+                     )).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerUser):
@@ -51,9 +51,8 @@ async def is_register_admin(chat, user):
 
 @register(pattern="^/gen (.*)")
 async def alive(event):
-    if event.is_group and not await is_register_admin(
-        event.input_chat, event.message.sender_id
-    ):
+    if event.is_group and not await is_register_admin(event.input_chat,
+                                                      event.message.sender_id):
         return
     sender = await event.get_sender()
     fname = sender.first_name
@@ -84,9 +83,8 @@ async def alive(event):
 
 @register(pattern="^/key (.*)")
 async def alive(event):
-    if event.is_group and not await is_register_admin(
-        event.input_chat, event.message.sender_id
-    ):
+    if event.is_group and not await is_register_admin(event.input_chat,
+                                                      event.message.sender_id):
         return
     sender = await event.get_sender()
     fname = sender.first_name
@@ -108,10 +106,8 @@ async def alive(event):
             reply += f"Time: {time}\n"
             reply += f"Checked By **{fname}**"
         elif "Test" in response.text:
-            reply = (
-                "SK Key : sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
-                + "Result: Test mode Key\n"
-            )
+            reply = ("SK Key : sk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
+                     "Result: Test mode Key\n")
 
             reply += "RESPONSE: ❌Test Mode Key❌\n"
             reply += f"Time: {time}\n"
@@ -128,9 +124,8 @@ async def alive(event):
 
 @register(pattern="^/ss (.*)")
 async def alive(event):
-    if event.is_group and not await is_register_admin(
-        event.input_chat, event.message.sender_id
-    ):
+    if event.is_group and not await is_register_admin(event.input_chat,
+                                                      event.message.sender_id):
         return
     sender = await event.get_sender()
     fname = sender.first_name
@@ -160,9 +155,8 @@ async def alive(event):
 
 @register(pattern="^/pp (.*)")
 async def alive(event):
-    if event.is_group and not await is_register_admin(
-        event.input_chat, event.message.sender_id
-    ):
+    if event.is_group and not await is_register_admin(event.input_chat,
+                                                      event.message.sender_id):
         return
     sender = await event.get_sender()
     fname = sender.first_name
@@ -192,9 +186,8 @@ async def alive(event):
 
 @register(pattern="^/ch (.*)")
 async def alive(event):
-    if event.is_group and not await is_register_admin(
-        event.input_chat, event.message.sender_id
-    ):
+    if event.is_group and not await is_register_admin(event.input_chat,
+                                                      event.message.sender_id):
         return
     sender = await event.get_sender()
     fname = sender.first_name
@@ -224,9 +217,8 @@ async def alive(event):
 
 @register(pattern="^/au (.*)")
 async def alive(event):
-    if event.is_group and not await is_register_admin(
-        event.input_chat, event.message.sender_id
-    ):
+    if event.is_group and not await is_register_admin(event.input_chat,
+                                                      event.message.sender_id):
         return
     sender = await event.get_sender()
     fname = sender.first_name
@@ -256,9 +248,8 @@ async def alive(event):
 
 @register(pattern="^/bin (.*)")
 async def alive(event):
-    if event.is_group and not await is_register_admin(
-        event.input_chat, event.message.sender_id
-    ):
+    if event.is_group and not await is_register_admin(event.input_chat,
+                                                      event.message.sender_id):
         return
     sender = await event.get_sender()
     fname = sender.first_name

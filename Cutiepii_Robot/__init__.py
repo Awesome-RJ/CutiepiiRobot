@@ -303,7 +303,7 @@ try:
     LOGGER.info(
         "[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • Redis Database"
     )
-    
+
 except BaseException:
     raise Exception(
         "[CUTIEPII ERROR]: Your Yūki • Data Center • Mumbai • Redis Database Is Not Alive, Please Check Again."
@@ -314,7 +314,6 @@ finally:
     LOGGER.info(
         "[CUTIEPII]: Connection To The Yūki • Data Center • Mumbai • Redis Database Established Successfully!"
     )
-
 
 # Credits Logger
 print(

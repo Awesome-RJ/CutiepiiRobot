@@ -73,7 +73,8 @@ async def get_user_id(username):
     return None
 
 
-async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def broadcast(update: Update,
+                    context: ContextTypes.DEFAULT_TYPE) -> None:
     to_send = await update.effective_message.text.split(None, 1)
     if len(to_send) >= 2:
         chats_ = sql.get_all_chats() or []
@@ -99,7 +100,8 @@ def log_user(update: Update):
     chat = update.effective_chat
     msg = update.effective_message
 
-    sql.update_user(msg.from_user.id, msg.from_user.username, chat.id, chat.title)
+    sql.update_user(msg.from_user.id, msg.from_user.username, chat.id,
+                    chat.title)
 
     if rep := msg.reply_to_message:
         sql.update_user(
@@ -137,9 +139,8 @@ def log_user(update: Update):
                 with contextlib.suppress(AttributeError):
                     sql.update_user(entity.user.id, entity.user.username)
     if msg.sender_chat and not msg.is_automatic_forward:
-        sql.update_user(
-            msg.sender_chat.id, msg.sender_chat.username, chat.id, chat.title
-        )
+        sql.update_user(msg.sender_chat.id, msg.sender_chat.username, chat.id,
+                        chat.title)
 
     if msg.new_chat_members:
         for user in msg.new_chat_members:
@@ -148,9 +149,8 @@ def log_user(update: Update):
             sql.update_user(user.id, user.username, chat.id, chat.title)
 
     if req := update.chat_join_request:
-        sql.update_user(
-            req.from_user.id, req.from_user.username, chat.id, chat.title
-        )
+        sql.update_user(req.from_user.id, req.from_user.username, chat.id,
+                        chat.title)
 
 
 async def chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -171,6 +171,7 @@ async def chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             caption="Here be the list of groups in my database.",
         )
 
+
 def build_keyboard_alternate(buttons):
     keyb = []
     for btn in buttons:
@@ -181,6 +182,7 @@ def build_keyboard_alternate(buttons):
 
     return keyb
 
+
 """
 async def chat_checker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
@@ -190,6 +192,7 @@ async def chat_checker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     ):
         await bot.leaveChat(update.effective_message.chat.id)
 """
+
 
 def __user_info__(user_id):
     if user_id in [777000, 1087968824]:
@@ -208,8 +211,11 @@ def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
 
 
-CUTIEPII_PTB.add_handler(CommandHandler(["broadcastall", "broadcastusers", "broadcastgroups"], broadcast))
-CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & filters.ChatType.GROUPS, log_user))
+CUTIEPII_PTB.add_handler(
+    CommandHandler(["broadcastall", "broadcastusers", "broadcastgroups"],
+                   broadcast))
+CUTIEPII_PTB.add_handler(
+    MessageHandler(filters.ALL & filters.ChatType.GROUPS, log_user))
 #CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & filters.ChatType.GROUPS, chat_checker))
 CUTIEPII_PTB.add_handler(CommandHandler("groups", chats))
 

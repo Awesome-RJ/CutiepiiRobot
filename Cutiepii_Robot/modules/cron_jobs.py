@@ -41,21 +41,26 @@ from telegram.ext import CommandHandler, ContextTypes
 from Cutiepii_Robot import DATABASE_NAME, OWNER_ID, CUTIEPII_PTB, LOGGER, BACKUP_PASS
 from Cutiepii_Robot.modules.helper_funcs.chat_status import owner_plus
 
+
 @owner_plus
 def backup_now(_: Update, ctx: ContextTypes):
     cronjob.run(CUTIEPII_PTB=CUTIEPII_PTB)
+
 
 @owner_plus
 async def stop_jobs(update: Update):
     print(j.stop())
     await update.effective_message.reply_text("Scheduler has been shut down")
 
+
 @owner_plus
 async def start_jobs(update: Update):
     print(j.start())
     await update.effective_message.reply_text("Scheduler started")
 
+
 zip_pass = BACKUP_PASS
+
 
 async def backup_db(_: ContextTypes):
     bot = CUTIEPII_PTB.bot
@@ -72,7 +77,8 @@ async def backup_db(_: ContextTypes):
     loginfo = "db backup"
     term(bkpcmd, loginfo)
     if not os.path.exists(f'{bkplocation}/{dbbkpname}'):
-        await bot.send_message(OWNER_ID, "An error occurred during the db backup")
+        await bot.send_message(OWNER_ID,
+                               "An error occurred during the db backup")
         tmp.edit_text("Backup Failed!")
         sleep(8)
         tmp.delete()
@@ -93,11 +99,7 @@ async def backup_db(_: ContextTypes):
     sleep(1)
     with open(f'backups/{datenow}.zip', 'rb') as bkp:
         nm = f"{bot.username} backup \n" + datenow
-        await bot.send_document(OWNER_ID,
-                        document=bkp,
-                        caption=nm,
-                        timeout=20
-                        )
+        await bot.send_document(OWNER_ID, document=bkp, caption=nm, timeout=20)
     LOGGER.info("removing zipped files")
     shutil.rmtree(f"backups/{datenow}")
     LOGGER.info("backup done")
@@ -105,15 +107,19 @@ async def backup_db(_: ContextTypes):
     sleep(5)
     tmp.delete()
 
+
 @owner_plus
 async def del_bkp_fldr(update: Update):
     shutil.rmtree("backups")
-    await update.effective_message.reply_text("'backups' directory has been purged!")
+    await update.effective_message.reply_text(
+        "'backups' directory has been purged!")
+
 
 def term(cmd, info):
-    process = subprocess.Popen(
-        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True
-    )
+    process = subprocess.Popen(cmd,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               shell=True)
     stdout, stderr = process.communicate()
     stderr = stderr.decode()
     if stdout := stdout.decode():
@@ -122,6 +128,7 @@ def term(cmd, info):
     if stderr:
         LOGGER.error(f"error while running {info}")
         LOGGER.info(f"{stderr}")
+
 
 # run the backup daliy at 1:00
 twhen = datetime.datetime.strptime('01:00', '%H:%M').time()

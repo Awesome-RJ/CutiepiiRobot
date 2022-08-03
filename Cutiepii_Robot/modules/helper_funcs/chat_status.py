@@ -44,7 +44,6 @@ from Cutiepii_Robot import (
     WHITELIST_USERS,
     CUTIEPII_PTB,
     OWNER_ID,
-
 )
 
 from Cutiepii_Robot.modules.helper_funcs.admin_status import bot_is_admin
@@ -59,11 +58,15 @@ ADMIN_CACHE = TTLCache(maxsize=512, ttl=60 * 10, timer=perf_counter)
 THREAD_LOCK = RLock()
 anonymous_data = {}
 
+
 def is_anon(user: User, chat: Chat):
     return chat.get_member(user.id).is_anonymous
 
+
 def is_whitelist_plus(_: Chat, user_id: int) -> bool:
-    return any(user_id in user for user in [WHITELIST_USERS, TIGER_USERS, SUPPORT_USERS, SUDO_USERS, DEV_USERS])
+    return any(
+        user_id in user for user in
+        [WHITELIST_USERS, TIGER_USERS, SUPPORT_USERS, SUDO_USERS, DEV_USERS])
 
 
 def is_support_plus(_: Chat, user_id: int) -> bool:
@@ -73,12 +76,17 @@ def is_support_plus(_: Chat, user_id: int) -> bool:
 def is_sudo_plus(_: Chat, user_id: int) -> bool:
     return user_id in SUDO_USERS or user_id in DEV_USERS
 
+
 def user_can_changeinfo(chat: Chat, user: User, _: int) -> bool:
     return chat.get_member(user.id).can_change_info
 
+
 def owner_plus(func):
+
     @wraps(func)
-    async def is_owner_plus_func(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+    async def is_owner_plus_func(update: Update,
+                                 context: ContextTypes.DEFAULT_TYPE, *args,
+                                 **kwargs):
         user = update.effective_user
 
         if user.id == OWNER_ID:
@@ -93,25 +101,20 @@ def owner_plus(func):
         else:
             await update.effective_message.reply_text(
                 "This is a restricted command."
-                " You do not have permissions to run this."
-            )
+                " You do not have permissions to run this.")
 
     return is_owner_plus_func
 
-async def is_user_admin(update: Update, user_id: int, member: ChatMember = None) -> bool:
+
+async def is_user_admin(update: Update,
+                        user_id: int,
+                        member: ChatMember = None) -> bool:
     chat = update.effective_chat
     msg = update.effective_message
-    if (
-        chat.type == "private"
-        or user_id in SUDO_USERS
-        or user_id in DEV_USERS
-        or chat.all_members_are_administrators
-        or (
-            msg.reply_to_message
-            and msg.reply_to_message.sender_chat is not None
-            and msg.reply_to_message.sender_chat.type != "channel"
-        )
-    ):
+    if (chat.type == "private" or user_id in SUDO_USERS or user_id in DEV_USERS
+            or chat.all_members_are_administrators or
+        (msg.reply_to_message and msg.reply_to_message.sender_chat is not None
+         and msg.reply_to_message.sender_chat.type != "channel")):
         return True
 
     if not member:
@@ -130,23 +133,17 @@ async def is_user_admin(update: Update, user_id: int, member: ChatMember = None)
                 return True
             return False
 
-def is_user_ban_protected(
-    update: Update, user_id: int, member: ChatMember = None
-) -> bool:
+
+def is_user_ban_protected(update: Update,
+                          user_id: int,
+                          member: ChatMember = None) -> bool:
     chat = update.effective_chat
     msg = update.effective_message
-    if (
-        chat.type == "private"
-        or user_id in SUDO_USERS
-        or user_id in DEV_USERS
-        or user_id in WHITELIST_USERS
-        or chat.all_members_are_administrators
-        or (
-            msg.reply_to_message
-            and msg.reply_to_message.sender_chat is not None
-            and msg.reply_to_message.sender_chat.type != "channel"
-        )
-    ):
+    if (chat.type == "private" or user_id in SUDO_USERS or user_id in DEV_USERS
+            or user_id in WHITELIST_USERS
+            or chat.all_members_are_administrators or
+        (msg.reply_to_message and msg.reply_to_message.sender_chat is not None
+         and msg.reply_to_message.sender_chat.type != "channel")):
         return True
 
     if not member:
@@ -156,8 +153,11 @@ def is_user_ban_protected(
 
 
 def dev_plus(func):
+
     @wraps(func)
-    async def is_dev_plus_func(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+    async def is_dev_plus_func(update: Update,
+                               context: ContextTypes.DEFAULT_TYPE, *args,
+                               **kwargs):
         user = update.effective_user
 
         if user.id in DEV_USERS:
@@ -172,15 +172,17 @@ def dev_plus(func):
         else:
             await update.effective_message.reply_text(
                 "This is a developer restricted command."
-                "You do not have permissions to run this.",
-            )
+                "You do not have permissions to run this.", )
 
     return is_dev_plus_func
 
 
 def sudo_plus(func):
+
     @wraps(func)
-    async def is_sudo_plus_func(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+    async def is_sudo_plus_func(update: Update,
+                                context: ContextTypes.DEFAULT_TYPE, *args,
+                                **kwargs):
         user = update.effective_user
         chat = update.effective_chat
 
@@ -195,16 +197,17 @@ def sudo_plus(func):
                 pass
         else:
             await update.effective_message.reply_text(
-                "At Least be an Admin to use these all Commands",
-            )
+                "At Least be an Admin to use these all Commands", )
 
     return is_sudo_plus_func
 
 
-
 def support_plus(func):
+
     @wraps(func)
-    async def is_support_plus_func(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+    async def is_support_plus_func(update: Update,
+                                   context: ContextTypes.DEFAULT_TYPE, *args,
+                                   **kwargs):
         user = update.effective_user
         chat = update.effective_chat
 
@@ -220,9 +223,13 @@ def support_plus(func):
 
 
 def whitelist_plus(func):
+
     @wraps(func)
     async def is_whitelist_plus_func(
-        update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs,
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE,
+        *args,
+        **kwargs,
     ):
         user = update.effective_user
         chat = update.effective_chat
@@ -230,15 +237,16 @@ def whitelist_plus(func):
         if user and is_whitelist_plus(chat, user.id):
             return func(update, context, *args, **kwargs)
         await update.effective_message.reply_text(
-            f"You don't have access to use this.\nVisit @{SUPPORT_CHAT}",
-        )
+            f"You don't have access to use this.\nVisit @{SUPPORT_CHAT}", )
 
     return is_whitelist_plus_func
 
 
 def user_admin(func):
+
     @wraps(func)
-    async def is_admin(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+    async def is_admin(update: Update, context: ContextTypes.DEFAULT_TYPE,
+                       *args, **kwargs):
         user = update.effective_user
 
         if user and (await is_user_admin(update, user.id)):
@@ -250,17 +258,17 @@ def user_admin(func):
                 await update.effective_message.delete()
         else:
             await update.effective_message.reply_text(
-                "Who dis non-admin telling me what to do?"
-            )
+                "Who dis non-admin telling me what to do?")
 
     return is_admin
 
 
 def user_admin_no_reply(func):
+
     @wraps(func)
-    async def is_not_admin_no_reply(
-        update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs
-    ):
+    async def is_not_admin_no_reply(update: Update,
+                                    context: ContextTypes.DEFAULT_TYPE, *args,
+                                    **kwargs):
         # bot = context.bot
         user = update.effective_user
         # chat = update.effective_chat
@@ -277,8 +285,10 @@ def user_admin_no_reply(func):
 
 
 def user_not_admin(func):
+
     @wraps(func)
-    async def is_not_admin(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+    async def is_not_admin(update: Update, context: ContextTypes.DEFAULT_TYPE,
+                           *args, **kwargs):
         message = update.effective_message
         user = update.effective_user
         # chat = update.effective_chat
@@ -294,8 +304,10 @@ def user_not_admin(func):
 
 
 def bot_admin(func):
+
     @wraps(func)
-    async def is_admin(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+    async def is_admin(update: Update, context: ContextTypes.DEFAULT_TYPE,
+                       *args, **kwargs):
         chat = update.effective_chat
         update_chat_title = chat.title
         message_chat_title = update.effective_message.chat.title
@@ -307,14 +319,17 @@ def bot_admin(func):
 
         if bot_is_admin(update.effective_chat, context.bot.id):
             return func(update, context, *args, **kwargs)
-        await update.effective_message.reply_text(not_admin, parse_mode=ParseMode.HTML)
+        await update.effective_message.reply_text(not_admin,
+                                                  parse_mode=ParseMode.HTML)
 
     return is_admin
 
 
 def bot_can_delete(func):
+
     @wraps(func)
-    async def delete_rights(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+    async def delete_rights(update: Update, context: ContextTypes.DEFAULT_TYPE,
+                            *args, **kwargs):
         bot = context.bot
         chat = update.effective_chat
         update_chat_title = chat.title
@@ -327,14 +342,18 @@ def bot_can_delete(func):
 
         if can_delete(chat, bot.id):
             return func(update, context, *args, **kwargs)
-        await update.effective_message.reply_text(cant_delete, parse_mode=ParseMode.HTML)
+        await update.effective_message.reply_text(cant_delete,
+                                                  parse_mode=ParseMode.HTML)
 
     return delete_rights
 
 
 def can_promote(func):
+
     @wraps(func)
-    async def promote_rights(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+    async def promote_rights(update: Update,
+                             context: ContextTypes.DEFAULT_TYPE, *args,
+                             **kwargs):
         chat = update.effective_chat
         update_chat_title = chat.title
         message_chat_title = update.effective_message.chat.title
@@ -349,17 +368,25 @@ def can_promote(func):
 
         if chat.get_member(1241223850).can_promote_members:
             return func(update, context, *args, **kwargs)
-        await update.effective_message.reply_text(cant_promote, parse_mode=ParseMode.HTML)
+        await update.effective_message.reply_text(cant_promote,
+                                                  parse_mode=ParseMode.HTML)
 
     return promote_rights
 
 
 def connection_status(func):
+
     @wraps(func)
-    async def connected_status(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+    async def connected_status(update: Update,
+                               context: ContextTypes.DEFAULT_TYPE, *args,
+                               **kwargs):
         if update.effective_chat is None or update.effective_user is None:
             return
-        if conn := await connected(context.bot, update, update.effective_chat, update.effective_user.id, need_admin=False):
+        if conn := await connected(context.bot,
+                                   update,
+                                   update.effective_chat,
+                                   update.effective_user.id,
+                                   need_admin=False):
             chat = await CUTIEPII_PTB.bot.getChat(conn)
             await update.__setattr__("_effective_chat", chat)
         elif update.effective_message.chat.type == ChatType.PRIVATE:
@@ -371,6 +398,7 @@ def connection_status(func):
         return func(update, context, *args, **kwargs)
 
     return connected_status
+
 
 # Workaround for circular import with connection.py
 from Cutiepii_Robot.modules import connection

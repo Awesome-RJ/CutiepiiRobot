@@ -51,7 +51,8 @@ from telegram.constants import ParseMode
 
 CMD_STARTERS = ("/", "!") if ALLOW_EXCL else "/"
 BLUE_TEXT_CLEAN_GROUP = 13
-CommandHandlerList = (CommandHandler, CustomCommandHandler, DisableAbleCommandHandler)
+CommandHandlerList = (CommandHandler, CustomCommandHandler,
+                      DisableAbleCommandHandler)
 command_list = [
     "cleanblue",
     "ignoreblue",
@@ -70,21 +71,24 @@ command_list = [
 
 for handler_list in CUTIEPII_PTB.handlers:
     for handler in CUTIEPII_PTB.handlers[handler_list]:
-        if any(isinstance(handler, cmd_handler) for cmd_handler in CommandHandlerList):
+        if any(
+                isinstance(handler, cmd_handler)
+                for cmd_handler in CommandHandlerList):
             command_list += handler.commands
 
 
-async def clean_blue_text_must_click(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def clean_blue_text_must_click(
+        update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     chat = update.effective_chat
     message = update.effective_message
-#    if (chat.get_member(1241223850)).can_delete_messages and sql.is_enabled(chat.id):
-    if (chat.get_member(1241223850)).can_delete_messages and sql.is_enabled(chat.id):    
+    #    if (chat.get_member(1241223850)).can_delete_messages and sql.is_enabled(chat.id):
+    if (chat.get_member(1241223850)).can_delete_messages and sql.is_enabled(
+            chat.id):
         fst_word = await message.text.strip().split(None, 1)[0]
 
         if len(fst_word) > 1 and any(
-            fst_word.startswith(start) for start in CMD_STARTERS
-        ):
+                fst_word.startswith(start) for start in CMD_STARTERS):
 
             command = fst_word[1:].split("@")
             chat = update.effective_chat
@@ -96,11 +100,11 @@ async def clean_blue_text_must_click(update: Update, context: ContextTypes.DEFAU
                 await message.delete()
 
 
-
 @connection_status
 @bot_can_delete
 @user_admin
-async def set_blue_text_must_click(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def set_blue_text_must_click(update: Update,
+                                   context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     message = update.effective_message
     bot, args = context.bot, context.args
@@ -130,7 +134,8 @@ async def set_blue_text_must_click(update: Update, context: ContextTypes.DEFAULT
 
 
 @user_admin
-async def add_bluetext_ignore(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def add_bluetext_ignore(update: Update,
+                              context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -148,7 +153,8 @@ async def add_bluetext_ignore(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 @user_admin
-async def remove_bluetext_ignore(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def remove_bluetext_ignore(update: Update,
+                                 context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -166,7 +172,8 @@ async def remove_bluetext_ignore(update: Update, context: ContextTypes.DEFAULT_T
 
 
 @user_admin
-async def add_bluetext_ignore_global(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def add_bluetext_ignore_global(
+        update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     args = context.args
     if len(args) >= 1:
@@ -184,7 +191,8 @@ async def add_bluetext_ignore_global(update: Update, context: ContextTypes.DEFAU
 
 
 @dev_plus
-async def remove_bluetext_ignore_global(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def remove_bluetext_ignore_global(
+        update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     args = context.args
     if len(args) >= 1:
@@ -202,7 +210,8 @@ async def remove_bluetext_ignore_global(update: Update, context: ContextTypes.DE
 
 
 @dev_plus
-async def bluetext_ignore_list(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def bluetext_ignore_list(update: Update,
+                               context: ContextTypes.DEFAULT_TYPE) -> None:
 
     message = update.effective_message
     chat = update.effective_chat
@@ -231,30 +240,18 @@ async def bluetext_ignore_list(update: Update, context: ContextTypes.DEFAULT_TYP
     return
 
 
-CUTIEPII_PTB.add_handler(CommandHandler(
-    "cleanblue", set_blue_text_must_click
-))
-CUTIEPII_PTB.add_handler(CommandHandler(
-    "ignoreblue", add_bluetext_ignore
-))
-CUTIEPII_PTB.add_handler(CommandHandler(
-    "unignoreblue", remove_bluetext_ignore
-))
-CUTIEPII_PTB.add_handler(CommandHandler(
-    "gignoreblue",
-    add_bluetext_ignore_global
-))
-CUTIEPII_PTB.add_handler(CommandHandler(
-    "ungignoreblue",
-    remove_bluetext_ignore_global
-))
-CUTIEPII_PTB.add_handler(CommandHandler(
-    "listblue", bluetext_ignore_list
-))
-CUTIEPII_PTB.add_handler(MessageHandler(
-    filters.COMMAND & filters.ChatType.GROUPS,
-    clean_blue_text_must_click
-))
+CUTIEPII_PTB.add_handler(CommandHandler("cleanblue", set_blue_text_must_click))
+CUTIEPII_PTB.add_handler(CommandHandler("ignoreblue", add_bluetext_ignore))
+CUTIEPII_PTB.add_handler(CommandHandler("unignoreblue",
+                                        remove_bluetext_ignore))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("gignoreblue", add_bluetext_ignore_global))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("ungignoreblue", remove_bluetext_ignore_global))
+CUTIEPII_PTB.add_handler(CommandHandler("listblue", bluetext_ignore_list))
+CUTIEPII_PTB.add_handler(
+    MessageHandler(filters.COMMAND & filters.ChatType.GROUPS,
+                   clean_blue_text_must_click))
 
 __mod_name__ = "Cleaning"
 
