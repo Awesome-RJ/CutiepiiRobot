@@ -369,7 +369,7 @@ def capture_err(func):
 async def member_permissions(chat_id: int, user_id: int):
     perms = []
     try:
-        member = await pgram.get_chat_member(chat_id, user_id)
+        member = (await pgram.get_chat_member(chat_id, user_id)).privileges
     except Exception:
         return []
     if member.can_post_messages:
