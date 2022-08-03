@@ -396,31 +396,34 @@ async def dwarn(
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-    query = update.callback_query  # type: Optional[CallbackQuery]
-    user = update.effective_user  # type: Optional[User]
+async def button(update: Update, _: ContextTypes.DEFAULT_TYPE) -> str:
+    query: Optional[CallbackQuery] = update.callback_query
+    user: Optional[User] = update.effective_user
     if match := re.match(r"rm_warn\((.+?)\)", query.data):
         user_id = match[1]
-        chat = update.effective_chat  # type: Optional[Chat]
+        chat: Optional[Chat] = update.effective_chat
         if not is_user_admin(update, int(user.id)):
             await query.answer(text="You are not authorized to remove this warn! Only administrators may remove warns.", show_alert=True)
             return ""
         if res := sql.remove_warn(user_id, chat.id):
-            await update.effective_message.edit_text(
-                f"Warn removed by {mention_html(user.id, user.first_name)}." if not is_anon(user, chat) else "anon admin", parse_mode=ParseMode.HTML)
+            await update.effective_message.edit_text(f'Warn removed by {"anon admin" if is_anon(user, chat) else mention_html(user.id, user.first_name)}.', parse_mode=ParseMode.HTML)
 
-            user_member = await chat.get_member(user_id)
-            return "<b>{}:</b>" \
-                   "\n#UNWARN" \
-                   "\n<b>Admin:</b> {}" \
-                   "\n<b>User:</b> {} (<code>{}</code>)".format(html.escape(chat.title),
-                                                                mention_html(user.id, user.first_name),
-                                                                mention_html(user_member.user.id, user_member.user.first_name),
-                                                                user_member.user.id)
-        await update.effective_message.edit_text(
-            "User has already has no warns.".format(mention_html(user.id, user.first_name)),
-            parse_mode=ParseMode.HTML)
-            return ""
+            user_member = chat.get_member(user_id)
+            return (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"#UNWARN\n"
+                f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
+                f"<b>User:</b> {mention_html(user_member.user.id, user_member.user.first_name)}\n"
+                f"<b>User ID:</b> <code>{user_member.user.id}</code>"
+            )
+        else:
+            await update.effective_message.edit_text(
+                "User already has no warns.", parse_mode=ParseMode.HTML
+            )
+
+    return ""
+
+
 
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
