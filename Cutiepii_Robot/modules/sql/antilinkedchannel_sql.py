@@ -117,16 +117,12 @@ def disable_pin(chat_id: int):
 def status_linked(chat_id: int) -> bool:
     with ANTI_LINKED_CHANNEL_SETTING_LOCK:
         d = SESSION.query(AntiLinkedChannelSettings).get(str(chat_id))
-        if not d:
-            return False
-        return d.setting
+        return d.setting if d else False
 
 def status_pin(chat_id: int) -> bool:
     with ANTI_PIN_CHANNEL_SETTING_LOCK:
         d = SESSION.query(AntiPinChannelSettings).get(str(chat_id))
-        if not d:
-            return False
-        return d.setting
+        return d.setting if d else False
 
 
 def migrate_chat(old_chat_id, new_chat_id):

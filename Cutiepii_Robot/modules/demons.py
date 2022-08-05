@@ -36,9 +36,12 @@ async def demons(event):
             [Button.inline("Yes", data="demons yes")],
             [Button.inline("No", data="demons no")],
         ]
-        text = f"Found **{0}** Demon{1} In This Chat!\n\nWould You Like To Hunt {2} ?".format(
-            demons, 's' if demons > 1 else '',
-            'Them All' if demons > 1 else 'That Demon')
+        text = f"Found **0** Demon1 In This Chat!\n\nWould You Like To Hunt 2 ?".format(
+            demons,
+            's' if demons > 1 else '',
+            'Them All' if demons > 1 else 'That Demon',
+        )
+
         await X.edit(text, buttons=markup)
     else:
         await X.edit("There Are No Demons!\nThis Chat Is Safe For Now!")
@@ -87,12 +90,17 @@ async def dimonhandler(event):
 
         demon = ""
         if normy_demons > 0:
-            demon += f"**{0}** - Demon{1} Hunted!".format(
-                normy_demons, 's' if normy_demons > 1 else '')
+            demon += '**0** - Demon1 Hunted!'.format(
+                normy_demons, 's' if normy_demons > 1 else ''
+            )
+
         if pro_demons > 0:
-            demon += f"\n**{0}** - Upper Level Demon{1} {2} Escaped!".format(
-                pro_demons, 's' if pro_demons > 1 else '',
-                'Are' if pro_demons > 1 else 'Is')
+            demon += f"\n**0** - Upper Level Demon1 2 Escaped!".format(
+                pro_demons,
+                's' if pro_demons > 1 else '',
+                'Are' if pro_demons > 1 else 'Is',
+            )
+
 
         await event.edit(demon)
         await event.answer("Demon Hunted!")

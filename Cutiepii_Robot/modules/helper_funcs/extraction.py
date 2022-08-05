@@ -47,9 +47,7 @@ def id_from_reply(message):
     res = message.text.split(None, 1)
     if prev_message.sender_chat:
         user_id = prev_message.sender_chat.id
-    if len(res) < 2:
-        return user_id, ""
-    return user_id, res[1]
+    return (user_id, "") if len(res) < 2 else (user_id, res[1])
 
 
 async def extract_user(message: Message, args: List[str]) -> Optional[int]:
