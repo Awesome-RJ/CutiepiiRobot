@@ -39,7 +39,6 @@ import platform
 import sqlalchemy
 import Cutiepii_Robot.modules.helper_funcs.git_api as git
 
-
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.chat_status import sudo_plus
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_action
@@ -62,7 +61,7 @@ from requests import get
 FORMATTING_HELP = """
 Main Help Here
 """
-MARKDOWN_HELP = f"""
+MARKDOWN_HELP = """
 
 Markdown is a very powerful formatting tool supported by telegram. Cutiepii Robot 愛 has some enhancements, to make sure that \
 saved messages are correctly parsed, and to allow you to create buttons.
@@ -105,7 +104,7 @@ You can also customise the contents of your message with contextual data. For ex
 - <code>{random}</code>: You can use this filling for a random greeting in welcome message.
 """
 
-RANDOM_HELP = f"""
+RANDOM_HELP = """
 <b>Random Content</b>
 
 Another thing that can be fun, is to randomise the contents of a message. Make things a little more personal by changing welcome messages, or changing notes!
@@ -124,14 +123,16 @@ This will randomly choose between sending the first message, "hello", or the sec
 
 
 @pgram.on_message(filters.command("slcheck"))
-async def slcheck(_,message):
+async def slcheck(_, message):
     message = Update.effective_message
     user = message.text.split(" ")[1]
     res = get(f"https://sylviorus.up.railway.app/user/{user}")
     if res["blacklisted"]:
-       enf = res["enforcer"]
-       reason = res["reason"]
-       await message.reply_text(f"**Enforcer**: {enf}\n**User** : {user}\n**Reason**: {reason}")
+        enf = res["enforcer"]
+        reason = res["reason"]
+        await message.reply_text(
+            f"**Enforcer**: {enf}\n**User** : {user}\n**Reason**: {reason}")
+
 
 async def gdpr(update: Update):
     await update.effective_message.reply_text("Deleting identifiable data...")
@@ -149,15 +150,16 @@ async def gdpr(update: Update):
         parse_mode=ParseMode.MARKDOWN_V2,
     )
 
+
 @user_admin
 async def echo(update: Update):
     message = update.effective_message
     args = message.text.split(" " or None, 1)
 
     if update.effective_message.reply_to_message:
-        message.reply_to_message.reply_text(
-            args[1], parse_mode=ParseMode.MARKDOWN_V2, disable_web_page_preview=True
-        )
+        message.reply_to_message.reply_text(args[1],
+                                            parse_mode=ParseMode.MARKDOWN_V2,
+                                            disable_web_page_preview=True)
     else:
         await message.reply_text(
             args[1],
@@ -177,7 +179,8 @@ def get_readable_time(seconds: int) -> str:
 
     while count < 4:
         count += 1
-        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
+        remainder, result = divmod(seconds, 60) if count < 3 else divmod(
+            seconds, 24)
         if seconds == 0 and remainder == 0:
             break
         time_list.append(int(result))
@@ -204,64 +207,84 @@ def get_size(bytes, suffix="B"):
 
 async def markdown_help_sender(update: Update):
     markup = InlineKeyboardMarkup([
-        [InlineKeyboardButton(text="Markdown formatting", callback_data="mkhelp_markdownformat"), InlineKeyboardButton(text="Fillings", callback_data="mkhelp_fillings")],
-        [InlineKeyboardButton(text="Random Content", callback_data="mkhelp_randomcontent")],
+        [
+            InlineKeyboardButton(text="Markdown formatting",
+                                 callback_data="mkhelp_markdownformat"),
+            InlineKeyboardButton(text="Fillings",
+                                 callback_data="mkhelp_fillings")
+        ],
+        [
+            InlineKeyboardButton(text="Random Content",
+                                 callback_data="mkhelp_randomcontent")
+        ],
     ])
     if update.callback_query:
-        await update.effective_message.edit_text(FORMATTING_HELP, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=markup)
+        await update.effective_message.edit_text(
+            FORMATTING_HELP,
+            parse_mode=ParseMode.MARKDOWN_V2,
+            reply_markup=markup)
     else:
-        await update.effective_message.reply_text(FORMATTING_HELP, parse_mode=ParseMode.MARKDOWN_V2, reply_markup=markup)
+        await update.effective_message.reply_text(
+            FORMATTING_HELP,
+            parse_mode=ParseMode.MARKDOWN_V2,
+            reply_markup=markup)
 
-async def markdown_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+async def markdown_help(update: Update,
+                        context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
             "Contact me in pm",
-            reply_markup=InlineKeyboardMarkup(
+            reply_markup=InlineKeyboardMarkup([
                 [
-                    [
-                        InlineKeyboardButton(
-                            "Markdown help",
-                            url=f"t.me/{context.bot.username}?start=markdownhelp",
-                        ),
-                    ],
+                    InlineKeyboardButton(
+                        "Markdown help",
+                        url=f"t.me/{context.bot.username}?start=markdownhelp",
+                    ),
                 ],
-            ),
+            ], ),
         )
         return
     markdown_help_sender(update)
 
 
-async def mkdown_btn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def mkdown_btn(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     query = update.callback_query
     match = query.data.split("_")[1]
 
     if match == "fillings":
         await update.effective_message.edit_text(
-            FILLINGS_HELP, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton(text="Back", callback_data="mkhelp_main")]],
-            ),
+            FILLINGS_HELP,
+            parse_mode=ParseMode.HTML,
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(text="Back", callback_data="mkhelp_main")
+            ]], ),
         )
 
     elif match == "markdownformat":
         await update.effective_message.edit_text(
-            MARKDOWN_HELP, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton(text="Back", callback_data="mkhelp_main")]],
-            ),
+            MARKDOWN_HELP,
+            parse_mode=ParseMode.HTML,
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(text="Back", callback_data="mkhelp_main")
+            ]], ),
         )
 
     elif match == "randomcontent":
         await update.effective_message.edit_text(
-            RANDOM_HELP, parse_mode=ParseMode.HTML, reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton(text="Back", callback_data="mkhelp_main")]],
-            ),
+            RANDOM_HELP,
+            parse_mode=ParseMode.HTML,
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(text="Back", callback_data="mkhelp_main")
+            ]], ),
         )
 
     else:
         markdown_help_sender(update)
 
     await bot.answer_callback_query(query.id)
-
 
 
 async def src(update: Update) -> None:
@@ -279,6 +302,7 @@ async def src(update: Update) -> None:
             disable_web_page_preview=True,
         ),
     )
+
 
 @send_action(ChatAction.UPLOAD_PHOTO)
 async def rmemes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -330,23 +354,24 @@ async def rmemes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return await msg.reply_text(f"Error! {excp.message}")
 
 
-async def markdown_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def markdown_help(update: Update,
+                        context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
             "Contact me in pm",
-            reply_markup=InlineKeyboardMarkup(
+            reply_markup=InlineKeyboardMarkup([
                 [
-                    [
-                        InlineKeyboardButton(
-                            "Markdown help",
-                            url=f"https://telegram.dog/{context.bot.username}?start=markdownhelp",
-                        ),
-                    ],
+                    InlineKeyboardButton(
+                        "Markdown help",
+                        url=
+                        f"https://telegram.dog/{context.bot.username}?start=markdownhelp",
+                    ),
                 ],
-            ),
+            ], ),
         )
         return
     markdown_help_sender(update)
+
 
 async def imdb(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
@@ -355,16 +380,14 @@ async def imdb(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         remove_space = movie_name.split(" ")
         final_name = "+".join(remove_space)
         page = requests.get(
-            f"https://www.imdb.com/find?ref_=nv_sr_fn&q={final_name}&s=all"
-        )
+            f"https://www.imdb.com/find?ref_=nv_sr_fn&q={final_name}&s=all")
 
         str(page.status_code)
         soup = BeautifulSoup(page.content, "lxml")
         odds = soup.findAll("tr", "odd")
         mov_title = odds[0].findNext("td").findNext("td").text
-        mov_link = (
-            "http://www.imdb.com/" + odds[0].findNext("td").findNext("td").a["href"]
-        )
+        mov_link = ("http://www.imdb.com/" +
+                    odds[0].findNext("td").findNext("td").a["href"])
         page1 = requests.get(mov_link)
         soup = BeautifulSoup(page1.content, "lxml")
         if soup.find("div", "poster"):
@@ -392,7 +415,8 @@ async def imdb(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             actors.pop()
             stars = f"{actors[0]},{actors[1]},{actors[2]}"
         if soup.find("div", "inline canwrap"):
-            story_line = soup.find("div", "inline canwrap").findAll("p")[0].text
+            story_line = soup.find("div",
+                                   "inline canwrap").findAll("p")[0].text
         else:
             story_line = "Not available"
         if info := soup.findAll("div", "txt-block"):
@@ -412,10 +436,11 @@ async def imdb(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             mov_rating = "Not available"
         msg = f"*Title :* {mov_title}\n{mov_details}\n*Rating :* {mov_rating} \n*Country :*  {mov_country}\n*Language :* {mov_language}\n*Director :* {director}\n*Writer :* {writer}\n*Stars :* {stars}\n*IMDB Url :* {mov_link}\n*Story Line :* {story_line}"
         await update.effective_message.reply_photo(
-            photo=poster, caption=msg, parse_mode=ParseMode.MARKDOWN_V2
-        )
+            photo=poster, caption=msg, parse_mode=ParseMode.MARKDOWN_V2)
     except IndexError:
-        await update.effective_message.reply_text("Plox enter **Valid movie name** kthx")
+        await update.effective_message.reply_text(
+            "Plox enter **Valid movie name** kthx")
+
 
 @sudo_plus
 async def status(update: Update):
@@ -452,10 +477,11 @@ async def status(update: Update):
     msg += f"SWAP: `{get_size(swap.total)} - {get_size(swap.used)} used ({swap.percent}%)`\n"
 
     await message.reply_text(
-        text = msg,
-        parse_mode = ParseMode.MARKDOWN_V2,
-        disable_web_page_preview = True,
+        text=msg,
+        parse_mode=ParseMode.MARKDOWN_V2,
+        disable_web_page_preview=True,
     )
+
 
 __help__ = """
 Available commands:
@@ -548,16 +574,30 @@ Bass Boosting
 ➛ /bassboost*:* Reply To Music Bass Boost.
 """
 
-
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("echo", echo, filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("markdownhelp", markdown_help, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("gdpr", gdpr, filters=PTB_Cutiepii_Filters.ChatType.PRIVATE, block=False))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_", block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("source", src, filters=PTB_Cutiepii_Filters.ChatType.PRIVATE, block=False))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("rmeme", rmemes, block=False))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("status", status, block=False))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("echo",
+                              echo,
+                              filters=PTB_Cutiepii_Filters.ChatType.GROUPS,
+                              block=False))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("markdownhelp", markdown_help, block=False))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("gdpr",
+                   gdpr,
+                   filters=PTB_Cutiepii_Filters.ChatType.PRIVATE,
+                   block=False))
+CUTIEPII_PTB.add_handler(
+    CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_", block=False))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("source",
+                   src,
+                   filters=PTB_Cutiepii_Filters.ChatType.PRIVATE,
+                   block=False))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("rmeme", rmemes, block=False))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("status", status, block=False))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("imdb", imdb, block=False))
-
 
 __mod_name__ = "Extras"
 __command_list__ = ["id", "echo", "source", "rmeme", "status"]

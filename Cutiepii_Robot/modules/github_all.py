@@ -1,4 +1,3 @@
-
 from typing import Optional, List
 
 import Cutiepii_Robot.modules.helper_funcs.git_api as api
@@ -14,17 +13,16 @@ from telegram.ext import (
     ContextTypes,
     CommandHandler,
     MessageHandler,
-
 )
 
 from telegram import (
-    Update,
-)
+    Update, )
 from telegram.constants import ParseMode, MessageLimit
 
 
 def getphh(index):
-    recentRelease = api.getReleaseData(api.getData("phhusson/treble_experimentations"), index)
+    recentRelease = api.getReleaseData(
+        api.getData("phhusson/treble_experimentations"), index)
     if recentRelease is None:
         return "The specified release could not be found"
     author = api.getAuthor(recentRelease)
@@ -41,7 +39,7 @@ def getphh(index):
             continue
         fileURL = api.getReleaseFileURL(asset)
         assetFile = f"➛ <a href='{fileURL}'>{fileName}</a>"
-        sizeB = ((api.getSize(asset))/1024)/1024
+        sizeB = ((api.getSize(asset)) / 1024) / 1024
         size = "{0:.2f}".format(sizeB)
         message += assetFile + "\n"
         message += f"    <code>Size: {size}" + " MB</code>\n"
@@ -84,27 +82,32 @@ def getRepo(bot, update, reponame):
     return None, None
 
 
-async def getRelease(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def getRelease(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     if len(args) == 0:
         await msg.reply_text("Please use some arguments!")
         return
-    if (
-        len(args) != 1
-        and (len(args) != 2 or not args[1].isdigit())
-        and "/" not in args[0]
-    ):
-        deletion(update, context, await msg.reply_text("Please specify a valid combination of <user>/<repo>"))
+    if (len(args) != 1 and (len(args) != 2 or not args[1].isdigit())
+            and "/" not in args[0]):
+        deletion(
+            update, context, await msg.reply_text(
+                "Please specify a valid combination of <user>/<repo>"))
         return
     index = int(args[1]) if len(args) == 2 else 0
     url = args[0]
     text = getData(url, index)
-    deletion(update, context, await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN_V2, disable_web_page_preview=True))
+    deletion(
+        update, context, await msg.reply_text(text,
+                                              parse_mode=ParseMode.MARKDOWN_V2,
+                                              disable_web_page_preview=True))
     return
 
 
-async def hashFetch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:  # kanged from notes
+async def hashFetch(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE) -> None:  # kanged from notes
     bot, args = context.bot, context.args
     message = update.effective_message.text
     msg = update.effective_message
@@ -112,14 +115,18 @@ async def hashFetch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     no_hash = fst_word[1:]
     url, index = getRepo(bot, update, no_hash)
     if url is None and index is None:
-        deletion(update, context, await msg.reply_text(
-            "There was a problem parsing your request. Likely this is not a saved repo shortcut",
-            parse_mode=ParseMode.MARKDOWN_V2,
-            disable_web_page_preview=True,
-        ))
+        deletion(
+            update, context, await msg.reply_text(
+                "There was a problem parsing your request. Likely this is not a saved repo shortcut",
+                parse_mode=ParseMode.MARKDOWN_V2,
+                disable_web_page_preview=True,
+            ))
         return
     text = getData(url, index)
-    deletion(update, context, await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN_V2, disable_web_page_preview=True))
+    deletion(
+        update, context, await msg.reply_text(text,
+                                              parse_mode=ParseMode.MARKDOWN_V2,
+                                              disable_web_page_preview=True))
     return
 
 
@@ -131,18 +138,23 @@ async def cmdFetch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
     url, index = getRepo(bot, update, args[0])
     if url is None and index is None:
-        deletion(update, context, await msg.reply_text(
-            "There was a problem parsing your request. Likely this is not a saved repo shortcut",
-            parse_mode=ParseMode.MARKDOWN_V2,
-            disable_web_page_preview=True,
-        ))
+        deletion(
+            update, context, await msg.reply_text(
+                "There was a problem parsing your request. Likely this is not a saved repo shortcut",
+                parse_mode=ParseMode.MARKDOWN_V2,
+                disable_web_page_preview=True,
+            ))
         return
     text = getData(url, index)
-    deletion(update, context, await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN_V2, disable_web_page_preview=True))
+    deletion(
+        update, context, await msg.reply_text(text,
+                                              parse_mode=ParseMode.MARKDOWN_V2,
+                                              disable_web_page_preview=True))
     return
 
 
-async def changelog(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def changelog(update: Update,
+                    context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     if len(args) != 1:
@@ -164,16 +176,17 @@ async def saveRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     chat_id = update.effective_chat.id
     msg = update.effective_message
-    if (
-        len(args) != 2
-        and (len(args) != 3 and not args[2].isdigit())
-        or "/" not in args[1]
-    ):
-        deletion(update, context, await msg.reply_text("Invalid data, use <reponame> <user>/<repo> <value (optional)>"))
+    if (len(args) != 2 and (len(args) != 3 and not args[2].isdigit())
+            or "/" not in args[1]):
+        deletion(
+            update, context, await msg.reply_text(
+                "Invalid data, use <reponame> <user>/<repo> <value (optional)>"
+            ))
         return
     index = int(args[2]) if len(args) == 3 else 0
     sql.add_repo_to_db(str(chat_id), args[0], args[1], index)
-    deletion(update, context, await msg.reply_text("Repo shortcut saved successfully!"))
+    deletion(update, context, await
+             msg.reply_text("Repo shortcut saved successfully!"))
     return
 
 
@@ -186,7 +199,8 @@ async def delRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await msg.reply_text("Invalid repo name!")
         return
     sql.rm_repo(str(chat_id), args[0])
-    deletion(update, context, await msg.reply_text("Repo shortcut deleted successfully!"))
+    deletion(update, context, await
+             msg.reply_text("Repo shortcut deleted successfully!"))
     return
 
 
@@ -200,21 +214,26 @@ async def listRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     for repo in repo_list:
         repo_name = f" • `{repo.name}`\n"
         if len(msg) + len(repo_name) > MessageLimit.TEXT_LENGTH:
-            deletion(update, context, await update.effective_message.reply_text(msg, parse_mode=ParseMode.MARKDOWN_V2))
+            deletion(
+                update, context, await update.effective_message.reply_text(
+                    msg, parse_mode=ParseMode.MARKDOWN_V2))
             msg = ""
         msg += repo_name
     if msg == "*List of repo shotcuts in {}:*\n":
-        deletion(update, context, await update.effective_message.reply_text("No repo shortcuts in this chat!"))
+        deletion(
+            update, context, await update.effective_message.reply_text(
+                "No repo shortcuts in this chat!"))
     elif len(msg) != 0:
-        deletion(update, context, await update.effective_message.reply_text(
-            msg.format(chat_name) + des, parse_mode=ParseMode.MARKDOWN_V2
-        ))
+        deletion(
+            update, context, await update.effective_message.reply_text(
+                msg.format(chat_name) + des, parse_mode=ParseMode.MARKDOWN_V2))
 
 
 async def getVer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     ver = api.vercheck()
-    deletion(update, context, await msg.reply_text(f"GitHub API version: {ver}"))
+    deletion(update, context, await
+             msg.reply_text(f"GitHub API version: {ver}"))
     return
 
 
@@ -222,6 +241,7 @@ def deletion(update: Update, context: ContextTypes.DEFAULT_TYPE, delmsg):
     chat = update.effective_chat
     if cleartime := get_clearcmd(chat.id, "github"):
         context.bot.run_async(delete, delmsg, cleartime.time)
+
 
 """
 *Github module. This module will fetch github releases*\n
@@ -241,11 +261,16 @@ def deletion(update: Update, context: ContextTypes.DEFAULT_TYPE, delmsg):
 
 __mod_name__ = "Git"
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("git", getRelease, admin_ok=True))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("fetch", cmdFetch, admin_ok=True))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("git", getRelease, admin_ok=True))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("fetch", cmdFetch, admin_ok=True))
 CUTIEPII_PTB.add_handler(CommandHandler("saverepo", saveRepo))
 CUTIEPII_PTB.add_handler(CommandHandler("delrepo", delRepo))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("listrepo", listRepo, admin_ok=True))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("gitver", getVer, admin_ok=True))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("changelog", changelog, admin_ok=True))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("listrepo", listRepo, admin_ok=True))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("gitver", getVer, admin_ok=True))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("changelog", changelog, admin_ok=True))
 CUTIEPII_PTB.add_handler(MessageHandler(r"^&[^\s]+", hashFetch))

@@ -53,7 +53,7 @@ async def shazamm(client, message):
     downloaded_file_name = kkk
     f = {"file": (downloaded_file_name, open(downloaded_file_name, "rb"))}
     await kek.edit(
-        f"**Searching For This Song In Cutiepii Robot 愛's DataBase.**")
+        "**Searching For This Song In Cutiepii Robot 愛's DataBase.**")
     r = requests.post("https://starkapi.herokuapp.com/shazam/", files=f)
     try:
         xo = r.json()

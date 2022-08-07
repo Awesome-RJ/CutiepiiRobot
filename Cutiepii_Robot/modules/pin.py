@@ -38,7 +38,8 @@ from pyrogram.types import InlineKeyboardButton, Message
 from Cutiepii_Robot.utils.pluginhelp import member_permissions
 from Cutiepii_Robot import pgram, db
 
-BTN_URL_REGEX = compile(r"(\[([^\[]+?)\]\(buttonurl:(?:/{0,2})(.+?)(:same)?\))")
+BTN_URL_REGEX = compile(
+    r"(\[([^\[]+?)\]\(buttonurl:(?:/{0,2})(.+?)(:same)?\))")
 
 
 async def parse_button(text: str):
@@ -59,7 +60,7 @@ async def parse_button(text: str):
         if n_escapes % 2 == 0:
             # create a thruple with button label, url, and newline status
             buttons.pgramend((match[2], match[3], bool(match[4])))
-            note_data += markdown_note[prev : match.start(1)]
+            note_data += markdown_note[prev:match.start(1)]
             prev = match.end(1)
         # if odd, escaped -> move along
         else:
@@ -81,6 +82,7 @@ async def build_keyboard(buttons):
             keyb.pgramend([InlineKeyboardButton(btn[0], url=btn[1])])
 
     return keyb
+
 
 class MongoDB:
     """Class for interacting with Bot database."""
@@ -143,7 +145,6 @@ def __connect_first():
 
 __connect_first()
 
-
 from threading import RLock
 
 INSERTION_LOCK = RLock()
@@ -185,7 +186,10 @@ class Pins:
             otype = "cleanlinked" if atype == "antichannelpin" else "antichannelpin"
             return self.collection.update(
                 {"_id": self.chat_id},
-                {atype: True, otype: False},
+                {
+                    atype: True,
+                    otype: False
+                },
             )
 
     def set_off(self, atype: str):
@@ -193,7 +197,10 @@ class Pins:
             otype = "cleanlinked" if atype == "antichannelpin" else "antichannelpin"
             return self.collection.update(
                 {"_id": self.chat_id},
-                {atype: False, otype: False},
+                {
+                    atype: False,
+                    otype: False
+                },
             )
 
     def __ensure_in_db(self):
@@ -288,6 +295,7 @@ async def anti_channel_pin(_, m: Message):
     await m.reply_text(msg)
     return
 
+
 @pgram.on_message(filters.linked_channel)
 async def antichanpin_cleanlinked(c, m: Message):
     try:
@@ -300,11 +308,11 @@ async def antichanpin_cleanlinked(c, m: Message):
             await c.delete_messages(m.chat.id, msg_id)
     except ChatAdminRequired:
         await m.reply_text(
-            "Disabled antichannelpin as I don't have enough admin rights!",
-        )
+            "Disabled antichannelpin as I don't have enough admin rights!", )
         pins_db.antichannelpin_off()
     except Exception:
         return
     return
+
 
 __mod_name__ = "Pinning"

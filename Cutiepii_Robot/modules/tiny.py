@@ -1,4 +1,3 @@
-
 """
 BSD 2-Clause License
 
@@ -41,9 +40,9 @@ from Cutiepii_Robot import telethn
 @register(pattern="^/tiny ?(.*)")
 async def _(event):
     reply = await event.get_reply_message()
-    if not (reply and(reply.media)):
-           await event.reply("`Please reply to a sticker`")
-           return
+    if not (reply and (reply.media)):
+        await event.reply("`Please reply to a sticker`")
+        return
     kontol = await event.reply("`Processing tiny...`")
     ik = await telethn.download_media(reply)
     im1 = Image.open("Cutiepii_Robot/resources/ken.png")
@@ -104,7 +103,9 @@ async def _(event):
         back_im.save("o.webp", "WEBP", quality=95)
         file = "o.webp"
         os.remove("k.png")
-    await telethn.send_file(event.chat_id, file, reply_to=event.reply_to_msg_id)
+    await telethn.send_file(event.chat_id,
+                            file,
+                            reply_to=event.reply_to_msg_id)
     await kontol.delete()
     os.remove(file)
     os.remove(ik)

@@ -1,4 +1,3 @@
-
 """
 BSD 2-Clause License
 
@@ -425,7 +424,6 @@ async def cb_handler(client: pgram, query: CallbackQuery):
         elif query.data == "rmbgsticker":
             await removebg_sticker(client, query.message)
 """
-
 """
 __mod_name__ = "Image Editor"
 __help__ = f

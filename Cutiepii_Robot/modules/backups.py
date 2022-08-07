@@ -40,7 +40,6 @@ from telegram.constants import ParseMode, ChatType
 from telegram.error import BadRequest
 from telegram.ext import ContextTypes, CommandHandler
 
-
 import Cutiepii_Robot.modules.sql.notes_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB, LOGGER, OWNER_ID, JOIN_LOGGER, SUPPORT_CHAT
 from Cutiepii_Robot.__main__ import DATA_IMPORT
@@ -54,9 +53,9 @@ import Cutiepii_Robot.modules.sql.locks_sql as locksql
 from Cutiepii_Robot.modules.connection import connected
 
 
-
 @user_admin
-async def import_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def import_data(update: Update,
+                      context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
@@ -69,7 +68,8 @@ async def import_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
-            await update.effective_message.reply_text("This is a group only command!")
+            await update.effective_message.reply_text(
+                "This is a group only command!")
             return ""
 
         chat = update.effective_chat
@@ -77,7 +77,8 @@ async def import_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
     if msg.reply_to_message and msg.reply_to_message.document:
         try:
-            file_info = await context.bot.get_file(msg.reply_to_message.document.file_id)
+            file_info = await context.bot.get_file(
+                msg.reply_to_message.document.file_id)
         except BadRequest:
             await msg.reply_text(
                 "Try downloading and uploading the file yourself again, This one seem broken to me!",
@@ -104,9 +105,11 @@ async def import_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
                 else:
                     text = "Backup comes from another chat, I can't return another chat to this chat"
-                return await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN_V2)
+                return await msg.reply_text(text,
+                                            parse_mode=ParseMode.MARKDOWN_V2)
         except Exception:
-            return await msg.reply_text("There was a problem while importing the data!")
+            return await msg.reply_text(
+                "There was a problem while importing the data!")
         # Check if backup is from self
         with contextlib.suppress(Exception):
             if str(context.bot.id) != str(data[str(chat.id)]["bot"]):
@@ -145,9 +148,9 @@ async def import_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN_V2)
 
 
-
 @user_admin
-async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def export_data(update: Update,
+                      context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_data = context.chat_data
     msg = update.effective_message  # type: Optional[Message]
     user = update.effective_user  # type: Optional[User]
@@ -161,7 +164,8 @@ async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         # chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
-            await update.effective_message.reply_text("This is a group only command!")
+            await update.effective_message.reply_text(
+                "This is a group only command!")
             return ""
         chat = update.effective_chat
         chat_id = update.effective_chat.id
@@ -171,12 +175,12 @@ async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     checkchat = get_chat(chat_id, chat_data)
     if checkchat.get("status") and jam <= int(checkchat.get("value")):
         timeformatt = time.strftime(
-            "%H:%M:%S %d/%m/%Y", time.localtime(checkchat.get("value")),
+            "%H:%M:%S %d/%m/%Y",
+            time.localtime(checkchat.get("value")),
         )
         await update.effective_message.reply_text(
-            "You can only backup once a day!\nYou can backup again in about `{}`".format(
-                timeformatt,
-            ),
+            "You can only backup once a day!\nYou can backup again in about `{}`"
+            .format(timeformatt, ),
             parse_mode=ParseMode.MARKDOWN_V2,
         )
         return
@@ -200,48 +204,52 @@ async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
                 countbtn += 1
                 if btn.same_line:
                     buttonlist.append(
-                        ("{}".format(btn.name), "{}".format(btn.url), True),
-                    )
+                        ("{}".format(btn.name), "{}".format(btn.url), True), )
                 else:
                     buttonlist.append(
-                        ("{}".format(btn.name), "{}".format(btn.url), False),
-                    )
+                        ("{}".format(btn.name), "{}".format(btn.url), False), )
             isicat += "###button###: {}<###button###>{}<###splitter###>".format(
-                note.value, str(buttonlist),
+                note.value,
+                str(buttonlist),
             )
             buttonlist.clear()
         elif note.msgtype == 2:
             isicat += "###sticker###:{}<###splitter###>".format(note.file)
         elif note.msgtype == 3:
             isicat += "###file###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value,
+                note.file,
+                note.value,
             )
         elif note.msgtype == 4:
             isicat += "###photo###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value,
+                note.file,
+                note.value,
             )
         elif note.msgtype == 5:
             isicat += "###audio###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value,
+                note.file,
+                note.value,
             )
         elif note.msgtype == 6:
             isicat += "###voice###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value,
+                note.file,
+                note.value,
             )
         elif note.msgtype == 7:
             isicat += "###video###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value,
+                note.file,
+                note.value,
             )
         elif note.msgtype == 8:
             isicat += "###video_note###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file, note.value,
+                note.file,
+                note.value,
             )
         else:
             isicat += "{}<###splitter###>".format(note.value)
     notes = {
-        "#{}".format(namacat.split("<###splitter###>")[x]): "{}".format(
-            isicat.split("<###splitter###>")[x],
-        )
+        "#{}".format(namacat.split("<###splitter###>")[x]):
+        "{}".format(isicat.split("<###splitter###>")[x], )
         for x in range(count)
     }
     # Rules
@@ -311,18 +319,21 @@ async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
     if curr_restr:
         locked_restr = {
-            "messages": curr_restr.messages,
-            "media": curr_restr.media,
-            "other": curr_restr.other,
-            "previews": curr_restr.preview,
-            "all": all(
-                [
-                    curr_restr.messages,
-                    curr_restr.media,
-                    curr_restr.other,
-                    curr_restr.preview,
-                ],
-            ),
+            "messages":
+            curr_restr.messages,
+            "media":
+            curr_restr.media,
+            "other":
+            curr_restr.other,
+            "previews":
+            curr_restr.preview,
+            "all":
+            all([
+                curr_restr.messages,
+                curr_restr.media,
+                curr_restr.other,
+                curr_restr.preview,
+            ], ),
         }
     else:
         locked_restr = {}
@@ -334,11 +345,13 @@ async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     backup[chat_id] = {
         "bot": context.bot.id,
         "hashes": {
-            "info": {"rules": rules},
+            "info": {
+                "rules": rules
+            },
             "extra": notes,
             "blacklist": bl,
             "disabled": disabledcmd,
-            "locks": locks,            
+            "locks": locks,
         },
     }
     baccinfo = json.dumps(backup, indent=4)
@@ -349,16 +362,23 @@ async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     with contextlib.suppress(BadRequest):
         await context.bot.sendMessage(
             JOIN_LOGGER,
-            "*Successfully imported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`".format(
-                chat.title, chat_id, tgl,
+            "*Successfully imported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`"
+            .format(
+                chat.title,
+                chat_id,
+                tgl,
             ),
             parse_mode=ParseMode.MARKDOWN_V2,
         )
     await context.bot.sendDocument(
         current_chat_id,
         document=open("Cutiepii_Robot{}Backup".format(chat_id), "rb"),
-        caption="*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `Cutiepii-Robot-Backup` was specially made for notes.".format(
-            chat.title, chat_id, tgl,
+        caption=
+        "*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `Cutiepii-Robot-Backup` was specially made for notes."
+        .format(
+            chat.title,
+            chat_id,
+            tgl,
         ),
         timeout=360,
         reply_to_message_id=msg.message_id,
@@ -380,6 +400,7 @@ def get_chat(chat_id, chat_data):
         return chat_data[chat_id]["backups"]
     except KeyError:
         return {"status": False, "value": False}
+
 
 __help__ = """
 *Only for group owner:*

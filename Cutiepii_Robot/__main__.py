@@ -126,8 +126,8 @@ PM_START_TEXT = """
 buttons = [
     [
         InlineKeyboardButton(
-            text=f"Add Cutiepii To Your Group",
-            url=f"https://telegram.dog/Cutiepii_Robot?startgroup=true")
+            text="Add Cutiepii To Your Group",
+            url="https://telegram.dog/Cutiepii_Robot?startgroup=true")
     ],
     [
         InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
@@ -210,7 +210,10 @@ for module_name in ALL_MODULES:
 
 
 # do not async
-async def send_help(context: ContextTypes.DEFAULT_TYPE, chat_id, text, keyboard=None):
+async def send_help(context: ContextTypes.DEFAULT_TYPE,
+                    chat_id,
+                    text,
+                    keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
     await context.bot.send_message(
@@ -465,7 +468,10 @@ async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         send_help(chat.id, HELP_STRINGS)
 
 
-async def send_settings(context: ContextTypes.DEFAULT_TYPE, chat_id, user_id, user=False):
+async def send_settings(context: ContextTypes.DEFAULT_TYPE,
+                        chat_id,
+                        user_id,
+                        user=False):
     if user:
         if USER_SETTINGS:
             settings = "\n\n".join(
@@ -682,7 +688,7 @@ def main() -> int:
     else:
         CUTIEPII_PTB.run_polling(drop_pending_updates=True, stop_signals=None)
         LOGGER.info(
-            f"Cutiepii Robot started, Using long polling. | BOT: [@Cutiepii_Robot]"
+            "Cutiepii Robot started, Using long polling. | BOT: [@Cutiepii_Robot]"
         )
 
 

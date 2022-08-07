@@ -42,8 +42,7 @@ async def _(event):
     async with ubot.conversation(chat) as conv:
         try:
             response = conv.wait_event(
-                events.NewMessage(incoming=True, from_users=178220800)
-            )
+                events.NewMessage(incoming=True, from_users=178220800))
             await conv.send_message("/start")
             response = await response
             await ubot.send_read_acknowledge(chat)

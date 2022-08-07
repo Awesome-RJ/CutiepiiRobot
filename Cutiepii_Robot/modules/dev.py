@@ -59,8 +59,10 @@ async def leave_cb(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await bot.leave_chat(chat_id=chat)
     callback.answer(text="Left chat")
 
+
 @dev_plus
-async def allow_groups(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def allow_groups(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     if not args:
         state = "off" if ALLOW_CHATS else "Lockdown is " + "on"
@@ -71,12 +73,14 @@ async def allow_groups(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     elif args[0].lower() in ["yes", "on"]:
         ALLOW_CHATS = False
     else:
-        await update.effective_message.reply_text("Format: /lockdown Yes/No or Off/On")
+        await update.effective_message.reply_text(
+            "Format: /lockdown Yes/No or Off/On")
         return
     await update.effective_message.reply_text("Done! Lockdown value toggled.")
 
 
 class Store:
+
     def __init__(self, func):
         self.func = func
         self.calls = []
@@ -118,11 +122,12 @@ telethn.add_event_handler(callback_queries, events.CallbackQuery())
 async def getstats(event):
     await event.reply(
         f"**__CUTIEPII EVENT STATISTICS__**\n**Average messages:** {messages.average()}/s\n**Average Callback Queries:** {callback_queries.average()}/s\n**Average Inline Queries:** {inline_queries.average()}/s",
-        parse_mode="md"
-    )
+        parse_mode="md")
+
 
 @dev_plus
-async def pip_install(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def pip_install(update: Update,
+                      context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     args = context.args
     if not args:
@@ -131,7 +136,10 @@ async def pip_install(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if len(args) >= 1:
         cmd = f"py -m pip install {' '.join(args)}"
         process = subprocess.Popen(
-            cmd.split(" "), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
+            cmd.split(" "),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            shell=True,
         )
         stdout, stderr = process.communicate()
         reply = ""
@@ -155,19 +163,25 @@ async def leave(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await bot.leave_chat(int(chat_id))
             await update.effective_message.reply_text("Left chat.")
         except TelegramError:
-            await update.effective_message.reply_text("Failed to leave chat for some reason.")
+            await update.effective_message.reply_text(
+                "Failed to leave chat for some reason.")
     else:
         chat = update.effective_chat
         # user = update.effective_user
-        kb = [[InlineKeyboardButton(text="I am sure of this action.", callback_data=f"leavechat_cb_({chat.id})")]]
+        kb = [[
+            InlineKeyboardButton(text="I am sure of this action.",
+                                 callback_data=f"leavechat_cb_({chat.id})")
+        ]]
 
-        await update.effective_message.reply_text(f"I'm going to leave {chat.title}, press the button below to confirm", reply_markup=InlineKeyboardMarkup(kb))
+        await update.effective_message.reply_text(
+            f"I'm going to leave {chat.title}, press the button below to confirm",
+            reply_markup=InlineKeyboardMarkup(kb))
+
 
 @dev_plus
 async def gitpull(update: Update):
     sent_msg = await update.effective_message.reply_text(
-        "Pulling all changes from remote and then attempting to restart."
-    )
+        "Pulling all changes from remote and then attempting to restart.")
     subprocess.Popen("git pull", stdout=subprocess.PIPE, shell=True)
 
     sent_msg_text = sent_msg.text + "\n\nChanges pulled...I guess.. Restarting in "
@@ -185,17 +199,19 @@ async def gitpull(update: Update):
 @dev_plus
 async def restart(update: Update):
     await update.effective_message.reply_text(
-	"Exiting all Processes and starting a new Instance!"
-    )
-    process = subprocess.run("pkill python3 && python3 -m Cutiepii_Robot", shell=True, check=True)
+        "Exiting all Processes and starting a new Instance!")
+    process = subprocess.run("pkill python3 && python3 -m Cutiepii_Robot",
+                             shell=True,
+                             check=True)
     process.communicate()
+
 
 CUTIEPII_PTB.add_handler(CommandHandler("install", pip_install))
 CUTIEPII_PTB.add_handler(CommandHandler("leave", leave))
 CUTIEPII_PTB.add_handler(CommandHandler("gitpull", gitpull))
 CUTIEPII_PTB.add_handler(CommandHandler("reboot", restart))
 CUTIEPII_PTB.add_handler(CommandHandler("lockdown", allow_groups))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(leave_cb, pattern=r"leavechat_cb_"))
-
+CUTIEPII_PTB.add_handler(
+    CallbackQueryHandler(leave_cb, pattern=r"leavechat_cb_"))
 
 __mod_name__ = "Dev"
