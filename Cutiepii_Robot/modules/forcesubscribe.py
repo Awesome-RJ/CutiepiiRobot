@@ -235,13 +235,13 @@ __help__ = """
 *Setup*
 1) First of all add me in the group as admin with ban users permission and in the channel as admin.
 Note: Only creator of the group can setup me and i will not allow force subscribe again if not done so.
- 
+
 *Commmands*:
 ➛ /forcesubscribe*:* To get the current settings.
 ➛ /forcesubscribe <no/off/disable>*:* To turn of ForceSubscribe.
 ➛ /forcesubscribe <channel username>*:* To turn on and setup the channel.
 ➛ /forcesubscribe clear*:* To unmute all members who muted by me.
 Note: /forcesub is an alias of /forcesubscribe
- 
+
 """
 __mod_name__ = "F-Sub"
