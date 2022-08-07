@@ -464,19 +464,19 @@ else:return
 
     if user.id == OWNER_ID:
         text += "\n\nUser level: <b>god</b>"
-        
+
     elif user.id in DEV_USERS:
         text += "\n\nUser level: <b>developer</b>"
-        
+
     elif user.id in SUDO_USERS:
         text += "\n\nUser level: <b>sudo</b>"
-        
+
     elif user.id in SUPPORT_USERS:
         text += "\n\nUser level: <b>support</b>"
-        
+
     elif user.id in WHITELIST_USERS:
         text += "\n\nUser level: <b>whitelist</b>"
-        
+
     elif user.id == 1482952149:
          text += "\n\nCo-Owner Of A Bot. Queen Of @Awesome_RJ. Bot Name Inspired From 'Rabeeka'."
 
