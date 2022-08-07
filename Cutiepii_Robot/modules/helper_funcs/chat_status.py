@@ -297,7 +297,7 @@ def user_not_admin(func):
             return
         if message.sender_chat and message.sender_chat.type != "channel":
             return
-        if user and not (await is_user_admin(update, user.id)):
+        if user and not await is_user_admin(update, user.id):
             return func(update, context, *args, **kwargs)
 
     return is_not_admin
