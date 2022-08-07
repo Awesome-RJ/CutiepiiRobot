@@ -38,7 +38,6 @@ def control_user(func):
                 "auth_link_cmd", "logout_cmd", "list_tags_genres_cmd"
         ]:
             with contextlib.suppress(KeyError):
-                msg['sender_chat']
                 key = rand_key()
                 ANON_JSON[key] = [func, message, msg]
                 await message.reply_text(
