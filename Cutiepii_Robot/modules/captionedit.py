@@ -6,6 +6,7 @@ from Cutiepii_Robot.utils.pluginhelpers import admins_only, get_text
 
 Cutiepii_PYRO_Captedit = filters.command("captedit")
 
+
 @pgram.on_message(Cutiepii_PYRO_Captedit & ~filters.bot & ~filters.private)
 @pgram.on_edited_message(Cutiepii_PYRO_Captedit)
 @admins_only

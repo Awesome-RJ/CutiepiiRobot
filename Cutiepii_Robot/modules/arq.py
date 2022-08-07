@@ -66,6 +66,4 @@ async def arq_stats(_, message):
 
 **@Cutiepii_Robot Some Modules Running On ARQ**
 """
-    await message.reply_text(
-        statistics, disable_web_page_preview=True
-    )
+    await message.reply_text(statistics, disable_web_page_preview=True)

@@ -77,9 +77,9 @@ async def downakd(e):
     link = f"https://www.deviantart.com/search?q={match}"
     ct = requests.get(link).content
     st = bs(ct, "html.parser", from_encoding="utf-8")
-    res = st.find_all("img", loading="lazy", src=re.compile("https://images-wixmp"))[
-        :num
-    ]
+    res = st.find_all("img",
+                      loading="lazy",
+                      src=re.compile("https://images-wixmp"))[:num]
     if Random:
         res = [random.choice(res)]
     out = []
@@ -90,7 +90,8 @@ async def downakd(e):
         out.append(img)
     if not out:
         return await xd.edit("`No Results Found!`")
-    await e.client.send_file(
-        e.chat_id, out, caption=f"Uploaded {len(res)} Images\n", album=True
-    )
+    await e.client.send_file(e.chat_id,
+                             out,
+                             caption=f"Uploaded {len(res)} Images\n",
+                             album=True)
     await xd.delete()

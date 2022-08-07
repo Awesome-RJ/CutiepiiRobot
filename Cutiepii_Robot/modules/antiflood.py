@@ -33,7 +33,6 @@ import contextlib
 import html
 import re
 
-
 from typing import Optional
 from telegram import Update, ChatPermissions
 from telegram.error import BadRequest
@@ -58,10 +57,9 @@ from Cutiepii_Robot.modules.sql.approve_sql import is_approved
 FLOOD_GROUP = 3
 
 
-
-
 @loggable
-async def check_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def check_flood(update: Update,
+                      context: ContextTypes.DEFAULT_TYPE) -> str:
     user = update.effective_user  # type: Optional[User]
     chat = update.effective_chat  # type: Optional[Chat]
     msg = update.effective_message  # type: Optional[Message]
@@ -69,10 +67,7 @@ async def check_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
         return ""
 
     # ignore admins and whitelists
-    if (
-        (await is_user_admin(update, user.id))
-        or user.id in WHITELIST_USERS
-    ):
+    if ((await is_user_admin(update, user.id)) or user.id in WHITELIST_USERS):
         sql.update_flood(chat.id, None)
         return ""
     # ignore approved users
@@ -96,7 +91,9 @@ async def check_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
             tag = "KICKED"
         elif getmode == 3:
             await context.bot.restrict_chat_member(
-                chat.id, user.id, permissions=ChatPermissions(can_send_messages=False),
+                chat.id,
+                user.id,
+                permissions=ChatPermissions(can_send_messages=False),
             )
             execstrings = "Muted"
             tag = "MUTED"
@@ -118,7 +115,6 @@ async def check_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
         send_message(msg, f"Beep Boop! Boop Beep!\n{execstrings}!")
         return f"<b>{tag}:</b>\n#{html.escape(chat.title)}\n<b>User:</b> {mention_html(user.id, user.first_name)}\nFlooded the group."
 
-
     except BadRequest:
         await msg.reply_text(
             "I can't restrict people here, give me permissions first! Until then, I'll disable anti-flood.",
@@ -127,10 +123,10 @@ async def check_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str
         return f"<b>{chat.title}:</b>\n#INFO\nDon't have enough permission to restrict users so automatically disabled anti-flood"
 
 
-
 @user_admin_no_reply
 @bot_admin
-async def flood_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def flood_button(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     query = update.callback_query
     user = update.effective_user
@@ -152,7 +148,6 @@ async def flood_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                 f"Unmuted by {mention_html(user.id, user.first_name)}.",
                 parse_mode=ParseMode.HTML,
             )
-
 
 
 @user_admin
@@ -182,20 +177,23 @@ async def set_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         if val in ["off", "no", "0"]:
             sql.set_flood(chat_id, 0)
             if conn:
-                await message.reply_text(f"Antiflood has been disabled in {chat_name}.")
+                await message.reply_text(
+                    f"Antiflood has been disabled in {chat_name}.")
             else:
-                await update.effective_message.reply_text("Antiflood has been disabled.")
+                await update.effective_message.reply_text(
+                    "Antiflood has been disabled.")
         elif val.isdigit():
             amount = int(val)
             if amount <= 0:
                 sql.set_flood(chat_id, 0)
                 if conn:
-                    await message.reply_text(f"Antiflood has been disabled in {chat_name}.")
+                    await message.reply_text(
+                        f"Antiflood has been disabled in {chat_name}.")
 
                 else:
-                    await update.effective_message.reply_text("Antiflood has been disabled.")
+                    await update.effective_message.reply_text(
+                        "Antiflood has been disabled.")
                 return f"<b>{html.escape(chat_name)}:</b>\n#SETFLOOD\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nDisable antiflood."
-
 
             if amount <= 3:
                 send_message(
@@ -205,14 +203,17 @@ async def set_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                 return ""
             sql.set_flood(chat_id, amount)
             if conn:
-                await message.reply_text(f"Anti-flood has been set to {amount} in chat: {chat_name}")
+                await message.reply_text(
+                    f"Anti-flood has been set to {amount} in chat: {chat_name}"
+                )
             else:
-                await message.reply_text(f"Successfully updated anti-flood limit to {amount}!")
+                await message.reply_text(
+                    f"Successfully updated anti-flood limit to {amount}!")
             return f"<b>{html.escape(chat_name)}:</b>\n#SETFLOOD\n<b>Admin:</b> {mention_html(user.id, user.first_name)}\nSet antiflood to <code>{amount}</code>."
 
-
         else:
-            await update.effective_message.reply_text("Invalid argument please use a number, 'off' or 'no'")
+            await update.effective_message.reply_text(
+                "Invalid argument please use a number, 'off' or 'no'")
     else:
         await message.reply_text(
             "Use `/setflood number` to enable anti-flood.\nOr use `/setflood off` to disable antiflood!.",
@@ -221,13 +222,16 @@ async def set_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     return ""
 
 
-
 async def flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message
 
-    conn = await connected(context.bot, update, chat, user.id, need_admin=False)
+    conn = await connected(context.bot,
+                           update,
+                           chat,
+                           user.id,
+                           need_admin=False)
     if conn:
         chat_id = conn
         chat_name = CUTIEPII_PTB.bot.getChat(conn).title
@@ -244,8 +248,9 @@ async def flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     limit = sql.get_flood_limit(chat_id)
     if limit == 0:
         text = await msg.reply_text(
-                f"I'm not enforcing any flood control in {chat_name}!",
-            ) if conn else await msg.reply_text("I'm not enforcing any flood control here!")
+            f"I'm not enforcing any flood control in {chat_name}!",
+        ) if conn else await msg.reply_text(
+            "I'm not enforcing any flood control here!")
     elif conn:
         text = await msg.reply_text(
             f"I'm currently restricting members after {limit} consecutive messages in {chat_name}."
@@ -257,9 +262,9 @@ async def flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         )
 
 
-
 @user_admin
-async def set_flood_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def set_flood_mode(update: Update,
+                         context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -297,8 +302,7 @@ async def set_flood_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
                     "It looks like you tried to set time value for antiflood "
                     "but you didn't specified time; Try, `/setfloodmode tban <timevalue>`."
                     "Examples of time value: "
-                    "4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
-                )
+                    "4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.")
                 send_message(msg, teks, parse_mode=ParseMode.MARKDOWN_V2)
                 return
             settypeflood = f"tban for {args[1]}"
@@ -316,7 +320,8 @@ async def set_flood_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             sql.set_flood_strength(chat_id, 5, str(args[1]))
         else:
             send_message(
-                msg, "I only understand ban/kick/mute/tban/tmute!",
+                msg,
+                "I only understand ban/kick/mute/tban/tmute!",
             )
             return
         if conn:
@@ -355,7 +360,6 @@ async def set_flood_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     return ""
 
 
-
 def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
 
@@ -365,6 +369,7 @@ def __chat_settings__(chat_id, user_id):
     if limit == 0:
         return "Not enforcing to flood control."
     return f"Antiflood has been set to`{limit}`."
+
 
 __help__ = """
 Antiflood allows you to take action on users that send more than x messages in a row. Exceeding the set flood \
@@ -388,8 +393,15 @@ will result in restricting that user.
 
 __mod_name__ = "Anti-Flood"
 
-CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & (~filters.StatusUpdate.ALL) & filters.ChatType.GROUPS, check_flood))
-CUTIEPII_PTB.add_handler(CommandHandler("setflood", set_flood, filters=filters.ChatType.GROUPS))
-CUTIEPII_PTB.add_handler(CommandHandler("setfloodmode", set_flood_mode))  # , filters.ChatType.GROUPS)
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(flood_button, pattern=r"unmute_flooder"))
-CUTIEPII_PTB.add_handler(CommandHandler("flood", flood, filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(
+    MessageHandler(
+        filters.ALL & (~filters.StatusUpdate.ALL) & filters.ChatType.GROUPS,
+        check_flood))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("setflood", set_flood, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler(
+    "setfloodmode", set_flood_mode))  # , filters.ChatType.GROUPS)
+CUTIEPII_PTB.add_handler(
+    CallbackQueryHandler(flood_button, pattern=r"unmute_flooder"))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("flood", flood, filters.ChatType.GROUPS))

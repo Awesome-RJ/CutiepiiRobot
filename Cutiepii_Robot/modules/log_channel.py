@@ -54,6 +54,7 @@ if is_module_loaded(FILENAME):
     from Cutiepii_Robot.modules.sql import log_channel_sql as sql
 
     def loggable(func):
+
         @wraps(func)
         def log_action(update, context, *args, **kwargs):
             result = func(update, context, *args, **kwargs)
@@ -78,8 +79,8 @@ if is_module_loaded(FILENAME):
 
         return log_action
 
-
     def gloggable(func):
+
         @wraps(func)
         def glog_action(update, context, *args, **kwargs):
             result = func(update, context, *args, **kwargs)
@@ -90,7 +91,6 @@ if is_module_loaded(FILENAME):
                 datetime_fmt = "%H:%M - %d-%m-%Y"
                 result += f"\n<b>Event Stamp</b>: <code>{datetime.utcnow().strftime(datetime_fmt)}</code>"
 
-
                 if message.chat.type == chat.SUPERGROUP and message.chat.username:
                     result += f"\n<b>Link:</b> <a href='https://t.me/{chat.username}/{message.message_id}'>click here</a>"
                 if log_chat := str(GBAN_LOGS):
@@ -100,9 +100,8 @@ if is_module_loaded(FILENAME):
 
         return glog_action
 
-    async def send_log(
-        context: ContextTypes.DEFAULT_TYPE, log_chat_id: str, orig_chat_id: str, result: str
-    ):
+    async def send_log(context: ContextTypes.DEFAULT_TYPE, log_chat_id: str,
+                       orig_chat_id: str, result: str):
         bot = context.bot
         try:
             await bot.send_message(
@@ -114,8 +113,8 @@ if is_module_loaded(FILENAME):
         except BadRequest as excp:
             if excp.message == "Chat not found":
                 await bot.send_message(
-                    orig_chat_id, "This log channel has been deleted - unsetting."
-                )
+                    orig_chat_id,
+                    "This log channel has been deleted - unsetting.")
                 sql.stop_chat_logging(orig_chat_id)
             else:
                 LOGGER.warning(excp.message)
@@ -124,13 +123,14 @@ if is_module_loaded(FILENAME):
 
                 await bot.send_message(
                     log_chat_id,
-                    result
-                    + "\n\nFormatting has been disabled due to an unexpected error.",
+                    result +
+                    "\n\nFormatting has been disabled due to an unexpected error.",
                 )
 
     @cutiepii_cmd(command="logchannel")
     @u_admin
-    async def logging(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    async def logging(update: Update,
+                      context: ContextTypes.DEFAULT_TYPE) -> None:
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -144,11 +144,13 @@ if is_module_loaded(FILENAME):
             )
 
         else:
-            await message.reply_text("No log channel has been set for this group!")
+            await message.reply_text(
+                "No log channel has been set for this group!")
 
     @cutiepii_cmd(command="setlog")
     @user_admin(AdminPerms.CAN_CHANGE_INFO)
-    async def setlog(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    async def setlog(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -174,31 +176,30 @@ if is_module_loaded(FILENAME):
                 )
             except Forbidden as excp:
                 if excp.message == "Forbidden: bot is not a member of the channel chat":
-                    await bot.send_message(chat.id, "Successfully set log channel!")
+                    await bot.send_message(chat.id,
+                                           "Successfully set log channel!")
                 else:
                     LOGGER.exception("ERROR in setting the log channel.")
 
             await bot.send_message(chat.id, "Successfully set log channel!")
 
         else:
-            await message.reply_text(
-                "The steps to set a log channel are:\n"
-                " - add bot to the desired channel\n"
-                " - send /setlog to the channel\n"
-                " - forward the /setlog to the group\n"
-            )
+            await message.reply_text("The steps to set a log channel are:\n"
+                                     " - add bot to the desired channel\n"
+                                     " - send /setlog to the channel\n"
+                                     " - forward the /setlog to the group\n")
 
     @cutiepii_cmd(command="unsetlog")
     @user_admin(AdminPerms.CAN_CHANGE_INFO)
-    async def unsetlog(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    async def unsetlog(update: Update,
+                       context: ContextTypes.DEFAULT_TYPE) -> None:
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
 
         if log_channel := sql.stop_chat_logging(chat.id):
             await bot.send_message(
-                log_channel, f"Channel has been unlinked from {chat.title}"
-            )
+                log_channel, f"Channel has been unlinked from {chat.title}")
             await message.reply_text("Log channel has been un-set.")
 
         else:
@@ -212,7 +213,8 @@ if is_module_loaded(FILENAME):
 
     def __chat_settings__(chat_id, user_id):
         if log_channel := sql.get_chat_log_channel(chat_id):
-            log_channel_info = asyncio.get_running_loop().run_until_complete(CUTIEPII_PTB.bot.get_chat(log_channel))
+            log_channel_info = asyncio.get_running_loop().run_until_complete(
+                CUTIEPII_PTB.bot.get_chat(log_channel))
             return f"This group has all it's logs sent to: {escape_markdown(log_channel_info.title)} (`{log_channel}`)"
         return "No log channel is set for this group!"
 
@@ -244,22 +246,19 @@ async def log_settings(update: Update):
     chat = update.effective_chat
     chat_set = sql.get_chat_setting(chat_id=chat.id)
     if not chat_set:
-        sql.set_chat_setting(
-            setting=sql.LogChannelSettings(chat.id, True, True, True, True, True)
-        )
-    btn = InlineKeyboardMarkup(
+        sql.set_chat_setting(setting=sql.LogChannelSettings(
+            chat.id, True, True, True, True, True))
+    btn = InlineKeyboardMarkup([
         [
-            [
-                InlineKeyboardButton(text="Warn", callback_data="log_tog_warn"),
-                InlineKeyboardButton(text="Action", callback_data="log_tog_act"),
-            ],
-            [
-                InlineKeyboardButton(text="Join", callback_data="log_tog_join"),
-                InlineKeyboardButton(text="Leave", callback_data="log_tog_leave"),
-            ],
-            [InlineKeyboardButton(text="Report", callback_data="log_tog_rep")],
-        ]
-    )
+            InlineKeyboardButton(text="Warn", callback_data="log_tog_warn"),
+            InlineKeyboardButton(text="Action", callback_data="log_tog_act"),
+        ],
+        [
+            InlineKeyboardButton(text="Join", callback_data="log_tog_join"),
+            InlineKeyboardButton(text="Leave", callback_data="log_tog_leave"),
+        ],
+        [InlineKeyboardButton(text="Report", callback_data="log_tog_rep")],
+    ])
     msg = update.effective_message
     await msg.reply_text("Toggle channel log settings", reply_markup=btn)
 
@@ -268,7 +267,8 @@ from Cutiepii_Robot.modules.sql import log_channel_sql as sql
 
 
 @cutiepii_callback(pattern=r"log_tog_.*")
-async def log_setting_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def log_setting_callback(update: Update,
+                               context: ContextTypes.DEFAULT_TYPE) -> None:
     cb = update.callback_query
     user = cb.from_user
     chat = cb.message.chat
@@ -278,9 +278,8 @@ async def log_setting_callback(update: Update, context: ContextTypes.DEFAULT_TYP
     setting = cb.data.replace("log_tog_", "")
     chat_set = sql.get_chat_setting(chat_id=chat.id)
     if not chat_set:
-        sql.set_chat_setting(
-            setting=sql.LogChannelSettings(chat.id, True, True, True, True, True)
-        )
+        sql.set_chat_setting(setting=sql.LogChannelSettings(
+            chat.id, True, True, True, True, True))
 
     t = sql.get_chat_setting(chat.id)
     if setting == "warn":

@@ -37,6 +37,7 @@ from Cutiepii_Robot.modules.mongo.couples_mongo import get_couple, save_couple
 from pyrogram import filters
 from datetime import datetime
 
+
 # Date and time
 def dt():
     now = datetime.now()
@@ -48,9 +49,11 @@ def dt_tom():
     return str(int(dt()[0].split("/")[0]) + 1)+"/" + \
         dt()[0].split("/")[1]+"/" + dt()[0].split("/")[2]
 
+
 today = str(dt()[0])
 tomorrow = str(dt_tom())
 Cutiepii_PYRO_Couples = filters.command("couples")
+
 
 @pgram.on_message(Cutiepii_PYRO_Couples)
 @pgram.on_edited_message(Cutiepii_PYRO_Couples)
@@ -80,14 +83,9 @@ async def couple(_, message):
             couple_selection_message = f"""**Couple of the day:**
 {c1_mention} + {c2_mention} = 💜
 __New couple of the day may be chosen at 12AM {tomorrow}__"""
-            await pgram.send_message(
-                message.chat.id,
-                text=couple_selection_message
-            )
-            couple = {
-                "c1_id": c1_id,
-                "c2_id": c2_id
-            }
+            await pgram.send_message(message.chat.id,
+                                     text=couple_selection_message)
+            couple = {"c1_id": c1_id, "c2_id": c2_id}
             await save_couple(chat_id, today, couple)
 
         else:
@@ -98,10 +96,8 @@ __New couple of the day may be chosen at 12AM {tomorrow}__"""
             couple_selection_message = f"""Couple of the day:
 [{c1_name}](tg://openmessage?user_id={c1_id}) + [{c2_name}](tg://openmessage?user_id={c2_id}) = 💜
 __New couple of the day may be chosen at 12AM {tomorrow}__"""
-            await pgram.send_message(
-                message.chat.id,
-                text=couple_selection_message
-            )
+            await pgram.send_message(message.chat.id,
+                                     text=couple_selection_message)
     except Exception as e:
         print(e)
         await message.reply_text(e)

@@ -45,7 +45,6 @@ from typing import List
 
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
-
 opener = urllib.request.build_opener()
 useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36 Edg/88.0.705.68"
 opener.addheaders = [("User-agent", useragent)]
@@ -68,20 +67,22 @@ async def reverse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         elif reply.document:
             file_id = reply.document.file_id
         else:
-             await msg.reply_text("Reply To An Image Or Sticker To Lookup!")
-             return
+            await msg.reply_text("Reply To An Image Or Sticker To Lookup!")
+            return
 
         image_file = await context.bot.get_file(file_id)
         image_file.download(imagename)
     else:
         await msg.reply_text(
-            "Please Reply To A Sticker, Or An Image To Search It!", parse_mode=ParseMode.MARKDOWN_V2,
+            "Please Reply To A Sticker, Or An Image To Search It!",
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
         return
 
-    MsG = await context.bot.send_message(chat_id,
-                                   "Let Me See...",
-                                   reply_to_message_id=rtmid,
+    MsG = await context.bot.send_message(
+        chat_id,
+        "Let Me See...",
+        reply_to_message_id=rtmid,
     )
     try:
         searchUrl = "https://www.google.com/searchbyimage/upload"
@@ -89,7 +90,9 @@ async def reverse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "encoded_image": (imagename, open(imagename, "rb")),
             "image_content": "",
         }
-        response = requests.post(searchUrl, files=multipart, allow_redirects=False)
+        response = requests.post(searchUrl,
+                                 files=multipart,
+                                 allow_redirects=False)
         fetchUrl = response.headers.get("Location")
 
         os.remove(imagename)
@@ -102,9 +105,8 @@ async def reverse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         match = ParseSauce(f"{fetchUrl}&hl=en")
         guess = match.get("best_guess")
         MsG.edit_text("Uploading...")
-        if match.get("override") and (
-            match.get("override") != "" or match.get("override") is not None
-        ):
+        if match.get("override") and (match.get("override") != ""
+                                      or match.get("override") is not None):
             imgspage = match.get("override")
         else:
             imgspage = match.get("similar_images")
@@ -113,13 +115,15 @@ async def reverse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if guess:
             MsG.edit_text("Hmmm....")
             search_result = guess.replace("Possible related search: ", "")
-            buttuns.append([InlineKeyboardButton(text="Images Link", url=fetchUrl)])
+            buttuns.append(
+                [InlineKeyboardButton(text="Images Link", url=fetchUrl)])
         else:
             MsG.edit_text("Couldn't Find Anything!")
             return
 
         if imgspage:
-            buttuns.append([InlineKeyboardButton(text="Similar Images", url=imgspage)])
+            buttuns.append(
+                [InlineKeyboardButton(text="Similar Images", url=imgspage)])
 
         MsG.edit_text(
             f"*Search Results*: \n\n`{search_result}`",
@@ -127,13 +131,18 @@ async def reverse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             reply_markup=InlineKeyboardMarkup(buttuns),
         )
 
-
     except BadRequest as Bdr:
-        MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: BadRequest!\n\n{Bdr}", parse_mode=ParseMode.MARKDOWN_V2)
+        MsG.edit_text(
+            f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: BadRequest!\n\n{Bdr}",
+            parse_mode=ParseMode.MARKDOWN_V2)
     except TelegramError as Tge:
-        MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: TelegramError!\n\n{Tge}", parse_mode=ParseMode.MARKDOWN_V2)
+        MsG.edit_text(
+            f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: TelegramError!\n\n{Tge}",
+            parse_mode=ParseMode.MARKDOWN_V2)
     except Exception as Exp:
-        MsG.edit_text(f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: Exception!\n\n{Exp}", parse_mode=ParseMode.MARKDOWN_V2)
+        MsG.edit_text(
+            f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: Exception!\n\n{Exp}",
+            parse_mode=ParseMode.MARKDOWN_V2)
 
 
 def ParseSauce(googleurl):
@@ -144,21 +153,23 @@ def ParseSauce(googleurl):
 
     try:
         for bess in soup.findAll("a", {"class": "PBorbe"}):
-             url = "https://www.google.com" + bess.get("href")
-             results["override"] = url
+            url = "https://www.google.com" + bess.get("href")
+            results["override"] = url
     except:
         pass
 
     for similar_image in soup.findAll("input", {"class": "gLFyf"}):
-         url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(similar_image.get("value"))
-         results["similar_images"] = url
+        url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(
+            similar_image.get("value"))
+        results["similar_images"] = url
 
     for best_guess in soup.findAll("div", attrs={"class": "r5a77d"}):
-         results["best_guess"] = best_guess.get_text()
+        results["best_guess"] = best_guess.get_text()
 
     return results
 
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["grs", "reverse", "pp"], reverse))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["grs", "reverse", "pp"], reverse))
 
 __mod_name__ = "Reverse"

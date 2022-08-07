@@ -32,24 +32,28 @@ dictionary = PyDictionary()
 
 
 class AioHttp:
+
     @staticmethod
     async def get_json(link):
-        async with aiohttp.ClientSession() as session, session.get(link) as resp:
+        async with aiohttp.ClientSession() as session, session.get(
+                link) as resp:
             return await resp.json()
 
     @staticmethod
     async def get_text(link):
-        async with aiohttp.ClientSession() as session, session.get(link) as resp:
+        async with aiohttp.ClientSession() as session, session.get(
+                link) as resp:
             return await resp.text()
 
     @staticmethod
     async def get_raw(link):
-        async with aiohttp.ClientSession() as session, session.get(link) as resp:
+        async with aiohttp.ClientSession() as session, session.get(
+                link) as resp:
             return await resp.read()
 
 
 __mod_name__ = "Inline"
-__help__ = f"""
+__help__ = """
 INLINE BOT SERVICE OF @Cutiepii_Robot
 I'm more efficient when added as group admin. By the way these commands can be used by anyone in a group via inline.
 ──「 Syntax 」──
@@ -91,7 +95,7 @@ I'm more efficient when added as group admin. By the way these commands can be u
 """
 
 __MODULE__ = "Inline"
-__HELP__ = f"""
+__HELP__ = """
  ==>> **INLINE BOT SERVICE OF @Cutiepii_Robot** <<==
 `I'm more efficient when added as group admin. By the way these commands can be used by anyone in a group via inline.`
    >> Syntax <<
@@ -145,32 +149,46 @@ async def inline_query_handler(client, query):
         answers = []
         if text.strip() == "":
             answerss = await inline_help_func(__HELP__)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=10)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=10)
             return
         if text.split()[0] == "alive":
             answerss = await alive_function(answers)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=10)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=10)
         elif text.split()[0] == "tr":
             lang = text.split()[1]
             tex = text.split(None, 2)[2]
             answerss = await translate_func(answers, lang, tex)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=10)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=10)
         elif text.split()[0] == "ud":
             tex = text.split(None, 1)[1]
             answerss = await urban_func(answers, tex)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=10)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=10)
         elif text.split()[0] == "google":
             tex = text.split(None, 1)[1]
             answerss = await google_search_func(answers, tex)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=10)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=10)
         elif text.split()[0] == "webss":
             tex = text.split(None, 1)[1]
             answerss = await webss(tex)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=2)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=2)
         elif text.split()[0] == "bitly":
             tex = text.split(None, 1)[1]
             answerss = await shortify(tex)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=2)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=2)
         elif text.split()[0] == "wiki":
             if len(text.split()) < 2:
                 await client.answer_inline_query(
@@ -182,11 +200,15 @@ async def inline_query_handler(client, query):
                 return
             tex = text.split(None, 1)[1].strip()
             answerss = await wiki_func(answers, tex)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=2)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=2)
 
         elif text.split()[0] == "ping":
             answerss = await ping_func(answers)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=2)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=2)
             return
 
         elif text.split()[0] == "yt":
@@ -210,16 +232,13 @@ async def inline_query_handler(client, query):
                         InlineQueryResultArticle(
                             title=result["title"],
                             description="{}, {} views.".format(
-                                result["duration"], result["viewCount"]["short"]
-                            ),
+                                result["duration"],
+                                result["viewCount"]["short"]),
                             input_message_content=InputTextMessageContent(
                                 "https://www.youtube.com/watch?v={}".format(
-                                    result["id"]
-                                )
-                            ),
+                                    result["id"])),
                             thumb_url=result["thumbnails"][0]["url"],
-                        )
-                    )
+                        ))
 
                 try:
                     await query.answer(results=answers, cache_time=0)
@@ -254,7 +273,9 @@ async def inline_query_handler(client, query):
         elif text.split()[0] == "torrent":
             tex = text.split(None, 1)[1]
             answerss = await torrent_func(answers, tex)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=10)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=10)
         elif text.split()[0] == "modapk":
             sgname = text.split(None, 1)[1]
             PabloEscobar = (
@@ -283,7 +304,8 @@ async def inline_query_handler(client, query):
                 rr = requests.get(lemk)
                 soup = BeautifulSoup(rr.content, "html5lib")
                 script = soup.find("script", type="text/javascript")
-                leek = re.search(r'href=[\'"]?([^\'" >]+)', script.text).group()
+                leek = re.search(r'href=[\'"]?([^\'" >]+)',
+                                 script.text).group()
                 dl_link = leek[5:]
 
                 results.append(
@@ -291,20 +313,18 @@ async def inline_query_handler(client, query):
                         photo_url=imme,
                         title=file_name,
                         caption=capt,
-                        reply_markup=InlineKeyboardMarkup(
+                        reply_markup=InlineKeyboardMarkup([
+                            [InlineKeyboardButton("Download Link", url=lemk)],
                             [
-                                [InlineKeyboardButton("Download Link", url=lemk)],
-                                [
-                                    InlineKeyboardButton(
-                                        "Direct Download Link", url=dl_link
-                                    )
-                                ],
-                            ]
-                        ),
-                    )
-                )
+                                InlineKeyboardButton("Direct Download Link",
+                                                     url=dl_link)
+                            ],
+                        ]),
+                    ))
 
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
         elif text.split()[0] == "reddit":
             subreddit = text.split(None, 1)[1]
             results = []
@@ -320,30 +340,27 @@ async def inline_query_handler(client, query):
                     photo_url=image,
                     title="Meme Search",
                     caption=caption,
-                    reply_markup=InlineKeyboardMarkup(
-                        [
-                            [InlineKeyboardButton("PostLink", url=link)],
-                        ]
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                    reply_markup=InlineKeyboardMarkup([
+                        [InlineKeyboardButton("PostLink", url=link)],
+                    ]),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
 
         elif text.split()[0] == "imdb":
             movie_name = text.split(None, 1)[1]
             results = []
             remove_space = movie_name.split(" ")
             final_name = "+".join(remove_space)
-            page = requests.get(
-                "https://www.imdb.com/find?ref_=nv_sr_fn&q=" + final_name + "&s=all"
-            )
+            page = requests.get("https://www.imdb.com/find?ref_=nv_sr_fn&q=" +
+                                final_name + "&s=all")
             str(page.status_code)
             soup = BeautifulSoup(page.content, "lxml")
             odds = soup.findAll("tr", "odd")
             mov_title = odds[0].findNext("td").findNext("td").text
-            mov_link = (
-                "http://www.imdb.com/" + odds[0].findNext("td").findNext("td").a["href"]
-            )
+            mov_link = ("http://www.imdb.com/" +
+                        odds[0].findNext("td").findNext("td").a["href"])
             page1 = requests.get(mov_link)
             soup = BeautifulSoup(page1.content, "lxml")
             if soup.find("div", "poster"):
@@ -373,7 +390,8 @@ async def inline_query_handler(client, query):
                 actors.pop()
                 stars = actors[0] + "," + actors[1] + "," + actors[2]
             if soup.find("div", "inline canwrap"):
-                story_line = soup.find("div", "inline canwrap").findAll("p")[0].text
+                story_line = soup.find("div",
+                                       "inline canwrap").findAll("p")[0].text
             else:
                 story_line = "Not available"
             info = soup.findAll("div", "txt-block")
@@ -393,39 +411,27 @@ async def inline_query_handler(client, query):
             else:
                 mov_rating = "Not available"
             lol = f"Movie - {mov_title}\n Click to see more"
-            msg = (
-                "<a href=" + poster + ">&#8203;</a>"
-                "<b>Title : </b><code>"
-                + mov_title
-                + "</code>\n<code>"
-                + mov_details
-                + "</code>\n<b>Rating : </b><code>"
-                + mov_rating
-                + "</code>\n<b>Country : </b><code>"
-                + mov_country[0]
-                + "</code>\n<b>Language : </b><code>"
-                + mov_language[0]
-                + "</code>\n<b>Director : </b><code>"
-                + director
-                + "</code>\n<b>Writer : </b><code>"
-                + writer
-                + "</code>\n<b>Stars : </b><code>"
-                + stars
-                + "</code>\n<b>IMDB Url : </b>"
-                + mov_link
-                + "\n<b>Story Line : </b>"
-                + story_line
-            )
+            msg = ("<a href=" + poster + ">&#8203;</a>"
+                   "<b>Title : </b><code>" + mov_title + "</code>\n<code>" +
+                   mov_details + "</code>\n<b>Rating : </b><code>" +
+                   mov_rating + "</code>\n<b>Country : </b><code>" +
+                   mov_country[0] + "</code>\n<b>Language : </b><code>" +
+                   mov_language[0] + "</code>\n<b>Director : </b><code>" +
+                   director + "</code>\n<b>Writer : </b><code>" + writer +
+                   "</code>\n<b>Stars : </b><code>" + stars +
+                   "</code>\n<b>IMDB Url : </b>" + mov_link +
+                   "\n<b>Story Line : </b>" + story_line)
             results.append(
                 InlineQueryResultArticle(
                     title="Imdb Search",
                     description=lol,
                     input_message_content=InputTextMessageContent(
-                        msg, disable_web_page_preview=False, parse_mode="HTML"
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                        msg, disable_web_page_preview=False,
+                        parse_mode="HTML"),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
         elif text.split()[0] == "spaminfo":
             cmd = text.split(None, 1)[1]
             results = []
@@ -463,13 +469,11 @@ async def inline_query_handler(client, query):
                         title="Spam Info",
                         description="Search Users spam info",
                         input_message_content=InputTextMessageContent(
-                            stats, disable_web_page_preview=True
-                        ),
-                    )
-                )
-                await client.answer_inline_query(
-                    query.id, cache_time=0, results=results
-                )
+                            stats, disable_web_page_preview=True),
+                    ))
+                await client.answer_inline_query(query.id,
+                                                 cache_time=0,
+                                                 results=results)
         elif text.split()[0] == "lyrics":
             cmd = text.split(None, 1)[1]
             results = []
@@ -492,11 +496,11 @@ async def inline_query_handler(client, query):
                     title="Song Lyrics",
                     description="Click here to see lyrics",
                     input_message_content=InputTextMessageContent(
-                        reply, disable_web_page_preview=False
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                        reply, disable_web_page_preview=False),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
         elif text.split()[0] == "pokedex":
             if len(text.split()) < 2:
                 await client.answer_inline_query(
@@ -508,28 +512,33 @@ async def inline_query_handler(client, query):
                 return
             pokedex = text.split(None, 1)[1].strip()
             Pokedex = await pokedexinfo(answers, pokedex)
-            await client.answer_inline_query(query.id, results=Pokedex, cache_time=2)
+            await client.answer_inline_query(query.id,
+                                             results=Pokedex,
+                                             cache_time=2)
         elif text.split()[0] == "paste":
             tex = text.split(None, 1)[1]
             answerss = await paste_func(answers, tex)
-            await client.answer_inline_query(query.id, results=answerss, cache_time=2)
+            await client.answer_inline_query(query.id,
+                                             results=answerss,
+                                             cache_time=2)
 
         elif text.split()[0] == "covid":
             lel = text.split(None, 1)[1]
             results = []
             country = lel.replace(" ", "")
-            data = await fetch(f"https://corona.lmao.ninja/v2/countries/{country}")
+            data = await fetch(
+                f"https://corona.lmao.ninja/v2/countries/{country}")
             data = await json_prettify(data)
             results.append(
                 InlineQueryResultArticle(
                     title="Covid Info Gathered succesfully",
                     description=data,
                     input_message_content=InputTextMessageContent(
-                        data, disable_web_page_preview=False
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, results=results, cache_time=2)
+                        data, disable_web_page_preview=False),
+                ))
+            await client.answer_inline_query(query.id,
+                                             results=results,
+                                             cache_time=2)
         elif text.split()[0] == "country":
             lel = text.split(None, 1)[1]
             results = []
@@ -632,11 +641,13 @@ async def inline_query_handler(client, query):
                 Touch for more info
                 """,
                     input_message_content=InputTextMessageContent(
-                        caption, parse_mode="HTML", disable_web_page_preview=True
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, results=results, cache_time=2)
+                        caption,
+                        parse_mode="HTML",
+                        disable_web_page_preview=True),
+                ))
+            await client.answer_inline_query(query.id,
+                                             results=results,
+                                             cache_time=2)
 
         elif text.split()[0] == "fakegen":
             results = []
@@ -656,11 +667,11 @@ async def inline_query_handler(client, query):
                     title="Fake infomation gathered",
                     description="Click here to see them",
                     input_message_content=InputTextMessageContent(
-                        res, parse_mode="HTML", disable_web_page_preview=True
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                        res, parse_mode="HTML", disable_web_page_preview=True),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
 
         elif text.split()[0] == "cs":
             results = []
@@ -677,11 +688,12 @@ async def inline_query_handler(client, query):
                     title="Match information gathered",
                     description="Click here to see them",
                     input_message_content=InputTextMessageContent(
-                        res, parse_mode="HTML", disable_web_page_preview=False
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                        res, parse_mode="HTML",
+                        disable_web_page_preview=False),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
 
         elif text.split()[0] == "antonyms":
             results = []
@@ -697,11 +709,11 @@ async def inline_query_handler(client, query):
                     title=f"antonyms for {lel}",
                     description=got,
                     input_message_content=InputTextMessageContent(
-                        got, disable_web_page_preview=False
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                        got, disable_web_page_preview=False),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
 
         elif text.split()[0] == "synonyms":
             results = []
@@ -717,11 +729,11 @@ async def inline_query_handler(client, query):
                     title=f"antonyms for {lel}",
                     description=got,
                     input_message_content=InputTextMessageContent(
-                        got, disable_web_page_preview=False
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                        got, disable_web_page_preview=False),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
 
         elif text.split()[0] == "define":
             results = []
@@ -737,11 +749,11 @@ async def inline_query_handler(client, query):
                     title=f"Definition for {lel}",
                     description=got,
                     input_message_content=InputTextMessageContent(
-                        got, disable_web_page_preview=False
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                        got, disable_web_page_preview=False),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
 
         elif text.split()[0] == "weather":
             results = []
@@ -749,14 +761,15 @@ async def inline_query_handler(client, query):
             input_str = text.split(None, 1)[1]
             async with aiohttp.ClientSession() as session:
                 response_api_zero = await session.get(
-                    sample_url.format(input_str, OPENWEATHERMAP_ID)
-                )
+                    sample_url.format(input_str, OPENWEATHERMAP_ID))
             response_api = await response_api_zero.json()
             if response_api["cod"] == 200:
                 country_code = response_api["sys"]["country"]
                 country_time_zone = int(response_api["timezone"])
-                sun_rise_time = int(response_api["sys"]["sunrise"]) + country_time_zone
-                sun_set_time = int(response_api["sys"]["sunset"]) + country_time_zone
+                sun_rise_time = int(
+                    response_api["sys"]["sunrise"]) + country_time_zone
+                sun_set_time = int(
+                    response_api["sys"]["sunset"]) + country_time_zone
                 lol = """ 
                 WEATHER INFO GATHERED
                 Location: {}
@@ -776,9 +789,11 @@ async def inline_query_handler(client, query):
                     response_api["wind"]["speed"],
                     response_api["clouds"]["all"],
                     # response_api["main"]["pressure"],
-                    time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(sun_rise_time)),
+                    time.strftime("%Y-%m-%d %H:%M:%S",
+                                  time.gmtime(sun_rise_time)),
                     country_code,
-                    time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(sun_set_time)),
+                    time.strftime("%Y-%m-%d %H:%M:%S",
+                                  time.gmtime(sun_set_time)),
                     country_code,
                 )
                 results.append(
@@ -786,13 +801,11 @@ async def inline_query_handler(client, query):
                         title="Weather Information",
                         description=lol,
                         input_message_content=InputTextMessageContent(
-                            lol, disable_web_page_preview=True
-                        ),
-                    )
-                )
-                await client.answer_inline_query(
-                    query.id, cache_time=0, results=results
-                )
+                            lol, disable_web_page_preview=True),
+                    ))
+                await client.answer_inline_query(query.id,
+                                                 cache_time=0,
+                                                 results=results)
 
         elif text.split()[0] == "datetime":
             results = []
@@ -802,7 +815,8 @@ async def inline_query_handler(client, query):
             if len(query_timezone) == 2:
                 result = generate_time(query_timezone, ["countryCode"])
             else:
-                result = generate_time(query_timezone, ["zoneName", "countryName"])
+                result = generate_time(query_timezone,
+                                       ["zoneName", "countryName"])
 
             if not result:
                 result = f"Timezone info not available for <b>{lel}</b>"
@@ -812,87 +826,60 @@ async def inline_query_handler(client, query):
                     title=f"Date & Time info of {lel}",
                     description=result,
                     input_message_content=InputTextMessageContent(
-                        result, disable_web_page_preview=False, parse_mode="html"
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                        result,
+                        disable_web_page_preview=False,
+                        parse_mode="html"),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
 
         elif text.split()[0] == "app":
             rip = []
             app_name = text.split(None, 1)[1]
             remove_space = app_name.split(" ")
             final_name = "+".join(remove_space)
-            page = requests.get(
-                "https://play.google.com/store/search?q=" + final_name + "&c=apps"
-            )
+            page = requests.get("https://play.google.com/store/search?q=" +
+                                final_name + "&c=apps")
             str(page.status_code)
             soup = BeautifulSoup(page.content, "lxml", from_encoding="utf-8")
             results = soup.findAll("div", "ZmHEEd")
-            app_name = (
-                results[0]
-                .findNext("div", "Vpfmgd")
-                .findNext("div", "WsMG1c nnK0zc")
-                .text
-            )
-            app_dev = (
-                results[0].findNext("div", "Vpfmgd").findNext("div", "KoLSrc").text
-            )
-            app_dev_link = (
-                "https://play.google.com"
-                + results[0].findNext("div", "Vpfmgd").findNext("a", "mnKHRc")["href"]
-            )
-            app_rating = (
-                results[0]
-                .findNext("div", "Vpfmgd")
-                .findNext("div", "pf5lIe")
-                .find("div")["aria-label"]
-            )
-            app_link = (
-                "https://play.google.com"
-                + results[0]
-                .findNext("div", "Vpfmgd")
-                .findNext("div", "vU6FJ p63iDd")
-                .a["href"]
-            )
-            app_icon = (
-                results[0]
-                .findNext("div", "Vpfmgd")
-                .findNext("div", "uzcko")
-                .img["data-src"]
-            )
+            app_name = (results[0].findNext("div", "Vpfmgd").findNext(
+                "div", "WsMG1c nnK0zc").text)
+            app_dev = (results[0].findNext("div",
+                                           "Vpfmgd").findNext("div",
+                                                              "KoLSrc").text)
+            app_dev_link = ("https://play.google.com" + results[0].findNext(
+                "div", "Vpfmgd").findNext("a", "mnKHRc")["href"])
+            app_rating = (results[0].findNext("div", "Vpfmgd").findNext(
+                "div", "pf5lIe").find("div")["aria-label"])
+            app_link = ("https://play.google.com" + results[0].findNext(
+                "div", "Vpfmgd").findNext("div", "vU6FJ p63iDd").a["href"])
+            app_icon = (results[0].findNext("div", "Vpfmgd").findNext(
+                "div", "uzcko").img["data-src"])
             app_details = "<a href='" + app_icon + "'>📲&#8203;</a>"
             app_details += " <b>" + app_name + "</b>"
-            app_details += (
-                "\n\n<code>Developer :</code> <a href='"
-                + app_dev_link
-                + "'>"
-                + app_dev
-                + "</a>"
-            )
+            app_details += ("\n\n<code>Developer :</code> <a href='" +
+                            app_dev_link + "'>" + app_dev + "</a>")
             app_details += "\n<code>Rating :</code> " + app_rating.replace(
-                "Rated ", "⭐ "
-            ).replace(" out of ", "/").replace(" stars", "", 1).replace(
-                " stars", "⭐ "
-            ).replace(
-                "five", "5"
-            )
-            app_details += (
-                "\n<code>Features :</code> <a href='"
-                + app_link
-                + "'>View in Play Store</a>"
-            )
+                "Rated ", "⭐ ").replace(" out of ", "/").replace(
+                    " stars", "", 1).replace(" stars", "⭐ ").replace(
+                        "five", "5")
+            app_details += ("\n<code>Features :</code> <a href='" + app_link +
+                            "'>View in Play Store</a>")
             app_details += f"\n\n===> @{SUPPORT_CHAT} <==="
             rip.append(
                 InlineQueryResultArticle(
                     title=f"Datails of {app_name}",
                     description=app_details,
                     input_message_content=InputTextMessageContent(
-                        app_details, disable_web_page_preview=True, parse_mode="html"
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=rip)
+                        app_details,
+                        disable_web_page_preview=True,
+                        parse_mode="html"),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=rip)
 
         elif text.split()[0] == "gh":
             results = []
@@ -914,11 +901,11 @@ async def inline_query_handler(client, query):
                     title=f"Results for {gett}",
                     description=f" Github info of {title}\n  Touch to read",
                     input_message_content=InputTextMessageContent(
-                        result, disable_web_page_preview=True
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                        result, disable_web_page_preview=True),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
 
         elif text.split()[0] == "so":
             results = []
@@ -940,11 +927,11 @@ async def inline_query_handler(client, query):
                     title=f"Stack overflow saerch - {title}",
                     description=f" Touch to view search results on {title}",
                     input_message_content=InputTextMessageContent(
-                        result, disable_web_page_preview=True
-                    ),
-                )
-            )
-            await client.answer_inline_query(query.id, cache_time=0, results=results)
+                        result, disable_web_page_preview=True),
+                ))
+            await client.answer_inline_query(query.id,
+                                             cache_time=0,
+                                             results=results)
 
     except (IndexError, TypeError, KeyError, ValueError):
         return
@@ -975,8 +962,8 @@ def generate_time(to_find: str, findtype: List[str]) -> str:
                 day_fmt = r"%A"
                 gmt_offset = zone["gmtOffset"]
                 timestamp = datetime.datetime.now(
-                    datetime.timezone.utc
-                ) + datetime.timedelta(seconds=gmt_offset)
+                    datetime.timezone.utc) + datetime.timedelta(
+                        seconds=gmt_offset)
                 current_date = timestamp.strftime(date_fmt)
                 current_time = timestamp.strftime(time_fmt)
                 current_day = timestamp.strftime(day_fmt)
@@ -984,16 +971,14 @@ def generate_time(to_find: str, findtype: List[str]) -> str:
                 break
 
     try:
-        result = (
-            f" DATE AND TIME OF COUNTRY"
-            f"🌍Country :{country_name}\n"
-            f"⏳Zone Name : {country_zone}\n"
-            f"🗺Country Code: {country_code}\n"
-            f"🌞Daylight saving : {daylight_saving}\n"
-            f"🌅Day : {current_day}\n"
-            f"⌚Current Time : {current_time}\n"
-            f"📆Current Date :{current_date}"
-        )
+        result = (f" DATE AND TIME OF COUNTRY"
+                  f"🌍Country :{country_name}\n"
+                  f"⏳Zone Name : {country_zone}\n"
+                  f"🗺Country Code: {country_code}\n"
+                  f"🌞Daylight saving : {daylight_saving}\n"
+                  f"🌅Day : {current_day}\n"
+                  f"⌚Current Time : {current_time}\n"
+                  f"📆Current Date :{current_date}")
     except BaseException:
         result = None
 

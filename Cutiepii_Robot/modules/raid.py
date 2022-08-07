@@ -24,7 +24,6 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import (
     AdminPerms,
 )
 
-
 # store job id in a dict to be able to cancel them later
 RUNNING_RAIDS = {}  # {chat_id:job_id, ...}
 
@@ -48,48 +47,46 @@ def get_readable_time(time: int) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def setRaid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
+async def setRaid(update: Update,
+                  context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     args = context.args
     chat = update.effective_chat
     msg = update.effective_message
     user = update.effective_user
     if chat.type == "private":
-        await context.bot.sendMessage(chat.id, "This command is not available in PMs.")
+        await context.bot.sendMessage(chat.id,
+                                      "This command is not available in PMs.")
         return
     stat, time, acttime = sql.getRaidStatus(chat.id)
     readable_time = get_readable_time(time)
     if len(args) == 0:
         if stat:
             text = 'Raid mode is currently <code>Enabled</code>\nWould you like to <code>Disable</code> raid?'
-            keyboard = [
-                [
-                    InlineKeyboardButton(
-                        "Disable Raid Mode",
-                        callback_data=f"disable_raid={chat.id}={time}",
-                    ),
-                    InlineKeyboardButton(
-                        "Cancel Action", callback_data="cancel_raid=1"
-                    ),
-                ]
-            ]
+            keyboard = [[
+                InlineKeyboardButton(
+                    "Disable Raid Mode",
+                    callback_data=f"disable_raid={chat.id}={time}",
+                ),
+                InlineKeyboardButton("Cancel Action",
+                                     callback_data="cancel_raid=1"),
+            ]]
 
         else:
             text = f"Raid mode is currently <code>Disabled</code>\nWould you like to <code>Enable</code> " \
                    f"raid for {readable_time}?"
-            keyboard = [
-                [
-                    InlineKeyboardButton(
-                        "Enable Raid Mode",
-                        callback_data=f"enable_raid={chat.id}={time}",
-                    ),
-                    InlineKeyboardButton(
-                        "Cancel Action", callback_data="cancel_raid=0"
-                    ),
-                ]
-            ]
+            keyboard = [[
+                InlineKeyboardButton(
+                    "Enable Raid Mode",
+                    callback_data=f"enable_raid={chat.id}={time}",
+                ),
+                InlineKeyboardButton("Cancel Action",
+                                     callback_data="cancel_raid=0"),
+            ]]
 
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await msg.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=reply_markup)
+        await msg.reply_text(text,
+                             parse_mode=ParseMode.HTML,
+                             reply_markup=reply_markup)
 
     elif args[0] == "off":
         if stat:
@@ -110,25 +107,28 @@ async def setRaid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optiona
             if 300 <= time < 86400:
                 text = f"Raid mode is currently <code>Disabled</code>\nWould you like to <code>Enable</code> " \
                        f"raid for {readable_time}? "
-                keyboard = [
-                    [
-                        InlineKeyboardButton(
-                            "Enable Raid",
-                            callback_data=f"enable_raid={chat.id}={time}",
-                        ),
-                        InlineKeyboardButton(
-                            "Cancel Action", callback_data="cancel_raid=0"
-                        ),
-                    ]
-                ]
+                keyboard = [[
+                    InlineKeyboardButton(
+                        "Enable Raid",
+                        callback_data=f"enable_raid={chat.id}={time}",
+                    ),
+                    InlineKeyboardButton("Cancel Action",
+                                         callback_data="cancel_raid=0"),
+                ]]
 
                 reply_markup = InlineKeyboardMarkup(keyboard)
-                await msg.reply_text(text, parse_mode=ParseMode.HTML, reply_markup=reply_markup)
+                await msg.reply_text(text,
+                                     parse_mode=ParseMode.HTML,
+                                     reply_markup=reply_markup)
             else:
-                await msg.reply_text("You can only set time between 5 minutes and 1 day", parse_mode=ParseMode.HTML)
+                await msg.reply_text(
+                    "You can only set time between 5 minutes and 1 day",
+                    parse_mode=ParseMode.HTML)
 
         else:
-            await msg.reply_text("Unknown time given, give me something like 5m or 1h", parse_mode=ParseMode.HTML)
+            await msg.reply_text(
+                "Unknown time given, give me something like 5m or 1h",
+                parse_mode=ParseMode.HTML)
 
 
 @cutiepii_callback(pattern="enable_raid=")
@@ -136,7 +136,8 @@ async def setRaid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optiona
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def enable_raid_cb(update: Update, ctx: ContextTypes) -> Optional[str]:
-    args = await update.callback_query.data.replace("enable_raid=", "").split("=")
+    args = await update.callback_query.data.replace("enable_raid=",
+                                                    "").split("=")
     chat = update.effective_chat
     user = update.effective_user
     chat_id = args[0]
@@ -144,9 +145,11 @@ async def enable_raid_cb(update: Update, ctx: ContextTypes) -> Optional[str]:
     readable_time = get_readable_time(time)
     _, t, acttime = sql.getRaidStatus(chat_id)
     sql.setRaidStatus(chat_id, True, time, acttime)
-    await update.effective_message.edit_text(f"Raid mode has been <code>Enabled</code> for {readable_time}.",
-                                       parse_mode=ParseMode.HTML)
-    LOGGER.info("enabled raid mode in {} for {}".format(chat_id, readable_time))
+    await update.effective_message.edit_text(
+        f"Raid mode has been <code>Enabled</code> for {readable_time}.",
+        parse_mode=ParseMode.HTML)
+    LOGGER.info("enabled raid mode in {} for {}".format(
+        chat_id, readable_time))
     with contextlib.suppress(KeyError):
         oldRaid = RUNNING_RAIDS.pop(int(chat_id))
         j.scheduler.remove_job(oldRaid)  # check if there was an old job
@@ -154,16 +157,15 @@ async def enable_raid_cb(update: Update, ctx: ContextTypes) -> Optional[str]:
     def disable_raid(_):
         sql.setRaidStatus(chat_id, False, t, acttime)
         LOGGER.info(f"disbled raid mode in {chat_id}")
-        ctx.bot.send_message(chat_id, "Raid mode has been automatically disabled!")
+        ctx.bot.send_message(chat_id,
+                             "Raid mode has been automatically disabled!")
 
     raid = j.run_once(disable_raid, time)
     RUNNING_RAIDS[int(chat_id)] = raid.job.id
-    return (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#RAID\n"
-        f"Enabled for {readable_time}\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-    )
+    return (f"<b>{html.escape(chat.title)}:</b>\n"
+            f"#RAID\n"
+            f"Enabled for {readable_time}\n"
+            f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
 
 
 @cutiepii_callback(pattern="disable_raid=")
@@ -171,7 +173,8 @@ async def enable_raid_cb(update: Update, ctx: ContextTypes) -> Optional[str]:
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def disable_raid_cb(update: Update) -> Optional[str]:
-    args = await update.callback_query.data.replace("disable_raid=", "").split("=")
+    args = await update.callback_query.data.replace("disable_raid=",
+                                                    "").split("=")
     chat = update.effective_chat
     user = update.effective_user
     chat_id = args[0]
@@ -183,12 +186,10 @@ async def disable_raid_cb(update: Update) -> Optional[str]:
         'Raid mode has been <code>Disabled</code>, newly joining members will no longer be kicked.',
         parse_mode=ParseMode.HTML,
     )
-    logmsg = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#RAID\n"
-        f"Disabled\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-    )
+    logmsg = (f"<b>{html.escape(chat.title)}:</b>\n"
+              f"#RAID\n"
+              f"Disabled\n"
+              f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
     return logmsg
 
 
@@ -208,7 +209,8 @@ async def disable_raid_cb(update: Update):
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def raidtime(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
+async def raidtime(update: Update,
+                   context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     what, time, acttime = sql.getRaidStatus(update.effective_chat.id)
     args = context.args
     msg = update.effective_message
@@ -229,13 +231,18 @@ async def raidtime(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Option
                    f"{readable_time} then turn off automatically"
             await msg.reply_text(text, parse_mode=ParseMode.HTML)
             sql.setRaidStatus(chat.id, what, time, acttime)
-            return (f"<b>{html.escape(chat.title)}:</b>\n"
-                    f"#RAID\n"
-                    f"Set Raid mode time to {readable_time}\n"
-                    f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
-        await msg.reply_text("You can only set time between 5 minutes and 1 day", parse_mode=ParseMode.HTML)
+            return (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"#RAID\n"
+                f"Set Raid mode time to {readable_time}\n"
+                f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
+        await msg.reply_text(
+            "You can only set time between 5 minutes and 1 day",
+            parse_mode=ParseMode.HTML)
     else:
-        await msg.reply_text("Unknown time given, give me something like 5m or 1h", parse_mode=ParseMode.HTML)
+        await msg.reply_text(
+            "Unknown time given, give me something like 5m or 1h",
+            parse_mode=ParseMode.HTML)
 
 
 @cutiepii_cmd(command="raidactiontime")
@@ -243,7 +250,8 @@ async def raidtime(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Option
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def raidtime(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
+async def raidtime(update: Update,
+                   context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     what, t, time = sql.getRaidStatus(update.effective_chat.id)
     args = context.args
     msg = update.effective_message
@@ -264,13 +272,18 @@ async def raidtime(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Option
                    f" join will be temp banned for {readable_time}"
             await msg.reply_text(text, parse_mode=ParseMode.HTML)
             sql.setRaidStatus(chat.id, what, t, time)
-            return (f"<b>{html.escape(chat.title)}:</b>\n"
-                    f"#RAID\n"
-                    f"Set Raid mode action time to {readable_time}\n"
-                    f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
-        await msg.reply_text("You can only set time between 5 minutes and 1 day", parse_mode=ParseMode.HTML)
+            return (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"#RAID\n"
+                f"Set Raid mode action time to {readable_time}\n"
+                f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
+        await msg.reply_text(
+            "You can only set time between 5 minutes and 1 day",
+            parse_mode=ParseMode.HTML)
     else:
-        await msg.reply_text("Unknown time given, give me something like 5m or 1h", parse_mode=ParseMode.HTML)
+        await msg.reply_text(
+            "Unknown time given, give me something like 5m or 1h",
+            parse_mode=ParseMode.HTML)
 
 
 __mod_name__ = "AntiRaid"

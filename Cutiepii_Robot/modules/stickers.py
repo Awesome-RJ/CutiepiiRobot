@@ -22,6 +22,7 @@ from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 combot_stickers_url = "https://combot.org/telegram/stickers?q="
 scraper = CloudScraper()
 
+
 def get_cbs_data(query, page, user_id):
     # returns (text, buttons)
     text = scraper.get(
@@ -38,11 +39,13 @@ def get_cbs_data(query, page, user_id):
         has_next_page = highlighted_page.next_sibling.next_sibling is not None
     buttons = []
     if has_prev_page:
-        buttons.append(InlineKeyboardButton(
-            text='⬅️', callback_data=f'cbs_{page - 1}_{user_id}'))
+        buttons.append(
+            InlineKeyboardButton(text='⬅️',
+                                 callback_data=f'cbs_{page - 1}_{user_id}'))
     if has_next_page:
-        buttons.append(InlineKeyboardButton(
-            text='➡️', callback_data=f'cbs_{page + 1}_{user_id}'))
+        buttons.append(
+            InlineKeyboardButton(text='➡️',
+                                 callback_data=f'cbs_{page + 1}_{user_id}'))
     buttons = InlineKeyboardMarkup([buttons]) if buttons else None
     text = f'Stickers for <code>{escape(query)}</code>:\nPage: {page}'
     if packs and titles:
@@ -60,18 +63,17 @@ async def stickerid(update: Update):
     msg = update.effective_message
     if msg.reply_to_message and msg.reply_to_message.sticker:
         await msg.reply_text(
-            "Hello "
-            + f"{mention_html(msg.from_user.id, msg.from_user.first_name)}"
-            + ", The sticker id you are replying is :\n <code>"
-            + escape(msg.reply_to_message.sticker.file_id)
-            + "</code>",
+            "Hello " +
+            f"{mention_html(msg.from_user.id, msg.from_user.first_name)}" +
+            ", The sticker id you are replying is :\n <code>" +
+            escape(msg.reply_to_message.sticker.file_id) + "</code>",
             parse_mode=ParseMode.HTML,
         )
     else:
         await msg.reply_text(
-            "Hello "
-            + f"{mention_html(msg.from_user.id, msg.from_user.first_name)}"
-            + ", Please reply to sticker message to get id sticker",
+            "Hello " +
+            f"{mention_html(msg.from_user.id, msg.from_user.first_name)}" +
+            ", Please reply to sticker message to get id sticker",
             parse_mode=ParseMode.HTML,
         )
 
@@ -90,14 +92,8 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             stickerset = context.bot.get_sticker_set(packname)
             if len(stickerset.stickers) >= max_stickers:
                 packnum += 1
-                packname = (
-                    "a"
-                    + str(packnum)
-                    + "_"
-                    + str(user.id)
-                    + "_by_"
-                    + context.bot.username
-                )
+                packname = ("a" + str(packnum) + "_" + str(user.id) + "_by_" +
+                            context.bot.username)
             else:
                 packname_found = 1
         except TelegramError as e:
@@ -170,15 +166,10 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     png_sticker=open("kangsticker.png", "rb"),
                     emojis=sticker_emoji,
                 )
-                edited_keyboard = InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                text="View Pack", url=f"t.me/addstickers/{packname}"
-                            )
-                        ]
-                    ]
-                )
+                edited_keyboard = InlineKeyboardMarkup([[
+                    InlineKeyboardButton(text="View Pack",
+                                         url=f"t.me/addstickers/{packname}")
+                ]])
                 await msg.reply_text(
                     f"<b>Your sticker has been added!</b>"
                     f"\nEmoji Is : {sticker_emoji}",
@@ -212,15 +203,11 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                         png_sticker=open("kangsticker.png", "rb"),
                         emojis=sticker_emoji,
                     )
-                    edited_keyboard = InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton(
-                                    text="View Pack", url=f"t.me/addstickers/{packname}"
-                                )
-                            ]
-                        ]
-                    )
+                    edited_keyboard = InlineKeyboardMarkup([[
+                        InlineKeyboardButton(
+                            text="View Pack",
+                            url=f"t.me/addstickers/{packname}")
+                    ]])
                     await msg.reply_text(
                         f"<b>Your sticker has been added!</b>"
                         f"\nEmoji Is : {sticker_emoji}",
@@ -230,17 +217,14 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 elif e.message == "Invalid sticker emojis":
                     await msg.reply_text("Invalid emoji(s).")
                 elif e.message == "Stickers_too_much":
-                    await msg.reply_text("Max packsize reached. Press F to pay respecc.")
+                    await msg.reply_text(
+                        "Max packsize reached. Press F to pay respecc.")
                 elif e.message == "Internal Server Error: sticker set not found (500)":
-                    edited_keyboard = InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton(
-                                    text="View Pack", url=f"t.me/addstickers/{packname}"
-                                )
-                            ]
-                        ]
-                    )
+                    edited_keyboard = InlineKeyboardMarkup([[
+                        InlineKeyboardButton(
+                            text="View Pack",
+                            url=f"t.me/addstickers/{packname}")
+                    ]])
                     await msg.reply_text(
                         f"<b>Your sticker has been added!</b>"
                         f"\nEmoji Is : {sticker_emoji}",
@@ -250,7 +234,8 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 print(e)
 
         elif is_animated:
-            packname = "animated" + str(user.id) + "_by_" + context.bot.username
+            packname = "animated" + str(
+                user.id) + "_by_" + context.bot.username
             packname_found = 0
             max_stickers = 50
             while packname_found == 0:
@@ -258,14 +243,9 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     stickerset = context.bot.get_sticker_set(packname)
                     if len(stickerset.stickers) >= max_stickers:
                         packnum += 1
-                        packname = (
-                            "animated"
-                            + str(packnum)
-                            + "_"
-                            + str(user.id)
-                            + "_by_"
-                            + context.bot.username
-                        )
+                        packname = ("animated" + str(packnum) + "_" +
+                                    str(user.id) + "_by_" +
+                                    context.bot.username)
                     else:
                         packname_found = 1
                 except TelegramError as e:
@@ -278,15 +258,10 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     tgs_sticker=open("kangsticker.tgs", "rb"),
                     emojis=sticker_emoji,
                 )
-                edited_keyboard = InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                text="View Pack", url=f"t.me/addstickers/{packname}"
-                            )
-                        ]
-                    ]
-                )
+                edited_keyboard = InlineKeyboardMarkup([[
+                    InlineKeyboardButton(text="View Pack",
+                                         url=f"t.me/addstickers/{packname}")
+                ]])
                 await msg.reply_text(
                     f"<b>Your sticker has been added!</b>"
                     f"\nEmoji Is : {sticker_emoji}",
@@ -309,15 +284,11 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 elif e.message == "Invalid sticker emojis":
                     await msg.reply_text("Invalid emoji(s).")
                 elif e.message == "Internal Server Error: sticker set not found (500)":
-                    edited_keyboard = InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton(
-                                    text="View Pack", url=f"t.me/addstickers/{packname}"
-                                )
-                            ]
-                        ]
-                    )
+                    edited_keyboard = InlineKeyboardMarkup([[
+                        InlineKeyboardButton(
+                            text="View Pack",
+                            url=f"t.me/addstickers/{packname}")
+                    ]])
                     await msg.reply_text(
                         f"<b>Your sticker has been added!</b>"
                         f"\nEmoji Is : {sticker_emoji}",
@@ -334,14 +305,9 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     stickerset = context.bot.get_sticker_set(packname)
                     if len(stickerset.stickers) >= max_stickers:
                         packnum += 1
-                        packname = (
-                            "video"
-                            + str(packnum)
-                            + "_"
-                            + str(user.id)
-                            + "_by_"
-                            + context.bot.username
-                        )
+                        packname = ("video" + str(packnum) + "_" +
+                                    str(user.id) + "_by_" +
+                                    context.bot.username)
                     else:
                         packname_found = 1
                 except TelegramError as e:
@@ -354,15 +320,10 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     webm_sticker=open("kangsticker.webm", "rb"),
                     emojis=sticker_emoji,
                 )
-                edited_keyboard = InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                text="View Pack", url=f"t.me/addstickers/{packname}"
-                            )
-                        ]
-                    ]
-                )
+                edited_keyboard = InlineKeyboardMarkup([[
+                    InlineKeyboardButton(text="View Pack",
+                                         url=f"t.me/addstickers/{packname}")
+                ]])
                 await msg.reply_text(
                     f"<b>Your sticker has been added!</b>"
                     f"\nEmoji Is : {sticker_emoji}",
@@ -385,15 +346,11 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 elif e.message == "Invalid sticker emojis":
                     await msg.reply_text("Invalid emoji(s).")
                 elif e.message == "Internal Server Error: sticker set not found (500)":
-                    edited_keyboard = InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton(
-                                    text="View Pack", url=f"t.me/addstickers/{packname}"
-                                )
-                            ]
-                        ]
-                    )
+                    edited_keyboard = InlineKeyboardMarkup([[
+                        InlineKeyboardButton(
+                            text="View Pack",
+                            url=f"t.me/addstickers/{packname}")
+                    ]])
                     await msg.reply_text(
                         f"<b>Your sticker has been added!</b>"
                         f"\nEmoji Is : {sticker_emoji}",
@@ -438,17 +395,13 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 png_sticker=open("kangsticker.png", "rb"),
                 emojis=sticker_emoji,
             )
-            edited_keyboard = InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="View Pack", url=f"t.me/addstickers/{packname}"
-                        )
-                    ]
-                ]
-            )
+            edited_keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton(text="View Pack",
+                                     url=f"t.me/addstickers/{packname}")
+            ]])
             await msg.reply_text(
-                f"<b>Your sticker has been added!</b>" f"\nEmoji Is : {sticker_emoji}",
+                f"<b>Your sticker has been added!</b>"
+                f"\nEmoji Is : {sticker_emoji}",
                 reply_markup=edited_keyboard,
                 parse_mode=ParseMode.HTML,
             )
@@ -477,15 +430,10 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     png_sticker=open("kangsticker.png", "rb"),
                     emojis=sticker_emoji,
                 )
-                edited_keyboard = InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                text="View Pack", url=f"t.me/addstickers/{packname}"
-                            )
-                        ]
-                    ]
-                )
+                edited_keyboard = InlineKeyboardMarkup([[
+                    InlineKeyboardButton(text="View Pack",
+                                         url=f"t.me/addstickers/{packname}")
+                ]])
                 await msg.reply_text(
                     f"<b>Your sticker has been added!</b>"
                     f"\nEmoji Is : {sticker_emoji}",
@@ -495,7 +443,8 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             elif e.message == "Invalid sticker emojis":
                 await msg.reply_text("Invalid emoji(s).")
             elif e.message == "Stickers_too_much":
-                await msg.reply_text("Max packsize reached. Press F to pay respecc.")
+                await msg.reply_text(
+                    "Max packsize reached. Press F to pay respecc.")
             elif e.message == "Internal Server Error: sticker set not found (500)":
                 await msg.reply_text(
                     f"<b>Your sticker has been added!</b>"
@@ -517,11 +466,10 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             packs = f"t.me/addstickers/{packname}"
 
         edited_keyboard = InlineKeyboardMarkup(
-            [[InlineKeyboardButton(text="View Pack", url=f"{packs}")]]
-        )
-        await msg.reply_text(
-            packs_text, reply_markup=edited_keyboard, parse_mode=ParseMode.MARKDOWN_V2
-        )
+            [[InlineKeyboardButton(text="View Pack", url=f"{packs}")]])
+        await msg.reply_text(packs_text,
+                             reply_markup=edited_keyboard,
+                             parse_mode=ParseMode.MARKDOWN_V2)
     try:
         if os.path.isfile("kangsticker.png"):
             os.remove("kangsticker.png")
@@ -533,30 +481,27 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         pass
 
 
-async def makepack_internal(
-    context,
-    msg,
-    user,
-    emoji,
-    packname,
-    packnum,
-    png_sticker=None,
-    tgs_sticker=None,
-    webm_sticker=None
-):
+async def makepack_internal(context,
+                            msg,
+                            user,
+                            emoji,
+                            packname,
+                            packnum,
+                            png_sticker=None,
+                            tgs_sticker=None,
+                            webm_sticker=None):
     name = user.first_name
     name = name[:50]
     keyboard = InlineKeyboardMarkup(
-        [[InlineKeyboardButton(text="View Pack", url=f"{packname}")]]
-    )
+        [[InlineKeyboardButton(text="View Pack", url=f"{packname}")]])
     try:
         extra_version = ""
         if packnum > 0:
             extra_version = " " + str(packnum)
         if png_sticker:
             sticker_pack_name = (
-                f"{name}'s stic-pack (@{context.bot.username})" + extra_version
-            )
+                f"{name}'s stic-pack (@{context.bot.username})" +
+                extra_version)
             success = context.bot.create_new_sticker_set(
                 user.id,
                 packname,
@@ -566,8 +511,7 @@ async def makepack_internal(
             )
         if tgs_sticker:
             sticker_pack_name = (
-                f"{name}'s ani-pack (@{context.bot.username})" + extra_version
-            )
+                f"{name}'s ani-pack (@{context.bot.username})" + extra_version)
             success = context.bot.create_new_sticker_set(
                 user.id,
                 packname,
@@ -577,8 +521,7 @@ async def makepack_internal(
             )
         if webm_sticker:
             sticker_pack_name = (
-                f"{name}'s vid-pack (@{context.bot.username})" + extra_version
-            )
+                f"{name}'s vid-pack (@{context.bot.username})" + extra_version)
             success = context.bot.create_new_sticker_set(
                 user.id,
                 packname,
@@ -599,16 +542,11 @@ async def makepack_internal(
             )
         elif e.message == "Peer_id_invalid" or "bot was blocked by the user":
             await msg.reply_text(
-                f"Cutiepii Robot 愛 was blocked by you.",
-                reply_markup=InlineKeyboardMarkup(
-                    [
-                        [
-                            InlineKeyboardButton(
-                                text="Unblock", url=f"t.me/{context.bot.username}"
-                            )
-                        ]
-                    ]
-                ),
+                "Cutiepii Robot 愛 was blocked by you.",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton(text="Unblock",
+                                         url=f"t.me/{context.bot.username}")
+                ]]),
             )
         elif e.message == "Internal Server Error: created sticker set not found (500)":
             await msg.reply_text(
@@ -629,18 +567,20 @@ async def makepack_internal(
             parse_mode=ParseMode.HTML,
         )
     else:
-        await msg.reply_text("Failed to create sticker pack. Possibly due to blek mejik.")
+        await msg.reply_text(
+            "Failed to create sticker pack. Possibly due to blek mejik.")
 
 
-async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def getsticker(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat_id = update.effective_chat.id
     if msg.reply_to_message and msg.reply_to_message.sticker:
         await context.bot.sendChatAction(chat_id, "typing")
         await update.effective_message.reply_text(
-            "Hello"
-            + f"{mention_html(msg.from_user.id, msg.from_user.first_name)}"
-            + ", Please check the file you requested below."
+            "Hello" +
+            f"{mention_html(msg.from_user.id, msg.from_user.first_name)}" +
+            ", Please check the file you requested below."
             "\nPlease use this feature wisely!",
             parse_mode=ParseMode.HTML,
         )
@@ -648,21 +588,23 @@ async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         file_id = msg.reply_to_message.sticker.file_id
         newFile = await context.bot.get_file(file_id)
         newFile.download("sticker.png")
-        await context.bot.sendDocument(chat_id, document=open("sticker.png", "rb"))
+        await context.bot.sendDocument(chat_id,
+                                       document=open("sticker.png", "rb"))
         await context.bot.sendChatAction(chat_id, "upload_photo")
         await context.bot.send_photo(chat_id, photo=open("sticker.png", "rb"))
 
     else:
         await context.bot.sendChatAction(chat_id, "typing")
         await update.effective_message.reply_text(
-            "Hello"
-            + f"{mention_html(msg.from_user.id, msg.from_user.first_name)}"
-            + ", Please reply to sticker message to get sticker image",
+            "Hello" +
+            f"{mention_html(msg.from_user.id, msg.from_user.first_name)}" +
+            ", Please reply to sticker message to get sticker image",
             parse_mode=ParseMode.HTML,
         )
 
 
-async def cb_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def cb_sticker(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     query = "".join(msg.text.split()[1:])
     if not query:
@@ -685,15 +627,17 @@ async def cbs_callback(update: Update):
     if (user_id) != query.from_user.id:
         await query.answer("Not for you", cache_time=60 * 60)
         return
-    search_query = query.message.text.split(
-        "\n", 1)[0].split(maxsplit=2)[2][:-1]
+    search_query = query.message.text.split("\n",
+                                            1)[0].split(maxsplit=2)[2][:-1]
     text, buttons = get_cbs_data(search_query, int(page), query.from_user.id)
-    await query.edit_message_text(
-        text, parse_mode=ParseMode.HTML, reply_markup=buttons)
+    await query.edit_message_text(text,
+                                  parse_mode=ParseMode.HTML,
+                                  reply_markup=buttons)
     await query.answer()
 
 
-async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def getsticker(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     msg = update.effective_message
     chat_id = update.effective_chat.id
@@ -716,7 +660,9 @@ async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
             new_file.download("sticker.tgs")
             new_files = await bot.get_file(file_id)
             new_files.download("sticker.tgs.rename_me")
-            await bot.sendDocument(chat_id, document=open("sticker.tgs.rename_me", "rb"))
+            await bot.sendDocument(chat_id,
+                                   document=open("sticker.tgs.rename_me",
+                                                 "rb"))
             await bot.sendChatAction(chat_id, "upload_photo")
             await bot.sendDocument(chat_id, document=open("sticker.tgs", "rb"))
             os.remove("sticker.tgs")
@@ -725,7 +671,8 @@ async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
             file_id = msg.reply_to_message.sticker.file_id
             new_file = await bot.get_file(file_id)
             new_file.download("sticker.webm")
-            await bot.sendDocument(chat_id, document=open("sticker.webm", "rb"))
+            await bot.sendDocument(chat_id,
+                                   document=open("sticker.webm", "rb"))
             await bot.sendChatAction(chat_id, "upload_video")
             await bot.sendVideo(chat_id, video=open("sticker.webm", "rb"))
             os.remove("sticker.webm")
@@ -735,7 +682,8 @@ async def getsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     )
 
 
-async def delsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def delsticker(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     if msg.reply_to_message and msg.reply_to_message.sticker:
         file_id = msg.reply_to_message.sticker.file_id
@@ -743,11 +691,11 @@ async def delsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         await msg.reply_text("Deleted!")
     else:
         await update.effective_message.reply_text(
-            "Please reply to sticker message to del sticker"
-        )
+            "Please reply to sticker message to del sticker")
 
 
-async def add_fvrtsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def add_fvrtsticker(update: Update,
+                          context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     user = update.effective_user
     args = context.args
@@ -759,30 +707,24 @@ async def add_fvrtsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         else:
             get_s_name_title = query
         if get_s_name is None:
-            await message.reply_text(
-                "Sticker is invalid!"
-            )
+            await message.reply_text("Sticker is invalid!")
         sticker_url = f"https://t.me/addstickers/{get_s_name}"
         sticker_m = "<a href='{}'>{}</a>".format(sticker_url, get_s_name_title)
-        check_pack = REDIS.hexists(
-            f"fvrt_stickers2_{user.id}", get_s_name_title)
+        check_pack = REDIS.hexists(f"fvrt_stickers2_{user.id}",
+                                   get_s_name_title)
         if check_pack is False:
-            REDIS.hset(f"fvrt_stickers2_{user.id}",
-                       get_s_name_title, sticker_m)
+            REDIS.hset(f"fvrt_stickers2_{user.id}", get_s_name_title,
+                       sticker_m)
             await message.reply_text(
                 f"<code>{sticker_m}</code> has been succesfully added into your favorite sticker packs list!",
-                parse_mode=ParseMode.HTML
-            )
+                parse_mode=ParseMode.HTML)
         else:
             await message.reply_text(
                 f"<code>{sticker_m}</code> is already exist in your favorite sticker packs list!",
-                parse_mode=ParseMode.HTML
-            )
+                parse_mode=ParseMode.HTML)
 
     else:
-        await message.reply_text(
-            "Reply to any sticker!"
-        )
+        await message.reply_text("Reply to any sticker!")
 
 
 async def list_fvrtsticker(update: Update):
@@ -792,47 +734,46 @@ async def list_fvrtsticker(update: Update):
     fvrt_stickers_list.sort()
     fvrt_stickers_list = "\n• ".join(fvrt_stickers_list)
     if fvrt_stickers_list:
-        await message.reply_text(
-            "{}'s favorite sticker packs:\n➛ {}".format(user.first_name,
-                                                        fvrt_stickers_list),
-            parse_mode=ParseMode.HTML
-        )
+        await message.reply_text("{}'s favorite sticker packs:\n➛ {}".format(
+            user.first_name, fvrt_stickers_list),
+                                 parse_mode=ParseMode.HTML)
     else:
-        await message.reply_text(
-            "You haven't added any sticker yet."
-        )
+        await message.reply_text("You haven't added any sticker yet.")
 
 
-async def remove_fvrtsticker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def remove_fvrtsticker(update: Update,
+                             context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     user = update.effective_user
     args = context.args
     del_stick = " ".join(args)
     if not del_stick:
         await message.reply_text(
-            "Please give a your favorite sticker pack name to remove from your list.")
+            "Please give a your favorite sticker pack name to remove from your list."
+        )
         return
     del_check = REDIS.hexists(f"fvrt_stickers2_{user.id}", del_stick)
     if not del_check is False:
         REDIS.hdel(f"fvrt_stickers2_{user.id}", del_stick)
         await message.reply_text(
             f"<code>{del_stick}</code> has been succesfully deleted from your list.",
-            parse_mode=ParseMode.HTML
-        )
+            parse_mode=ParseMode.HTML)
     else:
         await message.reply_text(
             f"<code>{del_stick}</code> doesn't exist in your favorite sticker pack list.",
-            parse_mode=ParseMode.HTML
-        )
+            parse_mode=ParseMode.HTML)
+
 
 Credit = "Yūki • Black Knights Union"
+
 
 @Cutiepii(pattern="^/mmf ?(.*)")
 async def handler(event):
     if event.fwd_from:
         return
     if not event.reply_to_msg_id:
-        await event.reply("Reply to an image or a sticker to memeify it Nigga!!")
+        await event.reply(
+            "Reply to an image or a sticker to memeify it Nigga!!")
         return
     reply_message = await event.get_reply_message()
     if not reply_message.media:
@@ -850,9 +791,9 @@ async def handler(event):
     os.remove(meme)
 
 
-
 # Taken from https://github.com/UsergeTeam/Userge-Plugins/blob/master/plugins/memify.py#L64
 # Maybe replyed to suit the needs of this module
+
 
 async def drawText(image_path, text):
     img = Image.open(image_path)
@@ -873,36 +814,34 @@ async def drawText(image_path, text):
     if upper_text:
         for u_text in textwrap.wrap(upper_text, width=15):
             u_width, u_height = draw.textsize(u_text, font=m_font)
-            draw.text(xy=(((i_width - u_width) / 2) - 2, int((current_h / 640)
-
-                                                             * i_width)), text=u_text, font=m_font, fill=(0, 0, 0))
-
-            draw.text(xy=(((i_width - u_width) / 2) + 2, int((current_h / 640)
-
-                                                             * i_width)), text=u_text, font=m_font, fill=(0, 0, 0))
-            draw.text(xy=((i_width - u_width) / 2,
-                          int(((current_h / 640) * i_width)) - 2),
-
+            draw.text(xy=(((i_width - u_width) / 2) - 2,
+                          int((current_h / 640) * i_width)),
                       text=u_text,
                       font=m_font,
-                      fill=(0,
-                            0,
-                            0))
+                      fill=(0, 0, 0))
+
+            draw.text(xy=(((i_width - u_width) / 2) + 2,
+                          int((current_h / 640) * i_width)),
+                      text=u_text,
+                      font=m_font,
+                      fill=(0, 0, 0))
+            draw.text(xy=((i_width - u_width) / 2,
+                          int(((current_h / 640) * i_width)) - 2),
+                      text=u_text,
+                      font=m_font,
+                      fill=(0, 0, 0))
 
             draw.text(xy=(((i_width - u_width) / 2),
                           int(((current_h / 640) * i_width)) + 2),
-
                       text=u_text,
                       font=m_font,
-                      fill=(0,
-                            0,
-                            0))
+                      fill=(0, 0, 0))
 
-
-
-            draw.text(xy=((i_width - u_width) / 2, int((current_h / 640)
-
-                                                       * i_width)), text=u_text, font=m_font, fill=(255, 255, 255))
+            draw.text(xy=((i_width - u_width) / 2,
+                          int((current_h / 640) * i_width)),
+                      text=u_text,
+                      font=m_font,
+                      fill=(255, 255, 255))
 
             current_h += u_height + pad
 
@@ -947,7 +886,6 @@ async def drawText(image_path, text):
                 fill=(0, 0, 0),
             )
 
-
             draw.text(
                 xy=(
                     (i_width - u_width) / 2,
@@ -981,13 +919,15 @@ Stickers made easy with stickers module!
 
 __mod_name__ = "Stickers"
 
-
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("stickerid", stickerid))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("getsticker", getsticker))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("kang", kang))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("delsticker", delsticker))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["addfsticker", "afs"], add_fvrtsticker))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["removefsticker", "rfs"], remove_fvrtsticker))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["myfsticker", "mfs"], list_fvrtsticker))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["addfsticker", "afs"], add_fvrtsticker))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["removefsticker", "rfs"], remove_fvrtsticker))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["myfsticker", "mfs"], list_fvrtsticker))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("stickers", cb_sticker))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(cbs_callback, pattern="cbs_"))

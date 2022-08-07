@@ -39,7 +39,8 @@ from Cutiepii_Robot.utils.pluginhelpers import humanbytes, time_formatter
 async def download_file(url, file_name, message, start_time, bot):
     async with aiohttp.ClientSession() as session:
         time.time()
-        await download_coroutine(session, url, file_name, message, start_time, bot)
+        await download_coroutine(session, url, file_name, message, start_time,
+                                 bot)
     return file_name
 
 
@@ -77,9 +78,8 @@ async def download_coroutine(session, url, file_name, event, start):
                     percentage = downloaded * 100 / total_length
                     speed = downloaded / diff
                     elapsed_time = round(diff) * 1000
-                    time_to_completion = (
-                        round((total_length - downloaded) / speed) * 1000
-                    )
+                    time_to_completion = (round(
+                        (total_length - downloaded) / speed) * 1000)
                     estimated_total_time = elapsed_time + time_to_completion
                     try:
                         total_length = max(total_length, downloaded)
@@ -98,7 +98,8 @@ ETA: {}""".format(
                         )
                         if current_message not in [display_message, "empty"]:
                             print(current_message)
-                            await event.edit(current_message, parse_mode="html")
+                            await event.edit(current_message,
+                                             parse_mode="html")
 
                             display_message = current_message
                     except Exception as e:

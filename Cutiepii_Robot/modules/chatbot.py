@@ -33,17 +33,18 @@ import re
 import requests
 from time import sleep
 
-
 from Cutiepii_Robot import BOT_ID, CUTIEPII_PTB, DEV_USERS
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
-    is_user_admin,
-)
+    is_user_admin, )
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import (
-    ContextTypes, CallbackQueryHandler,
-    CommandHandler, filters, MessageHandler,
+    ContextTypes,
+    CallbackQueryHandler,
+    CommandHandler,
+    filters,
+    MessageHandler,
 )
 
 CHATBOT_ENABLED_CHATS = []
@@ -59,7 +60,8 @@ async def chatbot_toggle(update: Update):
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.effective_message.reply_text("Choose an option:", reply_markup=reply_markup)
+    await update.effective_message.reply_text("Choose an option:",
+                                              reply_markup=reply_markup)
 
 
 async def chatbot_handle_callq(update: Update):
@@ -102,13 +104,12 @@ def chatbot_response(query: str) -> str:
 def check_message(_: ContextTypes, message):
     reply_msg = message.reply_to_message
     text = message.text
-    if re.search("[.|\n]{0,}"+context.bot.first_name+"[.|\n]{0,}", text, flags=re.IGNORECASE):
+    if re.search("[.|\n]{0,}" + context.bot.first_name + "[.|\n]{0,}",
+                 text,
+                 flags=re.IGNORECASE):
         return True
-    return bool(
-        reply_msg
-        and reply_msg.from_user.id == BOT_ID
-        or message.chat.type == "private"
-    )
+    return bool(reply_msg and reply_msg.from_user.id == BOT_ID
+                or message.chat.type == "private")
 
 
 async def chatbot(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -135,11 +136,12 @@ async def chatbot(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             response = response.replace("bot.name", bot.first_name)
         sleep(0.3)
         await msg.reply_text(response
-#    , timeout=60
-        )
+                             #    , timeout=60
+                             )
 
 
-async def list_chatbot_chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def list_chatbot_chats(update: Update,
+                             context: ContextTypes.DEFAULT_TYPE) -> None:
     text = "<b>AI-Enabled Chats</b>\n"
     for chat in CHATBOT_ENABLED_CHATS:
         x = await context.bot.get_chat(chat)
@@ -148,7 +150,7 @@ async def list_chatbot_chats(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
-__help__ = f"""
+__help__ = """
 Chatbot utilizes the Brainshop's API and allows Cutiepii Robot 愛 to talk and provides a more interactive group chat experience.
 
 *Commands:*
@@ -156,10 +158,23 @@ Chatbot utilizes the Brainshop's API and allows Cutiepii Robot 愛 to talk and p
 ➛ /chatbot*:* Shows chatbot control panel
 """
 
-CUTIEPII_PTB.add_handler(CommandHandler("chatbot", chatbot_toggle, block=False))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(chatbot_handle_callq, pattern=r"chatbot_", block=False))
-CUTIEPII_PTB.add_handler(MessageHandler(filters.TEXT & (~filters.Regex(r"^#[^\s]+") & ~filters.Regex(r"^!") & ~filters.Regex(r"^\/")), chatbot, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("listaichats", list_chatbot_chats, filters=filters.User(DEV_USERS), block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("chatbot", chatbot_toggle,
+                                        block=False))
+CUTIEPII_PTB.add_handler(
+    CallbackQueryHandler(chatbot_handle_callq,
+                         pattern=r"chatbot_",
+                         block=False))
+CUTIEPII_PTB.add_handler(
+    MessageHandler(filters.TEXT &
+                   (~filters.Regex(r"^#[^\s]+") & ~filters.Regex(r"^!")
+                    & ~filters.Regex(r"^\/")),
+                   chatbot,
+                   block=False))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("listaichats",
+                   list_chatbot_chats,
+                   filters=filters.User(DEV_USERS),
+                   block=False))
 
 __mod_name__ = "Chatbot"
 __command_list__ = ["chatbot", "listaichats"]

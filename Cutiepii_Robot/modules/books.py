@@ -64,20 +64,22 @@ async def _(event):
                 for ts in td.find_all("a"):
                     title = ts.get_text()
                     lool += 1
-                for ts in td.find_all("a", attrs={"href": re.compile("^/book/")}):
+                for ts in td.find_all("a",
+                                      attrs={"href": re.compile("^/book/")}):
                     ref = ts.get("href")
                     link = f"https://b-ok.cc{ref}"
 
                 f.write("\n" + title)
                 f.write("\nBook link:- " + link + "\n\n")
 
-        f.write(f"By @Cutiepii_Robot.")
+        f.write("By @Cutiepii_Robot.")
         f.close()
 
         await telethn.send_file(
             event.chat_id,
             "book.txt",
-            caption=f"**BOOKS GATHERED SUCCESSFULLY!\n\nBY DAISYX. JOIN THE SUPPORT @{SUPPORT_CHAT}.**",
+            caption=
+            f"**BOOKS GATHERED SUCCESSFULLY!\n\nBY DAISYX. JOIN THE SUPPORT @{SUPPORT_CHAT}.**",
         )
         os.remove("book.txt")
         await KkK.delete()
