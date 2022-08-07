@@ -430,12 +430,12 @@ async def enforce_gban(update: Update,
                        context: ContextTypes.DEFAULT_TYPE) -> None:
     # Not using @restrict handler to avoid spamming - just ignore if cant gban.
     bot = context.bot
-    if (sql.does_chat_gban(update.effective_chat.id)):
+    if sql.does_chat_gban(update.effective_chat.id):
         user = update.effective_user
         chat = update.effective_chat
         msg = update.effective_message
 
-        if user and not (await is_user_admin(update, user_id, member)):
+        if user and not await is_user_admin(update, user_id, member):
             await check_and_ban(update, user.id)
             return
 
@@ -446,7 +446,7 @@ async def enforce_gban(update: Update,
 
         if msg.reply_to_message:
             user = msg.reply_to_message.from_user
-            if user and not (await is_user_admin(update, user_id, member)):
+            if user and not await is_user_admin(update, user_id, member):
                 await check_and_ban(update, user.id, should_message=False)
 
 
