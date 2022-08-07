@@ -840,15 +840,12 @@ async def handler(event):
         return
     file = await telethn.download_media(reply_message)
     msg = await event.reply("Memifying this image! Please wait")
-
-    if "Kittu" not in Credit: 
-        await event.reply("this nigga removed credit line from code")
     text = str(event.pattern_match.group(1)).strip()
 
     if len(text) < 1:
         return await msg.edit("You might want to try `/mmf text`")
     meme = await drawText(file, text)
-    await event.client.send_file(event.chat_id, file=meme, force_document=False)
+    await telethn.send_file(event.chat_id, file=meme, force_document=False)
     await msg.delete()
     os.remove(meme)
 
