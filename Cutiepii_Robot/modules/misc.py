@@ -62,7 +62,7 @@ from requests import get
 FORMATTING_HELP = """
 Main Help Here
 """
-MARKDOWN_HELP = f"""
+MARKDOWN_HELP = """
 
 Markdown is a very powerful formatting tool supported by telegram. Cutiepii Robot 愛 has some enhancements, to make sure that \
 saved messages are correctly parsed, and to allow you to create buttons.
@@ -105,7 +105,7 @@ You can also customise the contents of your message with contextual data. For ex
 - <code>{random}</code>: You can use this filling for a random greeting in welcome message.
 """
 
-RANDOM_HELP = f"""
+RANDOM_HELP = """
 <b>Random Content</b>
 
 Another thing that can be fun, is to randomise the contents of a message. Make things a little more personal by changing welcome messages, or changing notes!

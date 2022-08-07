@@ -599,7 +599,7 @@ async def makepack_internal(
             )
         elif e.message == "Peer_id_invalid" or "bot was blocked by the user":
             await msg.reply_text(
-                f"Cutiepii Robot 愛 was blocked by you.",
+                "Cutiepii Robot 愛 was blocked by you.",
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [

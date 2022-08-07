@@ -321,7 +321,7 @@ async def apk(e):
             + app_link
             + "'>View in Play Store</a>"
         )
-        app_details += f"\n\n===> *Cutiepii Robot 愛* <==="
+        app_details += "\n\n===> *Cutiepii Robot 愛* <==="
         await e.reply(app_details, parse_mode="HTML")
     except IndexError:
         await e.reply("No result found in search. Please enter **Valid app name**")

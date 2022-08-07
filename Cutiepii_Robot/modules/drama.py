@@ -139,12 +139,12 @@ async def casts_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
         txt = f"List Casts Of <a href='https://mydramalist.com/{slug}'>{title}</a>\n"
         if mainroles:
-          txt += f"\n\n● <u><b>Main</b></u>"
+          txt += "\n\n● <u><b>Main</b></u>"
           for cast in mainroles:
              txt += f"\n⚬ {cast['role']['name'].replace('[', '').replace(']', '')}\n   (<a href='{cast['link']}'>{cast['name']}</a>)"
 
         if supportroles:
-          txt += f"\n\n● <u><b>Support</b></u>"
+          txt += "\n\n● <u><b>Support</b></u>"
           for cast in supportroles:
              txt += f"\n⚬ {cast['role']['name'].replace('[', '').replace(']', '')}\n   (<a href='{cast['link']}'>{cast['name']}</a>)"
 

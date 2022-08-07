@@ -631,7 +631,7 @@ async def get_top_animes(gnr: str, page, user):
     if gnr == "None":
         query = ALLTOP_QUERY
         vars_ = {"page": int(page)}
-        msg = f"Top animes:\n\n"
+        msg = "Top animes:\n\n"
     nsfw = False
     result = await return_json_senpai(query, vars_, auth=False, user=user)
     if len(result['data']['Page']['media']) == 0:
@@ -639,7 +639,7 @@ async def get_top_animes(gnr: str, page, user):
         msg = f"Top animes for tag `{gnr.capitalize()}`:\n\n"
         result = await return_json_senpai(query, vars_, auth=False, user=user)
         if len(result['data']['Page']['media']) == 0:
-            return [f"No results Found"]
+            return ["No results Found"]
         nsls = await get_all_tags('nsfw')
         nsfw = gnr.lower() in nsls.lower()
     data = result["data"]["Page"]
@@ -890,7 +890,7 @@ async def get_anilist(qdb, page, auth: bool = False, user: int = None):
     result = await return_json_senpai(PAGE_QUERY, vars_, auth=auth, user=user)
 
     if len(result['data']['Page']['media']) == 0:
-        return [f"No results Found"]
+        return ["No results Found"]
 
     data = result["data"]["Page"]["media"][0]
     # Data of all fields in returned json
@@ -992,7 +992,7 @@ async def get_character(query, page, auth: bool = False, user: int = None):
                                       auth=auth,
                                       user=user)
     if len(result['data']['Page']['characters']) == 0:
-        return [f"No results Found"]
+        return ["No results Found"]
     data = result["data"]["Page"]["characters"][0]
     # Character Data
     id_ = data["id"]
@@ -1029,7 +1029,7 @@ async def get_manga(qdb, page, auth: bool = False, user: int = None):
     vars_ = {"search": MANGA_DB[qdb], "asHtml": True, "page": page}
     result = await return_json_senpai(MANGA_QUERY, vars_, auth=auth, user=user)
     if len(result['data']['Page']['media']) == 0:
-        return [f"No results Found"]
+        return ["No results Found"]
     data = result["data"]["Page"]["media"][0]
 
     # Data of all fields in returned json

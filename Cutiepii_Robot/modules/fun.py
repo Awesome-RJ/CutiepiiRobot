@@ -858,7 +858,7 @@ async def cutiepii(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
     reply_text(random.choice(fun_strings.DECIDE))
 
-__help__ = f"""
+__help__ = """
 ➛ /runs*:* reply a random string from an array of replies
 ➛ /slap*:* slap a user, or get slapped if not a reply
 ➛ /shrug*:* get shrug XD

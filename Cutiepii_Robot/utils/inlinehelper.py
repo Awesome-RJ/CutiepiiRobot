@@ -80,7 +80,7 @@ async def inline_help_func(__HELP__):
     buttons.add(
         InlineKeyboardButton(
             "Get More Help.",
-            url=f"https://telegram.dog/Cutiepii_Robot?start=start"),
+            url="https://telegram.dog/Cutiepii_Robot?start=start"),
         InlineKeyboardButton("Go Inline!",
                              switch_inline_query_current_chat=""),
     )

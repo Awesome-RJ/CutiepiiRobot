@@ -268,7 +268,7 @@ async def swarn(
         if reason:
             reply += f"\n<code> </code><b>➛ Reason:</b> {html.escape(reason)}"
 
-        reply += f"\nPlease take some of your precious time to read the rules!"
+        reply += "\nPlease take some of your precious time to read the rules!"
 
         log_reason = (
             f"<b>{html.escape(chat.title)}:</b>\n"
@@ -367,7 +367,7 @@ async def dwarn(
         )
         if reason:
             reply += f"\n<code> </code><b>➛ Reason:</b> {html.escape(reason)}"
-        reply += f"\nPlease take some of your precious time to read the rules!"
+        reply += "\nPlease take some of your precious time to read the rules!"
 
         log_reason = (
             f"<b>{html.escape(chat.title)}:</b>\n"

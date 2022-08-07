@@ -258,7 +258,7 @@ CUTIEPII_PTB.add_handler(MessageHandler(
 
 __mod_name__ = "Cleaning"
 
-__help__ = f"""
+__help__ = """
 Blue text cleaner removed any made up commands that people send in your chat.
 ➛ /cleanblue <on/off/yes/no>*:* clean commands after sending
 ➛ /ignoreblue <word>*:* prevent auto cleaning of the command

@@ -126,8 +126,8 @@ PM_START_TEXT = """
 buttons = [
     [
         InlineKeyboardButton(
-            text=f"Add Cutiepii To Your Group",
-            url=f"https://telegram.dog/Cutiepii_Robot?startgroup=true")
+            text="Add Cutiepii To Your Group",
+            url="https://telegram.dog/Cutiepii_Robot?startgroup=true")
     ],
     [
         InlineKeyboardButton(text="[► Help ◄]", callback_data="help_back"),
@@ -682,7 +682,7 @@ def main() -> int:
     else:
         CUTIEPII_PTB.run_polling(drop_pending_updates=True, stop_signals=None)
         LOGGER.info(
-            f"Cutiepii Robot started, Using long polling. | BOT: [@Cutiepii_Robot]"
+            "Cutiepii Robot started, Using long polling. | BOT: [@Cutiepii_Robot]"
         )
 
 
