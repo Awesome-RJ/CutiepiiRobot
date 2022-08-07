@@ -15,7 +15,7 @@ from telegram.helpers import mention_html
 from urllib.parse import quote as urlquote
 from bs4 import BeautifulSoup
 
-from Cutiepii_Robot import REDIS, CUTIEPII_PTB
+from Cutiepii_Robot import REDIS, CUTIEPII_PTB, telethn
 from Cutiepii_Robot.events import register as Cutiepii
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
@@ -838,7 +838,7 @@ async def handler(event):
     if not reply_message.media:
         await event.reply("Provide some Text please")
         return
-    file = await Cutiepii.download_media(reply_message)
+    file = await telethn.download_media(reply_message)
     msg = await event.reply("Memifying this image! Please wait")
 
     if "Kittu" not in Credit: 
