@@ -95,7 +95,7 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         )
 
 
-def log_user(update: Update):
+async def log_user(update: Update):
     chat = update.effective_chat
     msg = update.effective_message
 
