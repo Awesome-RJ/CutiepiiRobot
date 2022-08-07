@@ -35,7 +35,6 @@ import lyricsgenius
 from pyrogram import filters
 from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent
 
-
 from Cutiepii_Robot import pgram, GENIUS_API_TOKEN, arq
 
 
@@ -46,11 +45,8 @@ async def lyrics_func(answers, text):
             InlineQueryResultArticle(
                 title="Error",
                 description=song.result,
-                input_message_content=InputTextMessageContent(
-                    song.result
-                ),
-            )
-        )
+                input_message_content=InputTextMessageContent(song.result),
+            ))
         return answers
     lyrics = song.result
     song = lyrics.splitlines()
@@ -67,8 +63,7 @@ async def lyrics_func(answers, text):
             title=song_name,
             description=artist,
             input_message_content=InputTextMessageContent(msg),
-        )
-    )
+        ))
     return answers
 
 
@@ -95,8 +90,7 @@ async def lyrics(client, message):
     if r"-" not in message.text:
         await message.reply(
             "`Error: please use '-' as divider for <artist> and <song>`\n"
-            "eg: `/glyrics Nicki Minaj - Super Bass`"
-        )
+            "eg: `/glyrics Nicki Minaj - Super Bass`")
         return
 
     if GENIUS_API_TOKEN is None:
@@ -139,6 +133,5 @@ async def lyrics(client, message):
         os.remove("lyrics.txt")
     else:
         await lel.edit(
-            f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```"
-        )
+            f"**Search query**: \n`{artist} - {song}`\n\n```{songs.lyrics}```")
     return

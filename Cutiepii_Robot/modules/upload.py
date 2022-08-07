@@ -42,6 +42,7 @@ from Cutiepii_Robot import telethn, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT, CUTIE
 from Cutiepii_Robot.modules.urluploader import download_file
 from Cutiepii_Robot.utils.pluginhelpers import humanbytes, progress
 
+
 def get_date_in_two_weeks():
     """
     get maximum date of storage for file
@@ -63,7 +64,8 @@ async def send_to_transfersh_async(file):
     url = "https://transfer.sh/"
 
     with open(file, "rb") as f:
-        async with aiohttp.ClientSession() as session, session.post(url, data={str(file): f}) as response:
+        async with aiohttp.ClientSession() as session, session.post(
+                url, data={str(file): f}) as response:
             download_link = await response.text()
 
     print(
@@ -77,7 +79,8 @@ async def send_to_tmp_async(file):
     url = "https://tmp.ninja/api.php?d=upload-tool"
 
     with open(file, "rb") as f:
-        async with aiohttp.ClientSession() as session, session.post(url, data={"file": f}) as response:
+        async with aiohttp.ClientSession() as session, session.post(
+                url, data={"file": f}) as response:
             download_link = await response.text()
 
     return download_link
@@ -91,10 +94,8 @@ async def tsh(event):
         ilk = await event.respond("Downloading...")
         try:
             file_path = await url.download_media(
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, ilk, start, "Downloading...")
-                )
-            )
+                progress_callback=lambda d, t: asyncio.get_event_loop(
+                ).create_task(progress(d, t, ilk, start, "Downloading...")))
         except Exception as e:
             traceback.print_exc()
             print(e)
@@ -127,10 +128,8 @@ async def tmp(event):
         ilk = await event.respond("Downloading...")
         try:
             file_path = await url.download_media(
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, ilk, start, "Downloading...")
-                )
-            )
+                progress_callback=lambda d, t: asyncio.get_event_loop(
+                ).create_task(progress(d, t, ilk, start, "Downloading...")))
         except Exception as e:
             traceback.print_exc()
             print(e)
@@ -162,7 +161,8 @@ async def up(event):
         ilk = await event.respond("Downloading...")
 
         try:
-            filename = os.path.join(TEMP_DOWNLOAD_DIRECTORY, os.path.basename(url.text))
+            filename = os.path.join(TEMP_DOWNLOAD_DIRECTORY,
+                                    os.path.basename(url.text))
             await download_file(url.text, filename, ilk, start, telethn)
         except Exception as e:
             print(e)
@@ -175,9 +175,9 @@ async def up(event):
 
             dosya = await telethn.upload_file(
                 filename,
-                progress_callback=lambda d, t: asyncio.get_event_loop().create_task(
-                    progress(d, t, orta, start, "Uploading to Telegram...")
-                ),
+                progress_callback=lambda d, t: asyncio.get_event_loop().
+                create_task(
+                    progress(d, t, orta, start, "Uploading to Telegram...")),
             )
 
             str(time.time() - start)
@@ -185,7 +185,7 @@ async def up(event):
                 event.chat.id,
                 dosya,
                 force_document=True,
-                caption = "Uploaded By *@Cutiepii_Robot*",
+                caption="Uploaded By *@Cutiepii_Robot*",
             )
         except Exception as e:
             traceback.print_exc()

@@ -210,7 +210,10 @@ for module_name in ALL_MODULES:
 
 
 # do not async
-async def send_help(context: ContextTypes.DEFAULT_TYPE, chat_id, text, keyboard=None):
+async def send_help(context: ContextTypes.DEFAULT_TYPE,
+                    chat_id,
+                    text,
+                    keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
     await context.bot.send_message(
@@ -465,7 +468,10 @@ async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         send_help(chat.id, HELP_STRINGS)
 
 
-async def send_settings(context: ContextTypes.DEFAULT_TYPE, chat_id, user_id, user=False):
+async def send_settings(context: ContextTypes.DEFAULT_TYPE,
+                        chat_id,
+                        user_id,
+                        user=False):
     if user:
         if USER_SETTINGS:
             settings = "\n\n".join(

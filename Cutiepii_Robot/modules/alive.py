@@ -48,13 +48,10 @@ file4 = "https://telegra.ph/file/e8f3310b943b8b8699dcd.jpg"
 file5 = "https://telegra.ph/file/401cb7f6216764ebab161.jpg"
 """ =======================Hottie====================== """
 
-BUTTON = [
-    [
-        Button.url("【► HELP ◄】", "https://t.me/Cutiepii_Robot?start=help"),
-        Button.url("【► SUPPORT ◄】", "https://t.me/Black_Knights_Union_Support"),
-    ]
-]
-
+BUTTON = [[
+    Button.url("【► HELP ◄】", "https://t.me/Cutiepii_Robot?start=help"),
+    Button.url("【► SUPPORT ◄】", "https://t.me/Black_Knights_Union_Support"),
+]]
 
 START_TIME = datetime.utcnow()
 START_TIME_ISO = START_TIME.replace(microsecond=0).isoformat()
@@ -89,39 +86,67 @@ async def hmm(yes):
     pm_caption += f"**♡ Telethon Version :** `{tlhver}`\n\n"
     pm_caption += f"**♡ Pyrogram Version :** `{pyrover}`\n\n"
     pm_caption += "**♡ My Master :** [Rajkumar](https://t.me/Awesome_RJ_official) "
-    BUTTON = [
-        [
-            Button.url("【► Help ◄】", "https://t.me/Cutiepii_Robot?start=help"),
-            Button.url("【► Support ◄】", "https://t.me/Black_Knights_Union_Support"),
-        ]
-    ]
-    on = await telethn.send_file(
-        yes.chat_id, file=file1, caption=pm_caption, buttons=BUTTON, reply_to=yes
-    )
+    BUTTON = [[
+        Button.url("【► Help ◄】", "https://t.me/Cutiepii_Robot?start=help"),
+        Button.url("【► Support ◄】",
+                   "https://t.me/Black_Knights_Union_Support"),
+    ]]
+    on = await telethn.send_file(yes.chat_id,
+                                 file=file1,
+                                 caption=pm_caption,
+                                 buttons=BUTTON,
+                                 reply_to=yes)
 
     await asyncio.sleep(edit_time)
-    ok = await telethn.edit_message(yes.chat_id, on, file=file2, buttons=BUTTON)
+    ok = await telethn.edit_message(yes.chat_id,
+                                    on,
+                                    file=file2,
+                                    buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok2 = await telethn.edit_message(yes.chat_id, ok, file=file3, buttons=BUTTON)
+    ok2 = await telethn.edit_message(yes.chat_id,
+                                     ok,
+                                     file=file3,
+                                     buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok3 = await telethn.edit_message(yes.chat_id, ok2, file=file4, buttons=BUTTON)
+    ok3 = await telethn.edit_message(yes.chat_id,
+                                     ok2,
+                                     file=file4,
+                                     buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok4 = await telethn.edit_message(yes.chat_id, ok3, file=file5, buttons=BUTTON)
+    ok4 = await telethn.edit_message(yes.chat_id,
+                                     ok3,
+                                     file=file5,
+                                     buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok5 = await telethn.edit_message(yes.chat_id, ok4, file=file1, buttons=BUTTON)
+    ok5 = await telethn.edit_message(yes.chat_id,
+                                     ok4,
+                                     file=file1,
+                                     buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok6 = await telethn.edit_message(yes.chat_id, ok5, file=file2, buttons=BUTTON)
+    ok6 = await telethn.edit_message(yes.chat_id,
+                                     ok5,
+                                     file=file2,
+                                     buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok7 = await telethn.edit_message(yes.chat_id, ok6, file=file3, buttons=BUTTON)
+    ok7 = await telethn.edit_message(yes.chat_id,
+                                     ok6,
+                                     file=file3,
+                                     buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok8 = await telethn.edit_message(yes.chat_id, ok7, file=file4, buttons=BUTTON)
+    ok8 = await telethn.edit_message(yes.chat_id,
+                                     ok7,
+                                     file=file4,
+                                     buttons=BUTTON)
 
     await asyncio.sleep(edit_time)
-    ok9 = await telethn.edit_message(yes.chat_id, ok8, file=file5, buttons=BUTTON)
+    ok9 = await telethn.edit_message(yes.chat_id,
+                                     ok8,
+                                     file=file5,
+                                     buttons=BUTTON)

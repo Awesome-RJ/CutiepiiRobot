@@ -41,6 +41,7 @@ from psycopg2 import errors as sqlerrors
 
 from Cutiepii_Robot import TOKEN, CUTIEPII_PTB, DEV_USERS, OWNER_ID, LOGGER
 
+
 class ErrorsDict(dict):
     "A custom dict to store errors and their count"
 
@@ -48,7 +49,8 @@ class ErrorsDict(dict):
         super().__init__(*args, **kwargs)
 
     def __contains__(self, error):
-        error.identifier = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ", k=5))
+        error.identifier = "".join(
+            random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ", k=5))
         for e in self:
             if type(e) is type(error) and e.args == error.args:
                 self[e] += 1
@@ -60,7 +62,8 @@ class ErrorsDict(dict):
 errors = ErrorsDict()
 
 
-async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def error_callback(update: Update,
+                         context: ContextTypes.DEFAULT_TYPE) -> None:
     if not update:
         return
 
@@ -70,17 +73,17 @@ async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     if update.effective_chat.type != "channel":
         try:
-            await context.bot.send_message(update.effective_chat.id, 
-            f"<b>Sorry I ran into an error!</b>\n<b>Error</b>: <code>{e}</code>\n<i>This incident has been logged. No further action is required.</i>",
-            parse_mode=ParseMode.HTML)
+            await context.bot.send_message(
+                update.effective_chat.id,
+                f"<b>Sorry I ran into an error!</b>\n<b>Error</b>: <code>{e}</code>\n<i>This incident has been logged. No further action is required.</i>",
+                parse_mode=ParseMode.HTML)
         except BaseException as e:
             LOGGER.exception(e)
 
     if context.error in errors:
         return
-    tb_list = traceback.format_exception(
-        None, context.error, context.error.__traceback__
-    )
+    tb_list = traceback.format_exception(None, context.error,
+                                         context.error.__traceback__)
     tb = "".join(tb_list)
     pretty_message = (
         "An exception was raised while handling an update\n"
@@ -88,17 +91,16 @@ async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         "Chat: {} {}\n"
         "Callback data: {}\n"
         "Message: {}\n\n"
-        "Full Traceback: {}"
-    ).format(
-        update.effective_user.id,
-        update.effective_chat.title if update.effective_chat else "",
-        update.effective_chat.id if update.effective_chat else "",
-        update.callback_query.data if update.callback_query else "None",
-        update.effective_message.text if update.effective_message else "No message",
-        tb,
-    )
+        "Full Traceback: {}").format(
+            update.effective_user.id,
+            update.effective_chat.title if update.effective_chat else "",
+            update.effective_chat.id if update.effective_chat else "",
+            update.callback_query.data if update.callback_query else "None",
+            update.effective_message.text
+            if update.effective_message else "No message",
+            tb,
+        )
     paste_url = upload_text(pretty_message)
-
 
     if not paste_url:
         with open("Cutiepii_error.txt", "w+") as f:
@@ -106,20 +108,23 @@ async def error_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         await context.bot.send_document(
             OWNER_ID,
             open("Cutiepii_error.txt", "rb"),
-            caption=f"#{context.error.identifier}\n<b>Your sugar mommy got an error for you, you cute guy:</b>\n<code>{e}</code>",
+            caption=
+            f"#{context.error.identifier}\n<b>Your sugar mommy got an error for you, you cute guy:</b>\n<code>{e}</code>",
             parse_mode=ParseMode.HTML,
         )
         return
     await context.bot.send_message(
         OWNER_ID,
-        text=f"#{context.error.identifier}\n<b>Your sugar mommy got an error for you, you cute guy:</b>\n<code>{e}</code>",
-        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("PrivateBin", url=paste_url)]]),
+        text=
+        f"#{context.error.identifier}\n<b>Your sugar mommy got an error for you, you cute guy:</b>\n<code>{e}</code>",
+        reply_markup=InlineKeyboardMarkup(
+            [[InlineKeyboardButton("PrivateBin", url=paste_url)]]),
         parse_mode=ParseMode.HTML,
     )
-    
 
 
-async def list_errors(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def list_errors(update: Update,
+                      context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_user.id not in DEV_USERS:
         return
     e = dict(sorted(errors.items(), key=lambda item: item[1], reverse=True))
@@ -140,6 +145,7 @@ async def list_errors(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
         return
     await update.effective_message.reply_text(msg, parse_mode=ParseMode.HTML)
+
 
 CUTIEPII_PTB.add_error_handler(error_callback)
 CUTIEPII_PTB.add_handler(CommandHandler("errors", list_errors))

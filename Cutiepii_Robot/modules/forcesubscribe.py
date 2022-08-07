@@ -49,8 +49,7 @@ from Cutiepii_Robot.modules.sql import forceSubscribe_sql as sql
 logging.basicConfig(level=logging.INFO)
 
 static_data_filter = filters.create(
-    lambda _, __, query: query.data == "onUnMuteRequest"
-)
+    lambda _, __, query: query.data == "onUnMuteRequest")
 
 
 @pgram.on_callback_query(static_data_filter)
@@ -77,7 +76,8 @@ def _onUnMuteRequest(client, cb):
                 except UserNotParticipant:
                     client.answer_callback_query(
                         cb.id,
-                        text=f"❗ Join our @{channel} channel and press 'UnMute Me' button.",
+                        text=
+                        f"❗ Join our @{channel} channel and press 'UnMute Me' button.",
                         show_alert=True,
                     )
                 except ChannelPrivate:
@@ -87,7 +87,8 @@ def _onUnMuteRequest(client, cb):
             else:
                 client.answer_callback_query(
                     cb.id,
-                    text="❗ You have been muted by admins due to some other reason.",
+                    text=
+                    "❗ You have been muted by admins due to some other reason.",
                     show_alert=True,
                 )
         elif client.get_chat_member(chat_id, BOT_ID).status != "administrator":
@@ -114,8 +115,8 @@ def _check_member(client, message):
             return
         try:
             if client.get_chat_member(chat_id, user_id).status not in (
-                "administrator",
-                "creator",
+                    "administrator",
+                    "creator",
             ):
                 channel = chat_db.channel
                 try:
@@ -125,28 +126,25 @@ def _check_member(client, message):
                         sent_message = message.reply_text(
                             f"Welcome {message.from_user.mention} 🙏 \n **You havent joined our @{channel} Channel yet** 😭 \n \nPlease Join [Our Channel](https://telegram.dog/{channel}) and hit the **UNMUTE ME** Button. \n \n ",
                             disable_web_page_preview=True,
-                            reply_markup=InlineKeyboardMarkup(
+                            reply_markup=InlineKeyboardMarkup([
                                 [
-                                    [
-                                        InlineKeyboardButton(
-                                            "Join Channel",
-                                            url=f"https://telegram.dog/{channel}",
-                                        )
-                                    ],
-                                    [
-                                        InlineKeyboardButton(
-                                            "UnMute Me",
-                                            callback_data="onUnMuteRequest",
-                                        )
-                                    ],
-                                ]
-                            ),
+                                    InlineKeyboardButton(
+                                        "Join Channel",
+                                        url=f"https://telegram.dog/{channel}",
+                                    )
+                                ],
+                                [
+                                    InlineKeyboardButton(
+                                        "UnMute Me",
+                                        callback_data="onUnMuteRequest",
+                                    )
+                                ],
+                            ]),
                         )
-
 
                         client.restrict_chat_member(
-                            chat_id, user_id, ChatPermissions(can_send_messages=False)
-                        )
+                            chat_id, user_id,
+                            ChatPermissions(can_send_messages=False))
                     except ChatAdminRequired:
                         sent_message.edit(
                             "❗ **Cutiepii Robot 愛 is not an admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
@@ -157,7 +155,8 @@ def _check_member(client, message):
                 except ChatAdminRequired:
                     client.send_message(
                         chat_id,
-                        text=f"❗ **I not an admin of @{channel} channel.**\n__Give me admin of that channel and retry.\n#Ending FSub...__",
+                        text=
+                        f"❗ **I not an admin of @{channel} channel.**\n__Give me admin of that channel and retry.\n#Ending FSub...__",
                     )
                 except ChannelPrivate:
                     return
@@ -165,7 +164,11 @@ def _check_member(client, message):
             return
 
 
-@pgram.on_message(filters.command(["forcesubscribe", "forcesub", "forcesub@Cutiepii_Robot", "forcesubscribe@Cutiepii_Robot"]) & ~filters.private)
+@pgram.on_message(
+    filters.command([
+        "forcesubscribe", "forcesub", "forcesub@Cutiepii_Robot",
+        "forcesubscribe@Cutiepii_Robot"
+    ]) & ~filters.private)
 def config(client, message):
     user = client.get_chat_member(message.chat.id, message.from_user.id)
     if user.status == "creator" or user.user.id in SUDO_USERS:
@@ -175,19 +178,20 @@ def config(client, message):
             input_str = input_str.replace("@", "")
             if input_str.lower() in ("off", "no", "disable"):
                 sql.disapprove(chat_id)
-                message.reply_text("❌ **Force Subscribe is Disabled Successfully.**")
+                message.reply_text(
+                    "❌ **Force Subscribe is Disabled Successfully.**")
             elif input_str.lower() in ("clear"):
                 sent_message = message.reply_text(
-                    "**Unmuting all members who are muted by me...**"
-                )
+                    "**Unmuting all members who are muted by me...**")
                 try:
                     for chat_member in client.get_chat_members(
-                        message.chat.id, filter="restricted"
-                    ):
+                            message.chat.id, filter="restricted"):
                         if chat_member.restricted_by.id == BOT_ID:
-                            client.unban_chat_member(chat_id, chat_member.user.id)
+                            client.unban_chat_member(chat_id,
+                                                     chat_member.user.id)
                             time.sleep(1)
-                    sent_message.edit("✅ **UnMuted all members who are muted by me.**")
+                    sent_message.edit(
+                        "✅ **UnMuted all members who are muted by me.**")
                 except ChatAdminRequired:
                     sent_message.edit(
                         "❗ **I am not an admin in this chat.**\n__I can't unmute members because i am not an admin in this chat make me admin with ban user permission.__"
@@ -215,7 +219,8 @@ def config(client, message):
                 disable_web_page_preview=True,
             )
         else:
-            message.reply_text("❌ **Force Subscribe is disabled in this chat.**")
+            message.reply_text(
+                "❌ **Force Subscribe is disabled in this chat.**")
     else:
         message.reply_text(
             "❗ **Group Creator Required**\n__You have to be the group creator to do that.__"

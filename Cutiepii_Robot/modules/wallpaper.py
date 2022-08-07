@@ -42,6 +42,7 @@ from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 
 # Wallpaper module powered by wall.alphacoders.com
 
+
 @cutiepii_cmd(command="wall")
 @send_action(ChatAction.UPLOAD_PHOTO)
 async def wall(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

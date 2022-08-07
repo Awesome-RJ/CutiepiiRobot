@@ -13,19 +13,19 @@ from telethon.tl import types, functions
 db = mongodb["Cutiepii_Robot_Barcode"]
 approved_users = db.approve
 
+
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
         return isinstance(
-            (
-                await telethn(functions.channels.GetParticipantRequest(chat, user))
-            ).participant,
+            (await
+             telethn(functions.channels.GetParticipantRequest(chat, user)
+                     )).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
         ui = await telethn.get_peer_id(user)
-        ps = (
-            await telethn(functions.messages.GetFullChatRequest(chat.chat_id))
-        ).full_chat.participants.participants
+        ps = (await telethn(functions.messages.GetFullChatRequest(chat.chat_id)
+                            )).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
@@ -71,8 +71,9 @@ async def _(event):
         message = "SYNTAX: `.barcode <long text to include>`"
     bar_code_type = "code128"
     try:
-        bar_code_mode_f = barcode.get(
-            bar_code_type, message, writer=ImageWriter())
+        bar_code_mode_f = barcode.get(bar_code_type,
+                                      message,
+                                      writer=ImageWriter())
         filename = bar_code_mode_f.save(bar_code_type)
         await event.client.send_file(
             event.chat_id,
@@ -87,6 +88,8 @@ async def _(event):
     end = datetime.now()
     ms = (end - start).seconds
     await event.reply(f"Created BarCode in {ms} seconds")
+
+
 file_help = os.path.basename(__file__)
 file_help = file_help.replace(".py", "")
 file_helpo = file_help.replace("_", " ")

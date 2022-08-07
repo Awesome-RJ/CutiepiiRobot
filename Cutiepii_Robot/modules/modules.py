@@ -40,17 +40,18 @@ from telegram.constants import ParseMode
 from telegram.ext import CommandHandler
 
 
-
 @dev_plus
 async def load(update: Update):
     message = update.effective_message
     text = await message.text.split(" ", 1)[1]
     load_messasge = await message.reply_text(
-        f"Attempting to load module : <b>{text}</b>", parse_mode=ParseMode.HTML,
+        f"Attempting to load module : <b>{text}</b>",
+        parse_mode=ParseMode.HTML,
     )
 
     try:
-        imported_module = importlib.import_module(f"Cutiepii_Robot.modules.{text}")
+        imported_module = importlib.import_module(
+            f"Cutiepii_Robot.modules.{text}")
     except Exception:
         await load_messasge.edit_text("Does that module even exist?")
         return
@@ -110,17 +111,18 @@ async def load(update: Update):
     )
 
 
-
 @dev_plus
 async def unload(update: Update):
     message = update.effective_message
     text = await message.text.split(" ", 1)[1]
     unload_messasge = await message.reply_text(
-        f"Attempting to unload module : <b>{text}</b>", parse_mode=ParseMode.HTML,
+        f"Attempting to unload module : <b>{text}</b>",
+        parse_mode=ParseMode.HTML,
     )
 
     try:
-        imported_module = importlib.import_module(f"Cutiepii_Robot.modules.{text}")
+        imported_module = importlib.import_module(
+            f"Cutiepii_Robot.modules.{text}")
     except Exception:
         await unload_messasge.edit_text("Does that module even exist?")
         return
@@ -130,13 +132,15 @@ async def unload(update: Update):
     if imported_module.__mod_name__.lower() in IMPORTED:
         IMPORTED.pop(imported_module.__mod_name__.lower())
     else:
-        await unload_messasge.edit_text("Can't unload something that isn't loaded.")
+        await unload_messasge.edit_text(
+            "Can't unload something that isn't loaded.")
         return
     if "__handlers__" in dir(imported_module):
         handlers = imported_module.__handlers__
         for handler in handlers:
             if isinstance(handler, bool):
-                await unload_messasge.edit_text("This module can't be unloaded!")
+                await unload_messasge.edit_text(
+                    "This module can't be unloaded!")
                 return
             if not isinstance(handler, tuple):
                 CUTIEPII_PTB.remove_handler(handler)
@@ -176,9 +180,9 @@ async def unload(update: Update):
         USER_SETTINGS.pop(imported_module.__mod_name__.lower())
 
     await unload_messasge.edit_text(
-        f"Successfully unloaded module : <b>{text}</b>", parse_mode=ParseMode.HTML,
+        f"Successfully unloaded module : <b>{text}</b>",
+        parse_mode=ParseMode.HTML,
     )
-
 
 
 @sudo_plus
@@ -199,6 +203,5 @@ async def listmodules(update: Update):
 CUTIEPII_PTB.add_handler(CommandHandler("load", load))
 CUTIEPII_PTB.add_handler(CommandHandler("unload", unload))
 CUTIEPII_PTB.add_handler(CommandHandler("listmodules", listmodules))
-
 
 __mod_name__ = "Modules"

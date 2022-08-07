@@ -36,9 +36,8 @@ async def bug(_, msg: Message):
     bugs = content(msg)
     user_id = msg.from_user.id
     mention = (
-        f"[{msg.from_user.first_name}](tg://user?id={str(msg.from_user.id)}"
-        + ")"
-    )
+        f"[{msg.from_user.first_name}](tg://user?id={str(msg.from_user.id)}" +
+        ")")
 
     datetimes_fmt = "%d-%m-%Y"
     datetimes = datetime.utcnow().strftime(datetimes_fmt)
@@ -51,7 +50,6 @@ async def bug(_, msg: Message):
 **Bug Report : ** **{bugs}**
 **Event Stamp : ** **{datetimes}**"""
 
-
     if msg.chat.type == "private":
         await msg.reply_text("❎ <b>This command only works in groups.</b>")
         return
@@ -59,19 +57,16 @@ async def bug(_, msg: Message):
     if user_id == OWNER_ID:
         if bugs:
             await msg.reply_text(
-                "❎ <b>How can be owner bot reporting bug??</b>",
-            )
+                "❎ <b>How can be owner bot reporting bug??</b>", )
             return
-        await msg.reply_text(
-            "Owner noob!"
-        )
+        await msg.reply_text("Owner noob!")
     elif bugs:
         await msg.reply_text(
             f"<b>Bug Report : {bugs}</b>\n\n"
             "✅ <b>The bug was successfully reported to the support group!</b>",
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Close", callback_data="close_reply")]]
-            ),
+                [[InlineKeyboardButton("Close",
+                                       callback_data="close_reply")]]),
         )
 
         thumb = "https://i.pinimg.com/564x/f2/47/8b/f2478ba4e193470ebcdf61a2ad0f33ce.jpg"
@@ -81,18 +76,11 @@ async def bug(_, msg: Message):
             photo=thumb,
             caption=f"{bug_report}",
             reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            "➡ View Bug", url=f"{msg.link}")
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            "❌ Close", callback_data="close_send_photo")
-                    ]
-                ]
-            )
-        )
+                [[InlineKeyboardButton("➡ View Bug", url=f"{msg.link}")],
+                 [
+                     InlineKeyboardButton("❌ Close",
+                                          callback_data="close_send_photo")
+                 ]]))
     else:
         await msg.reply_text("❎ <b>No bug to Report!</b>")
 
@@ -101,15 +89,14 @@ async def bug(_, msg: Message):
 async def close_reply(CallbackQuery):
     await CallbackQuery.message.delete()
 
+
 @pgram.on_callback_query(filters.regex("close_send_photo"))
 async def close_send_photo(_, CallbackQuery):
-    is_Admin = await pgram.get_chat_member(
-        CallbackQuery.message.chat.id, CallbackQuery.from_user.id
-    )
+    is_Admin = await pgram.get_chat_member(CallbackQuery.message.chat.id,
+                                           CallbackQuery.from_user.id)
     if not is_Admin.can_delete_messages:
-        return await CallbackQuery.answer(
-            "You're not allowed to close this.", show_alert=True
-        )
+        return await CallbackQuery.answer("You're not allowed to close this.",
+                                          show_alert=True)
     await CallbackQuery.message.delete()
 
 

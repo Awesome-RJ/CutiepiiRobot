@@ -48,10 +48,8 @@ from telethon.tl import functions, types
 from telethon import *
 from telethon.tl.types import *
 
-
 from Cutiepii_Robot import telethn, CUTIEPII_PTB
 from Cutiepii_Robot.events import register
-
 """
 trans = SyncTranslator()
 
@@ -110,13 +108,10 @@ async def google_search(query):
 async def _(event):
     if event.fwd_from:
         return
-    if (
-        event.is_group
-        and not await is_register_admin(event.input_chat, event.message.sender_id)
-    ):
+    if (event.is_group and not await is_register_admin(
+            event.input_chat, event.message.sender_id)):
         await event.reply(
-            "You are not Admin. So, You can't use this. Try in my inbox"
-        )
+            "You are not Admin. So, You can't use this. Try in my inbox")
         return
 
     args = event.pattern_match.group(1)
@@ -131,13 +126,15 @@ async def _(event):
         await telethn.send_file(
             event.chat_id,
             file=types.InputMediaGeoPoint(
-                types.InputGeoPoint(float(latitude), float(longitude))
-            ),
+                types.InputGeoPoint(float(latitude), float(longitude))),
         )
-        await event.reply(f"Open with: [Google Maps]({gm})", link_preview=False)
+        await event.reply(f"Open with: [Google Maps]({gm})",
+                          link_preview=False)
     except Exception as e:
         print(e)
         await event.reply("I can't find that")
+
+
 """
 @register(pattern="^/google (.*)")
 async def google(event):
@@ -189,6 +186,7 @@ async def _(event):
     )
 """
 
+
 @register(pattern="^/img (.*)")
 async def img_sampler(event):
     if event.fwd_from:
@@ -230,8 +228,7 @@ async def ParseSauce(googleurl):
     with contextlib.suppress(BaseException):
         for similar_image in soup.findAll("input", {"class": "gLFyf"}):
             url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(
-                similar_image.get("value")
-            )
+                similar_image.get("value"))
             results["similar_images"] = url
 
     for best_guess in soup.findAll("div", attrs={"class": "r5a77d"}):
@@ -269,86 +266,59 @@ async def apk(e):
         remove_space = app_name.split(" ")
         final_name = "+".join(remove_space)
         page = requests.get(
-            f"https://play.google.com/store/search?q={final_name}&c=apps"
-        )
+            f"https://play.google.com/store/search?q={final_name}&c=apps")
         soup = bs4.BeautifulSoup(page.content, "lxml", from_encoding="utf-8")
         results = soup.findAll("div", "ZmHEEd")
-        app_name = (
-            results[0].findNext("div", "Vpfmgd").findNext("div", "WsMG1c nnK0zc").text
-        )
-        app_dev = results[0].findNext("div", "Vpfmgd").findNext("div", "KoLSrc").text
-        app_dev_link = (
-            "https://play.google.com"
-            + results[0].findNext("div", "Vpfmgd").findNext("a", "mnKHRc")["href"]
-        )
-        app_rating = (
-            results[0]
-            .findNext("div", "Vpfmgd")
-            .findNext("div", "pf5lIe")
-            .find("div")["aria-label"]
-        )
-        app_link = (
-            "https://play.google.com"
-            + results[0]
-            .findNext("div", "Vpfmgd")
-            .findNext("div", "vU6FJ p63iDd")
-            .a["href"]
-        )
-        app_icon = (
-            results[0]
-            .findNext("div", "Vpfmgd")
-            .findNext("div", "uzcko")
-            .img["data-src"]
-        )
+        app_name = (results[0].findNext("div", "Vpfmgd").findNext(
+            "div", "WsMG1c nnK0zc").text)
+        app_dev = results[0].findNext("div",
+                                      "Vpfmgd").findNext("div", "KoLSrc").text
+        app_dev_link = ("https://play.google.com" + results[0].findNext(
+            "div", "Vpfmgd").findNext("a", "mnKHRc")["href"])
+        app_rating = (results[0].findNext("div", "Vpfmgd").findNext(
+            "div", "pf5lIe").find("div")["aria-label"])
+        app_link = ("https://play.google.com" + results[0].findNext(
+            "div", "Vpfmgd").findNext("div", "vU6FJ p63iDd").a["href"])
+        app_icon = (results[0].findNext("div", "Vpfmgd").findNext(
+            "div", "uzcko").img["data-src"])
         app_details = f"<a href={app_icon}" + "'>📲&#8203;</a>"
         app_details += f" <b>{app_name}</b>"
-        app_details += (
-            "\n\n<code>Developer :</code> <a href="
-            + app_dev_link
-            + "'>"
-            + app_dev
-            + "</a>"
-        )
+        app_details += ("\n\n<code>Developer :</code> <a href=" +
+                        app_dev_link + "'>" + app_dev + "</a>")
         app_details += "\n<code>Rating :</code> " + app_rating.replace(
-            "Rated ", "⭐ "
-        ).replace(" out of ", "/").replace(" stars", "", 1).replace(
-            " stars", "⭐ "
-        ).replace(
-            "five", "5"
-        )
-        app_details += (
-            "\n<code>Features :</code> <a href="
-            + app_link
-            + "'>View in Play Store</a>"
-        )
+            "Rated ", "⭐ ").replace(" out of ", "/").replace(
+                " stars", "", 1).replace(" stars", "⭐ ").replace("five", "5")
+        app_details += ("\n<code>Features :</code> <a href=" + app_link +
+                        "'>View in Play Store</a>")
         app_details += "\n\n===> *Cutiepii Robot 愛* <==="
         await e.reply(app_details, parse_mode="HTML")
     except IndexError:
-        await e.reply("No result found in search. Please enter **Valid app name**")
+        await e.reply(
+            "No result found in search. Please enter **Valid app name**")
     except Exception as err:
         await e.reply(f"Exception Occured:- {str(err)}")
 
 
 def progress(current, total):
     """Calculate and return the download progress with given arguments."""
-    print(f"Downloaded {current} of {total}\nCompleted {current / total * 100}")
+    print(
+        f"Downloaded {current} of {total}\nCompleted {current / total * 100}")
 
 
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (
-                await telethn(functions.channels.GetParticipantRequest(chat, user))
-            ).participant,
+            (await
+             telethn(functions.channels.GetParticipantRequest(chat, user)
+                     )).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await telethn.get_peer_id(user)
-        ps = (
-            await telethn(functions.messages.GetFullChatRequest(chat.chat_id))
-        ).full_chat.participants.participants
+        ps = (await telethn(functions.messages.GetFullChatRequest(chat.chat_id)
+                            )).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
@@ -363,8 +333,7 @@ async def parseqr(qr_e):
         return
     start = datetime.now()
     downloaded_file_name = await qr_e.telethn.download_media(
-        await qr_e.get_reply_message(), progress_callback=progress
-    )
+        await qr_e.get_reply_message(), progress_callback=progress)
     url = "https://api.qrserver.com/v1/read-qr-code/?outputformat=json"
     with open(downloaded_file_name, "rb") as file:
         files = {"file": file}
@@ -394,12 +363,12 @@ async def make_qr(qrcode):
         reply_msg_id = previous_message.id
         if previous_message.media:
             downloaded_file_name = await qrcode.telethn.download_media(
-                previous_message, progress_callback=progress
-            )
+                previous_message, progress_callback=progress)
             m_list = None
             with open(downloaded_file_name, "rb") as file:
                 m_list = file.readlines()
-            message = "".join(media.decode("UTF-8") + "\r\n" for media in m_list)
+            message = "".join(
+                media.decode("UTF-8") + "\r\n" for media in m_list)
             os.remove(downloaded_file_name)
         else:
             message = previous_message.message
@@ -425,6 +394,7 @@ size=200x200&charset-source=UTF-8&charset-target=UTF-8\
     await qrcode.reply(f"Created QRCode in {duration} seconds")
     await sleep(5)
 
+
 __help__ = """
 ➛ /google <text>*:* Perform a google search
 ➛ /img <text>*:* Search Google for images and returns them\nFor greater no. of results specify lim, For eg: `/img hello lim=10`
@@ -439,5 +409,3 @@ __help__ = """
 """
 
 __mod_name__ = "Google"
-
-

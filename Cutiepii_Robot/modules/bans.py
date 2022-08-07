@@ -37,16 +37,8 @@ from telegram.error import BadRequest, TelegramError
 from telegram.ext import filters, ContextTypes
 from telegram.helpers import mention_html
 from telegram.constants import ParseMode
-from Cutiepii_Robot import (
-    BAN_STICKER,
-    DEV_USERS,
-    ERROR_LOGS,
-    SUDO_USERS,
-    SUPPORT_USERS,
-    OWNER_ID,
-    WHITELIST_USERS,
-    LOGGER
-)
+from Cutiepii_Robot import (BAN_STICKER, DEV_USERS, ERROR_LOGS, SUDO_USERS,
+                            SUPPORT_USERS, OWNER_ID, WHITELIST_USERS, LOGGER)
 
 from Cutiepii_Robot.modules.helper_funcs.chat_status import connection_status, dev_plus, is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user_and_text
@@ -66,9 +58,12 @@ async def cannot_ban(user_id, message):
     elif user_id in SUPPORT_USERS:
         await message.reply_text("My support users are ban immune")
     elif user_id in WHITELIST_USERS:
-        await message.reply_text("Bring an order from My Devs to fight a Whitelist user.")
+        await message.reply_text(
+            "Bring an order from My Devs to fight a Whitelist user.")
     else:
-        await message.reply_text("This user has immunity and cannot be banned.")
+        await message.reply_text("This user has immunity and cannot be banned."
+                                 )
+
 
 ban_myself = "Oh yeah, ban myself, noob!"
 
@@ -81,7 +76,10 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import (
 )
 
 
-async def ban_chat(bot: Bot, who: Chat, where_chat_id, reason=None) -> Union[str, bool]:
+async def ban_chat(bot: Bot,
+                   who: Chat,
+                   where_chat_id,
+                   reason=None) -> Union[str, bool]:
     try:
         await bot.banChatSenderChat(where_chat_id, who.id)
     except BadRequest as excp:
@@ -95,11 +93,13 @@ async def ban_chat(bot: Bot, who: Chat, where_chat_id, reason=None) -> Union[str
     return (
         f"<b>Channel:</b> <a href=\"t.me/{who.username}\">{html.escape(who.title)}</a>"
         f"<b>Channel ID:</b> {who.id}"
-        "" if reason is None else f"<b>Reason:</b> {reason}"
-    )
+        "" if reason is None else f"<b>Reason:</b> {reason}")
 
 
-async def ban_user(bot: Bot, who: ChatMember, where_chat_id, reason=None) -> Union[str, bool]:
+async def ban_user(bot: Bot,
+                   who: ChatMember,
+                   where_chat_id,
+                   reason=None) -> Union[str, bool]:
     try:
         await bot.banChatMember(where_chat_id, who.user.id)
     except BadRequest as excp:
@@ -113,10 +113,13 @@ async def ban_user(bot: Bot, who: ChatMember, where_chat_id, reason=None) -> Uni
     return (
         f"<b>User:</b> <a href=\"tg://user?id={who.user.id}\">{html.escape(who.user.first_name)}</a>"
         f"<b>User ID:</b> {who.user.id}"
-        "" if reason is None else f"<b>Reason:</b> {reason}"
-    )
+        "" if reason is None else f"<b>Reason:</b> {reason}")
 
-async def unban_chat(bot: Bot, who: Chat, where_chat_id, reason=None) -> Union[str, bool]:
+
+async def unban_chat(bot: Bot,
+                     who: Chat,
+                     where_chat_id,
+                     reason=None) -> Union[str, bool]:
     try:
         await bot.unbanChatSenderChat(where_chat_id, who.id)
     except BadRequest as excp:
@@ -130,11 +133,13 @@ async def unban_chat(bot: Bot, who: Chat, where_chat_id, reason=None) -> Union[s
     return (
         f"<b>Channel:</b> <a href=\"t.me/{who.username}\">{html.escape(who.title)}</a>"
         f"<b>Channel ID:</b> {who.id}"
-        "" if reason is None else f"<b>Reason:</b> {reason}"
-    )
+        "" if reason is None else f"<b>Reason:</b> {reason}")
 
 
-async def unban_user(bot: Bot, who: ChatMember, where_chat_id, reason=None) -> Union[str, bool]:
+async def unban_user(bot: Bot,
+                     who: ChatMember,
+                     where_chat_id,
+                     reason=None) -> Union[str, bool]:
     try:
         await bot.unbanChatMember(where_chat_id, who.user.id)
     except BadRequest as excp:
@@ -148,8 +153,7 @@ async def unban_user(bot: Bot, who: ChatMember, where_chat_id, reason=None) -> U
     return (
         f"<b>User:</b> <a href=\"tg://user?id={who.user.id}\">{html.escape(who.user.first_name)}</a>"
         f"<b>User ID:</b> {who.user.id}"
-        "" if reason is None else f"<b>Reason:</b> {reason}"
-    )
+        "" if reason is None else f"<b>Reason:</b> {reason}")
 
 
 @cutiepii_cmd(command=['ban', 'dban', 'sban', 'dsban'])
@@ -157,7 +161,9 @@ async def unban_user(bot: Bot, who: ChatMember, where_chat_id, reason=None) -> U
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:  # sourcery no-metrics
+async def ban(
+    update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> Optional[str]:  # sourcery no-metrics
     global delsilent
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -168,27 +174,34 @@ async def ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[st
     if message.text.startswith(('/s', '!s', '>s')):
         silent = True
         if not bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES):
-            await message.reply_text("I don't have permission to delete messages here!")
+            await message.reply_text(
+                "I don't have permission to delete messages here!")
             return
     else:
         silent = False
     if message.text.startswith(('/d', '!d', '>d')):
         delban = True
         if not bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES):
-            await message.reply_text("I don't have permission to delete messages here!")
+            await message.reply_text(
+                "I don't have permission to delete messages here!")
             return
-        if not user_is_admin(update, user.id, perm = AdminPerms.CAN_DELETE_MESSAGES):
-            await message.reply_text("You don't have permission to delete messages here!")
+        if not user_is_admin(
+                update, user.id, perm=AdminPerms.CAN_DELETE_MESSAGES):
+            await message.reply_text(
+                "You don't have permission to delete messages here!")
             return
     else:
         delban = False
     if message.text.startswith(('/ds', '!ds', '>ds')):
         delsilent = True
         if not bot_is_admin(chat, AdminPerms.CAN_DELETE_MESSAGES):
-            await message.reply_text("I don't have permission to delete messages here!")
+            await message.reply_text(
+                "I don't have permission to delete messages here!")
             return
-        if not user_is_admin(update, user.id, perm = AdminPerms.CAN_DELETE_MESSAGES):
-            await message.reply_text("You don't have permission to delete messages here!")
+        if not user_is_admin(
+                update, user.id, perm=AdminPerms.CAN_DELETE_MESSAGES):
+            await message.reply_text(
+                "You don't have permission to delete messages here!")
             return
 
     if message.reply_to_message and message.reply_to_message.sender_chat:
@@ -196,18 +209,20 @@ async def ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[st
             await message.reply_text("This is a pretty bad idea, isn't it?")
             return
 
-        if did_ban := ban_chat(bot, message.reply_to_message.sender_chat, chat.id, reason = " ".join(args) or None):
-            logmsg  = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"#BANNED\n"
-            f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
+        if did_ban := ban_chat(bot,
+                               message.reply_to_message.sender_chat,
+                               chat.id,
+                               reason=" ".join(args) or None):
+            logmsg = (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"#BANNED\n"
+                f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
             logmsg += did_ban
 
             await message.reply_text(
                 f"Channel {html.escape(message.reply_to_message.sender_chat.title)} was banned successfully from {html.escape(chat.title)}",
                 parse_mode=ParseMode.HTML,
             )
-
 
         else:
             await message.reply_text("Failed to ban channel")
@@ -233,18 +248,20 @@ async def ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[st
             return ""
 
     if chan:
-        if did_ban := ban_chat(bot, chan, chat.id, reason = " ".join(args) or None):
-            logmsg  = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"#BANNED\n"
-            f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
+        if did_ban := ban_chat(bot,
+                               chan,
+                               chat.id,
+                               reason=" ".join(args) or None):
+            logmsg = (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"#BANNED\n"
+                f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
             logmsg += did_ban
 
             await message.reply_text(
                 f"Channel {html.escape(chan.title)} was banned successfully from {html.escape(chat.title)}",
                 parse_mode=ParseMode.HTML,
             )
-
 
         else:
             await message.reply_text("Failed to ban channel")
@@ -254,15 +271,18 @@ async def ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[st
         await message.reply_text(ban_myself)
         return ''
 
-    elif await is_user_admin(update, user_id, member) and user.id not in DEV_USERS:
+    elif await is_user_admin(update, user_id,
+                             member) and user.id not in DEV_USERS:
         cannot_ban(user_id, message)
         return ''
 
-    elif did_ban := ban_user(bot, member, chat.id, reason = " ".join(args) or None):
-        logmsg  = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#BANNED\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
+    elif did_ban := ban_user(bot,
+                             member,
+                             chat.id,
+                             reason=" ".join(args) or None):
+        logmsg = (f"<b>{html.escape(chat.title)}:</b>\n"
+                  f"#BANNED\n"
+                  f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
         logmsg += did_ban
 
         reply = (
@@ -276,16 +296,12 @@ async def ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[st
         await bot.sendMessage(
             chat.id,
             reply,
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="🔄 Unban", callback_data=f"unbanb_unban={user_id}"
-                        ),
-                        InlineKeyboardButton(text="🗑️ Delete", callback_data="unbanb_del"),
-                    ]
-                ]
-            ),
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(text="🔄 Unban",
+                                     callback_data=f"unbanb_unban={user_id}"),
+                InlineKeyboardButton(text="🗑️ Delete",
+                                     callback_data="unbanb_del"),
+            ]]),
             parse_mode=ParseMode.HTML,
         )
         return logmsg
@@ -317,7 +333,6 @@ async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     log_message = ""
     bot, args = context.bot, context.args
 
-
     user_id, reason = await extract_user_and_text(message, args)
 
     if not user_id:
@@ -340,7 +355,8 @@ async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         return log_message
 
     if not reason:
-        await message.reply_text("You haven't specified a time to ban this user for!")
+        await message.reply_text(
+            "You haven't specified a time to ban this user for!")
         return log_message
 
     split_reason = reason.split(None, 1)
@@ -357,8 +373,7 @@ async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         "#TEMP_BANNED\n"
         f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
         f"<b>User:</b> {mention_html(member.user.id, member.user.first_name)}\n"
-        f"<b>Time:</b> {time_val}"
-    )
+        f"<b>Time:</b> {time_val}")
     if reason:
         log += f"\n<b>Reason:</b> {reason}"
 
@@ -370,8 +385,7 @@ async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
             f"<b>╔━「 ❕ Temp Banned</b>\n"
             f"<b>➛ Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
             f"<b>➛ User:</b> {mention_html(member.user.id, html.escape(member.user.first_name))}\n"
-            f"<b>➛ Time: {time_val}</b>"
-        )
+            f"<b>➛ Time: {time_val}</b>")
 
         if reason:
             reply_msg += f"\n<b>➛ Reason:</b> {html.escape(reason)}"
@@ -379,29 +393,21 @@ async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await bot.sendMessage(
             chat.id,
             reply_msg,
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="🔄 Unban", callback_data=f"unbanb_unban={user_id}"
-                        ),
-                        InlineKeyboardButton(text="🗑️ Delete", callback_data="unbanb_del"),
-                    ]
-                ]
-            ),
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(text="🔄 Unban",
+                                     callback_data=f"unbanb_unban={user_id}"),
+                InlineKeyboardButton(text="🗑️ Delete",
+                                     callback_data="unbanb_del"),
+            ]]),
             parse_mode=ParseMode.HTML,
         )
         return log
-
-
-
 
     except BadRequest as excp:
         if excp.message == "Reply message not found":
             # Do not reply
             await message.reply_text(
-                f"Banned! User will be banned for {time_val}.", quote=False
-            )
+                f"Banned! User will be banned for {time_val}.", quote=False)
             return log
         await bot.sendMessage(ERROR_LOGS, str(update))
         await bot.sendMessage(
@@ -427,7 +433,9 @@ async def kick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     bot, args = context.bot, context.args
 
     if message.reply_to_message and message.reply_to_message.sender_chat:
-        await message.reply_text("This command doesn't work on channels, but I can ban them if u want.")
+        await message.reply_text(
+            "This command doesn't work on channels, but I can ban them if u want."
+        )
         return log_message
 
     user_id, reason = await extract_user_and_text(message, args)
@@ -492,20 +500,21 @@ async def kickme(update: Update) -> Optional[str]:
     user_id = update.effective_message.from_user.id
     user = update.effective_message.from_user
     chat = update.effective_chat
-    if await is_user_admin(update, user_id, member): 
-        await update.effective_message.reply_text("Haha you're stuck with us here.")
+    if await is_user_admin(update, user_id, member):
+        await update.effective_message.reply_text(
+            "Haha you're stuck with us here.")
         return ''
 
-    res = update.effective_chat.unban_member(user_id)  # unban on current user = kick
+    res = update.effective_chat.unban_member(
+        user_id)  # unban on current user = kick
     if res:
-        await update.effective_message.reply_text("*kicks you out of the group*")
+        await update.effective_message.reply_text(
+            "*kicks you out of the group*")
 
-        log = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"#KICKED\n"
-            "self kick"
-            f"<b>User:</b> {mention_html(user.id, user.first_name)}\n"
-        )
+        log = (f"<b>{html.escape(chat.title)}:</b>\n"
+               f"#KICKED\n"
+               "self kick"
+               f"<b>User:</b> {mention_html(user.id, user.first_name)}\n")
 
         return log
     await update.effective_message.reply_text("Huh? I can't :/")
@@ -516,7 +525,9 @@ async def kickme(update: Update) -> Optional[str]:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def unban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:  # sourcery no-metrics
+async def unban(
+    update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> Optional[str]:  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     message = update.effective_message  # type: Optional[Message]
@@ -528,18 +539,20 @@ async def unban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[
             await message.reply_text("This command doesn't work like this!")
             return
 
-        if did_ban := unban_chat(bot, message.reply_to_message.sender_chat, chat.id, reason = " ".join(args) or None):
-            logmsg  = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"#UNBANNED\n"
-            f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
+        if did_ban := unban_chat(bot,
+                                 message.reply_to_message.sender_chat,
+                                 chat.id,
+                                 reason=" ".join(args) or None):
+            logmsg = (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"#UNBANNED\n"
+                f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
             logmsg += did_ban
 
             await message.reply_text(
                 f"Channel {html.escape(message.reply_to_message.sender_chat.title)} was unbanned successfully from {html.escape(chat.title)}",
                 parse_mode=ParseMode.HTML,
             )
-
 
         else:
             await message.reply_text("Failed to unban channel")
@@ -565,18 +578,20 @@ async def unban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[
             return ""
 
     if chan:
-        if did_ban := unban_chat(bot, chan, chat.id, reason = " ".join(args) or None):
-            logmsg  = (
-            f"<b>{html.escape(chat.title)}:</b>\n"
-            f"#UNBANNED\n"
-            f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
+        if did_ban := unban_chat(bot,
+                                 chan,
+                                 chat.id,
+                                 reason=" ".join(args) or None):
+            logmsg = (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"#UNBANNED\n"
+                f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
             logmsg += did_ban
 
             await message.reply_text(
                 f"Channel {html.escape(chan.title)} was unbanned successfully from {html.escape(chat.title)}",
                 parse_mode=ParseMode.HTML,
             )
-
 
         else:
             await message.reply_text("Failed to unban channel")
@@ -586,7 +601,8 @@ async def unban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[
         await message.reply_text(ban_myself)
         return ''
 
-    elif await is_user_admin(update, user_id, member) and user.id not in DEV_USERS:
+    elif await is_user_admin(update, user_id,
+                             member) and user.id not in DEV_USERS:
         cannot_ban(user_id, message)
         return ''
 
@@ -594,18 +610,19 @@ async def unban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[
         await message.reply_text("This user isn't banned!")
         return ''
 
-    elif did_ban := unban_user(bot, member, chat.id, reason = " ".join(args) or None):
-        logmsg  = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#UNBANNED\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
+    elif did_ban := unban_user(bot,
+                               member,
+                               chat.id,
+                               reason=" ".join(args) or None):
+        logmsg = (f"<b>{html.escape(chat.title)}:</b>\n"
+                  f"#UNBANNED\n"
+                  f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
         logmsg += did_ban
 
         await message.reply_text(
             f"User {mention_html(member.user.id, member.user.first_name)} was unbanned successfully from {html.escape(chat.title)}",
             parse_mode=ParseMode.HTML,
         )
-
 
     else:
         await message.reply_text("Failed to unban user")
@@ -621,7 +638,8 @@ WHITELISTED_USERS = [OWNER_ID] + DEV_USERS + SUDO_USERS + WHITELIST_USERS
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @gloggable
-async def selfunban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
+async def selfunban(update: Update,
+                    context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     message = update.effective_message
     user = update.effective_user
     bot, args = context.bot, context.args
@@ -654,17 +672,18 @@ async def selfunban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optio
     log = (
         f"<b>{html.escape(chat.title)}:</b>\n"
         f"#UNBANNED\n"
-        f"<b>User:</b> {mention_html(member.user.id, member.user.first_name)}"
-    )
+        f"<b>User:</b> {mention_html(member.user.id, member.user.first_name)}")
 
     return log
+
 
 @cutiepii_callback(pattern=r"unbanb_")
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def unbanb_btn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def unbanb_btn(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> str:
     bot = context.bot
     query = update.callback_query
     chat = update.effective_chat
@@ -681,8 +700,7 @@ async def unbanb_btn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
                 pass
             chat.unban_member(user_id)
             await query.message.edit_text(
-                f"{member.user.first_name} [{member.user.id}] Unbanned."
-            )
+                f"{member.user.first_name} [{member.user.id}] Unbanned.")
             await bot.answer_callback_query(query.id, text="Unbanned!")
             return (
                 f"<b>{html.escape(chat.title)}:</b>\n"
@@ -695,6 +713,7 @@ async def unbanb_btn(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await query.message.delete()
         await bot.answer_callback_query(query.id, text="Deleted!")
         return ""
+
 
 @cutiepii_cmd(command='banme', filters=filters.ChatType.GROUPS)
 @connection_status
@@ -711,7 +730,9 @@ async def banme(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text("Huh? I can't :/")
 
 
-@cutiepii_cmd(command='snipe', can_disable=False, filters=filters.User(SUDO_USERS))
+@cutiepii_cmd(command='snipe',
+              can_disable=False,
+              filters=filters.User(SUDO_USERS))
 @dev_plus
 async def snipe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
@@ -720,7 +741,8 @@ async def snipe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         chat_id = str(args[0])
         del args[0]
     except TypeError:
-        await update.effective_message.reply_text("Please give me a chat to echo to!")
+        await update.effective_message.reply_text(
+            "Please give me a chat to echo to!")
     to_send = " ".join(args)
     if len(to_send) >= 2:
         try:
@@ -730,6 +752,7 @@ async def snipe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await update.effective_message.reply_text(
                 "Couldn't send the message. Perhaps I'm not part of that group?"
             )
+
 
 __help__ = """
 *User Commands*:

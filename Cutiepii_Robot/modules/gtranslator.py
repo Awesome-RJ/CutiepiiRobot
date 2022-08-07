@@ -38,20 +38,21 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 from telegram.constants import ParseMode
 
-
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
-
 trans = SyncTranslator()
 
-async def translate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+async def translate(update: Update,
+                    context: ContextTypes.DEFAULT_TYPE) -> None:
     global to_translate
     message = update.effective_message
     reply_msg = message.reply_to_message
 
     if not reply_msg:
-        await update.effective_message.reply_text("Reply to a message to translate it!")
+        await update.effective_message.reply_text(
+            "Reply to a message to translate it!")
         return
     if reply_msg.caption:
         to_translate = reply_msg.caption
@@ -68,12 +69,9 @@ async def translate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     except IndexError:
         source = await trans.detect(to_translate)
         dest = "en"
-    translation = trans(to_translate,
-                        sourcelang=source, targetlang=dest)
-    reply = (
-        f"<b>Language: {source} -> {dest}</b>:\n\n"
-        f"Translation: <code>{translation.text}</code>"
-    )
+    translation = trans(to_translate, sourcelang=source, targetlang=dest)
+    reply = (f"<b>Language: {source} -> {dest}</b>:\n\n"
+             f"Translation: <code>{translation.text}</code>")
 
     await update.effective_message.reply_text(reply, parse_mode=ParseMode.HTML)
 
@@ -93,6 +91,7 @@ async def languages(update: Update) -> None:
             disable_web_page_preview=True,
         ),
     )
+
 
 async def gtts(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
@@ -121,12 +120,14 @@ API_KEY = "6ae0c3a0-afdc-4532-a810-82ded0054236"
 URL = "http://services.gingersoftware.com/Ginger/correct/json/GingerTheText"
 
 
-
 async def spellcheck(update: Update):
     if update.effective_update.effective_message.reply_to_message:
         msg = update.effective_message.reply_to_message
 
-        params = dict(lang="US", clientVersion="2.0", apiKey=API_KEY, text=msg.text)
+        params = dict(lang="US",
+                      clientVersion="2.0",
+                      apiKey=API_KEY,
+                      text=msg.text)
 
         res = requests.get(URL, params=params)
         changes = json.loads(res.text).get("LightGingerTheTextResult")
@@ -137,7 +138,8 @@ async def spellcheck(update: Update):
             start = change.get("From")
             end = change.get("To") + 1
             if suggestions := change.get("Suggestions"):
-                sugg_str = suggestions[0].get("Text")  # should look at this list more
+                sugg_str = suggestions[0].get(
+                    "Text")  # should look at this list more
                 curr_string += msg.text[prev_end:start] + sugg_str
                 prev_end = end
 
@@ -145,11 +147,12 @@ async def spellcheck(update: Update):
         await update.effective_message.reply_text(curr_string)
     else:
         await update.effective_message.reply_text(
-            "Reply to some message to get grammar corrected text!"
-        )
+            "Reply to some message to get grammar corrected text!")
+
 
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["tr", "tl"], translate))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["langs", "lang"], languages))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["langs", "lang"], languages))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("tts", gtts))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("splcheck", spellcheck))
 

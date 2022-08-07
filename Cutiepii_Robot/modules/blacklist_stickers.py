@@ -50,8 +50,8 @@ from telegram.helpers import mention_html, mention_markdown
 from telegram.constants import ParseMode, ChatType
 
 
-
-def blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+def blackliststicker(update: Update,
+                     context: ContextTypes.DEFAULT_TYPE) -> None:
     global text
     msg = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat  # type: Optional[Chat]
@@ -71,12 +71,9 @@ def blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
 
     split_text = split_message(sticker_list)
     for text in split_text:
-        if (
-            sticker_list
-            == f"<b>List blacklisted stickers currently in {chat.title}:</b>\n".format(
-                html.escape(chat.title)
-            )
-        ):
+        if (sticker_list ==
+                f"<b>List blacklisted stickers currently in {chat.title}:</b>\n"
+                .format(html.escape(chat.title))):
             send_message(
                 update.effective_message,
                 f"There are no blacklist stickers in <b>{html.escape(chat.title)}</b>!",
@@ -87,9 +84,9 @@ def blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     send_message(update.effective_message, text, parse_mode=ParseMode.HTML)
 
 
-
 @user_admin
-async def add_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def add_blackliststicker(update: Update,
+                               context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     msg = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat  # type: Optional[Chat]
@@ -108,8 +105,10 @@ async def add_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
     if len(words) > 1:
         text = words[1].replace("https://telegram.dog/addstickers/", "")
         to_blacklist = list(
-            {trigger.strip() for trigger in text.split("\n") if trigger.strip()},
-        )
+            {
+                trigger.strip()
+                for trigger in text.split("\n") if trigger.strip()
+            }, )
 
         added = 0
         for trigger in to_blacklist:
@@ -123,7 +122,6 @@ async def add_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
                     f"Sticker `{trigger}` can not be found!",
                     parse_mode=ParseMode.MARKDOWN_V2,
                 )
-
 
         if added == 0:
             return
@@ -159,7 +157,6 @@ async def add_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
                 parse_mode=ParseMode.MARKDOWN_V2,
             )
 
-
         if added == 0:
             return
 
@@ -176,9 +173,9 @@ async def add_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYP
         )
 
 
-
 @user_admin
-async def unblackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def unblackliststicker(update: Update,
+                             context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     msg = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat  # type: Optional[Chat]
@@ -197,8 +194,10 @@ async def unblackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE)
     if len(words) > 1:
         text = words[1].replace("https://telegram.dog/addstickers/", "")
         to_unblacklist = list(
-            {trigger.strip() for trigger in text.split("\n") if trigger.strip()},
-        )
+            {
+                trigger.strip()
+                for trigger in text.split("\n") if trigger.strip()
+            }, )
 
         successful = 0
         for trigger in to_unblacklist:
@@ -216,7 +215,8 @@ async def unblackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
             else:
                 send_message(
-                    msg, "This sticker is not on the blacklist...!",
+                    msg,
+                    "This sticker is not on the blacklist...!",
                 )
 
         elif successful == len(to_unblacklist):
@@ -225,7 +225,6 @@ async def unblackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE)
                 f"Sticker <code>{successful}</code> deleted from blacklist in <b>{html.escape(chat_name)}</b>!",
                 parse_mode=ParseMode.HTML,
             )
-
 
         elif not successful:
             send_message(
@@ -254,7 +253,8 @@ async def unblackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE)
             )
 
         else:
-            send_message(msg, f"{trigger} not found on blacklisted stickers...!")
+            send_message(msg,
+                         f"{trigger} not found on blacklisted stickers...!")
     else:
         send_message(
             msg,
@@ -262,10 +262,10 @@ async def unblackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE)
         )
 
 
-
 @loggable
 @user_admin
-async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def blacklist_mode(update: Update,
+                         context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -278,7 +278,8 @@ async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     else:
         if update.effective_message.chat.type == ChatType.PRIVATE:
             send_message(
-                msg, "You can do this command in groups, not PM",
+                msg,
+                "You can do this command in groups, not PM",
             )
             return ""
         chat = update.effective_chat
@@ -361,17 +362,18 @@ async def blacklist_mode(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 
 @user_not_admin
-async def del_blackliststicker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def del_blackliststicker(update: Update,
+                               context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
     user = update.effective_user
-    to_match = message.sticker   
+    to_match = message.sticker
 
     if not to_match or not to_match.set_name:
         return
 
-    if is_approved(chat.id, user.id): # ignore approved users
+    if is_approved(chat.id, user.id):  # ignore approved users
         return
 
     getmode, value = sql.get_blacklist_setting(chat.id)
@@ -484,8 +486,17 @@ def __stats__():
 
 __mod_name__ = "Stickers Blacklist"
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("blsticker", blackliststicker, admin_ok=True,))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("addblsticker", add_blackliststicker))
-CUTIEPII_PTB.add_handler(CommandHandler(["unblsticker", "rmblsticker"], unblackliststicker))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(
+        "blsticker",
+        blackliststicker,
+        admin_ok=True,
+    ))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("addblsticker", add_blackliststicker))
+CUTIEPII_PTB.add_handler(
+    CommandHandler(["unblsticker", "rmblsticker"], unblackliststicker))
 CUTIEPII_PTB.add_handler(CommandHandler("blstickermode", blacklist_mode))
-CUTIEPII_PTB.add_handler(MessageHandler(filters.Sticker.ALL & filters.ChatType.GROUPS, del_blackliststicker))
+CUTIEPII_PTB.add_handler(
+    MessageHandler(filters.Sticker.ALL & filters.ChatType.GROUPS,
+                   del_blackliststicker))

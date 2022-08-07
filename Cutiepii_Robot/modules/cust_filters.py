@@ -1,7 +1,7 @@
 import re
 from html import escape
 
-import telegram 
+import telegram
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update
 from telegram.error import BadRequest
 from telegram.constants import MessageLimit, ParseMode
@@ -20,7 +20,7 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import (
     split_quotes,
     button_markdown_parser,
     markdown_to_html,
-    )
+)
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql import cust_filters_sql as sql
 from Cutiepii_Robot.modules.connection import connected
@@ -45,12 +45,18 @@ ENUM_FUNC_MAP = {
     # sql.Types.VIDEO_NOTE.value: CUTIEPII_PTB.bot.send_video_note
 }
 
+
 @cutiepii_cmd(command='filters', admin_ok=True)
-async def list_handlers(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def list_handlers(update: Update,
+                        context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     user = update.effective_user
 
-    conn = await connected(context.bot, update, chat, user.id, need_admin=False)
+    conn = await connected(context.bot,
+                           update,
+                           chat,
+                           user.id,
+                           need_admin=False)
     if conn is not False:
         chat_id = conn
         chat_name = CUTIEPII_PTB.bot.getChat(conn).title
@@ -67,7 +73,8 @@ async def list_handlers(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     all_handlers = sql.get_chat_triggers(chat_id)
 
     if not all_handlers:
-        send_message(update.effective_message, f"No filters saved in {chat_name}!")
+        send_message(update.effective_message,
+                     f"No filters saved in {chat_name}!")
         return
 
     for keyword in all_handlers:
@@ -91,7 +98,6 @@ async def list_handlers(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 # NOT ASYNC BECAUSE CUTIEPII_PTB HANDLER RAISED
 @cutiepii_cmd(command='filter', group=55)
-
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def filters(update, context) -> None:  # sourcery no-metrics
@@ -99,10 +105,8 @@ async def filters(update, context) -> None:  # sourcery no-metrics
     user = update.effective_user
     msg = update.effective_message
     args = msg.text.split(
-        None, 1
-    )  # use python's maxsplit to separate Cmd, keyword, and reply_text
-
-
+        None,
+        1)  # use python's maxsplit to separate Cmd, keyword, and reply_text
 
     conn = await connected(context.bot, update, chat, user.id)
     if conn is not False:
@@ -142,11 +146,10 @@ async def filters(update, context) -> None:  # sourcery no-metrics
     text, file_type, file_id = get_filter_type(msg)
     if not msg.reply_to_message and len(extracted) >= 2:
         offset = len(extracted[1]) - len(
-            msg.text
-        )  # set correct offset relative to command + notename
-        text, buttons = button_markdown_parser(
-            extracted[1], entities=msg.parse_entities(), offset=offset
-        )
+            msg.text)  # set correct offset relative to command + notename
+        text, buttons = button_markdown_parser(extracted[1],
+                                               entities=msg.parse_entities(),
+                                               offset=offset)
         text = text.strip()
         if not text:
             send_message(
@@ -162,12 +165,11 @@ async def filters(update, context) -> None:  # sourcery no-metrics
             text_to_parsing = msg.reply_to_message.caption
         else:
             text_to_parsing = ""
-        offset = len(
-            text_to_parsing
-        )  # set correct offset relative to command + notename
-        text, buttons = button_markdown_parser(
-            text_to_parsing, entities=msg.parse_entities(), offset=offset
-        )
+        offset = len(text_to_parsing
+                     )  # set correct offset relative to command + notename
+        text, buttons = button_markdown_parser(text_to_parsing,
+                                               entities=msg.parse_entities(),
+                                               offset=offset)
         text = text.strip()
 
     elif not text and not file_type:
@@ -184,14 +186,14 @@ async def filters(update, context) -> None:  # sourcery no-metrics
             text_to_parsing = msg.reply_to_message.caption
         else:
             text_to_parsing = ""
-        offset = len(
-            text_to_parsing
-        )  # set correct offset relative to command + notename
-        text, buttons = button_markdown_parser(
-            text_to_parsing, entities=msg.parse_entities(), offset=offset
-        )
+        offset = len(text_to_parsing
+                     )  # set correct offset relative to command + notename
+        text, buttons = button_markdown_parser(text_to_parsing,
+                                               entities=msg.parse_entities(),
+                                               offset=offset)
         text = text.strip()
-        if (msg.reply_to_message.text or msg.reply_to_message.caption) and not text:
+        if (msg.reply_to_message.text
+                or msg.reply_to_message.caption) and not text:
             send_message(
                 update.effective_message,
                 "There is no filter message - You can't JUST have buttons, you need a message to go with it!",
@@ -202,7 +204,8 @@ async def filters(update, context) -> None:  # sourcery no-metrics
         send_message(update.effective_message, "Invalid filter!")
         return
 
-    add = addnew_filter(update, chat_id, keyword, text, file_type, file_id, buttons)
+    add = addnew_filter(update, chat_id, keyword, text, file_type, file_id,
+                        buttons)
     # This is an old method
     # sql.add_filter(chat_id, keyword, content, is_sticker, is_document, is_image, is_audio, is_voice, is_video, buttons)
 
@@ -216,10 +219,8 @@ async def filters(update, context) -> None:  # sourcery no-metrics
         return f"<b>{escape(chat.title or chat.id)}:</b>\n"
 
 
-
 # NOT ASYNC BECAUSE CUTIEPII_PTB HANDLER RAISE
 @cutiepii_cmd(command="stop")
-
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def stop_filter(update, context) -> str:
@@ -254,21 +255,23 @@ async def stop_filter(update, context) -> str:
                 parse_mode=ParseMode.MARKDOWN_V2,
             )
             logmsg = (
-                    f"<b>{escape(chat.title or chat.id)}:</b>\n"
-                    f"#STOPFILTER\n"
-                    f"<b>Admin:</b> {mention_html(user.id, escape(user.first_name))}\n"
-                    f"<b>Filter:</b> {keyword}"
-                )
+                f"<b>{escape(chat.title or chat.id)}:</b>\n"
+                f"#STOPFILTER\n"
+                f"<b>Admin:</b> {mention_html(user.id, escape(user.first_name))}\n"
+                f"<b>Filter:</b> {keyword}")
             return logmsg
-
 
     send_message(
         update.effective_message,
         "That's not a filter - Click: /filters to get currently active filters.",
     )
 
-@cutiepii_msg((PTB_Cutiepii_Filters.TEXT & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE))
-async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
+
+@cutiepii_msg((PTB_Cutiepii_Filters.TEXT
+               & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE))
+async def reply_filter(
+        update: Update,
+        context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
 
@@ -298,8 +301,29 @@ async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                     "mention",
                 ]
                 if filt.reply_text:
-                    if valid_format := escape_invalid_curly_brackets(markdown_to_html(filt.reply_text), VALID_WELCOME_FORMATTERS):
-                        filtext = valid_format.format(first=escape(message.from_user.first_name), last=escape(message.from_user.last_name or message.from_user.first_name), fullname=" ".join([escape(message.from_user.first_name), escape(message.from_user.last_name),] if message.from_user.last_name else [escape(message.from_user.first_name)]), username=f"@{escape(message.from_user.username)}" if message.from_user.username else mention_html(message.from_user.id, message.from_user.first_name), mention=mention_html(message.from_user.id, message.from_user.first_name), chatname=escape(message.chat.title) if message.chat.type != "private" else escape(message.from_user.first_name), id=message.from_user.id)
+                    if valid_format := escape_invalid_curly_brackets(
+                            markdown_to_html(filt.reply_text),
+                            VALID_WELCOME_FORMATTERS):
+                        filtext = valid_format.format(
+                            first=escape(message.from_user.first_name),
+                            last=escape(message.from_user.last_name
+                                        or message.from_user.first_name),
+                            fullname=" ".join(
+                                [
+                                    escape(message.from_user.first_name),
+                                    escape(message.from_user.last_name),
+                                ] if message.from_user.last_name else
+                                [escape(message.from_user.first_name)]),
+                            username=f"@{escape(message.from_user.username)}"
+                            if message.from_user.username else mention_html(
+                                message.from_user.id,
+                                message.from_user.first_name),
+                            mention=mention_html(message.from_user.id,
+                                                 message.from_user.first_name),
+                            chatname=escape(message.chat.title)
+                            if message.chat.type != "private" else escape(
+                                message.from_user.first_name),
+                            id=message.from_user.id)
 
                     else:
                         filtext = ""
@@ -320,17 +344,27 @@ async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                         error_catch = get_exception(excp, filt, chat)
                         if error_catch == "noreply":
                             try:
-                                await context.bot.send_message(chat.id, filtext, parse_mode=ParseMode.HTML, disable_web_page_preview=True, reply_markup=keyboard)
+                                await context.bot.send_message(
+                                    chat.id,
+                                    filtext,
+                                    parse_mode=ParseMode.HTML,
+                                    disable_web_page_preview=True,
+                                    reply_markup=keyboard)
 
                             except BadRequest as excp:
-                                LOGGER.exception(f"Error in filters: {excp.message}")
-                                send_message(update.effective_message, get_exception(excp, filt, chat))
+                                LOGGER.exception(
+                                    f"Error in filters: {excp.message}")
+                                send_message(update.effective_message,
+                                             get_exception(excp, filt, chat))
                         else:
                             try:
-                                send_message(update.effective_message, get_exception(excp, filt, chat))
+                                send_message(update.effective_message,
+                                             get_exception(excp, filt, chat))
                             except BadRequest as excp:
-                                LOGGER.exception(f"Failed to send message: {excp.message}")
-                elif ENUM_FUNC_MAP[filt.file_type] == CUTIEPII_PTB.bot.send_sticker:
+                                LOGGER.exception(
+                                    f"Failed to send message: {excp.message}")
+                elif ENUM_FUNC_MAP[
+                        filt.file_type] == CUTIEPII_PTB.bot.send_sticker:
                     ENUM_FUNC_MAP[filt.file_type](
                         chat.id,
                         filt.file_id,
@@ -374,24 +408,41 @@ async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                 except BadRequest as excp:
                     if excp.message == "Unsupported url protocol":
                         try:
-                            send_message(update.effective_message, "You seem to be trying to use an unsupported url protocol. Telegram doesn't support buttons for some protocols, such as tg://. Please try again...")
+                            send_message(
+                                update.effective_message,
+                                "You seem to be trying to use an unsupported url protocol. Telegram doesn't support buttons for some protocols, such as tg://. Please try again..."
+                            )
 
                         except BadRequest as excp:
-                            LOGGER.exception(f"Error in filters: {excp.message}")
+                            LOGGER.exception(
+                                f"Error in filters: {excp.message}")
                     elif excp.message == "Reply message not found":
                         try:
-                            await context.bot.send_message(chat.id, filt.reply, parse_mode=ParseMode.MARKDOWN_V2, disable_web_page_preview=True, reply_markup=keyboard)
+                            await context.bot.send_message(
+                                chat.id,
+                                filt.reply,
+                                parse_mode=ParseMode.MARKDOWN_V2,
+                                disable_web_page_preview=True,
+                                reply_markup=keyboard)
 
                         except BadRequest as excp:
-                            LOGGER.exception(f"Error in filters: {excp.message}")
+                            LOGGER.exception(
+                                f"Error in filters: {excp.message}")
                     else:
                         try:
-                            send_message(update.effective_message, "This message couldn't be sent as it's incorrectly formatted.")
+                            send_message(
+                                update.effective_message,
+                                "This message couldn't be sent as it's incorrectly formatted."
+                            )
 
                         except BadRequest as excp:
-                            LOGGER.exception(f"Error in filters: {excp.message}")
-                        LOGGER.warning("Message %s could not be parsed", str(filt.reply))
-                        LOGGER.exception("Could not parse filter %s in chat %s", str(filt.keyword), str(chat.id))
+                            LOGGER.exception(
+                                f"Error in filters: {excp.message}")
+                        LOGGER.warning("Message %s could not be parsed",
+                                       str(filt.reply))
+                        LOGGER.exception(
+                            "Could not parse filter %s in chat %s",
+                            str(filt.keyword), str(chat.id))
 
             else:
                 # LEGACY - all new filters will have has_markdown set to True.
@@ -401,35 +452,39 @@ async def reply_filter(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                     LOGGER.exception(f"Error in filters: {excp.message}")
             break
 
-@cutiepii_cmd(command=["removeallfilters", "stopall"], filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
-async def rmall_filters(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
+@cutiepii_cmd(command=["removeallfilters", "stopall"],
+              filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
+async def rmall_filters(update: Update,
+                        context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
     user = update.effective_user
     member = chat.get_member(user.id)
     if member.status != "creator" and user.id not in SUDO_USERS:
         await update.effective_message.reply_text(
-            "Only the chat owner can clear all filters at once."
-        )
+            "Only the chat owner can clear all filters at once.")
     else:
-        buttons = InlineKeyboardMarkup(
+        buttons = InlineKeyboardMarkup([
             [
-                [
-                    InlineKeyboardButton(
-                        text="Stop all filters", callback_data="filters_rmall"
-                    )
-                ],
-                [InlineKeyboardButton(text="Cancel", callback_data="filters_cancel")],
-            ]
-        )
+                InlineKeyboardButton(text="Stop all filters",
+                                     callback_data="filters_rmall")
+            ],
+            [
+                InlineKeyboardButton(text="Cancel",
+                                     callback_data="filters_cancel")
+            ],
+        ])
         await update.effective_message.reply_text(
             f"Are you sure you would like to stop ALL filters in {chat.title}? This action cannot be undone.",
             reply_markup=buttons,
             parse_mode=ParseMode.MARKDOWN_V2,
         )
 
+
 @cutiepii_callback(pattern=r"filters_.*")
 @loggable
-async def rmall_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def rmall_callback(update: Update,
+                         context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     chat = update.effective_chat
     msg = update.effective_message
@@ -474,18 +529,19 @@ def get_exception(excp, filt, chat):
     if excp.message == "Reply message not found":
         return "noreply"
     LOGGER.warning("Message %s could not be parsed", str(filt.reply))
-    LOGGER.exception(
-        "Could not parse filter %s in chat %s", str(filt.keyword), str(chat.id)
-    )
+    LOGGER.exception("Could not parse filter %s in chat %s", str(filt.keyword),
+                     str(chat.id))
     return "This data could not be sent because it is incorrectly formatted."
 
 
 # NOT ASYNC NOT A HANDLER
-async def addnew_filter(update, chat_id, keyword, text, file_type, file_id, buttons):
+async def addnew_filter(update, chat_id, keyword, text, file_type, file_id,
+                        buttons):
     msg = update.effective_message
     totalfilt = sql.get_chat_triggers(chat_id)
     if len(totalfilt) >= 900:  # Idk why i made this like function....
-        await msg.reply_text("This group has reached its max filters limit of 900.")
+        await msg.reply_text(
+            "This group has reached its max filters limit of 900.")
         return False
     sql.new_add_filter(chat_id, keyword, text, file_type, file_id, buttons)
     return True
@@ -509,6 +565,7 @@ def __migrate__(old_chat_id, new_chat_id):
 def __chat_settings__(chat_id, _):
     cust_filters = sql.get_chat_triggers(chat_id)
     return f"There are `{len(cust_filters)}` custom filters here."
+
 
 __help__ = """
 ➛ /filters*:* List all active filters saved in the chat.
