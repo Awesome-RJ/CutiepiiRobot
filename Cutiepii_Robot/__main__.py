@@ -79,7 +79,6 @@ from telegram.ext import (
 from telegram.helpers import escape_markdown
 from pyrogram import idle
 
-
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -671,7 +670,7 @@ async def migrate_chats(update: Update):
     LOGGER.info("Successfully migrated!")
 
 
-def main() -> int:
+def main():
     CUTIEPII_PTB.add_error_handler(error_callback)
     CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("test", test))
     CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("start", start))
