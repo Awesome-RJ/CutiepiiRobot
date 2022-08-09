@@ -177,23 +177,6 @@ async def runs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         temp = "Run everyone, they just dropped a bomb 💣💣"
     await update.effective_message.reply_text(temp)
 
-
-async def goodnight(update: Update,
-                    context: ContextTypes.DEFAULT_TYPE) -> None:
-    message = update.effective_message
-    first_name = update.effective_user.first_name
-    reply = f"Good Night! {escape_markdown(first_name)}"
-    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
-
-
-async def goodmorning(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> None:
-    message = update.effective_message
-    first_name = update.effective_user.first_name
-    reply = f"Good Morning! {escape_markdown(first_name)}"
-    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
-
-
 @cutiepii_cmd(command='sanitize')
 async def sanitize(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
@@ -769,12 +752,30 @@ async def kill(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg.edit_text('⚰')
 
 
+"""
+async def goodnight(update: Update,
+                    context: ContextTypes.DEFAULT_TYPE) -> None:
+    message = update.effective_message
+    first_name = update.effective_user.first_name
+    reply = f"Good Night! {escape_markdown(first_name)}"
+    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
+
+
+async def goodmorning(update: Update,
+                      context: ContextTypes.DEFAULT_TYPE) -> None:
+    message = update.effective_message
+    first_name = update.effective_user.first_name
+    reply = f"Good Morning! {escape_markdown(first_name)}"
+    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
+
+
+
 async def cutiepii(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_text = (update.effective_message.reply_to_message.reply_text
                   if update.effective_message.reply_to_message else
                   update.effective_message.reply_text)
     reply_text(random.choice(fun_strings.DECIDE))
-
+"""
 
 __help__ = """
 ➛ /runs*:* reply a random string from an array of replies
@@ -842,6 +843,7 @@ __help__ = """
 ➛ /police*:* 🚓
 """
 
+"""
 CUTIEPII_PTB.add_handler(
     DisableAbleMessageHandler(filters.Regex(r"(?i)(goodmorning|good morning)"),
                               goodmorning,
@@ -854,5 +856,6 @@ CUTIEPII_PTB.add_handler(
     DisableAbleMessageHandler(filters.Regex(r"(?i)^cutiepii\?"),
                               cutiepii,
                               friendly="decide"))
+                              """
 
 __mod_name__ = "Fun"
