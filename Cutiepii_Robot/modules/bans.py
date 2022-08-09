@@ -775,11 +775,11 @@ __help__ = """
 
 CUTIEPII_PTB.add_handler(CommandHandler(['ban', 'dban', 'sban', 'dsban'], ban, block=bool))
 CUTIEPII_PTB.add_handler(CommandHandler(["tban"], temp_ban, block=bool))
-CUTIEPII_PTB.add_handler(CommandHandler(["kick", "punch"], punch, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler(["kick", "punch"], kick, block=bool))
 CUTIEPII_PTB.add_handler(CommandHandler("unban", unban, block=bool))
 CUTIEPII_PTB.add_handler(CommandHandler(['selfunban', 'roar'], selfunban, block=bool))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(unbanb_btn, pattern=r"unbanb_"))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["kickme", "punchme"], punchme, filters=filters.ChatType.GROUPS, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["kickme", "punchme"], kickme, filters=filters.ChatType.GROUPS, block=bool))
 CUTIEPII_PTB.add_handler(CommandHandler("snipe", snipe, pass_args=True, filters=filters.User(SUDO_USERS), block=bool))
 CUTIEPII_PTB.add_handler(CommandHandler("banme", banme, block=bool))
 
