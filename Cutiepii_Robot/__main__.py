@@ -60,9 +60,7 @@ from Cutiepii_Robot import (
 # NOTE: Module order is not guaranteed, specify that in the config file!
 from Cutiepii_Robot.modules import ALL_MODULES
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
-
 from Cutiepii_Robot.modules.helper_funcs.misc import paginate_modules
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_msg, cutiepii_cmd, cutiepii_callback
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.error import (
@@ -225,7 +223,7 @@ async def send_help(context: ContextTypes.DEFAULT_TYPE,
     )
 
 
-@cutiepii_cmd(command="test")
+
 async def test(update: Update):
     # pprint(eval(str(update)))
     # await update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
@@ -233,7 +231,6 @@ async def test(update: Update):
     print(update.effective_message)
 
 
-@cutiepii_cmd(command="start")
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     uptime = get_readable_time((time.time() - StartTime))
@@ -341,7 +338,7 @@ async def error_callback(update: Update,
         # handle all other telegram related errors
 
 
-@cutiepii_callback(pattern=r"help_.")
+
 async def help_button(update: Update,
                       context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
@@ -400,7 +397,7 @@ async def help_button(update: Update,
         # await query.message.delete()
 
 
-@cutiepii_callback(pattern=r"cutiepii_")
+
 async def cutiepii_callback_data(update: Update,
                                  context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
@@ -429,7 +426,7 @@ async def cutiepii_callback_data(update: Update,
         )
 
 
-@cutiepii_cmd(command="help")
+
 async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     args = update.effective_message.text.split(None, 1)
@@ -509,7 +506,6 @@ async def send_settings(context: ContextTypes.DEFAULT_TYPE,
         )
 
 
-@cutiepii_callback(pattern=r"stngs_")
 async def settings_button(update: Update,
                           context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
@@ -588,7 +584,6 @@ async def settings_button(update: Update,
                              str(query.data))
 
 
-@cutiepii_cmd(command="settings")
 async def get_settings(update: Update,
                        context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
@@ -616,7 +611,6 @@ async def get_settings(update: Update,
         text = "Click here to check your settings."
 
 
-@cutiepii_cmd(command="donate")
 async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_message.from_user
     chat = update.effective_chat  # type: Optional[Chat]
@@ -659,7 +653,6 @@ async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 "Contact me in PM first to get donation information.")
 
 
-@cutiepii_msg(filters.StatusUpdate.MIGRATE)
 async def migrate_chats(update: Update):
     msg = update.effective_message  # type: Optional[Message]
     if msg.migrate_to_chat_id:
@@ -680,6 +673,18 @@ async def migrate_chats(update: Update):
 
 def main() -> int:
     CUTIEPII_PTB.add_error_handler(error_callback)
+    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("test", test))
+    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("start", start))
+
+    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("help", get_help))
+    CUTIEPII_PTB.add_handler(CallbackQueryHandler(help_button, pattern=r"help_.*"))
+
+    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("settings", get_settings))
+    CUTIEPII_PTB.add_handler(CallbackQueryHandler(settings_button, pattern=r"stngs_"))
+
+    CUTIEPII_PTB.add_handler(CallbackQueryHandler(cutiepii_callback_data, pattern=r"cutiepii_"))
+    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("donate", donate))
+    CUTIEPII_PTB.add_handler(MessageHandler(filters.StatusUpdate.MIGRATE, migrate_chats, block=False))
 
     if WEBHOOK:
         LOGGER.info("Using webhooks.")
