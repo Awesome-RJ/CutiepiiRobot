@@ -3,9 +3,10 @@ from requests import get
 from json import JSONDecodeError
 
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes
+from telegram.ext import ContextTypes, CommandHandler, CallbackQueryHandler
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 
+from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_callback
 
 url = "https://mydramalist.com/"
@@ -18,7 +19,6 @@ def shorten(des: str = '', short: int = 500):
 
 
 # Drama
-@cutiepii_cmd(command="drama")
 async def drama(update: Update):
     message = update.effective_message
     search = await message.text.split(" ", 1)
@@ -63,7 +63,6 @@ async def drama(update: Update):
 
 
 # Callback Data
-@cutiepii_callback(pattern=r"drama-detail.*")
 async def drama_button(update: Update,
                        context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
@@ -126,7 +125,6 @@ async def drama_button(update: Update,
         await context.bot.answer_callback_query(query.id)
 
 
-@cutiepii_callback(pattern=r"drama-cast-detail.*")
 async def casts_button(update: Update,
                        context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
@@ -175,3 +173,6 @@ async def casts_button(update: Update,
             ]]),
         )
         await context.bot.answer_callback_query(query.id)
+
+CUTIEPII_PTB.add_handler(CommandHandler("Drama", drama))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(casts_button, pattern=r"drama-cast-detail.*"))
