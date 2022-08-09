@@ -47,23 +47,27 @@ from Cutiepii_Robot.modules.log_channel import loggable, gloggable
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_callback
 
 
-async def cannot_ban(user_id, message):
-
-    if user_id == OWNER_ID:
-        await message.reply_text("I'd never ban my owner.")
-    elif user_id in DEV_USERS:
-        await message.reply_text("I can't act against our own.")
-    elif user_id in SUDO_USERS:
-        await message.reply_text("My sudos are ban immune")
-    elif user_id in SUPPORT_USERS:
-        await message.reply_text("My support users are ban immune")
-    elif user_id in WHITELIST_USERS:
-        await message.reply_text(
-            "Bring an order from My Devs to fight a Whitelist user.")
+def cannot_ban(banner_id, user_id, message) -> bool:
+    if banner_id in DEV_USERS:
+        if user_id not in DEV_USERS:
+            return False
+        else:
+            message.reply_text("Why are you trying to ban another dev?")
+            return True
     else:
-        await message.reply_text("This user has immunity and cannot be banned."
-                                 )
-
+        if user_id == OWNER_ID:
+            message.reply_text("I'd never ban my owner.")
+            return True
+        elif user_id in DEV_USERS:
+            message.reply_text("This user is one of my Devs, I can't act against our own.")
+            return True
+        elif user_id in SUDO_USERS:
+            message.reply_text("My sudos are ban immune")
+            return True
+        elif user_id in WHITELIST_USERS:
+            message.reply_text("Let one of my Devs fight a Whitelist user.")
+            return True
+        return False
 
 ban_myself = "Oh yeah, ban myself, noob!"
 
@@ -273,7 +277,7 @@ async def ban(
 
     elif await is_user_admin(update, user_id,
                              member) and user.id not in DEV_USERS:
-        cannot_ban(user_id, message)
+        message.reply_text("This user has immunity and cannot be banned.")
         return ''
 
     elif did_ban := ban_user(bot,
@@ -350,10 +354,13 @@ async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         await message.reply_text(ban_myself)
         return log_message
 
-    if await is_user_admin(update, user_id, member) and user not in DEV_USERS:
-        cannot_ban(user_id, message)
-        return log_message
+    elif cannot_ban(user.id, user_id, message):
+        return ''
 
+    elif is_user_admin(update, user_id, member) and user.id not in DEV_USERS:
+        message.reply_text("This user has immunity and cannot be banned.")
+        return ''
+        
     if not reason:
         await message.reply_text(
             "You haven't specified a time to ban this user for!")
