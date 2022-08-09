@@ -73,12 +73,12 @@ async def convert(update: Update):
             f"{orig_cur_amount} {orig_cur} = {new_cur_amount} {new_cur}", )
 
     elif len(args) == 1:
-        await message.reply_text(_help_, parse_mode=ParseMode.MARKDOWN_V2)
+        await message.reply_text(_help_, parse_mode=ParseMode.MARKDOWN)
 
     else:
         await message.reply_text(
             f"*Invalid Args!!:* Required 3 But Passed {len(args) -1}",
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
         )
 
 

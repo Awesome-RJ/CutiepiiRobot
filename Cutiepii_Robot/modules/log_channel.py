@@ -140,7 +140,7 @@ if is_module_loaded(FILENAME):
             await message.reply_text(
                 f"This group has all it's logs sent to:"
                 f" {escape_markdown(log_channel_info.title)} (`{log_channel}`)",
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
             )
 
         else:

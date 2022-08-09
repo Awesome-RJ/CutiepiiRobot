@@ -73,7 +73,7 @@ async def shell(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 chat_id=message.chat_id,
             )
     else:
-        await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN_V2)
+        await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
 
 
 CUTIEPII_PTB.add_handler(CommandHandler(["sh"], shell))

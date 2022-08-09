@@ -183,7 +183,7 @@ async def goodnight(update: Update,
     message = update.effective_message
     first_name = update.effective_user.first_name
     reply = f"Good Night! {escape_markdown(first_name)}"
-    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN_V2)
+    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
 
 
 async def goodmorning(update: Update,
@@ -191,7 +191,7 @@ async def goodmorning(update: Update,
     message = update.effective_message
     first_name = update.effective_user.first_name
     reply = f"Good Morning! {escape_markdown(first_name)}"
-    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN_V2)
+    await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
 
 
 @cutiepii_cmd(command='sanitize')
@@ -445,7 +445,7 @@ async def weebify(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     if not string:
         await message.reply_text("Usage is `/weebify <text>`",
-                                 parse_mode=ParseMode.MARKDOWN_V2)
+                                 parse_mode=ParseMode.MARKDOWN)
         return
 
     for normiecharacter in string:

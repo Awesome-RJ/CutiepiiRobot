@@ -531,7 +531,7 @@ async def list_locks(update: Update,
 
     send_message(update.effective_message,
                  res,
-                 parse_mode=ParseMode.MARKDOWN_V2)
+                 parse_mode=ParseMode.MARKDOWN)
 
 
 def get_permission_list(current, new):

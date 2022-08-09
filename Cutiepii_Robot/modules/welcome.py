@@ -90,7 +90,7 @@ async def send(update, message, keyboard, backup_message):
     try:
         msg = await update.effective_message.reply_text(
             message,
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup=keyboard,
             reply_to_message_id=reply,
             allow_sending_without_reply=True,
@@ -102,7 +102,7 @@ async def send(update, message, keyboard, backup_message):
                     backup_message +
                     "\nNote: the current message has an invalid url in one of its buttons. Please update."
                 )),
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
 
@@ -111,7 +111,7 @@ async def send(update, message, keyboard, backup_message):
         elif excp.message == "Reply message not found":
             msg = await update.effective_message.reply_text(
                 message,
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
                 reply_markup=keyboard,
                 quote=False,
             )
@@ -122,7 +122,7 @@ async def send(update, message, keyboard, backup_message):
                     backup_message +
                     "\nNote: the current message has buttons which use url protocols that are unsupported by "
                     "telegram. Please update. ")),
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
 
@@ -132,7 +132,7 @@ async def send(update, message, keyboard, backup_message):
                     backup_message +
                     "\nNote: the current message has some bad urls. Please update."
                 )),
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
 
@@ -145,7 +145,7 @@ async def send(update, message, keyboard, backup_message):
                     backup_message +
                     "\nNote: An error occured when sending the custom message. Please update."
                 )),
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=reply,
             )
 
@@ -298,7 +298,7 @@ async def new_member(
                         \nCreator ID:   `\\{creator.id}` \
                         \nCreator Username:   \@{creator.username} \
                         """,
-                        parse_mode=ParseMode.MARKDOWN_V2,
+                        parse_mode=ParseMode.MARKDOWN,
                     )
                 else:
                     bot.send_message(
@@ -436,7 +436,7 @@ async def new_member(
                             callback_data=f"user_join_({new_mem.id})",
                         )
                     ]]),
-                    parse_mode=ParseMode.MARKDOWN_V2,
+                    parse_mode=ParseMode.MARKDOWN,
                     reply_to_message_id=reply,
                     allow_sending_without_reply=True,
                 )
@@ -536,7 +536,7 @@ async def new_member(
                     f"Welcome [{escape_markdown(new_mem.first_name)}](tg://user?id={user.id}). Click the correct button to get unmuted!\n"
                     f"You got 120 seconds for this.",
                     reply_markup=InlineKeyboardMarkup(btn),
-                    parse_mode=ParseMode.MARKDOWN_V2,
+                    parse_mode=ParseMode.MARKDOWN,
                     reply_to_message_id=reply,
                     allow_sending_without_reply=True,
                 )
@@ -736,7 +736,7 @@ async def welcome(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.effective_message.reply_text(
             f"This chat has it's welcome setting set to: `{pref}`.\n"
             f"*The welcome message (not filling the {{}}) is:*",
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
         )
 
         if welcome_type in [sql.Types.BUTTON_TEXT, sql.Types.TEXT]:
@@ -770,7 +770,7 @@ async def welcome(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     cust_content,
                     caption=welcome_m,
                     reply_markup=keyboard,
-                    parse_mode=ParseMode.MARKDOWN_V2,
+                    parse_mode=ParseMode.MARKDOWN,
                     **kwargs,
                 )
 
@@ -801,7 +801,7 @@ async def goodbye(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.effective_message.reply_text(
             f"This chat has it's goodbye setting set to: `{pref}`.\n"
             f"*The goodbye  message (not filling the {{}}) is:*",
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
         )
 
         if goodbye_type == sql.Types.BUTTON_TEXT:
@@ -822,7 +822,7 @@ async def goodbye(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         else:
             ENUM_FUNC_MAP[goodbye_type](chat.id,
                                         goodbye_m,
-                                        parse_mode=ParseMode.MARKDOWN_V2)
+                                        parse_mode=ParseMode.MARKDOWN)
 
     elif len(args) >= 1:
         if args[0].lower() in ("on", "yes"):
@@ -968,7 +968,7 @@ async def welcomemute(update: Update,
         else:
             await msg.reply_text(
                 "Please enter `off`/`no`/`soft`/`strong`/`captcha`!",
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
             )
             return ""
     else:
@@ -976,7 +976,7 @@ async def welcomemute(update: Update,
         reply = (
             f"\n Give me a setting!\nChoose one out of: `off`/`no` or `soft`, `strong` or `captcha` only! \n"
             f"Current setting: `{curr_setting}`")
-        await msg.reply_text(reply, parse_mode=ParseMode.MARKDOWN_V2)
+        await msg.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
         return ""
 
 
@@ -1030,11 +1030,11 @@ async def cleanservice(update: Update,
         if curr:
             await update.effective_message.reply_text(
                 "Welcome clean service is : on",
-                parse_mode=ParseMode.MARKDOWN_V2)
+                parse_mode=ParseMode.MARKDOWN)
         else:
             await update.effective_message.reply_text(
                 "Welcome clean service is : off",
-                parse_mode=ParseMode.MARKDOWN_V2)
+                parse_mode=ParseMode.MARKDOWN)
 
     elif len(args) >= 1:
         var = args[0]
@@ -1048,10 +1048,10 @@ async def cleanservice(update: Update,
                 "Welcome clean service is : on")
         else:
             await update.effective_message.reply_text(
-                "Invalid option", parse_mode=ParseMode.MARKDOWN_V2)
+                "Invalid option", parse_mode=ParseMode.MARKDOWN)
     else:
         await update.effective_message.reply_text(
-            "Usage is on/yes or off/no", parse_mode=ParseMode.MARKDOWN_V2)
+            "Usage is on/yes or off/no", parse_mode=ParseMode.MARKDOWN)
 
 
 async def user_button(update: Update,
@@ -1192,7 +1192,7 @@ async def user_captcha_button(update: Update,
             if res:
                 await bot.sendMessage(chat_id=chat.id,
                                       text=kicked_msg,
-                                      parse_mode=ParseMode.MARKDOWN_V2)
+                                      parse_mode=ParseMode.MARKDOWN)
 
     else:
         await query.answer(text="You're not allowed to do this!")
@@ -1238,14 +1238,14 @@ WELC_MUTE_HELP_TXT = (
 async def welcome_help(update: Update,
                        context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(WELC_HELP_TXT,
-                                              parse_mode=ParseMode.MARKDOWN_V2)
+                                              parse_mode=ParseMode.MARKDOWN)
 
 
 @u_admin
 async def welcome_mute_help(update: Update,
                             context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(WELC_MUTE_HELP_TXT,
-                                              parse_mode=ParseMode.MARKDOWN_V2)
+                                              parse_mode=ParseMode.MARKDOWN)
 
 
 # TODO: get welcome data from group butler snap

@@ -34,7 +34,7 @@ async def privatenotes(update: Update,
         else:
             msg = "Sorry, wrong value"
 
-    await message.reply_text(text=msg, parse_mode=ParseMode.MARKDOWN_V2)
+    await message.reply_text(text=msg, parse_mode=ParseMode.MARKDOWN)
 
 
 def setprivatenotes(chat_id, setting):

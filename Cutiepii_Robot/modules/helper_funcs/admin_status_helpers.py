@@ -65,14 +65,14 @@ def edit_anon_msg(msg: Message, text: str):
 	"""
 	edit anon check message and remove the button
 	"""
-	msg.edit_text(text, parse_mode = ParseMode.MARKDOWN_V2, reply_markup = None)
+	msg.edit_text(text, parse_mode = ParseMode.MARKDOWN, reply_markup = None)
 
 
 async def user_is_not_admin_errmsg(msg: Message, permission: AdminPerms = None, cb: CallbackQuery = None):
 	errmsg = f"You lack the following permission for this command:\n`{permission.value}`!"
 	if cb:
 		return cb.answer(errmsg, show_alert = True)
-	return await msg.reply_text(errmsg, parse_mode = ParseMode.MARKDOWN_V2)
+	return await msg.reply_text(errmsg, parse_mode = ParseMode.MARKDOWN)
 
 def button_expired_error(u: Update):
 	errmsg = "This button has expired!"
@@ -80,6 +80,6 @@ def button_expired_error(u: Update):
 		u.callback_query.answer(errmsg, show_alert = True)
 		u.effective_message.delete()
 		return
-	return u.effective_message.edit_text(errmsg, parse_mode = ParseMode.MARKDOWN_V2)
+	return u.effective_message.edit_text(errmsg, parse_mode = ParseMode.MARKDOWN)
 
 anon_callbacks = {}

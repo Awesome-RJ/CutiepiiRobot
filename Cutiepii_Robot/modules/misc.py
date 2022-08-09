@@ -147,7 +147,7 @@ async def gdpr(update: Update):
         "which clearly states that the right to erasure does not apply "
         '"for the performance of a task carried out in the public interest", as is '
         "the case for the aforementioned pieces of data.",
-        parse_mode=ParseMode.MARKDOWN_V2,
+        parse_mode=ParseMode.MARKDOWN,
     )
 
 
@@ -158,13 +158,13 @@ async def echo(update: Update):
 
     if update.effective_message.reply_to_message:
         message.reply_to_message.reply_text(args[1],
-                                            parse_mode=ParseMode.MARKDOWN_V2,
+                                            parse_mode=ParseMode.MARKDOWN,
                                             disable_web_page_preview=True)
     else:
         await message.reply_text(
             args[1],
             quote=False,
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
         )
     with contextlib.suppress(BadRequest):
@@ -221,12 +221,12 @@ async def markdown_help_sender(update: Update):
     if update.callback_query:
         await update.effective_message.edit_text(
             FORMATTING_HELP,
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup=markup)
     else:
         await update.effective_message.reply_text(
             FORMATTING_HELP,
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
             reply_markup=markup)
 
 
@@ -436,7 +436,7 @@ async def imdb(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             mov_rating = "Not available"
         msg = f"*Title :* {mov_title}\n{mov_details}\n*Rating :* {mov_rating} \n*Country :*  {mov_country}\n*Language :* {mov_language}\n*Director :* {director}\n*Writer :* {writer}\n*Stars :* {stars}\n*IMDB Url :* {mov_link}\n*Story Line :* {story_line}"
         await update.effective_message.reply_photo(
-            photo=poster, caption=msg, parse_mode=ParseMode.MARKDOWN_V2)
+            photo=poster, caption=msg, parse_mode=ParseMode.MARKDOWN)
     except IndexError:
         await update.effective_message.reply_text(
             "Plox enter **Valid movie name** kthx")
@@ -478,7 +478,7 @@ async def status(update: Update):
 
     await message.reply_text(
         text=msg,
-        parse_mode=ParseMode.MARKDOWN_V2,
+        parse_mode=ParseMode.MARKDOWN,
         disable_web_page_preview=True,
     )
 

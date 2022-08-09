@@ -782,7 +782,7 @@ async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if info := sql.get_user_me_info(user.id):
         await update.effective_message.reply_text(
             f"*{user.first_name}*:\n{escape_markdown(info)}",
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
         )
     elif message.reply_to_message:
@@ -803,7 +803,7 @@ async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if info := sql.get_user_me_info(user.id):
         await message.reply_text(
             f"*{user.first_name}*:\n{escape_markdown(info)}",
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
         )
     elif update.effective_message.reply_to_message:
@@ -859,7 +859,7 @@ async def about_bio(update: Update,
     if info := sql.get_user_bio(user.id):
         await message.reply_text(
             f"*{user.first_name}*:\n{escape_markdown(info)}",
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
         )
 

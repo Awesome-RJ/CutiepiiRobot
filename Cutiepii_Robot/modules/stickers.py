@@ -469,7 +469,7 @@ async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             [[InlineKeyboardButton(text="View Pack", url=f"{packs}")]])
         await msg.reply_text(packs_text,
                              reply_markup=edited_keyboard,
-                             parse_mode=ParseMode.MARKDOWN_V2)
+                             parse_mode=ParseMode.MARKDOWN)
     try:
         if os.path.isfile("kangsticker.png"):
             os.remove("kangsticker.png")

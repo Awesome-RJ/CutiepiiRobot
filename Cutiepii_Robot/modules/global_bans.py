@@ -486,7 +486,7 @@ async def clear_gbans(bot: Bot, update: Update):
             sql.ungban_user(id)
     await update.effective_message.reply_text(
         f"Done! `{deleted}` deleted accounts were removed from the gbanlist.",
-        parse_mode=ParseMode.MARKDOWN_V2,
+        parse_mode=ParseMode.MARKDOWN,
     )
 
 
@@ -505,7 +505,7 @@ async def check_gbans(bot: Bot, update: Update):
     if deleted:
         await update.effective_message.reply_text(
             f"`{deleted}` deleted accounts found in the gbanlist! Run /cleangb to remove them from the database!",
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
         )
 
     else:

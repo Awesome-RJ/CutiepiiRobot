@@ -73,18 +73,18 @@ async def feedback(e):
 """
     if user_id == 1926801217:
         await e.reply("**Sry I Can't Identify ur Info**",
-                      parse_mode=ParseMode.MARKDOWN_V2)
+                      parse_mode=ParseMode.MARKDOWN)
         return
 
     if user_id == 1087968824:
         await e.reply("**Turn Off Ur Anonymous Mode And Try**",
-                      parse_mode=ParseMode.MARKDOWN_V2)
+                      parse_mode=ParseMode.MARKDOWN)
         return
 
     if e.sender_id != OWNER_ID and not quew:
         await e.reply(
             GIVE,
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
             buttons=BUTTON,
             file=random.choice(FEED),
         ),

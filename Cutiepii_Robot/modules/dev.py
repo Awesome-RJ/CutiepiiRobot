@@ -149,7 +149,7 @@ async def pip_install(update: Update,
         if stderr:
             reply += f"*Stderr*\n`{stderr}`\n"
 
-        await message.reply_text(text=reply, parse_mode=ParseMode.MARKDOWN_V2)
+        await message.reply_text(text=reply, parse_mode=ParseMode.MARKDOWN)
 
 
 @dev_plus

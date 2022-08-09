@@ -106,7 +106,7 @@ async def import_data(update: Update,
                 else:
                     text = "Backup comes from another chat, I can't return another chat to this chat"
                 return await msg.reply_text(text,
-                                            parse_mode=ParseMode.MARKDOWN_V2)
+                                            parse_mode=ParseMode.MARKDOWN)
         except Exception:
             return await msg.reply_text(
                 "There was a problem while importing the data!")
@@ -145,7 +145,7 @@ async def import_data(update: Update,
             text = f"Backup fully restored on *{chat_name}*."
         else:
             text = "Backup fully restored"
-        await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN_V2)
+        await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN)
 
 
 @user_admin
@@ -181,7 +181,7 @@ async def export_data(update: Update,
         await update.effective_message.reply_text(
             "You can only backup once a day!\nYou can backup again in about `{}`"
             .format(timeformatt, ),
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
         )
         return
     if user.id != OWNER_ID:
@@ -368,7 +368,7 @@ async def export_data(update: Update,
                 chat_id,
                 tgl,
             ),
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
         )
     await context.bot.sendDocument(
         current_chat_id,
@@ -382,7 +382,7 @@ async def export_data(update: Update,
         ),
         timeout=360,
         reply_to_message_id=msg.message_id,
-        parse_mode=ParseMode.MARKDOWN_V2,
+        parse_mode=ParseMode.MARKDOWN,
     )
     os.remove("Cutiepii_Robot{}Backup".format(chat_id))  # Cleaning file
 

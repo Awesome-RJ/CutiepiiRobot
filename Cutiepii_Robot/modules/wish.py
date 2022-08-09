@@ -54,7 +54,7 @@ async def wish(e):
     quew = e.pattern_match.group(1)
     if e.sender_id != OWNER_ID and not quew:
         (await e.reply(WISH,
-                       parse_mode=ParseMode.MARKDOWN_V2,
+                       parse_mode=ParseMode.MARKDOWN,
                        buttons=BUTTON,
                        file=STAR), )
         return

@@ -93,7 +93,7 @@ async def covid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         text = f"*COVID-19 Statistics in {country} :*\n"
     text += f"Last Updated on `{date} GMT`\n\n🔼 Confirmed Cases : `{dot(case['cases'])}` | `+{dot(case['todayCases'])}`\n🔺 Active Cases : `{dot(case['active'])}`\n⚰️ Deaths : `{dot(case['deaths'])}` | `+{dot(case['todayDeaths'])}`\n💹 Recovered Cases: `{dot(case['recovered'])}` | `+{dot(case['todayRecovered'])}`\n💉 Total Tests : `{dot(case['tests'])}`\n👥 Populations : `{dot(case['population'])}`\n🌐 Source : worldometers"
     try:
-        await message.reply_text(text, parse_mode=ParseMode.MARKDOWN_V2)
+        await message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
     except Exception:
         await message.reply_text(
             "Try again in few times, maybe API are go down")

@@ -275,7 +275,7 @@ async def blacklist_mode(update: Update,
                     "but you didn't specified time; Try, `/blacklistmode tban <timevalue>`."
                     "Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
                 )
-                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN_V2)
+                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN)
                 return ""
             restime = extract_time(msg, args[1])
             if not restime:
@@ -283,7 +283,7 @@ async def blacklist_mode(update: Update,
                     "Invalid time value!"
                     "Example of time value: `4m = 4 minutes`, `3h = 3 hours`, `6d = 6 days`, `5w = 5 weeks`."
                 )
-                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN_V2)
+                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN)
                 return ""
             settypeblacklist = "temporarily ban for {}".format(args[1])
             sql.set_blacklist_strength(chat_id, 6, str(args[1]))
@@ -294,7 +294,7 @@ async def blacklist_mode(update: Update,
                     "but you didn't specified time; Try, `/blacklistmode tmute <timevalue>`."
                     "Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
                 )
-                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN_V2)
+                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN)
                 return ""
             restime = extract_time(msg, args[1])
             if not restime:
@@ -302,7 +302,7 @@ async def blacklist_mode(update: Update,
                     "Invalid time value!"
                     "Example of time value: `4m = 4 minutes`, `3h = 3 hours`, `6d = 6 days`, `5w = 5 weeks`."
                 )
-                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN_V2)
+                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN)
                 return ""
             settypeblacklist = "temporarily mute for {}".format(args[1])
             sql.set_blacklist_strength(chat_id, 7, str(args[1]))
@@ -317,7 +317,7 @@ async def blacklist_mode(update: Update,
                 settypeblacklist, chat_name)
         else:
             text = "Changed blacklist mode: `{}`!".format(settypeblacklist)
-        send_message(msg, text, parse_mode=ParseMode.MARKDOWN_V2)
+        send_message(msg, text, parse_mode=ParseMode.MARKDOWN)
         return ("<b>{}:</b>\n"
                 "<b>Admin:</b> {}\n"
                 "Changed the blacklist mode. will {}.".format(
@@ -347,7 +347,7 @@ async def blacklist_mode(update: Update,
             settypeblacklist, chat_name)
     else:
         text = "Current blacklistmode: *{}*.".format(settypeblacklist)
-    send_message(msg, text, parse_mode=ParseMode.MARKDOWN_V2)
+    send_message(msg, text, parse_mode=ParseMode.MARKDOWN)
     return ""
 
 

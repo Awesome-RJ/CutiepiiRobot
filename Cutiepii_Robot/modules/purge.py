@@ -225,7 +225,7 @@ async def purgeto_messages(event):
         pass
     time_ = time.perf_counter() - start
     text = f"Purged Successfully in {time_:0.2f}s"
-    await event.respond(text, parse_mode=ParseMode.MARKDOWN_V2)
+    await event.respond(text, parse_mode=ParseMode.MARKDOWN)
 
 
 __help__ = """

@@ -72,7 +72,7 @@ async def remind(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if len(args) != 3:
         await msg.reply_text(
             "Incorrect format\nFormat: `/remind 20m message here`",
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
         )
         return
 

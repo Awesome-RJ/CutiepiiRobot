@@ -761,12 +761,12 @@ async def set_warn_strength(update: Update,
         if soft_warn:
             await msg.reply_text(
                 "Warns are currently set to *kick* users when they exceed the limits.",
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
             )
         else:
             await msg.reply_text(
                 "Warns are currently set to *Ban* users when they exceed the limits.",
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
             )
     return ""
 

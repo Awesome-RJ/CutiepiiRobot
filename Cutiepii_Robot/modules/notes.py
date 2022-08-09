@@ -182,7 +182,7 @@ async def get(update: Update,
                 text = ""
 
             keyb = []
-            parseMode = ParseMode.MARKDOWN_V2
+            parseMode = ParseMode.MARKDOWN
             buttons = sql.get_buttons(note_chat_id, notename)
             if no_format:
                 parseMode = None
@@ -308,7 +308,7 @@ async def save(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     await msg.reply_text(
         f"Yas! Added `{note_name}`.\nGet it with /get `{note_name}`, or `#{note_name}`",
-        parse_mode=ParseMode.MARKDOWN_V2,
+        parse_mode=ParseMode.MARKDOWN,
     )
 
     if msg.reply_to_message and msg.reply_to_message.from_user.is_bot:
@@ -366,7 +366,7 @@ async def clearall(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.effective_message.reply_text(
             f"Are you sure you would like to clear ALL notes in {chat.title}? This action cannot be undone.",
             reply_markup=buttons,
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
         )
 
 
@@ -417,7 +417,7 @@ async def list_notes(update: Update,
             note_name = f"`{note_id}.`  `#{(note.name.lower())}`\n"
         if len(msg) + len(note_name) > MessageLimit.TEXT_LENGTH:
             await update.effective_message.reply_text(
-                msg, parse_mode=ParseMode.MARKDOWN_V2)
+                msg, parse_mode=ParseMode.MARKDOWN)
             msg = ""
         msg += note_name
 
@@ -430,7 +430,7 @@ async def list_notes(update: Update,
 
     elif len(msg) != 0:
         await update.effective_message.reply_text(
-            msg, parse_mode=ParseMode.MARKDOWN_V2)
+            msg, parse_mode=ParseMode.MARKDOWN)
 
 
 def __import_data__(chat_id, data):

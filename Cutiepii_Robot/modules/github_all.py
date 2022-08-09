@@ -100,7 +100,7 @@ async def getRelease(update: Update,
     text = getData(url, index)
     deletion(
         update, context, await msg.reply_text(text,
-                                              parse_mode=ParseMode.MARKDOWN_V2,
+                                              parse_mode=ParseMode.MARKDOWN,
                                               disable_web_page_preview=True))
     return
 
@@ -118,14 +118,14 @@ async def hashFetch(
         deletion(
             update, context, await msg.reply_text(
                 "There was a problem parsing your request. Likely this is not a saved repo shortcut",
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
             ))
         return
     text = getData(url, index)
     deletion(
         update, context, await msg.reply_text(text,
-                                              parse_mode=ParseMode.MARKDOWN_V2,
+                                              parse_mode=ParseMode.MARKDOWN,
                                               disable_web_page_preview=True))
     return
 
@@ -141,14 +141,14 @@ async def cmdFetch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         deletion(
             update, context, await msg.reply_text(
                 "There was a problem parsing your request. Likely this is not a saved repo shortcut",
-                parse_mode=ParseMode.MARKDOWN_V2,
+                parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
             ))
         return
     text = getData(url, index)
     deletion(
         update, context, await msg.reply_text(text,
-                                              parse_mode=ParseMode.MARKDOWN_V2,
+                                              parse_mode=ParseMode.MARKDOWN,
                                               disable_web_page_preview=True))
     return
 
@@ -216,7 +216,7 @@ async def listRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if len(msg) + len(repo_name) > MessageLimit.TEXT_LENGTH:
             deletion(
                 update, context, await update.effective_message.reply_text(
-                    msg, parse_mode=ParseMode.MARKDOWN_V2))
+                    msg, parse_mode=ParseMode.MARKDOWN))
             msg = ""
         msg += repo_name
     if msg == "*List of repo shotcuts in {}:*\n":
@@ -226,7 +226,7 @@ async def listRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     elif len(msg) != 0:
         deletion(
             update, context, await update.effective_message.reply_text(
-                msg.format(chat_name) + des, parse_mode=ParseMode.MARKDOWN_V2))
+                msg.format(chat_name) + des, parse_mode=ParseMode.MARKDOWN))
 
 
 async def getVer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

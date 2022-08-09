@@ -217,7 +217,7 @@ async def set_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     else:
         await message.reply_text(
             "Use `/setflood number` to enable anti-flood.\nOr use `/setflood off` to disable antiflood!.",
-            parse_mode=ParseMode.MARKDOWN_V2,
+            parse_mode=ParseMode.MARKDOWN,
         )
     return ""
 
@@ -303,7 +303,7 @@ async def set_flood_mode(update: Update,
                     "but you didn't specified time; Try, `/setfloodmode tban <timevalue>`."
                     "Examples of time value: "
                     "4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks.")
-                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN_V2)
+                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN)
                 return
             settypeflood = f"tban for {args[1]}"
             sql.set_flood_strength(chat_id, 4, str(args[1]))
@@ -314,7 +314,7 @@ async def set_flood_mode(update: Update,
                     "but you didn't specified time; Try, `/setfloodmode tmute <timevalue>`."
                     "Examples of time value: 4m = 4 minutes, 3h = 3 hours, 6d = 6 days, 5w = 5 weeks."
                 )
-                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN_V2)
+                send_message(msg, teks, parse_mode=ParseMode.MARKDOWN)
                 return
             settypeflood = f"tmute for {args[1]}"
             sql.set_flood_strength(chat_id, 5, str(args[1]))
