@@ -61,6 +61,7 @@ from Cutiepii_Robot import (
 from Cutiepii_Robot.modules import ALL_MODULES
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.misc import paginate_modules
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.error import (
