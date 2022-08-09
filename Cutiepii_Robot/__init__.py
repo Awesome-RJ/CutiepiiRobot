@@ -333,7 +333,7 @@ telegraph.create_account(short_name="Cutiepii")
 #------------------------------------------------------------------
 print("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
-"""
+
 CUTIEPII_PTB = (
     tg.Application.builder()
     .token(TOKEN)
@@ -342,8 +342,7 @@ CUTIEPII_PTB = (
     .concurrent_updates(True)
     .build()
 )
-"""
-CUTIEPII_PTB = (tg.Application.builder().token(TOKEN).build())
+
 # asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
 #------------------------------------------------------------------
 print("[CUTIEPII]: PYROGRAM CLIENT STARTING")
