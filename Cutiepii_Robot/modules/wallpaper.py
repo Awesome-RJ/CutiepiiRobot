@@ -36,14 +36,13 @@ from telegram import Update
 from telegram.constants import ChatAction
 from telegram.ext import ContextTypes
 
-from Cutiepii_Robot import SUPPORT_CHAT, WALL_API
+from Cutiepii_Robot import SUPPORT_CHAT, WALL_API, CUTIEPII_PTB
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_action
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 
 # Wallpaper module powered by wall.alphacoders.com
 
 
-@cutiepii_cmd(command="wall")
 @send_action(ChatAction.UPLOAD_PHOTO)
 async def wall(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = update.effective_chat.id
@@ -86,3 +85,5 @@ async def wall(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             reply_to_message_id=msg_id,
             timeout=60,
         )
+
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("wall", wall, block=bool))

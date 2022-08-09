@@ -8,16 +8,15 @@ from datetime import timedelta
 from pytimeparse.timeparse import timeparse
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import ContextTypes
+from telegram.ext import ContextTypes, CommandHandler, CallbackQueryHandler
 from telegram.constants import ParseMode
 from telegram.helpers import mention_html
 
 from Cutiepii_Robot.modules.log_channel import loggable
 
 from Cutiepii_Robot.modules.helper_funcs.chat_status import connection_status
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_callback
 from Cutiepii_Robot.modules.cron_jobs import j
-from Cutiepii_Robot import LOGGER
+from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.admin_status import (
     user_admin_check,
     bot_admin_check,
@@ -42,7 +41,6 @@ def get_readable_time(time: int) -> str:
     return f"{t[0]} hour(s)" if time >= 3600 else f"{t[1]} minutes"
 
 
-@cutiepii_cmd(command="raid")
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
@@ -131,7 +129,7 @@ async def setRaid(update: Update,
                 parse_mode=ParseMode.HTML)
 
 
-@cutiepii_callback(pattern="enable_raid=")
+
 @connection_status
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
@@ -168,7 +166,6 @@ async def enable_raid_cb(update: Update, ctx: ContextTypes) -> Optional[str]:
             f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n")
 
 
-@cutiepii_callback(pattern="disable_raid=")
 @connection_status
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
@@ -193,7 +190,6 @@ async def disable_raid_cb(update: Update) -> Optional[str]:
     return logmsg
 
 
-@cutiepii_callback(pattern="cancel_raid=")
 @connection_status
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 async def disable_raid_cb(update: Update):
@@ -204,7 +200,6 @@ async def disable_raid_cb(update: Update):
         parse_mode=ParseMode.HTML)
 
 
-@cutiepii_cmd(command="raidtime")
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
@@ -245,12 +240,11 @@ async def raidtime(update: Update,
             parse_mode=ParseMode.HTML)
 
 
-@cutiepii_cmd(command="raidactiontime")
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def raidtime(update: Update,
+async def raidactiontime(update: Update,
                    context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     what, t, time = sql.getRaidStatus(update.effective_chat.id)
     args = context.args
@@ -284,6 +278,14 @@ async def raidtime(update: Update,
         await msg.reply_text(
             "Unknown time given, give me something like 5m or 1h",
             parse_mode=ParseMode.HTML)
+
+CUTIEPII_PTB.add_handler(CommandHandler("raid", setRaid, block=bool))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(enable_raid_cb, pattern=r"enable_raid="))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(disable_raid_cb, pattern=r"disable_raid="))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(disable_raid_cb, pattern=r"cancel_raid="))
+CUTIEPII_PTB.add_handler(CommandHandler("raidtime", raidtime, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("raidactiontime", raidactiontime, block=bool))
+
 
 
 __mod_name__ = "AntiRaid"

@@ -75,6 +75,7 @@ from telegram.error import (
 from telegram.ext import (
     ContextTypes,
     filters,
+    CallbackQueryHandler
 )
 
 from telegram.helpers import escape_markdown
@@ -684,7 +685,7 @@ def main():
 
     CUTIEPII_PTB.add_handler(CallbackQueryHandler(cutiepii_callback_data, pattern=r"cutiepii_"))
     CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("donate", donate))
-    CUTIEPII_PTB.add_handler(MessageHandler(filters.StatusUpdate.MIGRATE, migrate_chats, block=False))
+    CUTIEPII_PTB.add_handler(MessageHandler(filters.StatusUpdate.MIGRATE, migrate_chats, block=bool))
 
     if WEBHOOK:
         LOGGER.info("Using webhooks.")

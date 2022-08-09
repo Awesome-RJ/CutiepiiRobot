@@ -1,3 +1,4 @@
+"""
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler, DisableAbleMessageHandler
 from Cutiepii_Robot import LOGGER, CUTIEPII_PTB as app
 
@@ -149,3 +150,5 @@ cutiepii_cmd = Cutiepii_TG_Handler(app).command
 cutiepii_msg = Cutiepii_TG_Handler(app).message
 cutiepii_callback = Cutiepii_TG_Handler(app).callbackquery
 cutiepii_inline = Cutiepii_TG_Handler(app).inlinequery
+
+"""

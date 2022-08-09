@@ -8,10 +8,12 @@ from telegram.constants import MessageLimit, ParseMode
 from telegram.ext import (
     filters as PTB_Cutiepii_Filters,
     ContextTypes,
-)
+    CallbackQueryHandler,
+    MessageHandler,
+    )
 from telegram.helpers import escape_markdown, mention_html
 
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_msg, cutiepii_callback
+
 from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS, LOGGER
 from Cutiepii_Robot.modules.helper_funcs.msg_types import get_filter_type
 from Cutiepii_Robot.modules.helper_funcs.misc import build_keyboard_parser
@@ -24,6 +26,7 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import (
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql import cust_filters_sql as sql
 from Cutiepii_Robot.modules.connection import connected
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_text
 from Cutiepii_Robot.modules.helper_funcs.admin_status import (
@@ -46,7 +49,6 @@ ENUM_FUNC_MAP = {
 }
 
 
-@cutiepii_cmd(command='filters', admin_ok=True)
 async def list_handlers(update: Update,
                         context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
@@ -97,7 +99,7 @@ async def list_handlers(update: Update,
 
 
 # NOT ASYNC BECAUSE CUTIEPII_PTB HANDLER RAISED
-@cutiepii_cmd(command='filter', group=55)
+
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def filters(update, context) -> None:  # sourcery no-metrics
@@ -220,7 +222,6 @@ async def filters(update, context) -> None:  # sourcery no-metrics
 
 
 # NOT ASYNC BECAUSE CUTIEPII_PTB HANDLER RAISE
-@cutiepii_cmd(command="stop")
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def stop_filter(update, context) -> str:
@@ -267,8 +268,7 @@ async def stop_filter(update, context) -> str:
     )
 
 
-@cutiepii_msg((PTB_Cutiepii_Filters.TEXT
-               & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE))
+
 async def reply_filter(
         update: Update,
         context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
@@ -453,8 +453,7 @@ async def reply_filter(
             break
 
 
-@cutiepii_cmd(command=["removeallfilters", "stopall"],
-              filters=PTB_Cutiepii_Filters.ChatType.GROUPS)
+
 async def rmall_filters(update: Update,
                         context: ContextTypes.DEFAULT_TYPE) -> None:
     chat = update.effective_chat
@@ -481,7 +480,6 @@ async def rmall_filters(update: Update,
         )
 
 
-@cutiepii_callback(pattern=r"filters_.*")
 @loggable
 async def rmall_callback(update: Update,
                          context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -588,5 +586,15 @@ doin?
 *Note*: Filters also support markdown formatters like: {first}, {last} etc.. and buttons.
 Check `/markdownhelp` to know more!
 """
+
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("filter", filters))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("stop", stop_filter))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(
+    ["removeallfilters", "stopall"], rmall_filters, filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=bool))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(
+    rmall_callback, pattern=r"filters_.*", block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(
+    "filters", list_handlers, admin_ok=True, block=bool))
+CUTIEPII_PTB.add_handler(MessageHandler(PTB_Cutiepii_Filters.TEXT & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE, reply_filter, block=bool))
 
 __mod_name__ = "Filters"

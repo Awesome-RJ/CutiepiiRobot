@@ -51,7 +51,6 @@ from Cutiepii_Robot.modules.helper_funcs.string_handling import extract_time
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.redis.approvals_redis import is_approved
 from Cutiepii_Robot.modules.warns import warn
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 from Cutiepii_Robot.modules.helper_funcs.anonymous import AdminPerms
 
 BLACKLIST_GROUP = 11
@@ -106,7 +105,6 @@ async def blacklist(update: Update,
         send_message(update.effective_message, text, parse_mode=ParseMode.HTML)
 
 
-@cutiepii_cmd(command="addblacklist")
 @user_admin(AdminPerms.CAN_DELETE_MESSAGES)
 async def add_blacklist(update: Update,
                         context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -513,11 +511,11 @@ Note:
 __mod_name__ = "Blacklists"
 
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("blacklist", blacklist, admin_ok=True))
-CUTIEPII_PTB.add_handler(CommandHandler("addblacklist", add_blacklist))
-CUTIEPII_PTB.add_handler(CommandHandler("unblacklist", unblacklist))
-CUTIEPII_PTB.add_handler(CommandHandler("blacklistmode", blacklist_mode))
+    DisableAbleCommandHandler("blacklist", blacklist, admin_ok=True, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("addblacklist", add_blacklist, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("unblacklist", unblacklist, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("blacklistmode", blacklist_mode, block=bool))
 CUTIEPII_PTB.add_handler(
     MessageHandler(
         (filters.TEXT | filters.COMMAND | filters.Sticker.ALL | filters.PHOTO)
-        & filters.ChatType.GROUPS, del_blacklist))
+        & filters.ChatType.GROUPS, del_blacklist, block=bool))

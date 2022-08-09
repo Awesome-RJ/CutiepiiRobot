@@ -34,17 +34,17 @@ from typing import Optional, Union
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Bot, Chat, ChatMember, Update
 from telegram.error import BadRequest, TelegramError
-from telegram.ext import filters, ContextTypes
+from telegram.ext import filters, ContextTypes, CommandHandler, CallbackQueryHandler
 from telegram.helpers import mention_html
 from telegram.constants import ParseMode
 from Cutiepii_Robot import (BAN_STICKER, DEV_USERS, ERROR_LOGS, SUDO_USERS,
-                            SUPPORT_USERS, OWNER_ID, WHITELIST_USERS, LOGGER)
+                            OWNER_ID, WHITELIST_USERS, LOGGER, CUTIEPII_PTB)
 
 from Cutiepii_Robot.modules.helper_funcs.chat_status import connection_status, dev_plus, is_user_admin
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user_and_text
 from Cutiepii_Robot.modules.helper_funcs.string_handling import extract_time
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.log_channel import loggable, gloggable
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_callback
 
 
 def cannot_ban(banner_id, user_id, message) -> bool:
@@ -160,7 +160,6 @@ async def unban_user(bot: Bot,
         "" if reason is None else f"<b>Reason:</b> {reason}")
 
 
-@cutiepii_cmd(command=['ban', 'dban', 'sban', 'dsban'])
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
@@ -325,7 +324,6 @@ async def ban(
     return logmsg
 
 
-@cutiepii_cmd(command='tban')
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
@@ -427,7 +425,7 @@ async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     return log_message
 
 
-@cutiepii_cmd(command=['kick', 'punch'])
+
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
@@ -500,7 +498,7 @@ async def kick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     return log_message
 
 
-@cutiepii_cmd(command='kickme', filters=filters.ChatType.GROUPS)
+
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def kickme(update: Update) -> Optional[str]:
@@ -527,7 +525,6 @@ async def kickme(update: Update) -> Optional[str]:
     await update.effective_message.reply_text("Huh? I can't :/")
 
 
-@cutiepii_cmd(command='unban')
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
@@ -641,7 +638,6 @@ async def unban(
 WHITELISTED_USERS = [OWNER_ID] + DEV_USERS + SUDO_USERS + WHITELIST_USERS
 
 
-@cutiepii_cmd(command=['selfunban', 'roar'])
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @gloggable
@@ -684,7 +680,7 @@ async def selfunban(update: Update,
     return log
 
 
-@cutiepii_callback(pattern=r"unbanb_")
+
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
@@ -722,7 +718,6 @@ async def unbanb_btn(update: Update,
         return ""
 
 
-@cutiepii_cmd(command='banme', filters=filters.ChatType.GROUPS)
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
@@ -737,9 +732,6 @@ async def banme(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text("Huh? I can't :/")
 
 
-@cutiepii_cmd(command='snipe',
-              can_disable=False,
-              filters=filters.User(SUDO_USERS))
 @dev_plus
 async def snipe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
@@ -780,5 +772,15 @@ __help__ = """
 ➛ /tmute <userhandle> x(m/h/d)*:* mutes a user for x time. (via handle, or reply). `m` = `minutes`, `h` = `hours`, `d` = `days`.
 ➛ /unmute <userhandle>*:* unmutes a user. Can also be used as a reply, muting the replied to user.
 """
+
+CUTIEPII_PTB.add_handler(CommandHandler(['ban', 'dban', 'sban', 'dsban'], ban, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler(["tban"], temp_ban, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler(["kick", "punch"], punch, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("unban", unban, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler(['selfunban', 'roar'], selfunban, block=bool))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(unbanb_btn, pattern=r"unbanb_"))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["kickme", "punchme"], punchme, filters=filters.ChatType.GROUPS, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("snipe", snipe, pass_args=True, filters=filters.User(SUDO_USERS), block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("banme", banme, block=bool))
 
 __mod_name__ = "Bans/Mutes"

@@ -7,7 +7,6 @@ from telegram.ext import ContextTypes, CommandHandler, CallbackQueryHandler
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 
 from Cutiepii_Robot import CUTIEPII_PTB
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_callback
 
 url = "https://mydramalist.com/"
 

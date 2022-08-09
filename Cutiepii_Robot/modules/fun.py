@@ -39,11 +39,10 @@ import Cutiepii_Robot.modules.fun_strings as fun_strings
 
 from pyrogram import filters as cutiepii_pyro
 from Cutiepii_Robot import SUPPORT_USERS, SUDO_USERS, pgram, CUTIEPII_PTB
-from Cutiepii_Robot.modules.disable import DisableAbleMessageHandler
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 from Cutiepii_Robot.modules.helper_funcs.chat_status import is_user_admin
 
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import ChatPermissions, Update, Bot
 from telegram.error import BadRequest
 from telegram.ext import ContextTypes, filters
@@ -170,14 +169,14 @@ async def hmeme(_, message):
     pgram.send_photo(message.chat.id, pic, caption=title)
 
 
-@cutiepii_cmd(command='runs')
+
 async def runs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     temp = random.choice(fun_strings.RUN_STRINGS)
     if update.effective_user.id == 1170714920:
         temp = "Run everyone, they just dropped a bomb 💣💣"
     await update.effective_message.reply_text(temp)
 
-@cutiepii_cmd(command='sanitize')
+
 async def sanitize(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     name = (message.reply_to_message.from_user.first_name
@@ -188,7 +187,6 @@ async def sanitize(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     caption=f"*Sanitizes {name}*")
 
 
-@cutiepii_cmd(command='slap')
 async def slap(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot: telegram.Bot = context.bot
     args = context.args
@@ -250,7 +248,7 @@ async def slap(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-@cutiepii_cmd(command='hug')
+
 async def hug(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_animation = (update.effective_message.reply_to_message.reply_text
                        if update.effective_message.reply_to_message else
@@ -259,7 +257,7 @@ async def hug(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_animation(hug.get('link'))
 
 
-@cutiepii_cmd(command='pat')
+
 async def pat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_animation = (update.effective_message.reply_to_message.reply_text
                        if update.effective_message.reply_to_message else
@@ -268,12 +266,12 @@ async def pat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_animation(pat.get('link'))
 
 
-@cutiepii_cmd(command='roll')
+
 async def roll(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(random.choice(range(1, 7)))
 
 
-@cutiepii_cmd(command='shout')
+
 async def shout(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     text = " ".join(args)
@@ -288,12 +286,12 @@ async def shout(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                                                      parse_mode="MARKDOWN")
 
 
-@cutiepii_cmd(command='toss')
+
 async def toss(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(random.choice(fun_strings.TOSS))
 
 
-@cutiepii_cmd(command='shrug')
+
 async def shrug(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     reply_text = (msg.reply_to_message.reply_text
@@ -310,7 +308,7 @@ async def bluetext(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
 
-@cutiepii_cmd(command='rlg')
+
 async def rlg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     eyes = random.choice(fun_strings.EYES)
     mouth = random.choice(fun_strings.MOUTHS)
@@ -323,7 +321,7 @@ async def rlg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.effective_message.reply_text(repl)
 
 
-@cutiepii_cmd(command='decide')
+
 async def decide(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = update.effective_message
     chat = update.effective_chat
@@ -340,7 +338,7 @@ async def decide(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
 
 
-@cutiepii_cmd(command='8ball')
+
 async def eightball(update: Update,
                     context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_text = (update.effective_message.reply_to_message.reply_text
@@ -414,7 +412,7 @@ weebyfont = [
 ]
 
 
-@cutiepii_cmd(command='weebify')
+
 async def weebify(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     args = context.args
     message = update.effective_message
@@ -442,7 +440,7 @@ async def weebify(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await message.reply_text(string)
 
 
-@cutiepii_cmd(command='gbum')
+
 async def gbun(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     chat = update.effective_chat
@@ -454,7 +452,7 @@ async def gbun(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                                       (random.choice(fun_strings.GBUN)))
 
 
-@cutiepii_cmd(command='gbam')
+
 async def gbam(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     chat = update.effective_chat
@@ -483,7 +481,7 @@ async def gbam(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await context.bot.sendMessage(chat.id, gbam, parse_mode=ParseMode.HTML)
 
 
-@cutiepii_cmd(command='cuddle')
+
 async def cuddle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     args = context.args
@@ -515,13 +513,12 @@ async def cuddle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-@cutiepii_cmd(command='flirt')
+
 async def flirt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
     reply_text(random.choice(fun_strings.FLIRT_TEXT))
 
 
-@cutiepii_cmd(command='lewd')
 async def lewd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     args = context.args
@@ -560,7 +557,6 @@ async def lewd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-@cutiepii_cmd(command='romance')
 async def romance(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     args = context.args
@@ -599,7 +595,7 @@ async def romance(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-@cutiepii_cmd(command='owo')
+
 async def owo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     args = context.args
@@ -633,7 +629,6 @@ async def owo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             owo_type = "Text"
 
 
-@cutiepii_cmd(command='uwu')
 async def uwu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
     args = context.args
@@ -667,7 +662,6 @@ async def uwu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             uwu_type = "Text"
 
 
-@cutiepii_cmd(command='blockanimation')
 async def blockanimation(update: Update,
                          context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -678,7 +672,6 @@ async def blockanimation(update: Update,
     msg.edit_text('🟥')
 
 
-@cutiepii_cmd(command='clockanimation')
 async def clockanimation(update: Update,
                          context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -690,7 +683,6 @@ async def clockanimation(update: Update,
     msg.edit_text('🕚')
 
 
-@cutiepii_cmd(command='earthanimation')
 async def earthanimation(update: Update,
                          context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -702,7 +694,6 @@ async def earthanimation(update: Update,
     msg.edit_text('🌍')
 
 
-@cutiepii_cmd(command='moonanimation')
 async def moonanimation(update: Update,
                         context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -713,7 +704,6 @@ async def moonanimation(update: Update,
     msg.edit_text('🌙')
 
 
-@cutiepii_cmd(command='bombs')
 async def bombs(bot: Bot, update: Update):
     await update.effective_message.reply_text('💣')
     for x in range(EDIT_TIMES):
@@ -722,7 +712,6 @@ async def bombs(bot: Bot, update: Update):
     await update.effective_message.edit_text('RIP PLOX...')
 
 
-@cutiepii_cmd(command='hack')
 async def hack(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('Target selected')
@@ -732,7 +721,7 @@ async def hack(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg.edit_text('successful hacked all data send on my Database')
 
 
-@cutiepii_cmd(command='love')
+
 async def love(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('❣️')
@@ -742,7 +731,6 @@ async def love(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg.edit_text('True Love💞')
 
 
-@cutiepii_cmd(command='kill')
 async def kill(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('🔫')
@@ -857,5 +845,35 @@ CUTIEPII_PTB.add_handler(
                               cutiepii,
                               friendly="decide"))
                               """
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("sanitize", sanitize, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("runs", runs, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("slap", slap, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("pat", pat, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("roll", roll, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("toss", toss, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("shrug", shrug, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("bluetext", bluetext, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("rlg", rlg, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("decide", decide, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("8ball", eightball, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("table", table, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("shout", shout, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("weebify", weebify, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("gbun", gbun, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("gbam", gbam, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("cuddle", cuddle, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("flirt", flirt, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("romance", romance, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("uwu", uwu, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("owo", owo, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("kill",kill, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("love", love, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("hack", hack, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("bombs",bombs, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("moonanimation", moonanimation, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("clockanimation", clockanimation, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("blockanimation", blockanimation, block=bool))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("earthanimation", earthanimation, block=bool))
+
 
 __mod_name__ = "Fun"

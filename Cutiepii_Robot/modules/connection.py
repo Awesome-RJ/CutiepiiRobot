@@ -393,14 +393,14 @@ async def connect_button(update: Update,
 
 CUTIEPII_PTB.add_handler(CommandHandler("connect", connect_chat))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("connection", connection_chat, block=False))
+    CommandHandler("connection", connection_chat, block=bool))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("disconnect", disconnect_chat, block=False))
+    CommandHandler("disconnect", disconnect_chat, block=bool))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("allowconnect", allow_connections, block=False))
+    CommandHandler("allowconnect", allow_connections, block=bool))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("helpconnect", help_connect_chat, block=False))
+    CommandHandler("helpconnect", help_connect_chat, block=bool))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(connect_button, pattern=r"connect", block=False))
+    CallbackQueryHandler(connect_button, pattern=r"connect", block=bool))
 
 __mod_name__ = "Connection"

@@ -30,11 +30,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 from telegram import Update, ChatPermissions
-from telegram.error import BadRequest, TelegramError
-from telegram.ext import ContextTypes
+from telegram.error import BadRequest
+from telegram.ext import ContextTypes, filters, CommandHandler
 
-from Cutiepii_Robot import LOGGER
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
+from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user_and_text
 from Cutiepii_Robot.modules.helper_funcs.admin_status import (
@@ -113,7 +112,6 @@ RUNMUTE_ERRORS = {
 }
 
 
-@cutiepii_cmd(command='rban')
 @dev_plus
 async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -191,7 +189,6 @@ async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await message.reply_text("Well damn, I can't ban that user.")
 
 
-@cutiepii_cmd(command='runban')
 @dev_plus
 async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -272,7 +269,6 @@ async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await message.reply_text("Well damn, I can't unban that user.")
 
 
-@cutiepii_cmd(command=['rpunch', 'rkick'])
 @dev_plus
 async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -351,7 +347,7 @@ async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await message.reply_text("Well damn, I can't punch that user.")
 
 
-@cutiepii_cmd(command='rmute')
+
 @dev_plus
 async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -433,7 +429,7 @@ async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await message.reply_text("Well damn, I can't mute that user.")
 
 
-@cutiepii_cmd(command='runmute')
+
 @dev_plus
 async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot, args = context.bot, context.args
@@ -530,7 +526,6 @@ async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 # https://github.com/el0xren/tgbot/commits/master/tg_bot/modules/misc.py
 # ported from tgbot, thanks to el0xren
-@cutiepii_cmd(command='recho')
 @dev_plus
 async def recho(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     bot = context.bot
@@ -548,3 +543,8 @@ async def recho(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await message.reply_text("Couldn't send the message. Perhaps I'm not part of that group?")
 
 """
+CUTIEPII_PTB.add_handler(CommandHandler("rban", rban, filters=filters.User(SUDO_USERS), block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("runban", runban, filters=filters.User(SUDO_USERS), block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("rpunch", rkick, filters=filters.User(SUDO_USERS), block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("rmute", rmute, filters=filters.User(SUDO_USERS), block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("runmute", runmute, filters=filters.User(SUDO_USERS), block=bool))

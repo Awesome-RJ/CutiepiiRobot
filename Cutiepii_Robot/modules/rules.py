@@ -157,14 +157,14 @@ CUTIEPII_PTB.add_handler(
     CommandHandler("rules",
                    get_rules,
                    filters=filters.ChatType.GROUPS,
-                   block=False))
+                   block=bool))
 CUTIEPII_PTB.add_handler(
     CommandHandler("setrules",
                    set_rules,
                    filters=filters.ChatType.GROUPS,
-                   block=False))
+                   block=bool))
 CUTIEPII_PTB.add_handler(
     CommandHandler("clearrules",
                    clear_rules,
                    filters=filters.ChatType.GROUPS,
-                   block=False))
+                   block=bool))

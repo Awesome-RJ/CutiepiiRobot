@@ -1275,11 +1275,11 @@ def __chat_settings__(chat_id, user_id):
 CUTIEPII_PTB.add_handler(
     MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS,
                    new_member,
-                   block=False))
+                   block=bool))
 CUTIEPII_PTB.add_handler(
     MessageHandler(filters.StatusUpdate.LEFT_CHAT_MEMBER,
                    left_member,
-                   block=False))
+                   block=bool))
 CUTIEPII_PTB.add_handler(
     CommandHandler("welcome", welcome, filters=filters.ChatType.GROUPS))
 CUTIEPII_PTB.add_handler(
@@ -1310,10 +1310,10 @@ CUTIEPII_PTB.add_handler(
 CUTIEPII_PTB.add_handler(CommandHandler("welcomehelp", welcome_help))
 CUTIEPII_PTB.add_handler(CommandHandler("welcomemutehelp", welcome_mute_help))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(user_button, pattern=r"user_join_", block=False))
+    CallbackQueryHandler(user_button, pattern=r"user_join_", block=bool))
 CUTIEPII_PTB.add_handler(
     CallbackQueryHandler(user_captcha_button,
                          pattern=r"user_captchajoin_\([\d\-]+,\d+\)_\(\d{4}\)",
-                         block=False))
+                         block=bool))
 
 __mod_name__ = "Greetings"

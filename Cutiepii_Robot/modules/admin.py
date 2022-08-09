@@ -1555,20 +1555,20 @@ async def permapin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             sendingmsg = await context.bot.send_message(
                 chat_id,
                 text,
-                parse_mode=ParseMode.MARKDOWN,
+                parse_mode=ParseMode.MARKDOWN_V2,
                 reply_markup=InlineKeyboardMarkup(tombol))
         except BadRequest:
             await context.bot.send_message(
                 chat_id,
                 "Incorrect markdown text!\nIf you don't know what markdown is, please send `/markdownhelp` in PM.",
-                parse_mode=ParseMode.MARKDOWN)
+                parse_mode=ParseMode.MARKDOWN_V2)
             return
     else:
         sendingmsg = ENUM_FUNC_MAP[str(data_type)](
             chat_id,
             content,
             caption=text,
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup(tombol))
     if sendingmsg is None:
@@ -1610,7 +1610,7 @@ async def permanent_pin_set(update: Update,
                     old_pin)
             await context.bot.send_message(chat_id,
                                            text_maker,
-                                           parse_mode=ParseMode.MARKDOWN)
+                                           parse_mode=ParseMode.MARKDOWN_V2)
             return ""
         prev_message = args[0]
         if prev_message == "off":
@@ -1653,7 +1653,7 @@ async def permanent_pin_set(update: Update,
                     old_pin)
             await context.bot.send_message(chat_id,
                                            text_maker,
-                                           parse_mode=ParseMode.MARKDOWN)
+                                           parse_mode=ParseMode.MARKDOWN_V2)
             return ""
 
     is_group = chat.type not in ("private", "channel")
@@ -1711,7 +1711,7 @@ async def permanent_pin(update: Update,
                 chat.id,
                 "*Cleanlinked error:*\nI can't pin messages here!\nMake sure I'm an admin and can pin messages.\n\nClean linked has been disabled, [The old permanent pinned message is here]({})"
                 .format(old_pin),
-                parse_mode=ParseMode.MARKDOWN)
+                parse_mode=ParseMode.MARKDOWN_V2)
             return
 
         if to_del:

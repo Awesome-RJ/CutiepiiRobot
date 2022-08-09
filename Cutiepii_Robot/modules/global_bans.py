@@ -28,7 +28,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     bot_admin,
 )
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_msg
+
 from Cutiepii_Robot.modules.helper_funcs.extraction import (
     extract_user,
     extract_user_and_text,
@@ -422,9 +422,7 @@ async def check_and_ban(update, user_id, should_message=True):
                 text, parse_mode=ParseMode.HTML)
 
 
-@cutiepii_msg((filters.ALL & filters.ChatType.GROUPS),
-              can_disable=False,
-              group=GBAN_ENFORCE_GROUP)
+
 @bot_admin
 async def enforce_gban(update: Update,
                        context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -563,10 +561,6 @@ CUTIEPII_PTB.add_handler(
     CommandHandler("checkgb", check_gbans, filters=filters.User(OWNER_ID)))
 CUTIEPII_PTB.add_handler(
     CommandHandler("cleangb", clear_gbans, filters=filters.User(OWNER_ID)))
-GBAN_ENFORCER = MessageHandler(filters.ALL & filters.ChatType.GROUPS,
-                               enforce_gban)
+CUTIEPII_PTB.add_handler(MessageHandler((filters.ALL & filters.ChatType.GROUPS), group=GBAN_ENFORCE_GROUP))
 
 __mod_name__ = "Anti-Spam"
-
-if STRICT_GBAN:  # enforce GBANS if this is set
-    CUTIEPII_PTB.add_handler(GBAN_ENFORCER, GBAN_ENFORCE_GROUP)

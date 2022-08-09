@@ -32,8 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from datetime import datetime
 from functools import wraps
 import asyncio
-from telegram.ext import ContextTypes
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_callback
+from telegram.ext import ContextTypes, CallbackQueryHandler, CommandHandler
 from Cutiepii_Robot.modules.helper_funcs.misc import is_module_loaded
 from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin, AdminPerms
@@ -127,7 +126,6 @@ if is_module_loaded(FILENAME):
                     "\n\nFormatting has been disabled due to an unexpected error.",
                 )
 
-    @cutiepii_cmd(command="logchannel")
     @u_admin
     async def logging(update: Update,
                       context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -147,7 +145,6 @@ if is_module_loaded(FILENAME):
             await message.reply_text(
                 "No log channel has been set for this group!")
 
-    @cutiepii_cmd(command="setlog")
     @user_admin(AdminPerms.CAN_CHANGE_INFO)
     async def setlog(update: Update,
                      context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -189,7 +186,6 @@ if is_module_loaded(FILENAME):
                                      " - send /setlog to the channel\n"
                                      " - forward the /setlog to the group\n")
 
-    @cutiepii_cmd(command="unsetlog")
     @user_admin(AdminPerms.CAN_CHANGE_INFO)
     async def unsetlog(update: Update,
                        context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -240,7 +236,6 @@ else:
         return func
 
 
-@cutiepii_cmd("logsettings")
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 async def log_settings(update: Update):
     chat = update.effective_chat
@@ -266,7 +261,6 @@ async def log_settings(update: Update):
 from Cutiepii_Robot.modules.sql import log_channel_sql as sql
 
 
-@cutiepii_callback(pattern=r"log_tog_.*")
 async def log_setting_callback(update: Update,
                                context: ContextTypes.DEFAULT_TYPE) -> None:
     cb = update.callback_query
@@ -304,3 +298,9 @@ async def log_setting_callback(update: Update,
         return
 
     cb.answer("Idk what to do")
+
+    CUTIEPII_PTB.add_handler(CommandHandler("logchannel", logging, block=bool))
+    CUTIEPII_PTB.add_handler(CallbackQueryHandler(unbanb_btn, pattern=r"unbanb_"))
+    CUTIEPII_PTB.add_handler(CommandHandler("unsetlog", unsetlog, block=bool))
+    CUTIEPII_PTB.add_handler(CommandHandler("logsettings", unsetlog, block=bool))
+    CUTIEPII_PTB.add_handler(CallbackQueryHandler(log_setting_callback, pattern=r"log_tog_.*"))
