@@ -780,7 +780,7 @@ CUTIEPII_PTB.add_handler(CommandHandler("unban", unban, block=bool))
 CUTIEPII_PTB.add_handler(CommandHandler(['selfunban', 'roar'], selfunban, block=bool))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(unbanb_btn, pattern=r"unbanb_"))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["kickme", "punchme"], kickme, filters=filters.ChatType.GROUPS, block=bool))
-CUTIEPII_PTB.add_handler(CommandHandler("snipe", snipe, pass_args=True, filters=filters.User(SUDO_USERS), block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("snipe", snipe, filters=filters.User(SUDO_USERS), block=bool))
 CUTIEPII_PTB.add_handler(CommandHandler("banme", banme, block=bool))
 
 __mod_name__ = "Bans/Mutes"
