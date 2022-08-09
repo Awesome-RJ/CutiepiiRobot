@@ -561,6 +561,6 @@ CUTIEPII_PTB.add_handler(
     CommandHandler("checkgb", check_gbans, filters=filters.User(OWNER_ID)))
 CUTIEPII_PTB.add_handler(
     CommandHandler("cleangb", clear_gbans, filters=filters.User(OWNER_ID)))
-CUTIEPII_PTB.add_handler(MessageHandler((filters.ALL & filters.ChatType.GROUPS), group=GBAN_ENFORCE_GROUP))
+CUTIEPII_PTB.add_handler(MessageHandler((filters.ALL & filters.ChatType.GROUPS)))
 
 __mod_name__ = "Anti-Spam"
