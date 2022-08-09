@@ -43,7 +43,7 @@ from pyrate_limiter import (
     MemoryListBucket,
 )
 
-CMD_STARTERS = ("/", "!", "?", ".", "~", "+") if ALLOW_EXCL else ("/", "!", "?", ".", "+")
+CMD_STARTERS = ("/", "?", ".", "~", "+") if ALLOW_EXCL else ("/", "?", ".", "+")
 
 
 class AntiSpam:
