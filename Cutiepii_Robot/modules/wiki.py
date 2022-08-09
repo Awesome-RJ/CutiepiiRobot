@@ -32,13 +32,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import wikipedia
 import re
 
-from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
+from Cutiepii_Robot import CUTIEPII_PTB
+
 from telegram.ext import CommandHandler
 from telegram.error import BadRequest
 from telegram.ext import ContextTypes
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 
-from telegram.constants import ParseMode
 
 
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
