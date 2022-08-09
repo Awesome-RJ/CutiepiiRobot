@@ -27,12 +27,13 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+"""
 
 import wikipedia
 import re
 
 from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
+from telegram.ext import CommandHandler
 from telegram.error import BadRequest
 from telegram.ext import ContextTypes
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -40,7 +41,6 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
 
 
-@cutiepii_cmd(command='wiki', can_disable=True)
 async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     kueri = re.split(pattern="wiki", string = update.effective_message.text)
     message = update.effective_message
@@ -73,4 +73,6 @@ async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await message.reply_text(
                 f"⚠ Error\n There are too many query! Express it more!\nPossible query result:\n{eet}"
             )
-            """
+
+
+CUTIEPII_PTB.add_handler(CommandHandler("wiki", wiki))
