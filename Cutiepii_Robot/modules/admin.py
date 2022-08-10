@@ -377,7 +377,7 @@ async def setchat_title(update: Update,
 @bot_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 @user_admin_check(AdminPerms.CAN_PROMOTE_MEMBERS)
 async def promote_button(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> None:
+                         context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     query = update.callback_query
     user = update.effective_user
     chat = update.effective_chat
@@ -539,7 +539,7 @@ async def promoteanon(update: Update,
 @can_promote
 @user_admin
 @loggable
-async def promote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def promote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     bot = context.bot
     args = context.args
 
@@ -649,7 +649,7 @@ async def promote(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @user_admin
 @loggable
 async def midpromote(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> str:
+                     context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     bot = context.bot
     args = context.args
 
@@ -753,7 +753,7 @@ async def midpromote(update: Update,
 @user_admin
 @loggable
 async def lowpromote(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> str:
+                     context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
     bot = context.bot
     args = context.args
 
