@@ -675,7 +675,7 @@ async def migrate_chats(update: Update):
 
 def main():
     CUTIEPII_PTB.add_error_handler(error_callback)
-    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("test", test, block=False))
+    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("test", test, block=True))
     CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("start", start, block=False))
 
     CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("help", get_help, block=False))
