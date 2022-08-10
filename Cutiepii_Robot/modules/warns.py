@@ -384,7 +384,7 @@ async def dwarn(user: User,
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def button(update: Update, _: CallbackContext.DEFAULT_TYPE) -> str:
+async def button(update: Update, _: CallbackContext) -> str:
     query: Optional[CallbackQuery] = update.callback_query
     user: Optional[User] = update.effective_user
     if match := re.match(r"rm_warn\((.+?)\)", query.data):
