@@ -73,7 +73,7 @@ from telegram.error import (
     Forbidden,
 )
 from telegram.ext import (
-    ContextTypes,
+    CallbackContext,
     filters,
     CallbackQueryHandler,
     MessageHandler
@@ -233,7 +233,7 @@ async def test(update: Update):
     print(update.effective_message)
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def start(update: Update, context: CallbackContext):
     args = context.args
     uptime = get_readable_time((time.time() - StartTime))
     if update.effective_chat.type == "private":
@@ -319,8 +319,7 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 # for test purposes
-async def error_callback(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> None:
+async def error_callback(_, context: CallbackContext):
     try:
         raise context.error
     except (BadRequest):
