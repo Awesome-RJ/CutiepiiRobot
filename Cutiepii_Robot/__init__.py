@@ -337,9 +337,6 @@ telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 CUTIEPII_PTB = (
     tg.Application.builder()
     .token(TOKEN)
-    .base_url(BOT_API_URL)
-    .base_file_url(BOT_API_FILE_URL)
-    .concurrent_updates(True)
     .build()
 )
 
