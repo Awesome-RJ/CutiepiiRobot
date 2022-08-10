@@ -96,12 +96,11 @@ async def broadcast(update: Update,
         )
 
 
-async def log_user(update: Update):
+async def log_user(update: Update, _: CallbackContext):
     chat = update.effective_chat
     msg = update.effective_message
 
-    sql.update_user(msg.from_user.id, msg.from_user.username, chat.id,
-                    chat.title)
+    sql.update_user(msg.from_user.id, msg.from_user.username, chat.id, chat.title)
 
     if rep := msg.reply_to_message:
         sql.update_user(
@@ -139,18 +138,15 @@ async def log_user(update: Update):
                 with contextlib.suppress(AttributeError):
                     sql.update_user(entity.user.id, entity.user.username)
     if msg.sender_chat and not msg.is_automatic_forward:
-        sql.update_user(msg.sender_chat.id, msg.sender_chat.username, chat.id,
-                        chat.title)
+        sql.update_user(
+            msg.sender_chat.id, msg.sender_chat.username, chat.id, chat.title
+        )
 
     if msg.new_chat_members:
         for user in msg.new_chat_members:
             if user.id == msg.from_user.id:  # we already added that in the first place
                 continue
             sql.update_user(user.id, user.username, chat.id, chat.title)
-
-    if req := update.chat_join_request:
-        sql.update_user(req.from_user.id, req.from_user.username, chat.id,
-                        chat.title)
 
 
 async def chats(update: Update, context: CallbackContext) -> None:
