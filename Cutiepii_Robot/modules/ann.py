@@ -7,7 +7,7 @@ from telegram.error import TelegramError
 from .helper_funcs.admin_status import A_CACHE, B_CACHE
 from telegram import Update, ChatMemberUpdated
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes, ChatMemberHandler
+from telegram.ext import CallbackContext, ChatMemberHandler
 
 import Cutiepii_Robot.modules.sql.log_channel_sql as logsql
 from Cutiepii_Robot import OWNER_ID, CUTIEPII_PTB
@@ -39,7 +39,7 @@ def do_announce(chat):  # announce to chat or only to log channel?
 
 @loggable
 async def chatmemberupdates(
-        update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
+        update: Update, context: CallbackContext) -> Optional[str]:
     bot = context.bot
     chat = update.effective_chat
     message = update.effective_message
@@ -319,7 +319,7 @@ async def chatmemberupdates(
 
 
 async def mychatmemberupdates(update: Update,
-                              context: ContextTypes.DEFAULT_TYPE) -> None:
+                              context: CallbackContext) -> None:
     result = extract_status_change(update.my_chat_member)
     status_change, _1 = result
     chat = update.effective_chat

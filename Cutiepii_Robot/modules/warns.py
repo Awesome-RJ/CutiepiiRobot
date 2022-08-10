@@ -59,7 +59,7 @@ from telegram import (
 )
 from telegram.error import BadRequest
 from telegram.constants import ParseMode, MessageLimit
-from telegram.ext import (ContextTypes, filters, CallbackQueryHandler,
+from telegram.ext import (CallbackContext, filters, CallbackQueryHandler,
                           CommandHandler, MessageHandler)
 from telegram.helpers import mention_html
 
@@ -384,7 +384,7 @@ async def dwarn(user: User,
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def button(update: Update, _: ContextTypes.DEFAULT_TYPE) -> str:
+async def button(update: Update, _: CallbackContext.DEFAULT_TYPE) -> str:
     query: Optional[CallbackQuery] = update.callback_query
     user: Optional[User] = update.effective_user
     if match := re.match(r"rm_warn\((.+?)\)", query.data):
@@ -418,7 +418,7 @@ async def button(update: Update, _: ContextTypes.DEFAULT_TYPE) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def warn_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def warn_user(update: Update, context: CallbackContext) -> str:
     args = context.args
     message: Optional[Message] = update.effective_message
     chat: Optional[Chat] = update.effective_chat
@@ -525,7 +525,7 @@ async def warn_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def reset_warns(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> str:
+                      context: CallbackContext) -> str:
     args = context.args
     message: Optional[Message] = update.effective_message
     chat: Optional[Chat] = update.effective_chat
@@ -544,7 +544,7 @@ async def reset_warns(update: Update,
     return ""
 
 
-async def warns(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def warns(update: Update, context: CallbackContext) -> None:
     args = context.args
     message: Optional[Message] = update.effective_message
     chat: Optional[Chat] = update.effective_chat
@@ -578,7 +578,7 @@ async def warns(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 # CUTIEPII_PTB handler stop - do not async
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def add_warn_filter(update: Update,
-                          context: ContextTypes.DEFAULT_TYPE) -> None:
+                          context: CallbackContext) -> None:
     chat: Optional[Chat] = update.effective_chat
     msg: Optional[Message] = update.effective_message
     user = update.effective_user
@@ -613,7 +613,7 @@ async def add_warn_filter(update: Update,
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def remove_warn_filter(update: Update,
-                             context: ContextTypes.DEFAULT_TYPE) -> None:
+                             context: CallbackContext) -> None:
     chat: Optional[Chat] = update.effective_chat
     msg: Optional[Message] = update.effective_message
     user = update.effective_user
@@ -649,7 +649,7 @@ async def remove_warn_filter(update: Update,
 
 
 async def list_warn_filters(update: Update,
-                            context: ContextTypes.DEFAULT_TYPE) -> None:
+                            context: CallbackContext) -> None:
     chat: Optional[Chat] = update.effective_chat
     all_handlers = sql.get_chat_warn_triggers(chat.id)
 
@@ -675,7 +675,7 @@ async def list_warn_filters(update: Update,
 
 @loggable
 async def reply_filter(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
+                       context: CallbackContext) -> Optional[str]:
     chat: Optional[Chat] = update.effective_chat
     message: Optional[Message] = update.effective_message
     user: Optional[User] = update.effective_user
@@ -705,7 +705,7 @@ async def reply_filter(update: Update,
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def set_warn_limit(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> str:
+                         context: CallbackContext) -> str:
     args = context.args
     chat: Optional[Chat] = update.effective_chat
     user = update.effective_user
@@ -733,7 +733,7 @@ async def set_warn_limit(update: Update,
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def set_warn_strength(update: Update,
-                            context: ContextTypes.DEFAULT_TYPE) -> None:
+                            context: CallbackContext) -> None:
     args = context.args
     chat: Optional[Chat] = update.effective_chat
     user: Optional[User] = update.effective_user

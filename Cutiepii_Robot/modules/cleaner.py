@@ -42,7 +42,7 @@ from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.sql import cleaner_sql as sql
 from telegram import Update
 from telegram.ext import (
-    ContextTypes,
+    CallbackContext,
     CommandHandler,
     filters,
     MessageHandler,
@@ -78,7 +78,7 @@ for handler_list in CUTIEPII_PTB.handlers:
 
 
 async def clean_blue_text_must_click(
-        update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        update: Update, context: CallbackContext) -> None:
     bot = context.bot
     chat = update.effective_chat
     message = update.effective_message
@@ -104,7 +104,7 @@ async def clean_blue_text_must_click(
 @bot_can_delete
 @user_admin
 async def set_blue_text_must_click(update: Update,
-                                   context: ContextTypes.DEFAULT_TYPE) -> None:
+                                   context: CallbackContext) -> None:
     chat = update.effective_chat
     message = update.effective_message
     bot, args = context.bot, context.args
@@ -135,7 +135,7 @@ async def set_blue_text_must_click(update: Update,
 
 @user_admin
 async def add_bluetext_ignore(update: Update,
-                              context: ContextTypes.DEFAULT_TYPE) -> None:
+                              context: CallbackContext) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -154,7 +154,7 @@ async def add_bluetext_ignore(update: Update,
 
 @user_admin
 async def remove_bluetext_ignore(update: Update,
-                                 context: ContextTypes.DEFAULT_TYPE) -> None:
+                                 context: CallbackContext) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
@@ -173,7 +173,7 @@ async def remove_bluetext_ignore(update: Update,
 
 @user_admin
 async def add_bluetext_ignore_global(
-        update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     args = context.args
     if len(args) >= 1:
@@ -192,7 +192,7 @@ async def add_bluetext_ignore_global(
 
 @dev_plus
 async def remove_bluetext_ignore_global(
-        update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     args = context.args
     if len(args) >= 1:
@@ -211,7 +211,7 @@ async def remove_bluetext_ignore_global(
 
 @dev_plus
 async def bluetext_ignore_list(update: Update,
-                               context: ContextTypes.DEFAULT_TYPE) -> None:
+                               context: CallbackContext) -> None:
 
     message = update.effective_message
     chat = update.effective_chat

@@ -7,7 +7,7 @@ from telegram.error import BadRequest
 from telegram.constants import MessageLimit, ParseMode
 from telegram.ext import (
     filters as PTB_Cutiepii_Filters,
-    ContextTypes,
+    CallbackContext,
     CallbackQueryHandler,
     MessageHandler,
     )
@@ -50,7 +50,7 @@ ENUM_FUNC_MAP = {
 
 
 async def list_handlers(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> None:
+                        context: CallbackContext) -> None:
     chat = update.effective_chat
     user = update.effective_user
 
@@ -271,7 +271,7 @@ async def stop_filter(update, context) -> str:
 
 async def reply_filter(
         update: Update,
-        context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
+        context: CallbackContext) -> None:  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     message = update.effective_message  # type: Optional[Message]
 
@@ -455,7 +455,7 @@ async def reply_filter(
 
 
 async def rmall_filters(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> None:
+                        context: CallbackContext) -> None:
     chat = update.effective_chat
     user = update.effective_user
     member = chat.get_member(user.id)
@@ -482,7 +482,7 @@ async def rmall_filters(update: Update,
 
 @loggable
 async def rmall_callback(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> None:
+                         context: CallbackContext) -> None:
     query = update.callback_query
     chat = update.effective_chat
     msg = update.effective_message

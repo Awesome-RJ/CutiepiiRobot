@@ -7,7 +7,7 @@ from telegram.constants import ParseMode
 from telegram.error import TelegramError
 from telegram.ext import CommandHandler
 from telegram.helpers import mention_html
-from telegram.ext import ContextTypes
+from telegram.ext import CallbackContext
 
 from Cutiepii_Robot import CUTIEPII_PTB, OWNER_ID, DEV_USERS, SUDO_USERS, SUPPORT_USERS, WHITELIST_USERS
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus, sudo_plus, whitelist_plus
@@ -17,7 +17,7 @@ from Cutiepii_Robot.modules.sql import super_users_sql as sql
 
 
 def check_user_id(user_id: int,
-                  context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
+                  context: CallbackContext) -> Optional[str]:
     bot = context.bot
     if not user_id:
         return "Nice try... Nope! Provide me an valid User ID."
@@ -29,7 +29,7 @@ def check_user_id(user_id: int,
 
 @dev_plus
 @gloggable
-async def addsudo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def addsudo(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -61,7 +61,7 @@ async def addsudo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @sudo_plus
 @gloggable
 async def addsupport(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> str:
+                     context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -100,7 +100,7 @@ async def addsupport(update: Update,
 @sudo_plus
 @gloggable
 async def addwhitelist(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> str:
+                       context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -139,7 +139,7 @@ async def addwhitelist(update: Update,
 @dev_plus
 @gloggable
 async def removesudo(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> str:
+                     context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -162,7 +162,7 @@ async def removesudo(update: Update,
 @sudo_plus
 @gloggable
 async def removesupport(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> str:
+                        context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -185,7 +185,7 @@ async def removesupport(update: Update,
 @sudo_plus
 @gloggable
 async def removewhitelist(update: Update,
-                          context: ContextTypes.DEFAULT_TYPE) -> str:
+                          context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -206,7 +206,7 @@ async def removewhitelist(update: Update,
 
 
 @whitelist_plus
-async def devlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def devlist(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     message = update.effective_message
     true_dev = list(set(DEV_USERS) - {OWNER_ID})
@@ -220,7 +220,7 @@ async def devlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 @whitelist_plus
-async def sudolist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def sudolist(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     message = update.effective_message
     true_sudo = list(set(SUDO_USERS) - set(DEV_USERS))
@@ -235,7 +235,7 @@ async def sudolist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 @whitelist_plus
 async def supportlist(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> None:
+                      context: CallbackContext) -> None:
     bot = context.bot
     message = update.effective_message
     msg = "<b>Support users:</b>\n"
@@ -249,7 +249,7 @@ async def supportlist(update: Update,
 
 @whitelist_plus
 async def whitelistlist(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> None:
+                        context: CallbackContext) -> None:
     bot = context.bot
     message = update.effective_message
     msg = "<b>Whitelist users:</b>\n"

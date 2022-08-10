@@ -50,7 +50,7 @@ from Cutiepii_Robot.modules.log_channel import gloggable
 from telegram import Update
 from telegram.error import BadRequest
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes, CommandHandler, filters
+from telegram.ext import CallbackContext, CommandHandler, filters
 from telegram.helpers import mention_html
 
 BLACKLISTWHITELIST = [
@@ -61,7 +61,7 @@ BLABLEUSERS = [OWNER_ID] + DEV_USERS
 
 @dev_plus
 @gloggable
-async def bl_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def bl_user(update: Update, context: CallbackContext) -> str:
     message = update.effective_message
     user = update.effective_user
     bot, args = context.bot, context.args
@@ -106,7 +106,7 @@ async def bl_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
 @dev_plus
 @gloggable
-async def unbl_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def unbl_user(update: Update, context: CallbackContext) -> str:
     message = update.effective_message
     user = update.effective_user
     bot, args = context.bot, context.args
@@ -146,7 +146,7 @@ async def unbl_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
 
 @dev_plus
-async def bl_users(context: ContextTypes.DEFAULT_TYPE):
+async def bl_users(context: CallbackContext):
     users = []
     bot = context.bot
     for each_user in sql.BLACKLIST_USERS:

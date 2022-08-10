@@ -38,7 +38,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.error import BadRequest, Forbidden
 from telegram.ext import (
-    ContextTypes,
+    CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
 
@@ -95,7 +95,7 @@ def get_muted_chats(bot: Bot, update: Update, leave: bool = False):
     return muted_chats
 
 
-async def get_invalid_chats(update: Update, context: ContextTypes.DEFAULT_TYPE, remove: bool = False):
+async def get_invalid_chats(update: Update, context: CallbackContext, remove: bool = False):
     bot = context.bot
     chat_id = update.effective_chat.id
     chats = user_sql.get_all_chats()
@@ -139,7 +139,7 @@ async def get_invalid_chats(update: Update, context: ContextTypes.DEFAULT_TYPE, 
     return kicked_chats
 
 
-async def get_invalid_gban(update: Update, context: ContextTypes.DEFAULT_TYPE, remove: bool = False):
+async def get_invalid_gban(update: Update, context: CallbackContext, remove: bool = False):
     bot = context.bot
     banned = gban_sql.get_gban_list()
     ungbanned_users = 0
@@ -164,7 +164,7 @@ async def get_invalid_gban(update: Update, context: ContextTypes.DEFAULT_TYPE, r
 
 
 @dev_plus
-async def dbcleanup(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def dbcleanup(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
 
     await msg.reply_text("Getting invalid chat count ...")
@@ -184,7 +184,7 @@ async def dbcleanup(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def callback_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def callback_button(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     query = update.callback_query
     message = query.message

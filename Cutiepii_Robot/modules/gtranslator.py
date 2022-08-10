@@ -35,7 +35,7 @@ import requests
 from gtts import gTTS
 from gpytranslate import SyncTranslator
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import ContextTypes
+from telegram.ext import CallbackContext
 from telegram.constants import ParseMode
 
 from Cutiepii_Robot import CUTIEPII_PTB
@@ -45,7 +45,7 @@ trans = SyncTranslator()
 
 
 async def translate(update: Update,
-                    context: ContextTypes.DEFAULT_TYPE) -> None:
+                    context: CallbackContext) -> None:
     global to_translate
     message = update.effective_message
     reply_msg = message.reply_to_message
@@ -93,7 +93,7 @@ async def languages(update: Update) -> None:
     )
 
 
-async def gtts(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def gtts(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     reply = " ".join(context.args)
     if not reply:

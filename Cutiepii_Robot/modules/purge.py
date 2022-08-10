@@ -38,7 +38,7 @@ from telethon import events
 from telethon.errors.rpcerrorlist import MessageDeleteForbiddenError
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes, CommandHandler, filters
+from telegram.ext import CallbackContext, CommandHandler, filters
 
 from Cutiepii_Robot import telethn, CUTIEPII_PTB, BOT_ID
 from Cutiepii_Robot.modules.sql.clear_cmd_sql import get_clearcmd
@@ -149,7 +149,7 @@ async def delete_messages(event):
 
 @user_admin
 async def purgefrom(update: Update,
-                    context: ContextTypes.DEFAULT_TYPE) -> None:
+                    context: CallbackContext) -> None:
     msg = update.effective_message
     chat = update.effective_chat
     bot = context.bot

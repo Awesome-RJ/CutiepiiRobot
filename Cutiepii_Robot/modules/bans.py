@@ -34,7 +34,7 @@ from typing import Optional, Union
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Bot, Chat, ChatMember, Update
 from telegram.error import BadRequest, TelegramError
-from telegram.ext import filters, ContextTypes, CommandHandler, CallbackQueryHandler
+from telegram.ext import filters, CallbackContext, CommandHandler, CallbackQueryHandler
 from telegram.helpers import mention_html
 from telegram.constants import ParseMode
 from Cutiepii_Robot import (BAN_STICKER, DEV_USERS, ERROR_LOGS, SUDO_USERS,
@@ -165,7 +165,7 @@ async def unban_user(bot: Bot,
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def ban(
-    update: Update, context: ContextTypes.DEFAULT_TYPE
+    update: Update, context: CallbackContext
 ) -> Optional[str]:  # sourcery no-metrics
     global delsilent
     chat = update.effective_chat  # type: Optional[Chat]
@@ -328,7 +328,7 @@ async def ban(
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def temp_ban(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
     message = update.effective_message
@@ -430,7 +430,7 @@ async def temp_ban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def kick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def kick(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
     message = update.effective_message
@@ -530,7 +530,7 @@ async def kickme(update: Update) -> Optional[str]:
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def unban(
-    update: Update, context: ContextTypes.DEFAULT_TYPE
+    update: Update, context: CallbackContext
 ) -> Optional[str]:  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -642,7 +642,7 @@ WHITELISTED_USERS = [OWNER_ID] + DEV_USERS + SUDO_USERS + WHITELIST_USERS
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @gloggable
 async def selfunban(update: Update,
-                    context: ContextTypes.DEFAULT_TYPE) -> Optional[str]:
+                    context: CallbackContext) -> Optional[str]:
     message = update.effective_message
     user = update.effective_user
     bot, args = context.bot, context.args
@@ -686,7 +686,7 @@ async def selfunban(update: Update,
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def unbanb_btn(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> str:
+                     context: CallbackContext) -> str:
     bot = context.bot
     query = update.callback_query
     chat = update.effective_chat
@@ -721,7 +721,7 @@ async def unbanb_btn(update: Update,
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def banme(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def banme(update: Update, context: CallbackContext) -> None:
     user_id = update.effective_message.from_user.id
     chat = update.effective_chat
     user = update.effective_user
@@ -733,7 +733,7 @@ async def banme(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 @dev_plus
-async def snipe(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def snipe(update: Update, context: CallbackContext) -> None:
     args = context.args
     bot = context.bot
     try:

@@ -39,7 +39,7 @@ from time import sleep
 from nekos.errors import InvalidArgument
 from telegram import Update
 from telegram.error import BadRequest, RetryAfter, Forbidden
-from telegram.ext import CommandHandler, filters, ContextTypes
+from telegram.ext import CommandHandler, filters, CallbackContext
 from telegram.constants import ParseMode
 from telegram.helpers import mention_html
 
@@ -89,7 +89,7 @@ async def rem_nsfw(update: Update):
     return message
 
 
-async def list_nsfw_chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def list_nsfw_chats(update: Update, context: CallbackContext):
     chats = sql.get_all_nsfw_chats()
     text = "<b>NSFW Activated Chats</b>\n"
     for chat in chats:
@@ -104,7 +104,7 @@ async def list_nsfw_chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
-async def neko(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def neko(update: Update, context: CallbackContext):
     message = update.effective_message
     args = context.args
     flag = args[0]

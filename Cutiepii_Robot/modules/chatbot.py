@@ -40,7 +40,7 @@ from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
 from telegram.ext import (
-    ContextTypes,
+    CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
     filters,
@@ -101,7 +101,7 @@ def chatbot_response(query: str) -> str:
     return data.json()["reply"]
 
 
-def check_message(_: ContextTypes, message):
+def check_message(_: CallbackContext, message):
     reply_msg = message.reply_to_message
     text = message.text
     if re.search("[.|\n]{0,}" + context.bot.first_name + "[.|\n]{0,}",
@@ -112,7 +112,7 @@ def check_message(_: ContextTypes, message):
                 or message.chat.type == "private")
 
 
-async def chatbot(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def chatbot(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     chat_id = update.effective_chat.id
     is_chat = chat_id in CHATBOT_ENABLED_CHATS
@@ -141,7 +141,7 @@ async def chatbot(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def list_chatbot_chats(update: Update,
-                             context: ContextTypes.DEFAULT_TYPE) -> None:
+                             context: CallbackContext) -> None:
     text = "<b>AI-Enabled Chats</b>\n"
     for chat in CHATBOT_ENABLED_CHATS:
         x = await context.bot.get_chat(chat)

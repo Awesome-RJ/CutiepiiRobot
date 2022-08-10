@@ -35,7 +35,7 @@ import Cutiepii_Robot.modules.sql.approve_sql as sql
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update
 from telegram.error import BadRequest
 from telegram.constants import ParseMode
-from telegram.ext import CallbackQueryHandler, ContextTypes
+from telegram.ext import CallbackQueryHandler, CallbackContext
 from telegram.helpers import mention_html
 
 from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS
@@ -48,7 +48,7 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import AdminPerms, user_ad
 
 @loggable
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def approve(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def approve(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -93,7 +93,7 @@ async def approve(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 @loggable
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def disapprove(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> None:
+                     context: CallbackContext) -> None:
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -146,7 +146,7 @@ async def approved(update: Update):
 
 
 @user_admin
-async def approval(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def approval(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args

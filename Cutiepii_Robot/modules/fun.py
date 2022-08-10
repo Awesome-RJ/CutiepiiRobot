@@ -45,7 +45,7 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import ChatPermissions, Update, Bot
 from telegram.error import BadRequest
-from telegram.ext import ContextTypes, filters
+from telegram.ext import CallbackContext, filters
 from telegram.constants import ParseMode, ChatType
 from telegram.helpers import escape_markdown
 
@@ -170,14 +170,14 @@ async def hmeme(_, message):
 
 
 
-async def runs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def runs(update: Update, context: CallbackContext) -> None:
     temp = random.choice(fun_strings.RUN_STRINGS)
     if update.effective_user.id == 1170714920:
         temp = "Run everyone, they just dropped a bomb 💣💣"
     await update.effective_message.reply_text(temp)
 
 
-async def sanitize(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def sanitize(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     name = (message.reply_to_message.from_user.first_name
             if message.reply_to_message else message.from_user.first_name)
@@ -187,7 +187,7 @@ async def sanitize(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     caption=f"*Sanitizes {name}*")
 
 
-async def slap(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def slap(update: Update, context: CallbackContext) -> None:
     bot: telegram.Bot = context.bot
     args = context.args
     message = update.effective_message
@@ -249,7 +249,7 @@ async def slap(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def hug(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def hug(update: Update, context: CallbackContext) -> None:
     reply_animation = (update.effective_message.reply_to_message.reply_text
                        if update.effective_message.reply_to_message else
                        update.effective_message.reply_text)
@@ -258,7 +258,7 @@ async def hug(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def pat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def pat(update: Update, context: CallbackContext) -> None:
     reply_animation = (update.effective_message.reply_to_message.reply_text
                        if update.effective_message.reply_to_message else
                        update.effective_message.reply_text)
@@ -267,12 +267,12 @@ async def pat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def roll(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def roll(update: Update, context: CallbackContext) -> None:
     await update.effective_message.reply_text(random.choice(range(1, 7)))
 
 
 
-async def shout(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def shout(update: Update, context: CallbackContext) -> None:
     args = context.args
     text = " ".join(args)
     result = [" ".join(list(text))]
@@ -287,19 +287,19 @@ async def shout(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def toss(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def toss(update: Update, context: CallbackContext) -> None:
     await update.effective_message.reply_text(random.choice(fun_strings.TOSS))
 
 
 
-async def shrug(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def shrug(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     reply_text = (msg.reply_to_message.reply_text
                   if msg.reply_to_message else msg.reply_text)
     reply_text(r"¯\_(ツ)_/¯")
 
 
-async def bluetext(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def bluetext(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     reply_text = (msg.reply_to_message.reply_text
                   if msg.reply_to_message else msg.reply_text)
@@ -309,7 +309,7 @@ async def bluetext(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def rlg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def rlg(update: Update, context: CallbackContext) -> None:
     eyes = random.choice(fun_strings.EYES)
     mouth = random.choice(fun_strings.MOUTHS)
     ears = random.choice(fun_strings.EARS)
@@ -322,7 +322,7 @@ async def rlg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def decide(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def decide(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     chat = update.effective_chat
     res = requests.get("https://yesno.wtf/api")
@@ -340,14 +340,14 @@ async def decide(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def eightball(update: Update,
-                    context: ContextTypes.DEFAULT_TYPE) -> None:
+                    context: CallbackContext) -> None:
     reply_text = (update.effective_message.reply_to_message.reply_text
                   if update.effective_message.reply_to_message else
                   update.effective_message.reply_text)
     reply_text(random.choice(fun_strings.EIGHTBALL))
 
 
-async def table(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def table(update: Update, context: CallbackContext) -> None:
     reply_text = (update.effective_message.reply_to_message.reply_text
                   if update.effective_message.reply_to_message else
                   update.effective_message.reply_text)
@@ -413,7 +413,7 @@ weebyfont = [
 
 
 
-async def weebify(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def weebify(update: Update, context: CallbackContext) -> None:
     args = context.args
     message = update.effective_message
     string = ""
@@ -441,7 +441,7 @@ async def weebify(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def gbun(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def gbun(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
     chat = update.effective_chat
 
@@ -453,7 +453,7 @@ async def gbun(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def gbam(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def gbam(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
     chat = update.effective_chat
     bot, args = context.bot, context.args
@@ -482,7 +482,7 @@ async def gbam(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def cuddle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def cuddle(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -514,12 +514,12 @@ async def cuddle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def flirt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def flirt(update: Update, context: CallbackContext) -> None:
     reply_text = update.effective_message.reply_to_message.reply_text if update.effective_message.reply_to_message else update.effective_message.reply_text
     reply_text(random.choice(fun_strings.FLIRT_TEXT))
 
 
-async def lewd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def lewd(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -557,7 +557,7 @@ async def lewd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-async def romance(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def romance(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -596,7 +596,7 @@ async def romance(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def owo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def owo(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -629,7 +629,7 @@ async def owo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             owo_type = "Text"
 
 
-async def uwu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def uwu(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -663,7 +663,7 @@ async def uwu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def blockanimation(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> None:
+                         context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('⬜')
     for x in range(EDIT_TIMES):
@@ -673,7 +673,7 @@ async def blockanimation(update: Update,
 
 
 async def clockanimation(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> None:
+                         context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -684,7 +684,7 @@ async def clockanimation(update: Update,
 
 
 async def earthanimation(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> None:
+                         context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -695,7 +695,7 @@ async def earthanimation(update: Update,
 
 
 async def moonanimation(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> None:
+                        context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('🌚')
     for x in range(EDIT_TIMES):
@@ -712,7 +712,7 @@ async def bombs(bot: Bot, update: Update):
     await update.effective_message.edit_text('RIP PLOX...')
 
 
-async def hack(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def hack(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('Target selected')
     for x in range(EDIT_TIMES):
@@ -722,7 +722,7 @@ async def hack(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 
-async def love(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def love(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('❣️')
     for x in range(EDIT_TIMES):
@@ -731,7 +731,7 @@ async def love(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg.edit_text('True Love💞')
 
 
-async def kill(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def kill(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('🔫')
     for x in range(EDIT_TIMES):
@@ -742,7 +742,7 @@ async def kill(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 """
 async def goodnight(update: Update,
-                    context: ContextTypes.DEFAULT_TYPE) -> None:
+                    context: CallbackContext) -> None:
     message = update.effective_message
     first_name = update.effective_user.first_name
     reply = f"Good Night! {escape_markdown(first_name)}"
@@ -750,7 +750,7 @@ async def goodnight(update: Update,
 
 
 async def goodmorning(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> None:
+                      context: CallbackContext) -> None:
     message = update.effective_message
     first_name = update.effective_user.first_name
     reply = f"Good Morning! {escape_markdown(first_name)}"
@@ -758,7 +758,7 @@ async def goodmorning(update: Update,
 
 
 
-async def cutiepii(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def cutiepii(update: Update, context: CallbackContext) -> None:
     reply_text = (update.effective_message.reply_to_message.reply_text
                   if update.effective_message.reply_to_message else
                   update.effective_message.reply_text)

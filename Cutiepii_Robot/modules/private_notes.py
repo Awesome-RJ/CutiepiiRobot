@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes, CommandHandler
+from telegram.ext import CallbackContext, CommandHandler
 
 import Cutiepii_Robot.modules.sql.private_notes as sql
 from Cutiepii_Robot import CUTIEPII_PTB
@@ -9,7 +9,7 @@ from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 
 @user_admin
 async def privatenotes(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> None:
+                       context: CallbackContext) -> None:
     chat = update.effective_chat
     message = update.effective_message
     args = context.args

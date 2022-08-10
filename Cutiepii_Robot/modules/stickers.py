@@ -9,7 +9,7 @@ from html import escape
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.error import TelegramError
 from telegram import Update
-from telegram.ext import ContextTypes, CallbackQueryHandler
+from telegram.ext import CallbackContext, CallbackQueryHandler
 from telegram.constants import ParseMode
 from telegram.helpers import mention_html
 from urllib.parse import quote as urlquote
@@ -78,7 +78,7 @@ async def stickerid(update: Update):
         )
 
 
-async def kang(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def kang(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     user = update.effective_user
     args = context.args
@@ -572,7 +572,7 @@ async def makepack_internal(context,
 
 
 async def getsticker(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> None:
+                     context: CallbackContext) -> None:
     msg = update.effective_message
     chat_id = update.effective_chat.id
     if msg.reply_to_message and msg.reply_to_message.sticker:
@@ -604,7 +604,7 @@ async def getsticker(update: Update,
 
 
 async def cb_sticker(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> None:
+                     context: CallbackContext) -> None:
     msg = update.effective_message
     query = "".join(msg.text.split()[1:])
     if not query:
@@ -637,7 +637,7 @@ async def cbs_callback(update: Update):
 
 
 async def getsticker(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> None:
+                     context: CallbackContext) -> None:
     bot = context.bot
     msg = update.effective_message
     chat_id = update.effective_chat.id
@@ -683,7 +683,7 @@ async def getsticker(update: Update,
 
 
 async def delsticker(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> None:
+                     context: CallbackContext) -> None:
     msg = update.effective_message
     if msg.reply_to_message and msg.reply_to_message.sticker:
         file_id = msg.reply_to_message.sticker.file_id
@@ -695,7 +695,7 @@ async def delsticker(update: Update,
 
 
 async def add_fvrtsticker(update: Update,
-                          context: ContextTypes.DEFAULT_TYPE) -> None:
+                          context: CallbackContext) -> None:
     message = update.effective_message
     user = update.effective_user
     args = context.args
@@ -742,7 +742,7 @@ async def list_fvrtsticker(update: Update):
 
 
 async def remove_fvrtsticker(update: Update,
-                             context: ContextTypes.DEFAULT_TYPE) -> None:
+                             context: CallbackContext) -> None:
     message = update.effective_message
     user = update.effective_user
     args = context.args

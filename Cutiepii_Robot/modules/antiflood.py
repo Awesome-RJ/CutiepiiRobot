@@ -37,7 +37,7 @@ from typing import Optional
 from telegram import Update, ChatPermissions
 from telegram.error import BadRequest
 from telegram.constants import ParseMode, ChatType
-from telegram.ext import ContextTypes, CallbackQueryHandler, CommandHandler, filters, MessageHandler
+from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler, filters, MessageHandler
 from telegram.helpers import mention_html
 
 from Cutiepii_Robot import CUTIEPII_PTB, WHITELIST_USERS
@@ -59,7 +59,7 @@ FLOOD_GROUP = 3
 
 @loggable
 async def check_flood(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> str:
+                      context: CallbackContext) -> str:
     user = update.effective_user  # type: Optional[User]
     chat = update.effective_chat  # type: Optional[Chat]
     msg = update.effective_message  # type: Optional[Message]
@@ -126,7 +126,7 @@ async def check_flood(update: Update,
 @user_admin_no_reply
 @bot_admin
 async def flood_button(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> None:
+                       context: CallbackContext) -> None:
     bot = context.bot
     query = update.callback_query
     user = update.effective_user
@@ -152,7 +152,7 @@ async def flood_button(update: Update,
 
 @user_admin
 @loggable
-async def set_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def set_flood(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     message = update.effective_message  # type: Optional[Message]
@@ -222,7 +222,7 @@ async def set_flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     return ""
 
 
-async def flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def flood(update: Update, context: CallbackContext) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message
@@ -264,7 +264,7 @@ async def flood(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 @user_admin
 async def set_flood_mode(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> None:
+                         context: CallbackContext) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]

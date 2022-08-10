@@ -34,7 +34,7 @@ import json
 import datetime
 
 from telegram import Update
-from telegram.ext import ContextTypes
+from telegram.ext import CallbackContext
 from telegram.constants import ParseMode
 
 from Cutiepii_Robot import CUTIEPII_PTB
@@ -62,7 +62,7 @@ async def dot(number, thousand_separator="."):
     return result
 
 
-async def covid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def covid(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     args = context.args
     query = " ".join(args)

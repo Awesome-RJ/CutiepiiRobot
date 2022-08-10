@@ -4,7 +4,7 @@ from threading import RLock
 
 from telegram import Chat, Update, ChatMember, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes as Ctx, CallbackQueryHandler as CBHandler
+from telegram.ext import CallbackContext as Ctx, CallbackQueryHandler as CBHandler
 
 from Cutiepii_Robot import CUTIEPII_PTB
 
@@ -208,7 +208,7 @@ def perm_callback_check(upd: Update, _: Ctx):
 
     msg.delete()
 
-    # update the `Update` and `ContextTypes` attributes by the correct values, so they can be used properly
+    # update the `Update` and `CallbackContext` attributes by the correct values, so they can be used properly
     setattr(cb[0][0], "_effective_user", upd.effective_user)
     setattr(cb[0][0], "_effective_message", cb[2][0])
 

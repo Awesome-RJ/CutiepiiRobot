@@ -34,7 +34,7 @@ import re
 from telegram.constants import ParseMode
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, Bot
 from telegram.error import BadRequest, Forbidden
-from telegram.ext import (CommandHandler, CallbackQueryHandler, ContextTypes)
+from telegram.ext import (CommandHandler, CallbackQueryHandler, CallbackContext)
 
 import Cutiepii_Robot.modules.sql.connection_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS, DEV_USERS
@@ -91,7 +91,7 @@ async def allow_connections(update, context) -> str:
 
 
 async def connection_chat(update: Update,
-                          context: ContextTypes.DEFAULT_TYPE) -> None:
+                          context: CallbackContext) -> None:
 
     chat = update.effective_chat
     user = update.effective_user
@@ -116,7 +116,7 @@ async def connection_chat(update: Update,
 
 async def connect_chat(
         update: Update,
-        context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
+        context: CallbackContext) -> None:  # sourcery no-metrics
 
     chat = update.effective_chat
     user = update.effective_user
@@ -259,7 +259,7 @@ async def connect_chat(
 
 
 async def disconnect_chat(update: Update,
-                          context: ContextTypes.DEFAULT_TYPE) -> None:
+                          context: CallbackContext) -> None:
 
     if update.effective_chat.type == "private":
         if disconnection_status := sql.disconnect(
@@ -322,7 +322,7 @@ CONN_HELP = """
 
 
 async def help_connect_chat(update: Update,
-                            context: ContextTypes.DEFAULT_TYPE) -> None:
+                            context: CallbackContext) -> None:
 
     args = context.args
 
@@ -337,7 +337,7 @@ async def help_connect_chat(update: Update,
 
 
 async def connect_button(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> None:
+                         context: CallbackContext) -> None:
     query = update.callback_query
     chat = update.effective_chat
     user = update.effective_user

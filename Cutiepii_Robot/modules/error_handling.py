@@ -36,7 +36,7 @@ import random
 from Cutiepii_Robot.modules.helper_funcs.misc import upload_text
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes, CommandHandler
+from telegram.ext import CallbackContext, CommandHandler
 from psycopg2 import errors as sqlerrors
 
 from Cutiepii_Robot import TOKEN, CUTIEPII_PTB, DEV_USERS, OWNER_ID, LOGGER
@@ -63,7 +63,7 @@ errors = ErrorsDict()
 
 
 async def error_callback(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> None:
+                         context: CallbackContext) -> None:
     if not update:
         return
 
@@ -124,7 +124,7 @@ async def error_callback(update: Update,
 
 
 async def list_errors(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> None:
+                      context: CallbackContext) -> None:
     if update.effective_user.id not in DEV_USERS:
         return
     e = dict(sorted(errors.items(), key=lambda item: item[1], reverse=True))

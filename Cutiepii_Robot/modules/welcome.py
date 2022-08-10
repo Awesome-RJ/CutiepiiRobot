@@ -35,7 +35,7 @@ from telegram import (
 )
 from telegram.error import BadRequest, TelegramError
 from telegram.ext import (
-    ContextTypes,
+    CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
     filters,
@@ -156,7 +156,7 @@ async def send(update, message, keyboard, backup_message):
 @loggable
 async def new_member(
         update: Update,
-        context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
+        context: CallbackContext) -> None:  # sourcery no-metrics
     bot, job_queue = context.bot, context.job_queue
     chat = update.effective_chat
     user = update.effective_user
@@ -598,7 +598,7 @@ async def new_member(
 
 
 async def check_not_bot(member: User, chat_id: int, message_id: int,
-                        context: ContextTypes.DEFAULT_TYPE):
+                        context: CallbackContext):
     bot = context.bot
     member_dict = VERIFIED_USER_WAITLIST.pop((chat_id, member.id))
     member_status = member_dict.get("status")
@@ -624,7 +624,7 @@ async def check_not_bot(member: User, chat_id: int, message_id: int,
 
 async def left_member(
         update: Update,
-        context: ContextTypes.DEFAULT_TYPE) -> None:  # sourcery no-metrics
+        context: CallbackContext) -> None:  # sourcery no-metrics
     bot = context.bot
     chat = update.effective_chat
     user = update.effective_user
@@ -725,7 +725,7 @@ async def left_member(
 
 
 @u_admin
-async def welcome(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def welcome(update: Update, context: CallbackContext) -> None:
     args = context.args
     chat = update.effective_chat
     # if no args, show current replies.
@@ -791,7 +791,7 @@ async def welcome(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 @u_admin
-async def goodbye(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def goodbye(update: Update, context: CallbackContext) -> None:
     args = context.args
     chat = update.effective_chat
 
@@ -842,7 +842,7 @@ async def goodbye(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def set_welcome(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> str:
+                      context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
@@ -865,7 +865,7 @@ async def set_welcome(update: Update,
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def reset_welcome(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> str:
+                        context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
 
@@ -882,7 +882,7 @@ async def reset_welcome(update: Update,
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def set_goodbye(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> str:
+                      context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
@@ -903,7 +903,7 @@ async def set_goodbye(update: Update,
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def reset_goodbye(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> str:
+                        context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
 
@@ -920,7 +920,7 @@ async def reset_goodbye(update: Update,
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def welcomemute(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> str:
+                      context: CallbackContext) -> str:
     args = context.args
     chat = update.effective_chat
     user = update.effective_user
@@ -983,7 +983,7 @@ async def welcomemute(update: Update,
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def clean_welcome(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> str:
+                        context: CallbackContext) -> str:
     args = context.args
     chat = update.effective_chat
     user = update.effective_user
@@ -1022,7 +1022,7 @@ async def clean_welcome(update: Update,
 
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 async def cleanservice(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> str:
+                       context: CallbackContext) -> str:
     args = context.args
     chat = update.effective_chat  # type: Optional[Chat]
     if chat.type == chat.PRIVATE:
@@ -1055,7 +1055,7 @@ async def cleanservice(update: Update,
 
 
 async def user_button(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> None:
+                      context: CallbackContext) -> None:
     chat = update.effective_chat
     user = update.effective_user
     query = update.callback_query
@@ -1115,7 +1115,7 @@ async def user_button(update: Update,
 
 
 async def user_captcha_button(update: Update,
-                              context: ContextTypes.DEFAULT_TYPE) -> None:
+                              context: CallbackContext) -> None:
     # sourcery no-metrics
     chat = update.effective_chat
     user = update.effective_user
@@ -1236,14 +1236,14 @@ WELC_MUTE_HELP_TXT = (
 
 @u_admin
 async def welcome_help(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> None:
+                       context: CallbackContext) -> None:
     await update.effective_message.reply_text(WELC_HELP_TXT,
                                               parse_mode=ParseMode.MARKDOWN)
 
 
 @u_admin
 async def welcome_mute_help(update: Update,
-                            context: ContextTypes.DEFAULT_TYPE) -> None:
+                            context: CallbackContext) -> None:
     await update.effective_message.reply_text(WELC_MUTE_HELP_TXT,
                                               parse_mode=ParseMode.MARKDOWN)
 

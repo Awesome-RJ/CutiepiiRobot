@@ -51,7 +51,7 @@ from datetime import datetime
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, __version__ as ptbver
 from telegram.constants import ParseMode, ChatAction
 from telegram.error import BadRequest
-from telegram.ext import filters as PTB_Cutiepii_Filters, CommandHandler, CallbackQueryHandler, ContextTypes
+from telegram.ext import filters as PTB_Cutiepii_Filters, CommandHandler, CallbackQueryHandler, CallbackContext
 from platform import python_version
 from telethon import version as tlthn
 from pyrogram import filters
@@ -231,7 +231,7 @@ async def markdown_help_sender(update: Update):
 
 
 async def markdown_help(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> None:
+                        context: CallbackContext) -> None:
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
             "Contact me in pm",
@@ -249,7 +249,7 @@ async def markdown_help(update: Update,
 
 
 async def mkdown_btn(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> None:
+                     context: CallbackContext) -> None:
     bot = context.bot
     query = update.callback_query
     match = query.data.split("_")[1]
@@ -305,7 +305,7 @@ async def src(update: Update) -> None:
 
 
 @send_action(ChatAction.UPLOAD_PHOTO)
-async def rmemes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def rmemes(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     chat = update.effective_chat
 
@@ -355,7 +355,7 @@ async def rmemes(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def markdown_help(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> None:
+                        context: CallbackContext) -> None:
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
             "Contact me in pm",
@@ -373,7 +373,7 @@ async def markdown_help(update: Update,
     markdown_help_sender(update)
 
 
-async def imdb(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def imdb(update: Update, context: CallbackContext) -> None:
     try:
         args = context.args
         movie_name = " ".join(args)

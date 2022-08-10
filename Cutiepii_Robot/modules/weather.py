@@ -60,7 +60,7 @@ from pytz import country_timezones as c_tz, timezone as tz, country_names as c_n
 from requests import get
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes
+from telegram.ext import CallbackContext
 from .sql.clear_cmd_sql import get_clearcmd
 
 
@@ -73,7 +73,7 @@ def get_tz(con):
             return tz(c_tz[con][0])
 
 
-async def weather(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def weather(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     chat = update.effective_chat
     message = update.effective_message

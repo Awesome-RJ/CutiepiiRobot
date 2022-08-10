@@ -34,7 +34,7 @@ import requests as r
 from random import randint
 from telegram import Update
 from telegram.constants import ChatAction
-from telegram.ext import ContextTypes
+from telegram.ext import CallbackContext
 
 from Cutiepii_Robot import SUPPORT_CHAT, WALL_API, CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
@@ -44,7 +44,7 @@ from Cutiepii_Robot.modules.helper_funcs.alternate import send_action
 
 
 @send_action(ChatAction.UPLOAD_PHOTO)
-async def wall(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def wall(update: Update, context: CallbackContext) -> None:
     chat_id = update.effective_chat.id
     msg = update.effective_message
     args = context.args

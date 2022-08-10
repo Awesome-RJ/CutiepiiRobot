@@ -35,7 +35,7 @@ from typing import Union
 from future.utils import string_types
 from telegram import Update
 from telegram.constants import ParseMode, ChatType
-from telegram.ext import CommandHandler, MessageHandler, ContextTypes
+from telegram.ext import CommandHandler, MessageHandler, CallbackContext
 from telegram.helpers import escape_markdown
 from Cutiepii_Robot import CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.handlers import CMD_STARTERS
@@ -132,7 +132,7 @@ if is_module_loaded(FILENAME):
 
     @user_admin
     async def disable(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> None:
+                      context: CallbackContext) -> None:
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
         args = context.args
@@ -180,7 +180,7 @@ if is_module_loaded(FILENAME):
 
     @user_admin
     async def enable(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> None:
+                     context: CallbackContext) -> None:
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
         args = context.args
@@ -229,7 +229,7 @@ if is_module_loaded(FILENAME):
 
     @user_admin
     async def list_cmds(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> None:
+                        context: CallbackContext) -> None:
         if DISABLE_CMDS + DISABLE_OTHER:
             result = "".join(f" - `{escape_markdown(str(cmd))}`\n"
                              for cmd in set(DISABLE_CMDS + DISABLE_OTHER))
@@ -253,7 +253,7 @@ if is_module_loaded(FILENAME):
         return f"The following commands are currently restricted:\n{result}"
 
     async def commands(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> None:
+                       context: CallbackContext) -> None:
         chat = update.effective_chat
         user = update.effective_user
         conn = await connected(context.bot,

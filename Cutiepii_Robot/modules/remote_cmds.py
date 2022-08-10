@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from telegram import Update, ChatPermissions
 from telegram.error import BadRequest
-from telegram.ext import ContextTypes, filters, CommandHandler
+from telegram.ext import CallbackContext, filters, CommandHandler
 
 from Cutiepii_Robot import LOGGER, CUTIEPII_PTB, SUDO_USERS
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
@@ -113,7 +113,7 @@ RUNMUTE_ERRORS = {
 
 
 @dev_plus
-async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def rban(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -190,7 +190,7 @@ async def rban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 @dev_plus
-async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def runban(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -270,7 +270,7 @@ async def runban(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 @dev_plus
-async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def rkick(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -349,7 +349,7 @@ async def rkick(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 @dev_plus
-async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def rmute(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -431,7 +431,7 @@ async def rmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 @dev_plus
-async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def runmute(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -527,7 +527,7 @@ async def runmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 # https://github.com/el0xren/tgbot/commits/master/tg_bot/modules/misc.py
 # ported from tgbot, thanks to el0xren
 @dev_plus
-async def recho(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def recho(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     args = context.args
     message = update.effective_message

@@ -38,7 +38,7 @@ from Cutiepii_Robot import TIME_API_KEY, CUTIEPII_PTB
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes
+from telegram.ext import CallbackContext
 
 
 def generate_time(to_find: str, findtype: List[str]) -> str:
@@ -87,7 +87,7 @@ def generate_time(to_find: str, findtype: List[str]) -> str:
     return result
 
 
-async def gettime(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def gettime(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
 
     try:

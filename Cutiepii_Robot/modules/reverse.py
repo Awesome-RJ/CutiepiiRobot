@@ -38,7 +38,7 @@ from bs4 import BeautifulSoup
 from telegram.error import BadRequest, TelegramError
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
-from telegram.ext import ContextTypes
+from telegram.ext import CallbackContext
 
 from Cutiepii_Robot import CUTIEPII_PTB
 from typing import List
@@ -50,7 +50,7 @@ useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML
 opener.addheaders = [("User-agent", useragent)]
 
 
-async def reverse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def reverse(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     chat_id = update.effective_chat.id
     rtmid = msg.message_id

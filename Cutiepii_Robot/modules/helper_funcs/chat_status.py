@@ -51,7 +51,7 @@ from Cutiepii_Robot.modules.helper_funcs.admin_status import bot_is_admin
 from telegram import Chat, ChatMember, Update, User
 from telegram.error import TelegramError
 from telegram.constants import ParseMode, ChatType
-from telegram.ext import ContextTypes
+from telegram.ext import CallbackContext
 
 # stores admemes in memory for 10 min.
 ADMIN_CACHE = TTLCache(maxsize=512, ttl=60 * 10, timer=perf_counter)
@@ -85,7 +85,7 @@ def owner_plus(func):
 
     @wraps(func)
     async def is_owner_plus_func(update: Update,
-                                 context: ContextTypes.DEFAULT_TYPE, *args,
+                                 context: CallbackContext, *args,
                                  **kwargs):
         user = update.effective_user
 
@@ -156,7 +156,7 @@ def dev_plus(func):
 
     @wraps(func)
     async def is_dev_plus_func(update: Update,
-                               context: ContextTypes.DEFAULT_TYPE, *args,
+                               context: CallbackContext, *args,
                                **kwargs):
         user = update.effective_user
 
@@ -181,7 +181,7 @@ def sudo_plus(func):
 
     @wraps(func)
     async def is_sudo_plus_func(update: Update,
-                                context: ContextTypes.DEFAULT_TYPE, *args,
+                                context: CallbackContext, *args,
                                 **kwargs):
         user = update.effective_user
         chat = update.effective_chat
@@ -206,7 +206,7 @@ def support_plus(func):
 
     @wraps(func)
     async def is_support_plus_func(update: Update,
-                                   context: ContextTypes.DEFAULT_TYPE, *args,
+                                   context: CallbackContext, *args,
                                    **kwargs):
         user = update.effective_user
         chat = update.effective_chat
@@ -227,7 +227,7 @@ def whitelist_plus(func):
     @wraps(func)
     async def is_whitelist_plus_func(
         update: Update,
-        context: ContextTypes.DEFAULT_TYPE,
+        context: CallbackContext,
         *args,
         **kwargs,
     ):
@@ -245,7 +245,7 @@ def whitelist_plus(func):
 def user_admin(func):
 
     @wraps(func)
-    async def is_admin(update: Update, context: ContextTypes.DEFAULT_TYPE,
+    async def is_admin(update: Update, context: CallbackContext,
                        *args, **kwargs):
         user = update.effective_user
 
@@ -267,7 +267,7 @@ def user_admin_no_reply(func):
 
     @wraps(func)
     async def is_not_admin_no_reply(update: Update,
-                                    context: ContextTypes.DEFAULT_TYPE, *args,
+                                    context: CallbackContext, *args,
                                     **kwargs):
         # bot = context.bot
         user = update.effective_user
@@ -287,7 +287,7 @@ def user_admin_no_reply(func):
 def user_not_admin(func):
 
     @wraps(func)
-    async def is_not_admin(update: Update, context: ContextTypes.DEFAULT_TYPE,
+    async def is_not_admin(update: Update, context: CallbackContext,
                            *args, **kwargs):
         message = update.effective_message
         user = update.effective_user
@@ -306,7 +306,7 @@ def user_not_admin(func):
 def bot_admin(func):
 
     @wraps(func)
-    async def is_admin(update: Update, context: ContextTypes.DEFAULT_TYPE,
+    async def is_admin(update: Update, context: CallbackContext,
                        *args, **kwargs):
         chat = update.effective_chat
         update_chat_title = chat.title
@@ -328,7 +328,7 @@ def bot_admin(func):
 def bot_can_delete(func):
 
     @wraps(func)
-    async def delete_rights(update: Update, context: ContextTypes.DEFAULT_TYPE,
+    async def delete_rights(update: Update, context: CallbackContext,
                             *args, **kwargs):
         bot = context.bot
         chat = update.effective_chat
@@ -352,7 +352,7 @@ def can_promote(func):
 
     @wraps(func)
     async def promote_rights(update: Update,
-                             context: ContextTypes.DEFAULT_TYPE, *args,
+                             context: CallbackContext, *args,
                              **kwargs):
         chat = update.effective_chat
         update_chat_title = chat.title
@@ -378,7 +378,7 @@ def connection_status(func):
 
     @wraps(func)
     async def connected_status(update: Update,
-                               context: ContextTypes.DEFAULT_TYPE, *args,
+                               context: CallbackContext, *args,
                                **kwargs):
         if update.effective_chat is None or update.effective_user is None:
             return

@@ -10,7 +10,7 @@ from Cutiepii_Robot.modules.helper_funcs.misc import delete
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
 from telegram.ext import (
-    ContextTypes,
+    CallbackContext,
     CommandHandler,
     MessageHandler,
 )
@@ -83,7 +83,7 @@ def getRepo(bot, update, reponame):
 
 
 async def getRelease(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> None:
+                     context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     if len(args) == 0:
@@ -107,7 +107,7 @@ async def getRelease(update: Update,
 
 async def hashFetch(
         update: Update,
-        context: ContextTypes.DEFAULT_TYPE) -> None:  # kanged from notes
+        context: CallbackContext) -> None:  # kanged from notes
     bot, args = context.bot, context.args
     message = update.effective_message.text
     msg = update.effective_message
@@ -130,7 +130,7 @@ async def hashFetch(
     return
 
 
-async def cmdFetch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def cmdFetch(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     if len(args) != 1:
@@ -154,7 +154,7 @@ async def cmdFetch(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def changelog(update: Update,
-                    context: ContextTypes.DEFAULT_TYPE) -> None:
+                    context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     if len(args) != 1:
@@ -172,7 +172,7 @@ async def changelog(update: Update,
 
 
 @user_admin
-async def saveRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def saveRepo(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     chat_id = update.effective_chat.id
     msg = update.effective_message
@@ -191,7 +191,7 @@ async def saveRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 @user_admin
-async def delRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def delRepo(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     chat_id = update.effective_chat.id
     msg = update.effective_message
@@ -204,7 +204,7 @@ async def delRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     return
 
 
-async def listRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def listRepo(update: Update, context: CallbackContext) -> None:
     chat_id = update.effective_chat.id
     chat = update.effective_chat
     chat_name = chat.title or chat.first_name or chat.username
@@ -229,7 +229,7 @@ async def listRepo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 msg.format(chat_name) + des, parse_mode=ParseMode.MARKDOWN))
 
 
-async def getVer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def getVer(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     ver = api.vercheck()
     deletion(update, context, await
@@ -237,7 +237,7 @@ async def getVer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     return
 
 
-def deletion(update: Update, context: ContextTypes.DEFAULT_TYPE, delmsg):
+def deletion(update: Update, context: CallbackContext, delmsg):
     chat = update.effective_chat
     if cleartime := get_clearcmd(chat.id, "github"):
         context.bot.run_async(delete, delmsg, cleartime.time)

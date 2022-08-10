@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from datetime import datetime
 from functools import wraps
 import asyncio
-from telegram.ext import ContextTypes, CallbackQueryHandler, CommandHandler
+from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 from Cutiepii_Robot.modules.helper_funcs.misc import is_module_loaded
 from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin, AdminPerms
@@ -99,7 +99,7 @@ if is_module_loaded(FILENAME):
 
         return glog_action
 
-    async def send_log(context: ContextTypes.DEFAULT_TYPE, log_chat_id: str,
+    async def send_log(context: CallbackContext, log_chat_id: str,
                        orig_chat_id: str, result: str):
         bot = context.bot
         try:
@@ -128,7 +128,7 @@ if is_module_loaded(FILENAME):
 
     @u_admin
     async def logging(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> None:
+                      context: CallbackContext) -> None:
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -147,7 +147,7 @@ if is_module_loaded(FILENAME):
 
     @user_admin(AdminPerms.CAN_CHANGE_INFO)
     async def setlog(update: Update,
-                     context: ContextTypes.DEFAULT_TYPE) -> None:
+                     context: CallbackContext) -> None:
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -188,7 +188,7 @@ if is_module_loaded(FILENAME):
 
     @user_admin(AdminPerms.CAN_CHANGE_INFO)
     async def unsetlog(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> None:
+                       context: CallbackContext) -> None:
         bot = context.bot
         message = update.effective_message
         chat = update.effective_chat
@@ -262,7 +262,7 @@ from Cutiepii_Robot.modules.sql import log_channel_sql as sql
 
 
 async def log_setting_callback(update: Update,
-                               context: ContextTypes.DEFAULT_TYPE) -> None:
+                               context: CallbackContext) -> None:
     cb = update.callback_query
     user = cb.from_user
     chat = cb.message.chat

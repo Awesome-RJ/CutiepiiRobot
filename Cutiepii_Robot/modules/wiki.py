@@ -36,12 +36,12 @@ from Cutiepii_Robot import CUTIEPII_PTB
 
 from telegram.ext import CommandHandler
 from telegram.error import BadRequest
-from telegram.ext import ContextTypes
+from telegram.ext import CallbackContext
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 
 
 
-async def wiki(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def wiki(update: Update, context: CallbackContext) -> None:
     kueri = re.split(pattern="wiki", string = update.effective_message.text)
     message = update.effective_message
     wikipedia.set_lang("en")

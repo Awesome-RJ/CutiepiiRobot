@@ -34,7 +34,7 @@ import datetime
 
 from telethon import events
 from telegram import Update
-from telegram.ext import ContextTypes, CommandHandler
+from telegram.ext import CallbackContext, CommandHandler
 from Cutiepii_Robot import telethn, CUTIEPII_PTB
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 
@@ -84,7 +84,7 @@ support_chat = os.getenv("SUPPORT_CHAT")
 
 
 @dev_plus
-def logs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+def logs(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
     with open("log.txt", "rb") as f:
         context.bot.send_document(document=f, filename=f.name, chat_id=user.id)

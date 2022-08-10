@@ -40,12 +40,12 @@ from Cutiepii_Robot.modules.sql.users_sql import get_user_com_chats
 from telegram import Update
 from telegram.constants import ParseMode
 from telegram.error import BadRequest, RetryAfter, Forbidden
-from telegram.ext import ContextTypes, CommandHandler
+from telegram.ext import CallbackContext, CommandHandler
 
 
 @dev_plus
 async def get_user_common_chats(update: Update,
-                                context: ContextTypes.DEFAULT_TYPE) -> None:
+                                context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     user = extract_user(msg, args)

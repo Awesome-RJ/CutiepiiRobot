@@ -74,7 +74,7 @@ from telegram.error import (
 )
 from telegram.ext import (
     CallbackContext,
-    ContextTypes,
+    CallbackContext,
     filters,
     CallbackQueryHandler,
     MessageHandler
@@ -211,7 +211,7 @@ for module_name in ALL_MODULES:
 
 
 # do not async
-async def send_help(context: ContextTypes.DEFAULT_TYPE,
+async def send_help(context: CallbackContext,
                     chat_id,
                     text,
                     keyboard=None):
@@ -296,7 +296,7 @@ async def start(update: Update, context: CallbackContext):
         )
 
 
-async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def error_handler(update: Update, context: CallbackContext):
     """Log the error and send a telegram message to notify the developer."""
     # Log the error before we do anything else, so we can see it even if something breaks.
     LOGGER.error(msg="Exception while handling an update:",
@@ -342,7 +342,7 @@ async def error_callback(_, context: CallbackContext):
 
 
 async def help_button(update: Update,
-                      context: ContextTypes.DEFAULT_TYPE) -> None:
+                      context: CallbackContext) -> None:
     query = update.callback_query
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     prev_match = re.match(r"help_prev\((.+?)\)", query.data)
@@ -401,7 +401,7 @@ async def help_button(update: Update,
 
 
 async def cutiepii_callback_data(update: Update,
-                                 context: ContextTypes.DEFAULT_TYPE) -> None:
+                                 context: CallbackContext) -> None:
     query = update.callback_query
     uptime = get_readable_time((time.time() - StartTime))
     if query.data == "cutiepii_":
@@ -429,7 +429,7 @@ async def cutiepii_callback_data(update: Update,
 
 
 
-async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def get_help(update: Update, context: CallbackContext) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     args = update.effective_message.text.split(None, 1)
 
@@ -467,7 +467,7 @@ async def get_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         send_help(chat.id, HELP_STRINGS)
 
 
-async def send_settings(context: ContextTypes.DEFAULT_TYPE,
+async def send_settings(context: CallbackContext,
                         chat_id,
                         user_id,
                         user=False):
@@ -509,7 +509,7 @@ async def send_settings(context: ContextTypes.DEFAULT_TYPE,
 
 
 async def settings_button(update: Update,
-                          context: ContextTypes.DEFAULT_TYPE) -> None:
+                          context: CallbackContext) -> None:
     query = update.callback_query
     user = update.effective_user
     bot = context.bot
@@ -587,7 +587,7 @@ async def settings_button(update: Update,
 
 
 async def get_settings(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> None:
+                       context: CallbackContext) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -613,7 +613,7 @@ async def get_settings(update: Update,
         text = "Click here to check your settings."
 
 
-async def donate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def donate(update: Update, context: CallbackContext) -> None:
     user = update.effective_message.from_user
     chat = update.effective_chat  # type: Optional[Chat]
     bot = context.bot

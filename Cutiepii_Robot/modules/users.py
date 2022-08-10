@@ -36,7 +36,7 @@ from time import sleep
 
 from telegram import Update
 from telegram.error import BadRequest, TelegramError
-from telegram.ext import MessageHandler, CommandHandler, ContextTypes, filters
+from telegram.ext import MessageHandler, CommandHandler, CallbackContext, filters
 
 import Cutiepii_Robot.modules.sql.users_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB, LOGGER
@@ -74,7 +74,7 @@ async def get_user_id(username):
 
 
 async def broadcast(update: Update,
-                    context: ContextTypes.DEFAULT_TYPE) -> None:
+                    context: CallbackContext) -> None:
     to_send = await update.effective_message.text.split(None, 1)
     if len(to_send) >= 2:
         chats_ = sql.get_all_chats() or []
@@ -153,7 +153,7 @@ async def log_user(update: Update):
                         chat.title)
 
 
-async def chats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def chats(update: Update, context: CallbackContext) -> None:
     all_chats = sql.get_all_chats() or []
     chatfile = "List of chats.\n0. Chat name | Chat ID | Members count\n"
     P = 1
@@ -184,7 +184,7 @@ def build_keyboard_alternate(buttons):
 
 
 """
-async def chat_checker(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def chat_checker(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     if (
         await update.effective_message.chat.get_member(bot.id).can_send_messages

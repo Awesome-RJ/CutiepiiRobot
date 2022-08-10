@@ -38,7 +38,7 @@ from typing import Optional
 from telegram import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, User, Bot, Chat, ChatPermissions, Update
 from telegram.constants import ParseMode
 from telegram.error import BadRequest
-from telegram.ext import ContextTypes, CommandHandler, CallbackQueryHandler
+from telegram.ext import CallbackContext, CommandHandler, CallbackQueryHandler
 from telegram.helpers import mention_html
 
 from Cutiepii_Robot import (
@@ -108,7 +108,7 @@ async def check_user(user_id: int, bot: Bot, update: Update) -> Optional[str]:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def mute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def mute(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     chat = update.effective_chat
@@ -164,7 +164,7 @@ async def mute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def button(update: Update, context: CallbackContext) -> str:
     query: Optional[CallbackQuery] = update.callback_query
     user: Optional[User] = update.effective_user
     chat = update.effective_chat
@@ -218,7 +218,7 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def unmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def unmute(update: Update, context: CallbackContext) -> str:
     bot, args = context.bot, context.args
     chat = update.effective_chat
     user = update.effective_user
@@ -280,7 +280,7 @@ async def unmute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def temp_mute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def temp_mute(update: Update, context: CallbackContext) -> str:
     bot, args = context.bot, context.args
     chat = update.effective_chat
     user = update.effective_user
@@ -362,7 +362,7 @@ async def temp_mute(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def temp_nomedia(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> str:
+                       context: CallbackContext) -> str:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     message = update.effective_message  # type: Optional[Message]
@@ -456,7 +456,7 @@ async def temp_nomedia(update: Update,
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def media(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     message = update.effective_message  # type: Optional[Message]
@@ -509,7 +509,7 @@ async def media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def nomedia(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def nomedia(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     message = update.effective_message  # type: Optional[Message]

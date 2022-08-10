@@ -42,7 +42,7 @@ from telegram import Chat, InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.error import BadRequest, Forbidden
 from telegram.constants import ParseMode
 from telegram.ext import (
-    ContextTypes,
+    CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
     filters,
@@ -56,7 +56,7 @@ REPORT_GROUP = 12
 
 @user_admin
 async def report_setting(update: Update,
-                         context: ContextTypes.DEFAULT_TYPE) -> None:
+                         context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     chat = update.effective_chat
     msg = update.effective_message
@@ -100,7 +100,7 @@ async def report_setting(update: Update,
 
 @user_not_admin
 @loggable
-async def report(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
+async def report(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -278,7 +278,7 @@ def __user_settings__(user_id):
             "You will *not* receive reports from chats you're admin.")
 
 
-async def buttons(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def buttons(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     query = update.callback_query
     splitter = query.data.replace("report_", "").split("=")

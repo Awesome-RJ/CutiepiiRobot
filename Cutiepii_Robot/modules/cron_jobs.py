@@ -36,14 +36,14 @@ import subprocess
 
 from time import sleep
 from telegram import Update
-from telegram.ext import CommandHandler, ContextTypes
+from telegram.ext import CommandHandler, CallbackContext
 
 from Cutiepii_Robot import DATABASE_NAME, OWNER_ID, CUTIEPII_PTB, LOGGER, BACKUP_PASS
 from Cutiepii_Robot.modules.helper_funcs.chat_status import owner_plus
 
 
 @owner_plus
-def backup_now(_: Update, ctx: ContextTypes):
+def backup_now(_: Update, ctx: CallbackContext):
     cronjob.run(CUTIEPII_PTB=CUTIEPII_PTB)
 
 
@@ -62,7 +62,7 @@ async def start_jobs(update: Update):
 zip_pass = BACKUP_PASS
 
 
-async def backup_db(_: ContextTypes):
+async def backup_db(_: CallbackContext):
     bot = CUTIEPII_PTB.bot
     tmpmsg = "Performing backup, Please wait..."
     tmp = await bot.send_message(OWNER_ID, tmpmsg)

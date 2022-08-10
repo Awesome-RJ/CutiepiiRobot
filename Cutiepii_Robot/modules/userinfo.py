@@ -46,7 +46,7 @@ from telethon import events
 
 from telegram import Update, MessageEntity, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode, MessageLimit, ChatType
-from telegram.ext import ContextTypes
+from telegram.ext import CallbackContext
 from telegram.error import BadRequest
 from telegram.helpers import escape_markdown, mention_html
 
@@ -261,7 +261,7 @@ def make_bar(per):
     return "■" * done + "□" * (10 - done)
 
 
-async def get_id(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def get_id(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     chat = update.effective_chat
@@ -338,7 +338,7 @@ async def group_info(event) -> None:
     await event.reply(msg)
 
 
-async def gifid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def gifid(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     if await msg.reply_to_message and await msg.reply_to_message.animation:
         await update.effective_message.reply_text(
@@ -351,7 +351,7 @@ async def gifid(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 """
-def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+def info(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     chat = update.effective_chat
@@ -564,7 +564,7 @@ else:return
 """
 
 
-async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def info(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     chat = update.effective_chat
@@ -773,7 +773,7 @@ async def info(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 """
 
 
-async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def about_me(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     user_id = extract_user(message, args)
@@ -794,7 +794,7 @@ async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "There isnt one, use /setme to set one.")
 
 
-async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def about_me(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
     user_id = extract_user(message, args)
@@ -816,7 +816,7 @@ async def about_me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def set_about_me(update: Update,
-                       context: ContextTypes.DEFAULT_TYPE) -> None:
+                       context: CallbackContext) -> None:
     message = update.effective_message
     user_id = message.from_user.id
     if user_id in [777000, 1087968824]:
@@ -850,7 +850,7 @@ async def set_about_me(update: Update,
 
 
 async def about_bio(update: Update,
-                    context: ContextTypes.DEFAULT_TYPE) -> None:
+                    context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -874,7 +874,7 @@ async def about_bio(update: Update,
 
 
 async def set_about_bio(update: Update,
-                        context: ContextTypes.DEFAULT_TYPE) -> None:
+                        context: CallbackContext) -> None:
     message = update.effective_message
     sender_id = update.effective_user.id
     bot = context.bot

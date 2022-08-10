@@ -32,7 +32,7 @@ from enum import Enum
 import functools
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackQueryHandler, ContextTypes
+from telegram.ext import CallbackQueryHandler, CallbackContext
 from telegram.constants import ParseMode
 
 from Cutiepii_Robot import DEV_USERS, SUDO_USERS, CUTIEPII_PTB
@@ -59,7 +59,7 @@ anon_callback_messages = {}
 def user_admin(permission: AdminPerms):
     def wrapper(func):
         @functools.wraps(func)
-        async def awrapper(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+        async def awrapper(update: Update, context: CallbackContext, *args, **kwargs):
             nonlocal permission
             if update.effective_chat.type == "private":
                 return func(update, context, *args, **kwargs)
