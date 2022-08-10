@@ -600,5 +600,5 @@ CUTIEPII_PTB.add_handler(CommandHandler("unlock",
 CUTIEPII_PTB.add_handler(CommandHandler(
     "locks", list_locks, block=False))  # , filters=Filters.group)
 CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.ALL & filters.ChatType.GROUPS, del_lockables),
-    PERM_GROUP, block=False)
+    MessageHandler(filters.ALL & filters.ChatType.GROUPS, del_lockables, block=False),
+    PERM_GROUP)
