@@ -404,4 +404,4 @@ CUTIEPII_PTB.add_handler(CommandHandler(
 CUTIEPII_PTB.add_handler(
     CallbackQueryHandler(flood_button, pattern=r"unmute_flooder", block=False))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("flood", flood, filters.ChatType.GROUPS, block=False))
+    CommandHandler("flood", flood, filters=filters.ChatType.GROUPS, block=False))
