@@ -206,12 +206,12 @@ async def restart(update: Update):
     process.communicate()
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("install", pip_install))
-CUTIEPII_PTB.add_handler(CommandHandler("leave", leave))
-CUTIEPII_PTB.add_handler(CommandHandler("gitpull", gitpull))
-CUTIEPII_PTB.add_handler(CommandHandler("reboot", restart))
-CUTIEPII_PTB.add_handler(CommandHandler("lockdown", allow_groups))
+CUTIEPII_PTB.add_handler(CommandHandler("install", pip_install, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("leave", leave, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("gitpull", gitpull, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("reboot", restart, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("lockdown", allow_groups, block=False))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(leave_cb, pattern=r"leavechat_cb_"))
+    CallbackQueryHandler(leave_cb, pattern=r"leavechat_cb_", block=False))
 
 __mod_name__ = "Dev"

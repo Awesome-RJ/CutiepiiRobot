@@ -226,14 +226,14 @@ async def unapproveall_btn(update: Update):
             await query.answer("You need to be admin to do this.")
 
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approve", approve))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unapprove", disapprove))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approved", approved))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approval", approval))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approve", approve, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unapprove", disapprove, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approved", approved, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approval", approval, block=False))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("unapproveall", unapproveall))
+    DisableAbleCommandHandler("unapproveall", unapproveall, block=False))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(unapproveall_btn, pattern=r"unapproveall_.*"))
+    CallbackQueryHandler(unapproveall_btn, pattern=r"unapproveall_.*", block=False))
 
 __help__ = """
 Sometimes, you might trust a user not to send unwanted content.

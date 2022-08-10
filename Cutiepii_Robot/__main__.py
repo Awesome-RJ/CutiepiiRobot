@@ -675,18 +675,18 @@ async def migrate_chats(update: Update):
 
 def main():
     CUTIEPII_PTB.add_error_handler(error_callback)
-    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("test", test))
-    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("start", start))
+    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("test", test, block=False))
+    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("start", start, block=False))
 
-    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("help", get_help))
-    CUTIEPII_PTB.add_handler(CallbackQueryHandler(help_button, pattern=r"help_.*"))
+    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("help", get_help, block=False))
+    CUTIEPII_PTB.add_handler(CallbackQueryHandler(help_button, pattern=r"help_.*", block=False))
 
-    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("settings", get_settings))
-    CUTIEPII_PTB.add_handler(CallbackQueryHandler(settings_button, pattern=r"stngs_"))
+    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("settings", get_settings, block=False))
+    CUTIEPII_PTB.add_handler(CallbackQueryHandler(settings_button, pattern=r"stngs_", block=False))
 
-    CUTIEPII_PTB.add_handler(CallbackQueryHandler(cutiepii_callback_data, pattern=r"cutiepii_"))
+    CUTIEPII_PTB.add_handler(CallbackQueryHandler(cutiepii_callback_data, pattern=r"cutiepii_", block=False))
     CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("donate", donate))
-    CUTIEPII_PTB.add_handler(MessageHandler(filters.StatusUpdate.MIGRATE, migrate_chats, block=bool))
+    CUTIEPII_PTB.add_handler(MessageHandler(filters.StatusUpdate.MIGRATE, migrate_chats, block=False))
 
     if WEBHOOK:
         LOGGER.info("Using webhooks.")

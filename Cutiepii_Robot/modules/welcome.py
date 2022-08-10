@@ -1275,45 +1275,45 @@ def __chat_settings__(chat_id, user_id):
 CUTIEPII_PTB.add_handler(
     MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS,
                    new_member,
-                   block=bool))
+                   block=False))
 CUTIEPII_PTB.add_handler(
     MessageHandler(filters.StatusUpdate.LEFT_CHAT_MEMBER,
                    left_member,
-                   block=bool))
+                   block=False))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("welcome", welcome, filters=filters.ChatType.GROUPS))
+    CommandHandler("welcome", welcome, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("goodbye", goodbye, filters=filters.ChatType.GROUPS))
+    CommandHandler("goodbye", goodbye, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("setwelcome", set_welcome, filters=filters.ChatType.GROUPS))
+    CommandHandler("setwelcome", set_welcome, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("setgoodbye", set_goodbye, filters=filters.ChatType.GROUPS))
+    CommandHandler("setgoodbye", set_goodbye, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("resetwelcome",
                    reset_welcome,
-                   filters=filters.ChatType.GROUPS))
+                   filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("resetgoodbye",
                    reset_goodbye,
-                   filters=filters.ChatType.GROUPS))
+                   filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("welcomemute", welcomemute,
-                   filters=filters.ChatType.GROUPS))
+                   filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("cleanservice",
                    cleanservice,
-                   filters=filters.ChatType.GROUPS))
+                   filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("cleanwelcome",
                    clean_welcome,
-                   filters=filters.ChatType.GROUPS))
+                   filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("welcomehelp", welcome_help))
 CUTIEPII_PTB.add_handler(CommandHandler("welcomemutehelp", welcome_mute_help))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(user_button, pattern=r"user_join_", block=bool))
+    CallbackQueryHandler(user_button, pattern=r"user_join_", block=False))
 CUTIEPII_PTB.add_handler(
     CallbackQueryHandler(user_captcha_button,
                          pattern=r"user_captchajoin_\([\d\-]+,\d+\)_\(\d{4}\)",
-                         block=bool))
+                         block=False))
 
 __mod_name__ = "Greetings"

@@ -80,4 +80,4 @@ async def eliminate_channel(update: Update,
 CUTIEPII_PTB.add_handler(
     DisableAbleCommandHandler("antichannel",
                               set_antichannel,
-                              filters=filters.ChatType.GROUPS))
+                              filters=filters.ChatType.GROUPS, block=False))

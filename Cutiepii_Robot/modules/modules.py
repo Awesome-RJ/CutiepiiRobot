@@ -200,8 +200,8 @@ async def listmodules(update: Update):
     await message.reply_text(module_list, parse_mode=ParseMode.HTML)
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("load", load))
-CUTIEPII_PTB.add_handler(CommandHandler("unload", unload))
-CUTIEPII_PTB.add_handler(CommandHandler("listmodules", listmodules))
+CUTIEPII_PTB.add_handler(CommandHandler("load", load, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("unload", unload, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("listmodules", listmodules, block=False))
 
 __mod_name__ = "Modules"

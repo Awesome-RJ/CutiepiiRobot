@@ -411,5 +411,5 @@ __help__ = """
 
 __mod_name__ = "Backups"
 
-CUTIEPII_PTB.add_handler(CommandHandler("import", import_data))
-CUTIEPII_PTB.add_handler(CommandHandler("export", export_data))
+CUTIEPII_PTB.add_handler(CommandHandler("import", import_data, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("export", export_data, block=False))

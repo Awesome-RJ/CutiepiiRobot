@@ -333,11 +333,11 @@ __help__ = """
 
 """
 
-CUTIEPII_PTB.add_handler(CommandHandler("reports", report_setting))
+CUTIEPII_PTB.add_handler(CommandHandler("reports", report_setting, block=False))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("report", report, filters=filters.ChatType.GROUPS))
+    CommandHandler("report", report, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(buttons, pattern=r"report_"))
+    MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report, block=False))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(buttons, pattern=r"report_", block=False))
 
 __mod_name__ = "Reporting"

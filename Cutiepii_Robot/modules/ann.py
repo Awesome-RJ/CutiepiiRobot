@@ -1,3 +1,4 @@
+"""
 import html
 import contextlib
 
@@ -376,3 +377,4 @@ CUTIEPII_PTB.add_handler(ChatMemberHandler(botstatchanged,
 CUTIEPII_PTB.add_handler(ChatMemberHandler(admincacheupdates,
                                            ChatMemberHandler.CHAT_MEMBER),
                          group=-22)
+"""

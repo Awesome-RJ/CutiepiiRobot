@@ -78,4 +78,4 @@ async def get_user_common_chats(update: Update,
         os.remove("common_chats.txt")
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("getchats", get_user_common_chats))
+CUTIEPII_PTB.add_handler(CommandHandler("getchats", get_user_common_chats, block=False))

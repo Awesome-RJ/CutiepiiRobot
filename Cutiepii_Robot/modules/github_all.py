@@ -262,15 +262,15 @@ def deletion(update: Update, context: ContextTypes.DEFAULT_TYPE, delmsg):
 __mod_name__ = "Git"
 
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("git", getRelease, admin_ok=True))
+    DisableAbleCommandHandler("git", getRelease, admin_ok=True, block=False))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("fetch", cmdFetch, admin_ok=True))
-CUTIEPII_PTB.add_handler(CommandHandler("saverepo", saveRepo))
-CUTIEPII_PTB.add_handler(CommandHandler("delrepo", delRepo))
+    DisableAbleCommandHandler("fetch", cmdFetch, admin_ok=True, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("saverepo", saveRepo, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("delrepo", delRepo, block=False))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("listrepo", listRepo, admin_ok=True))
+    DisableAbleCommandHandler("listrepo", listRepo, admin_ok=True, block=False))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("gitver", getVer, admin_ok=True))
+    DisableAbleCommandHandler("gitver", getVer, admin_ok=True, block=False))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("changelog", changelog, admin_ok=True))
-CUTIEPII_PTB.add_handler(MessageHandler(r"^&[^\s]+", hashFetch))
+    DisableAbleCommandHandler("changelog", changelog, admin_ok=True, block=False))
+CUTIEPII_PTB.add_handler(MessageHandler(r"^&[^\s]+", hashFetch, block=False))

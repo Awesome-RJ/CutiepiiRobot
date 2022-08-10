@@ -1757,67 +1757,67 @@ async def unpinallbtn(update: Update,
 CUTIEPII_PTB.add_handler(
     CommandHandler("setdesc",
                    set_desc,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("setsticker",
                    set_sticker,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("setgpic",
                    setchatpic,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("delgpic",
                    rmchatpic,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("setgtitle",
                    setchat_title,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 
 CUTIEPII_PTB.add_handler(
-    CommandHandler("pin", pin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+    CommandHandler("pin", pin, filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("unpin",
                    unpin,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("unpinall",
                    unpinall,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("permapin",
                    permapin,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("cleanlinked",
                    permanent_pin_set,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(unpinallbtn, pattern=r"unpinallbtn_"))
+    CallbackQueryHandler(unpinallbtn, pattern=r"unpinallbtn_", block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("pinned",
                    pinned,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("invitelink", invite))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("invitelink", invite, block=False))
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("promote", promote))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("promote", promote, block=False))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(promote_button, pattern=r"admin_"))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("fullpromote", fullpromote))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("lowpromote", lowpromote))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("midpromote", midpromote))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("setanon", promoteanon))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("demote", demote))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("middemote", middemote))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unsetanon", demoteanon))
+    CallbackQueryHandler(promote_button, pattern=r"admin_", block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("fullpromote", fullpromote, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("lowpromote", lowpromote, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("midpromote", midpromote, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("setanon", promoteanon, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("demote", demote, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("middemote", middemote, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unsetanon", demoteanon, block=False))
 
-CUTIEPII_PTB.add_handler(CommandHandler("title", set_title))
+CUTIEPII_PTB.add_handler(CommandHandler("title", set_title, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("admincache",
                    refresh_admin,
-                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+                   filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
 
 __help__ = """
 *User Commands*:

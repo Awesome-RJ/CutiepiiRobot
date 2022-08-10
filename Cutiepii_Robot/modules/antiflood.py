@@ -396,12 +396,12 @@ __mod_name__ = "Anti-Flood"
 CUTIEPII_PTB.add_handler(
     MessageHandler(
         filters.ALL & (~filters.StatusUpdate.ALL) & filters.ChatType.GROUPS,
-        check_flood))
+        check_flood, block=False))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("setflood", set_flood, filters=filters.ChatType.GROUPS))
+    CommandHandler("setflood", set_flood, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler(
-    "setfloodmode", set_flood_mode))  # , filters.ChatType.GROUPS)
+    "setfloodmode", set_flood_mode, block=False))  # , filters.ChatType.GROUPS)
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(flood_button, pattern=r"unmute_flooder"))
+    CallbackQueryHandler(flood_button, pattern=r"unmute_flooder", block=False))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("flood", flood, filters.ChatType.GROUPS))
+    CommandHandler("flood", flood, filters.ChatType.GROUPS, block=False))

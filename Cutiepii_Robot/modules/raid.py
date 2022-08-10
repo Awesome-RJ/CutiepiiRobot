@@ -279,12 +279,12 @@ async def raidactiontime(update: Update,
             "Unknown time given, give me something like 5m or 1h",
             parse_mode=ParseMode.HTML)
 
-CUTIEPII_PTB.add_handler(CommandHandler("raid", setRaid, block=bool))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(enable_raid_cb, pattern=r"enable_raid="))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(disable_raid_cb, pattern=r"disable_raid="))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(disable_raid_cb, pattern=r"cancel_raid="))
-CUTIEPII_PTB.add_handler(CommandHandler("raidtime", raidtime, block=bool))
-CUTIEPII_PTB.add_handler(CommandHandler("raidactiontime", raidactiontime, block=bool))
+CUTIEPII_PTB.add_handler(CommandHandler("raid", setRaid, block=False))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(enable_raid_cb, pattern=r"enable_raid=", block=False))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(disable_raid_cb, pattern=r"disable_raid=", block=False))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(disable_raid_cb, pattern=r"cancel_raid=", block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("raidtime", raidtime, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("raidactiontime", raidactiontime, block=False))
 
 
 

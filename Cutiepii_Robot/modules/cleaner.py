@@ -240,18 +240,18 @@ async def bluetext_ignore_list(update: Update,
     return
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("cleanblue", set_blue_text_must_click))
-CUTIEPII_PTB.add_handler(CommandHandler("ignoreblue", add_bluetext_ignore))
+CUTIEPII_PTB.add_handler(CommandHandler("cleanblue", set_blue_text_must_click, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("ignoreblue", add_bluetext_ignore, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("unignoreblue",
-                                        remove_bluetext_ignore))
+                                        remove_bluetext_ignore, block=False))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("gignoreblue", add_bluetext_ignore_global))
+    CommandHandler("gignoreblue", add_bluetext_ignore_global, block=False))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("ungignoreblue", remove_bluetext_ignore_global))
-CUTIEPII_PTB.add_handler(CommandHandler("listblue", bluetext_ignore_list))
+    CommandHandler("ungignoreblue", remove_bluetext_ignore_global, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("listblue", bluetext_ignore_list, block=False))
 CUTIEPII_PTB.add_handler(
     MessageHandler(filters.COMMAND & filters.ChatType.GROUPS,
-                   clean_blue_text_must_click))
+                   clean_blue_text_must_click, block=False))
 
 __mod_name__ = "Cleaning"
 

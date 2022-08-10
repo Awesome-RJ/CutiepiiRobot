@@ -76,7 +76,7 @@ async def shell(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
 
 
-CUTIEPII_PTB.add_handler(CommandHandler(["sh"], shell))
+CUTIEPII_PTB.add_handler(CommandHandler(["sh"], shell, block=False))
 
 __mod_name__ = "Shell"
 __command_list__ = ["sh"]

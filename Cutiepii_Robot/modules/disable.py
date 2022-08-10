@@ -306,13 +306,13 @@ if is_module_loaded(FILENAME):
     """
 
     CUTIEPII_PTB.add_handler(CommandHandler(
-        "disable", disable))  # , filters=filters.ChatType.GROUPS)
+        "disable", disable, block=False))  # , filters=filters.ChatType.GROUPS)
     CUTIEPII_PTB.add_handler(CommandHandler(
-        "enable", enable))  # , filters=filters.ChatType.GROUPS)
+        "enable", enable, block=False))  # , filters=filters.ChatType.GROUPS)
     CUTIEPII_PTB.add_handler(CommandHandler(
-        ["cmds", "disabled"], commands))  # , filters=filters.ChatType.GROUPS)
+        ["cmds", "disabled"], commands, block=False))  # , filters=filters.ChatType.GROUPS)
     CUTIEPII_PTB.add_handler(CommandHandler(
-        "listcmds", list_cmds))  # , filters=filters.ChatType.GROUPS)
+        "listcmds", list_cmds, block=False))  # , filters=filters.ChatType.GROUPS)
 
 else:
     DisableAbleCommandHandler = CommandHandler

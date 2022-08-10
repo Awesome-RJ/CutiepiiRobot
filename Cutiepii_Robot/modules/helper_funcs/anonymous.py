@@ -140,4 +140,4 @@ async def anon_callback_handler1(upd: Update):
     else:
         callback.answer("This isn't for ya")
 
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(anon_callback_handler1, pattern=r"anoncb"))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(anon_callback_handler1, pattern=r"anoncb", block=False))

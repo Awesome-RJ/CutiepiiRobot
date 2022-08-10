@@ -213,10 +213,10 @@ def __migrate__(old_chat_id, new_chat_id):
 
 CUTIEPII_PTB.add_handler(
     CommandHandler(["broadcastall", "broadcastusers", "broadcastgroups"],
-                   broadcast))
+                   broadcast, block=False))
 CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.ALL & filters.ChatType.GROUPS, log_user))
+    MessageHandler(filters.ALL & filters.ChatType.GROUPS, log_user, block=False))
 #CUTIEPII_PTB.add_handler(MessageHandler(filters.ALL & filters.ChatType.GROUPS, chat_checker))
-CUTIEPII_PTB.add_handler(CommandHandler("groups", chats))
+CUTIEPII_PTB.add_handler(CommandHandler("groups", chats, block=False))
 
 __mod_name__ = "Users"

@@ -816,42 +816,42 @@ CUTIEPII_PTB.add_handler(
     CommandHandler(["swarn", "dwarn", "dswarn", "warn"],
                    warn_user,
                    filters=filters.ChatType.GROUPS,
-                   block=bool))
+                   block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler(["resetwarn", "resetwarns"],
                    reset_warns,
                    filters=filters.ChatType.GROUPS,
-                   block=bool))
-#CUTIEPII_PTB.add_handler(CommandHandler(["rmwarn", "unwarn"], remove_warns, filters=filters.ChatType.GROUPS, block=bool))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"rm_warn"))
+                   block=False))
+#CUTIEPII_PTB.add_handler(CommandHandler(["rmwarn", "unwarn"], remove_warns, filters=filters.ChatType.GROUPS, block=False)
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"rm_warn", block=False))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("warns", warns, filters=filters.ChatType.GROUPS))
+    DisableAbleCommandHandler("warns", warns, filters=filters.ChatType.GROUPS, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("addwarn",
                    add_warn_filter,
                    filters=filters.ChatType.GROUPS,
-                   block=bool))
+                   block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler(["nowarn", "stopwarn"],
                    remove_warn_filter,
                    filters=filters.ChatType.GROUPS,
-                   block=bool))
+                   block=False))
 CUTIEPII_PTB.add_handler(
     DisableAbleCommandHandler(["warnlist", "warnfilters"],
                               list_warn_filters,
                               filters=filters.ChatType.GROUPS,
-                              admin_ok=True))
+                              admin_ok=True, block=False))
 CUTIEPII_PTB.add_handler(
     MessageHandler(
         filters.TEXT & filters.ChatType.GROUPS &
-        (~filters.UpdateType.EDITED_MESSAGE), reply_filter))
+        (~filters.UpdateType.EDITED_MESSAGE), reply_filter, block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("warnlimit",
                    set_warn_limit,
                    filters=filters.ChatType.GROUPS,
-                   block=bool))
+                   block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("strongwarn",
                    set_warn_strength,
                    filters=filters.ChatType.GROUPS,
-                   block=bool))
+                   block=False))

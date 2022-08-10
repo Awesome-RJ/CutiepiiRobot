@@ -214,4 +214,4 @@ def perm_callback_check(upd: Update, _: Ctx):
 
     return cb[1](cb[0][0], cb[0][1])  # return func(update, context)
 
-CUTIEPII_PTB.add_handler(CBHandler(perm_callback_check, pattern = "anonCB"))
+CUTIEPII_PTB.add_handler(CBHandler(perm_callback_check, pattern = "anonCB", block=False))

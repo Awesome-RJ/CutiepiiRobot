@@ -592,13 +592,13 @@ Locking bots will stop non-admins from adding bots to the chat.
 
 __mod_name__ = "Locks"
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("locktypes", locktypes))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("locktypes", locktypes, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("lock",
-                                        lock))  # , filters=Filters.group)
+                                        lock, block=False))  # , filters=Filters.group)
 CUTIEPII_PTB.add_handler(CommandHandler("unlock",
-                                        unlock))  # , filters=Filters.group)
+                                        unlock, block=False))  # , filters=Filters.group)
 CUTIEPII_PTB.add_handler(CommandHandler(
-    "locks", list_locks))  # , filters=Filters.group)
+    "locks", list_locks, block=False))  # , filters=Filters.group)
 CUTIEPII_PTB.add_handler(
     MessageHandler(filters.ALL & filters.ChatType.GROUPS, del_lockables),
-    PERM_GROUP)
+    PERM_GROUP, block=False)

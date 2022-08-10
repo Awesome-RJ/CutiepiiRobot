@@ -1090,13 +1090,13 @@ When marked as AFK, any mentions will be replied to with a message stating that 
 
 """
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("setbio", set_about_bio))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("bio", about_bio))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("id", get_id))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("gifid", gifid))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("info", info))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("setme", set_about_me))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("me", about_me))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("setbio", set_about_bio, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("bio", about_bio, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("id", get_id, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("gifid", gifid, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("info", info, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("setme", set_about_me, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("me", about_me, block=False))
 
 __mod_name__ = "Info & AFK"
 __command_list__ = ["setbio", "bio", "setme", "me", "info"]

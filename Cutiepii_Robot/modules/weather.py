@@ -243,4 +243,4 @@ async def _(event):
             await event.reply(file=out_file)
 
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("weather", weather))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("weather", weather), block=False)
