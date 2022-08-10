@@ -64,7 +64,7 @@ if is_module_loaded(FILENAME):
         def __init__(self,
                      command,
                      callback,
-                     block=bool,
+                     block=False,
                      admin_ok=False,
                      **kwargs):
             super().__init__(command, callback, **kwargs)
@@ -116,7 +116,7 @@ if is_module_loaded(FILENAME):
         def __init__(self,
                      pattern,
                      callback,
-                     block=bool,
+                     block=False,
                      friendly="",
                      **kwargs):
             super().__init__(pattern, callback, **kwargs)
