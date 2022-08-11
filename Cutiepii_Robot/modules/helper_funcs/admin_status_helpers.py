@@ -21,18 +21,18 @@ SUPPORT_USERS = SUPPORT_USERS + SUDO_USERS
 
 
 class AdminPerms(Enum):
-	CAN_RESTRICT_MEMBERS = 'can_restrict_members'
-	CAN_PROMOTE_MEMBERS = 'can_promote_members'
-	CAN_INVITE_USERS = 'can_invite_users'
-	CAN_DELETE_MESSAGES = 'can_delete_messages'
-	CAN_CHANGE_INFO = 'can_change_info'
-	CAN_PIN_MESSAGES = 'can_pin_messages'
-	IS_ANONYMOUS = 'is_anonymous'
+	CAN_RESTRICT_MEMBERS = 'Can Restrict Members'
+	CAN_PROMOTE_MEMBERS = 'Can Promote Members'
+	CAN_INVITE_USERS = 'Can Invite Users'
+	CAN_DELETE_MESSAGES = 'Can Delete Messages'
+	CAN_CHANGE_INFO = 'Can Change Info'
+	CAN_PIN_MESSAGES = 'Can Pin Messages'
+	IS_ANONYMOUS = 'Is Anonymous'
 
 
 class ChatStatus(Enum):
-	CREATOR = "creator"
-	ADMIN = "administrator"
+	CREATOR = "Creator"
+	ADMIN = "Administrator"
 
 
 # class SuperUsers(Enum):
@@ -69,7 +69,7 @@ def edit_anon_msg(msg: Message, text: str):
 
 
 async def user_is_not_admin_errmsg(msg: Message, permission: AdminPerms = None, cb: CallbackQuery = None):
-	errmsg = f"You lack the following permission for this command:\n`{permission.value}`!"
+	errmsg = f"You are missing the following rights to use this command:\n*{permission.value}*"
 	if cb:
 		return cb.answer(errmsg, show_alert = True)
 	return await msg.reply_text(errmsg, parse_mode = ParseMode.MARKDOWN)
