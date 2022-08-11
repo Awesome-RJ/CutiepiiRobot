@@ -228,10 +228,10 @@ async def send_help(context: CallbackContext,
 
 
 async def test(update: Update):
-    # pprint(eval(str(update)))
+    # pLOGGER.debug(eval(str(update)))
     # await update.effective_message.reply_text("Hola tester! _I_ *have* `markdown`", parse_mode=ParseMode.MARKDOWN)
     await update.effective_message.reply_text("This person edited a message")
-    print(update.effective_message)
+    LOGGER.debug(update.effective_message)
 
 
 async def start(update: Update, context: CallbackContext):
@@ -703,7 +703,7 @@ def main():
 try:
     ubot.start()
 except BaseException:
-    print("Userbot Error! Have you added a STRING_SESSION in deploying??")
+    LOGGER.debug("Userbot Error! Have you added a STRING_SESSION in deploying??")
     sys.exit(1)
 """
 

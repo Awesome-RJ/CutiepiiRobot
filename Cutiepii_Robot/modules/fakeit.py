@@ -37,7 +37,7 @@ from faker.providers import internet
 from telethon import events
 
 from Cutiepii_Robot.utils.pluginhelpers import is_admin
-from Cutiepii_Robot import telethn, SUPPORT_CHAT
+from Cutiepii_Robot import telethn, SUPPORT_CHAT, LOGGER
 
 
 @telethn.on(events.NewMessage(pattern="/fakegen$"))
@@ -48,7 +48,7 @@ async def hi(event):
         await event.reply("`You Should Be Admin To Do This!`")
         return
     fake = Faker()
-    print("FAKE DETAILS GENERATED\n")
+    LOGGER.debug("FAKE DETAILS GENERATED\n")
     name = str(fake.name())
     fake.add_provider(internet)
     address = str(fake.address())

@@ -12,7 +12,7 @@ from uuid import uuid4
 
 from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import InlineKeyboardButton, CallbackQuery, Message, InlineKeyboardMarkup
-from Cutiepii_Robot import DEV_USERS, pgram, GBAN_LOGS, TEMP_DOWNLOAD_DIRECTORY
+from Cutiepii_Robot import DEV_USERS, pgram, GBAN_LOGS, TEMP_DOWNLOAD_DIRECTORY, LOGGER
 from Cutiepii_Robot.utils.db import get_collection
 
 AUTH_USERS = get_collection("AUTH_USERS")
@@ -147,7 +147,7 @@ async def take_screen_shot(video_file: str,
                            duration: int,
                            path: str = "") -> Optional[str]:
     """ take a screenshot """
-    print(
+    LOGGER.debug(
         "[[[Extracting a frame from %s ||| Video duration => %s]]]",
         video_file,
         duration,
@@ -157,7 +157,7 @@ async def take_screen_shot(video_file: str,
     command = f'''ffmpeg -ss {duration} -i "{video_file}" -vframes 1 "{thumb_image_path}"'''
     err = (await runcmd(command))[1]
     if err:
-        print(err)
+        LOGGER.debug(err)
     return thumb_image_path if os.path.exists(thumb_image_path) else None
 
 

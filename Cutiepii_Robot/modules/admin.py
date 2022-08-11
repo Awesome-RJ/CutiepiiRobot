@@ -1706,7 +1706,7 @@ async def permanent_pin(update: Update,
                 old_pin = f"https://t.me/{chat.username}/{get_permapin}"
             else:
                 old_pin = f"https://t.me/c/{str(chat.id)[4:]}/{get_permapin}"
-                print(old_pin)
+                LOGGER.debug(old_pin)
             await context.bot.send_message(
                 chat.id,
                 "*Cleanlinked error:*\nI can't pin messages here!\nMake sure I'm an admin and can pin messages.\n\nClean linked has been disabled, [The old permanent pinned message is here]({})"
@@ -1716,12 +1716,12 @@ async def permanent_pin(update: Update,
 
         if to_del:
             try:
-                print(message.message_id)
+                LOGGER.debug(message.message_id)
                 context.bot.deleteMessage(chat.id, message.message_id)
             except BadRequest:
                 await context.bot.send_message(
                     chat.id, "Cleanlinked error: cannot delete pinned msg")
-                print("Cleanlinked error: cannot delete pin msg")
+                LOGGER.debug("Cleanlinked error: cannot delete pin msg")
 
 
 @bot_admin_check(AdminPerms.CAN_PIN_MESSAGES)

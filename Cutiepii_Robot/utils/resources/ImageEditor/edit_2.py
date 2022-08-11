@@ -34,6 +34,8 @@ import shutil
 
 import cv2
 import numpy as np
+
+from Cutiepii_Robot import LOGGER
 from PIL import Image, ImageDraw, ImageEnhance
 
 
@@ -70,7 +72,7 @@ async def circle_with_bg(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("circle_with_bg-error - " + str(e))
+        LOGGER.debug("circle_with_bg-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -113,7 +115,7 @@ async def circle_without_bg(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("circle_without_bg-error - " + str(e))
+        LOGGER.debug("circle_without_bg-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -147,7 +149,7 @@ async def sticker(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("sticker-error - " + str(e))
+        LOGGER.debug("sticker-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -198,7 +200,7 @@ async def edge_curved(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("edge_curved-error - " + str(e))
+        LOGGER.debug("edge_curved-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -235,7 +237,7 @@ async def contrast(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("contrast-error - " + str(e))
+        LOGGER.debug("contrast-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -291,7 +293,7 @@ async def sepia_mode(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("sepia_mode-error - " + str(e))
+        LOGGER.debug("sepia_mode-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -337,7 +339,7 @@ async def pencil(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("pencil-error - " + str(e))
+        LOGGER.debug("pencil-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -396,7 +398,7 @@ async def cartoon(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("cartoon-error - " + str(e))
+        LOGGER.debug("cartoon-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:

@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import aiohttp
 
 from pyrogram import filters
-from Cutiepii_Robot import pgram
+from Cutiepii_Robot import pgram, LOGGER
 from Cutiepii_Robot.utils.errors import capture_err
 
 __mod_name__ = "Github"
@@ -75,5 +75,5 @@ async def github(_, message):
 **Followers:** `{followers}`
 **Following:** `{following}`"""
         except Exception as e:
-            print(e)
+            LOGGER.debug(e)
     await message.reply_photo(photo=avatar_url, caption=caption)

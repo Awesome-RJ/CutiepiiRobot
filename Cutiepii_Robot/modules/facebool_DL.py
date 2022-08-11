@@ -37,7 +37,7 @@ from datetime import datetime
 from telethon import events
 
 from Cutiepii_Robot.utils.pluginhelpers import is_admin
-from Cutiepii_Robot import telethn, SUPPORT_CHAT, CUTIEPII_PTB
+from Cutiepii_Robot import telethn, SUPPORT_CHAT, LOGGER
 
 
 def main(url, filename):
@@ -56,7 +56,7 @@ def download_video(quality, url, filename):
     with open(f"{filename}.mp4", "wb") as f:
         for data in file_size_request.iter_content(block_size):
             f.write(data)
-    print("\nVideo downloaded successfully.")
+    LOGGER.debug("\nVideo downloaded successfully.")
 
 
 @telethn.on(events.NewMessage(pattern="^/fbdl (.*)"))

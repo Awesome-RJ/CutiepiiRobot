@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import ast
 import threading
 
-from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot import CUTIEPII_PTB, LOGGER
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 from telegram.error import BadRequest, Forbidden
 from sqlalchemy import Boolean, Column, Integer, String, UnicodeText
@@ -558,10 +558,10 @@ def multi_fban_user(
         SESSION.add(r)
         counter += 1
         if str(str(counter)[-2:]) == "00":
-            print(user_id)
-            print(first_name)
-            print(reason)
-            print(counter)
+            LOGGER.debug(user_id)
+            LOGGER.debug(first_name)
+            LOGGER.debug(reason)
+            LOGGER.debug(counter)
     try:
         SESSION.commit()
     except:
@@ -570,7 +570,7 @@ def multi_fban_user(
     finally:
         SESSION.commit()
     __load_all_feds_banned()
-    print("Done")
+    LOGGER.debug("Done")
     return counter
 
 
@@ -690,7 +690,7 @@ def set_fed_log(fed_id, chat_id):
         )
         SESSION.merge(fed)
         SESSION.commit()
-        print(fed_log)
+        LOGGER.debug(fed_log)
         return True
 
 

@@ -49,13 +49,13 @@ def backup_now(_: Update, ctx: CallbackContext):
 
 @owner_plus
 async def stop_jobs(update: Update):
-    print(j.stop())
+    LOGGER.debug(j.stop())
     await update.effective_message.reply_text("Scheduler has been shut down")
 
 
 @owner_plus
 async def start_jobs(update: Update):
-    print(j.start())
+    LOGGER.debug(j.start())
     await update.effective_message.reply_text("Scheduler started")
 
 
@@ -85,10 +85,10 @@ async def backup_db(_: CallbackContext):
         return
     LOGGER.info("copying config, and logs to backup location")
     if os.path.exists('log.txt'):
-        print("logs copied")
+        LOGGER.debug("logs copied")
         shutil.copyfile('log.txt', f'{bkplocation}/log.txt')
     if os.path.exists('Cutiepii_Robot/config.py'):
-        print("config copied")
+        LOGGER.debug("config copied")
         shutil.copyfile('Cutiepii_Robot/config.py', f'{bkplocation}/config.py')
     LOGGER.info("zipping the backup")
     zipcmd = f"zip --password '{zip_pass}' {bkplocation} {bkplocation}/*"

@@ -33,6 +33,8 @@ import os
 import time
 import aiohttp
 
+from Cutiepii_Robot import LOGGER
+
 from Cutiepii_Robot.utils.pluginhelpers import humanbytes, time_formatter
 
 
@@ -97,12 +99,12 @@ ETA: {}""".format(
                             time_formatter(estimated_total_time),
                         )
                         if current_message not in [display_message, "empty"]:
-                            print(current_message)
+                            LOGGER.debug(current_message)
                             await event.edit(current_message,
                                              parse_mode="html")
 
                             display_message = current_message
                     except Exception as e:
-                        print("Error", e)
+                        LOGGER.debug("Error", e)
                         # logger.info(str(e))
         return await response.release()

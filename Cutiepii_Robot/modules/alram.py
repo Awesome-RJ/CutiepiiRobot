@@ -1,4 +1,5 @@
-from Cutiepii_Robot import mongodb, telethn
+from Cutiepii_Robot import LOGGER, mongodb, telethn
+
 from Cutiepii_Robot.events import register
 from telethon import *
 import dateparser
@@ -73,8 +74,8 @@ async def _(event):
                                    "DATE_ORDER": "YMD"
                                })
 
-    #print(time)
-    #print(present)
+    #LOGGER.debug(time)
+    #LOGGER.debug(present)
     if not time > present:
         await event.reply("Please enter valid date and time.")
         return
@@ -119,7 +120,7 @@ async def _(event):
 async def tikclock():
     chats = alarms.find({})
     for c in chats:
-        #print(c)
+        #LOGGER.debug(c)
         chat = c["chat"]
         user = c["user"]
         time = c["time"]
@@ -132,10 +133,10 @@ async def tikclock():
                                    })
 
         ttime = dateparser.parse(f"{time}", settings={"TIMEZONE": f"{zone}"})
-        #print(ttime)
-        #print(present)
+        #LOGGER.debug(ttime)
+        #LOGGER.debug(present)
         #print (zone)
-        #print(present>=ttime)
+        #LOGGER.debug(present>=ttime)
         if present > ttime:
             await telethn.send_message(
                 chat,

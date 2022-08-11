@@ -36,7 +36,7 @@ from pyrogram.types import (
     InlineKeyboardMarkup,
     Message,
 )
-from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot import CUTIEPII_PTB, LOGGER
 
 # By @TroJanzHEX
 from Cutiepii_Robot.utils.resources.ImageEditor.edit_1 import (
@@ -128,7 +128,7 @@ async def photo(client: pgram, message: Message):
             reply_to_message_id=message.reply_to_message.message_id,
         )
     except Exception as e:
-        print(f"photomarkup error - {str(e)}")
+        LOGGER.debug(f"photomarkup error - {str(e)}")
         if "USER_IS_BLOCKED" in str(e):
             return
         try:

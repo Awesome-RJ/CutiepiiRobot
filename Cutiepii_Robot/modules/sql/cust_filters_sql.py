@@ -33,6 +33,7 @@ import threading
 
 from sqlalchemy import Column, String, UnicodeText, Boolean, Integer, distinct, func
 
+from Cutiepii_Robot import LOGGER
 from Cutiepii_Robot.modules.helper_funcs.msg_types import Types
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
@@ -378,7 +379,7 @@ def __migrate_filters():
             else:
                 file_type = Types.TEXT
 
-            print(x.chat_id, x.keyword, x.reply, file_type.value)
+            LOGGER.debug(x.chat_id, x.keyword, x.reply, file_type.value)
             if file_type == Types.TEXT:
                 filt = CustomFilters(
                     str(x.chat_id), x.keyword, x.reply, file_type.value, None,

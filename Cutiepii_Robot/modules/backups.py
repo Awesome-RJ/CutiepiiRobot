@@ -285,9 +285,9 @@ async def export_data(update: Update,
     		content = "{}#=#{}|btn|{}".format(typefilt, filt.reply, buttons)
     	else:
     		content = "{}#=#{}".format(typefilt, filt.reply)
-    		print(content)
+    		LOGGER.debug(content)
     		export_filters[filters] = content
-    #print(export_filters)
+    #LOGGER.debug(export_filters)
 
     """
 
@@ -389,13 +389,13 @@ async def export_data(update: Update,
 
 # Temporary data
 def put_chat(chat_id, value, chat_data):
-    print(chat_data)
+    LOGGER.debug(chat_data)
     status = value is not False
     chat_data[chat_id] = {"backups": {"status": status, "value": value}}
 
 
 def get_chat(chat_id, chat_data):
-    print(chat_data)
+    LOGGER.debug(chat_data)
     try:
         return chat_data[chat_id]["backups"]
     except KeyError:

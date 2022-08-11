@@ -48,7 +48,7 @@ from telethon.tl import functions, types
 from telethon import *
 from telethon.tl.types import *
 
-from Cutiepii_Robot import telethn, CUTIEPII_PTB
+from Cutiepii_Robot import telethn, LOGGER
 from Cutiepii_Robot.events import register
 """
 trans = SyncTranslator()
@@ -131,7 +131,7 @@ async def _(event):
         await event.reply(f"Open with: [Google Maps]({gm})",
                           link_preview=False)
     except Exception as e:
-        print(e)
+        LOGGER.debug(e)
         await event.reply("I can't find that")
 
 
@@ -301,7 +301,7 @@ async def apk(e):
 
 def progress(current, total):
     """Calculate and return the download progress with given arguments."""
-    print(
+    LOGGER.debug(
         f"Downloaded {current} of {total}\nCompleted {current / total * 100}")
 
 

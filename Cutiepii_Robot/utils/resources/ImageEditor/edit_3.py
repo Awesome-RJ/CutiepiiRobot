@@ -33,6 +33,7 @@ import os
 import shutil
 
 from PIL import Image, ImageOps
+from Cutiepii_Robot import LOGGER
 
 
 async def black_border(client, message):
@@ -62,7 +63,7 @@ async def black_border(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("black_border-error - " + str(e))
+        LOGGER.debug("black_border-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -99,7 +100,7 @@ async def green_border(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("green_border-error - " + str(e))
+        LOGGER.debug("green_border-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -136,7 +137,7 @@ async def blue_border(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("blue_border-error - " + str(e))
+        LOGGER.debug("blue_border-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -173,7 +174,7 @@ async def red_border(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("red_border-error - " + str(e))
+        LOGGER.debug("red_border-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:

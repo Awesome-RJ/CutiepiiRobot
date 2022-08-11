@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import random
 
-from Cutiepii_Robot import pgram
+from Cutiepii_Robot import pgram, LOGGER
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.modules.mongo.couples_mongo import get_couple, save_couple
 from pyrogram import filters
@@ -99,7 +99,7 @@ __New couple of the day may be chosen at 12AM {tomorrow}__"""
             await pgram.send_message(message.chat.id,
                                      text=couple_selection_message)
     except Exception as e:
-        print(e)
+        LOGGER.debug(e)
         await message.reply_text(e)
 
 

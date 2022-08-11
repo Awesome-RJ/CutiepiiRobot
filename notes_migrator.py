@@ -4,6 +4,9 @@ from enum import IntEnum, unique
 from typing import Optional, Union
 
 from telegram import InlineKeyboardMarkup
+import Cutiepii_Robot
+
+from Cutiepii_Robot import LOGGER
 
 from Cutiepii_Robot.modules.sql.notes_sql import SESSION, Notes
 
@@ -124,7 +127,7 @@ def update_note(text: str) -> str:
 
 
 def migrate_notes():
-    print("starting notes migration")
+    LOGGER.debug("starting notes migration")
     with threading.RLock():
 
         all_notes = SESSION.query(Notes).all()
@@ -134,4 +137,4 @@ def migrate_notes():
 
         SESSION.commit()
 
-    print("finished notes migration")
+    LOGGER.debug("finished notes migration")

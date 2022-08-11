@@ -38,7 +38,7 @@ import traceback
 import aiohttp
 from telethon import events
 
-from Cutiepii_Robot import telethn, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT, CUTIEPII_PTB
+from Cutiepii_Robot import telethn, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT, LOGGER
 from Cutiepii_Robot.modules.urluploader import download_file
 from Cutiepii_Robot.utils.pluginhelpers import humanbytes, progress
 
@@ -60,7 +60,7 @@ async def send_to_transfersh_async(file):
     final_date = get_date_in_two_weeks()
     file_name = os.path.basename(file)
 
-    print(f"\nUploading file: {file_name} (size of the file: {size_of_file})")
+    LOGGER.debug(f"\nUploading file: {file_name} (size of the file: {size_of_file})")
     url = "https://transfer.sh/"
 
     with open(file, "rb") as f:
@@ -68,7 +68,7 @@ async def send_to_transfersh_async(file):
                 url, data={str(file): f}) as response:
             download_link = await response.text()
 
-    print(
+    LOGGER.debug(
         f"Link to download file(will be saved till {final_date}):\n{download_link}"
     )
 
@@ -98,7 +98,7 @@ async def tsh(event):
                 ).create_task(progress(d, t, ilk, start, "Downloading...")))
         except Exception as e:
             traceback.print_exc()
-            print(e)
+            LOGGER.debug(e)
             await event.respond(f"Downloading Failed\n\n**Error:** {e}")
 
         await ilk.delete()
@@ -114,7 +114,7 @@ async def tsh(event):
             )
         except Exception as e:
             traceback.print_exc()
-            print(e)
+            LOGGER.debug(e)
             await event.respond(f"Uploading Failed\n\n**Error:** {e}")
 
     raise events.StopPropagation
@@ -132,7 +132,7 @@ async def tmp(event):
                 ).create_task(progress(d, t, ilk, start, "Downloading...")))
         except Exception as e:
             traceback.print_exc()
-            print(e)
+            LOGGER.debug(e)
             await event.respond(f"Downloading Failed\n\n**Error:** {e}")
 
         await ilk.delete()
@@ -147,7 +147,7 @@ async def tmp(event):
             )
         except Exception as e:
             traceback.print_exc()
-            print(e)
+            LOGGER.debug(e)
             await event.respond(f"Uploading Failed\n\n**Error:** {e}")
 
     raise events.StopPropagation
@@ -165,7 +165,7 @@ async def up(event):
                                     os.path.basename(url.text))
             await download_file(url.text, filename, ilk, start, telethn)
         except Exception as e:
-            print(e)
+            LOGGER.debug(e)
             await event.respond(f"Downloading Failed\n\n**Error:** {e}")
 
         await ilk.delete()
@@ -190,7 +190,7 @@ async def up(event):
         except Exception as e:
             traceback.print_exc()
 
-            print(e)
+            LOGGER.debug(e)
             await event.respond(f"Uploading Failed\n\n**Error:** {e}")
 
         await orta.delete()

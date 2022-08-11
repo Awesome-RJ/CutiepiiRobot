@@ -38,7 +38,7 @@ import numpy as np
 import requests
 from PIL import Image, ImageDraw, ImageOps
 
-from Cutiepii_Robot import REM_BG_API_KEY
+from Cutiepii_Robot import REM_BG_API_KEY, LOGGER
 
 
 async def rotate_90(client, message):
@@ -68,7 +68,7 @@ async def rotate_90(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("rotate_90-error - " + str(e))
+        LOGGER.debug("rotate_90-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -105,7 +105,7 @@ async def rotate_180(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("rotate_180-error - " + str(e))
+        LOGGER.debug("rotate_180-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -142,7 +142,7 @@ async def rotate_270(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("rotate_270-error - " + str(e))
+        LOGGER.debug("rotate_270-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -198,7 +198,7 @@ async def round_sticker(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("round_sticker-error - " + str(e))
+        LOGGER.debug("round_sticker-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -235,7 +235,7 @@ async def inverted(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("inverted-error - " + str(e))
+        LOGGER.debug("inverted-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -291,7 +291,7 @@ async def removebg_plain(client, message):
                 disable_web_page_preview=True,
             )
     except Exception as e:
-        print("removebg_plain-error - " + str(e))
+        LOGGER.debug("removebg_plain-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -347,7 +347,7 @@ async def removebg_white(client, message):
                 disable_web_page_preview=True,
             )
     except Exception as e:
-        print("removebg_white-error - " + str(e))
+        LOGGER.debug("removebg_white-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -403,7 +403,7 @@ async def removebg_sticker(client, message):
                 disable_web_page_preview=True,
             )
     except Exception as e:
-        print("removebg_sticker-error - " + str(e))
+        LOGGER.debug("removebg_sticker-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:

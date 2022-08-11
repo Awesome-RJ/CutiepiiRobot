@@ -316,22 +316,22 @@ finally:
     )
 
 # Credits Logger
-print(
+LOGGER.debug(
     "[CUTIEPII] CUTIEPII Is Starting. | Yūki • Black Knights Union Project | Licensed Under GPLv3."
 )
-print(
+LOGGER.debug(
     "[CUTIEPII] Cutie Cutie! Successfully Connected With A  Yūki • Data Center • Mumbai"
 )
-print(
+LOGGER.debug(
     "[CUTIEPII] Project Maintained By: github.com/Awesome-RJ (https://telegram.dog/Awesome_Rj)"
 )
 
-print("[CUTIEPII]: Telegraph Installing")
+LOGGER.debug("[CUTIEPII]: Telegraph Installing")
 telegraph = Telegraph()
-print("[CUTIEPII]: Telegraph Account Creating")
+LOGGER.debug("[CUTIEPII]: Telegraph Account Creating")
 telegraph.create_account(short_name="Cutiepii")
 #------------------------------------------------------------------
-print("[CUTIEPII]: TELETHON CLIENT STARTING")
+LOGGER.debug("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 
 CUTIEPII_PTB = (
@@ -342,7 +342,7 @@ CUTIEPII_PTB = (
 
 # asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
 #------------------------------------------------------------------
-print("[CUTIEPII]: PYROGRAM CLIENT STARTING")
+LOGGER.debug("[CUTIEPII]: PYROGRAM CLIENT STARTING")
 name = TOKEN.split(":")[0]
 pgram = Client(
     name,
@@ -353,23 +353,23 @@ pgram = Client(
                 os.cpu_count() + 4),
     in_memory=True,
 )
-print(
+LOGGER.debug(
     "[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
 mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
 motor = AsyncIOMotorClient(MONGO_DB_URL)
 db = motor[MONGO_DB]
 engine = AIOEngine(motor, MONGO_DB)
-print("[INFO]: INITIALZING AIOHTTP SESSION")
+LOGGER.debug("[INFO]: INITIALZING AIOHTTP SESSION")
 aiohttpsession = ClientSession()
 # ARQ Client
-print("[INFO]: INITIALIZING ARQ CLIENT")
+LOGGER.debug("[INFO]: INITIALIZING ARQ CLIENT")
 arq = ARQ("https://arq.hamker.in", "ERUOGT-KHSTDT-RUYZKQ-FZNSHO-ARQ",
           aiohttpsession)
-print(
+LOGGER.debug(
     "[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • PostgreSQL Database"
 )
 ubot = TelegramClient(StringSession(STRING_SESSION), APP_ID, APP_HASH)
-print(
+LOGGER.debug(
     "[CUTIEPII]: Connecting To Yūki • Cutiepii Userbot (https://telegram.dog/Awesome_Cutiepii)"
 )
 timeout = Timeout(40)

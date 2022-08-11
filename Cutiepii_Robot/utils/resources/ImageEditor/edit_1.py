@@ -32,6 +32,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import os
 import shutil
 import cv2
+
+from Cutiepii_Robot import LOGGER
 from PIL import Image, ImageEnhance, ImageFilter
 
 
@@ -62,7 +64,7 @@ async def bright(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("bright-error - " + str(e))
+        LOGGER.debug("bright-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -100,7 +102,7 @@ async def mix(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("mix-error - " + str(e))
+        LOGGER.debug("mix-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -137,7 +139,7 @@ async def black_white(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("black_white-error - " + str(e))
+        LOGGER.debug("black_white-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -174,7 +176,7 @@ async def normal_blur(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("normal_blur-error - " + str(e))
+        LOGGER.debug("normal_blur-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -211,7 +213,7 @@ async def g_blur(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("g_blur-error - " + str(e))
+        LOGGER.debug("g_blur-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -248,7 +250,7 @@ async def box_blur(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("box_blur-error - " + str(e))
+        LOGGER.debug("box_blur-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:

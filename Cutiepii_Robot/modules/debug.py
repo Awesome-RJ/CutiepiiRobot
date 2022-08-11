@@ -35,7 +35,7 @@ import datetime
 from telethon import events
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
-from Cutiepii_Robot import telethn, CUTIEPII_PTB
+from Cutiepii_Robot import telethn, CUTIEPII_PTB, LOGGER
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 
 DEBUG_MODE = False
@@ -46,7 +46,7 @@ async def debug(update: Update):
     global DEBUG_MODE
     message = update.effective_message
     args = message.text.split(" " or None, 1)
-    print(DEBUG_MODE)
+    LOGGER.debug(DEBUG_MODE)
     if len(args) > 1:
         if args[1] in ("yes", "on"):
             DEBUG_MODE = True
@@ -65,7 +65,7 @@ async def debug(update: Update):
 @telethn.on(events.NewMessage(pattern="[/!].*"))
 async def i_do_nothing_yes(event):
     if DEBUG_MODE:
-        print(f"-{event.sender_id} ({event.chat_id}) : {event.text}")
+        LOGGER.debug(f"-{event.sender_id} ({event.chat_id}) : {event.text}")
         if os.path.exists("updates.txt"):
             with open("updates.txt", "r") as f:
                 text = f.read()

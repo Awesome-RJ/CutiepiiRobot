@@ -15,7 +15,7 @@ from telegram.helpers import mention_html
 from urllib.parse import quote as urlquote
 from bs4 import BeautifulSoup
 
-from Cutiepii_Robot import REDIS, CUTIEPII_PTB, telethn
+from Cutiepii_Robot import REDIS, CUTIEPII_PTB, telethn, LOGGER
 from Cutiepii_Robot.events import register as Cutiepii
 from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 
@@ -179,7 +179,7 @@ async def kang(update: Update, context: CallbackContext) -> None:
 
             except OSError as e:
 
-                print(e)
+                LOGGER.debug(e)
                 return
 
             except TelegramError as e:
@@ -231,7 +231,7 @@ async def kang(update: Update, context: CallbackContext) -> None:
                         reply_markup=edited_keyboard,
                         parse_mode=ParseMode.HTML,
                     )
-                print(e)
+                LOGGER.debug(e)
 
         elif is_animated:
             packname = "animated" + str(
@@ -295,7 +295,7 @@ async def kang(update: Update, context: CallbackContext) -> None:
                         reply_markup=edited_keyboard,
                         parse_mode=ParseMode.HTML,
                     )
-                print(e)
+                LOGGER.debug(e)
         else:
             packname = "video" + str(user.id) + "_by_" + context.bot.username
             packname_found = 0
@@ -357,7 +357,7 @@ async def kang(update: Update, context: CallbackContext) -> None:
                         reply_markup=edited_keyboard,
                         parse_mode=ParseMode.HTML,
                     )
-                print(e)
+                LOGGER.debug(e)
 
     elif args:
         try:
@@ -407,7 +407,7 @@ async def kang(update: Update, context: CallbackContext) -> None:
             )
         except OSError as e:
             await msg.reply_text("I can only kang images m8.")
-            print(e)
+            LOGGER.debug(e)
             return
         except TelegramError as e:
             if e.message == "Stickerset_invalid":
@@ -452,7 +452,7 @@ async def kang(update: Update, context: CallbackContext) -> None:
                     reply_markup=edited_keyboard,
                     parse_mode=ParseMode.HTML,
                 )
-            print(e)
+            LOGGER.debug(e)
     else:
         packs_text = "*Please reply to a sticker, or image to kang it!*\n"
         if packnum > 0:
@@ -531,7 +531,7 @@ async def makepack_internal(context,
             )
 
     except TelegramError as e:
-        print(e)
+        LOGGER.debug(e)
         if e.message == "Sticker set name is already occupied":
             await msg.reply_text(
                 "<b>Your Sticker Pack is already created!</b>"

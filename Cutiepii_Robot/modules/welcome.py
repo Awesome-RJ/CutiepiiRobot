@@ -477,7 +477,7 @@ async def new_member(
                 # Get information
                 image = captcha["image"]
                 characters = captcha["characters"]
-                # print(characters)
+                # LOGGER.debug(characters)
                 fileobj = BytesIO()
                 fileobj.name = f"captcha_{new_mem.id}.png"
                 image.save(fp=fileobj)
@@ -516,7 +516,7 @@ async def new_member(
                 nums.append(characters)
                 random.shuffle(nums)
                 to_append = []
-                # print(nums)
+                # LOGGER.debug(nums)
                 for a in nums:
                     to_append.append(
                         InlineKeyboardButton(
@@ -1121,7 +1121,7 @@ async def user_captcha_button(update: Update,
     user = update.effective_user
     query = update.callback_query
     bot = context.bot
-    # print(query.data)
+    # LOGGER.debug(query.data)
     match = re.match(r"user_captchajoin_\(([\d\-]+),(\d+)\)_\((\d{4})\)",
                      query.data)
     message = update.effective_message

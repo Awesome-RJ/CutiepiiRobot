@@ -2,7 +2,7 @@ import sys
 import io
 import traceback
 
-from Cutiepii_Robot import telethn
+from Cutiepii_Robot import telethn, LOGGER
 from telethon.sync import events
 
 # telethon eval
@@ -60,7 +60,7 @@ async def aexec(code, smessatatus):
     message = event = smessatatus
 
     def p(_x):
-        return print(slitu.yaml_format(_x))
+        return LOGGER.debug(slitu.yaml_format(_x))
 
     reply = await event.get_reply_message()
     exec("async def __aexec(message, reply, telethn, p): " +

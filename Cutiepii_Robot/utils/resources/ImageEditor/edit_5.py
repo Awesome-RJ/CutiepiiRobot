@@ -33,6 +33,7 @@ import asyncio
 import os
 import shutil
 
+from Cutiepii_Robot import LOGGER
 
 async def normalglitch_1(client, message):
     try:
@@ -66,7 +67,7 @@ async def normalglitch_1(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("normalglitch_1-error - " + str(e))
+        LOGGER.debug("normalglitch_1-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -108,7 +109,7 @@ async def normalglitch_2(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("normalglitch_2-error - " + str(e))
+        LOGGER.debug("normalglitch_2-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -150,7 +151,7 @@ async def normalglitch_3(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("normalglitch_3-error - " + str(e))
+        LOGGER.debug("normalglitch_3-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -192,7 +193,7 @@ async def normalglitch_4(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("normalglitch_4-error - " + str(e))
+        LOGGER.debug("normalglitch_4-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -234,7 +235,7 @@ async def normalglitch_5(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("normalglitch_5-error - " + str(e))
+        LOGGER.debug("normalglitch_5-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -277,7 +278,7 @@ async def scanlineglitch_1(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("scanlineglitch_1-error - " + str(e))
+        LOGGER.debug("scanlineglitch_1-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -320,7 +321,7 @@ async def scanlineglitch_2(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("scanlineglitch_2-error - " + str(e))
+        LOGGER.debug("scanlineglitch_2-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -363,7 +364,7 @@ async def scanlineglitch_3(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("scanlineglitch_3-error - " + str(e))
+        LOGGER.debug("scanlineglitch_3-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -406,7 +407,7 @@ async def scanlineglitch_4(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("scanlineglitch_4-error - " + str(e))
+        LOGGER.debug("scanlineglitch_4-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:
@@ -449,7 +450,7 @@ async def scanlineglitch_5(client, message):
         except Exception:
             pass
     except Exception as e:
-        print("scanlineglitch_5-error - " + str(e))
+        LOGGER.debug("scanlineglitch_5-error - " + str(e))
         if "USER_IS_BLOCKED" in str(e):
             return
         try:

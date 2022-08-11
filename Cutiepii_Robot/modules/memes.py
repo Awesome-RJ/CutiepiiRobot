@@ -53,7 +53,7 @@ from pyrogram import filters
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.carbon import make_carbon
 from Cutiepii_Robot.events import register
-from Cutiepii_Robot import telethn, ubot, pgram, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT
+from Cutiepii_Robot import telethn, ubot, pgram, TEMP_DOWNLOAD_DIRECTORY, SUPPORT_CHAT, LOGGER
 
 nltk.download("punkt")
 nltk.download("averaged_perceptron_tagger")
@@ -639,7 +639,7 @@ async def _(event):
     if event.fwd_from:
         return
 
-    input_str = print(randrange(6))
+    input_str = LOGGER.debug(randrange(6))
     r = await event.reply(file=InputMediaDice("🏀"))
     if input_str:
         with contextlib.suppress(BaseException):

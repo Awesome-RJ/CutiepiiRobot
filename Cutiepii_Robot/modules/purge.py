@@ -40,7 +40,7 @@ from telegram import Update
 from telegram.constants import ParseMode
 from telegram.ext import CallbackContext, CommandHandler, filters
 
-from Cutiepii_Robot import telethn, CUTIEPII_PTB, BOT_ID
+from Cutiepii_Robot import telethn, CUTIEPII_PTB, BOT_ID, LOGGER
 from Cutiepii_Robot.modules.sql.clear_cmd_sql import get_clearcmd
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.telethn.chatstatus import (
@@ -103,7 +103,7 @@ async def delete_messages(event):
 
     # async for user in telethn.iter_participants(
     #         event.chat_id, filter=ChannelParticipantsAdmins):
-    #     print(user)
+    #     LOGGER.debug(user)
 
     if event.sender_id is None:
         return
@@ -123,11 +123,11 @@ async def delete_messages(event):
     if not message:
         await event.reply("Whadya want to delete?")
         return
-    # print(message.sender.id)
-    # print(BOT_ID)
-    # # print(event.sender_id.ChatAdminRights)
-    # print(event.chat.admin_rights)
-    # print(event.stringify())
+    # LOGGER.debug(message.sender.id)
+    # LOGGER.debug(BOT_ID)
+    # # LOGGER.debug(event.sender_id.ChatAdminRights)
+    # LOGGER.debug(event.chat.admin_rights)
+    # LOGGER.debug(event.stringify())
     if not await can_delete_messages(message=event) and int(
             message.sender.id) != int(BOT_ID):
         if event.chat.admin_rights is None:
@@ -143,7 +143,7 @@ async def delete_messages(event):
     try:
         await event.client.delete_messages(chat, event.message)
     except MessageDeleteForbiddenError:
-        print(
+        LOGGER.debug(
             f"error in deleting message {event.message.id} in {event.chat.id}")
 
 
@@ -218,7 +218,7 @@ async def purgeto_messages(event):
         if len(messages) == 100:
             await event.client.delete_messages(event.chat_id, messages)
             messages = []
-    print(messages)
+    LOGGER.debug(messages)
     try:
         await event.client.delete_messages(event.chat_id, messages)
     except:

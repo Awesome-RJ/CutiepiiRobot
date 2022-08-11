@@ -35,9 +35,8 @@ from traceback import format_exc
 from pyrogram import filters
 from pyrogram.types import Message
 
-from Cutiepii_Robot import arq
 from Cutiepii_Robot.utils.errors import capture_err
-from Cutiepii_Robot import pgram
+from Cutiepii_Robot import arq, pgram, LOGGER
 
 Cutiepii_PYRO_Q = filters.command(["quote", "q"])
 
@@ -124,7 +123,7 @@ async def quote(client, message: Message):
                      " message containing something other than text," +
                      " or one of the messages in-between are deleted.")
         e = format_exc()
-        print(e)
+        LOGGER.debug(e)
 
 
 __mod_name__ = "Quotly"
