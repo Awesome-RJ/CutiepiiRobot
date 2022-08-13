@@ -59,7 +59,7 @@ async def _(event):
         ))):
             is_admin = True
     if not is_admin:
-        return await event.respond("__Only admins can Unmuteall!__")
+        return await event.respond("__Only admins can Unbanall!__")
 
     if not admin and not creator:
         await event.reply("`I don't have enough permissions!`")
