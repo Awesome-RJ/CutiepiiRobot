@@ -624,10 +624,9 @@ async def unban(
         logmsg += did_ban
 
         await message.reply_text(
-            f"User {mention_html(member.user.id, member.user.first_name)} was unbanned successfully from {html.escape(chat.title)}",
+            f"{mention_html(member.user.id, member.user.first_name)} was unbanned by {mention_html(user.id, user.first_name)} in <b>{message.chat.title}</b>", 
             parse_mode=ParseMode.HTML,
-        )
-
+            )
     else:
         await message.reply_text("Failed to unban user")
         return ""

@@ -228,8 +228,8 @@ async def new_member(
 
             # Give the owner a special welcome
             if new_mem.id == OWNER_ID:
-                await update.effective_message.reply_text(
-                    "Oh hi, my creator.", reply_to_message_id=reply)
+                await update.effective_message.reply_animation(
+                    "https://telegra.ph/file/409bdbf03868cf6b2d755.mp4", caption="Oh hi, my creator.", reply_to_message_id=reply)
                 welcome_log = (f"{html.escape(chat.title)}\n"
                                f"#USER_JOINED\n"
                                f"Bot Owner just joined the chat")

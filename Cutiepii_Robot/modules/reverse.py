@@ -33,8 +33,9 @@ import requests
 import urllib
 import urllib.request
 import urllib.parse
-from bs4 import BeautifulSoup
 
+from io import BytesIO
+from bs4 import BeautifulSoup
 from telegram.error import BadRequest, TelegramError
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
@@ -71,7 +72,7 @@ async def reverse(update: Update, context: CallbackContext) -> None:
             return
 
         image_file = await context.bot.get_file(file_id)
-        image_file.download(imagename)
+        image_file.download(imagename, out=BytesIO())
     else:
         await msg.reply_text(
             "Please Reply To A Sticker, Or An Image To Search It!",

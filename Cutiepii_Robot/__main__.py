@@ -693,7 +693,7 @@ def main():
         CUTIEPII_PTB.run_webhook(listen="127.0.0.1", port=PORT, url_path=TOKEN)
 
     else:
-        CUTIEPII_PTB.run_polling(stop_signals=None)
+        CUTIEPII_PTB.run_polling(allowed_updates=Update.ALL_TYPES, stop_signals=None)
         LOGGER.info(
             "Cutiepii Robot started, Using long polling. | BOT: [@Cutiepii_Robot]"
         )

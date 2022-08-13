@@ -540,7 +540,7 @@ async def reset_warns(update: Update,
                 f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
                 f"<b>User:</b> {mention_html(warned.id, warned.first_name)}\n"
                 f"<b>User ID:</b> <code>{warned.id}</code>")
-    await message.reply_text("NNo user has been designated!")
+    await message.reply_text("⚠️ No user has been designated!")
     return ""
 
 
