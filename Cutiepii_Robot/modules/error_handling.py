@@ -122,7 +122,7 @@ async def error_callback(update: Update,
         parse_mode=ParseMode.HTML,
     )
 
-
+"""
 async def list_errors(update: Update,
                       context: CallbackContext) -> None:
     if update.effective_user.id not in DEV_USERS:
@@ -145,7 +145,8 @@ async def list_errors(update: Update,
 
         return
     await update.effective_message.reply_text(msg, parse_mode=ParseMode.HTML)
+"""
 
+CUTIEPII_PTB.add_error_handler(error_callback)
 
-CUTIEPII_PTB.add_error_handler(error_callback, block=False)
-CUTIEPII_PTB.add_handler(CommandHandler("errors", list_errors, block=False))
+# CUTIEPII_PTB.add_handler(CommandHandler("errors", list_errors, block=False))
