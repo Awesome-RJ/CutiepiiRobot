@@ -109,7 +109,7 @@ async def _(event):
         ):
             is_admin = True
     if not is_admin:
-        return await event.respond("__Only admins can Unmuteall!__")
+        return await event.respond("__Only admins can Unbanall!__")
     chat = await event.get_chat()
     admin = chat.admin_rights.ban_users
     creator = chat.creator
