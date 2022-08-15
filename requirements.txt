@@ -1,6 +1,6 @@
 alphabet-detector==0.0.7
 bleach==5.0.0
-cachetools~=5.2.0
+cachetools==5.2.0
 emoji==1.6.1
 pyrate-limiter==2.8.1
 lxml==4.9.1
@@ -44,12 +44,12 @@ pydub==0.25.1
 bs4==0.0.1
 multicolorcaptcha==1.2.0
 jikanpy==4.3.2
-future>=0.18.0
-geopy>=2.2.0
-humanize>=4.1.0
-pyrogram>=2.0.35
-python-arq>=6.0.2
-aiohttp>=3.0.0
+future==0.18.2
+geopy==2.2.0
+humanize==4.3.0
+pyrogram==2.0.40
+python-arq==6.0.5
+aiohttp==3.8.1
 carbonnow
 search_engine_parser
 googletrans
@@ -57,7 +57,7 @@ youtube_search_python==1.6.5
 httpx
 httpx[http2]
 pyYAML==6.0
-pygithub>=1.55
+pygithub==1.55
 gitpython
 flask
 gunicorn
@@ -67,7 +67,7 @@ pytimeparse
 APScheduler==3.9.1
 CloudScraper
 dnspython==2.2.1
-async-timeout>=1.2
+async-timeout==4.0.2
 psycopg2
 pycountry
 opencv-python-headless==4.5.4.60
