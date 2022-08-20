@@ -106,7 +106,7 @@ def _onUnMuteRequest(client, cb):
 
 
 @pgram.on_edited_message(filters.text & ~filters.private, group=1)
-def _check_member(client, message):
+def _check_member(client: Client, message: Message):
     chat_id = message.chat.id
     if chat_db := sql.fs_settings(chat_id):
         try:
@@ -169,7 +169,7 @@ def _check_member(client, message):
         "forcesubscribe", "forcesub", "forcesub@Cutiepii_Robot",
         "forcesubscribe@Cutiepii_Robot"
     ]) & ~filters.private)
-def config(client, message):
+def config(client: Client, message: Message):
     user = client.get_chat_member(message.chat.id, message.from_user.id)
     if user.status == "creator" or user.user.id in SUDO_USERS:
         chat_id = message.chat.id

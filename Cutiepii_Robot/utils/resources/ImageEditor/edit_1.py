@@ -37,7 +37,7 @@ from Cutiepii_Robot import LOGGER
 from PIL import Image, ImageEnhance, ImageFilter
 
 
-async def bright(client, message):
+async def bright(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -74,7 +74,7 @@ async def bright(client, message):
             return
 
 
-async def mix(client, message):
+async def mix(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -112,7 +112,7 @@ async def mix(client, message):
             return
 
 
-async def black_white(client, message):
+async def black_white(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -149,7 +149,7 @@ async def black_white(client, message):
             return
 
 
-async def normal_blur(client, message):
+async def normal_blur(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -186,7 +186,7 @@ async def normal_blur(client, message):
             return
 
 
-async def g_blur(client, message):
+async def g_blur(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -223,7 +223,7 @@ async def g_blur(client, message):
             return
 
 
-async def box_blur(client, message):
+async def box_blur(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):

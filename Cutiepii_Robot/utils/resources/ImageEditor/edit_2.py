@@ -39,7 +39,7 @@ from Cutiepii_Robot import LOGGER
 from PIL import Image, ImageDraw, ImageEnhance
 
 
-async def circle_with_bg(client, message):
+async def circle_with_bg(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -82,7 +82,7 @@ async def circle_with_bg(client, message):
             return
 
 
-async def circle_without_bg(client, message):
+async def circle_without_bg(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -125,7 +125,7 @@ async def circle_without_bg(client, message):
             return
 
 
-async def sticker(client, message):
+async def sticker(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -173,7 +173,7 @@ def add_corners(im, rad):
     return im
 
 
-async def edge_curved(client, message):
+async def edge_curved(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -210,7 +210,7 @@ async def edge_curved(client, message):
             return
 
 
-async def contrast(client, message):
+async def contrast(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -266,7 +266,7 @@ def sepia(img):
     return new_img
 
 
-async def sepia_mode(client, message):
+async def sepia_mode(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -307,7 +307,7 @@ def dodgeV2(x, y):
     return cv2.divide(x, 255 - y, scale=256)
 
 
-async def pencil(client, message):
+async def pencil(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -360,7 +360,7 @@ def color_quantization(img, k):
     return result
 
 
-async def cartoon(client, message):
+async def cartoon(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):

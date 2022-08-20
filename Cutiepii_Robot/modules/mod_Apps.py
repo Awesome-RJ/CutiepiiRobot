@@ -48,7 +48,7 @@ Cutiepii_PYRO_Mod = filters.command("mod")
 @pgram.on_message(Cutiepii_PYRO_Mod & ~filters.bot)
 @pgram.on_edited_message(Cutiepii_PYRO_Mod)
 @admins_only
-async def mudapk(client, message):
+async def mudapk(client: Client, message: Message):
     pablo = await client.send_message(message.chat.id,
                                       "`Searching For Mod App.....`")
     sgname = message.text

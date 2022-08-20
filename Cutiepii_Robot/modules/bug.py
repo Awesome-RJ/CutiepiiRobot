@@ -1,10 +1,10 @@
 from datetime import datetime
 
 from pyrogram import filters
+from pyrogram.enums import ChatType
 from pyrogram.types import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
-    CallbackQuery,
     Message,
 )
 
@@ -50,7 +50,7 @@ async def bug(_, msg: Message):
 **Bug Report : ** **{bugs}**
 **Event Stamp : ** **{datetimes}**"""
 
-    if msg.chat.type == "private":
+    if msg.chat.type == ChatType.PRIVATE:
         await msg.reply_text("❎ <b>This command only works in groups.</b>")
         return
 

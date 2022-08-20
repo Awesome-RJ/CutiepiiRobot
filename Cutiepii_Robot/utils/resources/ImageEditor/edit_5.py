@@ -35,7 +35,7 @@ import shutil
 
 from Cutiepii_Robot import LOGGER
 
-async def normalglitch_1(client, message):
+async def normalglitch_1(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -77,7 +77,7 @@ async def normalglitch_1(client, message):
             return
 
 
-async def normalglitch_2(client, message):
+async def normalglitch_2(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -119,7 +119,7 @@ async def normalglitch_2(client, message):
             return
 
 
-async def normalglitch_3(client, message):
+async def normalglitch_3(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -161,7 +161,7 @@ async def normalglitch_3(client, message):
             return
 
 
-async def normalglitch_4(client, message):
+async def normalglitch_4(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -203,7 +203,7 @@ async def normalglitch_4(client, message):
             return
 
 
-async def normalglitch_5(client, message):
+async def normalglitch_5(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -245,7 +245,7 @@ async def normalglitch_5(client, message):
             return
 
 
-async def scanlineglitch_1(client, message):
+async def scanlineglitch_1(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -288,7 +288,7 @@ async def scanlineglitch_1(client, message):
             return
 
 
-async def scanlineglitch_2(client, message):
+async def scanlineglitch_2(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -331,7 +331,7 @@ async def scanlineglitch_2(client, message):
             return
 
 
-async def scanlineglitch_3(client, message):
+async def scanlineglitch_3(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -374,7 +374,7 @@ async def scanlineglitch_3(client, message):
             return
 
 
-async def scanlineglitch_4(client, message):
+async def scanlineglitch_4(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -417,7 +417,7 @@ async def scanlineglitch_4(client, message):
             return
 
 
-async def scanlineglitch_5(client, message):
+async def scanlineglitch_5(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):

@@ -41,7 +41,7 @@ from PIL import Image, ImageDraw, ImageOps
 from Cutiepii_Robot import REM_BG_API_KEY, LOGGER
 
 
-async def rotate_90(client, message):
+async def rotate_90(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -78,7 +78,7 @@ async def rotate_90(client, message):
             return
 
 
-async def rotate_180(client, message):
+async def rotate_180(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -115,7 +115,7 @@ async def rotate_180(client, message):
             return
 
 
-async def rotate_270(client, message):
+async def rotate_270(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -164,7 +164,7 @@ def resize_photo(photo: str, userid: str) -> io.BytesIO:
     return resized_photo
 
 
-async def round_sticker(client, message):
+async def round_sticker(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -208,7 +208,7 @@ async def round_sticker(client, message):
             return
 
 
-async def inverted(client, message):
+async def inverted(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -245,7 +245,7 @@ async def inverted(client, message):
             return
 
 
-async def removebg_plain(client, message):
+async def removebg_plain(client: Client, message: Message):
     try:
         if REM_BG_API_KEY != "":
             userid = str(chat_id)
@@ -301,7 +301,7 @@ async def removebg_plain(client, message):
             return
 
 
-async def removebg_white(client, message):
+async def removebg_white(client: Client, message: Message):
     try:
         if REM_BG_API_KEY != "":
             userid = str(chat_id)
@@ -357,7 +357,7 @@ async def removebg_white(client, message):
             return
 
 
-async def removebg_sticker(client, message):
+async def removebg_sticker(client: Client, message: Message):
     try:
         if REM_BG_API_KEY != "":
             userid = str(chat_id)

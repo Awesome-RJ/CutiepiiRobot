@@ -40,6 +40,7 @@ from typing import Callable, Coroutine, Dict, List, Tuple, Union
 
 from PIL import Image
 from pyrogram import Client
+from pyrogram.enums import ChatType, ChatMemberStatus
 from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import Chat, Message, User
 
@@ -174,7 +175,7 @@ def get_text(message: Message) -> [None, str]:
 async def iter_chats(client):
     chats = []
     async for dialog in client.iter_dialogs():
-        if dialog.chat.type in ["supergroup", "channel"]:
+        if dialog.chat.type in [ChatType.SUPERGROUP, ChatType.CHANNEL]:
             chats.append(dialog.chat.id)
     return chats
 

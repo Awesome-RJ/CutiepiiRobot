@@ -42,7 +42,7 @@ from Cutiepii_Robot import pgram, SUPPORT_CHAT, CUTIEPII_PTB
 @pgram.on_message(
     filters.command(["identify", "shazam", "shazam@Cutiepii_Robot"]))
 @admins_only
-async def shazamm(client, message):
+async def shazamm(client: Client, message: Message):
     kek = await edit_or_reply(message, "`Shazaming In Progress!`")
     if not message.reply_to_message:
         await kek.edit("Reply To The Audio.")

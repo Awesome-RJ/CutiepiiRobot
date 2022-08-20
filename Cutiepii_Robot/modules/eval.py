@@ -90,7 +90,7 @@ async def send(msg, bot, update):
 
 
 async def aexec(code, client, message):
-    exec("async def __aexec(client, message): " +
+    exec("async def __aexec(client: Client, message: Message): " +
          "".join(f"\n {a}" for a in code.split("\n")))
     return await locals()["__aexec"](client, message)
 
@@ -158,7 +158,7 @@ async def do(func, bot, update):
 @pgram.on_message(Cutiepii_PYRO_Eval & filters.user(DEV_USERS) &
                   (~filters.forwarded) & (~filters.via_bot))
 @pgram.on_edited_message(Cutiepii_PYRO_Eval)
-async def executor(client, message):
+async def executor(client: Client, message: Message):
     try:
         cmd = message.text.split(" ", maxsplit=1)[1]
     except IndexError:

@@ -125,7 +125,7 @@ async def photo(client: pgram, message: Message):
                                          callback_data="close_e"),
                 ],
             ]),
-            reply_to_message_id=message.reply_to_message.message_id,
+            reply_to_message_id=message.reply_to_message.id,
         )
     except Exception as e:
         LOGGER.debug(f"photomarkup error - {str(e)}")

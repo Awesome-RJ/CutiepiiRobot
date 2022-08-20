@@ -85,7 +85,7 @@ async def lyrics_func(_, message):
 
 
 @pgram.on_message(filters.command(["glyrics", "glyrics@Cutiepii_Robot"]))
-async def lyrics(client, message):
+async def lyrics(client: Client, message: Message):
 
     if r"-" not in message.text:
         await message.reply(
@@ -128,7 +128,7 @@ async def lyrics(client, message):
         await client.send_document(
             message.chat.id,
             "lyrics.txt",
-            reply_to_msg_id=message.message_id,
+            reply_to_msg_id=message.id,
         )
         os.remove("lyrics.txt")
     else:

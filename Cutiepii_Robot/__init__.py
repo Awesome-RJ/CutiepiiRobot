@@ -37,6 +37,7 @@ import time
 import telegram.ext as tg
 
 from pyrogram import Client
+from pyrogram.enums import ParseMode
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
 from telegram import Chat
 from telethon import TelegramClient
@@ -343,14 +344,16 @@ CUTIEPII_PTB = (
 # asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
 #------------------------------------------------------------------
 LOGGER.debug("[CUTIEPII]: PYROGRAM CLIENT STARTING")
-name = TOKEN.split(":")[0]
+PyroGram = TOKEN.split(":")[0]
 pgram = Client(
-    name,
+    name=PyroGram,
     api_id=API_ID,
     api_hash=API_HASH,
     bot_token=TOKEN,
     workers=min(32,
                 os.cpu_count() + 4),
+    parse_mode=ParseMode.HTML,            
+    sleep_threshold=60,
     in_memory=True,
 )
 LOGGER.debug(
@@ -386,7 +389,7 @@ async def get_entity(client, entity):
         except TypeError:
             entity = entity.id
         try:
-            entity = await client.get_chat(entity)
+            entity = await client.get_users(entity)
         except (PeerIdInvalid, ChannelInvalid):
             for pgram in apps:
                 if pgram != client:

@@ -299,7 +299,7 @@ async def anti_channel_pin(_, m: Message):
 @pgram.on_message(filters.linked_channel)
 async def antichanpin_cleanlinked(c, m: Message):
     try:
-        msg_id = m.message_id
+        msg_id = m.id
         pins_db = Pins(m.chat.id)
         curr = pins_db.get_settings()
         if curr["antichannelpin"]:

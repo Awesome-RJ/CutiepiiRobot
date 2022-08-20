@@ -41,6 +41,7 @@ from functools import wraps
 from typing import Callable, Coroutine, Dict, List, Tuple, Union
 from PIL import Image
 from pyrogram import Client
+from pyrogram.enums import ChatType, ChatMemberStatus
 from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.types import Chat, Message, User
 
@@ -184,7 +185,7 @@ def get_text(message: Message) -> [None, str]:
 async def iter_chats(client):
     chats = []
     async for dialog in client.iter_dialogs():
-        if dialog.chat.type in ["supergroup", "channel"]:
+        if dialog.chat.type in [ChatType.SUPERGROUP, ChatType.CHANNEL]:
             chats.append(dialog.chat.id)
     return chats
 
@@ -215,7 +216,7 @@ async def fetch_audio(message):
 async def edit_or_reply(message, text, parse_mode="md"):
     if message.from_user.id:
         if message.reply_to_message:
-            kk = message.reply_to_message.message_id
+            kk = message.reply_to_message.id
             return await message.reply_text(text,
                                             reply_to_message_id=kk,
                                             parse_mode=parse_mode)

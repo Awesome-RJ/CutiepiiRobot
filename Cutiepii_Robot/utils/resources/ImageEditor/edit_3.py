@@ -36,7 +36,7 @@ from PIL import Image, ImageOps
 from Cutiepii_Robot import LOGGER
 
 
-async def black_border(client, message):
+async def black_border(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -73,7 +73,7 @@ async def black_border(client, message):
             return
 
 
-async def green_border(client, message):
+async def green_border(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -110,7 +110,7 @@ async def green_border(client, message):
             return
 
 
-async def blue_border(client, message):
+async def blue_border(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):
@@ -147,7 +147,7 @@ async def blue_border(client, message):
             return
 
 
-async def red_border(client, message):
+async def red_border(client: Client, message: Message):
     try:
         userid = str(chat_id)
         if not os.path.isdir(f"./DOWNLOADS/{userid}"):

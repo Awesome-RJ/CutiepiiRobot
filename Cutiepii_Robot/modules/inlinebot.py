@@ -642,7 +642,7 @@ async def inline_query_handler(client, query):
                 """,
                     input_message_content=InputTextMessageContent(
                         caption,
-                        parse_mode="HTML",
+                        
                         disable_web_page_preview=True),
                 ))
             await client.answer_inline_query(query.id,
@@ -667,7 +667,7 @@ async def inline_query_handler(client, query):
                     title="Fake infomation gathered",
                     description="Click here to see them",
                     input_message_content=InputTextMessageContent(
-                        res, parse_mode="HTML", disable_web_page_preview=True),
+                        res, disable_web_page_preview=True),
                 ))
             await client.answer_inline_query(query.id,
                                              cache_time=0,
@@ -688,7 +688,7 @@ async def inline_query_handler(client, query):
                     title="Match information gathered",
                     description="Click here to see them",
                     input_message_content=InputTextMessageContent(
-                        res, parse_mode="HTML",
+                        res, 
                         disable_web_page_preview=False),
                 ))
             await client.answer_inline_query(query.id,

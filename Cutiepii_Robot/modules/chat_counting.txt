@@ -55,7 +55,7 @@ async def levelsystem(_, message):
     & ~filters.private,
     group=8,
 )
-async def level(client, message):
+async def level(client: Client, message: Message):
     chat = message.chat.id
     user_id = message.from_user.id
 
@@ -96,7 +96,7 @@ async def level(client, message):
 @pgram.on_message(
     filters.command("rank", prefixes=["/", ".", "?", "-"])
     & ~filters.private)
-async def rank(client, message):
+async def rank(client: Client, message: Message):
     chat = message.chat.id
     user_id = message.from_user.id    
     

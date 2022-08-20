@@ -81,9 +81,9 @@ Cutiepii_PYRO_Whois = filters.command("whois")
 def ReplyCheck(message: Message):
     reply_id = None
     if message.reply_to_message:
-        reply_id = message.reply_to_message.message_id
+        reply_id = message.reply_to_message.id
     elif not message.from_user.is_self:
-        reply_id = message.message_id
+        reply_id = message.id
     return reply_id
 
 
@@ -121,7 +121,7 @@ def FullName(user: User):
 
 @pgram.on_message(Cutiepii_PYRO_Whois)
 @pgram.on_edited_message(Cutiepii_PYRO_Whois)
-async def whois(client, message):
+async def whois(client: Client, message: Message):
     cmd = message.command
     if not message.reply_to_message and len(cmd) == 1:
         get_user = message.from_user.id
@@ -136,7 +136,7 @@ async def whois(client, message):
     except PeerIdInvalid:
         await message.reply("I don't know that User.")
         return
-    desc = await client.get_chat(get_user)
+    desc = await client.get_users(get_user)
     desc = desc.description
     await message.reply_text(
         infotext.format(

@@ -34,6 +34,7 @@ import random
 from Cutiepii_Robot import pgram, LOGGER
 from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.modules.mongo.couples_mongo import get_couple, save_couple
+from pyrogram.enums import ChatType
 from pyrogram import filters
 from datetime import datetime
 
@@ -59,7 +60,7 @@ Cutiepii_PYRO_Couples = filters.command("couples")
 @pgram.on_edited_message(Cutiepii_PYRO_Couples)
 @capture_err
 async def couple(_, message):
-    if message.chat.type == "private":
+    if message.chat.type == ChatType.PRIVATE:
         await message.reply_text("This command only works in groups.")
         return
     try:
