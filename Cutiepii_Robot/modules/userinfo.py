@@ -442,7 +442,7 @@ else:return
                      context.bot.get_user_profile_photos(user.id).total_count
                   )
                   if ChatType.PRIVATE and user_id != bot.id:
-                     _stext = "\nPresence: <code>{}</code>"
+                     _stext = "\nStatus: <code>{}</code>"
                      afk_st = is_user_afk(user.id)
                      if afk_st:
                         text += _stext.format("AFK")
@@ -655,7 +655,7 @@ async def info(update: Update, context: CallbackContext) -> None:
         text += f"\n➛ Permalink: {mention_html(user.id, 'link')}"
 
         if ChatType.PRIVATE and user_id != bot.id:
-            _stext = "\n➛ Presence: <code>{}</code>"
+            _stext = "\n➛ Status: <code>{}</code>"
 
             if afk_st := is_user_afk(user.id):
                 text += _stext.format("AFK")
