@@ -121,7 +121,7 @@ async def is_user_admin(update: Update,
         # try to fetch from cache first.
         try:
             return user_id in ADMIN_CACHE[chat.id]
-        except KeyError:
+        except (KeyError, IndexError):
             # KeyError happened means cache is deleted,
             # so query bot api again and return user status
             # while saving it in cache for future usage...

@@ -60,7 +60,7 @@ def latest():
                 if aired else
                 f"**[{title}](https://subsplease.org/shows/{x['page']})**")
 
-        except KeyError:
+        except (KeyError, IndexError):
             title = f"**[{title}](https://subsplease.org/shows/{x['page']})**"
         data = f"{title} - {time}"
 

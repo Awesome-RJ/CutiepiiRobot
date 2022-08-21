@@ -1137,7 +1137,7 @@ async def toggle_favourites(id_: int, media: str, user: int):
                                  user=int(user))
     try:
         return "ok"
-    except KeyError:
+    except (KeyError, IndexError):
         return "failed"
 
 
@@ -1197,7 +1197,7 @@ async def update_anilist(id_, req, user, eid: int = None, status: str = None):
             'UpdateMediaListEntries'] if req == "lsus" else k["data"][
                 'DeleteMediaListEntry']
         return "ok"
-    except KeyError:
+    except (KeyError, IndexError):
         return "failed"
 
 

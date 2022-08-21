@@ -57,7 +57,7 @@ def get_string(key: str) -> Any:
     lang = language[0]
     try:
         return languages[lang][key]
-    except KeyError:
+    except (KeyError, IndexError):
         try:
             en_ = languages["en"][key]
             tr = trans.translate(en_, lang_tgt=lang).replace("\ N", "\n")
@@ -68,7 +68,7 @@ def get_string(key: str) -> Any:
             else:
                 languages.update({lang: {key: tr}})
             return tr
-        except KeyError:
+        except (KeyError, IndexError):
             return f"Warning: could not load any string with the key `{key}`"
         except Exception as er:
             LOGGER.exception(er)

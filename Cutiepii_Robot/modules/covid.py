@@ -77,7 +77,7 @@ async def covid(update: Update, context: CallbackContext) -> None:
     case = json.loads(request)
     try:
         json_date = case["updated"]
-    except KeyError:
+    except (KeyError, IndexError):
         await message.reply_text("Make sure you have input correct country")
         return
     float_date = float(json_date) / 1000.0
@@ -85,7 +85,7 @@ async def covid(update: Update, context: CallbackContext) -> None:
         "%d %b %Y %I:%M:%S %p")
     try:
         flag = case["countryInfo"]["flag"]
-    except KeyError:
+    except (KeyError, IndexError):
         flag = []
     if flag:
         text = f"*COVID-19 Statistics in* [{query}]({flag})\n"

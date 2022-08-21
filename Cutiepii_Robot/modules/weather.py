@@ -95,7 +95,7 @@ async def weather(update: Update, context: CallbackContext) -> None:
                 country = get_tz((newcity[1].strip()).title())
                 try:
                     countrycode = timezone_countries[f"{country}"]
-                except KeyError:
+                except (KeyError, IndexError):
                     weather.edit("`Invalid country.`")
                     return
                 city = newcity[0].strip() + "," + countrycode.strip()

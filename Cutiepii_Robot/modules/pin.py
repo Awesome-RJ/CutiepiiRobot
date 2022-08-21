@@ -249,7 +249,7 @@ class Pins:
             for key, val in keys.items():
                 try:
                     _ = data[key]
-                except KeyError:
+                except (KeyError, IndexError):
                     collection.update({"_id": data["_id"]}, {key: val})
 
 

@@ -64,7 +64,7 @@ async def convert(update: Update):
             current_rate = float(
                 response["Realtime Currency Exchange Rate"]
                 ["5. Exchange Rate"], )
-        except KeyError:
+        except (KeyError, IndexError):
             await update.effective_message.reply_text("Currency Not Supported."
                                                       )
             return

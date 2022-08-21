@@ -46,7 +46,7 @@ def bot_admin_check(permission: AdminPerms = None):
 
 			try:  # try to get from cache
 				bot_member = B_CACHE[chat.id]
-			except KeyError:  # if not in cache, get from API and save to cache
+			except (KeyError, IndexError):  # if not in cache, get from API and save to cache
 				bot_member = CUTIEPII_PTB.bot.getChatMember(chat.id, bot_id)
 				B_CACHE[chat.id] = bot_member
 
@@ -105,7 +105,7 @@ async def get_mem_from_cache(user_id: int, chat_id: int) -> ChatMember:
 			for i in A_CACHE[chat_id]:
 				if i.user.id == user_id: return i
 
-		except KeyError:
+		except (KeyError, IndexError):
 			admins = await CUTIEPII_PTB.bot.getChatAdministrators(chat_id)
 			A_CACHE[chat_id] = admins
 			for i in admins:
@@ -202,7 +202,7 @@ def perm_callback_check(upd: Update, _: Ctx):
 
     try:
     	cb = a_cb.pop((chat_id, message_id), None)
-    except KeyError:
+    except (KeyError, IndexError):
     	eam(msg, "This message is no longer valid.")
     	return
 

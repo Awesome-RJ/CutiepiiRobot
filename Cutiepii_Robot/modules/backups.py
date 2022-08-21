@@ -398,7 +398,7 @@ def get_chat(chat_id, chat_data):
     LOGGER.debug(chat_data)
     try:
         return chat_data[chat_id]["backups"]
-    except KeyError:
+    except (KeyError, IndexError):
         return {"status": False, "value": False}
 
 
