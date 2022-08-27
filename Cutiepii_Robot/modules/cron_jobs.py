@@ -43,7 +43,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import owner_plus
 
 
 @owner_plus
-def backup_now(_: Update, ctx: CallbackContext):
+def backup_now(_: Update, _: CallbackContext):
     cronjob.run(CUTIEPII_PTB=CUTIEPII_PTB)
 
 
