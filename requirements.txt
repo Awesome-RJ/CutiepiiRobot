@@ -47,7 +47,7 @@ jikanpy==4.3.2
 future==0.18.2
 geopy==2.2.0
 humanize==4.3.0
-pyrogram==2.0.40
+pyrogram==2.0.42
 python-arq==6.0.5
 aiohttp==3.8.1
 carbonnow
