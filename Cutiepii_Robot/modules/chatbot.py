@@ -140,8 +140,7 @@ async def chatbot(update: Update, context: CallbackContext) -> None:
                              )
 
 
-async def list_chatbot_chats(update: Update,
-                             context: CallbackContext) -> None:
+async def list_chatbot_chats(update: Update, context: CallbackContext) -> None:
     text = "<b>AI-Enabled Chats</b>\n"
     for chat in CHATBOT_ENABLED_CHATS:
         x = await context.bot.get_chat(chat)

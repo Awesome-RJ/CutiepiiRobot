@@ -61,8 +61,7 @@ async def leave_cb(update: Update, context: CallbackContext) -> None:
 
 
 @dev_plus
-async def allow_groups(update: Update,
-                       context: CallbackContext) -> None:
+async def allow_groups(update: Update, context: CallbackContext) -> None:
     args = context.args
     if not args:
         state = "off" if ALLOW_CHATS else "Lockdown is " + "on"
@@ -126,8 +125,7 @@ async def getstats(event):
 
 
 @dev_plus
-async def pip_install(update: Update,
-                      context: CallbackContext) -> None:
+async def pip_install(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     args = context.args
     if not args:

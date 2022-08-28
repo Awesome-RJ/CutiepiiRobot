@@ -92,8 +92,7 @@ async def approve(update: Update, context: CallbackContext) -> None:
 
 @loggable
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def disapprove(update: Update,
-                     context: CallbackContext) -> None:
+async def disapprove(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
@@ -226,14 +225,20 @@ async def unapproveall_btn(update: Update):
             await query.answer("You need to be admin to do this.")
 
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approve", approve, block=False))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("unapprove", disapprove, block=False))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approved", approved, block=False))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("approval", approval, block=False))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("approve", approve, block=False))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("unapprove", disapprove, block=False))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("approved", approved, block=False))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("approval", approval, block=False))
 CUTIEPII_PTB.add_handler(
     DisableAbleCommandHandler("unapproveall", unapproveall, block=False))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(unapproveall_btn, pattern=r"unapproveall_.*", block=False))
+    CallbackQueryHandler(unapproveall_btn,
+                         pattern=r"unapproveall_.*",
+                         block=False))
 
 __help__ = """
 Sometimes, you might trust a user not to send unwanted content.
