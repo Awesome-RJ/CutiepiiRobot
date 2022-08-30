@@ -335,11 +335,7 @@ telegraph.create_account(short_name="Cutiepii")
 LOGGER.debug("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 
-CUTIEPII_PTB = (
-    tg.Application.builder()
-    .token(TOKEN)
-    .build()
-)
+CUTIEPII_PTB = (tg.Application.builder().token(TOKEN).build())
 
 # asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
 #------------------------------------------------------------------
@@ -352,7 +348,7 @@ pgram = Client(
     bot_token=TOKEN,
     workers=min(32,
                 os.cpu_count() + 4),
-    parse_mode=ParseMode.HTML,            
+    parse_mode=ParseMode.HTML,
     sleep_threshold=60,
     in_memory=True,
 )

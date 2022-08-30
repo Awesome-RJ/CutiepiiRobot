@@ -524,8 +524,7 @@ async def warn_user(update: Update, context: CallbackContext) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def reset_warns(update: Update,
-                      context: CallbackContext) -> str:
+async def reset_warns(update: Update, context: CallbackContext) -> str:
     args = context.args
     message: Optional[Message] = update.effective_message
     chat: Optional[Chat] = update.effective_chat
@@ -577,8 +576,7 @@ async def warns(update: Update, context: CallbackContext) -> None:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 # CUTIEPII_PTB handler stop - do not async
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def add_warn_filter(update: Update,
-                          context: CallbackContext) -> None:
+async def add_warn_filter(update: Update, context: CallbackContext) -> None:
     chat: Optional[Chat] = update.effective_chat
     msg: Optional[Message] = update.effective_message
     user = update.effective_user
@@ -612,8 +610,7 @@ async def add_warn_filter(update: Update,
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def remove_warn_filter(update: Update,
-                             context: CallbackContext) -> None:
+async def remove_warn_filter(update: Update, context: CallbackContext) -> None:
     chat: Optional[Chat] = update.effective_chat
     msg: Optional[Message] = update.effective_message
     user = update.effective_user
@@ -648,8 +645,7 @@ async def remove_warn_filter(update: Update,
     )
 
 
-async def list_warn_filters(update: Update,
-                            context: CallbackContext) -> None:
+async def list_warn_filters(update: Update, context: CallbackContext) -> None:
     chat: Optional[Chat] = update.effective_chat
     all_handlers = sql.get_chat_warn_triggers(chat.id)
 
@@ -704,8 +700,7 @@ async def reply_filter(update: Update,
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
-async def set_warn_limit(update: Update,
-                         context: CallbackContext) -> str:
+async def set_warn_limit(update: Update, context: CallbackContext) -> str:
     args = context.args
     chat: Optional[Chat] = update.effective_chat
     user = update.effective_user
@@ -732,8 +727,7 @@ async def set_warn_limit(update: Update,
 
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def set_warn_strength(update: Update,
-                            context: CallbackContext) -> None:
+async def set_warn_strength(update: Update, context: CallbackContext) -> None:
     args = context.args
     chat: Optional[Chat] = update.effective_chat
     user: Optional[User] = update.effective_user
@@ -823,9 +817,13 @@ CUTIEPII_PTB.add_handler(
                    filters=filters.ChatType.GROUPS,
                    block=False))
 #CUTIEPII_PTB.add_handler(CommandHandler(["rmwarn", "unwarn"], remove_warns, filters=filters.ChatType.GROUPS, block=False)
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"rm_warn", block=False))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("warns", warns, filters=filters.ChatType.GROUPS, block=False))
+    CallbackQueryHandler(button, pattern=r"rm_warn", block=False))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("warns",
+                              warns,
+                              filters=filters.ChatType.GROUPS,
+                              block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("addwarn",
                    add_warn_filter,
@@ -840,11 +838,13 @@ CUTIEPII_PTB.add_handler(
     DisableAbleCommandHandler(["warnlist", "warnfilters"],
                               list_warn_filters,
                               filters=filters.ChatType.GROUPS,
-                              admin_ok=True, block=False))
+                              admin_ok=True,
+                              block=False))
 CUTIEPII_PTB.add_handler(
-    MessageHandler(
-        filters.TEXT & filters.ChatType.GROUPS &
-        (~filters.UpdateType.EDITED_MESSAGE), reply_filter, block=False))
+    MessageHandler(filters.TEXT & filters.ChatType.GROUPS &
+                   (~filters.UpdateType.EDITED_MESSAGE),
+                   reply_filter,
+                   block=False))
 CUTIEPII_PTB.add_handler(
     CommandHandler("warnlimit",
                    set_warn_limit,
