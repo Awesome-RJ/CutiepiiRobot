@@ -202,6 +202,7 @@ async def listmodules(update: Update):
 
 CUTIEPII_PTB.add_handler(CommandHandler("load", load, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("unload", unload, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("listmodules", listmodules, block=False))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("listmodules", listmodules, block=False))
 
 __mod_name__ = "Modules"
