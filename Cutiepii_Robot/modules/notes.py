@@ -271,8 +271,7 @@ async def hash_get(update: Update, context: CallbackContext) -> None:
 
 
 @connection_status
-async def slash_get(update: Update,
-                    context: CallbackContext) -> None:
+async def slash_get(update: Update, context: CallbackContext) -> None:
     message, chat_id = update.effective_message.text, update.effective_chat.id
     no_slash = message[1:]
     note_list = sql.get_all_chat_notes(chat_id)
@@ -370,8 +369,7 @@ async def clearall(update: Update, context: CallbackContext) -> None:
         )
 
 
-async def clearall_btn(update: Update,
-                       context: CallbackContext) -> None:
+async def clearall_btn(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     chat = update.effective_chat
     message = update.effective_message
@@ -404,8 +402,7 @@ async def clearall_btn(update: Update,
 
 
 @connection_status
-async def list_notes(update: Update,
-                     context: CallbackContext) -> None:
+async def list_notes(update: Update, context: CallbackContext) -> None:
     chat_id = update.effective_chat.id
     note_list = sql.get_all_chat_notes(chat_id)
     notes = len(note_list) + 1
@@ -605,13 +602,18 @@ __mod_name__ = "Notes"
 CUTIEPII_PTB.add_handler(CommandHandler("get", cmd_get, block=False))
 CUTIEPII_PTB.add_handler(
     MessageHandler(filters.Regex(r"^#[\w\-]+(?!\n)$"), hash_get, block=False))
-CUTIEPII_PTB.add_handler(MessageHandler(filters.Regex(r"^/\d+$"), slash_get, block=False))
+CUTIEPII_PTB.add_handler(
+    MessageHandler(filters.Regex(r"^/\d+$"), slash_get, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("save", save, block=False))
 CUTIEPII_PTB.add_handler(CommandHandler("clear", clear, block=False))
 
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler(["notes", "saved"], list_notes, admin_ok=True, block=False))
+    DisableAbleCommandHandler(["notes", "saved"],
+                              list_notes,
+                              admin_ok=True,
+                              block=False))
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("removeallnotes", clearall, block=False))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("removeallnotes", clearall, block=False))
 CUTIEPII_PTB.add_handler(
     CallbackQueryHandler(clearall_btn, pattern=r"notes_.*", block=False))
