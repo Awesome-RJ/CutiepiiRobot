@@ -296,8 +296,7 @@ def __user_settings__(user_id):
 CUTIEPII_PTB.add_handler(CommandHandler("reports", report_setting))
 CUTIEPII_PTB.add_handler(
     CommandHandler("report", report, filters=filters.ChatType.GROUPS))
-CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report))
+#CUTIEPII_PTB.add_handler(MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(buttons, pattern=r"report_"))
 
 __mod_name__ = "Reporting"
