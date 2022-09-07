@@ -72,7 +72,7 @@ def user_is_admin(
     user_id: int,
     channels: bool = False,  # if True, returns True if user is anonymous
     allow_moderators: bool = False,  # if True, returns True if user is a moderator
-    perm: AdminPerms = None  # if not None, returns True if user has the specified permission
+    perm: AdminPerms = None,  # if not None, returns True if user has the specified permission
     member: ChatMember = None
     ) -> bool:
 	chat = update.effective_chat
