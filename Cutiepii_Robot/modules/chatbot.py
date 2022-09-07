@@ -134,7 +134,7 @@ async def chatbot(update: Update, context: CallbackContext) -> None:
             response = response.replace("Aco", bot.first_name)
         if "bot.name" in response:
             response = response.replace("bot.name", bot.first_name)
-        await sleep(0.3)
+            await sleep(0.3)
         await msg.reply_text(response
                              #    , timeout=60
                              )
