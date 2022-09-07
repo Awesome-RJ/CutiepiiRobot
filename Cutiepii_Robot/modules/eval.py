@@ -155,7 +155,8 @@ async def do(func, bot, update):
             return result
 
 
-@pgram.on_message(Cutiepii_PYRO_Eval & filters.user(DEV_USERS) & (~filters.forwarded) & (~filters.via_bot))
+@pgram.on_message(Cutiepii_PYRO_Eval & filters.user(DEV_USERS) &
+                  (~filters.forwarded) & (~filters.via_bot))
 @pgram.on_edited_message(Cutiepii_PYRO_Eval)
 async def executor(client: Client, message: Message):
     try:

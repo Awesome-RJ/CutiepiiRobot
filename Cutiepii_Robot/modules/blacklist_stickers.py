@@ -50,8 +50,7 @@ from telegram.helpers import mention_html, mention_markdown
 from telegram.constants import ParseMode, ChatType
 
 
-def blackliststicker(update: Update,
-                     context: CallbackContext) -> None:
+def blackliststicker(update: Update, context: CallbackContext) -> None:
     global text
     msg = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat  # type: Optional[Chat]
@@ -174,8 +173,7 @@ async def add_blackliststicker(update: Update,
 
 
 @user_admin
-async def unblackliststicker(update: Update,
-                             context: CallbackContext) -> None:
+async def unblackliststicker(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     msg = update.effective_message  # type: Optional[Message]
     chat = update.effective_chat  # type: Optional[Chat]
@@ -264,8 +262,7 @@ async def unblackliststicker(update: Update,
 
 @loggable
 @user_admin
-async def blacklist_mode(update: Update,
-                         context: CallbackContext) -> None:
+async def blacklist_mode(update: Update, context: CallbackContext) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -487,11 +484,7 @@ def __stats__():
 __mod_name__ = "Stickers Blacklist"
 
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler(
-        "blsticker",
-        blackliststicker,
-        admin_ok=True
-    ))
+    DisableAbleCommandHandler("blsticker", blackliststicker, admin_ok=True))
 CUTIEPII_PTB.add_handler(
     DisableAbleCommandHandler("addblsticker", add_blackliststicker))
 CUTIEPII_PTB.add_handler(
