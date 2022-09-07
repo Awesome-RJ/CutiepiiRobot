@@ -1,3 +1,4 @@
+"""
 import ast
 import asyncio
 import contextlib
@@ -546,3 +547,5 @@ CUTIEPII_PTB.add_handler(CommandHandler(
 CUTIEPII_PTB.add_handler(
     MessageHandler(filters.ALL & filters.ChatType.GROUPS, del_lockables),
     PERM_GROUP)
+
+"""
