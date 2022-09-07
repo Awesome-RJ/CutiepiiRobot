@@ -23,7 +23,7 @@ from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     is_bot_admin,
     user_admin as u_admin,
 )
-from Cutiepii_Robot.modules.helper_funcs.decorators import kigcmd, kigmsg
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_msg
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql.approve_sql import is_approved
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin, AdminPerms
@@ -129,7 +129,7 @@ async def unrestr_members(
             )
 
 
-@kigcmd(command="locktypes")
+@cutiepii_cmd(command="locktypes")
 async def locktypes(update, _):
     await update.effective_message.reply_text(
         "\n • ".join(
@@ -139,7 +139,7 @@ async def locktypes(update, _):
     )
 
 
-@kigcmd(command="lock")
+@cutiepii_cmd(command="lock")
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def lock(update: Update, context: CallbackContext) -> str:  # sourcery no-metrics
@@ -244,7 +244,7 @@ async def lock(update: Update, context: CallbackContext) -> str:  # sourcery no-
     return ""
 
 
-@kigcmd(command="unlock")
+@cutiepii_cmd(command="unlock")
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
 async def unlock(
@@ -341,7 +341,7 @@ async def unlock(
     return ""
 
 
-@kigmsg((filters.ALL & filters.ChatType.GROUPS), group=PERM_GROUP)
+@cutiepii_msg((filters.ALL & filters.ChatType.GROUPS), group=PERM_GROUP)
 @user_not_admin
 async def del_lockables(update, context):  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
@@ -455,7 +455,7 @@ async def build_lock_message(chat_id):
     return res
 
 
-@kigcmd(command="locks")
+@cutiepii_cmd(command="locks")
 @u_admin
 async def list_locks(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
