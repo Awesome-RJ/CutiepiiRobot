@@ -116,7 +116,7 @@ if is_module_loaded(FILENAME):
         def __init__(self,
                      pattern,
                      callback,
-                     ,
+                     block=False,
                      friendly="",
                      **kwargs):
             super().__init__(pattern, callback, **kwargs)
