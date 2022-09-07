@@ -61,6 +61,14 @@ anonymous_data = {}
 def can_delete(chat: Chat, bot_id: int) -> bool:
     return chat.get_member(bot_id).can_delete_messages
 
+def is_bot_admin(chat: Chat, bot_id: int, bot_member: ChatMember = None) -> bool:
+    if chat.type == "private" or chat.all_members_are_administrators:
+        return True
+
+    if not bot_member:
+        bot_member = chat.get_member(bot_id)
+
+    return bot_member.status in ("administrator", "creator")
 
 def is_anon(user: User, chat: Chat):
     return chat.get_member(user.id).is_anonymous
