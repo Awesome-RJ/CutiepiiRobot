@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import re
 import requests
-from time import sleep
+from asyncio import sleep
 
 from Cutiepii_Robot import BOT_ID, CUTIEPII_PTB, DEV_USERS
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
@@ -134,7 +134,7 @@ async def chatbot(update: Update, context: CallbackContext) -> None:
             response = response.replace("Aco", bot.first_name)
         if "bot.name" in response:
             response = response.replace("bot.name", bot.first_name)
-       await sleep(0.3)
+        await sleep(0.3)
         await msg.reply_text(response
                              #    , timeout=60
                              )
