@@ -87,14 +87,13 @@ def user_is_admin(
     if not member:
         try:
             return user_id in ADMIN_CACHE[chat.id]
-        except KeyError:
-            chat_admins = await CUTIEPII_PTB.bot.getChatAdministrators(chat.id)
-            admin_list = [x.user.id for x in chat_admins]
-            ADMIN_CACHE[chat.id] = admin_list
-
-            if user_id in admin_list:
-                return True
-            return False
+            except KeyError:
+                chat_admins = await CUTIEPII_PTB.bot.getChatAdministrators(chat.id)
+                admin_list = [x.user.id for x in chat_admins]
+                ADMIN_CACHE[chat.id] = admin_list
+                if user_id in admin_list:
+                    return True
+                    return False
 
 
 RLOCK = RLock()
