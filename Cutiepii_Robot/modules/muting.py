@@ -361,8 +361,7 @@ async def temp_mute(update: Update, context: CallbackContext) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def temp_nomedia(update: Update,
-                       context: CallbackContext) -> str:
+async def temp_nomedia(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     message = update.effective_message  # type: Optional[Message]

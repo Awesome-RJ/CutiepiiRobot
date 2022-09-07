@@ -154,17 +154,20 @@ def __chat_settings__(chat_id):
 __mod_name__ = "Rules"
 
 CUTIEPII_PTB.add_handler(
-    CommandHandler("rules",
-                   get_rules,
-                   filters=filters.ChatType.GROUPS,
-                   ))
+    CommandHandler(
+        "rules",
+        get_rules,
+        filters=filters.ChatType.GROUPS,
+    ))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("setrules",
-                   set_rules,
-                   filters=filters.ChatType.GROUPS,
-                   ))
+    CommandHandler(
+        "setrules",
+        set_rules,
+        filters=filters.ChatType.GROUPS,
+    ))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("clearrules",
-                   clear_rules,
-                   filters=filters.ChatType.GROUPS,
-                   ))
+    CommandHandler(
+        "clearrules",
+        clear_rules,
+        filters=filters.ChatType.GROUPS,
+    ))

@@ -219,10 +219,9 @@ async def markdown_help_sender(update: Update):
         ],
     ])
     if update.callback_query:
-        await update.effective_message.edit_text(
-            FORMATTING_HELP,
-            parse_mode=ParseMode.MARKDOWN,
-            reply_markup=markup)
+        await update.effective_message.edit_text(FORMATTING_HELP,
+                                                 parse_mode=ParseMode.MARKDOWN,
+                                                 reply_markup=markup)
     else:
         await update.effective_message.reply_text(
             FORMATTING_HELP,
@@ -230,8 +229,7 @@ async def markdown_help_sender(update: Update):
             reply_markup=markup)
 
 
-async def markdown_help(update: Update,
-                        context: CallbackContext) -> None:
+async def markdown_help(update: Update, context: CallbackContext) -> None:
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
             "Contact me in pm",
@@ -248,8 +246,7 @@ async def markdown_help(update: Update,
     markdown_help_sender(update)
 
 
-async def mkdown_btn(update: Update,
-                     context: CallbackContext) -> None:
+async def mkdown_btn(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     query = update.callback_query
     match = query.data.split("_")[1]
@@ -354,8 +351,7 @@ async def rmemes(update: Update, context: CallbackContext) -> None:
         return await msg.reply_text(f"Error! {excp.message}")
 
 
-async def markdown_help(update: Update,
-                        context: CallbackContext) -> None:
+async def markdown_help(update: Update, context: CallbackContext) -> None:
     if update.effective_chat.type != "private":
         await update.effective_message.reply_text(
             "Contact me in pm",
@@ -575,28 +571,27 @@ Bass Boosting
 """
 
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("echo",
-                              echo,
-                              filters=PTB_Cutiepii_Filters.ChatType.GROUPS,
-                              ))
+    DisableAbleCommandHandler(
+        "echo",
+        echo,
+        filters=PTB_Cutiepii_Filters.ChatType.GROUPS,
+    ))
+CUTIEPII_PTB.add_handler(CommandHandler("markdownhelp", markdown_help))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("markdownhelp", markdown_help))
+    CommandHandler(
+        "gdpr",
+        gdpr,
+        filters=PTB_Cutiepii_Filters.ChatType.PRIVATE,
+    ))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_"))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("gdpr",
-                   gdpr,
-                   filters=PTB_Cutiepii_Filters.ChatType.PRIVATE,
-                   ))
-CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_"))
-CUTIEPII_PTB.add_handler(
-    CommandHandler("source",
-                   src,
-                   filters=PTB_Cutiepii_Filters.ChatType.PRIVATE,
-                   ))
-CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("rmeme", rmemes))
-CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("status", status))
+    CommandHandler(
+        "source",
+        src,
+        filters=PTB_Cutiepii_Filters.ChatType.PRIVATE,
+    ))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("rmeme", rmemes))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("status", status))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("imdb", imdb))
 
 __mod_name__ = "Extras"

@@ -62,8 +62,7 @@ async def drama(update: Update):
 
 
 # Callback Data
-async def drama_button(update: Update,
-                       context: CallbackContext) -> None:
+async def drama_button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     message = update.effective_message
 
@@ -124,8 +123,7 @@ async def drama_button(update: Update,
         await context.bot.answer_callback_query(query.id)
 
 
-async def casts_button(update: Update,
-                       context: CallbackContext) -> None:
+async def casts_button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     message = update.effective_message
 
@@ -173,5 +171,7 @@ async def casts_button(update: Update,
         )
         await context.bot.answer_callback_query(query.id)
 
+
 CUTIEPII_PTB.add_handler(CommandHandler("Drama", drama))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(casts_button, pattern=r"drama-cast-detail.*"))
+CUTIEPII_PTB.add_handler(
+    CallbackQueryHandler(casts_button, pattern=r"drama-cast-detail.*"))

@@ -92,8 +92,7 @@ async def approve(update: Update, context: CallbackContext) -> None:
 
 @loggable
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
-async def disapprove(update: Update,
-                     context: CallbackContext) -> None:
+async def disapprove(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     chat_title = message.chat.title
     chat = update.effective_chat
