@@ -75,12 +75,7 @@ def user_is_admin(
     perm: AdminPerms = None  # if not None, returns True if user has the specified permission
     ) -> bool:
 	chat = update.effective_chat
-    if (
-        chat.type == "private"
-        or user_id in SUDO_USERS
-        or user_id in DEV_USERS
-        or chat.all_members_are_administrators
-        ):
+    if chat.type == "private"or user_id in SUDO_USERS or user_id in DEV_USERS or chat.all_members_are_administrators
 		return True
 
 	if channels and (update.effective_message.sender_chat is not None and update.effective_message.sender_chat.type != "channel"):
