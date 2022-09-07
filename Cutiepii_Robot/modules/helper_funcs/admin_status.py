@@ -73,6 +73,7 @@ def user_is_admin(
     channels: bool = False,  # if True, returns True if user is anonymous
     allow_moderators: bool = False,  # if True, returns True if user is a moderator
     perm: AdminPerms = None  # if not None, returns True if user has the specified permission
+    member: ChatMember = None
     ) -> bool:
 	chat = update.effective_chat
 #    if chat.type == "private" or user_id in SUDO_USERS or user_id in DEV_USERS or chat.all_members_are_administrators
@@ -82,7 +83,7 @@ def user_is_admin(
 	if channels and (update.effective_message.sender_chat is not None and update.effective_message.sender_chat.type != "channel"):
 		return True  # return true if user is anonymous
 
-	member: ChatMember = get_mem_from_cache(user_id, chat.id)
+#	member: ChatMember = get_mem_from_cache(user_id, chat.id)
 	if not member:  # not in cache so not an admin
 		return False
 
@@ -107,7 +108,7 @@ async def get_mem_from_cache(user_id: int, chat_id: int) -> ChatMember:
 				if i.user.id == user_id: return i
 
 		except (KeyError, IndexError):
-			admins = await CUTIEPII_PTB.bot.getChatAdministrators(chat_id)
+			admins = CUTIEPII_PTB.bot.getChatAdministrators(chat_id)
 			A_CACHE[chat_id] = admins
 			for i in admins:
 				if i.user.id == user_id: return i
