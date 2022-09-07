@@ -100,7 +100,7 @@ async def list_nsfw_chats(update: Update, context: CallbackContext):
         except (BadRequest, Forbidden):
             sql.rem_nsfw(*chat)
         except RetryAfter as e:
-           await sleep(e.retry_after)
+            await sleep(e.retry_after)
     await update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
 
 
@@ -117,8 +117,7 @@ async def neko(update: Update, context: CallbackContext):
         return
     try:
         if flag == "-i":
-            await message.reply_photo(photo=img,
-                                      parse_mode=ParseMode.MARKDOWN)
+            await message.reply_photo(photo=img, parse_mode=ParseMode.MARKDOWN)
         elif flag == "-d":
             await message.reply_document(document=img,
                                          parse_mode=ParseMode.MARKDOWN)
@@ -129,8 +128,7 @@ async def neko(update: Update, context: CallbackContext):
             await message.reply_sticker(sticker=open(stkr, "rb"))
             os.remove("sticker.webp")
         elif flag == "-v":
-            await message.reply_video(video=img,
-                                      parse_mode=ParseMode.MARKDOWN)
+            await message.reply_video(video=img, parse_mode=ParseMode.MARKDOWN)
         else:
             await message.reply_text("Put flags correctly!!!")
     except Exception as excp:
@@ -680,10 +678,11 @@ async def baka(update: Update):
 CUTIEPII_PTB.add_handler(CommandHandler("addnsfw", add_nsfw))
 CUTIEPII_PTB.add_handler(CommandHandler("rmnsfw", rem_nsfw))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("nsfwchats",
-                   list_nsfw_chats,
-                   filters=filters.User(DEV_USERS),
-                   ))
+    CommandHandler(
+        "nsfwchats",
+        list_nsfw_chats,
+        filters=filters.User(DEV_USERS),
+    ))
 CUTIEPII_PTB.add_handler(CommandHandler("lewdkemo", lewdkemo))
 CUTIEPII_PTB.add_handler(CommandHandler("neko", neko))
 CUTIEPII_PTB.add_handler(CommandHandler("feet", feet))

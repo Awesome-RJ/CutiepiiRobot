@@ -347,7 +347,6 @@ async def rkick(update: Update, context: CallbackContext) -> None:
             await message.reply_text("Well damn, I can't punch that user.")
 
 
-
 @dev_plus
 async def rmute(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
@@ -427,7 +426,6 @@ async def rmute(update: Update, context: CallbackContext) -> None:
                 excp.message,
             )
             await message.reply_text("Well damn, I can't mute that user.")
-
 
 
 @dev_plus
@@ -543,8 +541,13 @@ async def recho(update: Update, context: CallbackContext) -> None:
             await message.reply_text("Couldn't send the message. Perhaps I'm not part of that group?")
 
 """
-CUTIEPII_PTB.add_handler(CommandHandler("rban", rban, filters=filters.User(SUDO_USERS)))
-CUTIEPII_PTB.add_handler(CommandHandler("runban", runban, filters=filters.User(SUDO_USERS)))
-CUTIEPII_PTB.add_handler(CommandHandler("rpunch", rkick, filters=filters.User(SUDO_USERS)))
-CUTIEPII_PTB.add_handler(CommandHandler("rmute", rmute, filters=filters.User(SUDO_USERS)))
-CUTIEPII_PTB.add_handler(CommandHandler("runmute", runmute, filters=filters.User(SUDO_USERS)))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("rban", rban, filters=filters.User(SUDO_USERS)))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("runban", runban, filters=filters.User(SUDO_USERS)))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("rpunch", rkick, filters=filters.User(SUDO_USERS)))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("rmute", rmute, filters=filters.User(SUDO_USERS)))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("runmute", runmute, filters=filters.User(SUDO_USERS)))
