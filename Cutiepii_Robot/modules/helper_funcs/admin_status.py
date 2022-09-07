@@ -96,7 +96,7 @@ def user_is_admin(
             # KeyError happened means cache is deleted,
             # so query bot api again and return user status
             # while saving it in cache for future usage...
-            chat_admins = await application.bot.getChatAdministrators(chat.id)
+            chat_admins = await CUTIEPII_PTB.bot.getChatAdministrators(chat.id)
             admin_list = [x.user.id for x in chat_admins]
             ADMIN_CACHE[chat.id] = admin_list
 
