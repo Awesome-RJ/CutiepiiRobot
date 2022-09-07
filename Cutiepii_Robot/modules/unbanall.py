@@ -76,7 +76,7 @@ async def _(event):
                 functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
             LOGGER.warn(f"sleeping for {ex.seconds} seconds")
-           sleep(ex.seconds)
+            sleep(ex.seconds)
         except Exception as ex:
             await event.reply(str(ex))
         else:
@@ -132,7 +132,7 @@ async def _(event):
                 functions.channels.EditBannedRequest(event.chat_id, i, rights))
         except FloodWaitError as ex:
             LOGGER.warn(f"sleeping for {ex.seconds} seconds")
-           sleep(ex.seconds)
+            sleep(ex.seconds)
         except Exception as ex:
             await event.reply(str(ex))
         else:
