@@ -32,7 +32,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import os
 import lyricsgenius
 
-from pyrogram import filters
+from pyrogram import filters, Client
+from pyrogram.types import Message
 from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent
 
 from Cutiepii_Robot import pgram, GENIUS_API_TOKEN, arq
