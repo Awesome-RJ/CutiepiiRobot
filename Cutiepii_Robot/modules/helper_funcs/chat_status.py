@@ -58,6 +58,9 @@ ADMIN_CACHE = TTLCache(maxsize=512, ttl=60 * 10, timer=perf_counter)
 THREAD_LOCK = RLock()
 anonymous_data = {}
 
+def can_delete(chat: Chat, bot_id: int) -> bool:
+    return chat.get_member(bot_id).can_delete_messages
+
 
 def is_anon(user: User, chat: Chat):
     return chat.get_member(user.id).is_anonymous

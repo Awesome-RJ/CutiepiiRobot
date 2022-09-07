@@ -41,6 +41,7 @@ from telegram.constants import ParseMode
 from telegram.ext import CallbackContext, CommandHandler, filters
 
 from Cutiepii_Robot import telethn, CUTIEPII_PTB, BOT_ID, LOGGER
+from Cutiepii_Robot.modules.helper_funcs.chat_status import can_delete
 from Cutiepii_Robot.modules.sql.clear_cmd_sql import get_clearcmd
 from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
 from Cutiepii_Robot.modules.helper_funcs.telethn.chatstatus import (
