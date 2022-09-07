@@ -35,7 +35,7 @@ import datetime
 import subprocess
 import asyncio
 
-from time import sleep
+from asyncio import sleep
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext
 
@@ -81,7 +81,7 @@ async def backup_db(_: CallbackContext):
         await bot.send_message(OWNER_ID,
                                "An error occurred during the db backup")
         tmp.edit_text("Backup Failed!")
-       await sleep(8)
+        await sleep(8)
         tmp.delete()
         return
     LOGGER.info("copying config, and logs to backup location")
