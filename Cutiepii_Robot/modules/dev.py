@@ -43,7 +43,7 @@ from telegram.constants import ParseMode
 from telegram.ext import CallbackQueryHandler
 from statistics import mean
 from time import monotonic as time
-from time import sleep
+from asyncio import sleep
 from telethon import events
 
 
@@ -188,7 +188,7 @@ async def gitpull(update: Update):
 
     for i in reversed(range(5)):
         sent_msg.edit_text(sent_msg_text + str(i + 1))
-       await sleep(1)
+        await sleep(1)
 
     sent_msg.edit_text("Restarted.")
 
