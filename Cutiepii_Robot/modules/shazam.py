@@ -32,7 +32,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import os
 import requests
 
-from pyrogram import filters
+from pyrogram import filters, Client
+from pyrogram.types import Message
 from json import JSONDecodeError
 
 from Cutiepii_Robot.utils.pluginhelpers import admins_only, edit_or_reply, fetch_audio
