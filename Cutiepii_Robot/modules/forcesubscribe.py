@@ -32,7 +32,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import logging
 import time
 
-from pyrogram import filters
+from pyrogram import filters, Client
+from pyrogram.types import Message
 from pyrogram.errors import RPCError
 from pyrogram.errors.exceptions.bad_request_400 import (
     ChannelPrivate,
