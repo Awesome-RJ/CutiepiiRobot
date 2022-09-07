@@ -105,7 +105,7 @@ async def backup_db(_: CallbackContext):
     shutil.rmtree(f"backups/{datenow}")
     LOGGER.info("backup done")
     tmp.edit_text("Backup complete!")
-   await sleep(5)
+    await sleep(5)
     tmp.delete()
 
 
