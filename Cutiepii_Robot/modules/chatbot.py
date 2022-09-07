@@ -140,8 +140,7 @@ async def chatbot(update: Update, context: CallbackContext) -> None:
                              )
 
 
-async def list_chatbot_chats(update: Update,
-                             context: CallbackContext) -> None:
+async def list_chatbot_chats(update: Update, context: CallbackContext) -> None:
     text = "<b>AI-Enabled Chats</b>\n"
     for chat in CHATBOT_ENABLED_CHATS:
         x = await context.bot.get_chat(chat)
@@ -158,23 +157,27 @@ Chatbot utilizes the Brainshop's API and allows Cutiepii Robot 愛 to talk and p
 ➛ /chatbot*:* Shows chatbot control panel
 """
 
-CUTIEPII_PTB.add_handler(CommandHandler("chatbot", chatbot_toggle,
-                                        ))
+CUTIEPII_PTB.add_handler(CommandHandler(
+    "chatbot",
+    chatbot_toggle,
+))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(chatbot_handle_callq,
-                         pattern=r"chatbot_",
-                         ))
+    CallbackQueryHandler(
+        chatbot_handle_callq,
+        pattern=r"chatbot_",
+    ))
 CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.TEXT &
-                   (~filters.Regex(r"^#[^\s]+") & ~filters.Regex(r"^!")
-                    & ~filters.Regex(r"^\/")),
-                   chatbot,
-                   ))
+    MessageHandler(
+        filters.TEXT & (~filters.Regex(r"^#[^\s]+") & ~filters.Regex(r"^!")
+                        & ~filters.Regex(r"^\/")),
+        chatbot,
+    ))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("listaichats",
-                   list_chatbot_chats,
-                   filters=filters.User(DEV_USERS),
-                   ))
+    CommandHandler(
+        "listaichats",
+        list_chatbot_chats,
+        filters=filters.User(DEV_USERS),
+    ))
 
 __mod_name__ = "Chatbot"
 __command_list__ = ["chatbot", "listaichats"]

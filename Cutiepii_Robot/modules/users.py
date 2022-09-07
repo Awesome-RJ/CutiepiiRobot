@@ -73,8 +73,7 @@ async def get_user_id(username):
     return None
 
 
-async def broadcast(update: Update,
-                    context: CallbackContext) -> None:
+async def broadcast(update: Update, context: CallbackContext) -> None:
     to_send = await update.effective_message.text.split(None, 1)
     if len(to_send) >= 2:
         chats_ = sql.get_all_chats() or []
@@ -100,7 +99,8 @@ async def log_user(update: Update, _: CallbackContext):
     chat = update.effective_chat
     msg = update.effective_message
 
-    sql.update_user(msg.from_user.id, msg.from_user.username, chat.id, chat.title)
+    sql.update_user(msg.from_user.id, msg.from_user.username, chat.id,
+                    chat.title)
 
     if rep := msg.reply_to_message:
         sql.update_user(
@@ -138,9 +138,8 @@ async def log_user(update: Update, _: CallbackContext):
                 with contextlib.suppress(AttributeError):
                     sql.update_user(entity.user.id, entity.user.username)
     if msg.sender_chat and not msg.is_automatic_forward:
-        sql.update_user(
-            msg.sender_chat.id, msg.sender_chat.username, chat.id, chat.title
-        )
+        sql.update_user(msg.sender_chat.id, msg.sender_chat.username, chat.id,
+                        chat.title)
 
     if msg.new_chat_members:
         for user in msg.new_chat_members:
