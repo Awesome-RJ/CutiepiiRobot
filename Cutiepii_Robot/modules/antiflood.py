@@ -58,8 +58,7 @@ FLOOD_GROUP = 3
 
 
 @loggable
-async def check_flood(update: Update,
-                      context: CallbackContext) -> str:
+async def check_flood(update: Update, context: CallbackContext) -> str:
     user = update.effective_user  # type: Optional[User]
     chat = update.effective_chat  # type: Optional[Chat]
     msg = update.effective_message  # type: Optional[Message]
@@ -125,8 +124,7 @@ async def check_flood(update: Update,
 
 @user_admin_no_reply
 @bot_admin
-async def flood_button(update: Update,
-                       context: CallbackContext) -> None:
+async def flood_button(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     query = update.callback_query
     user = update.effective_user
@@ -263,8 +261,7 @@ async def flood(update: Update, context: CallbackContext) -> None:
 
 
 @user_admin
-async def set_flood_mode(update: Update,
-                         context: CallbackContext) -> None:
+async def set_flood_mode(update: Update, context: CallbackContext) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]

@@ -40,9 +40,8 @@ from telegram.ext import CallbackContext
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 
 
-
 async def wiki(update: Update, context: CallbackContext) -> None:
-    kueri = re.split(pattern="wiki", string = update.effective_message.text)
+    kueri = re.split(pattern="wiki", string=update.effective_message.text)
     message = update.effective_message
     wikipedia.set_lang("en")
     if not str(kueri[1]):
@@ -50,15 +49,10 @@ async def wiki(update: Update, context: CallbackContext) -> None:
     else:
         try:
             pertama = await update.effective_message.reply_text("🔄 Loading...")
-            keyboard = InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="🔧 More Info...", url=wikipedia.page(kueri).url
-                        )
-                    ]
-                ]
-            )
+            keyboard = InlineKeyboardMarkup([[
+                InlineKeyboardButton(text="🔧 More Info...",
+                                     url=wikipedia.page(kueri).url)
+            ]])
             context.bot.editMessageText(
                 chat_id=update.effective_chat.id,
                 message_id=pertama.message_id,
