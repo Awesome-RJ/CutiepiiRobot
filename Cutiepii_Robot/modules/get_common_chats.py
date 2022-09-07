@@ -61,12 +61,12 @@ async def get_user_common_chats(update: Update,
     for chat in common_list:
         try:
             chat_name = await bot.get_chat(chat).title
-            sleep(0.3)
+           await sleep(0.3)
             text += f"➛ <code>{chat_name}</code>\n"
         except (BadRequest, Forbidden):
             pass
         except RetryAfter as e:
-            sleep(e.retry_after)
+           await sleep(e.retry_after)
 
     if len(text) < 4096:
         await msg.reply_text(text, parse_mode=ParseMode.HTML)

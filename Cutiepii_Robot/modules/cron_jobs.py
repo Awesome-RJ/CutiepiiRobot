@@ -80,7 +80,7 @@ async def backup_db(_: CallbackContext):
         await bot.send_message(OWNER_ID,
                                "An error occurred during the db backup")
         tmp.edit_text("Backup Failed!")
-        sleep(8)
+       await sleep(8)
         tmp.delete()
         return
     LOGGER.info("copying config, and logs to backup location")
@@ -96,7 +96,7 @@ async def backup_db(_: CallbackContext):
     LOGGER.info("zip started")
     term(zipcmd, zipinfo)
     LOGGER.info("zip done")
-    sleep(1)
+   await sleep(1)
     with open(f'backups/{datenow}.zip', 'rb') as bkp:
         nm = f"{bot.username} backup \n" + datenow
         await bot.send_document(OWNER_ID, document=bkp, caption=nm, timeout=20)
@@ -104,7 +104,7 @@ async def backup_db(_: CallbackContext):
     shutil.rmtree(f"backups/{datenow}")
     LOGGER.info("backup done")
     tmp.edit_text("Backup complete!")
-    sleep(5)
+   await sleep(5)
     tmp.delete()
 
 

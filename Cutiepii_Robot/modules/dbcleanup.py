@@ -68,7 +68,7 @@ def get_muted_chats(bot: Bot, update: Update, leave: bool = False):
             progress += 5
 
         cid = chat.chat_id
-        sleep(0.1)
+       await sleep(0.1)
 
         try:
             await bot..sendChatAction(cid, "TYPING", timeout=120)
@@ -86,7 +86,7 @@ def get_muted_chats(bot: Bot, update: Update, leave: bool = False):
     if not leave:
         return muted_chats
     for muted_chat in chat_list:
-        sleep(0.1)
+       await sleep(0.1)
         try:
             bot.leaveChat(muted_chat, timeout=120)
         except:
@@ -119,7 +119,7 @@ async def get_invalid_chats(update: Update, context: CallbackContext, remove: bo
             progress += 5
 
         cid = chat.chat_id
-        sleep(0.1)
+       await sleep(0.1)
         with contextlib.suppress(Exception):
             await bot.get_chat(cid, timeout=60)
         except (BadRequest, Forbidden):
@@ -134,7 +134,7 @@ async def get_invalid_chats(update: Update, context: CallbackContext, remove: bo
     if not remove:
         return kicked_chats
     for muted_chat in chat_list:
-        sleep(0.1)
+       await sleep(0.1)
         user_sql.rem_chat(muted_chat)
     return kicked_chats
 
@@ -147,7 +147,7 @@ async def get_invalid_gban(update: Update, context: CallbackContext, remove: boo
 
     for user in banned:
         user_id = user["user_id"]
-        sleep(0.1)
+       await sleep(0.1)
         with contextlib.suppress(Exception):
             await bot.get_chat(user_id)
         except BadRequest:
@@ -157,7 +157,7 @@ async def get_invalid_gban(update: Update, context: CallbackContext, remove: boo
     if not remove:
         return ungbanned_users
     for user_id in ungban_list:
-        sleep(0.1)
+       await sleep(0.1)
         gban_sql.ungban_user(user_id)
     return ungbanned_users
 

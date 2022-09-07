@@ -49,6 +49,7 @@ from pymongo import MongoClient
 from redis import StrictRedis
 from Python_ARQ import ARQ
 from aiohttp import ClientSession
+from telegram.ext import Application, Defaults
 from telegraph import Telegraph
 from httpx import AsyncClient, Timeout
 
@@ -335,11 +336,8 @@ telegraph.create_account(short_name="Cutiepii")
 LOGGER.debug("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 
-CUTIEPII_PTB = (
-    tg.Application.builder()
-    .token(TOKEN)
-    .build()
-)
+defaults = Defaults(block=False)
+CUTIEPII_PTB = Application.builder().token(TOKEN).defaults(defaults).concurrent_updates(True).build()
 
 # asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
 #------------------------------------------------------------------

@@ -60,7 +60,7 @@ class EqInlineKeyboardButton(InlineKeyboardButton):
         return self.text > other.text
 
 def delete(delmsg, timer):
-    sleep(timer)
+   await sleep(timer)
     try:
         delmsg.delete()
     except:
