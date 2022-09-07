@@ -82,8 +82,7 @@ async def eliminate_linked_channel_msg(update: Update):
 
 @bot_admin
 @user_admin
-async def set_antipinchannel(update: Update,
-                             context: CallbackContext) -> None:
+async def set_antipinchannel(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
