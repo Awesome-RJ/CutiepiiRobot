@@ -83,18 +83,19 @@ def user_is_admin(
 		return True  # return true if user is anonymous
 
 	member: ChatMember = get_mem_from_cache(user_id, chat.id)
+	if not member:  # not in cache so not an admin
+		return False
 
-    if not member:
-        try:
-            return user_id in ADMIN_CACHE[chat.id]
-            except KeyError:
-                chat_admins = await CUTIEPII_PTB.bot.getChatAdministrators(chat.id)
-                admin_list = [x.user.id for x in chat_admins]
-                ADMIN_CACHE[chat.id] = admin_list
-                if user_id in admin_list:
-                    return True
-                    return False
+"""
+	if perm:  # check perm if its required
+		try:
+			the_perm = perm.value
+		except AttributeError:
+			return bxp(update)
+		return getattr(member, the_perm) or member.status == "creator"
 
+	return member.status in ["administrator", "creator"] 
+"""
 
 RLOCK = RLock()
 
