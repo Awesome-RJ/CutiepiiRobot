@@ -67,7 +67,7 @@ def bot_admin_check(permission: AdminPerms = None):
 	return wrapper
 
 
-async def user_is_admin(
+def user_is_admin(
     update: Update,
     user_id: int,
     channels: bool = False,  # if True, returns True if user is anonymous
