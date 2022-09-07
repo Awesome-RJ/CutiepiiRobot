@@ -82,7 +82,7 @@ async def broadcast(update: Update,
         for chat in chats_:
             try:
                 await context.bot.sendMessage(int(chat["chat_id"]), to_send[1])
-               sleep(0.1)
+                sleep(0.1)
             except TelegramError:
                 failed += 1
                 LOGGER.warning(
