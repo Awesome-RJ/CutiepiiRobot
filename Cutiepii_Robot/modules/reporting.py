@@ -183,7 +183,7 @@ async def report(update: Update, context: CallbackContext) -> str:
 
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
-@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, noreply = True)
+@user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 async def buttons(update: Update, context: CallbackContext):
     bot = context.bot
     query = update.callback_query

@@ -111,7 +111,7 @@ async def get_mem_from_cache(user_id: int, chat_id: int) -> ChatMember:
 			for i in admins:
 				if i.user.id == user_id: return i
 
-def user_admin_check(permission: AdminPerms):
+def user_admin_check(permission: AdminPerms = None):
     def wrapper(func):
         @wraps(func)
         async def awrapper(update: Update, context: Ctx, *args, **kwargs):
