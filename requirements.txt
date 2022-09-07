@@ -50,7 +50,6 @@ humanize==4.3.0
 pyrogram==2.0.40
 python-arq==6.0.5
 aiohttp==3.8.1
-carbonnow
 search_engine_parser
 googletrans
 youtube_search_python==1.6.5

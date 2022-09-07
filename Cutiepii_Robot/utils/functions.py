@@ -6,7 +6,7 @@ from random import randint
 
 import aiofiles
 import aiohttp
-from carbonnow import Carbon
+
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from wget import download
 
@@ -78,11 +78,6 @@ async def get_http_status_code(url: str) -> int:
     async with aiohttp.ClientSession() as session, session.head(url) as resp:
         return resp.status
 
-
-async def make_carbon(code):
-    carbon = Carbon(code=code)
-    image = await carbon.save(str(randint(1000, 10000)))
-    return image
 
 
 async def transfer_sh(file):
