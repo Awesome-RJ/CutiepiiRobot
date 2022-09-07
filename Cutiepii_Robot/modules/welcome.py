@@ -154,9 +154,8 @@ async def send(update, message, keyboard, backup_message):
 
 
 @loggable
-async def new_member(
-        update: Update,
-        context: CallbackContext) -> None:  # sourcery no-metrics
+async def new_member(update: Update,
+                     context: CallbackContext) -> None:  # sourcery no-metrics
     bot, job_queue = context.bot, context.job_queue
     chat = update.effective_chat
     user = update.effective_user
@@ -229,7 +228,9 @@ async def new_member(
             # Give the owner a special welcome
             if new_mem.id == OWNER_ID:
                 await update.effective_message.reply_animation(
-                    "https://telegra.ph/file/409bdbf03868cf6b2d755.mp4", caption="Oh hi, my creator.", reply_to_message_id=reply)
+                    "https://telegra.ph/file/409bdbf03868cf6b2d755.mp4",
+                    caption="Oh hi, my creator.",
+                    reply_to_message_id=reply)
                 welcome_log = (f"{html.escape(chat.title)}\n"
                                f"#USER_JOINED\n"
                                f"Bot Owner just joined the chat")
@@ -622,9 +623,8 @@ async def check_not_bot(member: User, chat_id: int, message_id: int,
             )
 
 
-async def left_member(
-        update: Update,
-        context: CallbackContext) -> None:  # sourcery no-metrics
+async def left_member(update: Update,
+                      context: CallbackContext) -> None:  # sourcery no-metrics
     bot = context.bot
     chat = update.effective_chat
     user = update.effective_user
@@ -841,8 +841,7 @@ async def goodbye(update: Update, context: CallbackContext) -> None:
 
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
-async def set_welcome(update: Update,
-                      context: CallbackContext) -> str:
+async def set_welcome(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
@@ -864,8 +863,7 @@ async def set_welcome(update: Update,
 
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
-async def reset_welcome(update: Update,
-                        context: CallbackContext) -> str:
+async def reset_welcome(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
 
@@ -881,8 +879,7 @@ async def reset_welcome(update: Update,
 
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
-async def set_goodbye(update: Update,
-                      context: CallbackContext) -> str:
+async def set_goodbye(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
     msg = update.effective_message
@@ -902,8 +899,7 @@ async def set_goodbye(update: Update,
 
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
-async def reset_goodbye(update: Update,
-                        context: CallbackContext) -> str:
+async def reset_goodbye(update: Update, context: CallbackContext) -> str:
     chat = update.effective_chat
     user = update.effective_user
 
@@ -919,8 +915,7 @@ async def reset_goodbye(update: Update,
 
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
-async def welcomemute(update: Update,
-                      context: CallbackContext) -> str:
+async def welcomemute(update: Update, context: CallbackContext) -> str:
     args = context.args
     chat = update.effective_chat
     user = update.effective_user
@@ -982,8 +977,7 @@ async def welcomemute(update: Update,
 
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
-async def clean_welcome(update: Update,
-                        context: CallbackContext) -> str:
+async def clean_welcome(update: Update, context: CallbackContext) -> str:
     args = context.args
     chat = update.effective_chat
     user = update.effective_user
@@ -1021,16 +1015,14 @@ async def clean_welcome(update: Update,
 
 
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
-async def cleanservice(update: Update,
-                       context: CallbackContext) -> str:
+async def cleanservice(update: Update, context: CallbackContext) -> str:
     args = context.args
     chat = update.effective_chat  # type: Optional[Chat]
     if chat.type == chat.PRIVATE:
         curr = sql.clean_service(chat.id)
         if curr:
             await update.effective_message.reply_text(
-                "Welcome clean service is : on",
-                parse_mode=ParseMode.MARKDOWN)
+                "Welcome clean service is : on", parse_mode=ParseMode.MARKDOWN)
         else:
             await update.effective_message.reply_text(
                 "Welcome clean service is : off",
@@ -1054,8 +1046,7 @@ async def cleanservice(update: Update,
             "Usage is on/yes or off/no", parse_mode=ParseMode.MARKDOWN)
 
 
-async def user_button(update: Update,
-                      context: CallbackContext) -> None:
+async def user_button(update: Update, context: CallbackContext) -> None:
     chat = update.effective_chat
     user = update.effective_user
     query = update.callback_query
@@ -1235,15 +1226,13 @@ WELC_MUTE_HELP_TXT = (
 
 
 @u_admin
-async def welcome_help(update: Update,
-                       context: CallbackContext) -> None:
+async def welcome_help(update: Update, context: CallbackContext) -> None:
     await update.effective_message.reply_text(WELC_HELP_TXT,
                                               parse_mode=ParseMode.MARKDOWN)
 
 
 @u_admin
-async def welcome_mute_help(update: Update,
-                            context: CallbackContext) -> None:
+async def welcome_mute_help(update: Update, context: CallbackContext) -> None:
     await update.effective_message.reply_text(WELC_MUTE_HELP_TXT,
                                               parse_mode=ParseMode.MARKDOWN)
 
@@ -1273,13 +1262,15 @@ def __chat_settings__(chat_id, user_id):
 
 
 CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS,
-                   new_member,
-                   ))
+    MessageHandler(
+        filters.StatusUpdate.NEW_CHAT_MEMBERS,
+        new_member,
+    ))
 CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.StatusUpdate.LEFT_CHAT_MEMBER,
-                   left_member,
-                   ))
+    MessageHandler(
+        filters.StatusUpdate.LEFT_CHAT_MEMBER,
+        left_member,
+    ))
 CUTIEPII_PTB.add_handler(
     CommandHandler("welcome", welcome, filters=filters.ChatType.GROUPS))
 CUTIEPII_PTB.add_handler(
@@ -1312,8 +1303,9 @@ CUTIEPII_PTB.add_handler(CommandHandler("welcomemutehelp", welcome_mute_help))
 CUTIEPII_PTB.add_handler(
     CallbackQueryHandler(user_button, pattern=r"user_join_"))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(user_captcha_button,
-                         pattern=r"user_captchajoin_\([\d\-]+,\d+\)_\(\d{4}\)",
-                         ))
+    CallbackQueryHandler(
+        user_captcha_button,
+        pattern=r"user_captchajoin_\([\d\-]+,\d+\)_\(\d{4}\)",
+    ))
 
 __mod_name__ = "Greetings"

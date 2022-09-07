@@ -266,9 +266,8 @@ async def gban(update: Update, context: CallbackContext) -> None:
 
 
 @support_plus
-async def ungban(
-        update: Update,
-        context: CallbackContext) -> None:  # sourcery no-metrics
+async def ungban(update: Update,
+                 context: CallbackContext) -> None:  # sourcery no-metrics
     bot, args = context.bot, context.args
     message = update.effective_message
     user = update.effective_user
@@ -422,10 +421,8 @@ async def check_and_ban(update, user_id, should_message=True):
                 text, parse_mode=ParseMode.HTML)
 
 
-
 @bot_admin
-async def enforce_gban(update: Update,
-                       context: CallbackContext) -> None:
+async def enforce_gban(update: Update, context: CallbackContext) -> None:
     # Not using @restrict handler to avoid spamming - just ignore if cant gban.
     bot = context.bot
     if sql.does_chat_gban(update.effective_chat.id):
@@ -561,6 +558,7 @@ CUTIEPII_PTB.add_handler(
     CommandHandler("checkgb", check_gbans, filters=filters.User(OWNER_ID)))
 CUTIEPII_PTB.add_handler(
     CommandHandler("cleangb", clear_gbans, filters=filters.User(OWNER_ID)))
-CUTIEPII_PTB.add_handler(MessageHandler((filters.ALL & filters.ChatType.GROUPS), enforce_gban))
+CUTIEPII_PTB.add_handler(
+    MessageHandler((filters.ALL & filters.ChatType.GROUPS), enforce_gban))
 
 __mod_name__ = "Anti-Spam"
