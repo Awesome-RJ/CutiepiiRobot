@@ -515,7 +515,7 @@ def __migrate__(old_chat_id, new_chat_id):
 def __chat_settings__(chat_id, user_id):
     return asyncio.get_running_loop().run_until_complete(build_lock_message(chat_id))
 
-__help__ = """
+__help__ = 
 Do stickers annoy you? or want to avoid people sharing links? or pictures? \
 You're in the right place!
 The locks module allows you to lock away some common items in the \
@@ -533,7 +533,7 @@ Locking bots will stop non-admins from adding bots to the chat.
 *Note:*
  ➛ Unlocking permission *info* will allow members (non-admins) to change the group information, such as the description or the group name
  ➛ Unlocking permission *pin* will allow members (non-admins) to pinned a message in a group
-"""
+
 
 __mod_name__ = "Locks"
 
