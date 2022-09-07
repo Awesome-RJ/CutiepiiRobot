@@ -571,8 +571,7 @@ async def makepack_internal(context,
             "Failed to create sticker pack. Possibly due to blek mejik.")
 
 
-async def getsticker(update: Update,
-                     context: CallbackContext) -> None:
+async def getsticker(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     chat_id = update.effective_chat.id
     if msg.reply_to_message and msg.reply_to_message.sticker:
@@ -603,8 +602,7 @@ async def getsticker(update: Update,
         )
 
 
-async def cb_sticker(update: Update,
-                     context: CallbackContext) -> None:
+async def cb_sticker(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     query = "".join(msg.text.split()[1:])
     if not query:
@@ -636,8 +634,7 @@ async def cbs_callback(update: Update):
     await query.answer()
 
 
-async def getsticker(update: Update,
-                     context: CallbackContext) -> None:
+async def getsticker(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     msg = update.effective_message
     chat_id = update.effective_chat.id
@@ -682,8 +679,7 @@ async def getsticker(update: Update,
     )
 
 
-async def delsticker(update: Update,
-                     context: CallbackContext) -> None:
+async def delsticker(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     if msg.reply_to_message and msg.reply_to_message.sticker:
         file_id = msg.reply_to_message.sticker.file_id
@@ -694,8 +690,7 @@ async def delsticker(update: Update,
             "Please reply to sticker message to del sticker")
 
 
-async def add_fvrtsticker(update: Update,
-                          context: CallbackContext) -> None:
+async def add_fvrtsticker(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     user = update.effective_user
     args = context.args
@@ -741,8 +736,7 @@ async def list_fvrtsticker(update: Update):
         await message.reply_text("You haven't added any sticker yet.")
 
 
-async def remove_fvrtsticker(update: Update,
-                             context: CallbackContext) -> None:
+async def remove_fvrtsticker(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     user = update.effective_user
     args = context.args

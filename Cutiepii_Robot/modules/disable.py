@@ -63,7 +63,7 @@ if is_module_loaded(FILENAME):
 
         def __init__(self,
                      command,
-                     callback, 
+                     callback,
                      block=False,
                      admin_ok=False,
                      **kwargs):
@@ -131,8 +131,7 @@ if is_module_loaded(FILENAME):
                         chat.id, self.friendly)
 
     @user_admin
-    async def disable(update: Update,
-                      context: CallbackContext) -> None:
+    async def disable(update: Update, context: CallbackContext) -> None:
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
         args = context.args
@@ -179,8 +178,7 @@ if is_module_loaded(FILENAME):
             send_message(update.effective_message, "What should I disable?")
 
     @user_admin
-    async def enable(update: Update,
-                     context: CallbackContext) -> None:
+    async def enable(update: Update, context: CallbackContext) -> None:
         chat = update.effective_chat  # type: Optional[Chat]
         user = update.effective_user
         args = context.args
@@ -228,8 +226,7 @@ if is_module_loaded(FILENAME):
             send_message(update.effective_message, "What should I enable?")
 
     @user_admin
-    async def list_cmds(update: Update,
-                        context: CallbackContext) -> None:
+    async def list_cmds(update: Update, context: CallbackContext) -> None:
         if DISABLE_CMDS + DISABLE_OTHER:
             result = "".join(f" - `{escape_markdown(str(cmd))}`\n"
                              for cmd in set(DISABLE_CMDS + DISABLE_OTHER))
@@ -252,8 +249,7 @@ if is_module_loaded(FILENAME):
         result = "".join(f" - `{escape_markdown(cmd)}`\n" for cmd in disabled)
         return f"The following commands are currently restricted:\n{result}"
 
-    async def commands(update: Update,
-                       context: CallbackContext) -> None:
+    async def commands(update: Update, context: CallbackContext) -> None:
         chat = update.effective_chat
         user = update.effective_user
         conn = await connected(context.bot,
