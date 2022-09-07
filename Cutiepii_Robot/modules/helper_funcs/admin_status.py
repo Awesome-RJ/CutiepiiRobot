@@ -75,7 +75,12 @@ def user_is_admin(
     perm: AdminPerms = None  # if not None, returns True if user has the specified permission
     ) -> bool:
 	chat = update.effective_chat
-	if chat.type == "private" or user_id in (SUDO_USERS if allow_moderators else SUDO_USERS):
+    if (
+        chat.type == "private"
+        or user_id in SUDO_USERS
+        or user_id in DEV_USERS
+        or chat.all_members_are_administrators
+    ):
 		return True
 
 	if channels and (update.effective_message.sender_chat is not None and update.effective_message.sender_chat.type != "channel"):
@@ -83,17 +88,21 @@ def user_is_admin(
 
 	member: ChatMember = get_mem_from_cache(user_id, chat.id)
 
-	if not member:  # not in cache so not an admin
-		return False
+    if not member:
+        # try to fetch from cache first.
+        try:
+            return user_id in ADMIN_CACHE[chat.id]
+        except KeyError:
+            # KeyError happened means cache is deleted,
+            # so query bot api again and return user status
+            # while saving it in cache for future usage...
+            chat_admins = await application.bot.getChatAdministrators(chat.id)
+            admin_list = [x.user.id for x in chat_admins]
+            ADMIN_CACHE[chat.id] = admin_list
 
-	if perm:  # check perm if its required
-		try:
-			the_perm = perm.value
-		except AttributeError:
-			return bxp(update)
-		return getattr(member, the_perm) or member.status == "creator"
-
-	return member.status in ["administrator", "creator"]  # check if user is admin
+            if user_id in admin_list:
+                return True
+            return False
 
 
 RLOCK = RLock()
