@@ -34,7 +34,8 @@ import html
 from Cutiepii_Robot import LOGGER, SUDO_USERS, WHITELIST_USERS, CUTIEPII_PTB
 from Cutiepii_Robot.modules.log_channel import loggable
 from Cutiepii_Robot.modules.sql import reporting_sql as sql
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.constants import ParseMode
 from telegram.error import BadRequest
 from telegram.ext import (
     CallbackContext,
