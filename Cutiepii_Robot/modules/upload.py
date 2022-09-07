@@ -60,7 +60,8 @@ async def send_to_transfersh_async(file):
     final_date = get_date_in_two_weeks()
     file_name = os.path.basename(file)
 
-    LOGGER.debug(f"\nUploading file: {file_name} (size of the file: {size_of_file})")
+    LOGGER.debug(
+        f"\nUploading file: {file_name} (size of the file: {size_of_file})")
     url = "https://transfer.sh/"
 
     with open(file, "rb") as f:
