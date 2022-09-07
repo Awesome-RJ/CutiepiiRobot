@@ -562,17 +562,17 @@ async def nomedia(update: Update, context: CallbackContext) -> str:
     return ""
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("mute", mute, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("unmute", unmute, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler(['tmute', 'tempmute'], temp_mute, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("mute", mute))
+CUTIEPII_PTB.add_handler(CommandHandler("unmute", unmute))
+CUTIEPII_PTB.add_handler(CommandHandler(['tmute', 'tempmute'], temp_mute))
 CUTIEPII_PTB.add_handler(
     DisableAbleCommandHandler(["trestrict", "temprestrict"],
                               temp_nomedia,
-                              admin_ok=True, block=False))
+                              admin_ok=True))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler(["restrict", "nomedia"], nomedia, admin_ok=True, block=False))
+    DisableAbleCommandHandler(["restrict", "nomedia"], nomedia, admin_ok=True))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("unrestrict", media, admin_ok=True, block=False))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"cb_unmute", block=False))
+    DisableAbleCommandHandler("unrestrict", media, admin_ok=True))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(button, pattern=r"cb_unmute"))
 
 __mod_name__ = "Muting"

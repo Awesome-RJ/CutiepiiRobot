@@ -552,15 +552,15 @@ you and your groups by removing spam flooders as quickly as possible.
 *Note:* Users can appeal gbans or report spammers at @{SUPPORT_CHAT}
 """
 
-CUTIEPII_PTB.add_handler(CommandHandler("gban", gban, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("ungban", ungban, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("gbanlist", gbanlist, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("gban", gban))
+CUTIEPII_PTB.add_handler(CommandHandler("ungban", ungban))
+CUTIEPII_PTB.add_handler(CommandHandler("gbanlist", gbanlist))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("antispam", gbanstat, filters=filters.ChatType.GROUPS, block=False))
+    CommandHandler("antispam", gbanstat, filters=filters.ChatType.GROUPS))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("checkgb", check_gbans, filters=filters.User(OWNER_ID), block=False))
+    CommandHandler("checkgb", check_gbans, filters=filters.User(OWNER_ID)))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("cleangb", clear_gbans, filters=filters.User(OWNER_ID), block=False))
-CUTIEPII_PTB.add_handler(MessageHandler((filters.ALL & filters.ChatType.GROUPS), enforce_gban, block=False))
+    CommandHandler("cleangb", clear_gbans, filters=filters.User(OWNER_ID)))
+CUTIEPII_PTB.add_handler(MessageHandler((filters.ALL & filters.ChatType.GROUPS), enforce_gban))
 
 __mod_name__ = "Anti-Spam"

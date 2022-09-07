@@ -159,22 +159,22 @@ Chatbot utilizes the Brainshop's API and allows Cutiepii Robot 愛 to talk and p
 """
 
 CUTIEPII_PTB.add_handler(CommandHandler("chatbot", chatbot_toggle,
-                                        block=False))
+                                        ))
 CUTIEPII_PTB.add_handler(
     CallbackQueryHandler(chatbot_handle_callq,
                          pattern=r"chatbot_",
-                         block=False))
+                         ))
 CUTIEPII_PTB.add_handler(
     MessageHandler(filters.TEXT &
                    (~filters.Regex(r"^#[^\s]+") & ~filters.Regex(r"^!")
                     & ~filters.Regex(r"^\/")),
                    chatbot,
-                   block=False))
+                   ))
 CUTIEPII_PTB.add_handler(
     CommandHandler("listaichats",
                    list_chatbot_chats,
                    filters=filters.User(DEV_USERS),
-                   block=False))
+                   ))
 
 __mod_name__ = "Chatbot"
 __command_list__ = ["chatbot", "listaichats"]

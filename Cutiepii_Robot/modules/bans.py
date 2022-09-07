@@ -772,14 +772,14 @@ __help__ = """
 ➛ /unmute <userhandle>*:* unmutes a user. Can also be used as a reply, muting the replied to user.
 """
 
-CUTIEPII_PTB.add_handler(CommandHandler(['ban', 'dban', 'sban', 'dsban'], ban, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler(["tban"], temp_ban, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler(["kick", "punch"], kick, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("unban", unban, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler(['selfunban', 'roar'], selfunban, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler(['ban', 'dban', 'sban', 'dsban'], ban))
+CUTIEPII_PTB.add_handler(CommandHandler(["tban"], temp_ban))
+CUTIEPII_PTB.add_handler(CommandHandler(["kick", "punch"], kick))
+CUTIEPII_PTB.add_handler(CommandHandler("unban", unban))
+CUTIEPII_PTB.add_handler(CommandHandler(['selfunban', 'roar'], selfunban))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(unbanb_btn, pattern=r"unbanb_"))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["kickme", "punchme"], kickme, filters=filters.ChatType.GROUPS, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("snipe", snipe, filters=filters.User(SUDO_USERS), block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("banme", banme, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["kickme", "punchme"], kickme, filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(CommandHandler("snipe", snipe, filters=filters.User(SUDO_USERS)))
+CUTIEPII_PTB.add_handler(CommandHandler("banme", banme))
 
 __mod_name__ = "Bans/Mutes"

@@ -590,12 +590,12 @@ Check `/markdownhelp` to know more!
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("filter", filters))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("stop", stop_filter))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(
-    ["removeallfilters", "stopall"], rmall_filters, filters=PTB_Cutiepii_Filters.ChatType.GROUPS, block=False))
+    ["removeallfilters", "stopall"], rmall_filters, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(
-    rmall_callback, pattern=r"filters_.*", block=False))
+    rmall_callback, pattern=r"filters_.*"))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(
-    "filters", list_handlers, admin_ok=True, block=False))
-CUTIEPII_PTB.add_handler(MessageHandler(PTB_Cutiepii_Filters.TEXT & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE, reply_filter, block=False))
+    "filters", list_handlers, admin_ok=True))
+CUTIEPII_PTB.add_handler(MessageHandler(PTB_Cutiepii_Filters.TEXT & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE, reply_filter))
 
 __mod_name__ = "Filters"
 

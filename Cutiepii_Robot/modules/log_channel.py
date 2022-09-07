@@ -299,8 +299,8 @@ async def log_setting_callback(update: Update,
 
     cb.answer("Idk what to do")
 
-    CUTIEPII_PTB.add_handler(CommandHandler("logchannel", logging, block=False))
+    CUTIEPII_PTB.add_handler(CommandHandler("logchannel", logging))
     CUTIEPII_PTB.add_handler(CallbackQueryHandler(unbanb_btn, pattern=r"unbanb_"))
-    CUTIEPII_PTB.add_handler(CommandHandler("unsetlog", unsetlog, block=False))
-    CUTIEPII_PTB.add_handler(CommandHandler("logsettings", unsetlog, block=False))
-    CUTIEPII_PTB.add_handler(CallbackQueryHandler(log_setting_callback, pattern=r"log_tog_.*", block=False))
+    CUTIEPII_PTB.add_handler(CommandHandler("unsetlog", unsetlog))
+    CUTIEPII_PTB.add_handler(CommandHandler("logsettings", unsetlog))
+    CUTIEPII_PTB.add_handler(CallbackQueryHandler(log_setting_callback, pattern=r"log_tog_.*"))

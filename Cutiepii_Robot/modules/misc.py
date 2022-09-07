@@ -578,26 +578,26 @@ CUTIEPII_PTB.add_handler(
     DisableAbleCommandHandler("echo",
                               echo,
                               filters=PTB_Cutiepii_Filters.ChatType.GROUPS,
-                              block=False))
+                              ))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("markdownhelp", markdown_help, block=False))
+    CommandHandler("markdownhelp", markdown_help))
 CUTIEPII_PTB.add_handler(
     CommandHandler("gdpr",
                    gdpr,
                    filters=PTB_Cutiepii_Filters.ChatType.PRIVATE,
-                   block=False))
+                   ))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_", block=False))
+    CallbackQueryHandler(mkdown_btn, pattern=r"mkhelp_"))
 CUTIEPII_PTB.add_handler(
     CommandHandler("source",
                    src,
                    filters=PTB_Cutiepii_Filters.ChatType.PRIVATE,
-                   block=False))
+                   ))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("rmeme", rmemes, block=False))
+    DisableAbleCommandHandler("rmeme", rmemes))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("status", status, block=False))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("imdb", imdb, block=False))
+    DisableAbleCommandHandler("status", status))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("imdb", imdb))
 
 __mod_name__ = "Extras"
 __command_list__ = ["id", "echo", "source", "rmeme", "status"]

@@ -94,6 +94,6 @@ Example:
 Output: `1.0 USD = 75.505 INR`
 """
 
-CUTIEPII_PTB.add_handler(CommandHandler("cash", convert, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("cash", convert))
 
 __command_list__ = ["cash"]

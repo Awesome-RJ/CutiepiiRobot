@@ -250,6 +250,6 @@ async def react(update: Update):
         await message.reply_text(react)
 
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("react", react, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("react", react))
 
 __command_list__ = ["react"]

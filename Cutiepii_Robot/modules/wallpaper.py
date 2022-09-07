@@ -86,4 +86,4 @@ async def wall(update: Update, context: CallbackContext) -> None:
             timeout=60,
         )
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("wall", wall, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("wall", wall))

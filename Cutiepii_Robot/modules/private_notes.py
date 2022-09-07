@@ -48,4 +48,4 @@ def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("privatenotes", privatenotes, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("privatenotes", privatenotes))

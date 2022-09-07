@@ -283,10 +283,10 @@ This will print a reminder with the text after 2 hours
 Removes the reminder of the said timestamp ID
 """
 
-CUTIEPII_PTB.add_handler(CommandHandler(["remind", "reminder"], remind, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler(["reminds", "reminders"], reminders, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("clearreminder", clearreminder, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler(["remind", "reminder"], remind))
+CUTIEPII_PTB.add_handler(CommandHandler(["reminds", "reminders"], reminders))
+CUTIEPII_PTB.add_handler(CommandHandler("clearreminder", clearreminder))
 CUTIEPII_PTB.add_handler(CommandHandler("clearallreminders",
-                                        clearallreminders, block=False))
+                                        clearallreminders))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(clearallremindersbtn, pattern=r"clearremind_", block=False))
+    CallbackQueryHandler(clearallremindersbtn, pattern=r"clearremind_"))

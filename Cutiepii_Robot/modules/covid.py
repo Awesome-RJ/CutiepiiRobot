@@ -100,4 +100,4 @@ async def covid(update: Update, context: CallbackContext) -> None:
 
 
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler(["covid", "corona"], covid, block=False))
+    DisableAbleCommandHandler(["covid", "corona"], covid))

@@ -490,13 +490,13 @@ CUTIEPII_PTB.add_handler(
     DisableAbleCommandHandler(
         "blsticker",
         blackliststicker,
-        admin_ok=True, block=False
+        admin_ok=True
     ))
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("addblsticker", add_blackliststicker, block=False))
+    DisableAbleCommandHandler("addblsticker", add_blackliststicker))
 CUTIEPII_PTB.add_handler(
-    CommandHandler(["unblsticker", "rmblsticker"], unblackliststicker, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("blstickermode", blacklist_mode, block=False))
+    CommandHandler(["unblsticker", "rmblsticker"], unblackliststicker))
+CUTIEPII_PTB.add_handler(CommandHandler("blstickermode", blacklist_mode))
 CUTIEPII_PTB.add_handler(
     MessageHandler(filters.Sticker.ALL & filters.ChatType.GROUPS,
-                   del_blackliststicker, block=False))
+                   del_blackliststicker))

@@ -90,8 +90,8 @@ def logs(update: Update, context: CallbackContext) -> None:
         context.bot.send_document(document=f, filename=f.name, chat_id=user.id)
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("logs", logs, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("debug", debug, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("logs", logs))
+CUTIEPII_PTB.add_handler(CommandHandler("debug", debug))
 
 __mod_name__ = "Debug"
 

@@ -130,8 +130,8 @@ def eliminate_linked_channel_msg(update: Update):
 CUTIEPII_PTB.add_handler(
     DisableAbleCommandHandler("antilinkedchan",
                               set_antilinkedchannel,
-                              filters=filters.ChatType.GROUPS, block=False))
+                              filters=filters.ChatType.GROUPS))
 CUTIEPII_PTB.add_handler(
     DisableAbleCommandHandler("antichannelpin",
                               set_antipinchannel,
-                              filters=filters.ChatType.GROUPS, block=False))
+                              filters=filters.ChatType.GROUPS))

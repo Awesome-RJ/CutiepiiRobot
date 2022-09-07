@@ -602,16 +602,16 @@ A button can be added to a note by using standard markdown link syntax - the lin
 
 __mod_name__ = "Notes"
 
-CUTIEPII_PTB.add_handler(CommandHandler("get", cmd_get, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("get", cmd_get))
 CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.Regex(r"^#[\w\-]+(?!\n)$"), hash_get, block=False))
-CUTIEPII_PTB.add_handler(MessageHandler(filters.Regex(r"^/\d+$"), slash_get, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("save", save, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("clear", clear, block=False))
+    MessageHandler(filters.Regex(r"^#[\w\-]+(?!\n)$"), hash_get))
+CUTIEPII_PTB.add_handler(MessageHandler(filters.Regex(r"^/\d+$"), slash_get))
+CUTIEPII_PTB.add_handler(CommandHandler("save", save))
+CUTIEPII_PTB.add_handler(CommandHandler("clear", clear))
 
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler(["notes", "saved"], list_notes, admin_ok=True, block=False))
+    DisableAbleCommandHandler(["notes", "saved"], list_notes, admin_ok=True))
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("removeallnotes", clearall, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("removeallnotes", clearall))
 CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(clearall_btn, pattern=r"notes_.*", block=False))
+    CallbackQueryHandler(clearall_btn, pattern=r"notes_.*"))

@@ -292,11 +292,11 @@ def __user_settings__(user_id):
         return "You will *not* receive reports from chats you're admin."
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("reports", report_setting, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("reports", report_setting))
 CUTIEPII_PTB.add_handler(
-    CommandHandler("report", report, filters=filters.ChatType.GROUPS, block=False))
+    CommandHandler("report", report, filters=filters.ChatType.GROUPS))
 CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report, block=False))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(buttons, pattern=r"report_", block=False))
+    MessageHandler(filters.Regex(r"(?i)@admins(s)?"), report))
+CUTIEPII_PTB.add_handler(CallbackQueryHandler(buttons, pattern=r"report_"))
 
 __mod_name__ = "Reporting"

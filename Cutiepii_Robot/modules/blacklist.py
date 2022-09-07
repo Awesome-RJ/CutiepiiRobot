@@ -511,11 +511,11 @@ Note:
 __mod_name__ = "Blacklists"
 
 CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("blacklist", blacklist, admin_ok=True, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("addblacklist", add_blacklist, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("unblacklist", unblacklist, block=False))
-CUTIEPII_PTB.add_handler(CommandHandler("blacklistmode", blacklist_mode, block=False))
+    DisableAbleCommandHandler("blacklist", blacklist, admin_ok=True))
+CUTIEPII_PTB.add_handler(CommandHandler("addblacklist", add_blacklist))
+CUTIEPII_PTB.add_handler(CommandHandler("unblacklist", unblacklist))
+CUTIEPII_PTB.add_handler(CommandHandler("blacklistmode", blacklist_mode))
 CUTIEPII_PTB.add_handler(
     MessageHandler(
         (filters.TEXT | filters.COMMAND | filters.Sticker.ALL | filters.PHOTO)
-        & filters.ChatType.GROUPS, del_blacklist, block=False))
+        & filters.ChatType.GROUPS, del_blacklist))

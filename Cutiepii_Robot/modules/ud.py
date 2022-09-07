@@ -70,6 +70,6 @@ async def ud(update: Update, context: CallbackContext) -> None:
         await msg.reply_text(f"Error! {err.message}")
 
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["ud"], ud, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["ud"], ud))
 
 __command_list__ = ["ud"]

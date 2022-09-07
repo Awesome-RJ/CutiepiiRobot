@@ -159,10 +159,10 @@ async def modr(update: Update, context: CallbackContext) -> None:
 
 __mod_name__ = "Moderation"
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("addmod", mod, block=False))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("rmmod", dismod, block=False))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("modlist", modd, block=False))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("modcheck", modr, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("addmod", mod))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("rmmod", dismod))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("modlist", modd))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("modcheck", modr))
 
 __command_list__ = [
     "addmod",

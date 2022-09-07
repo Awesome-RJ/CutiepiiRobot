@@ -131,7 +131,7 @@ async def pingall(update: Update):
     )
 
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("ping", ping, block=False))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("pingall", pingall, block=False))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("ping", ping))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("pingall", pingall))
 
 __command_list__ = ["ping", "pingall"]

@@ -75,4 +75,4 @@ async def wiki(update: Update, context: CallbackContext) -> None:
             )
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("wiki", wiki, block=False))
+CUTIEPII_PTB.add_handler(CommandHandler("wiki", wiki))
