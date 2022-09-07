@@ -10,9 +10,8 @@ from telegram.ext import (
     CallbackContext,
     CallbackQueryHandler,
     MessageHandler,
-    )
+)
 from telegram.helpers import escape_markdown, mention_html
-
 
 from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS, LOGGER
 from Cutiepii_Robot.modules.helper_funcs.msg_types import get_filter_type
@@ -49,8 +48,7 @@ ENUM_FUNC_MAP = {
 }
 
 
-async def list_handlers(update: Update,
-                        context: CallbackContext) -> None:
+async def list_handlers(update: Update, context: CallbackContext) -> None:
     chat = update.effective_chat
     user = update.effective_user
 
@@ -99,6 +97,7 @@ async def list_handlers(update: Update,
 
 
 # NOT ASYNC BECAUSE CUTIEPII_PTB HANDLER RAISED
+
 
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 @loggable
@@ -266,7 +265,6 @@ async def stop_filter(update, context) -> str:
         update.effective_message,
         "That's not a filter - Click: /filters to get currently active filters.",
     )
-
 
 
 async def reply_filter(
@@ -453,9 +451,7 @@ async def reply_filter(
             break
 
 
-
-async def rmall_filters(update: Update,
-                        context: CallbackContext) -> None:
+async def rmall_filters(update: Update, context: CallbackContext) -> None:
     chat = update.effective_chat
     user = update.effective_user
     member = chat.get_member(user.id)
@@ -481,8 +477,7 @@ async def rmall_filters(update: Update,
 
 
 @loggable
-async def rmall_callback(update: Update,
-                         context: CallbackContext) -> None:
+async def rmall_callback(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     chat = update.effective_chat
     msg = update.effective_message
@@ -589,13 +584,17 @@ Check `/markdownhelp` to know more!
 
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("filter", filters))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("stop", stop_filter))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(
-    ["removeallfilters", "stopall"], rmall_filters, filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(
-    rmall_callback, pattern=r"filters_.*"))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(
-    "filters", list_handlers, admin_ok=True))
-CUTIEPII_PTB.add_handler(MessageHandler(PTB_Cutiepii_Filters.TEXT & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE, reply_filter))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["removeallfilters", "stopall"],
+                              rmall_filters,
+                              filters=PTB_Cutiepii_Filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(
+    CallbackQueryHandler(rmall_callback, pattern=r"filters_.*"))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("filters", list_handlers, admin_ok=True))
+CUTIEPII_PTB.add_handler(
+    MessageHandler(
+        PTB_Cutiepii_Filters.TEXT
+        & ~PTB_Cutiepii_Filters.UpdateType.EDITED_MESSAGE, reply_filter))
 
 __mod_name__ = "Filters"
-

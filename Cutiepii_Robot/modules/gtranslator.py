@@ -44,8 +44,7 @@ from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 trans = SyncTranslator()
 
 
-async def translate(update: Update,
-                    context: CallbackContext) -> None:
+async def translate(update: Update, context: CallbackContext) -> None:
     global to_translate
     message = update.effective_message
     reply_msg = message.reply_to_message

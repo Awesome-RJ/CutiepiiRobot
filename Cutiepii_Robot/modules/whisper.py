@@ -35,25 +35,19 @@ async def inline(event):
         inp = event.text.split(None, 1)[1]
         user, msg = inp.split("|")
     except IndexError:
-        await event.answer(
-                [], 
-                switch_pm=f"@{me} [Username]|[Message]",
-                switch_pm_param="whisper"
-                )
+        await event.answer([],
+                           switch_pm=f"@{me} [Username]|[Message]",
+                           switch_pm_param="whisper")
     except ValueError:
-        await event.answer(
-                [],
-                switch_pm="Give a message too!",
-                switch_pm_param="whisper"
-                )
+        await event.answer([],
+                           switch_pm="Give a message too!",
+                           switch_pm_param="whisper")
     try:
         ui = await bot(us(user))
     except BaseException:
-        await event.answer(
-                [],
-                switch_pm="Invalid User ID/Username",
-                switch_pm_param="whisper"
-                )
+        await event.answer([],
+                           switch_pm="Invalid User ID/Username",
+                           switch_pm_param="whisper")
         return
     db.update({"user_id": ui.user.id, "msg": msg, "self": event.sender.id})
     text = f"""
@@ -63,19 +57,13 @@ Click The Below Button To See The Message!
 **Note:** __Only {ui.user.first_name} can open this!__
     """
     dn = event.builder.article(
-            title="Its a secret message! Sssh",
-            description="It's a secret message! Sssh!",
-            text=text,
-            buttons=[
-                [Button.inline(" Show Message! ", data="wspr")]
-                ]
-            )
-    await event.answer(
-            [dn],
-            switch_pm="It's a secret message! Sssh",
-            switch_pm_param="whisper"
-            )
-
+        title="Its a secret message! Sssh",
+        description="It's a secret message! Sssh!",
+        text=text,
+        buttons=[[Button.inline(" Show Message! ", data="wspr")]])
+    await event.answer([dn],
+                       switch_pm="It's a secret message! Sssh",
+                       switch_pm_param="whisper")
 
 
 @bot.on(events.CallbackQuery(data="wspr"))
