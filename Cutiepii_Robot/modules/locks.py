@@ -16,7 +16,7 @@ from typing import Optional
 
 from Cutiepii_Robot import CUTIEPII_PTB, LOGGER
 from Cutiepii_Robot.modules.connection import connected
-from Cutiepii_Robot.modules.helper_funcs.alternate import send_message, typing_action
+from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     can_delete,
     user_not_admin,
@@ -142,7 +142,6 @@ async def locktypes(update, _):
 @kigcmd(command="lock")
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
-@typing_action
 async def lock(update: Update, context: CallbackContext) -> str:  # sourcery no-metrics
     args = context.args
     chat = update.effective_chat
@@ -248,7 +247,6 @@ async def lock(update: Update, context: CallbackContext) -> str:  # sourcery no-
 @kigcmd(command="unlock")
 @user_admin(AdminPerms.CAN_CHANGE_INFO)
 @loggable
-@typing_action
 async def unlock(
     update: Update, context: CallbackContext
 ) -> str:  # sourcery no-metrics
@@ -459,7 +457,6 @@ async def build_lock_message(chat_id):
 
 @kigcmd(command="locks")
 @u_admin
-@typing_action
 async def list_locks(update, context):
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user
