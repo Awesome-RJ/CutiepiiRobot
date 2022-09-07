@@ -10,12 +10,13 @@ from alphabet_detector import AlphabetDetector
 from telegram import Message, Chat, MessageEntity, Update
 from telegram import ChatPermissions
 from telegram.error import BadRequest, TelegramError
-from telegram.ext import filters, CallbackContext
+from telegram.ext import filters, CallbackContext, CommandHandler, MessageHandler
 from telegram.helpers import mention_html
 from typing import Optional
 
 from Cutiepii_Robot import CUTIEPII_PTB, LOGGER
 from Cutiepii_Robot.modules.connection import connected
+from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
 from Cutiepii_Robot.modules.helper_funcs.alternate import send_message
 from Cutiepii_Robot.modules.helper_funcs.chat_status import (
     can_delete,
