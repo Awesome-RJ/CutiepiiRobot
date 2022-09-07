@@ -44,7 +44,7 @@ from telegram.ext import (
     CommandHandler,
 )
 import Cutiepii_Robot.modules.sql.log_channel_sql as logsql
-from telegram.utils.helpers import mention_html
+from telegram.helpers import mention_html
 
 from Cutiepii_Robot.modules.helper_funcs.admin_status import (
     user_admin_check,
