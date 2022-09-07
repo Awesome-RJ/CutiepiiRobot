@@ -34,7 +34,8 @@ import re
 from telegram.constants import ParseMode
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, Bot
 from telegram.error import BadRequest, Forbidden
-from telegram.ext import (CommandHandler, CallbackQueryHandler, CallbackContext)
+from telegram.ext import (CommandHandler, CallbackQueryHandler,
+                          CallbackContext)
 
 import Cutiepii_Robot.modules.sql.connection_sql as sql
 from Cutiepii_Robot import CUTIEPII_PTB, SUDO_USERS, DEV_USERS
@@ -90,8 +91,7 @@ async def allow_connections(update, context) -> str:
         )
 
 
-async def connection_chat(update: Update,
-                          context: CallbackContext) -> None:
+async def connection_chat(update: Update, context: CallbackContext) -> None:
 
     chat = update.effective_chat
     user = update.effective_user
@@ -258,8 +258,7 @@ async def connect_chat(
                          "Connection to this chat is not allowed!")
 
 
-async def disconnect_chat(update: Update,
-                          context: CallbackContext) -> None:
+async def disconnect_chat(update: Update, context: CallbackContext) -> None:
 
     if update.effective_chat.type == "private":
         if disconnection_status := sql.disconnect(
@@ -321,8 +320,7 @@ CONN_HELP = """
  """
 
 
-async def help_connect_chat(update: Update,
-                            context: CallbackContext) -> None:
+async def help_connect_chat(update: Update, context: CallbackContext) -> None:
 
     args = context.args
 
@@ -336,8 +334,7 @@ async def help_connect_chat(update: Update,
                      parse_mode="markdown")
 
 
-async def connect_button(update: Update,
-                         context: CallbackContext) -> None:
+async def connect_button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     chat = update.effective_chat
     user = update.effective_user
@@ -392,14 +389,10 @@ async def connect_button(update: Update,
 
 
 CUTIEPII_PTB.add_handler(CommandHandler("connect", connect_chat))
-CUTIEPII_PTB.add_handler(
-    CommandHandler("connection", connection_chat))
-CUTIEPII_PTB.add_handler(
-    CommandHandler("disconnect", disconnect_chat))
-CUTIEPII_PTB.add_handler(
-    CommandHandler("allowconnect", allow_connections))
-CUTIEPII_PTB.add_handler(
-    CommandHandler("helpconnect", help_connect_chat))
+CUTIEPII_PTB.add_handler(CommandHandler("connection", connection_chat))
+CUTIEPII_PTB.add_handler(CommandHandler("disconnect", disconnect_chat))
+CUTIEPII_PTB.add_handler(CommandHandler("allowconnect", allow_connections))
+CUTIEPII_PTB.add_handler(CommandHandler("helpconnect", help_connect_chat))
 CUTIEPII_PTB.add_handler(
     CallbackQueryHandler(connect_button, pattern=r"connect"))
 
