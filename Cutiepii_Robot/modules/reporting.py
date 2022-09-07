@@ -58,7 +58,7 @@ REPORT_GROUP = 12
 REPORT_IMMUNE_USERS = SUDO_USERS + WHITELIST_USERS
 
 @bot_admin_check()
-@user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods=True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
 async def report_setting(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
