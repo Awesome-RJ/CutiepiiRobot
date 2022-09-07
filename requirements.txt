@@ -34,7 +34,7 @@ NumPy==1.23.1
 gpytranslate==1.4.0
 glitch_this==1.0.2
 countryinfo==0.1.2
-faker==13.14.0
+faker==13.16.0
 PyDictionary==2.0.1
 markdown2==2.4.3
 cowpy==1.1.5
