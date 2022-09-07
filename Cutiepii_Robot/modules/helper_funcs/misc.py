@@ -60,11 +60,11 @@ class EqInlineKeyboardButton(InlineKeyboardButton):
         return self.text > other.text
 
 def delete(delmsg, timer):
-   await sleep(timer)
+    await sleep(timer)
     try:
         delmsg.delete()
-    except:
-        return
+        except:
+            return
 
 def split_message(msg: str) -> List[str]:
     if len(msg) < MAX_MESSAGE_LENGTH:

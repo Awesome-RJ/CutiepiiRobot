@@ -33,6 +33,7 @@ import os
 import shutil
 import datetime
 import subprocess
+import asyncio
 
 from time import sleep
 from telegram import Update
@@ -96,7 +97,7 @@ async def backup_db(_: CallbackContext):
     LOGGER.info("zip started")
     term(zipcmd, zipinfo)
     LOGGER.info("zip done")
-   await sleep(1)
+    await sleep(1)
     with open(f'backups/{datenow}.zip', 'rb') as bkp:
         nm = f"{bot.username} backup \n" + datenow
         await bot.send_document(OWNER_ID, document=bkp, caption=nm, timeout=20)
