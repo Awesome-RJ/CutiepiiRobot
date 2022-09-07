@@ -348,12 +348,12 @@ pgram = Client(
     api_id=API_ID,
     api_hash=API_HASH,
     bot_token=TOKEN,
-    workers=min(32,
-                os.cpu_count() + 4),
-    parse_mode=ParseMode.HTML,            
+    workers=min(32, os.cpu_count() + 4),
+    parse_mode=ParseMode.DEFAULT,
     sleep_threshold=60,
     in_memory=True,
 )
+
 LOGGER.debug(
     "[CUTIEPII]: Connecting To Yūki • Data Center • Mumbai • MongoDB Database")
 mongodb = MongoClient(MONGO_DB_URL, 27017)[MONGO_DB]
