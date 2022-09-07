@@ -63,8 +63,8 @@ if is_module_loaded(FILENAME):
 
         def __init__(self,
                      command,
-                     callback,
-                     ,
+                     callback, 
+                     block=False,
                      admin_ok=False,
                      **kwargs):
             super().__init__(command, callback, **kwargs)
