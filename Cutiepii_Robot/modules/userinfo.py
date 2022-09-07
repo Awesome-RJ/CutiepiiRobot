@@ -36,7 +36,7 @@ import datetime
 import asyncio
 import contextlib
 
-from pyrogram import filters
+from pyrogram import filters, Client
 from pyrogram.errors import PeerIdInvalid
 from pyrogram.types import Message, User
 
