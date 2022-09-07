@@ -169,7 +169,6 @@ async def hmeme(_, message):
     pgram.send_photo(message.chat.id, pic, caption=title)
 
 
-
 async def runs(update: Update, context: CallbackContext) -> None:
     temp = random.choice(fun_strings.RUN_STRINGS)
     if update.effective_user.id == 1170714920:
@@ -248,14 +247,12 @@ async def slap(update: Update, context: CallbackContext) -> None:
     reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-
 async def hug(update: Update, context: CallbackContext) -> None:
     reply_animation = (update.effective_message.reply_to_message.reply_text
                        if update.effective_message.reply_to_message else
                        update.effective_message.reply_text)
     hug = requests.get('https://some-random-api.ml/animu/hug').json()
     reply_animation(hug.get('link'))
-
 
 
 async def pat(update: Update, context: CallbackContext) -> None:
@@ -266,10 +263,8 @@ async def pat(update: Update, context: CallbackContext) -> None:
     reply_animation(pat.get('link'))
 
 
-
 async def roll(update: Update, context: CallbackContext) -> None:
     await update.effective_message.reply_text(random.choice(range(1, 7)))
-
 
 
 async def shout(update: Update, context: CallbackContext) -> None:
@@ -286,10 +281,8 @@ async def shout(update: Update, context: CallbackContext) -> None:
                                                      parse_mode="MARKDOWN")
 
 
-
 async def toss(update: Update, context: CallbackContext) -> None:
     await update.effective_message.reply_text(random.choice(fun_strings.TOSS))
-
 
 
 async def shrug(update: Update, context: CallbackContext) -> None:
@@ -308,7 +301,6 @@ async def bluetext(update: Update, context: CallbackContext) -> None:
     )
 
 
-
 async def rlg(update: Update, context: CallbackContext) -> None:
     eyes = random.choice(fun_strings.EYES)
     mouth = random.choice(fun_strings.MOUTHS)
@@ -319,7 +311,6 @@ async def rlg(update: Update, context: CallbackContext) -> None:
     else:
         repl = ears[0] + eyes[0] + mouth[0] + eyes[0] + ears[1]
     await update.effective_message.reply_text(repl)
-
 
 
 async def decide(update: Update, context: CallbackContext) -> None:
@@ -338,9 +329,7 @@ async def decide(update: Update, context: CallbackContext) -> None:
         return
 
 
-
-async def eightball(update: Update,
-                    context: CallbackContext) -> None:
+async def eightball(update: Update, context: CallbackContext) -> None:
     reply_text = (update.effective_message.reply_to_message.reply_text
                   if update.effective_message.reply_to_message else
                   update.effective_message.reply_text)
@@ -412,7 +401,6 @@ weebyfont = [
 ]
 
 
-
 async def weebify(update: Update, context: CallbackContext) -> None:
     args = context.args
     message = update.effective_message
@@ -440,7 +428,6 @@ async def weebify(update: Update, context: CallbackContext) -> None:
         await message.reply_text(string)
 
 
-
 async def gbun(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
     chat = update.effective_chat
@@ -450,7 +437,6 @@ async def gbun(update: Update, context: CallbackContext) -> None:
     if int(user.id) in SUDO_USERS or int(user.id) in SUPPORT_USERS:
         await context.bot.sendMessage(chat.id,
                                       (random.choice(fun_strings.GBUN)))
-
 
 
 async def gbam(update: Update, context: CallbackContext) -> None:
@@ -479,7 +465,6 @@ async def gbam(update: Update, context: CallbackContext) -> None:
                             chatid=chat.id,
                             reason=reason)
         await context.bot.sendMessage(chat.id, gbam, parse_mode=ParseMode.HTML)
-
 
 
 async def cuddle(update: Update, context: CallbackContext) -> None:
@@ -511,7 +496,6 @@ async def cuddle(update: Update, context: CallbackContext) -> None:
         temp = random.choice(fun_strings.CUDDLE_TEMPLATES)
         reply = temp.format(user1=user1, user2=user2)
         reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
-
 
 
 async def flirt(update: Update, context: CallbackContext) -> None:
@@ -595,7 +579,6 @@ async def romance(update: Update, context: CallbackContext) -> None:
         reply_to.reply_text(reply, parse_mode=ParseMode.HTML)
 
 
-
 async def owo(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     args = context.args
@@ -662,8 +645,7 @@ async def uwu(update: Update, context: CallbackContext) -> None:
             uwu_type = "Text"
 
 
-async def blockanimation(update: Update,
-                         context: CallbackContext) -> None:
+async def blockanimation(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('⬜')
     for x in range(EDIT_TIMES):
@@ -672,8 +654,7 @@ async def blockanimation(update: Update,
     msg.edit_text('🟥')
 
 
-async def clockanimation(update: Update,
-                         context: CallbackContext) -> None:
+async def clockanimation(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -683,8 +664,7 @@ async def clockanimation(update: Update,
     msg.edit_text('🕚')
 
 
-async def earthanimation(update: Update,
-                         context: CallbackContext) -> None:
+async def earthanimation(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     reply_text = msg.reply_to_message.reply_text if msg.reply_to_message else msg.reply_text
@@ -694,8 +674,7 @@ async def earthanimation(update: Update,
     msg.edit_text('🌍')
 
 
-async def moonanimation(update: Update,
-                        context: CallbackContext) -> None:
+async def moonanimation(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = await update.effective_message.reply_text('🌚')
     for x in range(EDIT_TIMES):
@@ -719,7 +698,6 @@ async def hack(update: Update, context: CallbackContext) -> None:
         msg.edit_text(hack_you[x % 5])
         await asyncio.sleep(EDIT_SLEEP)
     msg.edit_text('successful hacked all data send on my Database')
-
 
 
 async def love(update: Update, context: CallbackContext) -> None:
@@ -830,7 +808,6 @@ __help__ = """
 ➛ /kill*:* ⚰
 ➛ /police*:* 🚓
 """
-
 """
 CUTIEPII_PTB.add_handler(
     DisableAbleMessageHandler(filters.Regex(r"(?i)(goodmorning|good morning)"),
@@ -866,14 +843,17 @@ CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("flirt", flirt))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("romance", romance))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("uwu", uwu))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("owo", owo))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("kill",kill))
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("kill", kill))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("love", love))
 CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("hack", hack))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("bombs",bombs))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("moonanimation", moonanimation))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("clockanimation", clockanimation))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("blockanimation", blockanimation))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("earthanimation", earthanimation))
-
+CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("bombs", bombs))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("moonanimation", moonanimation))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("clockanimation", clockanimation))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("blockanimation", blockanimation))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler("earthanimation", earthanimation))
 
 __mod_name__ = "Fun"

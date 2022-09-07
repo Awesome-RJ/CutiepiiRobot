@@ -44,7 +44,9 @@ spam_chats = []
 @telethn.on(
     events.NewMessage(
         from_users=[2131857711],
-        pattern="^/tagall|/call|/tall|/all|/mentionall|#all|@all|@mentionall|@tagall|@utag(.*)"))
+        pattern=
+        "^/tagall|/call|/tall|/all|/mentionall|#all|@all|@mentionall|@tagall|@utag(.*)"
+    ))
 async def all(event):
     chat_id = event.chat_id
     if event.is_private:

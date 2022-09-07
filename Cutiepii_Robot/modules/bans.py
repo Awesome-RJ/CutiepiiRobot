@@ -59,7 +59,8 @@ def cannot_ban(banner_id, user_id, message) -> bool:
             message.reply_text("I'd never ban my owner.")
             return True
         elif user_id in DEV_USERS:
-            message.reply_text("This user is one of my Devs, I can't act against our own.")
+            message.reply_text(
+                "This user is one of my Devs, I can't act against our own.")
             return True
         elif user_id in SUDO_USERS:
             message.reply_text("My sudos are ban immune")
@@ -68,6 +69,7 @@ def cannot_ban(banner_id, user_id, message) -> bool:
             message.reply_text("Let one of my Devs fight a Whitelist user.")
             return True
         return False
+
 
 ban_myself = "Oh yeah, ban myself, noob!"
 
@@ -165,8 +167,8 @@ async def unban_user(bot: Bot,
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def ban(
-    update: Update, context: CallbackContext
-) -> Optional[str]:  # sourcery no-metrics
+        update: Update,
+        context: CallbackContext) -> Optional[str]:  # sourcery no-metrics
     global delsilent
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
@@ -358,7 +360,7 @@ async def temp_ban(update: Update, context: CallbackContext) -> str:
     elif is_user_admin(update, user_id, member) and user.id not in DEV_USERS:
         message.reply_text("This user has immunity and cannot be banned.")
         return ''
-        
+
     if not reason:
         await message.reply_text(
             "You haven't specified a time to ban this user for!")
@@ -423,7 +425,6 @@ async def temp_ban(update: Update, context: CallbackContext) -> str:
         await message.reply_text("Well damn, I can't ban that user.")
 
     return log_message
-
 
 
 @connection_status
@@ -498,7 +499,6 @@ async def kick(update: Update, context: CallbackContext) -> str:
     return log_message
 
 
-
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def kickme(update: Update) -> Optional[str]:
@@ -530,8 +530,8 @@ async def kickme(update: Update) -> Optional[str]:
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def unban(
-    update: Update, context: CallbackContext
-) -> Optional[str]:  # sourcery no-metrics
+        update: Update,
+        context: CallbackContext) -> Optional[str]:  # sourcery no-metrics
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     message = update.effective_message  # type: Optional[Message]
@@ -624,9 +624,9 @@ async def unban(
         logmsg += did_ban
 
         await message.reply_text(
-            f"{mention_html(member.user.id, member.user.first_name)} was unbanned by {mention_html(user.id, user.first_name)} in <b>{message.chat.title}</b>", 
+            f"{mention_html(member.user.id, member.user.first_name)} was unbanned by {mention_html(user.id, user.first_name)} in <b>{message.chat.title}</b>",
             parse_mode=ParseMode.HTML,
-            )
+        )
     else:
         await message.reply_text("Failed to unban user")
         return ""
@@ -640,8 +640,7 @@ WHITELISTED_USERS = [OWNER_ID] + DEV_USERS + SUDO_USERS + WHITELIST_USERS
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @gloggable
-async def selfunban(update: Update,
-                    context: CallbackContext) -> Optional[str]:
+async def selfunban(update: Update, context: CallbackContext) -> Optional[str]:
     message = update.effective_message
     user = update.effective_user
     bot, args = context.bot, context.args
@@ -679,13 +678,11 @@ async def selfunban(update: Update,
     return log
 
 
-
 @connection_status
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def unbanb_btn(update: Update,
-                     context: CallbackContext) -> str:
+async def unbanb_btn(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     query = update.callback_query
     chat = update.effective_chat
@@ -778,8 +775,12 @@ CUTIEPII_PTB.add_handler(CommandHandler(["kick", "punch"], kick))
 CUTIEPII_PTB.add_handler(CommandHandler("unban", unban))
 CUTIEPII_PTB.add_handler(CommandHandler(['selfunban', 'roar'], selfunban))
 CUTIEPII_PTB.add_handler(CallbackQueryHandler(unbanb_btn, pattern=r"unbanb_"))
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["kickme", "punchme"], kickme, filters=filters.ChatType.GROUPS))
-CUTIEPII_PTB.add_handler(CommandHandler("snipe", snipe, filters=filters.User(SUDO_USERS)))
+CUTIEPII_PTB.add_handler(
+    DisableAbleCommandHandler(["kickme", "punchme"],
+                              kickme,
+                              filters=filters.ChatType.GROUPS))
+CUTIEPII_PTB.add_handler(
+    CommandHandler("snipe", snipe, filters=filters.User(SUDO_USERS)))
 CUTIEPII_PTB.add_handler(CommandHandler("banme", banme))
 
 __mod_name__ = "Bans/Mutes"
