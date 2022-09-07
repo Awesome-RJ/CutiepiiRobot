@@ -36,7 +36,8 @@ import requests
 import wget
 
 from bs4 import BeautifulSoup
-from pyrogram import filters
+from pyrogram import filters, Client
+from pyrogram.types import Message
 
 from Cutiepii_Robot.utils.pluginhelpers import admins_only
 from Cutiepii_Robot.utils.progress import progress
