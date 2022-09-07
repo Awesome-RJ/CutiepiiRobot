@@ -80,7 +80,7 @@ def user_is_admin(
         or user_id in SUDO_USERS
         or user_id in DEV_USERS
         or chat.all_members_are_administrators
-    ):
+        ):
 		return True
 
 	if channels and (update.effective_message.sender_chat is not None and update.effective_message.sender_chat.type != "channel"):
