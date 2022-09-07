@@ -58,7 +58,7 @@ REPORT_IMMUNE_USERS = SUDO_USERS + WHITELIST_USERS
 
 @bot_admin_check()
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO, allow_mods=True)
-def report_setting(update: Update, context: CallbackContext):
+async def report_setting(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     chat = update.effective_chat
     msg = update.effective_message
@@ -86,7 +86,7 @@ def report_setting(update: Update, context: CallbackContext):
 
 @user_not_admin_check
 @loggable
-def report(update: Update, context: CallbackContext) -> str:
+async def report(update: Update, context: CallbackContext) -> str:
     # sourcery no-metrics
     global reply_markup
     bot = context.bot
@@ -183,7 +183,7 @@ def report(update: Update, context: CallbackContext) -> str:
 
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS, allow_mods=True, noreply = True)
-def buttons(update: Update, context: CallbackContext):
+async def buttons(update: Update, context: CallbackContext):
     bot = context.bot
     query = update.callback_query
     splitter = query.data.replace("reported_", "").split("=")
