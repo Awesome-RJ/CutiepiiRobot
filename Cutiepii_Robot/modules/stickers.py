@@ -78,7 +78,7 @@ async def stickerid(update: Update):
         )
 
 
-async def kang(update: Update, context: CallbackContext) -> None:
+def kang(update: Update, context: CallbackContext) -> None:
     msg = update.effective_message
     user = update.effective_user
     args = context.args
