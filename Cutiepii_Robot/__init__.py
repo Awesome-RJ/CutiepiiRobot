@@ -75,9 +75,9 @@ logging.getLogger("pyrogram").setLevel(logging.INFO)
 LOGGER = logging.getLogger(__name__)
 
 # if version < 3.6, stop bot.
-if sys.version_info[0] < 3 or sys.version_info[1] < 8:
+if sys.version_info[0] < 3 or sys.version_info[1] < 9:
     LOGGER.error(
-        "You MUST have a python version of at least 3.6! Multiple features depend on this. Bot quitting.",
+        "You MUST have a python version of at least 3.9! Multiple features depend on this. Bot quitting.",
     )
     sys.exit(1)
 
