@@ -35,6 +35,7 @@ import shutil
 
 from Cutiepii_Robot import LOGGER
 
+
 async def normalglitch_1(client: Client, message: Message):
     try:
         userid = str(chat_id)

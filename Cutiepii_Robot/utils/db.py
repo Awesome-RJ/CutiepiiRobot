@@ -15,7 +15,8 @@ _RUN = asyncio.get_event_loop().run_until_complete
 if "CutiepiiRobot" in _RUN(_MGCLIENT.list_database_names()):
     LOGGER.debug("[CUTIEPII] Anime  Database Found :) => Now Logging to it...")
 else:
-    LOGGER.debug("[CUTIEPII] Anime Database Not Found :( => Creating New Database...")
+    LOGGER.debug(
+        "[CUTIEPII] Anime Database Not Found :( => Creating New Database...")
 
 _DATABASE: AgnosticDatabase = _MGCLIENT["CutiepiiRobot"]
 
