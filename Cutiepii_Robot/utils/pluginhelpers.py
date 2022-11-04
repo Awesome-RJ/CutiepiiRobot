@@ -224,7 +224,6 @@ async def edit_or_reply(message, text, parse_mode="md"):
     return await message.edit(text, parse_mode=parse_mode)
 
 
-
 async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
     """run command in terminal"""
     args = shlex.split(cmd)

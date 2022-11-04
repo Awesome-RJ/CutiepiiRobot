@@ -79,7 +79,6 @@ async def get_http_status_code(url: str) -> int:
         return resp.status
 
 
-
 async def transfer_sh(file):
     async with aiofiles.open(file, "rb") as f:
         params = {file: await f.read()}

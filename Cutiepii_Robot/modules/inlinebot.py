@@ -641,9 +641,7 @@ async def inline_query_handler(client, query):
                 Touch for more info
                 """,
                     input_message_content=InputTextMessageContent(
-                        caption,
-                        
-                        disable_web_page_preview=True),
+                        caption, disable_web_page_preview=True),
                 ))
             await client.answer_inline_query(query.id,
                                              results=results,
@@ -688,8 +686,7 @@ async def inline_query_handler(client, query):
                     title="Match information gathered",
                     description="Click here to see them",
                     input_message_content=InputTextMessageContent(
-                        res, 
-                        disable_web_page_preview=False),
+                        res, disable_web_page_preview=False),
                 ))
             await client.answer_inline_query(query.id,
                                              cache_time=0,

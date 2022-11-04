@@ -207,9 +207,12 @@ async def edit_or_reply(message, text, parse_mode="md"):
     if message.from_user.id:
         if message.reply_to_message:
             kk = message.reply_to_message.id
-            return await message.reply_text(text, reply_to_message_id=kk, parse_mode=parse_mode)
+            return await message.reply_text(text,
+                                            reply_to_message_id=kk,
+                                            parse_mode=parse_mode)
         return await message.reply_text(text, parse_mode=parse_mode)
     return await message.edit(text, parse_mode=parse_mode)
+
 
 async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
     """ run command in terminal """

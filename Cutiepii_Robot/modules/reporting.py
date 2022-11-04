@@ -47,15 +47,12 @@ import Cutiepii_Robot.modules.sql.log_channel_sql as logsql
 from telegram.helpers import mention_html
 
 from Cutiepii_Robot.modules.helper_funcs.admin_status import (
-    user_admin_check,
-    bot_admin_check,
-    AdminPerms,
-    user_not_admin_check,
-    A_CACHE
-)
+    user_admin_check, bot_admin_check, AdminPerms, user_not_admin_check,
+    A_CACHE)
 
 REPORT_GROUP = 12
 REPORT_IMMUNE_USERS = SUDO_USERS + WHITELIST_USERS
+
 
 @bot_admin_check()
 @user_admin_check(AdminPerms.CAN_CHANGE_INFO)
@@ -70,8 +67,7 @@ async def report_setting(update: Update, context: CallbackContext):
             sql.set_chat_setting(chat.id, True)
             await msg.reply_text(
                 "Turned on reporting! Admins who have turned on reports will be notified when /report "
-                "or @admin is called."
-            )
+                "or @admin is called.")
 
         elif args[0] in ("no", "off"):
             sql.set_chat_setting(chat.id, False)
@@ -94,10 +90,11 @@ async def report(update: Update, context: CallbackContext) -> str:
     message = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
-    
+
     log_setting = logsql.get_chat_setting(chat.id)
     if not log_setting:
-        logsql.set_chat_setting(logsql.LogChannelSettings(chat.id, True, True, True, True, True))
+        logsql.set_chat_setting(
+            logsql.LogChannelSettings(chat.id, True, True, True, True, True))
         log_setting = logsql.get_chat_setting(chat.id)
 
     if chat and message.reply_to_message and sql.chat_should_report(chat.id):
@@ -115,7 +112,10 @@ async def report(update: Update, context: CallbackContext) -> str:
             await message.reply_text("Uh? You reporting a Super user?")
             return ""
 
-        admin_list = [i.user.id for i in A_CACHE[chat.id] if not (i.user.is_bot or i.is_anonymous)]
+        admin_list = [
+            i.user.id for i in A_CACHE[chat.id]
+            if not (i.user.is_bot or i.is_anonymous)
+        ]
 
         if reported_user.id in admin_list:
             await message.reply_text("Why are you reporting an admin?")
@@ -127,8 +127,10 @@ async def report(update: Update, context: CallbackContext) -> str:
                 try:
                     reported += f"<a href=\"tg://user?id={admin}\">\u2063</a>"
                 except BadRequest:
-                    LOGGER.exception(f"Exception while reporting user: {user} in chat: {chat.id}")
-            await message.reply_text(reported, parse_mode = ParseMode.HTML)
+                    LOGGER.exception(
+                        f"Exception while reporting user: {user} in chat: {chat.id}"
+                    )
+            await message.reply_text(reported, parse_mode=ParseMode.HTML)
 
         message = update.effective_message
         msg = (
@@ -149,33 +151,34 @@ async def report(update: Update, context: CallbackContext) -> str:
                 ),
                 InlineKeyboardButton(
                     "⛔️ Ban",
-                    callback_data=f"reported_{chat.id}=banned={reported_user.id}",
+                    callback_data=
+                    f"reported_{chat.id}=banned={reported_user.id}",
                 ),
             ],
             [
                 InlineKeyboardButton(
                     "❎ Delete Message",
-                    callback_data=f"reported_{chat.id}=delete={reported_user.id}={message.reply_to_message.message_id}",
+                    callback_data=
+                    f"reported_{chat.id}=delete={reported_user.id}={message.reply_to_message.message_id}",
                 ),
                 InlineKeyboardButton(
                     "❌ Close Panel",
-                    callback_data=f"reported_{chat.id}=close={reported_user.id}",
+                    callback_data=
+                    f"reported_{chat.id}=close={reported_user.id}",
                 )
             ],
             [
-                InlineKeyboardButton(
-                        "📝 Read the rules", url="t.me/{}?start={}".format(bot.username, chat.id)
-                    )
+                InlineKeyboardButton("📝 Read the rules",
+                                     url="t.me/{}?start={}".format(
+                                         bot.username, chat.id))
             ],
         ]
         reply_markup2 = InlineKeyboardMarkup(keyboard2)
         reportmsg = f"{mention_html(reported_user.id, reported_user.first_name)} was reported to the admins."
         reportmsg += tmsg
-        await message.reply_text(
-            reportmsg,
-            parse_mode=ParseMode.HTML,
-            reply_markup=reply_markup2
-        )
+        await message.reply_text(reportmsg,
+                                 parse_mode=ParseMode.HTML,
+                                 reply_markup=reply_markup2)
         if not log_setting.log_report:
             return ""
         return msg
@@ -207,61 +210,60 @@ async def buttons(update: Update, context: CallbackContext):
         try:
             bot.deleteMessage(splitter[0], splitter[3])
             await query.answer("✅ Message Deleted")
-            
+
             kyb_no_del = [
                 [
                     InlineKeyboardButton(
                         "⚠ Kick",
-                        callback_data=f"reported_{splitter[0]}=kick={splitter[2]}",
+                        callback_data=
+                        f"reported_{splitter[0]}=kick={splitter[2]}",
                     ),
                     InlineKeyboardButton(
                         "⛔️ Ban",
-                        callback_data=f"reported_{splitter[0]}=banned={splitter[2]}",
+                        callback_data=
+                        f"reported_{splitter[0]}=banned={splitter[2]}",
                     ),
                 ],
                 [
                     InlineKeyboardButton(
                         "❌ Close Panel",
-                        callback_data=f"reported_{splitter[0]}=close={splitter[2]}",
+                        callback_data=
+                        f"reported_{splitter[0]}=close={splitter[2]}",
                     )
                 ],
                 [
                     InlineKeyboardButton(
-                            "📝 Read the rules", url="t.me/{}?start={}".format(bot.username, splitter[0]),
-                        )
+                        "📝 Read the rules",
+                        url="t.me/{}?start={}".format(bot.username,
+                                                      splitter[0]),
+                    )
                 ],
             ]
-            
-            query.edit_message_reply_markup(
-                InlineKeyboardMarkup(kyb_no_del)
-            )
+
+            query.edit_message_reply_markup(InlineKeyboardMarkup(kyb_no_del))
             return ""
         except Exception as err:
-            query.answer(
-                text=f"🛑 Failed to delete message!\n{err}",
-                show_alert=True
-            )
+            query.answer(text=f"🛑 Failed to delete message!\n{err}",
+                         show_alert=True)
     elif splitter[1] == "close":
         try:
             await query.answer("✅ Panel Closed!")
-            
+
             kyb_no_del = [
                 [
                     InlineKeyboardButton(
-                            "📝 Read the rules", url="t.me/{}?start={}".format(bot.username, splitter[0]),
-                        )
+                        "📝 Read the rules",
+                        url="t.me/{}?start={}".format(bot.username,
+                                                      splitter[0]),
+                    )
                 ],
             ]
-            
-            query.edit_message_reply_markup(
-                InlineKeyboardMarkup(kyb_no_del)
-            )
+
+            query.edit_message_reply_markup(InlineKeyboardMarkup(kyb_no_del))
             return ""
         except Exception as err:
-            query.answer(
-                text=f"🛑 Failed to close panel!\n{err}",
-                show_alert=True
-            )
+            query.answer(text=f"🛑 Failed to close panel!\n{err}",
+                         show_alert=True)
 
 
 def __migrate__(old_chat_id, new_chat_id):
@@ -279,12 +281,13 @@ def __user_settings__(user_id):
         return "You will *not* receive reports from chats you're admin."
 
 
-
 def __migrate__(old_chat_id, new_chat_id):
     sql.migrate_chat(old_chat_id, new_chat_id)
 
+
 def __chat_settings__(chat_id, _):
     return f"This chat is setup to send user reports to admins, via /report and @admin: `{sql.chat_should_report(chat_id)}`"
+
 
 def __user_settings__(user_id):
     if sql.user_should_report(user_id) is True:

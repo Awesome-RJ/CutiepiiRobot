@@ -81,11 +81,7 @@ def dismod(chat_id, user_id):
 
 def list_modd(chat_id):
     try:
-        return (
-            SESSION.query(Mods)
-            .filter(Mods.chat_id == str(chat_id))
-            .order_by(Mods.user_id.asc())
-            .all()
-        )
+        return (SESSION.query(Mods).filter(
+            Mods.chat_id == str(chat_id)).order_by(Mods.user_id.asc()).all())
     finally:
         SESSION.close()
