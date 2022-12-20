@@ -1268,13 +1268,9 @@ LOGO_LINKS1 = [
 @register(pattern="^/logo ?(.*)")
 async def lego(event):
     quew = event.pattern_match.group(1)
-    if event.sender_id == OWNER_ID:
-        pass
-    else:
-
-        if not quew:
-            await event.reply("Please Gimmie A Text For The Logo.")
-            return
+    if event.sender_id != OWNER_ID and not quew:
+        await event.reply("Please Gimmie A Text For The Logo.")
+        return
     pesan = await event.reply("Logo In A Process. Please Wait.")
     try:
         text = event.pattern_match.group(1)
