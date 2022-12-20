@@ -16,8 +16,7 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from Cutiepii_Robot.modules.sql import super_users_sql as sql
 
 
-def check_user_id(user_id: int,
-                  context: CallbackContext) -> Optional[str]:
+def check_user_id(user_id: int, context: CallbackContext) -> Optional[str]:
     bot = context.bot
     if not user_id:
         return "Nice try... Nope! Provide me an valid User ID."
@@ -60,8 +59,7 @@ async def addsudo(update: Update, context: CallbackContext) -> str:
 
 @sudo_plus
 @gloggable
-async def addsupport(update: Update,
-                     context: CallbackContext) -> str:
+async def addsupport(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -99,8 +97,7 @@ async def addsupport(update: Update,
 
 @sudo_plus
 @gloggable
-async def addwhitelist(update: Update,
-                       context: CallbackContext) -> str:
+async def addwhitelist(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -138,8 +135,7 @@ async def addwhitelist(update: Update,
 
 @dev_plus
 @gloggable
-async def removesudo(update: Update,
-                     context: CallbackContext) -> str:
+async def removesudo(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -161,8 +157,7 @@ async def removesudo(update: Update,
 
 @sudo_plus
 @gloggable
-async def removesupport(update: Update,
-                        context: CallbackContext) -> str:
+async def removesupport(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -184,8 +179,7 @@ async def removesupport(update: Update,
 
 @sudo_plus
 @gloggable
-async def removewhitelist(update: Update,
-                          context: CallbackContext) -> str:
+async def removewhitelist(update: Update, context: CallbackContext) -> str:
     bot = context.bot
     args = context.args
     message = update.effective_message
@@ -234,8 +228,7 @@ async def sudolist(update: Update, context: CallbackContext) -> None:
 
 
 @whitelist_plus
-async def supportlist(update: Update,
-                      context: CallbackContext) -> None:
+async def supportlist(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     message = update.effective_message
     msg = "<b>Support users:</b>\n"
@@ -248,8 +241,7 @@ async def supportlist(update: Update,
 
 
 @whitelist_plus
-async def whitelistlist(update: Update,
-                        context: CallbackContext) -> None:
+async def whitelistlist(update: Update, context: CallbackContext) -> None:
     bot = context.bot
     message = update.effective_message
     msg = "<b>Whitelist users:</b>\n"

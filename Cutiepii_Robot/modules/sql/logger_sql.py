@@ -36,8 +36,6 @@ from sqlalchemy import Column, String, Boolean
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
 
-
-
 class LoggerSettings(BASE):
     __tablename__ = "chat_log_settings"
     chat_id = Column(String(14), primary_key=True)
@@ -86,12 +84,12 @@ def does_chat_log(chat_id):
         return d.setting
 
 
-
 def __load_chat_log_stat_list():
     global LOGSTAT_LIST
     try:
         LOGSTAT_LIST = {
-            x.chat_id for x in SESSION.query(LoggerSettings).all() if x.setting
+            x.chat_id
+            for x in SESSION.query(LoggerSettings).all() if x.setting
         }
     finally:
         SESSION.close()
@@ -112,11 +110,8 @@ __load_chat_log_stat_list()
 
 def migrate_chat(old_chat_id, new_chat_id):
     with LOG_SETTING_LOCK:
-        chat_notes = (
-            SESSION.query(LoggerSettings)
-            .filter(LoggerSettings.chat_id == str(old_chat_id))
-            .all()
-        )
+        chat_notes = (SESSION.query(LoggerSettings).filter(
+            LoggerSettings.chat_id == str(old_chat_id)).all())
         for note in chat_notes:
             note.chat_id = str(new_chat_id)
         SESSION.commit()

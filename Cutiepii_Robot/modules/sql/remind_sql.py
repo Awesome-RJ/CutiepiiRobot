@@ -1,4 +1,3 @@
-
 """
 BSD 2-Clause License
 
@@ -51,12 +50,14 @@ class Reminds(BASE):
     def __repr__(self):
         return f"<remind in {self.chat_id} for time {self.time_seconds}>"
 
+
 # Reminds.__table__.drop()
 Reminds.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 
 REMINDERS = {}
+
 
 def set_remind(chat_id, time_sec, remind_message, user_id):
     with INSERTION_LOCK:
@@ -69,27 +70,44 @@ def set_remind(chat_id, time_sec, remind_message, user_id):
         SESSION.commit()
         if time_sec not in REMINDERS:
             REMINDERS[time_sec] = []
-        REMINDERS[time_sec].append({"chat_id": str(chat_id), "message": remind_message, "user_id": user_id})
+        REMINDERS[time_sec].append({
+            "chat_id": str(chat_id),
+            "message": remind_message,
+            "user_id": user_id
+        })
+
 
 def rem_remind(chat_id, time_sec, remind_message, user_id):
     with INSERTION_LOCK:
         if reminds := SESSION.query(Reminds).get((str(chat_id), time_sec)):
             SESSION.delete(reminds)
             SESSION.commit()
-            REMINDERS[time_sec].remove({"chat_id": str(chat_id), "message": remind_message, "user_id": user_id})
+            REMINDERS[time_sec].remove({
+                "chat_id": str(chat_id),
+                "message": remind_message,
+                "user_id": user_id
+            })
             return True
         SESSION.close()
         return False
 
+
 def get_remind_in_chat(chat_id, timestamp):
-    return (SESSION.query(Reminds).filter(Reminds.chat_id == str(chat_id), Reminds.time_seconds == timestamp).first())
+    return (SESSION.query(Reminds).filter(
+        Reminds.chat_id == str(chat_id),
+        Reminds.time_seconds == timestamp).first())
+
 
 def num_reminds_in_chat(chat_id):
-    return (SESSION.query(Reminds).filter(Reminds.chat_id == str(chat_id)).count())
+    return (SESSION.query(Reminds).filter(
+        Reminds.chat_id == str(chat_id)).count())
+
 
 def get_reminds_in_chat(chat_id):
     try:
-        return (SESSION.query(Reminds).filter(Reminds.chat_id == str(chat_id)).order_by(Reminds.time_seconds.asc()).all())
+        return (SESSION.query(Reminds).filter(
+            Reminds.chat_id == str(chat_id)).order_by(
+                Reminds.time_seconds.asc()).all())
     finally:
         SESSION.close()
 
@@ -100,12 +118,18 @@ def __get_all_reminds():
         for chat in chats:
             if (chat.time_seconds <= round(time.time())) or chat.user_id == 0:
                 try:
-                    rem_remind(chat.chat_id, chat.time_seconds, chat.remind_message, chat.user_id)
+                    rem_remind(chat.chat_id, chat.time_seconds,
+                               chat.remind_message, chat.user_id)
                 except:
                     pass
                 continue
-            REMINDERS[chat.time_seconds] = [{"chat_id": chat.chat_id, "message": chat.remind_message, "user_id": chat.user_id}]
+            REMINDERS[chat.time_seconds] = [{
+                "chat_id": chat.chat_id,
+                "message": chat.remind_message,
+                "user_id": chat.user_id
+            }]
     finally:
         SESSION.close()
+
 
 __get_all_reminds()

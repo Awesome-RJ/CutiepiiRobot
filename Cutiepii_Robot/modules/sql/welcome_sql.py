@@ -217,12 +217,12 @@ class Welcome(BASE):
     should_goodbye = Column(Boolean, default=True)
     custom_content = Column(UnicodeText, default=None)
 
-    custom_welcome = Column(
-        UnicodeText, default=random.choice(DEFAULT_WELCOME_MESSAGES)
-    )
+    custom_welcome = Column(UnicodeText,
+                            default=random.choice(DEFAULT_WELCOME_MESSAGES))
     welcome_type = Column(Integer, default=Types.TEXT.value)
 
-    custom_leave = Column(UnicodeText, default=random.choice(DEFAULT_GOODBYE_MESSAGES))
+    custom_leave = Column(UnicodeText,
+                          default=random.choice(DEFAULT_GOODBYE_MESSAGES))
     leave_type = Column(Integer, default=Types.TEXT.value)
 
     clean_welcome = Column(BigInteger)
@@ -306,6 +306,7 @@ class RaidMode(BASE):
     status = Column(Boolean, default=False)
     time = Column(Integer, default=21600)
     acttime = Column(Integer, default=3600)
+
     # permanent = Column(Boolean, default=False)
 
     def __init__(self, chat_id, status, time, acttime):
@@ -314,6 +315,7 @@ class RaidMode(BASE):
         self.time = time
         self.acttime = acttime
         # self.permanent = permanent
+
 
 Welcome.__table__.create(checkfirst=True)
 WelcomeButtons.__table__.create(checkfirst=True)
@@ -330,6 +332,7 @@ WM_LOCK = threading.RLock()
 CS_LOCK = threading.RLock()
 
 RAID_LOCK = threading.RLock()
+
 
 def welcome_mutes(chat_id):
     try:
@@ -351,7 +354,8 @@ def set_welcome_mutes(chat_id, welcomemutes):
 
 def set_human_checks(user_id, chat_id):
     with INSERTION_LOCK:
-        human_check = SESSION.query(WelcomeMuteUsers).get((user_id, str(chat_id)))
+        human_check = SESSION.query(WelcomeMuteUsers).get(
+            (user_id, str(chat_id)))
         if not human_check:
             human_check = WelcomeMuteUsers(user_id, str(chat_id), True)
 
@@ -366,7 +370,8 @@ def set_human_checks(user_id, chat_id):
 
 def get_human_checks(user_id, chat_id):
     try:
-        human_check = SESSION.query(WelcomeMuteUsers).get((user_id, str(chat_id)))
+        human_check = SESSION.query(WelcomeMuteUsers).get(
+            (user_id, str(chat_id)))
         if not human_check:
             return None
         human_check = human_check.human_check
@@ -454,9 +459,11 @@ def set_gdbye_preference(chat_id, should_goodbye):
         SESSION.commit()
 
 
-def set_custom_welcome(
-    chat_id, custom_content, custom_welcome, welcome_type, buttons=None
-):
+def set_custom_welcome(chat_id,
+                       custom_content,
+                       custom_welcome,
+                       welcome_type,
+                       buttons=None):
     if buttons is None:
         buttons = []
 
@@ -477,11 +484,8 @@ def set_custom_welcome(
         SESSION.add(welcome_settings)
 
         with WELC_BTN_LOCK:
-            prev_buttons = (
-                SESSION.query(WelcomeButtons)
-                .filter(WelcomeButtons.chat_id == str(chat_id))
-                .all()
-            )
+            prev_buttons = (SESSION.query(WelcomeButtons).filter(
+                WelcomeButtons.chat_id == str(chat_id)).all())
             for btn in prev_buttons:
                 SESSION.delete(btn)
 
@@ -522,11 +526,8 @@ def set_custom_gdbye(chat_id, custom_goodbye, goodbye_type, buttons=None):
         SESSION.add(welcome_settings)
 
         with LEAVE_BTN_LOCK:
-            prev_buttons = (
-                SESSION.query(GoodbyeButtons)
-                .filter(GoodbyeButtons.chat_id == str(chat_id))
-                .all()
-            )
+            prev_buttons = (SESSION.query(GoodbyeButtons).filter(
+                GoodbyeButtons.chat_id == str(chat_id)).all())
             for btn in prev_buttons:
                 SESSION.delete(btn)
 
@@ -549,24 +550,18 @@ def get_custom_gdbye(chat_id):
 
 def get_welc_buttons(chat_id):
     try:
-        return (
-            SESSION.query(WelcomeButtons)
-            .filter(WelcomeButtons.chat_id == str(chat_id))
-            .order_by(WelcomeButtons.id)
-            .all()
-        )
+        return (SESSION.query(WelcomeButtons).filter(
+            WelcomeButtons.chat_id == str(chat_id)).order_by(
+                WelcomeButtons.id).all())
     finally:
         SESSION.close()
 
 
 def get_gdbye_buttons(chat_id):
     try:
-        return (
-            SESSION.query(GoodbyeButtons)
-            .filter(GoodbyeButtons.chat_id == str(chat_id))
-            .order_by(GoodbyeButtons.id)
-            .all()
-        )
+        return (SESSION.query(GoodbyeButtons).filter(
+            GoodbyeButtons.chat_id == str(chat_id)).order_by(
+                GoodbyeButtons.id).all())
     finally:
         SESSION.close()
 
@@ -574,8 +569,7 @@ def get_gdbye_buttons(chat_id):
 def clean_service(chat_id: Union[str, int]) -> bool:
     try:
         if chat_setting := SESSION.query(CleanServiceSetting).get(
-            str(chat_id)
-        ):
+                str(chat_id)):
             return chat_setting.clean_service
         return False
     finally:
@@ -599,20 +593,14 @@ def migrate_chat(old_chat_id, new_chat_id):
             chat.chat_id = str(new_chat_id)
 
         with WELC_BTN_LOCK:
-            chat_buttons = (
-                SESSION.query(WelcomeButtons)
-                .filter(WelcomeButtons.chat_id == str(old_chat_id))
-                .all()
-            )
+            chat_buttons = (SESSION.query(WelcomeButtons).filter(
+                WelcomeButtons.chat_id == str(old_chat_id)).all())
             for btn in chat_buttons:
                 btn.chat_id = str(new_chat_id)
 
         with LEAVE_BTN_LOCK:
-            chat_buttons = (
-                SESSION.query(GoodbyeButtons)
-                .filter(GoodbyeButtons.chat_id == str(old_chat_id))
-                .all()
-            )
+            chat_buttons = (SESSION.query(GoodbyeButtons).filter(
+                GoodbyeButtons.chat_id == str(old_chat_id)).all())
             for btn in chat_buttons:
                 btn.chat_id = str(new_chat_id)
 
@@ -623,7 +611,7 @@ def getRaidStatus(chat_id):
     try:
         if stat := SESSION.query(RaidMode).get(str(chat_id)):
             return stat.status, stat.time, stat.acttime
-        return False, 21600, 3600 #default
+        return False, 21600, 3600  #default
     finally:
         SESSION.close()
 
@@ -636,16 +624,19 @@ def setRaidStatus(chat_id, status, time=21600, acttime=3600):
         SESSION.add(newObj)
         SESSION.commit()
 
+
 def toggleRaidStatus(chat_id):
     newObj = True
     with RAID_LOCK:
         prevObj = SESSION.query(RaidMode).get(str(chat_id))
         if prevObj:
             newObj = not prevObj.status
-        stat = RaidMode(str(chat_id), newObj, prevObj.time or 21600, prevObj.acttime or 3600)
+        stat = RaidMode(str(chat_id), newObj, prevObj.time or 21600,
+                        prevObj.acttime or 3600)
         SESSION.add(stat)
         SESSION.commit()
         return newObj
+
 
 def _ResetRaidOnRestart():
     with RAID_LOCK:
@@ -653,6 +644,7 @@ def _ResetRaidOnRestart():
         for r in raid:
             r.status = False
         SESSION.commit()
+
 
 # it uses a cron job to turn off so if the bot restarts and there is a pending raid disable job then raid will stay on
 _ResetRaidOnRestart()
