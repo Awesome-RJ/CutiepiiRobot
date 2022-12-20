@@ -40,10 +40,10 @@ from Cutiepii_Robot.events import register
 from PIL import Image, ImageDraw, ImageFont
 
 LOGO_LINKS1 = [
-    "https://telegra.ph/file/cecce411e88f00a5bfd99.jpg",
-    "https://telegra.ph/file/e999fbca16d7fd9995d2a.jpg",
-    "https://telegra.ph/file/973d830501725e170acf8.jpg",
-    "https://telegra.ph/file/a6468482197bdd0b28c2f.jpg",
+    "https://graph.org/file/cecce411e88f00a5bfd99.jpg",
+    "https://graph.org/file/e999fbca16d7fd9995d2a.jpg",
+    "https://graph.org/file/973d830501725e170acf8.jpg",
+    "https://graph.org/file/a6468482197bdd0b28c2f.jpg",
     "https://telegra.ph/file/bea4c385a300ea6361a2e.jpg",
     "https://telegra.ph/file/5dbda3a87be3d7c479e30.jpg",
     "https://telegra.ph/file/031ac36905d0c56b651e8.jpg",
