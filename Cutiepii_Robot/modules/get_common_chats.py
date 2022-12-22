@@ -66,7 +66,7 @@ async def get_user_common_chats(update: Update,
         except (BadRequest, Forbidden):
             pass
         except RetryAfter as e:
-           await sleep(e.retry_after)
+            await sleep(e.retry_after)
 
     if len(text) < 4096:
         await msg.reply_text(text, parse_mode=ParseMode.HTML)

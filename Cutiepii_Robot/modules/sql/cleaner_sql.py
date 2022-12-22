@@ -82,8 +82,7 @@ GLOBAL_IGNORE_COMMANDS = set()
 def set_cleanbt(chat_id, is_enable):
     with CLEANER_CHAT_SETTINGS:
         if curr := SESSION.query(CleanerBlueTextChatSettings).get(
-            str(chat_id)
-        ):
+                str(chat_id)):
             SESSION.delete(curr)
 
         newcurr = CleanerBlueTextChatSettings(str(chat_id), is_enable)
@@ -95,14 +94,16 @@ def set_cleanbt(chat_id, is_enable):
 def chat_ignore_command(chat_id, ignore):
     ignore = ignore.lower()
     with CLEANER_CHAT_LOCK:
-        ignored = SESSION.query(CleanerBlueTextChat).get((str(chat_id), ignore))
+        ignored = SESSION.query(CleanerBlueTextChat).get(
+            (str(chat_id), ignore))
 
         if not ignored:
 
             if str(chat_id) not in CLEANER_CHATS:
-                CLEANER_CHATS.setdefault(
-                    str(chat_id), {"setting": False, "commands": set()}
-                )
+                CLEANER_CHATS.setdefault(str(chat_id), {
+                    "setting": False,
+                    "commands": set()
+                })
 
             CLEANER_CHATS[str(chat_id)]["commands"].add(ignore)
 
@@ -118,12 +119,12 @@ def chat_unignore_command(chat_id, unignore):
     unignore = unignore.lower()
     with CLEANER_CHAT_LOCK:
         if unignored := SESSION.query(CleanerBlueTextChat).get(
-            (str(chat_id), unignore)
-        ):
+            (str(chat_id), unignore)):
             if str(chat_id) not in CLEANER_CHATS:
-                CLEANER_CHATS.setdefault(
-                    str(chat_id), {"setting": False, "commands": set()}
-                )
+                CLEANER_CHATS.setdefault(str(chat_id), {
+                    "setting": False,
+                    "commands": set()
+                })
             if unignore in CLEANER_CHATS.get(str(chat_id)).get("commands"):
                 CLEANER_CHATS[str(chat_id)]["commands"].remove(unignore)
 
@@ -156,8 +157,7 @@ def global_unignore_command(commands):
     commands = frozenset({command.lower()})
     with CLEANER_GLOBAL_LOCK:
         if unignored := SESSION.query(CleanerBlueTextGlobal).get(
-            str(commands)
-        ):
+                str(commands)):
             if command in GLOBAL_IGNORE_COMMANDS:
                 GLOBAL_IGNORE_COMMANDS.remove(commands)
 
@@ -173,9 +173,8 @@ def is_command_ignored(chat_id, commands):
     if frozenset({command.lower()}) in GLOBAL_IGNORE_COMMANDS:
         return True
 
-    if str(chat_id) in CLEANER_CHATS and frozenset({command.lower()}) in CLEANER_CHATS.get(
-        str(chat_id)
-    ).get("commands"):
+    if str(chat_id) in CLEANER_CHATS and frozenset(
+        {command.lower()}) in CLEANER_CHATS.get(str(chat_id)).get("commands"):
         return True
 
     return False
@@ -184,10 +183,9 @@ def is_command_ignored(chat_id, commands):
 def is_enabled(chat_id):
     try:
         if resultcurr := SESSION.query(CleanerBlueTextChatSettings).get(
-            str(chat_id)
-        ):
+                str(chat_id)):
             return resultcurr.is_enable
-        return False #default
+        return False  #default
     finally:
         SESSION.close()
 
@@ -206,21 +204,28 @@ def __load_cleaner_list():
 
     try:
         GLOBAL_IGNORE_COMMANDS = {
-            x.command for x in SESSION.query(CleanerBlueTextGlobal).all()
+            x.command
+            for x in SESSION.query(CleanerBlueTextGlobal).all()
         }
     finally:
         SESSION.close()
 
     try:
         for x in SESSION.query(CleanerBlueTextChatSettings).all():
-            CLEANER_CHATS.setdefault(x.chat_id, {"setting": False, "commands": set()})
+            CLEANER_CHATS.setdefault(x.chat_id, {
+                "setting": False,
+                "commands": set()
+            })
             CLEANER_CHATS[x.chat_id]["setting"] = x.is_enable
     finally:
         SESSION.close()
 
     try:
         for x in SESSION.query(CleanerBlueTextChat).all():
-            CLEANER_CHATS.setdefault(x.chat_id, {"setting": False, "commands": set()})
+            CLEANER_CHATS.setdefault(x.chat_id, {
+                "setting": False,
+                "commands": set()
+            })
             CLEANER_CHATS[x.chat_id]["commands"].add(x.command)
     finally:
         SESSION.close()

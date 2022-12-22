@@ -82,8 +82,7 @@ def getRepo(bot, update, reponame):
     return None, None
 
 
-async def getRelease(update: Update,
-                     context: CallbackContext) -> None:
+async def getRelease(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     if len(args) == 0:
@@ -105,9 +104,8 @@ async def getRelease(update: Update,
     return
 
 
-async def hashFetch(
-        update: Update,
-        context: CallbackContext) -> None:  # kanged from notes
+async def hashFetch(update: Update,
+                    context: CallbackContext) -> None:  # kanged from notes
     bot, args = context.bot, context.args
     message = update.effective_message.text
     msg = update.effective_message
@@ -153,8 +151,7 @@ async def cmdFetch(update: Update, context: CallbackContext) -> None:
     return
 
 
-async def changelog(update: Update,
-                    context: CallbackContext) -> None:
+async def changelog(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     msg = update.effective_message
     if len(args) != 1:
@@ -225,8 +222,9 @@ async def listRepo(update: Update, context: CallbackContext) -> None:
                 "No repo shortcuts in this chat!"))
     elif len(msg) != 0:
         deletion(
-            update, context, await update.effective_message.reply_text(
-                msg.format(chat_name) + des, parse_mode=ParseMode.MARKDOWN))
+            update, context, await
+            update.effective_message.reply_text(msg.format(chat_name) + des,
+                                                parse_mode=ParseMode.MARKDOWN))
 
 
 async def getVer(update: Update, context: CallbackContext) -> None:

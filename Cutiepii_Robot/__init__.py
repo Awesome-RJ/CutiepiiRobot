@@ -337,7 +337,8 @@ LOGGER.debug("[CUTIEPII]: TELETHON CLIENT STARTING")
 telethn = TelegramClient(MemorySession(), API_ID, API_HASH)
 
 defaults = Defaults(block=False)
-CUTIEPII_PTB = Application.builder().token(TOKEN).defaults(defaults).concurrent_updates(True).build()
+CUTIEPII_PTB = Application.builder().token(TOKEN).defaults(
+    defaults).concurrent_updates(True).build()
 
 # asyncio.get_event_loop().run_until_complete(CUTIEPII_PTB.bot.initialize())
 #------------------------------------------------------------------
@@ -348,7 +349,8 @@ pgram = Client(
     api_id=API_ID,
     api_hash=API_HASH,
     bot_token=TOKEN,
-    workers=min(32, os.cpu_count() + 4),
+    workers=min(32,
+                os.cpu_count() + 4),
     parse_mode=ParseMode.DEFAULT,
     sleep_threshold=60,
     in_memory=True,

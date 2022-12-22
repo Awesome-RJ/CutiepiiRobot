@@ -71,8 +71,7 @@ USER_LOCK = threading.RLock()
 def chat_should_report(chat_id: Union[str, int]) -> bool:
     try:
         if chat_setting := SESSION.query(ReportingChatSettings).get(
-            str(chat_id)
-        ):
+                str(chat_id)):
             return chat_setting.should_report
         return False
     finally:
@@ -112,11 +111,8 @@ def set_user_setting(user_id: int, setting: bool):
 
 def migrate_chat(old_chat_id, new_chat_id):
     with CHAT_LOCK:
-        chat_notes = (
-            SESSION.query(ReportingChatSettings)
-            .filter(ReportingChatSettings.chat_id == str(old_chat_id))
-            .all()
-        )
+        chat_notes = (SESSION.query(ReportingChatSettings).filter(
+            ReportingChatSettings.chat_id == str(old_chat_id)).all())
         for note in chat_notes:
             note.chat_id = str(new_chat_id)
         SESSION.commit()

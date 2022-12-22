@@ -1,4 +1,3 @@
-
 import html
 import contextlib
 import Cutiepii_Robot.modules.sql.welcome_sql as sql
@@ -46,8 +45,7 @@ def get_readable_time(time: int) -> str:
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def setRaid(update: Update,
-                  context: CallbackContext) -> Optional[str]:
+async def setRaid(update: Update, context: CallbackContext) -> Optional[str]:
     args = context.args
     chat = update.effective_chat
     msg = update.effective_message
@@ -90,7 +88,7 @@ async def setRaid(update: Update,
     elif args[0] == "off":
         if stat:
             sql.setRaidStatus(chat.id, False, time, acttime)
-#            j.scheduler.remove_job(RUNNING_RAIDS.pop(chat.id))
+            #            j.scheduler.remove_job(RUNNING_RAIDS.pop(chat.id))
             text = "Raid mode has been <code>Disabled</code>, members that join will no longer be kicked."
             await msg.reply_text(text, parse_mode=ParseMode.HTML)
             return (
@@ -130,11 +128,11 @@ async def setRaid(update: Update,
                 parse_mode=ParseMode.HTML)
 
 
-
 @connection_status
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def enable_raid_cb(update: Update, ctx: CallbackContext) -> Optional[str]:
+async def enable_raid_cb(update: Update,
+                         ctx: CallbackContext) -> Optional[str]:
     args = await update.callback_query.data.replace("enable_raid=",
                                                     "").split("=")
     chat = update.effective_chat
@@ -159,7 +157,9 @@ async def enable_raid_cb(update: Update, ctx: CallbackContext) -> Optional[str]:
         ctx.bot.send_message(chat_id,
                              "Raid mode has been automatically disabled!")
 
+
 #    raid = j.run_once(disable_raid, time)
+
     RUNNING_RAIDS[int(chat_id)] = raid.job.id
     return (f"<b>{html.escape(chat.title)}:</b>\n"
             f"#RAID\n"
@@ -179,7 +179,7 @@ async def disable_raid_cb(update: Update) -> Optional[str]:
     time = args[1]
     _, _, acttime = sql.getRaidStatus(chat_id)
     sql.setRaidStatus(chat_id, False, time, acttime)
-#    j.scheduler.remove_job(RUNNING_RAIDS.pop(int(chat_id)))
+    #    j.scheduler.remove_job(RUNNING_RAIDS.pop(int(chat_id)))
     await update.effective_message.edit_text(
         'Raid mode has been <code>Disabled</code>, newly joining members will no longer be kicked.',
         parse_mode=ParseMode.HTML,
@@ -205,8 +205,7 @@ async def disable_raid_cb(update: Update):
 @bot_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
-async def raidtime(update: Update,
-                   context: CallbackContext) -> Optional[str]:
+async def raidtime(update: Update, context: CallbackContext) -> Optional[str]:
     what, time, acttime = sql.getRaidStatus(update.effective_chat.id)
     args = context.args
     msg = update.effective_message
@@ -246,7 +245,7 @@ async def raidtime(update: Update,
 @user_admin_check(AdminPerms.CAN_RESTRICT_MEMBERS)
 @loggable
 async def raidactiontime(update: Update,
-                   context: CallbackContext) -> Optional[str]:
+                         context: CallbackContext) -> Optional[str]:
     what, t, time = sql.getRaidStatus(update.effective_chat.id)
     args = context.args
     msg = update.effective_message
@@ -280,13 +279,15 @@ async def raidactiontime(update: Update,
             "Unknown time given, give me something like 5m or 1h",
             parse_mode=ParseMode.HTML)
 
+
 CUTIEPII_PTB.add_handler(CommandHandler("raid", setRaid))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(enable_raid_cb, pattern=r"enable_raid="))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(disable_raid_cb, pattern=r"disable_raid="))
-CUTIEPII_PTB.add_handler(CallbackQueryHandler(disable_raid_cb, pattern=r"cancel_raid="))
+CUTIEPII_PTB.add_handler(
+    CallbackQueryHandler(enable_raid_cb, pattern=r"enable_raid="))
+CUTIEPII_PTB.add_handler(
+    CallbackQueryHandler(disable_raid_cb, pattern=r"disable_raid="))
+CUTIEPII_PTB.add_handler(
+    CallbackQueryHandler(disable_raid_cb, pattern=r"cancel_raid="))
 CUTIEPII_PTB.add_handler(CommandHandler("raidtime", raidtime))
 CUTIEPII_PTB.add_handler(CommandHandler("raidactiontime", raidactiontime))
-
-
 
 __mod_name__ = "AntiRaid"

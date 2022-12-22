@@ -56,11 +56,7 @@ def rm_repo(chat_id, name):
 
 def get_all_repos(chat_id):
     try:
-        return (
-            SESSION.query(GitHub)
-            .filter(GitHub.chat_id == str(chat_id))
-            .order_by(GitHub.name.asc())
-            .all()
-        )
+        return (SESSION.query(GitHub).filter(
+            GitHub.chat_id == str(chat_id)).order_by(GitHub.name.asc()).all())
     finally:
         SESSION.close()

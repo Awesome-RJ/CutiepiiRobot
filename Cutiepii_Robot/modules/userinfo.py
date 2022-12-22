@@ -815,8 +815,7 @@ async def about_me(update: Update, context: CallbackContext) -> None:
             "There isnt one, use /setme to set one.")
 
 
-async def set_about_me(update: Update,
-                       context: CallbackContext) -> None:
+async def set_about_me(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     user_id = message.from_user.id
     if user_id in [777000, 1087968824]:
@@ -849,8 +848,7 @@ async def set_about_me(update: Update,
             )
 
 
-async def about_bio(update: Update,
-                    context: CallbackContext) -> None:
+async def about_bio(update: Update, context: CallbackContext) -> None:
     bot, args = context.bot, context.args
     message = update.effective_message
 
@@ -873,8 +871,7 @@ async def about_bio(update: Update,
             "You haven't had a bio set about yourself yet!", )
 
 
-async def set_about_bio(update: Update,
-                        context: CallbackContext) -> None:
+async def set_about_bio(update: Update, context: CallbackContext) -> None:
     message = update.effective_message
     sender_id = update.effective_user.id
     bot = context.bot

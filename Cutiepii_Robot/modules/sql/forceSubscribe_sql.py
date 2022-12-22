@@ -48,7 +48,8 @@ forceSubscribe.__table__.create(checkfirst=True)
 
 def fs_settings(chat_id):
     try:
-        return SESSION.query(forceSubscribe).filter(forceSubscribe.chat_id == chat_id).one()
+        return SESSION.query(forceSubscribe).filter(
+            forceSubscribe.chat_id == chat_id).one()
     except:
         return None
     finally:
@@ -60,12 +61,10 @@ def add_channel(chat_id, channel):
     if adder:
         adder.channel = channel
     else:
-        adder = forceSubscribe(
-            chat_id,
-            channel
-        )
+        adder = forceSubscribe(chat_id, channel)
     SESSION.add(adder)
     SESSION.commit()
+
 
 def disapprove(chat_id):
     if rem := SESSION.query(forceSubscribe).get(chat_id):

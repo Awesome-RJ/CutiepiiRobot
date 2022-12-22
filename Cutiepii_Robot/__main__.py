@@ -72,16 +72,12 @@ from telegram.error import (
     TimedOut,
     Forbidden,
 )
-from telegram.ext import (
-    CallbackContext,
-    CallbackContext,
-    filters,
-    CallbackQueryHandler,
-    MessageHandler
-)
+from telegram.ext import (CallbackContext, CallbackContext, filters,
+                          CallbackQueryHandler, MessageHandler)
 
 from telegram.helpers import escape_markdown
 from pyrogram import idle
+
 
 def get_readable_time(seconds: int) -> str:
     count = 0
@@ -211,10 +207,7 @@ for module_name in ALL_MODULES:
 
 
 # do not async
-async def send_help(context: CallbackContext,
-                    chat_id,
-                    text,
-                    keyboard=None):
+async def send_help(context: CallbackContext, chat_id, text, keyboard=None):
     if not keyboard:
         keyboard = InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help"))
     await context.bot.send_message(
@@ -224,7 +217,6 @@ async def send_help(context: CallbackContext,
         disable_web_page_preview=True,
         reply_markup=keyboard,
     )
-
 
 
 async def test(update: Update):
@@ -340,9 +332,7 @@ async def error_callback(_, context: CallbackContext):
         # handle all other telegram related errors
 
 
-
-async def help_button(update: Update,
-                      context: CallbackContext) -> None:
+async def help_button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     prev_match = re.match(r"help_prev\((.+?)\)", query.data)
@@ -399,7 +389,6 @@ async def help_button(update: Update,
         # await query.message.delete()
 
 
-
 async def cutiepii_callback_data(update: Update,
                                  context: CallbackContext) -> None:
     query = update.callback_query
@@ -426,7 +415,6 @@ async def cutiepii_callback_data(update: Update,
             timeout=60,
             disable_web_page_preview=False,
         )
-
 
 
 async def get_help(update: Update, context: CallbackContext) -> None:
@@ -508,8 +496,7 @@ async def send_settings(context: CallbackContext,
         )
 
 
-async def settings_button(update: Update,
-                          context: CallbackContext) -> None:
+async def settings_button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     user = update.effective_user
     bot = context.bot
@@ -586,8 +573,7 @@ async def settings_button(update: Update,
                              str(query.data))
 
 
-async def get_settings(update: Update,
-                       context: CallbackContext) -> None:
+async def get_settings(update: Update, context: CallbackContext) -> None:
     chat = update.effective_chat  # type: Optional[Chat]
     user = update.effective_user  # type: Optional[User]
     msg = update.effective_message  # type: Optional[Message]
@@ -679,21 +665,27 @@ def main():
     CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("start", start))
 
     CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("help", get_help))
-    CUTIEPII_PTB.add_handler(CallbackQueryHandler(help_button, pattern=r"help_.*"))
+    CUTIEPII_PTB.add_handler(
+        CallbackQueryHandler(help_button, pattern=r"help_.*"))
 
-    CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("settings", get_settings))
-    CUTIEPII_PTB.add_handler(CallbackQueryHandler(settings_button, pattern=r"stngs_"))
+    CUTIEPII_PTB.add_handler(
+        DisableAbleCommandHandler("settings", get_settings))
+    CUTIEPII_PTB.add_handler(
+        CallbackQueryHandler(settings_button, pattern=r"stngs_"))
 
-    CUTIEPII_PTB.add_handler(CallbackQueryHandler(cutiepii_callback_data, pattern=r"cutiepii_"))
+    CUTIEPII_PTB.add_handler(
+        CallbackQueryHandler(cutiepii_callback_data, pattern=r"cutiepii_"))
     CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("donate", donate))
-    CUTIEPII_PTB.add_handler(MessageHandler(filters.StatusUpdate.MIGRATE, migrate_chats))
+    CUTIEPII_PTB.add_handler(
+        MessageHandler(filters.StatusUpdate.MIGRATE, migrate_chats))
 
     if WEBHOOK:
         LOGGER.info("Using webhooks.")
         CUTIEPII_PTB.run_webhook(listen="127.0.0.1", port=PORT, url_path=TOKEN)
 
     else:
-        CUTIEPII_PTB.run_polling(allowed_updates=Update.ALL_TYPES, stop_signals=None)
+        CUTIEPII_PTB.run_polling(allowed_updates=Update.ALL_TYPES,
+                                 stop_signals=None)
         LOGGER.info(
             "Cutiepii Robot started, Using long polling. | BOT: [@Cutiepii_Robot]"
         )
