@@ -44,7 +44,7 @@ pydub==0.25.1
 bs4==0.0.1
 multicolorcaptcha==1.2.0
 jikanpy==4.3.2
-future==0.18.2
+future==0.18.3
 geopy==2.2.0
 humanize==4.3.0
 pyrogram==2.0.40
