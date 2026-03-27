@@ -66,7 +66,7 @@ pytimeparse
 APScheduler==3.9.1
 CloudScraper
 dnspython==2.2.1
-async-timeout==4.0.2
+async-timeout==4.0.3
 psycopg2
 pycountry
 opencv-python-headless==4.5.4.60
