@@ -69,6 +69,6 @@ dnspython==2.2.1
 async-timeout==4.0.2
 psycopg2
 pycountry
-opencv-python-headless==4.5.4.60
+opencv-python-headless==4.8.1.78
 pycryptodome
 base58
