@@ -65,7 +65,7 @@ python-barcode==0.14.0
 pytimeparse
 APScheduler==3.9.1
 CloudScraper
-dnspython==2.2.1
+dnspython==2.6.1
 async-timeout==4.0.2
 psycopg2
 pycountry
