@@ -1,9 +1,15 @@
+import os
 import sys
+import logging
+import asyncio
 import io
 import traceback
 
 from Cutiepii_Robot import telethn, LOGGER
 from telethon.sync import events
+from datetime import datetime
+from os import environ, execle
+
 
 # telethon eval
 
@@ -15,9 +21,7 @@ async def eval(event):
     cmd = "".join(event.message.message.split(maxsplit=1)[1:])
     if not cmd:
         return
-    catevent = await telethn.send_message(event.chat.id,
-                                          "`Running ...`",
-                                          reply_to=event)
+    catevent = await telethn.send_message(event.chat.id, "`Running ...`", reply_to=event)
     old_stderr = sys.stderr
     old_stdout = sys.stdout
     redirected_output = sys.stdout = io.StringIO()
@@ -40,7 +44,7 @@ async def eval(event):
         evaluation = stdout
     else:
         evaluation = "Success"
-    final_output = f"**➛  Eval : **\n`{cmd}` \n\n**➛  Result : **\n`{evaluation}` \n"
+    final_output = f"**-  Eval : **\n`{cmd}` \n\n**-  Result : **\n`{evaluation}` \n"
     MAX_MESSAGE_SIZE_LIMIT = 4095
     if len(final_output) > MAX_MESSAGE_SIZE_LIMIT:
         with io.BytesIO(str.encode(final_output)) as out_file:
@@ -59,11 +63,10 @@ async def eval(event):
 async def aexec(code, smessatatus):
     message = event = smessatatus
 
-    def p(_x):
-        return LOGGER.debug(slitu.yaml_format(_x))
-
     reply = await event.get_reply_message()
-    exec("async def __aexec(message, reply, telethn, p): " +
-         "\n event = smessatatus = message" +
-         "".join(f"\n {l}" for l in code.split("\n")))
-    return await locals()["__aexec"](message, reply, telethn, p)
+    exec(
+        f"async def __aexec(message, reply, client): "
+        + "\n event = smessatatus = message"
+        + "".join(f"\n {l}" for l in code.split("\n"))
+    )
+    return await locals()["__aexec"](message, reply, message.client)

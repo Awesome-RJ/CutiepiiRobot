@@ -1,8 +1,9 @@
 import urllib.request as url
 import json
+import datetime
 
 VERSION = "1.1.0"
-APIURL = "http://api.github.com/repos/"
+APIURL = "https://api.github.com/repos/"
 
 
 def vercheck() -> str:
@@ -15,48 +16,68 @@ def vercheck() -> str:
 def getData(repoURL):
     try:
         with url.urlopen(APIURL + repoURL + "/releases") as data_raw:
-            return json.loads(data_raw.read().decode())
+            repoData = json.loads(data_raw.read().decode())
+            return repoData
     except:
         return None
 
 
 def getReleaseData(repoData, index):
-    return repoData[index] if index < len(repoData) else None
+    if index < len(repoData):
+        return repoData[index]
+    else:
+        return None
 
 
 # Release-wise stuff
 
 
 def getAuthor(releaseData):
-    return None if releaseData is None else releaseData["author"]["login"]
+    if releaseData is None:
+        return None
+    return releaseData["author"]["login"]
 
 
 def getAuthorUrl(releaseData):
-    return None if releaseData is None else releaseData["author"]["html_url"]
+    if releaseData is None:
+        return None
+    return releaseData["author"]["html_url"]
 
 
 def getReleaseName(releaseData):
-    return None if releaseData is None else releaseData["name"]
+    if releaseData is None:
+        return None
+    return releaseData["name"]
 
 
 def getReleaseTag(releaseData):
-    return None if releaseData is None else releaseData["tag_name"]
+    if releaseData is None:
+        return None
+    return releaseData["tag_name"]
 
 
 def getReleaseDate(releaseData):
-    return None if releaseData is None else releaseData["published_at"]
+    if releaseData is None:
+        return None
+    return releaseData["published_at"]
 
 
 def getAssetsSize(releaseData):
-    return None if releaseData is None else len(releaseData["assets"])
+    if releaseData is None:
+        return None
+    return len(releaseData["assets"])
 
 
 def getAssets(releaseData):
-    return None if releaseData is None else releaseData["assets"]
+    if releaseData is None:
+        return None
+    return releaseData["assets"]
 
 
 def getBody(releaseData):  # changelog stuff
-    return None if releaseData is None else releaseData["body"]
+    if releaseData is None:
+        return None
+    return releaseData["body"]
 
 
 # Asset-wise stuff

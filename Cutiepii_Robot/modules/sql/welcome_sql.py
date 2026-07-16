@@ -1,6 +1,8 @@
 import random
 import threading
 from typing import Union
+
+from sqlalchemy.sql.expression import false
 from sqlalchemy import BigInteger, Boolean, Column, Integer, String, UnicodeText
 
 from Cutiepii_Robot.modules.helper_funcs.msg_types import Types
@@ -35,7 +37,7 @@ DEFAULT_WELCOME_MESSAGES = [
     "{first} just showed up. Hold my beer.",
     "Challenger approaching! {first} has appeared!",
     "It's a bird! It's a plane! Nevermind, it's just {first}.",
-    "It's {first}! Praise the sun! \o/",
+    "It's {first}! Praise the sun! \\o/",
     "Never gonna give {first} up. Never gonna let {first} down.",
     "Ha! {first} has joined! You activated my trap card!",
     "Hey! Listen! {first} has joined!",
@@ -233,7 +235,9 @@ class Welcome(BASE):
         self.should_goodbye = should_goodbye
 
     def __repr__(self):
-        return f"<Chat {self.chat_id} should Welcome new users: {self.should_welcome}>"
+        return "<Chat {} should Welcome new users: {}>".format(
+            self.chat_id, self.should_welcome
+        )
 
 
 class WelcomeButtons(BASE):
@@ -297,7 +301,7 @@ class CleanServiceSetting(BASE):
         self.chat_id = str(chat_id)
 
     def __repr__(self):
-        return f"<Chat used clean service ({self.chat_id})>"
+        return "<Chat used clean service ({})>".format(self.chat_id)
 
 
 class RaidMode(BASE):
@@ -333,7 +337,8 @@ RAID_LOCK = threading.RLock()
 
 def welcome_mutes(chat_id):
     try:
-        if welcomemutes := SESSION.query(WelcomeMute).get(str(chat_id)):
+        welcomemutes = SESSION.query(WelcomeMute).get(str(chat_id))
+        if welcomemutes:
             return welcomemutes.welcomemutes
         return False
     finally:
@@ -342,7 +347,8 @@ def welcome_mutes(chat_id):
 
 def set_welcome_mutes(chat_id, welcomemutes):
     with WM_LOCK:
-        if prev := SESSION.query(WelcomeMute).get((str(chat_id))):
+        prev = SESSION.query(WelcomeMute).get((str(chat_id)))
+        if prev:
             SESSION.delete(prev)
         welcome_m = WelcomeMute(str(chat_id), welcomemutes)
         SESSION.add(welcome_m)
@@ -375,6 +381,16 @@ def get_human_checks(user_id, chat_id):
         SESSION.close()
 
 
+def remove_human_check(user_id, chat_id):
+    try:
+        human_check = SESSION.query(WelcomeMuteUsers).get((user_id, str(chat_id)))
+        if human_check:
+            SESSION.delete(human_check)
+            SESSION.commit()
+    finally:
+        SESSION.close()
+
+
 def get_welc_mutes_pref(chat_id):
     welcomemutes = SESSION.query(WelcomeMute).get(str(chat_id))
     SESSION.close()
@@ -395,8 +411,10 @@ def get_welc_pref(chat_id):
             welc.custom_content,
             welc.welcome_type,
         )
-    # Welcome by default.
-    return True, DEFAULT_WELCOME, None, Types.TEXT
+
+    else:
+        # Welcome by default.
+        return True, DEFAULT_WELCOME, None, Types.TEXT
 
 
 def get_gdbye_pref(chat_id):
@@ -404,8 +422,9 @@ def get_gdbye_pref(chat_id):
     SESSION.close()
     if welc:
         return welc.should_goodbye, welc.custom_leave, welc.leave_type
-    # Welcome by default.
-    return True, DEFAULT_GOODBYE, Types.TEXT
+    else:
+        # Welcome by default.
+        return True, DEFAULT_GOODBYE, Types.TEXT
 
 
 def set_clean_welcome(chat_id, clean_welcome):
@@ -573,9 +592,8 @@ def get_gdbye_buttons(chat_id):
 
 def clean_service(chat_id: Union[str, int]) -> bool:
     try:
-        if chat_setting := SESSION.query(CleanServiceSetting).get(
-            str(chat_id)
-        ):
+        chat_setting = SESSION.query(CleanServiceSetting).get(str(chat_id))
+        if chat_setting:
             return chat_setting.clean_service
         return False
     finally:
@@ -595,7 +613,8 @@ def set_clean_service(chat_id: Union[int, str], setting: bool):
 
 def migrate_chat(old_chat_id, new_chat_id):
     with INSERTION_LOCK:
-        if chat := SESSION.query(Welcome).get(str(old_chat_id)):
+        chat = SESSION.query(Welcome).get(str(old_chat_id))
+        if chat:
             chat.chat_id = str(new_chat_id)
 
         with WELC_BTN_LOCK:

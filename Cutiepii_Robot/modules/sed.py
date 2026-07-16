@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -27,18 +27,22 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""
 
-
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_msg
 import sre_constants
 import regex
 import telegram
+from telegram.constants import MessageLimit
+MAX_MESSAGE_LENGTH = MessageLimit.MAX_TEXT_LENGTH
 
 
-from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
+from Cutiepii_Robot import LOGGER, dispatcher
 from Cutiepii_Robot.modules.disable import DisableAbleMessageHandler
 from Cutiepii_Robot.modules.helper_funcs.regex_helper import infinite_loop_check
 from telegram import Update
-from telegram.ext import filters
+from telegram.ext import ContextTypes, filters
+CallbackContext = ContextTypes.DEFAULT_TYPE  # Alias for backward compatibility
 
 DELIMITERS = ("/", ":", "|", "_")
 
@@ -89,7 +93,8 @@ def separate_sed(sed_string):
     return replace, replace_with, flags.lower()
 
 
-async def sed(update: Update):
+@cutiepii_msg(pattern=filters.Regex(r"s([{}]).*?\1.*".format("".join(DELIMITERS))), can_disable=True, friendly="sed")
+async def sed(update: Update, context: CallbackContext):
     sed_result = separate_sed(update.effective_message.text)
     if sed_result and update.effective_update.effective_message.reply_to_message:
         if update.effective_message.reply_to_message.text:
@@ -113,12 +118,13 @@ async def sed(update: Update):
                 return
             if check and check.group(0).lower() == to_fix.lower():
                 update.effective_message.reply_to_message.reply_text(
-                    f"Hey everyone, {update.effective_user.first_name} is trying to make me say stuff I don't wanna say!"
+                    "Hey everyone, {} is trying to make "
+                    "me say stuff I don't wanna "
+                    "say!".format(update.effective_user.first_name),
                 )
-
                 return
             if infinite_loop_check(repl):
-                await update.effective_message.reply_text(
+                update.effective_message.reply_text(
                     "I'm afraid I can't run that regex.",
                 )
                 return
@@ -135,36 +141,27 @@ async def sed(update: Update):
             else:
                 text = regex.sub(repl, repl_with, to_fix, count=1, timeout=3).strip()
         except TimeoutError:
-            await update.effective_message.reply_text("Timeout")
+            update.effective_message.reply_text("Timeout")
             return
         except sre_constants.error:
             LOGGER.warning(update.effective_message.text)
             LOGGER.exception("SRE constant error")
-            await update.effective_message.reply_text("Do you even sed? Apparently not.")
+            update.effective_message.reply_text("Do you even sed? Apparently not.")
             return
 
         # empty string errors -_-
-        if len(text) >= telegram.MessageLimit.TEXT_LENGTH:
-            await update.effective_message.reply_text(
+        if len(text) >= MAX_MESSAGE_LENGTH:
+            update.effective_message.reply_text(
                 "The result of the sed command was too long for \
                                                  telegram!",
             )
         elif text:
             update.effective_message.reply_to_message.reply_text(text)
-"""
-"""
-__help__ = 
- ➛ `s/<text1>/<text2>(/<flag>)*:* Reply to a message with this to perform a sed operation on that message, replacing all \
-occurrences of 'text1' with 'text2'. Flags are optional, and currently include 'i' for ignore case, "g' for global, \
-or nothing. Delimiters include `/`, `_`, `|`, and `:`. Text grouping is supported. The resulting message cannot be \
-larger than {}.
-*Reminder:* Sed uses some special characters to make matching easier, such as these: `+*.?\\`
-If you want to use these characters, make sure you escape them!
-*Example:* \\?.
 
+
+__help__ = True
 
 
 __mod_name__ = "Sed/Regex"
 
-CUTIEPII_PTB.add_handler(DisableAbleMessageHandler(filters.Regex(f's([{"".join(DELIMITERS)}]).*?\\1.*'), sed, friendly="sed"))
-"""
+

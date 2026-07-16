@@ -1,7 +1,7 @@
 import threading
 
 from Cutiepii_Robot.modules.sql import BASE, SESSION
-from sqlalchemy import Integer, String, Column, UnicodeText
+from sqlalchemy import Integer, String, Boolean, Column, UnicodeText
 
 
 class ClearCmd(BASE):
@@ -30,7 +30,8 @@ def get_allclearcmd(chat_id):
 
 def get_clearcmd(chat_id, cmd):
     try:
-        if clear_cmd := SESSION.query(ClearCmd).get((str(chat_id), cmd)):
+        clear_cmd = SESSION.query(ClearCmd).get((str(chat_id), cmd))
+        if clear_cmd:
             return clear_cmd
         return False
     finally:
@@ -50,26 +51,26 @@ def set_clearcmd(chat_id, cmd, time):
 
 def del_clearcmd(chat_id, cmd):
     with CLEAR_CMD_LOCK:
-        if del_cmd := SESSION.query(ClearCmd).get((str(chat_id), cmd)):
+        del_cmd = SESSION.query(ClearCmd).get((str(chat_id), cmd))
+        if del_cmd:
             SESSION.delete(del_cmd)
             SESSION.commit()
             return True
-        SESSION.close()
+        else:
+            SESSION.close()
         return False
 
 
 def del_allclearcmd(chat_id):
     with CLEAR_CMD_LOCK:
-        if (
-            del_cmd := SESSION.query(ClearCmd)
-            .filter(ClearCmd.chat_id == str(chat_id))
-            .all()
-        ):
+        del_cmd = SESSION.query(ClearCmd).filter(ClearCmd.chat_id == str(chat_id)).all()
+        if del_cmd:
             for cmd in del_cmd:
                 SESSION.delete(cmd)
                 SESSION.commit()
             return True
-        SESSION.close()
+        else:
+            SESSION.close()
         return False
 
 

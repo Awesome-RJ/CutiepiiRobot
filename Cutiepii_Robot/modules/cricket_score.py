@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -42,16 +42,17 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (await
-             telethn(functions.channels.GetParticipantRequest(chat, user)
-                     )).participant,
+            (
+                await telethn(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await telethn.get_peer_id(user)
-        ps = (await telethn(functions.messages.GetFullChatRequest(chat.chat_id)
-                            )).full_chat.participants.participants
+        ps = (
+            await telethn(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
@@ -63,10 +64,11 @@ async def is_register_admin(chat, user):
 async def _(event):
     if event.fwd_from:
         return
-    if event.is_group and not await is_register_admin(event.input_chat,
-                                                      event.message.sender_id):
+    if event.is_group and not await is_register_admin(
+        event.input_chat, event.message.sender_id
+    ):
         return
-    score_page = "http://static.cricinfo.com/rss/livescores.xml"
+    score_page = "https://static.cricinfo.com/rss/livescores.xml"
     page = urllib.request.urlopen(score_page)
     soup = BeautifulSoup(page, "html.parser")
     result = soup.find_all("description")

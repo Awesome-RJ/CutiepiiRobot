@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,71 +29,57 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import asyncio
 import os
 import re
 
 import aiofiles
-from pykeyboard import InlineKeyboard
-from pyrogram import filters
-from pyrogram.types import InlineKeyboardButton
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ContextTypes
 
-from Cutiepii_Robot import pgram, aiohttpsession
-from Cutiepii_Robot.utils.errors import capture_err
 from Cutiepii_Robot.utils.pastebin import paste
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 
-pattern = re.compile(r"^text/|json$|yaml$|xml$|toml$|x-sh$|x-shellscript$")
-Cutiepii_PYRO_Paste = filters.command("paste")
-
-
-async def isPreviewUp(preview: str) -> bool:
-    for _ in range(7):
-        try:
-            async with aiohttpsession.head(preview, timeout=2) as resp:
-                status = resp.status
-                size = resp.content_length
-        except asyncio.exceptions.TimeoutError:
-            return False
-        if status == 404 or (status == 200 and size == 0):
-            await asyncio.sleep(0.4)
-        else:
-            return status == 200
-    return False
+pattern = re.compile(
+    r"^text/|json$|yaml$|xml$|toml$|x-sh$|x-shellscript$"
+)
 
 
-@pgram.on_message(Cutiepii_PYRO_Paste)
-@pgram.on_edited_message(Cutiepii_PYRO_Paste)
-@capture_err
-async def paste_func(_, message):
+@cutiepii_cmd(command="paste")
+async def paste_func(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.effective_message
+    
     if not message.reply_to_message:
-        return await message.reply_text("Reply To A Message With /paste")
+        return await message.reply_text(
+            "Reply To A Message With /paste"
+        )
     m = await message.reply_text("Pasting...")
+    
     if message.reply_to_message.text:
         content = str(message.reply_to_message.text)
     elif message.reply_to_message.document:
         document = message.reply_to_message.document
         if document.file_size > 1048576:
-            return await m.edit("You can only paste files smaller than 1MB.")
-        if not pattern.search(document.mime_type):
-            return await m.edit("Only text files can be pasted.")
-        doc = await message.reply_to_message.download()
-        async with aiofiles.open(doc, mode="r") as f:
+            return await m.edit_text(
+                "You can only paste files smaller than 1MB."
+            )
+        if not document.mime_type or not pattern.search(document.mime_type):
+            return await m.edit_text("Only text files can be pasted.")
+        
+        file = await context.bot.get_file(document.file_id)
+        doc = await file.download_to_drive()
+        
+        async with aiofiles.open(doc, mode="r", encoding="utf-8", errors="ignore") as f:
             content = await f.read()
         os.remove(doc)
+    else:
+        return await m.edit_text("Reply to a text message or document.")
+    
     link = await paste(content)
-    preview = f"{link}/preview.png"
-    button = InlineKeyboard(row_width=1)
-    button.add(InlineKeyboardButton(text="Paste Link", url=link))
+    if link.startswith("Error"):
+        return await m.edit_text(link)
 
-    if await isPreviewUp(preview):
-        try:
-            await message.reply_photo(photo=preview,
-                                      quote=False,
-                                      reply_markup=button)
-            return await m.delete()
-        except Exception:
-            pass
-    return await m.edit(link)
+    button = InlineKeyboardMarkup([[InlineKeyboardButton(text="Paste Link 🔗", url=link)]])
+    await m.edit_text(f"Pasted successfully!", reply_markup=button)
 
 
 __mod_name__ = "Paste"

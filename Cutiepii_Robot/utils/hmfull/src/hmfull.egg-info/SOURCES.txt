@@ -1,0 +1,8 @@
+README.rst
+setup.cfg
+setup.py
+src/hmfull.egg-info/PKG-INFO
+src/hmfull.egg-info/SOURCES.txt
+src/hmfull.egg-info/dependency_links.txt
+src/hmfull.egg-info/requires.txt
+src/hmfull.egg-info/top_level.txt

@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -32,10 +32,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from io import BytesIO
 from Cutiepii_Robot import aiohttpsession
 
-
 async def make_carbon(code):
-    url = "https://carbonara.vercel.app/api/cook"
+    url = "https://carbonara.solopov.dev/api/cook"
     async with aiohttpsession.post(url, json={"code": code}) as resp:
+        if resp.status != 200:
+            raise Exception(f"API returned status code {resp.status}")
         image = BytesIO(await resp.read())
     image.name = "Cutiepii_Carbon.png"
     return image

@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -28,12 +28,12 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-
 import threading
 
-from Cutiepii_Robot.modules.sql import BASE, SESSION
-from sqlalchemy import Boolean, Column, String, UnicodeText
+from sqlalchemy import Column, UnicodeText, String, Boolean
 from sqlalchemy.sql.sqltypes import BigInteger
+
+from Cutiepii_Robot.modules.sql import BASE, SESSION
 
 
 class GloballyBannedUsers(BASE):
@@ -48,7 +48,7 @@ class GloballyBannedUsers(BASE):
         self.reason = reason
 
     def __repr__(self):
-        return f"<GBanned User {self.name} ({self.user_id})>"
+        return "<GBanned User {} ({})>".format(self.name, self.user_id)
 
     def to_dict(self):
         return {"user_id": self.user_id, "name": self.name, "reason": self.reason}
@@ -64,7 +64,7 @@ class GbanSettings(BASE):
         self.setting = enabled
 
     def __repr__(self):
-        return f"<Gban setting {self.chat_id} ({self.setting})>"
+        return "<Gban setting {} ({})>".format(self.chat_id, self.setting)
 
 
 GloballyBannedUsers.__table__.create(checkfirst=True)
@@ -106,7 +106,8 @@ def update_gban_reason(user_id, name, reason=None):
 
 def ungban_user(user_id):
     with GBANNED_USERS_LOCK:
-        if user := SESSION.query(GloballyBannedUsers).get(user_id):
+        user = SESSION.query(GloballyBannedUsers).get(user_id)
+        if user:
             SESSION.delete(user)
 
         SESSION.commit()
@@ -184,7 +185,8 @@ def __load_gban_stat_list():
 
 def migrate_chat(old_chat_id, new_chat_id):
     with GBAN_SETTING_LOCK:
-        if chat := SESSION.query(GbanSettings).get(str(old_chat_id)):
+        chat = SESSION.query(GbanSettings).get(str(old_chat_id))
+        if chat:
             chat.chat_id = new_chat_id
             SESSION.add(chat)
 
@@ -194,3 +196,4 @@ def migrate_chat(old_chat_id, new_chat_id):
 # Create in memory userid to avoid disk access
 __load_gbanned_userid_list()
 __load_gban_stat_list()
+

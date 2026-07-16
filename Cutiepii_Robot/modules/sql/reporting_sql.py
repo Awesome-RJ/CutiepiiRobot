@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -70,9 +70,8 @@ USER_LOCK = threading.RLock()
 
 def chat_should_report(chat_id: Union[str, int]) -> bool:
     try:
-        if chat_setting := SESSION.query(ReportingChatSettings).get(
-            str(chat_id)
-        ):
+        chat_setting = SESSION.query(ReportingChatSettings).get(str(chat_id))
+        if chat_setting:
             return chat_setting.should_report
         return False
     finally:
@@ -81,7 +80,8 @@ def chat_should_report(chat_id: Union[str, int]) -> bool:
 
 def user_should_report(user_id: int) -> bool:
     try:
-        if user_setting := SESSION.query(ReportingUserSettings).get(user_id):
+        user_setting = SESSION.query(ReportingUserSettings).get(user_id)
+        if user_setting:
             return user_setting.should_report
         return True
     finally:

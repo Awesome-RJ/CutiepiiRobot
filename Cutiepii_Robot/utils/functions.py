@@ -1,3 +1,4 @@
+
 import codecs
 import pickle
 from asyncio import gather, get_running_loop
@@ -6,20 +7,21 @@ from random import randint
 
 import aiofiles
 import aiohttp
-
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from wget import download
 
 from Cutiepii_Robot.utils import aiodownloader
 from Cutiepii_Robot.utils.fetch import fetch
+
 """
 Just import 'downloader' anywhere and do downloader.download() to
 download file from a given url
 """
 downloader = aiodownloader.Handler()
 
-
 # Another downloader, but with wget
+
+
 async def download_url(url: str):
     loop = get_running_loop()
     file = await loop.run_in_executor(None, download, url)
@@ -68,6 +70,7 @@ def generate_captcha():
     return [file, correct_answer, wrong_answers]
 
 
+
 async def file_size_from_url(url: str) -> int:
     async with aiohttp.ClientSession() as session, session.head(url) as resp:
         size = int(resp.headers["content-length"])
@@ -79,12 +82,21 @@ async def get_http_status_code(url: str) -> int:
         return resp.status
 
 
+async def make_carbon(code):
+    # Alternative implementation using carbonara API (replaces carbonnow package)
+    from io import BytesIO
+    from Cutiepii_Robot import aiohttpsession
+    url = "https://carbonara.vercel.app/api/cook"
+    async with aiohttpsession.post(url, json={"code": code}) as resp:
+        image = BytesIO(await resp.read())
+    image.name = "Cutiepii_Carbon.png"
+    return image
+
 
 async def transfer_sh(file):
     async with aiofiles.open(file, "rb") as f:
         params = {file: await f.read()}
-    async with aiohttp.ClientSession() as session, session.post(
-            "https://transfer.sh/", data=params) as resp:
+    async with aiohttp.ClientSession() as session, session.post("https://transfer.sh/", data=params) as resp:
         download_link = str(await resp.text()).strip()
     return download_link
 
@@ -101,14 +113,15 @@ def str_to_obj(string: str):
 
 async def calc_distance_from_ip(ip1: str, ip2: str) -> float:
     Radius_Earth = 6371.0088
-    data1, data2 = await gather(fetch(f"http://ipinfo.io/{ip1}"),
-                                fetch(f"http://ipinfo.io/{ip2}"))
+    data1, data2 = await gather(
+        fetch(f"https://ipinfo.io/{ip1}"), fetch(f"https://ipinfo.io/{ip2}")
+    )
     lat1, lon1 = data1["loc"].split(",")
     lat2, lon2 = data2["loc"].split(",")
     lat1, lon1 = radians(float(lat1)), radians(float(lon1))
     lat2, lon2 = radians(float(lat2)), radians(float(lon2))
     dlon = lon2 - lon1
     dlat = lat2 - lat1
-    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
+    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
     return Radius_Earth * c

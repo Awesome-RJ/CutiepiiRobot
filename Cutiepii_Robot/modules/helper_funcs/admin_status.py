@@ -1,219 +1,449 @@
+import asyncio
 from functools import wraps
-from typing import Optional
+from typing import Optional, Callable, Any
 from threading import RLock
 
-from telegram import Chat, Update, ChatMember, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Chat, Update, ChatMember
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext as Ctx, CallbackQueryHandler as CBHandler
+from telegram.ext import ContextTypes, CallbackQueryHandler, ApplicationHandlerStop
+from telegram.error import Forbidden, TelegramError
 
-from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot import dispatcher, LOGGER
+from Cutiepii_Robot.modules.sql.moderators_sql import is_modd
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_callback
 
-from .admin_status_helpers import (
-	ADMINS_CACHE as A_CACHE,
-	BOT_ADMIN_CACHE as B_CACHE,
+from Cutiepii_Robot.modules.helper_funcs.admin_status_helpers import (
+	ADMINS_CACHE,
+	BOT_ADMIN_CACHE,
 	SUDO_USERS,
 	AdminPerms,
+	anon_reply_markup as arm,
+	anon_reply_text as art,
 	anon_callbacks as a_cb,
+	user_is_not_admin_errmsg as u_na_errmsg,
 	edit_anon_msg as eam,
-    button_expired_error as bxp,
+	button_expired_error as bxp,
+	get_admin_item,
+	set_admin_item,
+	get_bot_admin_item,
+	set_bot_admin_item
 )
 
-anon_callbacks = {}
-anon_callback_messages = {}
-
-def bot_is_admin(chat: Chat, bot_id: int, bot_member: ChatMember = None) -> bool:
-    if chat.type == "private" or chat.all_members_are_administrators:
-        return True
-
-    if not bot_member:
-        bot_member = chat.get_member(bot_id)
-
-    return bot_member.status in ("administrator", "creator")
+# Attributes that exist on ChatMemberAdministrator (PTB v20+); ChatMemberMember has none.
+# Excludes e.g. can_send_messages which is on ChatPermissions, not ChatMember.
+_VALID_MEMBER_PERMS = frozenset(
+	{"can_restrict_members", "can_promote_members", "can_invite_users", "can_delete_messages",
+	 "can_change_info", "can_pin_messages", "is_anonymous"}
+)
 
 
-# decorator, can be used as
-# @bot_perm_check() with no perm to check for admin-ship only
-# or as @bot_perm_check(AdminPerms.value) to check for a specific permission
-def bot_admin_check(permission: AdminPerms = None):
-	def wrapper(func):
+async def bot_is_admin(chat: Chat, perm: Optional[AdminPerms] = None) -> bool:
+	"""Check if bot is admin in chat, optionally with specific permission"""
+	try:
+		if chat.type == "private":
+			return True
+		# all_members_are_administrators was removed in PTB v20+
+
+		bot_member = await get_bot_member(chat.id)
+
+		if perm:
+			# ChatMemberMember lacks permission attributes in PTB v20+
+			return hasattr(bot_member, perm.value) and getattr(bot_member, perm.value)
+
+		return bot_member.status == "administrator"  # bot can't be owner
+	except Exception as e:
+		LOGGER.error(f"[AdminStatus] Error checking bot admin status: {e}")
+		return False
+
+
+async def get_bot_member(chat_id: int) -> ChatMember:
+	"""Get bot's ChatMember object from cache or API"""
+	try:
+		# Check cache first
+		if chat_id in BOT_ADMIN_CACHE:
+			return BOT_ADMIN_CACHE[chat_id]
+		
+		# Fetch from API (PTB v20+ uses async get_chat_member)
+		mem = await dispatcher.bot.get_chat_member(chat_id, dispatcher.bot.id)
+		BOT_ADMIN_CACHE[chat_id] = mem
+		return mem
+		
+	except (Forbidden, TelegramError) as e:
+		LOGGER.warning(f"[AdminStatus] Failed to get bot member for chat {chat_id}: {e}")
+		# Return None - caller should handle this appropriately
+		# Alternative: Return ghost member with no permissions (commented for PTB v20+ compatibility)
+		# bot_user = await dispatcher.bot.get_me()
+		# ghost = ChatMember(
+		# 	user=bot_user,
+		# 	status='member',
+		# 	can_be_edited=False,
+		# 	is_anonymous=False,
+		# 	can_manage_chat=False,
+		# 	can_delete_messages=False,
+		# 	can_manage_video_chats=False,
+		# 	can_restrict_members=False,
+		# 	can_promote_members=False,
+		# 	can_change_info=False,
+		# 	can_invite_users=False,
+		# 	can_post_messages=False,
+		# 	can_edit_messages=False,
+		# 	can_pin_messages=False,
+		# 	can_manage_topics=False,
+		# 	can_send_messages=False,
+		# )
+		# return ghost
+		return None
+
+
+# Decorator to check if bot is admin with optional permission check
+# Usage: @bot_admin_check() or @bot_admin_check(AdminPerms.CAN_DELETE_MESSAGES)
+def bot_admin_check(permission: Optional[AdminPerms] = None) -> Callable:
+	"""Decorator to check if bot is admin, optionally with specific permission"""
+	def wrapper(func: Callable) -> Callable:
 		@wraps(func)
-		async def wrapped(update: Update, context: Ctx, *args, **kwargs):
+		async def wrapped(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs) -> Any:
 			nonlocal permission
 			chat = update.effective_chat
-			if chat.type == "private" or chat.all_members_are_administrators:
-				return func(update, context, *args, **kwargs)
-			bot_id = 1241223850
+			
+			try:
+				if chat.type == "private":
+					return await func(update, context, *args, **kwargs)
+				# all_members_are_administrators was removed in PTB v20+
+				
+				bot_id = dispatcher.bot.id
 
-			try:  # try to get from cache
-				bot_member = B_CACHE[chat.id]
-			except (KeyError, IndexError):  # if not in cache, get from API and save to cache
-				bot_member = CUTIEPII_PTB.bot.getChatMember(chat.id, bot_id)
-				B_CACHE[chat.id] = bot_member
+				# Try to get from cache
+				try:
+					bot_member = BOT_ADMIN_CACHE[chat.id]
+				except KeyError:
+					# If not in cache, get from API and save to cache (PTB v20+ async)
+					bot_member = await dispatcher.bot.get_chat_member(chat.id, bot_id)
+					BOT_ADMIN_CACHE[chat.id] = bot_member
 
-			if permission:  # if a perm is required, check for it
-				if getattr(bot_member, permission.value):
-					func(update, context, *args, **kwargs)
-					return
-				return await update.effective_message.reply_text(
-						f"I can't perform this action due to missing permissions;\n"
-						f"Make sure i am an admin and {permission.name.lower().replace('is_', 'am ').replace('_', ' ')}!")
+				# ChatMemberMember = bot is not admin; never access permission attributes on it
+				if type(bot_member).__name__ == "ChatMemberMember":
+					await update.effective_message.reply_text(
+						"<b>Action Denied</b>\nI must be an administrator to perform this action.",
+						parse_mode=ParseMode.HTML
+					)
+					return None
 
-			if bot_member.status == "administrator":  # if no perm is required, check for admin-ship only
-				return func(update, context, *args, **kwargs)
-			return await update.effective_message.reply_text("I can't perform this action because I'm not admin!")
+				# If a permission is required, check for it
+				if permission:
+					if permission.value in _VALID_MEMBER_PERMS:
+						try:
+							if getattr(bot_member, permission.value, None):
+								return await func(update, context, *args, **kwargs)
+						except Exception:
+							pass
+					
+					await update.effective_message.reply_text(
+						f"<b>Action Denied</b>\nI require the '{permission.value.replace('_', ' ')}' permission to perform this action.",
+						parse_mode=ParseMode.HTML
+					)
+					return None
+
+				# If no specific permission is required, check for admin-ship only
+				if getattr(bot_member, "status", None) == "administrator":
+					return await func(update, context, *args, **kwargs)
+				else:
+					await update.effective_message.reply_text(
+						"<b>Action Denied</b>\nI must be an administrator to perform this action.",
+						parse_mode=ParseMode.HTML
+					)
+					return None
+					
+			except Exception as e:
+				LOGGER.error(f"[AdminStatus] Error in bot_admin_check: {e}")
+				await update.effective_message.reply_text(
+					"<b>Error</b>\nAn error occurred while checking bot administrator permissions.",
+					parse_mode=ParseMode.HTML
+				)
+				return None
 
 		return wrapped
-
 	return wrapper
 
 
-def user_is_admin(
-    update: Update,
-    user_id: int,
-    channels: bool = False,  # if True, returns True if user is anonymous
-    allow_moderators: bool = False,  # if True, returns True if user is a moderator
-    perm: AdminPerms = None,  # if not None, returns True if user has the specified permission
-    member: ChatMember = None
-    ) -> bool:
-	chat = update.effective_chat
-#    if chat.type == "private" or user_id in SUDO_USERS or user_id in DEV_USERS or chat.all_members_are_administrators
-	if chat.type == "private" or user_id in (SUDO_USERS if allow_moderators else SUDO_USERS):
-		return True
+async def user_is_admin(
+	update: Update,
+	user_id: int,
+	channels: bool = False,  # if True, returns True if user is anonymous
+	allow_moderators: bool = False,  # if True, returns True if user is a moderator
+	perm: Optional[AdminPerms] = None  # if not None, returns True if user has the specified permission
+) -> bool:
+	"""Check if user is admin in chat"""
+	try:
+		# Support both user_is_admin(update, user_id) and user_is_admin(chat, user_id) from admin.py
+		chat = update.effective_chat if hasattr(update, 'effective_chat') else update
+		message = getattr(update, 'effective_message', None)
+		
+		# Private chats and sudo users always return True
+		if chat.type == "private" or user_id in SUDO_USERS:
+			return True
 
-	if channels and (update.effective_message.sender_chat is not None and update.effective_message.sender_chat.type != "channel"):
-		return True  # return true if user is anonymous
+		# Check for anonymous admin (channel)
+		if channels and message and (message.sender_chat is not None and message.sender_chat.type != "channel"):
+			return True
 
-#	member: ChatMember = get_mem_from_cache(user_id, chat.id)
-	if not member:  # not in cache so not an admin
+		# Check moderators if allowed
+		if allow_moderators and is_modd(chat.id, user_id):
+			return True
+
+		member: Optional[ChatMember] = await get_mem_from_cache(user_id, chat.id)
+
+		if not member:  # not in cache so not an admin
+			return False
+
+		# Check specific permission if required
+		if perm:
+			try:
+				the_perm = perm.value
+			except AttributeError:
+				if isinstance(perm, str) and perm.upper() in AdminPerms.__members__:
+					the_perm = getattr(AdminPerms, perm.upper()).value
+				else:
+					LOGGER.warning(f"[AdminStatus] Invalid permission: {perm}")
+					return False
+			try:
+				# ChatMemberMember has no permission attributes (can_send_messages etc); any getattr can raise
+				if the_perm not in _VALID_MEMBER_PERMS:
+					return getattr(member, "status", None) == "creator"
+				val = getattr(member, the_perm, None)
+				if val is not None:
+					return bool(val) or getattr(member, "status", None) == "creator"
+				return getattr(member, "status", None) == "creator"
+			except AttributeError:
+				# Regular member (ChatMemberMember) or missing attr; treat as no permission
+				return False
+
+		# Check if user is admin
+		try:
+			return member.status in ["administrator", "creator"]
+		except AttributeError:
+			return False
+		
+	except Exception as e:
+		LOGGER.error(f"[AdminStatus] Error checking user admin status: {e}")
 		return False
 
-"""
-	if perm:  # check perm if its required
-		try:
-			the_perm = perm.value
-		except AttributeError:
-			return bxp(update)
-		return getattr(member, the_perm) or member.status == "creator"
-
-	return member.status in ["administrator", "creator"] 
-"""
 
 RLOCK = RLock()
 
 
-async def get_mem_from_cache(user_id: int, chat_id: int) -> ChatMember:
+async def get_mem_from_cache(user_id: int, chat_id: int) -> Optional[ChatMember]:
+	"""Get user's ChatMember object from cache or API (PTB v20+ async)"""
 	with RLOCK:
 		try:
-			for i in A_CACHE[chat_id]:
-				if i.user.id == user_id: return i
+			# Check cache first
+			if chat_id in ADMINS_CACHE:
+				for member in ADMINS_CACHE[chat_id]:
+					if member.user.id == user_id:
+						return member
+				return None  # User not in admin list
+			
+			# Fetch from API (PTB v20+ get_chat_administrators is async)
+			try:
+				admins = await dispatcher.bot.get_chat_administrators(chat_id)
+				ADMINS_CACHE[chat_id] = list(admins)
+				
+				for member in admins:
+					if member.user.id == user_id:
+						return member
+				return None
+				
+			except Forbidden:
+				LOGGER.warning(f"[AdminStatus] Bot not authorized in chat {chat_id}")
+				return None
+			except TelegramError as e:
+				LOGGER.error(f"[AdminStatus] Error fetching admins for chat {chat_id}: {e}")
+				return None
+				
+		except Exception as e:
+			LOGGER.error(f"[AdminStatus] Error in get_mem_from_cache: {e}")
+			return None
 
-		except (KeyError, IndexError):
-			admins = CUTIEPII_PTB.bot.getChatAdministrators(chat_id)
-			A_CACHE[chat_id] = admins
-			for i in admins:
-				if i.user.id == user_id: return i
+# Decorator to check if user is admin
+# Usage: @user_admin_check() or @user_admin_check(AdminPerms.CAN_DELETE_MESSAGES, allow_mods=True)
+def user_admin_check(permission: Optional[AdminPerms] = None, allow_mods: bool = False, noreply: bool = False) -> Callable:
+	"""Decorator to check if user is admin, optionally with specific permission"""
+	def wrapper(func: Callable) -> Callable:
+		@wraps(func)
+		async def wrapped(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs) -> Any:
+			nonlocal permission
+			try:
+				if update.effective_chat.type == 'private':
+					res = func(update, context, *args, **kwargs)
+					if asyncio.iscoroutine(res):
+						return await res
+					return res
+				
+				message = update.effective_message
 
-def user_admin_check(permission: AdminPerms = None):
-    def wrapper(func):
-        @wraps(func)
-        async def awrapper(update: Update, context: Ctx, *args, **kwargs):
-            nonlocal permission
-            if update.effective_chat.type == "private":
-                return func(update, context, *args, **kwargs)
-            message = update.effective_message
-            if update.effective_message.sender_chat:
-                callback_id = (
-                    f"anoncb/{message.chat.id}/{message.message_id}/{permission.value}"
-                )
-                anon_callbacks[(message.chat.id, message.message_id)] = (
-                    (update, context),
-                    func,
-                )
-                anon_callback_messages[(message.chat.id, message.message_id)] = (
-                    await message.reply_text(
-                        "Seems like you're anonymous, click the button below to prove your identity",
-                        reply_markup=InlineKeyboardMarkup(
-                            [
-                                [
-                                    InlineKeyboardButton(
-                                        text="Prove identity", callback_data=callback_id
-                                    )
-                                ]
-                            ]
-                        ),
-                    )
-                ).message_id
-            else:
-                user_id = message.from_user.id
-                chat_id = message.chat.id
-                mem = await context.bot.get_chat_member(
-                    chat_id=chat_id, user_id=user_id
-                )
-                if (
-                    getattr(mem, permission.value) is True
-                    or mem.status == "creator"
-                    or user_id in SUDO_USERS
-                ):
-                    return func(update, context, *args, **kwargs)
-                else:
-                    return await message.reply_text(
-                        f"You lack the permission: `{permission.name}`",
-                        parse_mode=ParseMode.MARKDOWN,
-                    )
+				# Handle anonymous admin
+				if update.effective_message.sender_chat and not update.effective_message.is_automatic_forward:
+					callback_id = f'anonCB/{message.chat.id}/{message.message_id}/{permission.value if permission else "None"}'
+					a_cb[(message.chat.id, message.message_id)] = (
+						(update, context),
+						func, (message, args)
+					)
+					await message.reply_text(
+						text=art,
+						reply_markup=arm(callback_id)
+					)
+					return None
 
-        return awrapper
+				# Check if user is admin
+				user_id = message.from_user.id if not noreply else update.effective_user.id
+				if await user_is_admin(
+					update,
+					user_id,
+					allow_moderators=allow_mods,
+					perm=permission
+				):
+					res = func(update, context, *args, **kwargs)
+					if asyncio.iscoroutine(res):
+						return await res
+					return res
 
-    return wrapper
+				return await u_na_errmsg(message, permission, update.callback_query)
+				
+			except ApplicationHandlerStop:
+				raise
+			except Exception as e:
+				import traceback
+				LOGGER.error(f"[AdminStatus] Error in user_admin_check: {e}\n{traceback.format_exc()}")
+				return None
+
+		return wrapped
+	return wrapper
 
 
-# decorator, can be used as @user_not_admin_check to check user is not admin
-def user_not_admin_check(func):
+# Decorator to check user is NOT admin
+def user_not_admin_check(func: Callable) -> Callable:
+	"""Decorator to ensure user is not an admin"""
 	@wraps(func)
-	def wrapped(update: Update, context: Ctx, *args, **kwargs):
-		message = update.effective_message
-		user = message.sender_chat or update.effective_user
-		if (message.is_automatic_forward
-				or (message.sender_chat and message.sender_chat.type != "channel")
-				or not user):
-			return
-		if not user_is_admin(update, user.id, channels = True):
-			return func(update, context, *args, **kwargs)
-		return
+	async def wrapped(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs) -> Any:
+		try:
+			message = update.effective_message
+			user = message.sender_chat or update.effective_user
+			
+			if (message.is_automatic_forward
+					or (message.sender_chat and message.sender_chat.type != "channel")
+					or not user):
+				return None
+			
+			if not await user_is_admin(update, user.id, channels=True):
+				result = func(update, context, *args, **kwargs)
+				if asyncio.iscoroutine(result):
+					return await result
+				return result
+			
+			return None
+		except ApplicationHandlerStop:
+			raise
+		except Exception as e:
+			LOGGER.error(f"[AdminStatus] Error in user_not_admin_check: {e}")
+			return None
 	return wrapped
 
 
-def perm_callback_check(upd: Update, _: Ctx):
-    callback = upd.callback_query
-    chat_id = int(callback.data.split('/')[1])
-    message_id = int(callback.data.split('/')[2])
-    perm = callback.data.split('/')[3]
-    user_id = callback.from_user.id
-    msg = upd.effective_message
+class AnonymousAdminMessage:
+	def __init__(self, original_message, real_user):
+		self._original_message = original_message
+		self._real_user = real_user
 
-    mem = user_is_admin(upd, user_id, perm = perm if perm != 'None' else None)
+	def __getattr__(self, name):
+		return getattr(self._original_message, name)
 
-    if not mem:  # not admin or doesn't have the required perm
-        eam(
-            msg,
-            "You need to be an admin to perform this action!"
-            if perm != 'None'
-            else f"You lack the permission: `{perm}`!",
-        )
+	@property
+	def from_user(self):
+		return self._real_user
 
-        return
+	@property
+	def sender_chat(self):
+		return None
 
-    try:
-    	cb = a_cb.pop((chat_id, message_id), None)
-    except (KeyError, IndexError):
-    	eam(msg, "This message is no longer valid.")
-    	return
 
-    msg.delete()
+class AnonymousAdminUpdate:
+	def __init__(self, original_update, real_user):
+		self._original_update = original_update
+		self._real_user = real_user
+		self._wrapped_message = AnonymousAdminMessage(original_update.message, real_user) if original_update.message else None
 
-    # update the `Update` and `CallbackContext` attributes by the correct values, so they can be used properly
-    setattr(cb[0][0], "_effective_user", upd.effective_user)
-    setattr(cb[0][0], "_effective_message", cb[2][0])
+	def __getattr__(self, name):
+		return getattr(self._original_update, name)
 
-    return cb[1](cb[0][0], cb[0][1])  # return func(update, context)
+	@property
+	def effective_user(self):
+		return self._real_user
 
-CUTIEPII_PTB.add_handler(CBHandler(perm_callback_check, pattern = "anonCB"))
+	@property
+	def effective_sender_chat(self):
+		return None
+
+	@property
+	def message(self):
+		return self._wrapped_message
+
+	@property
+	def effective_message(self):
+		return self._wrapped_message
+
+
+@cutiepii_callback(pattern="anonCB")
+async def perm_callback_check(upd: Update, _: ContextTypes.DEFAULT_TYPE) -> Any:
+	"""Handle anonymous admin permission callback"""
+	try:
+		callback = upd.callback_query
+		chat_id = int(callback.data.split('/')[1])
+		message_id = int(callback.data.split('/')[2])
+		perm = callback.data.split('/')[3]
+		user_id = callback.from_user.id
+		msg = upd.effective_message
+
+		# Check if user has required permission
+		is_admin = await user_is_admin(upd, user_id, perm=perm if perm != 'None' else None)
+
+		if not is_admin:
+			await eam(
+				msg,
+				"You need to be an admin to perform this action!"
+				if perm == 'None'
+				else f"You lack the permission: `{perm}`!"
+			)
+			return None
+
+		# Get callback data
+		cb = a_cb.pop((chat_id, message_id), None)
+		if not cb:
+			await eam(msg, "This message is no longer valid.")
+			return None
+
+		await msg.delete()
+
+		# Wrap the original update to correctly identify the real user and bypass anon sender chat
+		wrapped_update = AnonymousAdminUpdate(cb[0][0], upd.effective_user)
+
+		return await cb[1](wrapped_update, cb[0][1])  # return func(wrapped_update, context)
+		
+	except Exception as e:
+		LOGGER.error(f"[AdminStatus] Error in perm_callback_check: {e}")
+		return None
+
+
+async def update_admins_cache(chat_id: int) -> None:
+	"""Update admin cache for a chat"""
+	try:
+		# Directly refresh the admin list from the API and update ADMINS_CACHE
+		admins = await dispatcher.bot.get_chat_administrators(chat_id)
+		ADMINS_CACHE[chat_id] = list(admins)
+		# Also refresh the bot's own member record
+		bot_member = await dispatcher.bot.get_chat_member(chat_id, dispatcher.bot.id)
+		BOT_ADMIN_CACHE[chat_id] = bot_member
+		LOGGER.info(f"[AdminStatus] Updated admin cache for chat {chat_id}")
+	except Exception as e:
+		LOGGER.error(f"[AdminStatus] Error updating admin cache for chat {chat_id}: {e}")
+
+
+# Callback handler is registered via cutiepii_callback decorator

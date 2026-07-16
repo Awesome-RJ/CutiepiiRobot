@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -33,6 +33,7 @@ import threading
 from sqlalchemy import Column, String
 from sqlalchemy.sql.sqltypes import BigInteger
 
+from Cutiepii_Robot import LOGGER
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
 
@@ -46,12 +47,13 @@ class Approvals(BASE):
         self.user_id = user_id
 
     def __repr__(self):
-        return f"<Approve {self.user_id}>"
+        return "<Approve %s>" % self.user_id
 
 
 Approvals.__table__.create(checkfirst=True)
 
 APPROVE_INSERTION_LOCK = threading.RLock()
+APPROVED_USERS = {}
 
 
 def approve(chat_id, user_id):
@@ -59,25 +61,31 @@ def approve(chat_id, user_id):
         approve_user = Approvals(str(chat_id), user_id)
         SESSION.add(approve_user)
         SESSION.commit()
+        
+        chat_id_str = str(chat_id)
+        if chat_id_str not in APPROVED_USERS:
+            APPROVED_USERS[chat_id_str] = set()
+        APPROVED_USERS[chat_id_str].add(int(user_id))
 
 
 def is_approved(chat_id, user_id):
-    try:
-        return SESSION.query(Approvals).get((str(chat_id), user_id))
-    finally:
-        SESSION.close()
+    return int(user_id) in APPROVED_USERS.get(str(chat_id), set())
 
 
 def disapprove(chat_id, user_id):
     with APPROVE_INSERTION_LOCK:
-        if disapprove_user := SESSION.query(Approvals).get(
-            (str(chat_id), user_id)
-        ):
+        disapprove_user = SESSION.query(Approvals).get((str(chat_id), user_id))
+        if disapprove_user:
             SESSION.delete(disapprove_user)
             SESSION.commit()
+            
+            chat_id_str = str(chat_id)
+            if chat_id_str in APPROVED_USERS and int(user_id) in APPROVED_USERS[chat_id_str]:
+                APPROVED_USERS[chat_id_str].remove(int(user_id))
             return True
-        SESSION.close()
-        return False
+        else:
+            SESSION.close()
+            return False
 
 
 def list_approved(chat_id):
@@ -90,3 +98,25 @@ def list_approved(chat_id):
         )
     finally:
         SESSION.close()
+
+
+def __load_approvals():
+    global APPROVED_USERS
+    try:
+        all_approvals = SESSION.query(Approvals).all()
+        for x in all_approvals:
+            if x.chat_id not in APPROVED_USERS:
+                APPROVED_USERS[x.chat_id] = set()
+            APPROVED_USERS[x.chat_id].add(int(x.user_id))
+        LOGGER.info(f"[SQL] Loaded approvals for {len(APPROVED_USERS)} chats")
+    except Exception as e:
+        LOGGER.error(f"[SQL] Failed to load approvals: {e}")
+        APPROVED_USERS = {}
+    finally:
+        SESSION.close()
+
+
+try:
+    __load_approvals()
+except Exception as e:
+    LOGGER.error(f"[SQL] Failed to initialize approvals: {e}")

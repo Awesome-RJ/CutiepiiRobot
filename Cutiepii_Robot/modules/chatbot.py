@@ -2,179 +2,225 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import re
-import requests
-from asyncio import sleep
-
-from Cutiepii_Robot import BOT_ID, CUTIEPII_PTB, DEV_USERS
-from Cutiepii_Robot.modules.helper_funcs.chat_status import (
-    is_user_admin, )
-from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+import aiohttp
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
-from telegram.ext import (
-    CallbackContext,
-    CallbackQueryHandler,
-    CommandHandler,
-    filters,
-    MessageHandler,
-)
+from telegram.ext import ContextTypes, CallbackQueryHandler, MessageHandler, filters
 
-CHATBOT_ENABLED_CHATS = []
+from Cutiepii_Robot import dispatcher, LOGGER
+from Cutiepii_Robot.modules.sql import chatbot_sql as sql
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_callback, cutiepii_cmd, cutiepii_msg
+from Cutiepii_Robot.modules.helper_funcs.chat_status import user_admin
 
 
 @user_admin
-async def chatbot_toggle(update: Update):
-    keyboard = [
-        [
-            InlineKeyboardButton("Enable", callback_data="chatbot_enable"),
-            InlineKeyboardButton("Disable", callback_data="chatbot_disable"),
-        ],
-    ]
-
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.effective_message.reply_text("Choose an option:",
-                                              reply_markup=reply_markup)
-
-
-async def chatbot_handle_callq(update: Update):
-    query = update.callback_query
-    user = update.effective_user
+@cutiepii_cmd(command="chatbot", can_disable=True)
+async def chatbot_toggle(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Toggle chatbot settings in group or PM."""
+    message = update.effective_message
     chat = update.effective_chat
-    action = query.data.split("_")[1]
 
-    if not await is_user_admin(update, user.id):
-        return await query.answer("This is not for you.")
+    chat_id = chat.id
 
-    if action == "delete":
-        await query.message.delete()
-
-    elif action == "enable":
-        if chat.id in CHATBOT_ENABLED_CHATS:
-            return await query.answer("Chatbot is already enabled")
-        CHATBOT_ENABLED_CHATS.append(chat.id)
-        await query.answer("Chatbot enabled")
-        await query.message.delete()
-
-    elif action == "disable":
-        if chat.id not in CHATBOT_ENABLED_CHATS:
-            return await query.answer("Chatbot is already disabled")
-        CHATBOT_ENABLED_CHATS.remove(chat.id)
-        await query.answer("Chatbot disabled")
-        await query.message.delete()
-
+    if sql.is_cutiepii(chat_id):
+        buttons = [
+            [InlineKeyboardButton("🔴 Disable ChatBot", callback_data=f"disable_chatbot:{chat_id}")],
+            [InlineKeyboardButton("🗑️ Close", callback_data="chatbot_close")]
+        ]
+        await message.reply_text(
+            "<b>📢 ChatBot is enabled in this chat.</b>",
+            reply_markup=InlineKeyboardMarkup(buttons),
+            parse_mode=ParseMode.HTML
+        )
     else:
-        await query.answer()
+        buttons = [
+            [InlineKeyboardButton("🟢 Enable ChatBot", callback_data=f"enable_chatbot:{chat_id}")],
+            [InlineKeyboardButton("🗑️ Close", callback_data="chatbot_close")]
+        ]
+        await message.reply_text(
+            "<b>📢 ChatBot is disabled in this chat.</b>",
+            reply_markup=InlineKeyboardMarkup(buttons),
+            parse_mode=ParseMode.HTML
+        )
 
 
-def chatbot_response(query: str) -> str:
-    data = requests.get(
-        f"https://www.kukiapi.xyz/api/apikey=5349869477-KUKIhU1ygu8mm0/Cutiepii/@Awesome_RJ/message={query}"
-    )
-    return data.json()["reply"]
+@cutiepii_callback(pattern=r"^(enable_chatbot|disable_chatbot|chatbot_close):?")
+async def toggle_chatbot(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Callback handler to enable/disable chatbot."""
+    query = update.callback_query
+    await query.answer()
+    data = query.data
 
-
-def check_message(_: CallbackContext, message):
-    reply_msg = message.reply_to_message
-    text = message.text
-    if re.search("[.|\n]{0,}" + context.bot.first_name + "[.|\n]{0,}",
-                 text,
-                 flags=re.IGNORECASE):
-        return True
-    return bool(reply_msg and reply_msg.from_user.id == BOT_ID
-                or message.chat.type == "private")
-
-
-async def chatbot(update: Update, context: CallbackContext) -> None:
-    msg = update.effective_message
-    chat_id = update.effective_chat.id
-    is_chat = chat_id in CHATBOT_ENABLED_CHATS
-    bot = context.bot
-    if not is_chat:
+    if data == "chatbot_close":
+        await query.message.delete()
         return
-    if msg.text and not msg.document:
-        if not check_message(context, msg):
-            return
-        # lower the text to ensure text replace checks
-        query = msg.text.lower()
-        botname = bot.first_name.lower()
-        if botname in query:
-            query = query.replace(botname, "bot.name")
-        await bot.sendChatAction(chat_id, action="typing")
-        user_id = update.message.from_user.id
-        response = chatbot_response(query, user_id)
-        if "Aco" in response:
-            response = response.replace("Aco", bot.first_name)
-        if "bot.name" in response:
-            response = response.replace("bot.name", bot.first_name)
-            await sleep(0.3)
-        await msg.reply_text(response
-                             #    , timeout=60
-                             )
+
+    action, chat_id = data.split(":")
+    chat_id = int(chat_id)
+
+    # Check user permissions if group
+    user = query.from_user
+    if query.message.chat.type != "private":
+        try:
+            member = await context.bot.get_chat_member(chat_id, user.id)
+            if member.status not in ["creator", "administrator"]:
+                await query.answer("You must be an administrator to change chatbot settings!", show_alert=True)
+                return
+        except Exception:
+            pass
+
+    if action == "enable_chatbot":
+        sql.set_cutiepii(chat_id)
+        await query.message.edit_text("<b>🟢 ChatBot has been enabled for this chat.</b>", parse_mode=ParseMode.HTML)
+    elif action == "disable_chatbot":
+        sql.rem_cutiepii(chat_id)
+        await query.message.edit_text("<b>🔴 ChatBot has been disabled for this chat.</b>", parse_mode=ParseMode.HTML)
 
 
-async def list_chatbot_chats(update: Update,
-                             context: CallbackContext) -> None:
-    text = "<b>AI-Enabled Chats</b>\n"
-    for chat in CHATBOT_ENABLED_CHATS:
-        x = await context.bot.get_chat(chat)
-        name = x.title or x.first_name
-        text += f"➛ <code>{name}</code>\n"
-    await update.effective_message.reply_text(text, parse_mode=ParseMode.HTML)
+from datetime import datetime, timedelta
+
+GEMINI_COOLDOWN_UNTIL = None
 
 
-__help__ = """
-Chatbot utilizes the Brainshop's API and allows Cutiepii Robot 愛 to talk and provides a more interactive group chat experience.
+@cutiepii_msg(pattern=filters.TEXT & (~filters.COMMAND), group=9)
+async def handle_chatbot(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Message handler to query AI chatbot."""
+    global GEMINI_COOLDOWN_UNTIL
+    message = update.effective_message
+    chat = update.effective_chat
+    user = update.effective_user
 
-*Commands:*
-*Admins only:*
-➛ /chatbot*:* Shows chatbot control panel
-"""
+    if not message or not chat or not user or user.is_bot:
+        return
 
-CUTIEPII_PTB.add_handler(CommandHandler("chatbot", chatbot_toggle,
-                                        ))
-CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(chatbot_handle_callq,
-                         pattern=r"chatbot_",
-                         ))
-CUTIEPII_PTB.add_handler(
-    MessageHandler(filters.TEXT &
-                   (~filters.Regex(r"^#[^\s]+") & ~filters.Regex(r"^!")
-                    & ~filters.Regex(r"^\/")),
-                   chatbot,
-                   ))
-CUTIEPII_PTB.add_handler(
-    CommandHandler("listaichats",
-                   list_chatbot_chats,
-                   filters=filters.User(DEV_USERS),
-                   ))
+    # Chatbot is disabled by default in PM and groups, must be explicitly enabled
+    if not sql.is_cutiepii(chat.id):
+        return
+
+    is_group = chat.type != "private"
+    if is_group:
+        # Check if the message is a reply to the bot
+        replied = message.reply_to_message
+        if not replied or replied.from_user.id != context.bot.id:
+            # Also reply if the bot is explicitly mentioned
+            bot_username = f"@{context.bot.username}"
+            if not message.text or bot_username not in message.text:
+                return
+
+    query_text = message.text
+    if is_group and query_text:
+        # Strip bot username if present
+        bot_username = f"@{context.bot.username}"
+        query_text = query_text.replace(bot_username, "").strip()
+
+    if not query_text:
+        return
+
+    # Trigger typing state safely
+    try:
+        await context.bot.send_chat_action(chat.id, action="typing")
+    except Exception as e:
+        LOGGER.warning(f"Failed to send typing chat action: {e}")
+
+    import os
+    gemini_key = os.environ.get("GEMINI_API_KEY")
+    bot_response = None
+
+    # Check if Gemini is on cooldown
+    gemini_on_cooldown = False
+    if GEMINI_COOLDOWN_UNTIL and datetime.now() < GEMINI_COOLDOWN_UNTIL:
+        gemini_on_cooldown = True
+        LOGGER.info("Gemini API is on 1-hour cooldown. Bypassing directly to OpenRouter.")
+
+    # 1. Try Gemini API first (if key is configured and not on cooldown)
+    if gemini_key and not gemini_on_cooldown:
+        try:
+            async with aiohttp.ClientSession() as session:
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={gemini_key}"
+                async with session.post(
+                    url,
+                    json={
+                        "contents": [{"parts": [{"text": query_text}]}],
+                        "systemInstruction": {
+                            "parts": [{
+                                "text": "You are a flirty, funny AI chatbot named Cutiepii. Respond in casual, conversational Hinglish (Hindi written in English letters). Keep replies brief, funny, and engaging."
+                            }]
+                        }
+                    },
+                    timeout=aiohttp.ClientTimeout(total=8)
+                ) as resp:
+                    if resp.status == 200:
+                        data = await resp.json(content_type=None)
+                        bot_response = data['candidates'][0]['content']['parts'][0]['text']
+                    elif resp.status == 429:
+                        GEMINI_COOLDOWN_UNTIL = datetime.now() + timedelta(hours=1)
+                        LOGGER.warning("Gemini API rate limited (429). Activating 1-hour cooldown. Falling back to OpenRouter.")
+                    else:
+                        LOGGER.warning(f"Gemini API returned status code {resp.status}. Falling back to OpenRouter.")
+        except Exception as e:
+            LOGGER.warning(f"Gemini API error: {type(e).__name__} - {str(e)[:100]}. Falling back to OpenRouter.")
+
+    # 2. Fallback to OpenRouter API (if Gemini failed or was not configured)
+    if not bot_response:
+        openrouter_key = os.environ.get("OPENROUTER_API_KEY", "")
+        last_status = None
+        for model in ["openrouter/free", "meta-llama/llama-3.3-70b-instruct:free", "google/gemma-4-31b-it:free"]:
+            try:
+                async with aiohttp.ClientSession() as session:
+                    url = "https://openrouter.ai/api/v1/chat/completions"
+                    headers = {
+                        "Authorization": f"Bearer {openrouter_key}",
+                        "Content-Type": "application/json",
+                        "HTTP-Referer": "https://github.com/Awesome-RJ/Cutiepii_Robot",
+                        "X-Title": "Cutiepii Robot"
+                    }
+                    payload = {
+                        "model": model,
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": "You are a flirty, funny AI chatbot named Cutiepii. Respond in casual, conversational Hinglish (Hindi written in English letters). Keep replies brief, funny, and engaging."
+                            },
+                            {
+                                "role": "user",
+                                "content": query_text
+                            }
+                        ]
+                    }
+                    async with session.post(url, json=payload, headers=headers, timeout=aiohttp.ClientTimeout(total=20)) as resp:
+                        last_status = resp.status
+                        if resp.status == 200:
+                            data = await resp.json(content_type=None)
+                            bot_response = data['choices'][0]['message']['content']
+                            break
+                        elif resp.status == 429:
+                            LOGGER.warning(f"OpenRouter model {model} rate limited (429). Trying next fallback.")
+                        else:
+                            LOGGER.error(f"OpenRouter API returned status code {resp.status} for model {model}")
+            except Exception as e:
+                LOGGER.error(f"Error fetching OpenRouter response for model {model}: {type(e).__name__} - {str(e)[:100]}")
+
+        if not bot_response and last_status == 402:
+            bot_response = "Arey! OpenRouter API wallet mein balance khatam ho gaya hai (Insufficient Credits - Error 402). 🥺 Please reload karo!"
+
+    if not bot_response:
+        if is_group:
+            await message.reply_text("❌ Chatbot is facing temporary API issues. Please try again in a moment.")
+        else:
+            await message.reply_text("Sorry, I'm having trouble responding right now.")
+        return
+
+    await message.reply_text(bot_response)
+
+
+# Handler registration
+
 
 __mod_name__ = "Chatbot"
-__command_list__ = ["chatbot", "listaichats"]
+__help__ = True

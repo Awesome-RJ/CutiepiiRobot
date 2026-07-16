@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -44,7 +44,10 @@ from Cutiepii_Robot import telethn, SUPPORT_CHAT, LOGGER
 async def hi(event):
     if event.fwd_from:
         return
-    if (event.is_group and not await is_admin(event, event.message.sender_id)):
+    if (
+        event.is_group
+        and not await is_admin(event, event.message.sender_id)
+    ):
         await event.reply("`You Should Be Admin To Do This!`")
         return
     fake = Faker()
@@ -78,4 +81,5 @@ async def _(event):
         fole = "FRIDAYOT.jpg"
         await telethn.send_file(event.chat_id, fole, caption=captin)
         await event.delete()
-        os.system("rm ./cutiepii_picgen.jpg ")
+        if os.path.exists(fole):
+            os.remove(fole)

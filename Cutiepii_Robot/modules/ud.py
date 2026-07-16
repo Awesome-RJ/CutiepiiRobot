@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -30,14 +30,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 from requests import get
-from telegram import Update
-from telegram.ext import CallbackContext
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.constants import ParseMode
+from telegram.ext import ContextTypes
 from telegram.error import BadRequest
-from Cutiepii_Robot import CUTIEPII_PTB
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
+
+CallbackContext = ContextTypes.DEFAULT_TYPE
 
 
-async def ud(update: Update, context: CallbackContext) -> None:
+@cutiepii_cmd(command=["ud"], can_disable=True)
+async def ud(update, context):
     msg = update.effective_message
     args = context.args
     text = " ".join(args).lower()
@@ -45,18 +49,16 @@ async def ud(update: Update, context: CallbackContext) -> None:
         await msg.reply_text("Please enter keywords to search on ud!")
         return
     if text == "Cutiepii":
-        await msg.reply_text(
-            "Cutiepii is my owner so if you search him on urban dictionary you can't find the meaning because he is my husband and only me who know what's the meaning of!"
-        )
+        await msg.reply_text("Cutiepii is my owner so if you search him on urban dictionary you can't find the meaning because he is my husband and only me who know what's the meaning of!")
         return
     try:
-        results = get(
-            f"http://api.urbandictionary.com/v0/define?term={text}").json()
+        results = get(f"https://api.urbandictionary.com/v0/define?term={text}").json()
+        reply_text = ''
         reply_text = f'Word: {text}\n\nDefinition: \n{results["list"][0]["definition"]}'
         reply_text += f'\n\nExample: \n{results["list"][0]["example"]}'
     except IndexError:
         reply_text = (
-            f"Word: {text}\n\nResults: Sorry could not find any matching results!"
+            f"Word: {text}\n\nResults: ⚠️ Sorry could not find any matching results!"
         )
     ignore_chars = "[]"
     reply = reply_text
@@ -65,11 +67,9 @@ async def ud(update: Update, context: CallbackContext) -> None:
     if len(reply) >= 4096:
         reply = reply[:4096]  # max msg lenth of tg.
     try:
-        await msg.reply_text(reply)
+        CUTIEPII_BTN = [[
+            InlineKeyboardButton(text="🔍 Google it", url=f"https://google.com/search?q={text}")
+            ]]
+        await msg.reply_text(reply, reply_markup=InlineKeyboardMarkup(CUTIEPII_BTN), parse_mode=ParseMode.MARKDOWN)
     except BadRequest as err:
         await msg.reply_text(f"Error! {err.message}")
-
-
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler(["ud"], ud))
-
-__command_list__ = ["ud"]

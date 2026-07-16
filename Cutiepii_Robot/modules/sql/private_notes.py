@@ -1,6 +1,6 @@
 import threading
 
-from sqlalchemy import Column, String, Boolean
+from sqlalchemy import Column, String, Boolean, UnicodeText
 from Cutiepii_Robot.modules.sql import SESSION, BASE
 
 
@@ -20,7 +20,8 @@ PRIVATE_NOTES_INSERTION_LOCK = threading.RLock()
 
 def get_private_notes(chat_id) -> bool:
     try:
-        if private_notes := SESSION.query(PrivateNotes).get(str(chat_id)):
+        private_notes = SESSION.query(PrivateNotes).get(str(chat_id))
+        if private_notes:
             return private_notes.setting
         return False
     finally:

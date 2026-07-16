@@ -1,9 +1,9 @@
-"""
+﻿"""
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yuki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -28,12 +28,15 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
+import asyncio
+import html
 import contextlib
 
 from time import perf_counter
 from functools import wraps
 from cachetools import TTLCache
 from threading import RLock
+from Cutiepii_Robot.modules.sql.moderators_sql import is_modd
 from Cutiepii_Robot import (
     DEL_CMDS,
     DEV_USERS,
@@ -42,253 +45,423 @@ from Cutiepii_Robot import (
     SUPPORT_USERS,
     TIGER_USERS,
     WHITELIST_USERS,
-    CUTIEPII_PTB,
+    dispatcher,
     OWNER_ID,
 )
-
-from Cutiepii_Robot.modules.helper_funcs.admin_status import bot_is_admin
+from Cutiepii_Robot.modules import connection
+from Cutiepii_Robot.modules.helper_funcs.admin_status import get_bot_member
 
 from telegram import Chat, ChatMember, Update, User
-from telegram.error import TelegramError
-from telegram.constants import ParseMode, ChatType
-from telegram.ext import CallbackContext
+from telegram.constants import ParseMode, ChatMemberStatus
+CHATMEMBER_ADMINISTRATOR = ChatMemberStatus.ADMINISTRATOR
+CHATMEMBER_CREATOR = ChatMemberStatus.OWNER
+from telegram.error import TelegramError, Forbidden, BadRequest
+from telegram.ext import ContextTypes
+CallbackContext = ContextTypes.DEFAULT_TYPE
 
-# stores admemes in memory for 10 min.
+from Cutiepii_Robot import LOGGER
+
+# Stores admin list in memory for 10 minutes.
 ADMIN_CACHE = TTLCache(maxsize=512, ttl=60 * 10, timer=perf_counter)
 THREAD_LOCK = RLock()
-anonymous_data = {}
-
-def can_delete(chat: Chat, bot_id: int) -> bool:
-    return chat.get_member(bot_id).can_delete_messages
-
-def is_bot_admin(chat: Chat, bot_id: int, bot_member: ChatMember = None) -> bool:
-    if chat.type == "private" or chat.all_members_are_administrators:
-        return True
-
-    if not bot_member:
-        bot_member = chat.get_member(bot_id)
-
-    return bot_member.status in ("administrator", "creator")
-
-def is_anon(user: User, chat: Chat):
-    return chat.get_member(user.id).is_anonymous
 
 
-def is_whitelist_plus(_: Chat, user_id: int) -> bool:
-    return any(
-        user_id in user for user in
-        [WHITELIST_USERS, TIGER_USERS, SUPPORT_USERS, SUDO_USERS, DEV_USERS])
+def is_whitelist_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
+    return any(user_id in user for user in [WHITELIST_USERS, TIGER_USERS, SUPPORT_USERS, SUDO_USERS, DEV_USERS])
 
 
-def is_support_plus(_: Chat, user_id: int) -> bool:
+def is_support_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
     return user_id in SUPPORT_USERS or user_id in SUDO_USERS or user_id in DEV_USERS
 
 
-def is_sudo_plus(_: Chat, user_id: int) -> bool:
+def is_sudo_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
     return user_id in SUDO_USERS or user_id in DEV_USERS
 
 
-def user_can_changeinfo(chat: Chat, user: User, _: int) -> bool:
+def is_stats_plus(chat: Chat, user_id: int, member: ChatMember = None) -> bool:
+    return user_id in DEV_USERS
+
+
+def user_can_changeinfo(chat: Chat, user: User, bot_id: int) -> bool:
     return chat.get_member(user.id).can_change_info
 
 
-def owner_plus(func):
-
+def bot_admin(func):
+    """Decorator to check if bot is admin"""
     @wraps(func)
-    async def is_owner_plus_func(update: Update,
-                                 context: CallbackContext, *args,
-                                 **kwargs):
+    async def is_admin(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+        try:
+            chat = update.effective_chat
+            update_chat_title = chat.title
+            message_chat_title = update.effective_message.chat.title
+
+            if update_chat_title == message_chat_title:
+                not_admin = "<b>Action Denied</b>\nI am not an administrator in this chat."
+            else:
+                not_admin = f"<b>Action Denied</b>\nI am not an administrator in <b>{html.escape(update_chat_title)}</b>."
+
+            if await is_bot_admin(chat, context.bot.id):
+                return await func(update, context, *args, **kwargs)
+            else:
+                await update.effective_message.reply_text(not_admin, parse_mode=ParseMode.HTML)
+                return None
+        except Exception as e:
+            LOGGER.error(f"[ChatStatus] Error in bot_admin decorator: {e}")
+            return None
+
+    return is_admin
+
+
+def owner_plus(func):
+    """Decorator to restrict command to the bot owner only"""
+    @wraps(func)
+    async def is_owner_plus_func(update: Update, context: CallbackContext, *args, **kwargs):
         user = update.effective_user
 
-        if user.id == OWNER_ID:
-            return func(update, context, *args, **kwargs)
         if not user:
-            pass
-        elif DEL_CMDS and " " not in update.effective_message.text:
-            try:
+            return None
+
+        if user.id == OWNER_ID:
+            return await func(update, context, *args, **kwargs)
+
+        if DEL_CMDS and " " not in update.effective_message.text:
+            with contextlib.suppress(TelegramError):
                 await update.effective_message.delete()
-            except:
-                pass
         else:
             await update.effective_message.reply_text(
-                "This is a restricted command."
-                " You do not have permissions to run this.")
+                "<b>Action Denied</b>\nThis is a restricted command. You do not have the required permissions.",
+                parse_mode=ParseMode.HTML
+            )
 
     return is_owner_plus_func
 
 
-async def is_user_admin(update: Update,
-                        user_id: int,
-                        member: ChatMember = None) -> bool:
-    chat = update.effective_chat
-    msg = update.effective_message
-    if (chat.type == "private" or user_id in SUDO_USERS or user_id in DEV_USERS
-            or chat.all_members_are_administrators or
-        (msg.reply_to_message and msg.reply_to_message.sender_chat is not None
-         and msg.reply_to_message.sender_chat.type != "channel")):
+def user_can_change(func):
+    """Decorator to check if user has can_change_info permission"""
+    @wraps(func)
+    async def info_changer(update, context, *args, **kwargs):
+        user = update.effective_user.id
+        member = await update.effective_chat.get_member(user)
+
+        if not (member.can_change_info or member.status == "creator") and user not in SUDO_USERS:
+            await update.effective_message.reply_text(
+                "<b>Action Denied</b>\nYou are missing the required permission: <code>can change info</code>.",
+                parse_mode=ParseMode.HTML
+            )
+            return ""
+
+        return await func(update, context, *args, **kwargs)
+
+    return info_changer
+
+
+def user_can_promote(func):
+    """Decorator to check if user has can_promote_members permission"""
+    @wraps(func)
+    async def user_is_promoter(update: Update, context: CallbackContext, *args, **kwargs):
+        user = update.effective_user
+        if not user:
+            return
+        user_id = user.id
+        member = await update.effective_chat.get_member(user_id)
+        no_rights = "<b>Action Denied</b>\nYou do not have the permission to add administrators."
+        if (
+            not (member.can_promote_members or member.status == "creator")
+            and user_id not in SUDO_USERS
+            and user_id not in [777000, 1087968824]
+        ):
+            if not update.callback_query:
+                await update.effective_message.reply_text(no_rights, parse_mode=ParseMode.HTML)
+            else:
+                await update.callback_query.answer(
+                    "Action Denied\nYou do not have the permission to add administrators.",
+                    show_alert=True
+                )
+            return ""
+        return await func(update, context, *args, **kwargs)
+
+    return user_is_promoter
+
+
+async def user_is_admin(update: Update, user_id: int, member: ChatMember = None) -> bool:
+    """Check if user is admin in the chat"""
+    try:
+        chat = update.effective_chat
+
+        if (
+            chat.type == "private"
+            or user_id in SUDO_USERS
+            or user_id in DEV_USERS
+            or (
+                update.effective_message.reply_to_message
+                and update.effective_message.reply_to_message.sender_chat is not None
+                and update.effective_message.reply_to_message.sender_chat.type != "channel"
+            )
+        ):
+            return True
+
+        if not member:
+            try:
+                return user_id in ADMIN_CACHE[chat.id]
+            except KeyError:
+                try:
+                    chat_admins = await dispatcher.bot.get_chat_administrators(chat.id)
+                except Forbidden:
+                    LOGGER.warning(f"[ChatStatus] Bot not authorized in chat {chat.id}")
+                    return False
+
+                admin_list = [x.user.id for x in chat_admins]
+                ADMIN_CACHE[chat.id] = admin_list
+
+                return user_id in admin_list
+
+        return member.status in ("administrator", "creator")
+
+    except Exception as e:
+        LOGGER.error(f"[ChatStatus] Error checking user admin status: {e}")
+        return False
+
+
+async def is_bot_admin(chat: Chat, bot_id: int, bot_member: ChatMember = None) -> bool:
+    if chat.type == "private":
         return True
 
-    if not member:
-        # try to fetch from cache first.
+    if not bot_member:
         try:
-            return user_id in ADMIN_CACHE[chat.id]
-        except (KeyError, IndexError):
-            # KeyError happened means cache is deleted,
-            # so query bot api again and return user status
-            # while saving it in cache for future usage...
-            chat_admins = await CUTIEPII_PTB.bot.getChatAdministrators(chat.id)
-            admin_list = [x.user.id for x in chat_admins]
-            ADMIN_CACHE[chat.id] = admin_list
-
-            if user_id in admin_list:
-                return True
+            bot_member = await get_bot_member(chat.id)
+        except BadRequest:
             return False
 
+    return bot_member.status in ("administrator", "creator")
 
-def is_user_ban_protected(update: Update,
-                          user_id: int,
-                          member: ChatMember = None) -> bool:
-    chat = update.effective_chat
-    msg = update.effective_message
-    if (chat.type == "private" or user_id in SUDO_USERS or user_id in DEV_USERS
-            or user_id in WHITELIST_USERS
-            or chat.all_members_are_administrators or
-        (msg.reply_to_message and msg.reply_to_message.sender_chat is not None
-         and msg.reply_to_message.sender_chat.type != "channel")):
+
+async def can_delete(chat: Chat, bot_id: int) -> bool:
+    return getattr(await get_bot_member(chat.id), "can_delete_messages", False)
+
+
+async def is_user_in_chat(chat: Chat, user_id: int) -> bool:
+    member = await chat.get_member(user_id)
+    return member.status not in ("left", "kicked")
+
+
+async def is_user_ban_protected(update: Update, user_id: int, member: ChatMember = None) -> bool:
+    chat = update.effective_chat if hasattr(update, "effective_chat") else update
+    msg = getattr(update, "effective_message", None)
+    if (
+        chat.type == "private"
+        or user_id in SUDO_USERS
+        or user_id in DEV_USERS
+        or user_id in WHITELIST_USERS
+        or user_id in TIGER_USERS
+        or is_modd(chat.id, user_id)
+        or (msg and msg.reply_to_message and msg.reply_to_message.sender_chat is not None and
+            msg.reply_to_message.sender_chat.type != "channel")
+    ):
         return True
 
     if not member:
-        member = chat.get_member(user_id)
+        member = await chat.get_member(user_id)
 
     return member.status in ("administrator", "creator")
 
 
 def dev_plus(func):
-
+    """Decorator for developer-only commands"""
     @wraps(func)
-    async def is_dev_plus_func(update: Update,
-                               context: CallbackContext, *args,
-                               **kwargs):
-        user = update.effective_user
+    async def is_dev_plus_func(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+        try:
+            user = update.effective_user
 
-        if user.id in DEV_USERS:
-            return func(update, context, *args, **kwargs)
-        if not user:
-            pass
-        elif DEL_CMDS and " " not in update.effective_message.text:
-            try:
-                await update.effective_message.delete()
-            except:
-                pass
-        else:
-            await update.effective_message.reply_text(
-                "This is a developer restricted command."
-                "You do not have permissions to run this.", )
+            if user and user.id in DEV_USERS:
+                return await func(update, context, *args, **kwargs)
+
+            if not user:
+                return None
+
+            if DEL_CMDS and " " not in update.effective_message.text:
+                with contextlib.suppress(TelegramError):
+                    await update.effective_message.delete()
+            else:
+                await update.effective_message.reply_text(
+                    "<b>Action Denied</b>\nThis command is restricted to bot developers.",
+                    parse_mode=ParseMode.HTML
+                )
+            return None
+        except Exception as e:
+            LOGGER.error(f"[ChatStatus] Error in dev_plus decorator: {e}")
+            return None
 
     return is_dev_plus_func
 
 
 def sudo_plus(func):
-
+    """Decorator for sudo+ level commands"""
     @wraps(func)
-    async def is_sudo_plus_func(update: Update,
-                                context: CallbackContext, *args,
-                                **kwargs):
-        user = update.effective_user
-        chat = update.effective_chat
+    async def is_sudo_plus_func(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+        try:
+            user = update.effective_user
+            chat = update.effective_chat
 
-        if user and is_sudo_plus(chat, user.id):
-            return func(update, context, *args, **kwargs)
-        if not user:
-            pass
-        elif DEL_CMDS and " " not in update.effective_message.text:
-            try:
-                await update.effective_message.delete()
-            except:
-                pass
-        else:
-            await update.effective_message.reply_text(
-                "At Least be an Admin to use these all Commands", )
+            if user and is_sudo_plus(chat, user.id):
+                return await func(update, context, *args, **kwargs)
+
+            if not user:
+                return None
+
+            if DEL_CMDS and " " not in update.effective_message.text:
+                with contextlib.suppress(TelegramError):
+                    await update.effective_message.delete()
+            else:
+                await update.effective_message.reply_text(
+                    "<b>Action Denied</b>\nThis command is restricted to bot administrators.",
+                    parse_mode=ParseMode.HTML
+                )
+            return None
+        except Exception as e:
+            LOGGER.error(f"[ChatStatus] Error in sudo_plus decorator: {e}")
+            return None
 
     return is_sudo_plus_func
 
 
-def support_plus(func):
-
+def stats_plus(func):
+    """Decorator for stats/dev+ level commands"""
     @wraps(func)
-    async def is_support_plus_func(update: Update,
-                                   context: CallbackContext, *args,
-                                   **kwargs):
+    async def is_stats_plus_func(update: Update, context: CallbackContext, *args, **kwargs):
+        user = update.effective_user
+        chat = update.effective_chat
+
+        if user and is_stats_plus(chat, user.id):
+            return await func(update, context, *args, **kwargs)
+
+        if not user:
+            return None
+
+        if DEL_CMDS and " " not in update.effective_message.text:
+            with contextlib.suppress(TelegramError):
+                await update.effective_message.delete()
+        else:
+            await update.effective_message.reply_text(
+                "<b>Action Denied</b>\nThis command is restricted to bot developers.",
+                parse_mode=ParseMode.HTML
+            )
+
+    return is_stats_plus_func
+
+
+def support_plus(func):
+    """Decorator for support+ level commands"""
+    @wraps(func)
+    async def is_support_plus_func(update: Update, context: CallbackContext, *args, **kwargs):
         user = update.effective_user
         chat = update.effective_chat
 
         if user and is_support_plus(chat, user.id):
-            return func(update, context, *args, **kwargs)
+            return await func(update, context, *args, **kwargs)
+
+        if not user:
+            return None
+
         if DEL_CMDS and " " not in update.effective_message.text:
-            try:
+            with contextlib.suppress(TelegramError):
                 await update.effective_message.delete()
-            except:
-                pass
 
     return is_support_plus_func
 
 
 def whitelist_plus(func):
-
+    """Decorator for whitelist+ level commands"""
     @wraps(func)
     async def is_whitelist_plus_func(
-        update: Update,
-        context: CallbackContext,
-        *args,
-        **kwargs,
+        update: Update, context: CallbackContext, *args, **kwargs,
     ):
         user = update.effective_user
         chat = update.effective_chat
 
         if user and is_whitelist_plus(chat, user.id):
-            return func(update, context, *args, **kwargs)
+            return await func(update, context, *args, **kwargs)
+
         await update.effective_message.reply_text(
-            f"You don't have access to use this.\nVisit @{SUPPORT_CHAT}", )
+            f"<b>Action Denied</b>\nYou do not have permission to use this command. For assistance, contact @{SUPPORT_CHAT}.",
+            parse_mode=ParseMode.HTML
+        )
 
     return is_whitelist_plus_func
 
 
 def user_admin(func):
-
+    """Decorator to check if user is admin"""
     @wraps(func)
-    async def is_admin(update: Update, context: CallbackContext,
-                       *args, **kwargs):
-        user = update.effective_user
+    async def is_admin(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+        try:
+            user = update.effective_user
 
-        if user and (await is_user_admin(update, user.id)):
-            return func(update, context, *args, **kwargs)
+            if user and await user_is_admin(update, user.id):
+                return await func(update, context, *args, **kwargs)
+
+            if not user:
+                return None
+
+            if DEL_CMDS and " " not in update.effective_message.text:
+                with contextlib.suppress(TelegramError):
+                    await update.effective_message.delete()
+            else:
+                if update.callback_query:
+                    await update.callback_query.answer(
+                        "Action Denied\nYou must be an administrator to perform this action.",
+                        show_alert=True
+                    )
+                    return ""
+                await update.effective_message.reply_text(
+                    "<b>Action Denied</b>\nYou must be an administrator to perform this action.",
+                    parse_mode=ParseMode.HTML
+                )
+            return None
+        except Exception as e:
+            import traceback
+            LOGGER.error(f"[ChatStatus] Error in user_admin decorator: {e}\n{traceback.format_exc()}")
+            return None
+
+    return is_admin
+
+
+def is_user_admin_callback_query(func):
+    """Decorator to check if user is admin for callback queries"""
+    @wraps(func)
+    async def is_admin(update: Update, context: CallbackContext, *args, **kwargs):
+        user = update.callback_query.from_user
+        chat = update.effective_chat
+
+        member = await chat.get_member(user.id)
+        if member.status in (CHATMEMBER_ADMINISTRATOR, CHATMEMBER_CREATOR) or user.id in DEV_USERS:
+            return await func(update, context, *args, **kwargs)
+
         if not user:
-            pass
-        elif DEL_CMDS and " " not in update.effective_message.text:
-            with contextlib.suppress(TelegramError):
-                await update.effective_message.delete()
-        else:
-            await update.effective_message.reply_text(
-                "Who dis non-admin telling me what to do?")
+            return None
+
+        await update.callback_query.answer(
+            "Action Denied\nYou do not have access to use this.",
+            show_alert=True
+        )
 
     return is_admin
 
 
 def user_admin_no_reply(func):
-
+    """Decorator to check if user is admin, silently ignoring non-admins"""
     @wraps(func)
-    async def is_not_admin_no_reply(update: Update,
-                                    context: CallbackContext, *args,
-                                    **kwargs):
-        # bot = context.bot
+    async def is_not_admin_no_reply(
+                update: Update, context: CallbackContext, *args, **kwargs
+        ):
         user = update.effective_user
-        # chat = update.effective_chat
 
-        if user and (await is_user_admin(update, user.id)):
-            return func(update, context, *args, **kwargs)
+        if user and await user_is_admin(update, user.id):
+            return await func(update, context, *args, **kwargs)
+
         if not user:
-            pass
-        elif DEL_CMDS and " " not in update.effective_message.text:
+            return None
+
+        if DEL_CMDS and " " not in update.effective_message.text:
             with contextlib.suppress(TelegramError):
                 await update.effective_message.delete()
 
@@ -296,122 +469,163 @@ def user_admin_no_reply(func):
 
 
 def user_not_admin(func):
-
+    """Decorator that runs handler only if user is NOT an admin"""
     @wraps(func)
-    async def is_not_admin(update: Update, context: CallbackContext,
-                           *args, **kwargs):
-        message = update.effective_message
+    async def is_not_admin(update: Update, context: CallbackContext, *args, **kwargs):
         user = update.effective_user
-        # chat = update.effective_chat
 
-        if message.is_automatic_forward:
-            return
-        if message.sender_chat and message.sender_chat.type != "channel":
-            return
-        if user and not await is_user_admin(update, user.id):
-            return func(update, context, *args, **kwargs)
+        if user and not await user_is_admin(update, user.id):
+            return await func(update, context, *args, **kwargs)
+
+        return None
 
     return is_not_admin
 
 
-def bot_admin(func):
-
-    @wraps(func)
-    async def is_admin(update: Update, context: CallbackContext,
-                       *args, **kwargs):
-        chat = update.effective_chat
-        update_chat_title = chat.title
-        message_chat_title = update.effective_message.chat.title
-
-        if update_chat_title == message_chat_title:
-            not_admin = "I'm not an admin in this chat, how about you promote me first?"
-        else:
-            not_admin = f"I'm not admin in <b>{update_chat_title}</b>, how about you promote me first?"
-
-        if bot_is_admin(update.effective_chat, context.bot.id):
-            return func(update, context, *args, **kwargs)
-        await update.effective_message.reply_text(not_admin,
-                                                  parse_mode=ParseMode.HTML)
-
-    return is_admin
-
-
 def bot_can_delete(func):
-
+    """Decorator to check if bot has delete messages permission"""
     @wraps(func)
-    async def delete_rights(update: Update, context: CallbackContext,
-                            *args, **kwargs):
-        bot = context.bot
+    async def delete_rights(update: Update, context: CallbackContext, *args, **kwargs):
         chat = update.effective_chat
         update_chat_title = chat.title
         message_chat_title = update.effective_message.chat.title
 
         if update_chat_title == message_chat_title:
-            cant_delete = "I can't delete messages here!\nMake sure I'm admin and can delete other user's messages."
+            cant_delete = "<b>Action Denied</b>\nI do not have the permission to delete messages."
         else:
-            cant_delete = f"I can't delete messages in <b>{update_chat_title}</b>!\nMake sure I'm admin and can delete other user's messages there."
+            cant_delete = f"<b>Action Denied</b>\nI do not have the permission to delete messages in <b>{html.escape(update_chat_title)}</b>."
 
-        if can_delete(chat, bot.id):
-            return func(update, context, *args, **kwargs)
-        await update.effective_message.reply_text(cant_delete,
-                                                  parse_mode=ParseMode.HTML)
+        if await can_delete(chat, context.bot.id):
+            return await func(update, context, *args, **kwargs)
+        await update.effective_message.reply_text(cant_delete, parse_mode=ParseMode.HTML)
 
     return delete_rights
 
 
-def can_promote(func):
-
+def can_pin(func):
+    """Decorator to check if bot has pin messages permission"""
     @wraps(func)
-    async def promote_rights(update: Update,
-                             context: CallbackContext, *args,
-                             **kwargs):
+    async def pin_rights(update: Update, context: CallbackContext, *args, **kwargs):
         chat = update.effective_chat
         update_chat_title = chat.title
         message_chat_title = update.effective_message.chat.title
 
         if update_chat_title == message_chat_title:
-            cant_promote = "I can't promote/demote people here!\nMake sure I'm admin and can appoint new admins."
+            cant_pin = "<b>Action Denied</b>\nI do not have the permission to pin messages."
         else:
-            cant_promote = (
-                f"I can't promote/demote people in <b>{update_chat_title}</b>!\n"
-                f"Make sure I'm admin there and have the permission to appoint new admins."
-            )
+            cant_pin = f"<b>Action Denied</b>\nI do not have the permission to pin messages in <b>{html.escape(update_chat_title)}</b>."
 
-        if chat.get_member(1241223850).can_promote_members:
-            return func(update, context, *args, **kwargs)
-        await update.effective_message.reply_text(cant_promote,
-                                                  parse_mode=ParseMode.HTML)
+        bot_member = await get_bot_member(chat.id)
+        if getattr(bot_member, "can_pin_messages", False):
+            return await func(update, context, *args, **kwargs)
+        await update.effective_message.reply_text(cant_pin, parse_mode=ParseMode.HTML)
+
+    return pin_rights
+
+
+def can_promote(func):
+    """Decorator to check if bot has promote members permission"""
+    @wraps(func)
+    async def promote_rights(update: Update, context: CallbackContext, *args, **kwargs):
+        chat = update.effective_chat
+        update_chat_title = chat.title
+        message_chat_title = update.effective_message.chat.title
+
+        if update_chat_title == message_chat_title:
+            cant_promote = "<b>Action Denied</b>\nI do not have the permission to promote or demote members."
+        else:
+            cant_promote = f"<b>Action Denied</b>\nI do not have the permission to promote or demote members in <b>{html.escape(update_chat_title)}</b>."
+
+        bot_member = await get_bot_member(chat.id)
+        if getattr(bot_member, "can_promote_members", False):
+            return await func(update, context, *args, **kwargs)
+        await update.effective_message.reply_text(cant_promote, parse_mode=ParseMode.HTML)
 
     return promote_rights
 
 
-def connection_status(func):
-
+def can_restrict(func):
+    """Decorator to check if bot has restrict members permission"""
     @wraps(func)
-    async def connected_status(update: Update,
-                               context: CallbackContext, *args,
-                               **kwargs):
-        if update.effective_chat is None or update.effective_user is None:
-            return
-        if conn := await connected(context.bot,
-                                   update,
-                                   update.effective_chat,
-                                   update.effective_user.id,
-                                   need_admin=False):
-            chat = await CUTIEPII_PTB.bot.getChat(conn)
-            await update.__setattr__("_effective_chat", chat)
-        elif update.effective_message.chat.type == ChatType.PRIVATE:
-            await update.effective_message.reply_text(
-                "Send /connect in a group that you and I have in common first."
-            )
-            return connected_status
+    async def restrict_rights(update: Update, context: CallbackContext, *args, **kwargs):
+        chat = update.effective_chat
+        update_chat_title = chat.title
+        message_chat_title = update.effective_message.chat.title
 
-        return func(update, context, *args, **kwargs)
+        if update_chat_title == message_chat_title:
+            cant_restrict = "<b>Action Denied</b>\nI do not have the permission to restrict members."
+        else:
+            cant_restrict = f"<b>Action Denied</b>\nI do not have the permission to restrict members in <b>{html.escape(update_chat_title)}</b>."
+
+        bot_member = await get_bot_member(chat.id)
+        if getattr(bot_member, "can_restrict_members", False):
+            return await func(update, context, *args, **kwargs)
+        await update.effective_message.reply_text(cant_restrict, parse_mode=ParseMode.HTML)
+
+    return restrict_rights
+
+
+def user_can_ban(func):
+    """Decorator to check if user has ban/restrict permissions"""
+    @wraps(func)
+    async def user_is_banhammer(update: Update, context: CallbackContext, *args, **kwargs):
+        user_id = update.effective_user.id
+        chat = update.effective_chat
+        member = await chat.get_member(user_id)
+        if (
+            not member.can_restrict_members
+            and member.status != "creator"
+            and user_id not in SUDO_USERS
+        ):
+            await update.effective_message.reply_text(
+                "<b>Action Denied</b>\nYou do not have the required ban/restrict permissions.",
+                parse_mode=ParseMode.HTML
+            )
+            return ""
+        return await func(update, context, *args, **kwargs)
+
+    return user_is_banhammer
+
+
+def connection_status(func):
+    """Decorator to handle connection status"""
+    @wraps(func)
+    async def connected_status(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+        try:
+            if not update.effective_user:
+                return None
+
+            conn = await connected(
+                context.bot,
+                update,
+                update.effective_chat,
+                update.effective_user.id,
+                need_admin=False,
+            )
+
+            if conn:
+                chat = await dispatcher.bot.get_chat(conn)
+                # Store connected chat in context data for downstream use
+                context.chat_data["_connected_chat"] = chat
+                try:
+                    # Best-effort override for backward compat (may silently fail on PTB v20+)
+                    object.__setattr__(update, "_effective_chat", chat)
+                except Exception:
+                    pass
+            else:
+                if update.effective_message.chat.type == "private":
+                    await update.effective_message.reply_text(
+                        "<b>Connection Error</b>\nPlease initiate <code>/connect</code> in a group chat first.",
+                        parse_mode=ParseMode.HTML
+                    )
+                    return None
+
+            return await func(update, context, *args, **kwargs)
+        except Exception as e:
+            LOGGER.error(f"[ChatStatus] Error in connection_status decorator: {e}")
+            return None
 
     return connected_status
 
-
-# Workaround for circular import with connection.py
-from Cutiepii_Robot.modules import connection
 
 connected = connection.connected

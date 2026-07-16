@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -48,7 +48,7 @@ class Purges(BASE):
 
 
     def __repr__(self):
-        return f"<Purges {self.chat_id}>"
+        return "<Purges %s>" % self.chat_id
 
 
 Purges.__table__.create(checkfirst=True)
@@ -69,12 +69,14 @@ def is_purgefrom(chat_id, message_from):
 
 def clear_purgefrom(chat_id, message_from):
     with PURGES_INSERTION_LOCK:
-        if note := SESSION.query(Purges).get((str(chat_id), message_from)):
+        note = SESSION.query(Purges).get((str(chat_id), message_from))
+        if note:
             SESSION.delete(note)
             SESSION.commit()
             return True
-        SESSION.close()
-        return False
+        else:
+            SESSION.close()
+            return False
 
 def show_purgefrom(chat_id):
     try:

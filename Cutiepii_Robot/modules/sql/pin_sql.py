@@ -30,7 +30,8 @@ ANTICHANNELPIN_LOCK = threading.RLock()
 
 def getCleanLinked(chat_id):
     try:
-        if resultObj := SESSION.query(CleanLinked).get(str(chat_id)):
+        resultObj = SESSION.query(CleanLinked).get(str(chat_id))
+        if resultObj:
             return resultObj.status
         return False #default
     finally:
@@ -38,7 +39,8 @@ def getCleanLinked(chat_id):
 
 def setCleanLinked(chat_id, status):
     with CLEANLINKED_LOCK:
-        if prevObj := SESSION.query(CleanLinked).get(str(chat_id)):
+        prevObj = SESSION.query(CleanLinked).get(str(chat_id))
+        if prevObj:
             SESSION.delete(prevObj)
         newObj = CleanLinked(str(chat_id), status)
         SESSION.add(newObj)
@@ -47,7 +49,8 @@ def setCleanLinked(chat_id, status):
 
 def getAntiChannelPin(chat_id):
     try:
-        if resultObj := SESSION.query(AntiChannelPin).get(str(chat_id)):
+        resultObj = SESSION.query(AntiChannelPin).get(str(chat_id))
+        if resultObj:
             return resultObj.status
         return False #default
     finally:
@@ -55,7 +58,8 @@ def getAntiChannelPin(chat_id):
 
 def setAntiChannelPin(chat_id, status):
     with ANTICHANNELPIN_LOCK:
-        if prevObj := SESSION.query(AntiChannelPin).get(str(chat_id)):
+        prevObj = SESSION.query(AntiChannelPin).get(str(chat_id))
+        if prevObj:
             SESSION.delete(prevObj)
         newObj = AntiChannelPin(str(chat_id), status)
         SESSION.add(newObj)

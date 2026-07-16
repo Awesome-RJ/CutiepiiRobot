@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -28,11 +28,14 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
+from Cutiepii_Robot.modules.helper_funcs.decorators import register
+
 
 import io
 
 from telethon import types
 from telethon.tl import functions
+
 
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn
@@ -42,16 +45,17 @@ async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (await
-             telethn(functions.channels.GetParticipantRequest(chat, user)
-                     )).participant,
+            (
+                await telethn(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await telethn.get_peer_id(user)
-        ps = (await telethn(functions.messages.GetFullChatRequest(chat.chat_id)
-                            )).full_chat.participants.participants
+        ps = (
+            await telethn(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
@@ -89,4 +93,4 @@ async def _(event):
             )
             await event.delete()
     else:
-        await event.reply(f"`{the_real_message}`")
+        await event.reply("`{}`".format(the_real_message))

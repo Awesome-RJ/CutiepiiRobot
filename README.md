@@ -1,94 +1,109 @@
-![Cutiepii](https://telegra.ph/file/85581d42f2b95ff65fc06.jpg)
+<div align="center">
 
-# 𝑪𝒖𝒕𝒊𝒆𝒑𝒊𝒊 𝑹𝒐𝒃𝒐𝒕 [ BETA ]
-[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html) [![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/Awesome-RJ/CutiepiiRobot/?ref=repository-badge) [![Join Support!](https://img.shields.io/badge/Join%20Channel-!-red)](https://telegram.dog/Black_Knights_Union_Support) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity) [![GitHub contributors](https://img.shields.io/github/contributors/Naereen/StrapDown.js.svg)](https://GitHub.com/Awesome-RJ/CutiepiiRobot/graphs/contributors/)
+# 🌸 Cutiepii Robot
 
-A modular telegram Python bot running on python3 with an sqlalchemy, Redis, mongodb database.
+**A powerful, modular, and cute Telegram group management bot.**
 
-###  ╔═━「 Status 」
+![Upgraded](https://img.shields.io/badge/Upgraded-PTB%2020.0a0%20→%2022.8-brightgreen?style=for-the-badge&logo=telegram&logoColor=white)
 
-+ [x] Maintained
-+ [x] Support Group Included
-+ [x] Free
-+ [x] OpenSourced
-+ [x] Working Instance Available
-+ [x] Clean Code
-+ [x] Heroku Deploy
-+ [x] Docker/Local Machine
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![python-telegram-bot](https://img.shields.io/badge/python--telegram--bot-22.8-00b2ff?style=for-the-badge&logo=telegram&logoColor=white)](https://github.com/python-telegram-bot/python-telegram-bot)
+[![Telethon](https://img.shields.io/badge/Telethon-1.42%2B-0088cc?style=for-the-badge&logo=telegram&logoColor=white)](https://github.com/LonamiWebs/Telethon)
+[![License](https://img.shields.io/badge/License-BSD_2--Clause-orange?style=for-the-badge)](LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/Awesome-RJ/CutiepiiRobot?style=for-the-badge&logo=github)](https://github.com/Awesome-RJ/CutiepiiRobot)
 
-╘═━「 Can be found on telegram as [Cutiepii Robot](https://telegram.dog/Cutiepii_Robot) 」
+</div>
 
-## ╔═━「 Credits 」
-The bot is based of on the original work done by [PaulSonOfLars](https://github.com/PaulSonOfLars)
-This repo was just reamped to suit an Anime-centric community. All original credits go to Paul and his dedication, Without his efforts, this fork would not have been possible!
+---
 
-### ╔═━「 Creator Info/Credits 」
+## ✨ What is Cutiepii?
 
-+ ➢ [Rajkumar](https://github.com/Awesome-RJ) : OWNER | DEV
-+ ➢ [AkshayRajput](https://github.com/TheHamkerCat) : ARQ MODULES
-+ ➢ [TheRealPhoenix](https://github.com/rsktg) : BASE
-+ ➢ [DragSama](https://github.com/DragSama) : ANIME
-+ ➢ [TsunayoshiSawada](https://github.com/TsunayoshiSawada) : BASE
-+ ➢ [Pokurt](https://github.com/pokurt) : WHATANIME MODULE API
-+ ➢ [Pranav ⁪⁬⁮⁮⁮⁮Ajay](https://github.com/MoeZilla) : POKEDEX, CHATBOT MODULE & API ETC
-+ ➢ [Dank-del](https://github.com/Dank-del) : LEWD MODULE
-+ ➢ [InukaAsith](https://github.com/InukaAsith) : MEMES, INLINE ETC MODULES 
-+ ➢ [AyraHikari](https://github.com/AyraHikari): FED MODULE
-+ ➢ [Peaktogoo](https://github.com/peaktogoo) : FED MODULE
+Cutiepii Robot is a fully-featured, modular Telegram bot built for group management. It's fast, reliable, and packed with features — from bans and warnings to AI chatbot and anime search.
 
-╘═━「 Any other authorship/credits can be seen through the commits. 」
+> 🚀 **Major Comeback!** Last publicly released ~4 years ago on `python-telegram-bot v20.0a0`.
+> This version is a **complete rewrite and upgrade** to **PTB v22.8** with async/await, full Python 3.9+ support, and many new modules.
 
-[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
+---
 
-The Support group can be reached out to at [Yūki • Black Knights Union • Support](https://telegram.dog/Black_Knights_Union_Support), where you can ask for help about [Cutiepii Robot 愛](https://telegram.dog/Cutiepii_Robot), discover/request new features, report bugs, and stay in the loop whenever a new update is available. 
+## ⬆️ Migration Highlights
 
-<details>
-	<summary>Heroku Deploy</summary>
-	<br>
-	<b>
-The Easiest Way to Deploy This Bot is Via Heroku.
-		In Order To deploy, You Just Have Fill The Necessary Environment Variables and Done!</b>
-	
-  <h1>
-    <p align="center">
-        <a href="https://heroku.com/deploy?template=https://github.com/Awesome-RJ/CutiepiiRobotV2.git">
-            <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
-        </a>
-    </p>
-</h1>
+| Before (4 years ago) | Now |
+|---|---|
+| PTB `20.0a0` (alpha) | PTB `22.8` (stable) |
+| Sync handlers | Fully `async/await` |
+| Basic admin modules | 50+ modules |
+| No AI chatbot | Gemini + OpenRouter AI chatbot |
+| No welcome image | Dynamic Pillow welcome cards |
+| Single language | 5 languages (EN, HI, ES, JA, RU) |
+| Redis optional | Redis + PostgreSQL required |
 
-</details> 
+---
 
-<details>
-    <summary>More Deploy Options</summary>
-    <br>
-    <p align="center">
+## 📦 Core Libraries
 
-    Deploying on Local Machine
+| Library | Version | Purpose |
+|---|---|---|
+| `python-telegram-bot` | 22.8 | Primary bot framework |
+| `telethon` | ≥ 1.42.0 | MTProto client for advanced features |
+| `SQLAlchemy` | 1.4.x | SQL database ORM |
+| `redis` | ≥ 5.0 | Caching & rate limiting |
+| `aiohttp` | 3.9.5 | Async HTTP requests |
+| `Pillow` | ≥ 10.2 | Image processing & welcome cards |
+| `APScheduler` | ≥ 3.10 | Scheduled jobs & reminders |
+| `yt-dlp` | ≥ 2024.1 | Media downloading |
 
-</p>
+---
 
-```console
-    ~$ git clone https://github.com/Awesome-RJ/CutiepiiRobotV2.git
-    ~$ cd CutiepiiRobotV2
-    ~$ cp sample_config.py config.py
-```
+## 🚀 Features
 
-Edit Config.py with your own Values
+- 🛡️ **Admin Tools** — Ban, kick, mute, warn, and purge
+- 👋 **Welcome & Goodbye** — Custom messages with dynamic placeholders
+- 🤖 **AI Chatbot** — Powered by Gemini & OpenRouter (bring your own API key)
+- 📝 **Filters & Notes** — Save and trigger custom text or media
+- ⚠️ **Warnings System** — Configurable warn limits with auto-action
+- 🔒 **Locks & Anti-Spam** — Flood control, blacklists, NSFW detection
+- 🎌 **Anime & Fun** — AniList, Jikan, wallpapers, memes, and more
+- ⏰ **Reminders** — Set personal or group reminders
+- 🌍 **Multi-language** — English, Hindi, Spanish, Japanese, Russian
 
-Start with ```python3 -m Cutiepii_Robot```
+---
 
-</details>    
+## ⚙️ Setup
 
-<details>
-     <summary>Deploying On IDE VMs Like Repl.it</summary>
-       <br>
-         <p align="left">
-            <b> 
+1. Clone the repo and install dependencies:
+   ```bash
+   git clone https://github.com/Awesome-RJ/CutiepiiRobot
+   cd CutiepiiRobot
+   pip install -r requirements.txt
+   ```
 
-            Refer to Deploying On Local Machine.
+2. Copy `.env.example` to `.env` and fill in your values:
+   ```bash
+   cp .env.example .env
+   ```
 
- </b>
-</p>
-</details>
+3. Run the bot:
+   ```bash
+   python -m Cutiepii_Robot
+   ```
 
+> See `.env.example` for all available configuration options.
+
+---
+
+## 🙏 Credits
+
+| Contributor | Role |
+|---|---|
+| [Awesome-RJ](https://github.com/Awesome-RJ) | Creator & Lead Developer |
+| [Paul Larsen](https://github.com/PaulSonOfLars) | Original Marie Bot base |
+| [python-telegram-bot team](https://github.com/python-telegram-bot) | Core bot framework |
+| [LonamiWebs](https://github.com/LonamiWebs/Telethon) | Telethon MTProto library |
+
+---
+
+<div align="center">
+
+Made with ❤️ by [Awesome-RJ](https://github.com/Awesome-RJ)
+
+</div>

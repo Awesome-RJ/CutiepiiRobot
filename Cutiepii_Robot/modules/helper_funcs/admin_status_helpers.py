@@ -1,11 +1,17 @@
+import json
+
 from enum import Enum
 from cachetools import TTLCache
-from time import perf_counter
+from time import perf_counter, time
+from typing import List, Any, Dict
+from Cutiepii_Robot.modules.sql.moderators_sql import is_modd
 
-from telegram import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, Update, Message
+from telegram import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, Message, Update, ChatMember
 from telegram.constants import ParseMode
+# JSONDict is just Dict[str, Any] - use Dict[str, Any] directly
+JSONDict = Dict[str, Any]
 
-from Cutiepii_Robot import DEV_USERS, SUDO_USERS, SUPPORT_USERS, WHITELIST_USERS
+from Cutiepii_Robot import OWNER_ID, DEV_USERS, SUDO_USERS, SUPPORT_USERS, WHITELIST_USERS, REDIS, dispatcher
 
 # stores admin in memory for 10 min.
 ADMINS_CACHE = TTLCache(maxsize = 512, ttl = (60 * 30), timer=perf_counter)
@@ -19,30 +25,14 @@ WHITELIST_USERS = WHITELIST_USERS + SUDO_USERS
 
 SUPPORT_USERS = SUPPORT_USERS + SUDO_USERS
 
-
 class AdminPerms(Enum):
-	CAN_RESTRICT_MEMBERS = 'Can Restrict Members'
-	CAN_PROMOTE_MEMBERS = 'Can Promote Members'
-	CAN_INVITE_USERS = 'Can Invite Users'
-	CAN_DELETE_MESSAGES = 'Can Delete Messages'
-	CAN_CHANGE_INFO = 'Can Change Info'
-	CAN_PIN_MESSAGES = 'Can Pin Messages'
-	IS_ANONYMOUS = 'Is Anonymous'
-
-
-class ChatStatus(Enum):
-	CREATOR = "Creator"
-	ADMIN = "Administrator"
-
-
-# class SuperUsers(Enum):
-# 	Owner = [OWNER_ID]
-# 	SysAdmin = [OWNER_ID, SYS_ADMIN]
-# 	Devs = DEV_USERS
-# 	Sudos = SUDO_USERS
-# 	Supports = SUPPORT_USERS
-# 	Whitelist = WHITELIST_USERS
-# 	Mods = MOD_USERS
+	CAN_RESTRICT_MEMBERS = 'can_restrict_members'
+	CAN_PROMOTE_MEMBERS = 'can_promote_members'
+	CAN_INVITE_USERS = 'can_invite_users'
+	CAN_DELETE_MESSAGES = 'can_delete_messages'
+	CAN_CHANGE_INFO = 'can_change_info'
+	CAN_PIN_MESSAGES = 'can_pin_messages'
+	IS_ANONYMOUS = 'is_anonymous'
 
 
 def anon_reply_markup(cb_id: str) -> InlineKeyboardMarkup:
@@ -50,7 +40,7 @@ def anon_reply_markup(cb_id: str) -> InlineKeyboardMarkup:
 			[
 				[
 					InlineKeyboardButton(
-							text = 'Prove identity',
+							text = 'Prove Identity',
 							callback_data = cb_id
 					)
 				]
@@ -58,28 +48,79 @@ def anon_reply_markup(cb_id: str) -> InlineKeyboardMarkup:
 	)
 
 
-anon_reply_text = "Seems like you're anonymous, click the button below to prove your identity"
+anon_reply_text = "<b>Anonymous Admin</b>\nYou appear to be an anonymous administrator. Please click the button below to prove your identity."
 
 
-def edit_anon_msg(msg: Message, text: str):
+async def edit_anon_msg(msg: Message, text: str):
 	"""
 	edit anon check message and remove the button
 	"""
-	msg.edit_text(text, parse_mode = ParseMode.MARKDOWN, reply_markup = None)
+	await msg.edit_text(text, parse_mode = ParseMode.HTML, reply_markup = None)
 
 
 async def user_is_not_admin_errmsg(msg: Message, permission: AdminPerms = None, cb: CallbackQuery = None):
-	errmsg = f"You are missing the following rights to use this command:\n*{permission.value}*"
+	if permission:
+		errmsg = f"<b>Action Denied</b>\nYou are missing the required permission: <code>{permission.value}</code>"
+	else:
+		errmsg = "<b>Action Denied</b>\nYou do not have the necessary administrator permissions to use this command."
 	if cb:
-		return cb.answer(errmsg, show_alert = True)
-	return await msg.reply_text(errmsg, parse_mode = ParseMode.MARKDOWN)
+		return await cb.answer(errmsg.replace("<b>", "").replace("</b>", "").replace("<code>", "").replace("</code>", ""), show_alert = True)
+	return await msg.reply_text(errmsg, parse_mode = ParseMode.HTML)
 
-def button_expired_error(u: Update):
-	errmsg = "This button has expired!"
+async def button_expired_error(u: Update):
+	errmsg = "<b>Error</b>\nThis button has expired."
 	if u.callback_query:
-		u.callback_query.answer(errmsg, show_alert = True)
-		u.effective_message.delete()
+		await u.callback_query.answer(errmsg.replace("<b>", "").replace("</b>", ""), show_alert = True)
+		await u.effective_message.delete()
 		return
-	return u.effective_message.edit_text(errmsg, parse_mode = ParseMode.MARKDOWN)
+	return await u.effective_message.edit_text(errmsg, parse_mode = ParseMode.HTML)
+
+def get_admin_item(chat_id: int) -> Dict[int, JSONDict]:
+	"""
+	Retrieve admin list from Redis.
+	DEPRECATED: Use ADMINS_CACHE (TTLCache) directly instead.
+	"""
+	data = REDIS.get(f"admin{chat_id}")
+	if data:
+		return json.loads(data)
+	else:
+		raise KeyError
+
+
+def get_bot_admin_item(chat_id: int) -> ChatMember:
+	"""
+	Retrieve bot admin status from Redis.
+	DEPRECATED: Use BOT_ADMIN_CACHE (TTLCache) directly instead.
+	Note: Requires a live Bot object for de_json deserialization.
+	"""
+	data = REDIS.get(f"bot_admin{chat_id}")
+	if data:
+		return ChatMember.de_json(data=json.loads(data), bot=dispatcher.bot)
+	else:
+		raise KeyError
+
+
+def set_admin_item(chat_id: int, data: Dict[int, ChatMember]) -> None:
+	"""
+	Persist admin list to Redis.
+	DEPRECATED: Use ADMINS_CACHE (TTLCache) directly instead.
+	"""
+	REDIS.set(f"admin{chat_id}", json.dumps(data))
+
+
+def set_bot_admin_item(chat_id: int, data: ChatMember) -> None:
+	"""
+	Persist bot admin status to Redis.
+	DEPRECATED: Use BOT_ADMIN_CACHE (TTLCache) directly instead.
+	"""
+	REDIS.set(f"bot_admin{chat_id}", data.to_json())
+
+
+def get_callback(chat_id: int, message_id: int):
+	return json.loads(REDIS.get(f"cb{message_id}{chat_id}"))
+
+
+def set_callback(chat_id: int, message_id: int, data) -> None:
+	REDIS.set(f"cb{message_id}{chat_id}", json.dumps(data))
 
 anon_callbacks = {}

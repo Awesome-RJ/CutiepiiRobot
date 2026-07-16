@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,7 +29,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from sqlalchemy import Column, String
+from sqlalchemy import Boolean, Column, Integer, String, UnicodeText
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
 
@@ -45,13 +45,14 @@ Nightmode.__table__.create(checkfirst=True)
 
 
 def add_nightmode(chat_id: str):
-    nightmoddy = Nightmode(chat_id)
+    nightmoddy = Nightmode(str(chat_id))
     SESSION.add(nightmoddy)
     SESSION.commit()
 
 
 def rmnightmode(chat_id: str):
-    if rmnightmoddy := SESSION.query(Nightmode).get(chat_id):
+    rmnightmoddy = SESSION.query(Nightmode).get(str(chat_id))
+    if rmnightmoddy:
         SESSION.delete(rmnightmoddy)
         SESSION.commit()
 
@@ -64,7 +65,8 @@ def get_all_chat_id():
 
 def is_nightmode_indb(chat_id: str):
     try:
-        if s__ := SESSION.query(Nightmode).get(chat_id):
+        s__ = SESSION.query(Nightmode).get(str(chat_id))
+        if s__:
             return str(s__.chat_id)
     finally:
         SESSION.close()

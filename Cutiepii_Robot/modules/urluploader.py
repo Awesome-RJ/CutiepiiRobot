@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -33,20 +33,20 @@ import os
 import time
 import aiohttp
 
-from Cutiepii_Robot import LOGGER
-
 from Cutiepii_Robot.utils.pluginhelpers import humanbytes, time_formatter
+
+from Cutiepii_Robot import BOT_USERNAME, LOGGER
 
 
 async def download_file(url, file_name, message, start_time, bot):
     async with aiohttp.ClientSession() as session:
         time.time()
-        await download_coroutine(session, url, file_name, message, start_time,
-                                 bot)
+        await download_coroutine(session, url, file_name, message, start_time, bot)
     return file_name
 
 
-async def download_coroutine(session, url, file_name, event, start):
+async def download_coroutine(session, url, file_name, event, start, bot):
+
     CHUNK_SIZE = 1024 * 6  # 2341
     downloaded = 0
     display_message = ""
@@ -56,16 +56,12 @@ async def download_coroutine(session, url, file_name, event, start):
         if "text" in content_type and total_length < 500:
             return await response.release()
         await event.edit(
-            """**Initiating Download**
-**URL:** {}
-**File Name:** {}
-**File Size:** {}
-**© @Cutiepii_Robot**""".format(
-                url,
-                os.path.basename(file_name).replace("%20", " "),
-                humanbytes(total_length),
-            ),
-            parse_mode="md",
+            f"<b>Initiating Download</b>\n"
+            f"<b>URL:</b> {url}\n"
+            f"<b>File Name:</b> {os.path.basename(file_name).replace('%20', ' ')}\n"
+            f"<b>File Size:</b> {humanbytes(total_length)}\n"
+            f"<b>Powered by:</b> @{BOT_USERNAME}",
+            parse_mode="html",
         )
         with open(file_name, "wb") as f_handle:
             while True:
@@ -80,28 +76,23 @@ async def download_coroutine(session, url, file_name, event, start):
                     percentage = downloaded * 100 / total_length
                     speed = downloaded / diff
                     elapsed_time = round(diff) * 1000
-                    time_to_completion = (round(
-                        (total_length - downloaded) / speed) * 1000)
+                    time_to_completion = (
+                        round((total_length - downloaded) / speed) * 1000
+                    )
                     estimated_total_time = elapsed_time + time_to_completion
                     try:
                         total_length = max(total_length, downloaded)
-                        current_message = """Downloading : {}%
-URL: {}
-File Name: {}
-File Size: {}
-Downloaded: {}
-ETA: {}""".format(
-                            "%.2f" % (percentage),
-                            url,
-                            file_name.split("/")[-1],
-                            humanbytes(total_length),
-                            humanbytes(downloaded),
-                            time_formatter(estimated_total_time),
+                        current_message = (
+                            f"<b>Downloading:</b> {float(percentage):.2f}%\n"
+                            f"<b>URL:</b> {url}\n"
+                            f"<b>File Name:</b> {file_name.split('/')[-1]}\n"
+                            f"<b>File Size:</b> {humanbytes(total_length)}\n"
+                            f"<b>Downloaded:</b> {humanbytes(downloaded)}\n"
+                            f"<b>ETA:</b> {time_formatter(estimated_total_time)}"
                         )
                         if current_message not in [display_message, "empty"]:
                             LOGGER.debug(current_message)
-                            await event.edit(current_message,
-                                             parse_mode="html")
+                            await event.edit(current_message, parse_mode="html")
 
                             display_message = current_message
                     except Exception as e:

@@ -1,6 +1,8 @@
+Cutiepii_Robot/config.py
 Cutiepii_Robot/*.session
 Cutiepii_Robot/*.session-journal
-log.txt
+Cutiepii_Robot/config.ini
+LOGGER.txt
 *.pyc
 .idea/
 .project
@@ -17,3 +19,4 @@ env
 cutiepii.session-journal
 updates.txt
 *.exe
+log.txt

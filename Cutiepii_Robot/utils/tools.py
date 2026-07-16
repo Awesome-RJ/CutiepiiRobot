@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -45,7 +45,7 @@ def humanbytes(size: int) -> str:
     if size is None or isinstance(size, str):
         return ""
 
-    power = 2**10
+    power = 2 ** 10
     raised_to_pow = 0
     dict_power_n = {0: "", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
     while size > power:
@@ -58,21 +58,23 @@ def time_formatter(seconds: int) -> str:
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
-    tmp = (((str(days) + " day(s), ") if days else "") +
-           ((str(hours) + " hour(s), ") if hours else "") +
-           ((str(minutes) + " minute(s), ") if minutes else "") +
-           ((str(seconds) + " second(s), ") if seconds else ""))
+    tmp = (
+        ((str(days) + " day(s), ") if days else "")
+        + ((str(hours) + " hour(s), ") if hours else "")
+        + ((str(minutes) + " minute(s), ") if minutes else "")
+        + ((str(seconds) + " second(s), ") if seconds else "")
+    )
     return tmp[:-2]
 
 
 def human_to_bytes(size: str) -> int:
     units = {
-        "M": 2**20,
-        "MB": 2**20,
-        "G": 2**30,
-        "GB": 2**30,
-        "T": 2**40,
-        "TB": 2**40,
+        "M": 2 ** 20,
+        "MB": 2 ** 20,
+        "G": 2 ** 30,
+        "GB": 2 ** 30,
+        "T": 2 ** 40,
+        "TB": 2 ** 40,
     }
 
     size = size.upper()

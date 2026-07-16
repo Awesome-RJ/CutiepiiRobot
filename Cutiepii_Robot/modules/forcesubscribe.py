@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,220 +29,277 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import logging
-import time
+import html
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ChatMember
+from telegram.ext import ContextTypes, MessageHandler, filters, CallbackQueryHandler
+from telegram.error import BadRequest
+from telegram.constants import ParseMode
 
-from pyrogram import filters, Client
-from pyrogram.types import Message
-from pyrogram.errors import RPCError
-from pyrogram.errors.exceptions.bad_request_400 import (
-    ChannelPrivate,
-    ChatAdminRequired,
-    PeerIdInvalid,
-    UsernameNotOccupied,
-    UserNotParticipant,
-)
-from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
-
-from Cutiepii_Robot import BOT_ID, OWNER_ID as SUDO_USERS, pgram, CUTIEPII_PTB
+from Cutiepii_Robot import dispatcher
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_callback, cutiepii_cmd, cutiepii_msg
 from Cutiepii_Robot.modules.sql import forceSubscribe_sql as sql
 
-logging.basicConfig(level=logging.INFO)
 
-static_data_filter = filters.create(
-    lambda _, __, query: query.data == "onUnMuteRequest")
+import re
 
-
-@pgram.on_callback_query(static_data_filter)
-def _onUnMuteRequest(client, cb):
-    try:
-        user_id = cb.from_user.id
-        chat_id = cb.message.chat.id
-    except:
+@cutiepii_msg(pattern=filters.ChatType.GROUPS & ~filters.StatusUpdate.ALL, group=5)
+async def check_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Check if new member has subscribed to all configured channels/groups"""
+    message = update.effective_message
+    chat = update.effective_chat
+    user = update.effective_user
+    
+    # Get forcesubscribe settings
+    fs_setting = sql.fs_settings(chat.id)
+    if not fs_setting:
         return
-    if chat_db := sql.fs_settings(chat_id):
-        channel = chat_db.channel
+    
+    channel = fs_setting.channel
+    channels = [c.strip() for c in re.split(r'[,\s;]+', channel) if c.strip()]
+    
+    not_joined_channels = []
+    for chan in channels:
         try:
-            chat_member = client.get_chat_member(chat_id, user_id)
-        except:
-            return
-        if chat_member.restricted_by:
-            if chat_member.restricted_by.id == BOT_ID:
-                try:
-                    client.get_chat_member(channel, user_id)
-                    client.unban_chat_member(chat_id, user_id)
-                    cb.message.delete()
-                    # if cb.message.reply_to_message.from_user.id == user_id:
-                    # cb.message.delete()
-                except UserNotParticipant:
-                    client.answer_callback_query(
-                        cb.id,
-                        text=
-                        f"❗ Join our @{channel} channel and press 'UnMute Me' button.",
-                        show_alert=True,
-                    )
-                except ChannelPrivate:
-                    client.unban_chat_member(chat_id, user_id)
-                    cb.message.delete()
-
-            else:
-                client.answer_callback_query(
-                    cb.id,
-                    text=
-                    "❗ You have been muted by admins due to some other reason.",
-                    show_alert=True,
-                )
-        elif client.get_chat_member(chat_id, BOT_ID).status != "administrator":
-            client.send_message(
-                chat_id,
-                f"❗ **{cb.from_user.mention} is trying to UnMute himself but i can't unmute him because i am not an admin in this chat add me as admin again.**\n__#Leaving this chat...__",
-            )
-
-        else:
-            client.answer_callback_query(
-                cb.id,
-                text="❗ Warning! Don't press the button when you can talk.",
-                show_alert=True,
-            )
-
-
-@pgram.on_edited_message(filters.text & ~filters.private, group=1)
-def _check_member(client: Client, message: Message):
-    chat_id = message.chat.id
-    if chat_db := sql.fs_settings(chat_id):
+            member = await context.bot.get_chat_member(chan, user.id)
+            if member.status not in [ChatMember.MEMBER, ChatMember.ADMINISTRATOR, ChatMember.OWNER]:
+                not_joined_channels.append(chan)
+        except BadRequest:
+            not_joined_channels.append(chan)
+            
+    if not_joined_channels:
+        # User is not subscribed to all required chats
+        button = []
+        for chan in not_joined_channels:
+            try:
+                chat_info = await context.bot.get_chat(chan)
+                title = chat_info.title
+                invite_link = await context.bot.export_chat_invite_link(chan)
+            except BadRequest:
+                title = chan
+                invite_link = f"https://t.me/{chan.replace('@', '')}" if str(chan).startswith("@") else None
+            
+            if invite_link:
+                button.append([InlineKeyboardButton(f"Join {title}", url=invite_link)])
+        
+        button.append([InlineKeyboardButton("Unmute Me", callback_data=f"fs_unmute_{user.id}")])
+        
         try:
-            user_id = message.from_user.id
-        except:
-            return
-        try:
-            if client.get_chat_member(chat_id, user_id).status not in (
-                    "administrator",
-                    "creator",
-            ):
-                channel = chat_db.channel
-                try:
-                    client.get_chat_member(channel, user_id)
-                except UserNotParticipant:
-                    try:
-                        sent_message = message.reply_text(
-                            f"Welcome {message.from_user.mention} 🙏 \n **You havent joined our @{channel} Channel yet** 😭 \n \nPlease Join [Our Channel](https://telegram.dog/{channel}) and hit the **UNMUTE ME** Button. \n \n ",
-                            disable_web_page_preview=True,
-                            reply_markup=InlineKeyboardMarkup([
-                                [
-                                    InlineKeyboardButton(
-                                        "Join Channel",
-                                        url=f"https://telegram.dog/{channel}",
-                                    )
-                                ],
-                                [
-                                    InlineKeyboardButton(
-                                        "UnMute Me",
-                                        callback_data="onUnMuteRequest",
-                                    )
-                                ],
-                            ]),
-                        )
-
-                        client.restrict_chat_member(
-                            chat_id, user_id,
-                            ChatPermissions(can_send_messages=False))
-                    except ChatAdminRequired:
-                        sent_message.edit(
-                            "❗ **Cutiepii Robot 愛 is not an admin here..**\n__Give me ban permissions and retry.. \n#Ending FSub...__"
-                        )
-                    except RPCError:
-                        return
-
-                except ChatAdminRequired:
-                    client.send_message(
-                        chat_id,
-                        text=
-                        f"❗ **I not an admin of @{channel} channel.**\n__Give me admin of that channel and retry.\n#Ending FSub...__",
-                    )
-                except ChannelPrivate:
-                    return
-        except:
-            return
-
-
-@pgram.on_message(
-    filters.command([
-        "forcesubscribe", "forcesub", "forcesub@Cutiepii_Robot",
-        "forcesubscribe@Cutiepii_Robot"
-    ]) & ~filters.private)
-def config(client: Client, message: Message):
-    user = client.get_chat_member(message.chat.id, message.from_user.id)
-    if user.status == "creator" or user.user.id in SUDO_USERS:
-        chat_id = message.chat.id
-        if len(message.command) > 1:
-            input_str = message.command[1]
-            input_str = input_str.replace("@", "")
-            if input_str.lower() in ("off", "no", "disable"):
-                sql.disapprove(chat_id)
-                message.reply_text(
-                    "❌ **Force Subscribe is Disabled Successfully.**")
-            elif input_str.lower() in ("clear"):
-                sent_message = message.reply_text(
-                    "**Unmuting all members who are muted by me...**")
-                try:
-                    for chat_member in client.get_chat_members(
-                            message.chat.id, filter="restricted"):
-                        if chat_member.restricted_by.id == BOT_ID:
-                            client.unban_chat_member(chat_id,
-                                                     chat_member.user.id)
-                            time.sleep(1)
-                    sent_message.edit(
-                        "✅ **UnMuted all members who are muted by me.**")
-                except ChatAdminRequired:
-                    sent_message.edit(
-                        "❗ **I am not an admin in this chat.**\n__I can't unmute members because i am not an admin in this chat make me admin with ban user permission.__"
-                    )
-            else:
-                try:
-                    client.get_chat_member(input_str, "me")
-                    sql.add_channel(chat_id, input_str)
-                    message.reply_text(
-                        f"✅ **Force Subscribe is Enabled**\n__Force Subscribe is enabled, all the group members have to subscribe this [channel](https://telegram.dog/{input_str}) in order to send messages in this group.__",
-                        disable_web_page_preview=True,
-                    )
-                except UserNotParticipant:
-                    message.reply_text(
-                        f"❗ **Not an Admin in the Channel**\n__I am not an admin in the [channel](https://telegram.dog/{input_str}). Add me as a admin in order to enable ForceSubscribe.__",
-                        disable_web_page_preview=True,
-                    )
-                except (UsernameNotOccupied, PeerIdInvalid):
-                    message.reply_text("❗ **Invalid Channel Username.**")
-                except Exception as err:
-                    message.reply_text(f"❗ **ERROR:** ```{err}```")
-        elif sql.fs_settings(chat_id):
-            message.reply_text(
-                f"✅ **Force Subscribe is enabled in this chat.**\n__For this [Channel](https://telegram.dog/{sql.fs_settings(chat_id).channel})__",
-                disable_web_page_preview=True,
-            )
-        else:
-            message.reply_text(
-                "❌ **Force Subscribe is disabled in this chat.**")
-    else:
-        message.reply_text(
-            "❗ **Group Creator Required**\n__You have to be the group creator to do that.__"
+            await message.delete()
+        except BadRequest:
+            pass
+            
+        await context.bot.send_message(
+            chat.id,
+            f"Hello {user.mention_html()},\n\n"
+            f"You must join the following channels/groups to participate in this group:\n"
+            + "\n".join([f"- <b>{c}</b>" for c in not_joined_channels]) + "\n\n"
+            f"Please join them and click the 'Unmute Me' button below.",
+            parse_mode=ParseMode.HTML,
+            reply_markup=InlineKeyboardMarkup(button)
+        )
+        
+        # Mute user
+        await context.bot.restrict_chat_member(
+            chat.id,
+            user.id,
+            permissions=None
         )
 
 
-__help__ = """
-*Force Subscribe*:
-- Cutiepii Robot 愛 can mute members who are not subscribed your channel until they subscribe
-- When enabled I will mute unsubscribed members and show them a unmute button. When they pressed the button I will unmute them
+@cutiepii_callback(pattern=r"^fs_unmute_")
+async def fs_unmute_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle unmute button callback for multiple channels/groups"""
+    query = update.callback_query
+    chat = query.message.chat
+    user = query.from_user
+    
+    # Extract user_id from callback data
+    _, _, target_user_id = query.data.split("_")
+    target_user_id = int(target_user_id)
+    
+    if user.id != target_user_id:
+        await query.answer("This button is not configured for your user.", show_alert=True)
+        return
+    
+    # Get forcesubscribe settings
+    fs_setting = sql.fs_settings(chat.id)
+    if not fs_setting:
+        await query.answer("Force subscription requirements have been disabled for this chat.", show_alert=True)
+        return
+    
+    channel = fs_setting.channel
+    channels = [c.strip() for c in re.split(r'[,\s;]+', channel) if c.strip()]
+    
+    not_joined = []
+    for chan in channels:
+        try:
+            member = await context.bot.get_chat_member(chan, user.id)
+            if member.status not in [ChatMember.MEMBER, ChatMember.ADMINISTRATOR, ChatMember.OWNER]:
+                not_joined.append(chan)
+        except BadRequest:
+            not_joined.append(chan)
+            
+    if not not_joined:
+        try:
+            # User is subscribed, unmute them
+            await context.bot.restrict_chat_member(
+                chat.id,
+                user.id,
+                permissions=chat.permissions
+            )
+            await query.message.delete()
+            await query.answer("Access Granted\nYou have been successfully unmuted. Welcome to the group.", show_alert=True)
+        except BadRequest as e:
+            await query.answer(f"Error\nFailed to unmute: {str(e)}", show_alert=True)
+    else:
+        await query.answer("Action Denied\nYou must join all the required channels or groups before you can be unmuted.", show_alert=True)
 
-*Setup*
-1) First of all add me in the group as admin with ban users permission and in the channel as admin.
-Note: Only creator of the group can setup me and i will not allow force subscribe again if not done so.
 
-*Commmands*:
-➛ /forcesubscribe*:* To get the current settings.
-➛ /forcesubscribe <no/off/disable>*:* To turn of ForceSubscribe.
-➛ /forcesubscribe <channel username>*:* To turn on and setup the channel.
-➛ /forcesubscribe clear*:* To unmute all members who muted by me.
-Note: /forcesub is an alias of /forcesubscribe
+@cutiepii_cmd(command=["forcesubscribe", "fsub"], filters=filters.ChatType.GROUPS)
+async def force_subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Enable/disable force subscribe"""
+    message = update.effective_message
+    chat = update.effective_chat
+    user = update.effective_user
+    args = context.args
+    
+    # Check if user is admin
+    member = await context.bot.get_chat_member(chat.id, user.id)
+    if member.status not in [ChatMember.ADMINISTRATOR, ChatMember.OWNER]:
+        await message.reply_text("<b>Action Denied</b>\nYou do not have administrator privileges to run this command.", parse_mode=ParseMode.HTML)
+        return
+    
+    # Check bot admin status
+    bot_member = await context.bot.get_chat_member(chat.id, context.bot.id)
+    if not bot_member.can_restrict_members:
+        await message.reply_text("<b>Action Denied</b>\nI require the Restrict Members administrator permission to enable force subscription checks.", parse_mode=ParseMode.HTML)
+        return
+    
+    if not args:
+        # Show current settings
+        fs_setting = sql.fs_settings(chat.id)
+        if fs_setting:
+            await message.reply_text(
+                f"<b>Force Subscribe Status</b>\nForce subscribe is enabled.\nChannels/Groups: <code>{fs_setting.channel}</code>\n\n"
+                f"Use <code>/forcesubscribe off</code> to disable.\n"
+                f"Use <code>/forcesubscribe @channel1 @channel2</code> to set multiple targets.",
+                parse_mode=ParseMode.HTML
+            )
+        else:
+            await message.reply_text(
+                "<b>Force Subscribe Status</b>\nForce subscribe is disabled.\n\n"
+                "Use <code>/forcesubscribe @channel @group</code> to enable.",
+                parse_mode=ParseMode.HTML
+            )
+        return
+    
+    if args[0].lower() in ["off", "disable", "no"]:
+        sql.disapprove(chat.id)
+        await message.reply_text("<b>Force Subscribe Updated</b>\nForce subscription requirements have been disabled for this chat.", parse_mode=ParseMode.HTML)
+        # Log to log channel
+        import Cutiepii_Robot.modules.sql.log_channel_sql as log_sql
+        log_channel = log_sql.get_chat_log_channel(chat.id)
+        if log_channel:
+            admin_mention = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
+            log_txt = (
+                f"<b>{html.escape(chat.title)}:</b>\n"
+                f"#FORCESUBSCRIBE\n"
+                f"<b>Admin:</b> {admin_mention}\n"
+                f"<b>Status:</b> Disabled"
+            )
+            try:
+                await context.bot.send_message(log_channel, log_txt, parse_mode=ParseMode.HTML)
+            except Exception as e:
+                LOGGER.error(f"Failed to send forcesubscribe disable log: {e}")
+        return
+    
+    # Parse and validate multiple channels/groups
+    channels_arg = " ".join(args)
+    parsed_channels = [c.strip() for c in re.split(r'[,\s;]+', channels_arg) if c.strip()]
+    
+    if not parsed_channels:
+        await message.reply_text("<b>Invalid Command Usage</b>\nPlease provide at least one channel or group username/ID.", parse_mode=ParseMode.HTML)
+        return
+        
+    validated_channels = []
+    validated_titles = []
+    
+    for chan in parsed_channels:
+        try:
+            chat_info = await context.bot.get_chat(chan)
+            if chat_info.type not in ["channel", "supergroup", "group"]:
+                await message.reply_text(f"<b>Invalid Target</b>\n<code>{chan}</code> is not a valid channel or group type.", parse_mode=ParseMode.HTML)
+                return
+            
+            # Check if bot is admin in channel/group
+            bot_channel_member = await context.bot.get_chat_member(chan, context.bot.id)
+            if bot_channel_member.status not in [ChatMember.ADMINISTRATOR, ChatMember.OWNER]:
+                await message.reply_text(f"<b>Action Denied</b>\nI am not an administrator in <code>{chat_info.title}</code> ({chan}).", parse_mode=ParseMode.HTML)
+                return
+                
+            validated_channels.append(chan)
+            validated_titles.append(chat_info.title)
+        except BadRequest as e:
+            await message.reply_text(f"<b>Error</b>\nError validating <code>{chan}</code>: <code>{str(e)}</code>\n\nPlease verify that I am an administrator in that channel or group.", parse_mode=ParseMode.HTML)
+            return
+            
+    saved_str = ",".join(validated_channels)
+    sql.add_channel(chat.id, saved_str)
+    
+    titles_str = ", ".join(validated_titles)
+    await message.reply_text(f"<b>Force Subscribe Updated</b>\nForce subscription has been enabled for: <b>{titles_str}</b>.", parse_mode=ParseMode.HTML)
+    
+    # Log to log channel
+    import Cutiepii_Robot.modules.sql.log_channel_sql as log_sql
+    log_channel = log_sql.get_chat_log_channel(chat.id)
+    if log_channel:
+        admin_mention = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
+        log_txt = (
+            f"<b>{html.escape(chat.title)}:</b>\n"
+            f"#FORCESUBSCRIBE\n"
+            f"<b>Admin:</b> {admin_mention}\n"
+            f"<b>Status:</b> Enabled forcesubscribe for {titles_str} (<code>{saved_str}</code>)"
+        )
+        try:
+            await context.bot.send_message(log_channel, log_txt, parse_mode=ParseMode.HTML)
+        except Exception as e:
+            LOGGER.error(f"Failed to send forcesubscribe enable log: {e}")
+ 
+ 
+@cutiepii_cmd(command="remfsub", filters=filters.ChatType.GROUPS)
+async def remove_forcesubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.effective_message
+    chat = update.effective_chat
+    user = update.effective_user
+    
+    # Check if user is admin
+    member = await context.bot.get_chat_member(chat.id, user.id)
+    if member.status not in [ChatMember.ADMINISTRATOR, ChatMember.OWNER]:
+        await message.reply_text("<b>Action Denied</b>\nYou do not have administrator privileges to run this command.", parse_mode=ParseMode.HTML)
+        return
+        
+    sql.disapprove(chat.id)
+    await message.reply_text("<b>Force Subscribe Updated</b>\nForce subscription requirements have been disabled and removed successfully.", parse_mode=ParseMode.HTML)
+    
+    # Log to log channel
+    import Cutiepii_Robot.modules.sql.log_channel_sql as log_sql
+    log_channel = log_sql.get_chat_log_channel(chat.id)
+    if log_channel:
+        admin_mention = f"<a href='tg://user?id={user.id}'>{html.escape(user.first_name)}</a>"
+        log_txt = (
+            f"<b>{html.escape(chat.title)}:</b>\n"
+            f"#FORCESUBSCRIBE\n"
+            f"<b>Admin:</b> {admin_mention}\n"
+            f"<b>Status:</b> Disabled & Removed"
+        )
+        try:
+            await context.bot.send_message(log_channel, log_txt, parse_mode=ParseMode.HTML)
+        except Exception as e:
+            LOGGER.error(f"Failed to send forcesubscribe remove log: {e}")
 
-"""
-__mod_name__ = "F-Sub"
+
+# Handler registration
+
+
+__mod_name__ = "Force Subscribe"
+__help__ = True

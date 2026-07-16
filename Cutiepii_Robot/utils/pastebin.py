@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,27 +29,19 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import socket
-
-from asyncio import get_running_loop
-from functools import partial
+from Cutiepii_Robot import http
 
 
-def _netcat(host, port, content):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((host, port))
-    s.sendall(content.encode())
-    s.shutdown(socket.SHUT_WR)
-    while True:
-        data = s.recv(4096).decode("utf-8").strip("\n\x00")
-        if not data:
-            break
-        return data
-    s.close()
-
-
-async def paste(content):
-    loop = get_running_loop()
-    link = await loop.run_in_executor(
-        None, partial(_netcat, "ezup.dev", 9999, content))
-    return link
+async def paste(content: str) -> str:
+    try:
+        response = await http.post(
+            "https://dpaste.com/api/v2/",
+            data={"content": content, "expiry_days": 7},
+            timeout=15.0
+        )
+        if response.status_code == 201:
+            return response.text.strip()
+        else:
+            return f"Error: dpaste.com returned status code {response.status_code}"
+    except Exception as e:
+        return f"Error connecting to dpaste.com: {str(e)}"

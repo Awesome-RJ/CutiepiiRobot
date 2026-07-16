@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import threading
 import typing
 
-from sqlalchemy import Column, String, func, distinct, BigInteger, Boolean
+from sqlalchemy import Column, String, func, distinct, BigInteger, Boolean, select
 
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
@@ -105,23 +105,42 @@ def get_chat_setting(chat_id: int) -> typing.Optional[LogChannelSettings]:
         return SESSION.query(LogChannelSettings).get(chat_id)
 
 
-def set_chat_setting(setting: LogChannelSettings):
-    with LOGS_INSERTION_LOCK:
-        res: LogChannelSettings = SESSION.query(LogChannelSettings).get(setting.chat_id)
-        if res:
-            res.log_warn = setting.log_warn
-            res.log_action = setting.log_action
-            res.log_report = setting.log_report
-            res.log_joins = setting.log_joins
-            res.log_leave = setting.log_leave
-        else:
-            SESSION.add(setting)
-    SESSION.commit()
+def set_chat_setting(chatid, join=None, leave=None, warn=None, action=None, report=None):
+    # Accept (chatid, join, leave, warn, action, report) or a single LogChannelSettings instance
+    if isinstance(chatid, LogChannelSettings):
+        obj = chatid
+        chatid = obj.chat_id
+        join = obj.log_joins
+        leave = obj.log_leave
+        warn = obj.log_warn
+        action = obj.log_action
+        report = obj.log_report
+    elif join is None or leave is None or warn is None or action is None or report is None:
+        raise TypeError(
+            "set_chat_setting() requires 6 arguments: (chatid, join, leave, warn, action, report), "
+            "or a single LogChannelSettings instance."
+        )
+    try:
+        with LOGS_INSERTION_LOCK:
+            res = SESSION.query(LogChannelSettings).get(chatid)
+            if not res:
+                res = LogChannelSettings(chatid, join, leave, warn, action, report)
+            else:
+                res.log_warn = warn
+                res.log_action = action
+                res.log_report = report
+                res.log_joins = join
+                res.log_leave = leave
+            SESSION.add(res)
+            SESSION.commit()
+    finally:
+        SESSION.close()
 
 
 def set_chat_log_channel(chat_id, log_channel):
     with LOGS_INSERTION_LOCK:
-        if res := SESSION.query(GroupLogs).get(str(chat_id)):
+        res = SESSION.query(GroupLogs).get(str(chat_id))
+        if res:
             res.log_channel = log_channel
         else:
             res = GroupLogs(chat_id, log_channel)
@@ -137,7 +156,8 @@ def get_chat_log_channel(chat_id):
 
 def stop_chat_logging(chat_id):
     with LOGS_INSERTION_LOCK:
-        if res := SESSION.query(GroupLogs).get(str(chat_id)):
+        res = SESSION.query(GroupLogs).get(str(chat_id))
+        if res:
             if str(chat_id) in CHANNELS:
                 del CHANNELS[str(chat_id)]
 
@@ -156,7 +176,8 @@ def num_logchannels():
 
 def migrate_chat(old_chat_id, new_chat_id):
     with LOGS_INSERTION_LOCK:
-        if chat := SESSION.query(GroupLogs).get(str(old_chat_id)):
+        chat = SESSION.query(GroupLogs).get(str(old_chat_id))
+        if chat:
             chat.chat_id = str(new_chat_id)
             SESSION.add(chat)
             if str(old_chat_id) in CHANNELS:

@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -40,12 +40,12 @@ class Disable(BASE):
     chat_id = Column(String(14), primary_key=True)
     command = Column(UnicodeText, primary_key=True)
 
-    def __init__(self, chat_id, commands):
+    def __init__(self, chat_id, command):
         self.chat_id = chat_id
-        self.commands = commands
+        self.command = command
 
     def __repr__(self):
-        return f"Disabled cmd {self.commands} in {self.chat_id}"
+        return "Disabled cmd {} in {}".format(self.command, self.chat_id)
 
 
 Disable.__table__.create(checkfirst=True)
@@ -72,7 +72,9 @@ def disable_command(chat_id, disable):
 
 def enable_command(chat_id, enable):
     with DISABLE_INSERTION_LOCK:
-        if disabled := SESSION.query(Disable).get((str(chat_id), enable)):
+        disabled = SESSION.query(Disable).get((str(chat_id), enable))
+
+        if disabled:
             if enable in DISABLED.get(str(chat_id)):  # sanity check
                 DISABLED.setdefault(str(chat_id), set()).remove(enable)
 
@@ -120,6 +122,7 @@ def migrate_chat(old_chat_id, new_chat_id):
 
 
 def __load_disabled_commands():
+    global DISABLED
     try:
         all_chats = SESSION.query(Disable).all()
         for chat in all_chats:

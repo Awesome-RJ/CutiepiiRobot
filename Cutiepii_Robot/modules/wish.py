@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -31,15 +31,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import random
 
 from Cutiepii_Robot import OWNER_ID, telethn
+from Cutiepii_Robot.events import register
 
 from telethon import events, Button
 from telegram.constants import ParseMode
 
-BUTTON = [[
-    Button.url("❓ What Is This", "https://t.me/Black_Knights_Union/195")
-]]
-COMET = "https://telegra.ph/file/713fbfbdde25cc1726866.mp4"
-STAR = "https://telegra.ph/file/ad90b44c551cec31df76b.mp4"
+BUTTON = [[Button.url("❓ What Is This", "https://t.me/Black_Knights_Union/195")]]
+COMET = "https://te.legra.ph/file/713fbfbdde25cc1726866.mp4"
+STAR = "https://te.legra.ph/file/ad90b44c551cec31df76b.mp4"
 WISH = """
 **You can use** `/wish` **as a general Wishing Well of sorts**
 **For example:**
@@ -48,17 +47,13 @@ WISH = """
 /wish I had someone to /cuddle at night...`
 """
 
-
 @telethn.on(events.NewMessage(pattern="/wish ?(.*)"))
 async def wish(e):
-    quew = e.pattern_match.group(1)
-    if e.sender_id != OWNER_ID and not quew:
-        (await e.reply(WISH,
-                       parse_mode=ParseMode.MARKDOWN,
-                       buttons=BUTTON,
-                       file=STAR), )
-        return
-    if not e.is_reply:
-        mm = random.randint(1, 100)
-        DREAM = f"**Your wish has been cast.✨**\n\n__chance of success {mm}%__"
-        await e.reply(DREAM, buttons=BUTTON, file=COMET)
+ quew = e.pattern_match.group(1)
+ if e.sender_id != OWNER_ID and not quew:
+  (await e.reply(WISH, parse_mode=ParseMode.MARKDOWN, buttons=BUTTON, file=STAR),) 
+  return   
+ if not e.is_reply:
+         mm = random.randint(1,100)
+         DREAM = f"**Your wish has been cast.✨**\n\n__chance of success {mm}%__"
+         await e.reply(DREAM, buttons=BUTTON, file=COMET )

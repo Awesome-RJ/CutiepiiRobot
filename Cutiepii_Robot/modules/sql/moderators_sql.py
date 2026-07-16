@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -31,7 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import threading
 
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Integer
 from sqlalchemy.sql.sqltypes import BigInteger
 
 from Cutiepii_Robot.modules.sql import BASE, SESSION
@@ -47,7 +47,7 @@ class Mods(BASE):
         self.user_id = user_id
 
     def __repr__(self):
-        return f"<Mod {self.user_id}>"
+        return "<Mod %s>" % self.user_id
 
 
 Mods.__table__.create(checkfirst=True)
@@ -71,12 +71,14 @@ def is_modd(chat_id, user_id):
 
 def dismod(chat_id, user_id):
     with MOD_INSERTION_LOCK:
-        if dismod_user := SESSION.query(Mods).get((str(chat_id), user_id)):
+        dismod_user = SESSION.query(Mods).get((str(chat_id), user_id))
+        if dismod_user:
             SESSION.delete(dismod_user)
             SESSION.commit()
             return True
-        SESSION.close()
-        return False
+        else:
+            SESSION.close()
+            return False
 
 
 def list_modd(chat_id):

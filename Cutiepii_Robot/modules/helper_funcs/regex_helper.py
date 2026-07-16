@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -35,7 +35,7 @@ import regex
 def regex_searcher(regex_string, string):
     try:
         search = regex.search(regex_string, string, timeout=6)
-    except Exception:
+    except (TimeoutError, Exception):
         return False
     return search
 
@@ -47,6 +47,7 @@ def infinite_loop_check(regex_string):
         r"\(.{1,}\)\{.{1,}(,)?\}\(.*\)(\+|\* |\{.*\})",
     ]
     for match in loop_matches:
-        if match_1 := regex.search(match, regex_string):
+        match_1 = regex.search(match, regex_string)
+        if match_1:
             return True
     return False

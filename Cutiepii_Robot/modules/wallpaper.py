@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,24 +29,20 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import requests as r
-
 from random import randint
+import requests
+
 from telegram import Update
-from telegram.constants import ChatAction
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
+CallbackContext = ContextTypes.DEFAULT_TYPE
+from Cutiepii_Robot import PIXABAY_API, SUPPORT_CHAT, dispatcher, LOGGER, arq
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
+from Cutiepii_Robot.modules.sql.clear_cmd_sql import get_clearcmd
 
-from Cutiepii_Robot import SUPPORT_CHAT, WALL_API, CUTIEPII_PTB
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot.modules.helper_funcs.alternate import send_action
-
-# Wallpaper module powered by wall.alphacoders.com
-
-
-@send_action(ChatAction.UPLOAD_PHOTO)
-async def wall(update: Update, context: CallbackContext) -> None:
-    chat_id = update.effective_chat.id
+@cutiepii_cmd(command="wall", can_disable=True)
+async def wall(update: Update, context: CallbackContext):
     msg = update.effective_message
+    chat_id = update.effective_chat.id
     args = context.args
     msg_id = update.effective_message.message_id
     bot = context.bot
@@ -54,36 +50,102 @@ async def wall(update: Update, context: CallbackContext) -> None:
     if not query:
         await msg.reply_text("Please enter a query!")
         return
-    term = await query.replace(" ", "%20")
-    json_rep = r.get(
-        f"https://wall.alphacoders.com/api2.0/get.php?auth={WALL_API}&method=search&term={term}"
-    ).json()
-    if not json_rep.get("success"):
-        await msg.reply_text(f"An error occurred! Report this @{SUPPORT_CHAT}")
     else:
-        wallpapers = json_rep.get("wallpapers")
-        if not wallpapers:
+        caption = query
+        term = query.replace(" ", "+")
+        wallpaper = None
+        if arq:
+            try:
+                res = await arq.wall(query)
+                if res.ok:
+                    wallpapers = res.result
+                    if wallpapers:
+                        index = randint(0, len(wallpapers) - 1) if len(wallpapers) > 1 else 0
+                        wallpaper = wallpapers[index].get("url_image")
+            except Exception as e:
+                LOGGER.warning(f"ARQ wallpaper search failed: {e}")
+
+        if not wallpaper and PIXABAY_API:
+            try:
+                response = requests.get(f"https://pixabay.com/api/?key={PIXABAY_API}&q={term}&image_type=photo&per_page=200")
+                if response.status_code == 200:
+                    data = response.json()
+                    wallpapers = data.get("hits")
+                    if wallpapers:
+                        index = randint(0, len(wallpapers) - 1) if len(wallpapers) > 1 else 0
+                        wallpaper = wallpapers[index].get("largeImageURL")
+            except Exception as e:
+                LOGGER.warning(f"Pixabay search failed: {e}")
+
+        if not wallpaper:
+            try:
+                response = requests.get(f"https://wallhaven.cc/api/v1/search?q={term}")
+                if response.status_code == 200:
+                    data = response.json()
+                    wallpapers = data.get("data")
+                    if wallpapers:
+                        index = randint(0, len(wallpapers) - 1) if len(wallpapers) > 1 else 0
+                        wallpaper = wallpapers[index].get("path")
+            except Exception as e:
+                LOGGER.warning(f"Wallhaven search failed: {e}")
+
+        if not wallpaper:
             await msg.reply_text("No results found! Refine your search.")
             return
-        index = randint(0, len(wallpapers) - 1)  # Choose random index
-        wallpaper = wallpapers[index]
-        wallpaper = wallpaper.get("url_image")
-        wallpaper = wallpaper.replace("\\", "")
-        await bot.send_photo(
-            chat_id,
-            photo=wallpaper,
-            caption="Preview",
-            reply_to_message_id=msg_id,
-            timeout=60,
-        )
-        caption = query
-        await bot.send_document(
-            chat_id,
-            document=wallpaper,
-            filename="wallpaper",
-            caption=caption,
-            reply_to_message_id=msg_id,
-            timeout=60,
-        )
+        else:
+            wallpaper = wallpaper.replace("\\", "")
+            
+            import io
+            import httpx
+            img_bytes = None
+            try:
+                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
+                async with httpx.AsyncClient(timeout=20) as client:
+                    response = await client.get(wallpaper, headers=headers)
+                    if response.status_code == 200:
+                        img_bytes = response.content
+            except Exception as e:
+                LOGGER.warning(f"Failed to download wallpaper locally: {e}")
 
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("wall", wall))
+            if img_bytes:
+                photo_data = io.BytesIO(img_bytes)
+                doc_data = io.BytesIO(img_bytes)
+                filename = "wallpaper.jpg"
+                if "." in wallpaper.split("/")[-1]:
+                    filename = f"wallpaper.{wallpaper.split('.')[-1]}"
+            else:
+                photo_data = wallpaper
+                doc_data = wallpaper
+                filename = "wallpaper"
+
+            delmsg_preview = await bot.send_photo(
+                chat_id,
+                photo=photo_data,
+                caption="Preview",
+                reply_to_message_id=msg_id,
+                timeout=60,
+            )
+            delmsg = await bot.send_document(
+                chat_id,
+                document=doc_data,
+                filename=filename,
+                caption=caption,
+                reply_to_message_id=msg_id,
+                timeout=60,
+            )
+
+    cleartime = get_clearcmd(chat_id, "wall")
+
+    if cleartime:
+        # Schedule delete tasks (run_async removed in v20+)
+        import asyncio
+        async def _delete_task(msg):
+            await asyncio.sleep(cleartime.time)
+            try:
+                await msg.delete()
+            except:
+                pass
+        asyncio.create_task(_delete_task(delmsg_preview))
+        asyncio.create_task(_delete_task(delmsg))
+
+__mod_name__ = "Wallpaper"

@@ -1,0 +1,1339 @@
+language:
+  select: '<b>Language Selection</b>
+
+
+    Choose your preferred language for the bot.
+
+    This will change all bot messages and help text to your selected language.'
+  changed: Language changed successfully!
+  current: <b>Current Language:</b> English
+  help: |
+      <b>Language Selection</b>
+
+      Configure the bot interface language.
+
+      - <code>/language</code> or <code>/lang</code>: Open the language selection menu.
+      - <code>/currentlang</code>: Display the active language.
+help:
+  main: "<b>Main</b> commands available:\n➛ <code>/help</code>: PM's you this message.\n➛ <code>/help <module name></code>: PM's you info about that module.\n➛ <code>/donate</code>: information on how to donate!\n➛ <code>/settings</code>:\n   ❍ in PM: will send you your settings for all supported modules.\n   ❍ in a group: will redirect you to pm, with all that chat's settings.\n"
+admin:
+  help: |
+      <b>Admin Management Module</b>
+
+      This module allows group administrators to manage member roles, clean chat content, and configure rules.
+
+      <u><b>Role Modifications</b></u>
+
+      - <code>/promote <user> <title></code>: Promote a member to administrator with custom title.
+      - <code>/demote <user></code>: Demote an administrator back to standard member.
+      - <code>/lowpromote</code>: Promote with basic permissions.
+      - <code>/midpromote</code>: Promote with standard moderation permissions.
+      - <code>/highpromote</code>: Promote with maximum privileges.
+      - <code>/fullpromote</code>: Promote with all rights.
+      - <code>/manage_admins</code>: Interactive panel to adjust permissions.
+
+      <u><b>Chat Maintenance & Pinning</b></u>
+
+      - <code>/purge</code>: Delete all messages between the replied-to message and the current.
+      - <code>/del</code>: Delete the replied-to message.
+      - <code>/pin [loud]</code>: Pin the replied-to message. Add 'loud' to notify users.
+      - <code>/unpin</code>: Unpin the latest pinned message.
+      - <code>/unpinall</code>: Unpin all pinned messages.
+      - <code>/permapin</code>: Pin a message permanently.
+      - <code>/slowmode <seconds/off></code>: Limit message sending frequency.
+      - <code>/mute_all</code>: Restrict all normal members from messaging.
+      - <code>/unmute_all</code>: Allow all normal members to message again.
+      - <code>/zombies [clean]</code>: Find or clean deleted user accounts.
+
+      <u><b>Chat Configurations</b></u>
+
+      - <code>/setrules <text></code>: Define group rules.
+      - <code>/clearrules</code>: Clear group rules.
+      - <code>/rules</code>: Display group rules.
+      - <code>/logchannel</code>: Get the registered log channel.
+      - <code>/setlog</code>: Set the current chat as log channel.
+      - <code>/unsetlog</code>: Unset the log channel.
+      - <code>/antichannel <on/off></code>: Restrict members from sending messages as channels.
+      - <code>/cleanlinked <on/off></code>: Automatically delete messages forwarded from linked channels.
+      - <code>/invitelink</code>: Retrieve the chat invite link.
+      - <code>/title <text></code>: Set custom title for an administrator.
+      - <code>/admincache</code>: Refresh the administrator database cache.
+      - <code>/userlist</code>: Generate a text file containing all group members.
+      - <code>/setgtitle <text></code>: Update group name.
+      - <code>/setgpic</code>: Update group profile photo.
+      - <code>/delgpic</code>: Remove group photo.
+      - <code>/setgdesc <text></code>: Update group bio, showing this fix it in all yaml and string.
+      - <code>/setgstickers</code>: Set group sticker pack.
+bans:
+  help: |
+      <b>Moderation & Ban System</b>
+
+      Restrict, ban, or kick members violating group policies.
+
+      - <code>/kickme</code>: Exit the group voluntarily.
+      - <code>/banme</code>: Ban yourself from the group.
+      - <code>/ban <user></code>: Ban a member permanently.
+      - <code>/sban <user></code>: Silently ban a member and delete the command.
+      - <code>/tban <user> <time></code>: Ban a member temporarily (e.g., 5m, 2h, 1d).
+      - <code>/unban <user></code>: Revoke ban for a user.
+      - <code>/kick <user></code>: Remove a member from the chat.
+      - <code>/mute <user></code>: Mute a member permanently.
+      - <code>/dmute <user></code>: Mute a member and delete their message.
+      - <code>/smute <user></code>: Silently mute a member.
+      - <code>/dsmute <user></code>: Silently mute and delete message.
+      - <code>/tmute <user> <time></code>: Mute a member temporarily.
+      - <code>/dtmute <user> <time></code>: Temporarily mute and delete message.
+      - <code>/unmute <user></code>: Unmute a member.
+      - <code>/snipe <user></code>: Ban a user and purge their recent messages.
+warns:
+  help: |
+      <b>Warnings System</b>
+
+      Track warnings and automate restrictions for repeated offenses.
+
+      - <code>/warns <user></code>: View a member's warnings list.
+      - <code>/warn <user></code>: Issue a warning.
+      - <code>/swarn <user></code>: Silently issue a warning.
+      - <code>/dwarn <user></code>: Warn and delete trigger message.
+      - <code>/dswarn <user></code>: Silently warn and delete trigger message.
+      - <code>/resetwarn <user></code>: Reset all warnings for a member.
+      - <code>/rmwarn <user></code>: Remove the latest warning for a member.
+      - <code>/warnlist</code>: List all automated warning keyword filters.
+      - <code>/addwarn <keyword> <reply></code>: Add warning on keyword detection.
+      - <code>/nowarn <keyword></code>: Remove a warning keyword filter.
+      - <code>/warnlimit <number></code>: Set warnings threshold before action.
+      - <code>/setwarnmode <ban/kick/mute></code>: Configure warning threshold action.
+antiflood:
+  help: |
+      <b>Anti-Flood Control</b>
+
+      Prevent users from spamming multiple messages consecutively.
+
+      - <code>/flood</code>: View current anti-flood configurations.
+      - <code>/setflood <number/off></code>: Define consecutive message limits.
+      - <code>/setfloodmode <action> [time]</code>: Set limit action (ban/kick/mute/tban/tmute).
+welcome:
+  help: |
+      <b>Welcome Greetings</b>
+
+      Welcome new members and customize goodbye templates.
+
+      - <code>/welcome <on/off></code>: Enable or disable greetings.
+      - <code>/welcome</code>: View active welcome configurations.
+      - <code>/setwelcome <text></code>: Define a custom welcome message (supports media captions).
+      - <code>/setgoodbye <text></code>: Define a custom goodbye message.
+      - <code>/resetwelcome</code>: Reset welcome message to default.
+      - <code>/resetgoodbye</code>: Reset goodbye message to default.
+      - <code>/cleanwelcome <on/off></code>: Automatically delete the previous welcome message.
+      - <code>/cleanservice <on/off></code>: Clean Telegram's join/left service messages.
+      - <code>/welcomehelp</code>: View list of formatting tags and variables.
+      - <code>/welcomemute <on/off/soft/strong/captcha></code>: Restrict members until verification.
+      - <code>/welcomemutehelp</code>: Retrieve welcome mute system details.
+locks:
+  help: |
+      <b>Chat Media Locks</b>
+
+      Lock specific content types to prevent spam (stickers, links, voice, etc.).
+
+      - <code>/lock <type></code>: Lock a specific content type.
+      - <code>/unlock <type></code>: Unlock a content type.
+      - <code>/locks</code>: View active group locks.
+      - <code>/locktypes</code>: List all lockable media and message types.
+notes:
+  help: |
+      <b>Custom Group Notes</b>
+
+      Save text shortcuts or media attachments for quick retrieval.
+
+      - <code>/get <name></code> or <code>#<name></code>: Retrieve a saved note.
+      - <code>/notes</code>: View all saved notes in the group.
+      - <code>/save <name> [text]</code>: Save the replied message or text as a note.
+      - <code>/clear <name></code>: Delete a saved note.
+      - <code>/deleteall</code>: Clear all saved notes in the group.
+filters:
+  help: |
+      <b>Keyword Filters</b>
+
+      Automate replies to custom keywords.
+
+      - <code>/filters</code>: List all active custom filters.
+      - <code>/filter <keyword> <reply></code>: Set auto-reply for a keyword (supports media).
+      - <code>/stop <keyword></code>: Remove a keyword filter.
+      - <code>/removeallfilters</code>: Delete all filters from the chat database.
+blacklist:
+  help: |
+      <b>Blacklist Filters</b>
+
+      Block specific words from being sent in the chat.
+
+      - <code>/blacklist</code>: View blacklisted words.
+      - <code>/addblacklist <word></code>: Add a word to the blacklist.
+      - <code>/unblacklist <word></code>: Remove a word from the blacklist.
+      - <code>/blacklistmode <mode></code>: Configure default action (del/warn/ban/kick/mute).
+      - <code>/blocklistdelete <on/off></code>: Toggle automatic word deletion.
+      - <code>/removeallblacklists</code>: Clear the blacklist.
+fun:
+  help: |
+      <b>Entertainment & Fun</b>
+
+      Amuse members with animations, games, and text utilities.
+
+      - <code>/runs</code>: Interactive text run generator.
+      - <code>/slap</code>: Slap another user.
+      - <code>/pat</code>: Pat another user.
+      - <code>/hug</code>: Hug another user.
+      - <code>/cuddle</code>: Cuddle another user.
+      - <code>/kiss</code>: Kiss another user.
+      - <code>/flirt</code>: Flirt with someone.
+      - <code>/love</code>: Love percentage calculator.
+      - <code>/meme</code>: Fetch a random SFW meme.
+      - <code>/weebify <text></code>: Convert text to anime/weeb fonts.
+      - <code>/owo <text></code>: Convert text to owo format.
+disasters:
+  help: |
+      <b>Elevation & Elevated Levels</b>
+
+      View and manage bot elevated privileges (dev, sudo, support).
+
+      - <code>/devlist</code>: View developer-level accounts.
+      - <code>/sudolist</code>: View sudo-level accounts.
+      - <code>/supportlist</code>: View support-level accounts.
+      - <code>/whitelistlist</code>: View whitelisted accounts.
+android:
+  help: |
+      <b>Android Utilities</b>
+
+      Search Android OS ROMs, recoveries, and device specs.
+
+      - <code>/magisk</code>: Get latest Magisk releases.
+      - <code>/twrp <codename></code>: Get official TWRP links for a device.
+      - <code>/device <codename></code>: Retrieve technical specifications of a phone.
+guestbot:
+  help: |
+      <b>Guest Tracking</b>
+
+      Monitor guest and temporary members in the chat.
+
+      - <code>/guestinfo <user></code>: Get membership stats of a user.
+      - <code>/gueststats</code>: Show stats of members vs guests.
+inline:
+  help: |
+      <b>Inline Search Mode</b>
+
+      Access interactive search features inline.
+
+      Type <code>@BotUsername</code> in any chat followed by:
+
+      - <code>neko</code>: SFW anime neko images.
+      - <code>wallpaper</code>: High quality anime wallpapers.
+      - <code>slap</code>: Slapping animations.
+      - <code>lick</code>: Licking animations.
+      - <code>anime <query></code>: Search AniList database.
+telegraph:
+  help: |
+      <b>Telegraph & Upload Utilities</b>
+
+      Upload media files and enhance images.
+
+      - <code>/tgm</code>: Reply to media to get a shareable Telegraph/Catbox link.
+      - <code>/tgt [text]</code>: Upload raw text to Telegraph.
+      - <code>/up <url></code>: Upload external files directly to Telegram.
+      - <code>/upscale</code>: Enhance and upscale an image.
+translate:
+  help: |
+      <b>Translation & Speech</b>
+
+      Translate text and generate voice messages.
+
+      - <code>/tr <lang> <text></code>: Translate text to target language.
+      - <code>/languages</code>: List all supported language codes.
+      - <code>/tts <text></code>: Convert text to speech.
+quotes:
+  help: |
+      <b>Quotes & Sticker Quotes</b>
+
+      Get anime quotes, shayaris, or generate quote stickers.
+
+      - <code>/animequote</code>: Retrieve a random anime quote.
+      - <code>/shayri</code>: Retrieve a Hindi Shayari.
+      - <code>/q [index]</code>: Reply to messages to generate a quote sticker.
+sgen:
+  help: |
+      <b>Session String Generator</b>
+
+      Generate Pyrogram or Telethon session strings.
+
+      - <code>/sgen</code>: Run session wizard in PM.
+sports:
+  help: |
+      <b>Sports Updates</b>
+
+      Retrieve real-time sports results.
+
+      - <code>/cricket</code>: Get live cricket score summaries.
+      - <code>/football</code>: Get active football fixtures.
+stickers:
+  help: |
+      <b>Sticker Tools</b>
+
+      Inspect and customize stickers.
+
+      - <code>/stickerinfo</code>: Get detail about a sticker.
+      - <code>/mmf <top> ; <bottom></code>: Reply to a sticker to draw memes.
+mentionall:
+  help: |
+      <b>Tag All Members</b>
+
+      Mention every member in the group chat.
+
+      - <code>/tagall <text></code>: Tag all members.
+      - <code>/etagall <text></code>: Tag all members with emojis.
+logomaker:
+  help: |
+      <b>Logo Generator</b>
+
+      Create customized text logos.
+
+      - <code>/logo <text></code>: Generate a standard logo.
+      - <code>/clogo <text></code>: Generate custom logo.
+massaction:
+  help: |
+      <b>Mass Administration</b>
+
+      Perform mass actions across the group.
+
+      - <code>/unbanall</code>: Unban all restricted accounts.
+      - <code>/unmuteall</code>: Unmute all restricted accounts.
+pokedex:
+  help: |
+      <b>Pokedex Search</b>
+
+      Query Pokemon information.
+
+      - <code>/pokemon <name></code>: View Pokedex stats and info.
+games:
+  help: |
+      <b>Games & Quizzes</b>
+
+      Play flag guessing, riddles, or Pokemon silhouettes.
+
+      - <code>/flagguess</code>: Start a flag guessing round.
+      - <code>/riddle</code>: Solve riddles.
+      - <code>/pokeguess</code>: Guess the Pokemon silhouette.
+      - <code>/rps</code>: Rock, Paper, Scissors game.
+anime:
+  help: |
+      <b>Anime Database</b>
+
+      Query waifus, schedules, recommendations, and news.
+
+      - <code>/waifu</code>: Get waifu art.
+      - <code>/animenews</code>: Get latest anime news updates.
+      - <code>/recommend</code>: Get anime recommendation.
+media:
+  help: |
+      <b>Paid Media & Analytics</b>
+
+      Track paid media statistics and suggestion queues.
+
+      - <code>/setprice</code>: Set media unlock price.
+      - <code>/mediaanalytics</code>: View media stats.
+connection:
+  help: |
+      <b>Remote Connection</b>
+
+      Configure settings and execute commands in groups from PM.
+
+      - <code>/connect [chat_id]</code>: Connect to a chat.
+      - <code>/connection</code>: Show current connection status.
+      - <code>/disconnect</code>: Disconnect from the active chat.
+      - <code>/allowconnect <on/off></code>: Toggle allow connections.
+disable:
+  help: |
+      <b>Disable Commands</b>
+
+      Disable specific commands in the group chat.
+
+      - <code>/disable <command></code>: Disable a command.
+      - <code>/enable <command></code>: Enable a command.
+      - <code>/cmds</code>: View disabled commands.
+      - <code>/enableall</code>: Re-enable all commands.
+nightmode:
+  help: |
+      <b>Night Mode</b>
+
+      Schedule read-only hours for the group.
+
+      - <code>/nightmode [HH:MM] [HH:MM]</code>: Define night read-only hours.
+      - <code>/nightmode off</code>: Disable night mode scheduler.
+raid:
+  help: |
+      <b>Raid Mode Security</b>
+
+      Defend the chat against join spam and raids.
+
+      - <code>/raidmode [on/off]</code>: Toggle raid mode.
+      - <code>/raidtime [time]</code>: Set raid mode activation time.
+      - <code>/lockdown [on/off]</code>: Restrict normal users from chatting.
+muting:
+  help: |
+      <b>Restrictions & Mutes</b>
+
+      Restrict sending messages or media dynamically.
+
+      - <code>/restrict</code>: Limit user permissions.
+      - <code>/unrestrict</code>: Restore user permissions.
+privatenotes:
+  help: |
+      <b>Private Notes Redirect</b>
+
+      Send note responses directly to the user's private messages.
+
+      - <code>/privatenotes [on/off]</code>: Toggle private notes redirection.
+blacklist_chats:
+  help: |
+      <b>Chat Blacklist</b>
+
+      Blacklist group chats to prevent bot operations.
+
+      - <code>/blacklist_chat [chat_id]</code>: Blacklist a group by ID.
+      - <code>/whitelist_chat [chat_id]</code>: Whitelist a group.
+business:
+  help: |
+      <b>Business Automation</b>
+
+      Configure business messages and smart reply triggers.
+
+      - <code>/bizgreet [text]</code>: Customize business greetings.
+      - <code>/biztrigger <word> <reply></code>: Configure quick auto-responses.
+devutils:
+  help: |
+      <b>Developer Utilities</b>
+
+      Daily tools for text parsing, encoding, and calculations.
+
+      - <code>/search <query></code>: Perform DDG quick search.
+      - <code>/genpass [length]</code>: Generate a secure password.
+      - <code>/hash <text></code>: Generate MD5, SHA-256 hashes.
+      - <code>/b64en</code>: Encode text to Base64.
+      - <code>/b64de</code>: Decode Base64 text.
+      - <code>/calc <expr></code>: Evaluate a math expression safely.
+      - <code>/qr <text></code>: Generate QR code.
+ranking:
+  help: |
+      <b>Chat Ranking System</b>
+
+      Track active users levels, XP, and streaks.
+
+      - <code>/rank</code>: Check member level and XP.
+      - <code>/leaderboard</code>: Show top active users.
+      - <code>/streak</code>: Show consecutive messaging streak.
+feeds:
+  help: |
+      <b>RSS & Feed Subscriptions</b>
+
+      Subscribe to news feeds directly in chat.
+
+      - <code>/add_feed <url></code>: Subscribe to RSS feed.
+      - <code>/feeds</code>: View feed subscriptions.
+forcesubscribe:
+  help: |
+      <b>Force Channel Subscription</b>
+
+      Require joining a channel/group to participate.
+
+      - <code>/forcesubscribe @channel</code>: Set channel requirement.
+      - <code>/forcesubscribe off</code>: Disable forcesubscribe.
+confession:
+  help: |
+      <b>Anonymous Confessions</b>
+
+      Send anonymous messages to users or groups.
+
+      - <code>/confess</code>: Run confession wizard in PM.
+      - <code>/blockconfess</code>: Block incoming confessions.
+pypi:
+  help: |
+      <b>PyPI Package Lookup</b>
+
+      Search Python Package Index database.
+
+      - <code>/pypi <package></code>: Get PyPI package details.
+tmdb:
+  help: |
+      <b>TMDB Search</b>
+
+      Search movie and TV show info.
+
+      - <code>/tmdb <query></code>: Search TMDB.
+torrent:
+  help: |
+      <b>Torrent Lookup</b>
+
+      Search torrent trackers for magnet links.
+
+      - <code>/torrent <query></code>: Search torrent indexes.
+wallpaper:
+  help: |
+      <b>Wallpaper Downloader</b>
+
+      Download wallpapers.
+
+      - <code>/wall <query></code>: Search and download wall.
+antinsfw:
+  help: |
+      <b>Anti-NSFW Filter</b>
+
+      Automatically detect and remove NSFW (Not Safe For Work) content from your group!
+
+      <b>Admin Commands:</b>
+
+      - <code>/antinsfw</code>: Check current settings status.
+      - <code>/antinsfw [on/off]</code>: Toggle NSFW media detection.
+      - <code>/antinsfw mode [delete/warn/mute/kick/ban]</code>: Set action for detected NSFW content.
+      - <code>/antinsfw log [on/off]</code>: Toggle persistent group chat logging.
+
+      <b>Features:</b>
+
+      • Automatically scans images for NSFW content.
+      • Deletes inappropriate images automatically.
+      • Warns, restricts, mutes, kicks, or bans users based on active action mode.
+      • Logs all detections to linked log channels and optionally to group chats.
+      • Admin messages are not checked.
+
+      <b>Note:</b> This feature uses AI detection and may not be 100% accurate.
+afk:
+  help: |
+      <b>Away From Keyboard (AFK)</b>
+
+      Mark yourself as AFK when you are busy or away. The bot will notify users when they mention or reply to you.
+
+      <b>Commands:</b>
+
+      - <code>/afk &lt;reason&gt;</code>: Set yourself as AFK with an optional reason.
+      - <code>/brb &lt;reason&gt;</code>: Set yourself as AFK.
+      - <code>/afkdel [on/off/yes/no]</code>: Enable/disable auto delete AFK messages in the group (Admin only).
+      - <code>off</code> / <code>brb</code> (at the start of a message): Clear your AFK status.
+
+      <b>Features:</b>
+
+      • <b>Media AFK:</b> Reply to any media (photo, gif, video, document, voice) with `/afk` to set it as your AFK status!
+      • <b>AFK Duration:</b> Shows exactly how long you have been away.
+      • <b>Auto-Clear:</b> Sending any message will clear your AFK status.
+      • <b>Auto-Delete:</b> Automatically deletes AFK notification messages after 11 seconds to keep the group clean (Default: Enabled).
+antispam:
+  help: |
+      <b>AntiSpam</b>
+
+      Anti-Spam technology is used by the bot developers to global ban (gban) spammers across all chats. This helps protect you and your groups by removing spam flooders as quickly as possible.
+
+      <b>Admin Commands:</b>
+      - <code>/antispam [on/off/yes/no]</code>: Toggle enforcing global bans in this chat or return the current setting.
+
+      <b>Note:</b> Users can appeal gbans or report spammers at our support group.
+approvals:
+  help: |
+      <b>Approval System</b>
+
+      Sometimes you might trust a user not to send unwanted content. While you might not want to make them an administrator, you can approve them so locks, blacklists, and flood control do not apply to them.
+
+      <b>User Commands:</b>
+      - <code>/approval</code>: Check a user's approval status in this chat.
+
+      <b>Admin Commands:</b>
+      - <code>/approve</code>: Approve a user. Locks, blacklists, and flood control will no longer apply to them.
+      - <code>/unapprove</code>: Revoke a user's approved status.
+      - <code>/approved</code>: List all approved users in the chat.
+
+      <b>Group Owner Commands:</b>
+      - <code>/unapproveall</code>: Unapprove all users in the chat (this action cannot be undone).
+backups:
+  help: |
+      <b>Backup & Restore</b>
+
+      Easily backup and restore your chat configurations (rules, notes, and welcome settings).
+
+      <b>Group Owner Commands:</b>
+      - <code>/import</code>: Reply to a backup file to import the configuration into the chat.
+      - <code>/export</code>: Export the chat configuration data.
+
+      <b>Note:</b> Media files cannot be imported during restore operations due to Telegram API restrictions.
+alarm:
+  help: |
+      ❍ /setalarm <(date) (time)|zone|reason>: sets a alarm/reminder
+      **Syntax:** `/setalarm 01/01/2000 10:00:00 AM | America/New_York | breakfast`
+      **NOTE:** Please turn on notifications for @{BOT_USERNAME} otherwise you will not get notification for the alarm !
+anilist:
+  help: |
+      *AniList Search Integration*
+
+      Search for anime, manga, and characters directly from AniList!
+
+      *Commands:*
+      ❍ /anilist or /alanime <anime name>: Search for anime on AniList
+      ❍ /almanga <manga name>: Search for manga on AniList
+      ❍ /alcharacter <character name>: Search for character on AniList
+      ❍ /airing <anime name>: Show the next airing episode time for the anime
+anti-flood:
+  help: |
+      *Anti-Flood System:*
+
+      Antiflood allows you to take action on users that send more than X messages in a row. \ Exceeding the set flood limit will result in restricting that user.
+
+      This will mute users if they send more than 10 messages in a row. Bots are ignored.
+
+      *Commands:*
+      ❍ /flood: Get the current flood control setting
+      *Admins only:*
+      ❍ /setflood <int/'no'/'off'>: Enable or disable flood control
+      *Example:* `/setflood 10`
+      ❍ /setfloodmode <ban/kick/mute/tban/tmute> <value>: Action to perform when user has exceeded flood limit
+      *Note:*
+      - Value must be specified for tban and tmute
+      - Time format can be:
+      - `5m` = 5 minutes
+      - `6h` = 6 hours
+      - `3d` = 3 days
+      - `1w` = 1 week
+bans/mutes:
+  help: |
+      *User Commands:*
+      ❍ /kickme: Kicks the user who issued the command
+      ❍ /banme: Bot will ban you from the group
+      ❍ /roar: Self unban
+      *Ban Commands (Admins only):*
+      ❍ /ban <userhandle>: Ban a user (via handle or reply)
+      ❍ /sban <userhandle>: Silently ban a user (deletes command and trigger)
+      ❍ /tban <userhandle> x(m/h/d): Ban a user for `x` time (via handle or reply). `m` = minutes, `h` = hours, `d` = days
+      ❍ /stban <userhandle> x(m/h/d): Silently temporary ban a user
+      ❍ /dtban <userhandle> x(m/h/d): Delete replied-to message and temporary ban a user
+      ❍ /dban <userhandle>: Ban a user and delete the replied-to message (via handle or reply)
+      ❍ /unban <userhandle>: Unban a user (via handle or reply)
+      ❍ /kick <userhandle>: Kick a user out of the group (via handle or reply)
+      ❍ /dkick <userhandle>: Kick a user out of the group silently
+      ❍ /skick <userhandle>: Kick a user and delete the replied-to message
+      ❍ /dskick <userhandle>: Kick a user and delete both sent and replied-to messages
+      ❍ /listban [user] [groups]: Ban a user from groups listed in a message (devs only)
+      ❍ /listunban [user] [groups]: Unban a user from groups listed in a message (devs only)
+      *Mute Commands (Admins only):*
+      ❍ /mute <userhandle>: Silence a user. Can also be used as a reply, muting the replied-to user
+      ❍ /dmute <userhandle>: Silence a user silently
+      ❍ /smute <userhandle>: Silence a user and delete the replied-to message
+      ❍ /dsmute <userhandle>: Silence a user and delete both sent and replied-to messages
+      ❍ /tmute <userhandle> x(m/h/d): Mute a user for x time (via handle or reply). `m` = minutes, `h` = hours, `d` = days
+      ❍ /stmute <userhandle> x(m/h/d): Silently temporary mute a user
+      ❍ /dtmute <userhandle> x(m/h/d): Delete replied-to message and temporary mute a user
+      ❍ /unmute <userhandle>: Unmute a user. Can also be used as a reply
+barcode:
+  help: |
+      ❍ /barcode <text>: makes a barcode out of the text, crop the barcode if you don't want to reveal the text
+blacklists:
+  help: |
+      *Blacklist System:*
+
+      Blacklists are used to stop certain triggers from being said in a group. Any time the trigger is mentioned, \ the message will immediately be deleted. A good combo is to pair this with warn filters!
+
+      *NOTE:* Blacklists do not affect group admins.
+      *User Commands:*
+      ❍ /blacklist: View the current blacklisted words
+      *Admins only:*
+      ❍ /addblacklist <triggers>: Add a trigger to the blacklist. Each line is considered one trigger, so using different lines will allow you to add multiple triggers
+      ❍ /unblacklist <triggers>: Remove triggers from the blacklist. Same newline logic applies here, so you can remove multiple triggers at once
+      ❍ /blacklistmode <off/del/warn/ban/kick/mute/tban/tmute>: Action to perform when someone sends blacklisted words
+      *Blacklist Stickers:* Blacklist stickers are used to stop certain stickers. Whenever a blacklisted sticker is sent, the message will be deleted immediately.
+      *NOTE:* Blacklist stickers do not affect group admins.
+      *Commands:*
+      ❍ /blsticker: See current blacklisted stickers
+      *Admins only:*
+      ❍ /addblsticker <sticker link>: Add a sticker to the blacklist. Can be added via reply to sticker
+      ❍ /unblsticker <sticker link>: Remove stickers from blacklist. Same newline logic applies here, so you can delete multiple triggers at once
+      ❍ /rmblsticker <sticker link>: Same as above
+      ❍ /blstickermode <delete/ban/tban/mute/tmute>: Set the default action when users send blacklisted stickers
+      *Note:* <sticker link> can be `https://t.me/addstickers/<stickerpackname>` or just `<sticker>` or reply to the sticker message
+knowledge:
+  help: |
+      *Knowledge & Comics:*
+
+      Search books, get Wiktionary definitions, and view xkcd comics.
+
+      *Commands:*
+      ❍ /book [query]: Search for a book on Google Books.
+      ❍ /wiktionary [word]: Get a detailed Wiktionary definition.
+      ❍ /xkcd [id]: View xkcd comics.
+chatbot:
+  help: |
+      *Chatbot:*
+
+      Talk to the bot interactively using the AI Brainshop integration!
+
+      *Commands:*
+      ❍ /chatbot: Enable or disable chatbot in the group.
+      *Usage:*
+      - Chatbot is **always enabled** in private messages.
+      - In groups, once enabled, reply to any bot message or mention the bot to start a conversation.
+boosts:
+  help: |
+      *Premium Chat Boosts:*
+      ❍ /boosts: Get the current boost level and count of the group.
+      ❍ /boost: Get the current boost level and count of the group.
+cleaning:
+  help: |
+      *Blue Text Cleaner:*
+
+      Blue text cleaner removes any made-up commands that people send in your chat.
+
+      *Commands:*
+      ❍ /cleanblue <on/off/yes/no>: Clean commands after sending
+      ❍ /ignoreblue <word>: Prevent auto-cleaning of the command
+      ❍ /unignoreblue <word>: Remove prevent auto-cleaning of the command
+      ❍ /listblue: List currently whitelisted commands
+      *Disaster-only commands (admins cannot use these):*
+      ❍ /gignoreblue <word>: Globally ignore bluetext cleaning of saved words across {BOT_NAME}
+      ❍ /ungignoreblue <word>: Remove said command from global cleaning list
+covid:
+  help: |
+      *🦠 COVID-19 Statistics:*
+
+      Get real-time COVID-19 statistics for any country or globally!
+
+      *Commands:*
+      ❍ /covid: Global statistics
+      ❍ /covid <country>: Country-specific stats
+      *Examples:*
+      - `/covid` - Global stats
+      - `/covid USA` - USA statistics
+      - `/covid India` - India statistics
+      - `/covid UK` - UK statistics
+      *Features:*
+      - 📊 Real-time data
+      - 🌍 Global statistics
+      - 🏳️ Country-specific stats
+      - 📈 Daily updates (today's cases/deaths)
+      - 💚 Recovery numbers
+      - 🟡 Active cases
+      - 🔴 Critical cases
+      - 📊 Per million statistics
+      - ⚡ Fast with smart caching
+      - 🔄 Quick refresh
+      *Interactive Buttons:*
+      - Switch between global/country
+      - Refresh current data
+      - Quick country selection
+      - Search other countries
+      *Popular Countries:* USA, India, Brazil, UK, Russia, France, Turkey, Iran, Argentina, Spain, Colombia, Italy, Germany, Mexico, Poland, South Africa, Ukraine, Peru, Indonesia, Netherlands, Czech Republic, Romania, Belgium
+      *Note:* Data cached for 30 minutes. Source: disease.sh API
+crypto:
+  help: |
+      *💰 Cryptocurrency Rates:*
+
+      Get real-time cryptocurrency prices and rates!
+
+      *Commands:*
+      ❍ /crypto <symbol>: Get crypto rates
+      *Examples:*
+      - `/crypto BTC` - Bitcoin rates
+      - `/crypto ETH` - Ethereum rates
+      - `/crypto DOGE` - Dogecoin rates
+      *Features:*
+      - 💰 Real-time cryptocurrency rates
+      - 💱 Multiple currency pairs (USD, INR, EUR, etc.)
+      - 📊 Live market data
+      - ⚡ Fast with smart caching (5 min)
+      - 🔄 Quick refresh button
+      - 💎 Popular crypto quick access
+      *Popular Cryptocurrencies:*
+      - BTC (Bitcoin)
+      - ETH (Ethereum)
+      - USDT (Tether)
+      - BNB (Binance)
+      - XRP (Ripple)
+      - ADA (Cardano)
+      - DOGE (Dogecoin)
+      - SOL (Solana)
+      *Interactive Buttons:*
+      - Refresh rates
+      - View popular cryptos
+      - Quick crypto selection
+      - Direct exchange links
+      *Note:* Rates cached for 5 minutes. Data from WazirX API.
+currency:
+  help: |
+      *💱 Currency Converter:*
+
+      Convert between any currencies with real-time exchange rates!
+
+      *Commands:*
+      ❍ /cash <amount> <from> <to>: Convert currency
+      *Examples:*
+      - `/cash 100 USD EUR` - Convert 100 USD to EUR
+      - `/cash 50 EUR GBP` - Convert 50 EUR to GBP
+      - `/cash 1000 INR USD` - Convert 1000 INR to USD
+      *Features:*
+      - 💱 Real-time exchange rates
+      - 🔄 One-click reverse conversion
+      - 🔁 Quick popular pairs
+      - ⚡ Fast with smart caching
+      - 📋 Supports 160+ currencies
+      *Interactive Buttons:*
+      - Reverse conversion instantly
+      - Try popular currency pairs
+      - View all supported currencies
+      *Note:* Rates cached for 1 hour for better performance
+dev helpers:
+  help: |
+      *Developer Utilities:*
+
+      Handy developer utilities and coding tools.
+
+      *Commands:*
+      ❍ /json [URL]: Get parsed JSON response from a REST API.
+      ❍ /webss [URL] [FULL_SIZE?]: Take a screenshot of a webpage. Use `y`/`yes`/`true` for full size.
+      ❍ /carbon [code]: Generate a carbon.now.sh code snippet image (or reply to code).
+      ❍ /commit: Generate funny commit messages.
+      ❍ /runs: Runs diagnostics and checks speed.
+      ❍ /id: Get Chat ID or User ID (or reply to a user).
+      ❍ /random [length]: Generate random complex passwords.
+      ❍ /cheat [language] [query]: Get quick programming-related cheatsheets and coding help.
+dictionary:
+  help: |
+      *Dictionary:*
+      ❍ /define : Type the word you want to search for. Example: /define hello
+      ❍ /meaning : Type the word you want to get the meaning for. Example: /meaning hello
+      ❍ /synonym : Find the synonyms of a word. Example: /synonym happy
+      ❍ /antonym : Find the antonyms of a word. Example: /antonym sad
+events:
+  help: |
+      *Events & Competitions Module:*
+      ❍ /events: Show active events and recent history.
+      ❍ /join [event_key]: Join an active event.
+      ❍ /eventcreate [event_key]: Owner-only: start a timed event.
+      ❍ /eventend [event_key]: Owner-only: finish an event, declare a random winner, and distribute rewards.
+fantasy:
+  help: |
+      *Hunter Entertainment: Fantasy Sector 🪄*
+
+      Explore magical worlds and multiverses:
+
+      ❍ /wizard [spells|houses|elixirs|wizards] [query] : Get detailed Harry Potter world info.
+      ❍ /poke [name/id] : Search for a Pokemon with detailed stats and abilities.
+      ❍ /rick [character name] : Search or get a random character from Rick and Morty.
+federations:
+  help: |
+      Everything is fun, until a spammer starts entering your group, and you have to block it. Then you need to start banning more, and more, and it hurts. But then you have many groups, and you don't want this spammer to be in one of your groups - how can you deal? Do you have to manually block it, in all your groups?\n
+      *No longer!* With Federation, you can make a ban in one chat overlap with all other chats.\n You can even designate federation admins, so your trusted admin can ban all the spammers from chats you want to protect.\n
+      *Commands:* Feds are now divided into 3 sections for your ease.
+      ❍ /fedownerhelp: Provides help for fed creation and owner only commands
+      ❍ /fedadminhelp: Provides help for fed administration commands
+      ❍ /feduserhelp: Provides help for commands anyone can use
+force subscribe:
+  help: |
+      Force users to join one or more channels/groups before they can chat in the group.
+
+      *Admin Commands:*
+      - `/forcesubscribe` / `/fsub` - Check current settings
+      - `/forcesubscribe @channel @group` / `/fsub @channel @group` - Enable force subscribe for multiple channels/groups (separated by spaces or commas)
+      - `/forcesubscribe off` / `/fsub off` - Disable force subscribe
+      - `/remfsub` - Remove/Disable force subscribe
+      *Note:* Bot must be admin in both the group and the target channels/groups!
+google:
+  help: |
+      *Google & Search Commands:*
+      ❍ /google <text>: Perform a Google search
+      ❍ /img <text>: Search Google for images and return them For greater number of results specify lim, e.g.: `/img hello lim=10`
+      ❍ /app <appname>: Search for an app in Play Store and return its details
+      ❍ /reverse: Reply to a sticker or image to reverse search it You can also search an image with a link: `/reverse picturelink <amount>`
+      ❍ /gitinfo <github username>: Get info of any GitHub profile
+      ❍ /ytdl <youtube video link>: Download any YouTube video in every possible resolution
+      ❍ /webss <website url>: Get a screenshot of any website you want
+      ❍ /makeqr <text>: Convert any text to a QR code format
+      ❍ /getqr: Reply to a QR code to decode and get what is inside it
+translator:
+  help: |
+      *Translation System:*
+      *Commands:*
+      ❍ /langs: List of all language codes for translation
+      ❍ /tl or /tr: As a reply to a message, translates it to English
+      ❍ /tl <lang>: Translate to <lang>
+      *Example:* `/tl ja` translates to Japanese
+      ❍ /tl <source>//<dest>: Translate from <source> to <dest>
+      *Example:* `/tl en//es` translates from English to Spanish
+      - [List of supported languages for translation](https://te.legra.ph/Lang-Codes-03-19-3)
+how-all:
+  help: |
+      *Fun Checker Commands:*
+      ❍ /horny: Check your current horniness level
+      ❍ /gay: Check your current gayness level
+      ❍ /lesbian: Check your current lesbian level
+      ❍ /boobs: Check your current boob size
+      ❍ /cock: Check your current size
+      ❍ /cute: Check your current cuteness level
+      *Note:* This module is inspired by @HowAllBot. It's just for fun - don't take it seriously!
+imposter:
+  help: |
+      **Purpose:** This module monitors changes in user information (username, first name, or last name) in group chats and notifies the group about any detected updates.
+      **Features:** ✧ Tracks changes in:
+      - Username
+      - First Name
+      - Last Name ✧ Sends an announcement to the group when a user updates any of these details. ✧ Provides clear and formatted notifications to ensure transparency.
+      **Commands:** ✧ /imposter : Enable/disable imposter monitoring in the chat.
+join request:
+  help: |
+      *Join Request Management*
+
+      This module helps administrators manage join requests in groups/channels where the join approval system is enabled.
+
+      *Commands:*
+      - `/joinreq` [on | off | auto]: Configure the approval behavior for new join requests.
+      - `/autoapprove` [on | off | auto]: Configure the approval behavior for new join requests.
+      - `/clear_pending`: Decline all pending join requests from the chat (allows users to request again).
+      *Settings & Modes:* ✧ *ON (Manual):* Sends a notification message to the chat by silently tagging administrators with inline buttons to manually **Accept** or **Decline** the join request. ✧ *AUTO (Automatic):* Automatically approves any user who sends a request to join the chat via invite links. ✧ *OFF:* Disables auto-approval and stops notifications (silent pending queue).
+      *Notes:*
+      - Join request behavior can only be managed by administrators.
+      - Manual accept/decline actions on the bot notification are restricted to administrators only.
+karma:
+  help: |
+      🌟 *Karma System*
+
+      React to messages to give karma points!
+
+      *Upvote Triggers:* +, ++, +1, thx, tnx, ty, tq, thank you, thanks, 👍, ❤️, 💕, cool, good, agree, makasih, love, pro, or starting with ++ (e.g. ++ @user)
+      *Downvote Triggers:* -, --, -1, 👎, 💔, noob, weak, not cool, disagree, worst, bad, or starting with -- (e.g. -- @user)
+      *Commands:*
+      - `/karma` - Check your karma or replied user's karma
+      - `/karmastat` (or `/topkarma`) - View karma leaderboard
+      *Admin Commands:*
+      - `/karmaon` - Enable karma system
+      - `/karmaoff` - Disable karma system
+      *Note:* You cannot give karma to yourself or bots!
+linux:
+  help: |
+      *Available commands:*\n
+      *Linux Kernel:*
+      - `/kernels`: fetches linux kernels information\n
+live photo:
+  help: |
+      *Live Photos:*
+
+      Send animated "live" photos that play a short video on long-press. Both the static cover and the motion video must be supplied.
+
+      *Commands:*
+      ❍ /livephoto: Reply to a video to send it as a live photo using that video's first frame as the cover.
+      ❍ /livephoto [video URL / file-id]: Pass a video URL or file-id.
+      ❍ /livephoto [video URL / file-id] | [cover URL / file-id]: Send a custom video + cover.
+      *Notes:*
+      - Video must be ≤ 10 seconds and ≤ 10 MB.
+      - If you don't supply a cover, Telegram will use the video's first frame.
+logo:
+  help: |
+      🎨 *Logo Maker*
+
+      Create beautiful text logos directly in the chat!
+
+      *Commands:*
+      - `/logo <text>` - Generates a logo with a random background image and font
+      - `/clogo <first_word> <last_word>` - Creates a custom styled orange/black logo
+      - `/blogo <text>` - Generates a logo with a Blackpink theme (pink text on black background)
+      *Examples:*
+      - `/logo Yumeko`
+      - `/clogo Custom Logo`
+      - `/blogo Blink Style`
+mass action:
+  help: |
+      ⚡ *Mass Actions*
+
+      Batch moderate entire chats in seconds! Only administrators with the Restrict Members privilege can execute these commands.
+
+      *Commands:*
+      - `/unbanall` - Unbans all banned users in the chat.
+      - `/unmuteall` - Unmutes all muted/restricted users in the chat.
+tag all:
+  help: |
+      📣 *Mention All Users*
+
+      Admins can mention all group members easily!
+
+      *Commands:*
+      - `/tagall` (or `/tall`, `/call`, `/all`, `/mentionall`, `@all`) <text> - Tag all users using their names
+      - `/etagall` (or `@eall`) <text> - Tag all users using random emojis instead of names
+      - `/cancel` (or `/stoptagall`, `/stoptall`) - Stops the active tagging process
+      *Note:* You can also click the inline **Stop** button on the progress message to cancel.
+extras:
+  help: |
+      Available commands: 📐 Markdown:
+      ❍ /markdownhelp`: quick summary of how markdown works in telegram - can only be called in private chats
+
+      💴 Currency converter:
+      ❍ /cash`: currency converter Example: `/cash 1 USD INR` OR `/cash 1 usd inr` Output: `1.0 USD = 75.505 INR`
+
+      🗣 Translator:
+      ❍ /tr` or `/tl` (language code) as reply to a long message Example: `/tr en`: translates something to english `/tr hi-en`: translates hindi to english.
+      ❍ /langs` : lists all the language codes
+
+      🕐 Timezones:
+      ❍ /time <query>`: Gives information about a timezone. Available queries: Country Code/Country Name/Timezone Name
+      - [Timezones list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+
+      🖌️ Quotly:
+      ❍ /q` : To quote a message.
+      ❍ /q <Number>` : To quote more than 1 messages.
+      ❍ /q r` : to quote a message with it's reply
+
+      🗜️ Compress And Decompress:
+      ❍ /zip: reply to a telegram file to compress it in .zip format
+      ❍ /unzip: reply to a telegram file to decompress it from the .zip format
+
+      👤 Fake Info:
+      ❍ /fakegen: Generate fake information
+      ❍ /picgen: Generate a fake picture
+
+      🔐 Encryption:
+      ❍ /encrypt: Encrypt the given text
+      ❍ /decrypt: Decrypt previously encrypted text
+
+      📙 English Dictionary:
+      ❍ /define <text>: Get the definition of a word or expression (example: /define kill)
+      ❍ /spell: Reply to a message to get a grammar-corrected version
+      ❍ /synonyms <word>: Find synonyms of a word
+      ❍ /antonyms <word>: Find antonyms of a word
+
+      💳 CC Checker:
+      ❍ /au [cc]: Stripe Auth given CC
+      ❍ /pp [cc]: Paypal 1$ Guest Charge
+      ❍ /ss [cc]: Speedy Stripe Auth
+      ❍ /ch [cc]: Check If CC is Live
+      ❍ /bin [bin]: Gather's Info About the bin
+      ❍ /gen [bin]: Generates CC with given bin
+      ❍ /key [sk]: Checks if Stripe key is Live
+
+      🗳  Other Commands:
+
+      *Paste:*
+      ❍ /paste: Save replied content to `dpaste.com` and get a URL
+      *React:*
+      ❍ /react: React with a random reaction
+      *Urban Dictionary:*
+      ❍ /ud <word>: Search Urban Dictionary for a word or expression
+      *Wikipedia:*
+      ❍ /wiki <query>: Search Wikipedia for your query
+      *Wallpapers:*
+      ❍ /wall <query>: Get a wallpaper from AlphaCoders
+      *Text To Speech:*
+      ❍ /texttospeech <text>: Convert a text message to a voice message
+      *Books:*
+      ❍ /book <book name>: Get instant download link of a book
+      *Cricket Score:*
+      ❍ /cs: Get live cricket score
+      *Phone Info:*
+      ❍ /phone [phone no]: Get phone number information
+      *Bass Boosting:*
+      ❍ /bassboost: Reply to music to bass boost it
+music play:
+  help: |
+      {BOT_NAME} Music : Help Menu
+
+      ╒════「 Setup Guide 」 │1. Promote bot as admin (with manage video chats). │2. Start the Group Voice Chat. │3. Play songs using `/play [song name/link]` or reply to audio. ╘══════════════════
+
+      ╒════「 Play Commands 」 ├ /play [song name/link/reply] : Play via YouTube, Spotify, etc. ├ /vplay [song name/link/reply] : Play video stream. ├ /playforce [song name/link/reply] : Force play (skips current). ├ /vplayforce [song name/link/reply] : Force play video stream. ╘══════════════════
+
+      ╒════「 Playlists & Queue 」 ├ /queue : Shows current playing queue. ├ /playlist : Views your personal playlist. ├ /addplaylist [query/link] : Adds a song to your personal playlist. ├ /delplaylist [number] : Removes a song from your personal playlist. ├ /playplaylist : Plays your personal playlist. ├ /gplaylist : Views the group playlist. ├ /addgplaylist [query/link] : Adds a song to the group playlist. ├ /delgplaylist [number] : Removes a song from the group playlist. ├ /playgplaylist : Plays the group playlist. ╘══════════════════
+
+      ╒════「 Downloads 」 ├ /song [query/link] : Download audio file. ├ /vsong [query/link] : Download video file. ╘══════════════════
+
+      ╒════「 Admin Commands 」 ├ /pause : Pauses music stream. ├ /resume : Resumes music stream. ├ /skip : Skips current track. ├ /stop or /end : Stops streaming and clears queue. ├ /volume or /vol [1-200] : Adjust assistant audio volume. ├ /settings or /playmode : Open settings menu. ├ /reload : Reloads admin cache list. ╘══════════════════
+news:
+  help: |
+      *News & Information:*
+
+      Fetch the latest global headlines across multiple portals and gates.
+
+      *Commands:*
+      ❍ /news [category]: Fetch the latest headlines from global gates.
+      ❍ /headlines: Quick top headlines from your preferred category.
+      ❍ /newsset category [name]: Set your resonance category (default category).
+      ❍ /newsset topics [keywords]: Filter stories by specific keywords.
+      *Available Gates:* `world`, `tech`, `gaming`, `anime`, `science`, `business`, `sports`, `health`, `entertainment`
+pdf:
+  help: |
+      *PDF Converter:*
+
+      Convert your images to PDF documents instantly. Perfect for scanned homework or online classes.
+
+      *Commands:*
+      ❍ /pdf: Reply to an image (as document) or start a multi-image PDF session.
+      ❍ /done: Compile and finish your active PDF session.
+      ❍ /cancel: Cancel the active session and discard temporary images.
+ping:
+  help: |
+      Retrieve bot ping, service uptime, and host system statistics.
+
+      👤 *User Commands:*
+      ➛ /ping: View bot latency.
+      ➛ /pingall: Check ping to Telegram and API databases.
+      ➛ /uptime or /up: View operational duration.
+
+      🛡️ *Admin Commands:*
+      ➛ /stats or /statistics: View detailed host hardware metrics and software/bot stats.
+pipes:
+  help: |
+      *THIS MODULE IS ONLY FOR DEVS*
+
+      Use this module to create a pipe that will forward messages of one chat/channel to another.
+
+      ❍ /activate_pipe [FROM_CHAT_ID] [TO_CHAT_ID] [BOT|USERBOT] : Active a pipe.
+      ❍ /deactivate_pipe [FROM_CHAT_ID] : Deactivate a pipe.
+      ❍ /show_pipes : Show all the active pipes.
+      *Note:*
+      - These pipes are only temporary, and will be destroyed on restart.
+status tracking:
+  help: |
+      👤 *User Status Tracking:* Monitor user online/offline status and typing indicators in accessible group chats.
+
+      *Commands:*
+      ❍ /statuscheck [username/user_id]: Monitor presence type (Online, Typing, Recording, Uploading, Offline) for a user.
+purges:
+  help: |
+      *Admins only:*
+      ❍ /del: deletes the message you replied to
+      ❍ /purge: deletes all messages between this and the replied to message (requires confirmation button clicks).
+      ❍ /spurge: silently deletes all messages between this and the replied to message (no confirmation or notifications).
+      ❍ /purge <number>: if replied to with a number, deletes that many messages from target message, if sent normally in group then delete from current to previous messages
+      ❍ /purgeuser: purge recent messages from a specific user (reply to their message).
+      ❍ /purgefrom: marks a start point to purge from
+      ❍ /purgeto: marks the end point, messages bet to and from are deleted
+quotly:
+  help: |
+      💬 *Quotly*
+
+      Generate high-quality stickers from chat messages!
+
+      *Commands:*
+      - `/q`: Reply to a message to generate a quote sticker.
+      - `/qr`: Generate a quote that includes the replied-to message reference in the header.
+      - `/fq [text]`: Reply to a user to fake their quote, or fakes yourself if not a reply.
+      *Modifiers / Flags:*
+      - `!png` / `!file`: Send output as PNG document.
+      - `!stories` / `!story`: Render in 720x1280 Stories format.
+      - `!anon` / `!hide`: Anonymize/hide author name and avatar.
+      - `!reply` / `r`: Force reply context.
+      *Parameters:*
+      - `color`: Hex code (e.g. #1b1429),preset, or preset words (e.g. random, transparent).
+      - `emojiBrand`: apple, google, twitter, blob, joypixels.
+      - `sScale`: Custom scale (e.g. s1.5, s2, s3).
+reminders:
+  help: |
+      *Reminders System:*
+
+      This module lets you set up to 20 reminders per group/PM.
+
+      *Commands:*
+      ❍ /remind <time> <text>: Set a reminder for given time, usage is the same as a mute command
+      ❍ /reminders: List all the reminders for current chat
+      ❍ /clearreminder <timestampID>: Remove the reminder of the given timestamp ID from the list
+      ❍ /clearallreminders: Clear all saved reminders (owner only)
+      *Parameters:*
+      - *TimestampID:* An ID number listed under each reminder, used to remove a reminder
+      - *Time:* 1d (days), 1h (hours), 1m (minutes), or 30s (seconds)
+      *Notes:*
+      - You can only supply one time variable: day(s), hour(s), minute(s), or seconds
+      - The shortest reminder can be 30 seconds
+      - Reminders are limited to 512 characters per reminder
+      - Only group admins can set up reminders
+      *Examples:* `/remind 2h You need to sleep!` This will send a reminder with the text after 2 hours
+
+      `/clearreminder 1631378953` Removes the reminder of the specified timestamp ID
+sed/regex:
+  help: |
+      - `s/<text1>/<text2>(/<flag>): Reply to a message with this to perform a sed operation on that message, replacing all \ occurrences of 'text1' with 'text2'. Flags are optional, and currently include 'i' for ignore case, "g' for global, \ or nothing. Delimiters include `/`, `\\_`, `|`, and `:`. Text grouping is supported. The resulting message cannot be \ larger than 4096 characters.
+      *Reminder:* Sed uses some special characters to make matching easier, such as these: `+*.?` and `\\\\` If you want to use these characters, make sure you escape them!
+      *Example:* \\?.
+session gen:
+  help: |
+      🔑 *Session Generator*
+
+      Generate string sessions for Pyrogram or Telethon directly inside the bot!
+
+      *Commands:*
+      - `/sgen` - Start the interactive string session generation process (available in PM/Private chat only).
+tag alert:
+  help: |
+      Get notified when someone mentions you in a group!
+
+      *Commands:*
+      - `/tagalert` - Check your current tag alert status
+      - `/tagalert on` - Enable tag alerts in this group
+      - `/tagalert off` - Disable tag alerts in this group
+      *How it works:* 1. Enable tag alerts in the groups you want 2. When someone mentions you (using @username or by tagging you) 3. You receive a private message from the bot with the mention
+      *Note:* You must start a private chat with the bot first to receive alerts!
+translation:
+  help: |
+      🌐 *Translation & Text-to-Speech*
+
+      Translate languages and convert text to spoken audio.
+
+      *Commands:*
+      - `/tr` (or `/tl`, `/translate`) <lang_code> - Reply to a message to translate it (auto-detects source language).
+      - `/tr` <source>//<target> - Reply to translate from source to target (e.g. `/tr en//fr`).
+      - `/tr` <target> <text> - Translate the specified text to target language directly.
+      - `/languages` (or `/lang`) - View the list of supported language codes.
+      - `/tts` <text> - Convert the specified text to a playable voice note.
+      - `/tts` <lang_code> <text> - Convert text to voice note in target language (e.g. `/tts es hola`).
+      - `/tts` - Reply to any text message to convert it to a voice note.
+upscale:
+  help: |
+      🖼 *Image Upscaler*
+
+      Enhance and upscale images to higher resolution!
+
+      *Commands:*
+      - `/upscale` (or `/enhance`) - Reply to a photo or PNG/JPG document to upscale it.
+bios/abouts:
+  help: |
+      Manage user bios, about messages, and personal information card.
+
+      👤 *User Commands:*
+      ❍ /me: Get your or replied user's info.
+      ❍ /setme <text>: Set your about me info.
+      ❍ /bio: Get your or replied user's bio.
+      ❍ /setbio <text>: Reply to a user's message to set their bio.
+      ❍ /myinfo: Retrieve your detailed user details profile card.
+waifu:
+  help: |
+      *Waifu & Couples:*
+      ❍ /couple / /ship: Choose the couple of the day from the group members
+      ❍ /mywaifu: Find your waifu of the day in this chat with a bond percentage
+      ❍ /myhusbando: Find your husbando of the day in this chat with a bond percentage
+warnings:
+  help: |
+      *Warnings System:*
+      *User Commands:*
+      ❍ /warns <userhandle>: Get a user's number and reason of warnings
+      ❍ /warnlist: List all current warning filters
+      *Admin only:*
+      ❍ /warn <userhandle>: Warn a user. After 3 warns, the user will be banned from the group. Can also be used as a reply
+      ❍ /resetwarn <userhandle>: Reset the warnings for a user. Can also be used as a reply
+      ❍ /rmwarn, /unwarn <userhandle>: Remove user's latest warning. Can also be used as a reply
+      ❍ /addwarn <keyword> <reply message>: Set a warning filter on a certain keyword. If you want your keyword to be a sentence, enclose it in quotes, like this: `/addwarn "very angry" This is an angry user`
+      ❍ /nowarn <keyword>: Stop a warning filter
+      ❍ /warnlimit <num>: Set the warning limit
+      ❍ /strongwarn <on/yes/off/no>: If set to on, exceeding the warn limit will result in a ban. Otherwise, will just kick
+      ❍ /setwarnmode <ban/kick/mute/tmute/tban>: Set the action to perform when warnings have been exceeded
+weather:
+  help: |
+      *🌤️ Weather Information:*
+
+      Get current weather conditions for any city in the world!
+
+      *Commands:*
+      ❍ /weather <city>: Get weather information
+      *Examples:*
+      - `/weather London` - London weather
+      - `/weather New York` - New York weather
+      - `/weather Tokyo` - Tokyo weather
+      *Features:*
+      - 🌡️ Current temperature & feels like
+      - 🌥️ Weather conditions with icons
+      - 💧 Humidity percentage
+      - 💨 Wind speed
+      - 🌅🌇 Sunrise & sunset times
+      - ☀️ UV Index
+      - ⚡ Fast with smart caching
+      - 🔄 Quick refresh button
+      - °C/°F toggle
+      *Note:* Weather data cached for 10 minutes
+greetings:
+  help: |
+      Greet new members with customized welcome templates.
+
+      *Admin Commands:*
+      - `/welcome <on/off>` - Enable/disable welcome messages.
+      - `/welcome` - View current welcome message settings.
+      - `/welcome_mode <text/image>` - Set welcome mode (image mode generates card graphics).
+      - `/setwelcome <text>` - Set custom welcome message (supports HTML).
+      - `/setgoodbye <text>` - Set custom goodbye message.
+      - `/resetwelcome` - Reset welcome message to default.
+      - `/resetgoodbye` - Reset goodbye message to default.
+      - `/cleanwelcome <on/off>` - Delete the previous welcome message.
+      - `/cleanservice <on/off>` - Delete Telegram's service join/left messages.
+      - `/welcomehelp` - View tags and formatting options.
+      - `/welcomemute <on/off>` - Mute new members on join.
+      - `/captcha <on/off>` - Toggle math captcha verification for new joins.
+      - `/welcomemutehelp` - Get information about welcome mutes.
+whatanime:
+  help: |
+      Find anime from an image or GIF using trace.moe!
+
+      *Commands:*
+      - `/whatanime` - Reply to an image/GIF to find the anime
+      *How to use:* 1. Send or forward an anime screenshot/GIF 2. Reply to it with `/whatanime` 3. Wait for the bot to find the anime!
+      *Note:* Works best with clear, unedited anime screenshots.
+wikipedia:
+  help: |
+      *🌐 Wikipedia Search:*
+
+      Search Wikipedia for any topic!
+
+      *Commands:*
+      ❍ /wiki <query>: Search Wikipedia for a term
+      *Examples:*
+      - `/wiki Python programming`
+      - `/wiki Elon Musk`
+      - `/wiki Quantum physics`
+
+# Announcements module
+announce:
+  help: |
+    *Announcements:*
+    Toggle admin action announcements in the group chat.
+
+    *Commands:*
+    ❍ /announce <on/off/yes/no>: Toggle announcements of admin actions in the chat.
+
+# CleanLinked / Anti-Channel Pin module
+antilinkedchannel:
+  help: |
+    *CleanLinked / Anti-Channel Pin:*
+    Automatically unpin or delete forwarded posts from linked channels.
+
+    *Commands:*
+    ❍ /cleanlinked <on/off/yes/no>: Toggle deletion of automatically forwarded channel messages in the chat.
+    ❍ /antichannelpin <on/off/yes/no>: Toggle unpinning of automatically forwarded channel messages in the chat.
+
+# Clear Commands module
+clear_cmd:
+  help: |
+    *Clear Commands:*
+    This module allows you to automatically delete command outputs after a certain time to keep your group chat clean.
+
+    *Commands:*
+    ❍ /clearcmd: View list of configured commands and delete timers in this chat.
+    ❍ /clearcmd list: View list of all clearable commands.
+    ❍ /clearcmd <command> <time>: Set a delete timer (5 to 300 seconds) for a command (e.g. `/clearcmd ping 10`).
+    ❍ /clearcmd <command> restore: Stop auto-deleting a command's output.
+    ❍ /clearcmd restore: Stop auto-deleting outputs for all commands.
+
+# Blue Text Cleaner module
+cleaner:
+  help: |
+    *Blue Text Cleaner:*
+    Blue text cleaner removes any made-up commands that people send in your chat.
+
+    *Commands:*
+    ❍ /cleanbluetext <on/off/yes/no>: Clean commands after sending.
+    ❍ /ignorecleanbluetext <word>: Prevent auto-cleaning of the command.
+    ❍ /unignorecleanbluetext <word>: Remove prevent auto-cleaning of the command.
+    ❍ /listcleanbluetext: List currently whitelisted commands.
+
+    *Disaster-only commands:*
+    ❍ /ignoreglobalcleanbluetext <word>: Globally ignore bluetext cleaning of saved words.
+    ❍ /unignoreglobalcleanbluetext <word>: Remove said command from global cleaning list.
+
+# Zombies module
+zombies:
+  help: |
+    *Zombies (Deleted Accounts):*
+    Identify and remove deleted/inactive accounts from your group chat.
+
+    *Commands:*
+    ❍ /zombies: Scan for deleted accounts in the chat.
+    ❍ /zombies clean: Ban and kick all deleted accounts from the chat.
+

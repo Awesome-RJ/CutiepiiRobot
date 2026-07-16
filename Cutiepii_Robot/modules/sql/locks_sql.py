@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -32,9 +32,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # New chat added -> setup permissions
 import threading
 
-from sqlalchemy import Column, String, Boolean
+from sqlalchemy import Column, String, Boolean, text
 
 from Cutiepii_Robot.modules.sql import SESSION, BASE
+from Cutiepii_Robot import LOGGER
 
 
 class Permissions(BASE):
@@ -45,6 +46,7 @@ class Permissions(BASE):
     voice = Column(Boolean, default=False)
     contact = Column(Boolean, default=False)
     video = Column(Boolean, default=False)
+    videonote = Column(Boolean, default=False)
     document = Column(Boolean, default=False)
     photo = Column(Boolean, default=False)
     sticker = Column(Boolean, default=False)
@@ -67,6 +69,26 @@ class Permissions(BASE):
     txt = Column(Boolean, default=False)
     xml = Column(Boolean, default=False)
     zip = Column(Boolean, default=False)
+    phone = Column(Boolean, default=False)
+    command = Column(Boolean, default=False)
+    email = Column(Boolean, default=False)
+    anonchannel = Column(Boolean, default=False)
+    forwardchannel = Column(Boolean, default=False)
+    forwardbot = Column(Boolean, default=False)
+    videonote = Column(Boolean, default=False)
+    album = Column(Boolean, default=False)
+    cashtag = Column(Boolean, default=False)
+    checklist = Column(Boolean, default=False)
+    comment = Column(Boolean, default=False)
+    emojionly = Column(Boolean, default=False)
+    forwardstory = Column(Boolean, default=False)
+    forwarduser = Column(Boolean, default=False)
+    guestbot = Column(Boolean, default=False)
+    outsidereaction = Column(Boolean, default=False)
+    reaction = Column(Boolean, default=False)
+    zalgo = Column(Boolean, default=False)
+    emoji = Column(Boolean, default=False)
+    emojicustom = Column(Boolean, default=False)
 
     def __init__(self, chat_id):
         self.chat_id = str(chat_id)  # ensure string
@@ -74,6 +96,7 @@ class Permissions(BASE):
         self.voice = False
         self.contact = False
         self.video = False
+        self.videonote = False
         self.document = False
         self.photo = False
         self.sticker = False
@@ -96,9 +119,28 @@ class Permissions(BASE):
         self.txt = False
         self.xml = False
         self.zip = False
+        self.phone = False
+        self.command = False
+        self.email = False
+        self.anonchannel = False
+        self.forwardchannel = False
+        self.forwardbot = False
+        self.album = False
+        self.cashtag = False
+        self.checklist = False
+        self.comment = False
+        self.emojionly = False
+        self.forwardstory = False
+        self.forwarduser = False
+        self.guestbot = False
+        self.outsidereaction = False
+        self.reaction = False
+        self.zalgo = False
+        self.emoji = False
+        self.emojicustom = False
 
     def __repr__(self):
-        return f"<Permissions for {self.chat_id}>"
+        return "<Permissions for %s>" % self.chat_id
 
 
 class Restrictions(BASE):
@@ -118,8 +160,19 @@ class Restrictions(BASE):
         self.preview = False
 
     def __repr__(self):
-        return f"<Restrictions for {self.chat_id}>"
+        return "<Restrictions for %s>" % self.chat_id
 
+class LockConfig(BASE):
+    __tablename__ = "lock_config"
+    chat_id = Column(String(14), primary_key=True)
+    warn = Column(Boolean, default=False)
+
+    def __init__(self, chat_id):
+        self.chat_id = str(chat_id)  # ensure string
+        self.warn = False
+
+    def __repr__(self):
+        return "<Restrictions for %s>" % self.chat_id
 
 # For those who faced database error, Just uncomment the
 # line below and run bot for 1 time & remove that line!
@@ -127,31 +180,62 @@ class Restrictions(BASE):
 Permissions.__table__.create(checkfirst=True)
 # Permissions.__table__.drop()
 Restrictions.__table__.create(checkfirst=True)
+LockConfig.__table__.create(checkfirst=True)
+
+# Database ALTER TABLE migrations for new lock types
+for col in ["album", "cashtag", "checklist", "comment", "emojionly", "forwardstory", "forwarduser", "guestbot", "outsidereaction", "reaction", "zalgo", "emoji", "emojicustom"]:
+    try:
+        SESSION.execute(text(f"ALTER TABLE permissions ADD COLUMN {col} BOOLEAN DEFAULT FALSE"))
+        SESSION.commit()
+    except Exception:
+        SESSION.rollback()
 
 PERM_LOCK = threading.RLock()
 RESTR_LOCK = threading.RLock()
+CONF_LOCK = threading.RLock()
+
+# Memory caches for zero-latency lookups on message handling
+PERMISSIONS_CACHE = {}
+RESTRICTIONS_CACHE = {}
+LOCK_CONFIG_CACHE = {}
+
+
+def set_lockconf(chat_id, should_warn):
+    with CONF_LOCK:
+        lock_setting = SESSION.query(LockConfig).get(str(chat_id))
+        if not lock_setting:
+            lock_setting = LockConfig(str(chat_id))
+
+        lock_setting.warn = should_warn
+        SESSION.add(lock_setting)
+        SESSION.commit()
+        LOCK_CONFIG_CACHE[str(chat_id)] = should_warn
 
 
 def init_permissions(chat_id, reset=False):
-    curr_perm = SESSION.query(Permissions).get(str(chat_id))
-    if reset:
-        SESSION.delete(curr_perm)
-        SESSION.flush()
-    perm = Permissions(str(chat_id))
-    SESSION.add(perm)
-    SESSION.commit()
-    return perm
+    with PERM_LOCK:
+        curr_perm = SESSION.query(Permissions).get(str(chat_id))
+        if reset and curr_perm:
+            SESSION.delete(curr_perm)
+            SESSION.flush()
+        perm = Permissions(str(chat_id))
+        SESSION.add(perm)
+        SESSION.commit()
+        PERMISSIONS_CACHE[str(chat_id)] = {c.name: getattr(perm, c.name) for c in perm.__table__.columns}
+        return perm
 
 
 def init_restrictions(chat_id, reset=False):
-    curr_restr = SESSION.query(Restrictions).get(str(chat_id))
-    if reset:
-        SESSION.delete(curr_restr)
-        SESSION.flush()
-    restr = Restrictions(str(chat_id))
-    SESSION.add(restr)
-    SESSION.commit()
-    return restr
+    with RESTR_LOCK:
+        curr_restr = SESSION.query(Restrictions).get(str(chat_id))
+        if reset and curr_restr:
+            SESSION.delete(curr_restr)
+            SESSION.flush()
+        restr = Restrictions(str(chat_id))
+        SESSION.add(restr)
+        SESSION.commit()
+        RESTRICTIONS_CACHE[str(chat_id)] = {c.name: getattr(restr, c.name) for c in restr.__table__.columns}
+        return restr
 
 
 def update_lock(chat_id, lock_type, locked):
@@ -169,6 +253,8 @@ def update_lock(chat_id, lock_type, locked):
                 curr_perm.contact = locked
             case "video":
                 curr_perm.video = locked
+            case "videonote":
+                curr_perm.videonote = locked
             case "document":
                 curr_perm.document = locked
             case "photo":
@@ -213,9 +299,48 @@ def update_lock(chat_id, lock_type, locked):
                 curr_perm.xml = locked
             case "zip":
                 curr_perm.zip = locked
+            case "phone":
+                curr_perm.phone = locked
+            case "command":
+                curr_perm.command = locked
+            case "email":
+                curr_perm.email = locked
+            case "anonchannel":
+                curr_perm.anonchannel = locked
+            case "forwardchannel":
+                curr_perm.forwardchannel = locked
+            case "forwardbot":
+                curr_perm.forwardbot = locked
+            case "album":
+                curr_perm.album = locked
+            case "cashtag":
+                curr_perm.cashtag = locked
+            case "checklist":
+                curr_perm.checklist = locked
+            case "comment":
+                curr_perm.comment = locked
+            case "emojionly":
+                curr_perm.emojionly = locked
+            case "forwardstory":
+                curr_perm.forwardstory = locked
+            case "forwarduser":
+                curr_perm.forwarduser = locked
+            case "guestbot":
+                curr_perm.guestbot = locked
+            case "outsidereaction":
+                curr_perm.outsidereaction = locked
+            case "reaction":
+                curr_perm.reaction = locked
+            case "zalgo":
+                curr_perm.zalgo = locked
+            case "emoji":
+                curr_perm.emoji = locked
+            case "emojicustom":
+                curr_perm.emojicustom = locked
 
         SESSION.add(curr_perm)
         SESSION.commit()
+        PERMISSIONS_CACHE[str(chat_id)] = {c.name: getattr(curr_perm, c.name) for c in curr_perm.__table__.columns}
 
 
 def update_restriction(chat_id, restr_type, locked):
@@ -240,93 +365,31 @@ def update_restriction(chat_id, restr_type, locked):
                 curr_restr.preview = locked
         SESSION.add(curr_restr)
         SESSION.commit()
+        RESTRICTIONS_CACHE[str(chat_id)] = {c.name: getattr(curr_restr, c.name) for c in curr_restr.__table__.columns}
 
 
 def is_locked(chat_id, lock_type):
-    curr_perm = SESSION.query(Permissions).get(str(chat_id))
-    SESSION.close()
-
+    curr_perm = PERMISSIONS_CACHE.get(str(chat_id))
     if not curr_perm:
         return False
-
-    match lock_type:
-        case "sticker":
-            return curr_perm.sticker
-        case "photo":
-            return curr_perm.photo
-        case "audio":
-            return curr_perm.audio
-        case "voice":
-            return curr_perm.voice
-        case "contact":
-            return curr_perm.contact
-        case "video":
-            return curr_perm.video
-        case "document":
-            return curr_perm.document
-        case "gif":
-            return curr_perm.gif
-        case "url":
-            return curr_perm.url
-        case "bots":
-            return curr_perm.bots
-        case "forward":
-            return curr_perm.forward
-        case "game":
-            return curr_perm.game
-        case "location":
-            return curr_perm.location
-        case "rtl":
-            return curr_perm.rtl
-        case "button":
-            return curr_perm.button
-        case "egame":
-            return curr_perm.egame
-        case "inline":
-            return curr_perm.inline
-        case "apk":
-            return curr_perm.apk
-        case "doc":
-            return curr_perm.doc
-        case "exe":
-            return curr_perm.exe
-        case "jpg":
-            return curr_perm.jpg
-        case "mp3":
-            return curr_perm.mp3
-        case "pdf":
-            return curr_perm.pdf
-        case "txt":
-            return curr_perm.txt
-        case "xml":
-            return curr_perm.xml
-        case "zip":
-            return curr_perm.zip
+    return curr_perm.get(lock_type, False)
 
 
 def is_restr_locked(chat_id, lock_type):
-    curr_restr = SESSION.query(Restrictions).get(str(chat_id))
-    SESSION.close()
-
+    curr_restr = RESTRICTIONS_CACHE.get(str(chat_id))
     if not curr_restr:
         return False
 
-    match lock_type:
-        case "messages":
-            return curr_restr.messages
-        case "media":
-            return curr_restr.media
-        case "other":
-            return curr_restr.other
-        case "previews":
-            return curr_restr.preview
-        case "all":
-            return (
-                curr_restr.messages
-                and curr_restr.media
-                and curr_restr.other
-                and curr_restr.preview
-            )
+    if lock_type == "all":
+        return (
+            curr_restr.get("messages", False)
+            and curr_restr.get("media", False)
+            and curr_restr.get("other", False)
+            and curr_restr.get("preview", False)
+        )
+    elif lock_type == "previews":
+        return curr_restr.get("preview", False)
+    return curr_restr.get(lock_type, False)
 
 
 def get_locks(chat_id):
@@ -343,13 +406,53 @@ def get_restr(chat_id):
         SESSION.close()
 
 
+def get_lockconf(chat_id) -> bool:
+    return LOCK_CONFIG_CACHE.get(str(chat_id), False)
+
+
 def migrate_chat(old_chat_id, new_chat_id):
     with PERM_LOCK:
-        if perms := SESSION.query(Permissions).get(str(old_chat_id)):
+        perms = SESSION.query(Permissions).get(str(old_chat_id))
+        if perms:
             perms.chat_id = str(new_chat_id)
+            PERMISSIONS_CACHE[str(new_chat_id)] = {c.name: getattr(perms, c.name) for c in perms.__table__.columns}
+            if str(old_chat_id) in PERMISSIONS_CACHE:
+                del PERMISSIONS_CACHE[str(old_chat_id)]
         SESSION.commit()
 
     with RESTR_LOCK:
-        if rest := SESSION.query(Restrictions).get(str(old_chat_id)):
+        rest = SESSION.query(Restrictions).get(str(old_chat_id))
+        if rest:
             rest.chat_id = str(new_chat_id)
+            RESTRICTIONS_CACHE[str(new_chat_id)] = {c.name: getattr(rest, c.name) for c in rest.__table__.columns}
+            if str(old_chat_id) in RESTRICTIONS_CACHE:
+                del RESTRICTIONS_CACHE[str(old_chat_id)]
         SESSION.commit()
+
+
+def __load_locks():
+    global PERMISSIONS_CACHE, RESTRICTIONS_CACHE, LOCK_CONFIG_CACHE
+    try:
+        all_perms = SESSION.query(Permissions).all()
+        for perm in all_perms:
+            PERMISSIONS_CACHE[perm.chat_id] = {c.name: getattr(perm, c.name) for c in perm.__table__.columns}
+        
+        all_restrs = SESSION.query(Restrictions).all()
+        for restr in all_restrs:
+            RESTRICTIONS_CACHE[restr.chat_id] = {c.name: getattr(restr, c.name) for c in restr.__table__.columns}
+            
+        all_configs = SESSION.query(LockConfig).all()
+        for config in all_configs:
+            LOCK_CONFIG_CACHE[config.chat_id] = config.warn
+            
+        LOGGER.info(f"[SQL] Loaded locks: {len(PERMISSIONS_CACHE)} perms, {len(RESTRICTIONS_CACHE)} restrictions, {len(LOCK_CONFIG_CACHE)} configs")
+    except Exception as e:
+        LOGGER.error(f"[SQL] Failed to load locks into memory: {e}")
+    finally:
+        SESSION.close()
+
+
+try:
+    __load_locks()
+except Exception as e:
+    LOGGER.error(f"[SQL] Failed to initialize locks module: {e}")

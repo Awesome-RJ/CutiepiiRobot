@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -63,7 +63,11 @@ def set_rules(chat_id, rules_text):
 
 
 def get_rules(chat_id):
-    ret = rules.rules if (rules := SESSION.query(Rules).get(str(chat_id))) else ""
+    rules = SESSION.query(Rules).get(str(chat_id))
+    ret = ""
+    if rules:
+        ret = rules.rules
+
     SESSION.close()
     return ret
 
@@ -77,6 +81,7 @@ def num_chats():
 
 def migrate_chat(old_chat_id, new_chat_id):
     with INSERTION_LOCK:
-        if chat := SESSION.query(Rules).get(str(old_chat_id)):
+        chat = SESSION.query(Rules).get(str(old_chat_id))
+        if chat:
             chat.chat_id = str(new_chat_id)
         SESSION.commit()

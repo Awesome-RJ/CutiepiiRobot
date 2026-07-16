@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,34 +29,35 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 import subprocess
 
-from Cutiepii_Robot import LOGGER, CUTIEPII_PTB
+from Cutiepii_Robot import LOGGER, dispatcher
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import ContextTypes, CommandHandler
+CallbackContext = ContextTypes.DEFAULT_TYPE  # Alias for backward compatibility
+# run_async removed in python-telegram-bot v20+ - handlers are async by default
 
 
 @dev_plus
-async def shell(update: Update, context: CallbackContext) -> None:
+@cutiepii_cmd(command=["sh"])
+async def shell(update: Update, context: CallbackContext):
     message = update.effective_message
-    cmd = await message.text.split(" ", 1)
+    cmd = message.text.split(" ", 1)
     if len(cmd) == 1:
-        await update.effective_message.reply_text(
-            "No command to execute was given.")
+        update.effective_message.reply_text("No command to execute was given.")
         return
     cmd = cmd[1]
     process = subprocess.Popen(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        shell=True,
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True,
     )
     stdout, stderr = process.communicate()
     reply = ""
     stderr = stderr.decode()
-    if stdout := stdout.decode():
+    stdout = stdout.decode()
+    if stdout:
         reply += f"*Stdout*\n`{stdout}`\n"
         LOGGER.info(f"Shell - {cmd} - {stdout}")
     if stderr:
@@ -73,10 +74,10 @@ async def shell(update: Update, context: CallbackContext) -> None:
                 chat_id=message.chat_id,
             )
     else:
-        await message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
+        message.reply_text(reply, parse_mode=ParseMode.MARKDOWN)
 
-
-CUTIEPII_PTB.add_handler(CommandHandler(["sh"], shell))
 
 __mod_name__ = "Shell"
 __command_list__ = ["sh"]
+__handlers__ = [
+]

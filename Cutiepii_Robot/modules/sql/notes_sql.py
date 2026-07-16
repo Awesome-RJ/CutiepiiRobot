@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -55,7 +55,7 @@ class Notes(BASE):
         self.file = file
 
     def __repr__(self):
-        return f"<Note {self.name}>"
+        return "<Note %s>" % self.name
 
 
 class Buttons(BASE):
@@ -87,7 +87,8 @@ def add_note_to_db(chat_id, note_name, note_data, msgtype, buttons=None, file=No
         buttons = []
 
     with NOTES_INSERTION_LOCK:
-        if prev := SESSION.query(Notes).get((str(chat_id), note_name)):
+        prev = SESSION.query(Notes).get((str(chat_id), note_name))
+        if prev:
             with BUTTONS_INSERTION_LOCK:
                 prev_buttons = (
                     SESSION.query(Buttons)
@@ -127,20 +128,17 @@ def get_note(chat_id, note_name):
 
 def rm_note(chat_id, note_name):
     with NOTES_INSERTION_LOCK:
-        if note := (
+        note = (
             SESSION.query(Notes)
-            .filter(
-                func.lower(Notes.name) == note_name,
-                Notes.chat_id == str(chat_id),
-            )
+            .filter(func.lower(Notes.name) == note_name, Notes.chat_id == str(chat_id))
             .first()
-        ):
+        )
+        if note:
             with BUTTONS_INSERTION_LOCK:
                 buttons = (
                     SESSION.query(Buttons)
                     .filter(
-                        Buttons.chat_id == str(chat_id),
-                        Buttons.note_name == note_name,
+                        Buttons.chat_id == str(chat_id), Buttons.note_name == note_name
                     )
                     .all()
                 )
@@ -150,8 +148,10 @@ def rm_note(chat_id, note_name):
             SESSION.delete(note)
             SESSION.commit()
             return True
-        SESSION.close()
-        return False
+
+        else:
+            SESSION.close()
+            return False
 
 
 def get_all_chat_notes(chat_id):

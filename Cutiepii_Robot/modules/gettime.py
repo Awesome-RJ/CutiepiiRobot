@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -34,11 +34,11 @@ import pycountry
 from typing import List
 
 from requests import get
-from Cutiepii_Robot import TIME_API_KEY, CUTIEPII_PTB
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+from Cutiepii_Robot import TIME_API_KEY, dispatcher
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 
 
 def generate_time(to_find: str, findtype: List[str]) -> str:
@@ -62,8 +62,8 @@ def generate_time(to_find: str, findtype: List[str]) -> str:
                 day_fmt = r"%A"
                 gmt_offset = zone["gmtOffset"]
                 timestamp = datetime.datetime.now(
-                    datetime.timezone.utc, ) + datetime.timedelta(
-                        seconds=gmt_offset)
+                    datetime.timezone.utc,
+                ) + datetime.timedelta(seconds=gmt_offset)
                 current_date = timestamp.strftime(date_fmt)
                 current_time = timestamp.strftime(time_fmt)
                 current_day = timestamp.strftime(day_fmt)
@@ -81,24 +81,22 @@ def generate_time(to_find: str, findtype: List[str]) -> str:
             f"<b>Current Date:</b> <code>{current_date}</code>\n"
             '<b>Timezones:</b> <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List here</a>'
         )
-    except Exception:
+    except:
         result = None
 
     return result
 
-
-async def gettime(update: Update, context: CallbackContext) -> None:
+@cutiepii_cmd(command='time', rate_limit_calls=10, rate_limit_window=60, add_error_handler=True)
+async def gettime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
 
     try:
         query = message.text.strip().split(" ", 1)[1]
-    except Exception:
-        await update.effective_message.reply_text(
-            "Provide a country name/abbreviation/timezone to find.")
+    except:
+        update.effective_message.reply_text("Provide a country name/abbreviation/timezone to find.")
         return
-    send_message = await message.reply_text(
-        f"Finding timezone info for <b>{query}</b>",
-        parse_mode=ParseMode.HTML,
+    send_message = message.reply_text(
+        f"Finding timezone info for <b>{query}</b>", parse_mode=ParseMode.HTML,
     )
 
     query_timezone = query.lower()
@@ -120,13 +118,7 @@ async def gettime(update: Update, context: CallbackContext) -> None:
         return
 
     send_message.edit_text(
-        result,
-        parse_mode=ParseMode.HTML,
-        disable_web_page_preview=True,
+        result, parse_mode=ParseMode.HTML, disable_web_page_preview=True,
     )
 
-
-CUTIEPII_PTB.add_handler(DisableAbleCommandHandler("time", gettime))
-
 __mod_name__ = "Time"
-__command_list__ = ["time"]

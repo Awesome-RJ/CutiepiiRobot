@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,11 +29,61 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+from Cutiepii_Robot import DEV_USERS, SUDO_USERS, SUPPORT_USERS
 from telegram import Message
-from telegram.ext.filters import MessageFilter
+from telegram.ext import filters
+MessageFilter = filters.BaseFilter  # Alias for backward compatibility
 
-    class _IsAnonChannel(MessageFilter):
+
+class CustomFilters:
+    class _Supporters(MessageFilter):
         def filter(self, message: Message):
-            return bool((message.from_user and message.from_user.id == 136817688 ))
+            return bool(message.from_user and message.from_user.id in SUPPORT_USERS)
 
-    is_anon_channel = _IsAnonChannel()
+    support_filter = _Supporters()
+
+    class _Sudoers(MessageFilter):
+        def filter(self, message: Message):
+            return bool(message.from_user and message.from_user.id in SUDO_USERS)
+
+    sudo_filter = _Sudoers()
+
+    class _Developers(MessageFilter):
+        def filter(self, message: Message):
+            return bool(message.from_user and message.from_user.id in DEV_USERS)
+
+    dev_filter = _Developers()
+
+    class _MimeType(MessageFilter):
+        def __init__(self, mimetype):
+            self.mime_type = mimetype
+            self.name = f"CustomFilters.mime_type({self.mime_type})"
+
+        def filter(self, message: Message):
+            return bool(
+                message.document and message.document.mime_type == self.mime_type,
+            )
+
+    mime_type = _MimeType
+
+    class _HasText(MessageFilter):
+        def filter(self, message: Message):
+            return bool(
+                message.text
+                or message.sticker
+                or message.photo
+                or message.document
+                or message.video,
+            )
+
+    has_text = _HasText()
+
+    class _AnonChannel(MessageFilter):
+
+        def filter(self, message: Message):
+            return bool(
+                message.from_user and message.from_user.id == 136817688
+            )
+
+    anonchannel = _AnonChannel()
+    """Messages that are from `Anonymous Chanels`"""

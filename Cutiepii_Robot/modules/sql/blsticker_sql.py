@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -48,7 +48,7 @@ class StickersFilters(BASE):
         return "<Stickers filter '%s' for %s>" % (self.trigger, self.chat_id)
 
     def __eq__(self, other):
-        return (
+        return bool(
             isinstance(other, StickersFilters)
             and self.chat_id == other.chat_id
             and self.trigger == other.trigger,
@@ -67,7 +67,9 @@ class StickerSettings(BASE):
         self.value = value
 
     def __repr__(self):
-        return f"<{self.chat_id} will executing {self.blacklist_type} for blacklist trigger.>"
+        return "<{} will executing {} for blacklist trigger.>".format(
+            self.chat_id, self.blacklist_type,
+        )
 
 
 StickersFilters.__table__.create(checkfirst=True)
@@ -86,6 +88,7 @@ def add_to_stickers(chat_id, trigger):
 
         SESSION.merge(stickers_filt)  # merge to avoid duplicate key issues
         SESSION.commit()
+        global CHAT_STICKERS
         if CHAT_STICKERS.get(str(chat_id), set()) == set():
             CHAT_STICKERS[str(chat_id)] = {trigger}
         else:
@@ -94,9 +97,8 @@ def add_to_stickers(chat_id, trigger):
 
 def rm_from_stickers(chat_id, trigger):
     with STICKERS_FILTER_INSERTION_LOCK:
-        if stickers_filt := SESSION.query(StickersFilters).get(
-            (str(chat_id), trigger)
-        ):
+        stickers_filt = SESSION.query(StickersFilters).get((str(chat_id), trigger))
+        if stickers_filt:
             if trigger in CHAT_STICKERS.get(str(chat_id), set()):  # sanity check
                 CHAT_STICKERS.get(str(chat_id), set()).remove(trigger)
 
@@ -148,6 +150,7 @@ def set_blacklist_strength(chat_id, blacklist_type, value):
     # 6 = tban
     # 7 = tmute
     with STICKSET_FILTER_INSERTION_LOCK:
+        global CHAT_BLSTICK_BLACKLISTS
         curr_setting = SESSION.query(StickerSettings).get(str(chat_id))
         if not curr_setting:
             curr_setting = StickerSettings(
@@ -167,7 +170,8 @@ def set_blacklist_strength(chat_id, blacklist_type, value):
 
 def get_blacklist_setting(chat_id):
     try:
-        if setting := CHAT_BLSTICK_BLACKLISTS.get(str(chat_id)):
+        setting = CHAT_BLSTICK_BLACKLISTS.get(str(chat_id))
+        if setting:
             return setting["blacklist_type"], setting["value"]
         return 1, "0"
 
@@ -193,6 +197,7 @@ def __load_CHAT_STICKERS():
 
 
 def __load_chat_stickerset_blacklists():
+    global CHAT_BLSTICK_BLACKLISTS
     try:
         chats_settings = SESSION.query(StickerSettings).all()
         for x in chats_settings:  # remove tuple by ( ,)

@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -33,6 +33,7 @@ import threading
 
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 from sqlalchemy import Column, String, UnicodeText
+from Cutiepii_Robot import LOGGER
 
 
 class BlacklistUsers(BASE):
@@ -45,7 +46,21 @@ class BlacklistUsers(BASE):
         self.reason = reason
 
 
-BlacklistUsers.__table__.create(checkfirst=True)
+# Create table with error handling for permission issues
+try:
+    BlacklistUsers.__table__.create(checkfirst=True)
+except Exception as e:
+    error_str = str(e).lower()
+    if "permission denied" in error_str or "insufficientprivilege" in error_str:
+        # Tables are created by BASE.metadata.create_all() in sql/__init__.py
+        # Permission errors are expected on managed databases like Render
+        pass
+    elif "already exists" in error_str or "duplicate" in error_str:
+        # Table already exists, which is fine
+        pass
+    else:
+        # Log other errors but don't fail
+        LOGGER.warning(f"[SQL] Could not create blacklistusers table: {e}")
 
 BLACKLIST_LOCK = threading.RLock()
 BLACKLIST_USERS = set()
@@ -66,7 +81,8 @@ def blacklist_user(user_id, reason=None):
 
 def unblacklist_user(user_id):
     with BLACKLIST_LOCK:
-        if user := SESSION.query(BlacklistUsers).get(str(user_id)):
+        user = SESSION.query(BlacklistUsers).get(str(user_id))
+        if user:
             SESSION.delete(user)
 
         SESSION.commit()
@@ -74,10 +90,11 @@ def unblacklist_user(user_id):
 
 
 def get_reason(user_id):
-    if user := SESSION.query(BlacklistUsers).get(str(user_id)):
+    user = SESSION.query(BlacklistUsers).get(str(user_id))
+    rep = ""
+    if user:
         rep = user.reason
-    else:
-        rep = ""
+
     SESSION.close()
     return rep
 
@@ -90,6 +107,15 @@ def __load_blacklist_userid_list():
     global BLACKLIST_USERS
     try:
         BLACKLIST_USERS = {int(x.user_id) for x in SESSION.query(BlacklistUsers).all()}
+    except Exception:
+        # Table might not exist yet during early import-time. Let's create it.
+        try:
+            engine = SESSION.get_bind()
+            BlacklistUsers.__table__.create(bind=engine, checkfirst=True)
+            BLACKLIST_USERS = {int(x.user_id) for x in SESSION.query(BlacklistUsers).all()}
+        except Exception as e:
+            LOGGER.error(f"[SQL] Failed to load or auto-create blacklistusers table: {e}")
+            BLACKLIST_USERS = set()
     finally:
         SESSION.close()
 

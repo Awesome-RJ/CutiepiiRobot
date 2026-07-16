@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -28,21 +28,25 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-from pyrogram.types import Message
-from typing import Tuple
+import asyncio
+import os
+import shlex
+
+from functools import wraps
+from typing import Tuple, Optional
 
 # Setting Message
 
 
-def get_text(message: Message) -> [None, str]:
+def get_text(message) -> Optional[str]:
     """Extract Text From Commands"""
-    text_to_return = message.text
-    if message.text is None:
+    text_to_return = message.text if hasattr(message, 'text') else None
+    if text_to_return is None:
         return None
     if " " not in text_to_return:
         return None
 
     try:
-        return message.text.split(None, 1)[1]
+        return text_to_return.split(None, 1)[1]
     except IndexError:
         return None

@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -30,46 +30,41 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import json
-import time
 import os
-import contextlib
+import time
+
+import Cutiepii_Robot.modules.sql.blacklist_sql as blacklistsql
+import Cutiepii_Robot.modules.sql.locks_sql as locksql
+import Cutiepii_Robot.modules.sql.notes_sql as sql
+import Cutiepii_Robot.modules.sql.rules_sql as rulessql
 
 from io import BytesIO
 from telegram import Update
-from telegram.constants import ParseMode, ChatType
+from telegram.constants import ParseMode, ChatAction
 from telegram.error import BadRequest
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import ContextTypes
 
-import Cutiepii_Robot.modules.sql.notes_sql as sql
-from Cutiepii_Robot import CUTIEPII_PTB, LOGGER, OWNER_ID, JOIN_LOGGER, SUPPORT_CHAT
-from Cutiepii_Robot.__main__ import DATA_IMPORT
-
-from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
-import Cutiepii_Robot.modules.sql.rules_sql as rulessql
-import Cutiepii_Robot.modules.sql.blacklist_sql as blacklistsql
-from Cutiepii_Robot.modules.sql import disable_sql as disabledsql
-import Cutiepii_Robot.modules.sql.welcome_sql as welcsql
-import Cutiepii_Robot.modules.sql.locks_sql as locksql
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
+from Cutiepii_Robot.modules.helper_funcs.alternate import typing_action
+from Cutiepii_Robot.modules.helper_funcs.admin_status import user_admin_check, AdminPerms
+from Cutiepii_Robot import LOGGER
 from Cutiepii_Robot.modules.connection import connected
 
-
-@user_admin
-async def import_data(update: Update,
-                      context: CallbackContext) -> None:
+@cutiepii_cmd(command='import', rate_limit_calls=2, rate_limit_window=300, add_error_handler=True)
+@typing_action
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
+async def import_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.effective_message
     chat = update.effective_chat
     user = update.effective_user
-    # TODO: allow uploading doc with command, not just as reply
-    # only work with a doc
 
     conn = await connected(context.bot, update, chat, user.id, need_admin=True)
     if conn:
-        chat = CUTIEPII_PTB.bot.getChat(conn)
-        chat_name = CUTIEPII_PTB.bot.getChat(conn).title
+        chat = await dispatcher.bot.get_chat(conn)
+        chat_name = chat.title
     else:
-        if update.effective_message.chat.type == ChatType.PRIVATE:
-            await update.effective_message.reply_text(
-                "This is a group only command!")
+        if update.effective_message.chat.type == "private":
+            await update.effective_message.reply_text("This is a group only command!")
             return ""
 
         chat = update.effective_chat
@@ -77,8 +72,7 @@ async def import_data(update: Update,
 
     if msg.reply_to_message and msg.reply_to_message.document:
         try:
-            file_info = await context.bot.get_file(
-                msg.reply_to_message.document.file_id)
+            file_info = await context.bot.get_file(msg.reply_to_message.document.file_id)
         except BadRequest:
             await msg.reply_text(
                 "Try downloading and uploading the file yourself again, This one seem broken to me!",
@@ -86,38 +80,34 @@ async def import_data(update: Update,
             return
 
         with BytesIO() as file:
-            file_info.download(out=file)
+            await file_info.download_to_memory(out=file)
             file.seek(0)
             data = json.load(file)
 
-        # only import one group
         if len(data) > 1 and str(chat.id) not in data:
             await msg.reply_text(
                 "There are more than one group in this file and the chat.id is not same! How am i supposed to import it?",
             )
             return
 
-        # Check if backup is this chat
         try:
             if data.get(str(chat.id)) is None:
                 if conn:
-                    text = f"Backup comes from another chat, I can't return another chat to chat *{chat_name}*"
-
+                    text = "Backup comes from another chat, I can't return another chat to chat *{}*".format(
+                        chat_name,
+                    )
                 else:
                     text = "Backup comes from another chat, I can't return another chat to this chat"
-                return await msg.reply_text(text,
-                                            parse_mode=ParseMode.MARKDOWN)
+                return await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN)
         except Exception:
-            return await msg.reply_text(
-                "There was a problem while importing the data!")
-        # Check if backup is from self
-        with contextlib.suppress(Exception):
-            if str(context.bot.id) != str(data[str(chat.id)]["bot"]):
-                return await msg.reply_text(
+            return await msg.reply_text("There was a problem while importing the data!")
+        try:
+            if str(BOT_ID) != str(data[str(chat.id)]["bot"]):
+                await msg.reply_text(
                     "Backup from another bot that is not suggested might cause the problem, documents, photos, videos, audios, records might not work as it should be.",
                 )
-
-        # Select data source
+        except Exception:
+            pass
         if str(chat.id) in data:
             data = data[str(chat.id)]["hashes"]
         else:
@@ -125,7 +115,10 @@ async def import_data(update: Update,
 
         try:
             for mod in DATA_IMPORT:
-                mod.__import_data__(str(chat.id), data)
+                if asyncio.iscoroutinefunction(mod.__import_data__):
+                    await mod.__import_data__(str(chat.id), data)
+                else:
+                    mod.__import_data__(str(chat.id), data)
         except Exception:
             await msg.reply_text(
                 f"An error occurred while recovering your data. The process failed. If you experience a problem with this, please take it to @{SUPPORT_CHAT}",
@@ -138,34 +131,29 @@ async def import_data(update: Update,
             )
             return
 
-        # TODO: some of that link logic
-        # NOTE: consider default permissions stuff?
         if conn:
-
-            text = f"Backup fully restored on *{chat_name}*."
+            text = "Backup fully restored on *{}*.".format(chat_name)
         else:
             text = "Backup fully restored"
         await msg.reply_text(text, parse_mode=ParseMode.MARKDOWN)
 
-
-@user_admin
-async def export_data(update: Update,
-                      context: CallbackContext) -> None:
+@cutiepii_cmd(command='export', rate_limit_calls=1, rate_limit_window=300, add_error_handler=True)
+@user_admin_check(AdminPerms.CAN_CHANGE_INFO)
+async def export_data(update: Update, context: ContextTypes.DEFAULT_TYPE):  # sourcery no-metrics
     chat_data = context.chat_data
-    msg = update.effective_message  # type: Optional[Message]
-    user = update.effective_user  # type: Optional[User]
-    chat_id = update.effective_chat.id
+    msg = update.effective_message
+    user = update.effective_user
     chat = update.effective_chat
+
+    chat_id = update.effective_chat.id
     current_chat_id = update.effective_chat.id
     conn = await connected(context.bot, update, chat, user.id, need_admin=True)
     if conn:
-        chat = CUTIEPII_PTB.bot.getChat(conn)
+        chat = await dispatcher.bot.get_chat(conn)
         chat_id = conn
-        # chat_name = CUTIEPII_PTB.bot.getChat(conn).title
     else:
-        if update.effective_message.chat.type == ChatType.PRIVATE:
-            await update.effective_message.reply_text(
-                "This is a group only command!")
+        if update.effective_message.chat.type == "private":
+            await update.effective_message.reply_text("This is a group only command!")
             return ""
         chat = update.effective_chat
         chat_id = update.effective_chat.id
@@ -173,19 +161,24 @@ async def export_data(update: Update,
     jam = time.time()
     new_jam = jam + 10800
     checkchat = get_chat(chat_id, chat_data)
-    if checkchat.get("status") and jam <= int(checkchat.get("value")):
-        timeformatt = time.strftime(
-            "%H:%M:%S %d/%m/%Y",
-            time.localtime(checkchat.get("value")),
-        )
-        await update.effective_message.reply_text(
-            "You can only backup once a day!\nYou can backup again in about `{}`"
-            .format(timeformatt, ),
-            parse_mode=ParseMode.MARKDOWN,
-        )
-        return
-    if user.id != OWNER_ID:
+    if checkchat.get("status"):
+        if jam <= int(checkchat.get("value")):
+            timeformatt = time.strftime(
+                "%H:%M:%S %d/%m/%Y", time.localtime(checkchat.get("value")),
+            )
+            await update.effective_message.reply_text(
+                "You can only backup once a day!\nYou can backup again in about `{}`".format(
+                    timeformatt,
+                ),
+                parse_mode=ParseMode.MARKDOWN,
+            )
+            return
+        else:
+            if user.id != OWNER_ID:
+                put_chat(chat_id, new_jam, chat_data)
+    elif user.id != OWNER_ID:
         put_chat(chat_id, new_jam, chat_data)
+
     note_list = sql.get_all_chat_notes(chat_id)
     backup = {}
     buttonlist = []
@@ -193,7 +186,6 @@ async def export_data(update: Update,
     isicat = ""
     rules = ""
     count = 0
-    countbtn = 0
     # Notes
     for note in note_list:
         count += 1
@@ -201,102 +193,40 @@ async def export_data(update: Update,
         if note.msgtype == 1:
             tombol = sql.get_buttons(chat_id, note.name)
             for btn in tombol:
-                countbtn += 1
                 if btn.same_line:
                     buttonlist.append(
-                        ("{}".format(btn.name), "{}".format(btn.url), True), )
+                        ("{}".format(btn.name), "{}".format(btn.url), True),
+                    )
                 else:
                     buttonlist.append(
-                        ("{}".format(btn.name), "{}".format(btn.url), False), )
+                        ("{}".format(btn.name), "{}".format(btn.url), False),
+                    )
             isicat += "###button###: {}<###button###>{}<###splitter###>".format(
-                note.value,
-                str(buttonlist),
+                note.value, str(buttonlist),
             )
             buttonlist.clear()
         elif note.msgtype == 2:
             isicat += "###sticker###:{}<###splitter###>".format(note.file)
-        elif note.msgtype == 3:
-            isicat += "###file###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file,
-                note.value,
-            )
-        elif note.msgtype == 4:
-            isicat += "###photo###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file,
-                note.value,
-            )
-        elif note.msgtype == 5:
-            isicat += "###audio###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file,
-                note.value,
-            )
-        elif note.msgtype == 6:
-            isicat += "###voice###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file,
-                note.value,
-            )
-        elif note.msgtype == 7:
-            isicat += "###video###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file,
-                note.value,
-            )
-        elif note.msgtype == 8:
-            isicat += "###video_note###:{}<###TYPESPLIT###>{}<###splitter###>".format(
-                note.file,
-                note.value,
+        elif note.msgtype in (3, 4, 5, 6, 7, 8):
+            types = {3: "file", 4: "photo", 5: "audio", 6: "voice", 7: "video", 8: "video_note"}
+            isicat += "###{}###:{}<###TYPESPLIT###>{}<###splitter###>".format(
+                types[note.msgtype], note.file, note.value,
             )
         else:
             isicat += "{}<###splitter###>".format(note.value)
     notes = {
-        "#{}".format(namacat.split("<###splitter###>")[x]):
-        "{}".format(isicat.split("<###splitter###>")[x], )
+        "#{}".format(namacat.split("<###splitter###>")[x]): "{}".format(
+            isicat.split("<###splitter###>")[x],
+        )
         for x in range(count)
     }
-    # Rules
     rules = rulessql.get_rules(chat_id)
-    # Blacklist
     bl = list(blacklistsql.get_chat_blacklist(chat_id))
-    # Disabled command
     disabledcmd = list(disabledsql.get_all_disabled(chat_id))
-    # Filters
-    """
-     all_filters = list(filtersql.get_chat_triggers(chat_id))
-     export_filters = {}
-     for filters in all_filters:
-    	filt = filtersql.get_filter(chat_id, filters)
-    	if filt.is_sticker:
-    		typefilt = "sticker"
-    	elif filt.is_document:
-    		typefilt = "document"
-    	elif filt.is_image:
-    		typefilt = "image"
-    	elif filt.is_audio:
-    		typefilt = "audio"
-    	elif filt.is_video:
-    		typefilt = "video"
-    	elif filt.is_voice:
-    		typefilt = "voice"
-    	elif filt.has_buttons:
-    		typefilt = "buttons"
-    		buttons = filtersql.get_buttons(chat_id, filt.keyword)
-    	elif filt.has_markdown:
-    		typefilt = "text"
-    	if typefilt == "buttons":
-    		content = "{}#=#{}|btn|{}".format(typefilt, filt.reply, buttons)
-    	else:
-    		content = "{}#=#{}".format(typefilt, filt.reply)
-    		LOGGER.debug(content)
-    		export_filters[filters] = content
-    #LOGGER.debug(export_filters)
-
-    """
-
-    # Welcome (TODO)
-    #welc = welcsql.get_welc_pref(chat_id)
-    # Locked
     curr_locks = locksql.get_locks(chat_id)
     curr_restr = locksql.get_restr(chat_id)
 
+    locked_lock = {}
     if curr_locks:
         locked_lock = {
             "sticker": curr_locks.sticker,
@@ -314,40 +244,29 @@ async def export_data(update: Update,
             "location": curr_locks.location,
             "rtl": curr_locks.rtl,
         }
-    else:
-        locked_lock = {}
 
+    locked_restr = {}
     if curr_restr:
         locked_restr = {
-            "messages":
-            curr_restr.messages,
-            "media":
-            curr_restr.media,
-            "other":
-            curr_restr.other,
-            "previews":
-            curr_restr.preview,
-            "all":
-            all([
-                curr_restr.messages,
-                curr_restr.media,
-                curr_restr.other,
-                curr_restr.preview,
-            ], ),
+            "messages": curr_restr.messages,
+            "media": curr_restr.media,
+            "other": curr_restr.other,
+            "previews": curr_restr.preview,
+            "all": all(
+                [
+                    curr_restr.messages,
+                    curr_restr.media,
+                    curr_restr.other,
+                    curr_restr.preview,
+                ],
+            ),
         }
-    else:
-        locked_restr = {}
 
     locks = {"locks": locked_lock, "restrict": locked_restr}
-    # Warns (TODO)
-    # warns = warnssql.get_warns(chat_id)
-    # Backing up
     backup[chat_id] = {
-        "bot": context.bot.id,
+        "bot": BOT_ID,
         "hashes": {
-            "info": {
-                "rules": rules
-            },
+            "info": {"rules": rules},
             "extra": notes,
             "blacklist": bl,
             "disabled": disabledcmd,
@@ -355,61 +274,41 @@ async def export_data(update: Update,
         },
     }
     baccinfo = json.dumps(backup, indent=4)
-    with open("Cutiepii_Robot{}Backup".format(chat_id), "w") as f:
+    file_name = "{}{}.json".format(BOT_USERNAME, chat_id)
+    with open(file_name, "w") as f:
         f.write(str(baccinfo))
-    await context.bot.sendChatAction(current_chat_id, "upload_document")
+    
+    await context.bot.send_chat_action(current_chat_id, ChatAction.UPLOAD_DOCUMENT)
     tgl = time.strftime("%H:%M:%S - %d/%m/%Y", time.localtime(time.time()))
-    with contextlib.suppress(BadRequest):
-        await context.bot.sendMessage(
-            JOIN_LOGGER,
-            "*Successfully imported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`"
-            .format(
-                chat.title,
-                chat_id,
-                tgl,
+    with open(file_name, "rb") as f:
+        await context.bot.send_document(
+            current_chat_id,
+            document=f,
+            caption=("*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n"
+                    "\nNote: This `{}-Backup` was specially made for notes.").format(
+                chat.title, chat_id, tgl, BOT_USERNAME
             ),
+            reply_to_message_id=msg.message_id,
             parse_mode=ParseMode.MARKDOWN,
         )
-    await context.bot.sendDocument(
-        current_chat_id,
-        document=open("Cutiepii_Robot{}Backup".format(chat_id), "rb"),
-        caption=
-        "*Successfully Exported backup:*\nChat: `{}`\nChat ID: `{}`\nOn: `{}`\n\nNote: This `Cutiepii-Robot-Backup` was specially made for notes."
-        .format(
-            chat.title,
-            chat_id,
-            tgl,
-        ),
-        timeout=360,
-        reply_to_message_id=msg.message_id,
-        parse_mode=ParseMode.MARKDOWN,
-    )
-    os.remove("Cutiepii_Robot{}Backup".format(chat_id))  # Cleaning file
+    os.remove(file_name)  # Cleaning file
 
 
 # Temporary data
 def put_chat(chat_id, value, chat_data):
-    LOGGER.debug(chat_data)
+    # LOGGER.debug(chat_data)
     status = value is not False
     chat_data[chat_id] = {"backups": {"status": status, "value": value}}
 
 
 def get_chat(chat_id, chat_data):
-    LOGGER.debug(chat_data)
+    # LOGGER.debug(chat_data)
     try:
         return chat_data[chat_id]["backups"]
-    except (KeyError, IndexError):
+    except KeyError:
         return {"status": False, "value": False}
 
 
-__help__ = """
-*Only for group owner:*
-➛ /import*:* Reply to the backup file for the butler / emilia group to import as much as possible, making transfers very easy! \
- Note that files / photos cannot be imported due to telegram restrictions.
-➛ /export*:* Export group data, which will be exported are: rules, notes (documents, images, music, video, audio, voice, text, text buttons) \
-"""
+__help__ = True
 
 __mod_name__ = "Backups"
-
-CUTIEPII_PTB.add_handler(CommandHandler("import", import_data))
-CUTIEPII_PTB.add_handler(CommandHandler("export", export_data))

@@ -2,19 +2,10 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -28,59 +19,90 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_callback, cutiepii_cmd
 import re
 import os
 import subprocess
 import sys
 import asyncio
-
-from Cutiepii_Robot import CUTIEPII_PTB, DEV_USERS, telethn, OWNER_ID
-from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.error import TelegramError
-from telegram.ext import CallbackContext, CommandHandler
-from telegram.constants import ParseMode
-from telegram.ext import CallbackQueryHandler
+import shlex
+from typing import Optional
+from contextlib import suppress
 from statistics import mean
 from time import monotonic as time
-from asyncio import sleep
+
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.constants import ParseMode
+from telegram.error import TelegramError
+from telegram.ext import ContextTypes, CommandHandler, CallbackQueryHandler
+from telegram.error import Forbidden
 from telethon import events
 
+from Cutiepii_Robot import dispatcher, DEV_USERS, telethn, OWNER_ID, ALLOW_CHATS, LOGGER
+from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 
-async def leave_cb(update: Update, context: CallbackContext) -> None:
-    bot = context.bot
-    callback = update.callback_query
-    if callback.from_user.id not in DEV_USERS:
-        callback.answer(text="This isn't for you", show_alert=True)
-        return
 
-    match = re.match(r"leavechat_cb_\((.+?)\)", callback.data)
-    chat = int(match[1])
-    await bot.leave_chat(chat_id=chat)
-    callback.answer(text="Left chat")
+@cutiepii_callback(pattern=r"leavechat_cb_")
+async def leave_cb(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Callback for leave chat confirmation"""
+    try:
+        callback = update.callback_query
+        
+        if callback.from_user.id not in DEV_USERS:
+            await callback.answer(text="This action is not authorized.", show_alert=True)
+            return
+        
+        match = re.match(r"leavechat_cb_\((.+?)\)", callback.data)
+        if not match:
+            await callback.answer(text="Invalid callback data.", show_alert=True)
+            return
+        
+        chat_id = int(match.group(1))
+        await context.bot.leave_chat(chat_id=chat_id)
+        await callback.answer(text="Left the chat.")
+        
+        LOGGER.info(f"[Dev] Bot left chat {chat_id} by {callback.from_user.id}")
+        
+    except Exception as e:
+        LOGGER.error(f"[Dev] Error in leave_cb: {e}")
+        await callback.answer(text="Error occurred while leaving the chat.", show_alert=True)
 
 
 @dev_plus
-async def allow_groups(update: Update,
-                       context: CallbackContext) -> None:
-    args = context.args
-    if not args:
-        state = "off" if ALLOW_CHATS else "Lockdown is " + "on"
-        await update.effective_message.reply_text(f"Current state: {state}")
-        return
-    if args[0].lower() in ["off", "no"]:
-        ALLOW_CHATS = True
-    elif args[0].lower() in ["yes", "on"]:
-        ALLOW_CHATS = False
-    else:
-        await update.effective_message.reply_text(
-            "Format: /lockdown Yes/No or Off/On")
-        return
-    await update.effective_message.reply_text("Done! Lockdown value toggled.")
+@cutiepii_cmd(command="lockdown")
+async def allow_groups(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Toggle group lockdown mode (developer only)"""
+    try:
+        args = context.args
+        message = update.effective_message
+        
+        if not args:
+            state = "Lockdown is " + ("disabled" if ALLOW_CHATS else "enabled")
+            await message.reply_text(f"<b>Lockdown Settings</b>\nCurrent state: {state}", parse_mode=ParseMode.HTML)
+            return
+        
+        arg = args[0].lower()
+        if arg in ["off", "no"]:
+            # ALLOW_CHATS = True means lockdown is OFF
+            ALLOW_CHATS = True
+            await message.reply_text("<b>Lockdown Disabled</b>\nThe bot is now allowed to join new groups.", parse_mode=ParseMode.HTML)
+        elif arg in ["yes", "on"]:
+            # ALLOW_CHATS = False means lockdown is ON
+            ALLOW_CHATS = False
+            await message.reply_text("<b>Lockdown Enabled</b>\nThe bot will not join new groups.", parse_mode=ParseMode.HTML)
+        else:
+            await message.reply_text("<b>Usage:</b>\n<code>/lockdown &lt;yes/no&gt;</code> or <code>&lt;on/off&gt;</code>", parse_mode=ParseMode.HTML)
+            return
+        
+        LOGGER.info(f"[Dev] Lockdown toggled to {arg} by {update.effective_user.id}")
+        
+    except Exception as e:
+        LOGGER.error(f"[Dev] Error in allow_groups: {e}")
+        await update.effective_message.reply_text("An error occurred while toggling lockdown.")
 
 
 class Store:
-
+    """Store for tracking event statistics"""
     def __init__(self, func):
         self.func = func
         self.calls = []
@@ -88,12 +110,14 @@ class Store:
         self.lock = asyncio.Lock()
 
     def average(self):
+        """Calculate average calls per second"""
         return round(mean(self.calls), 2) if self.calls else 0
 
     def __repr__(self):
         return f"<Store func={self.func.__name__}, average={self.average()}>"
 
     async def __call__(self, event):
+        """Track event calls"""
         async with self.lock:
             if not self.calls:
                 self.calls = [0]
@@ -106,13 +130,16 @@ class Store:
 
 
 async def nothing(event):
+    """Placeholder function for event tracking"""
     pass
 
 
+# Initialize event trackers
 messages = Store(nothing)
 inline_queries = Store(nothing)
 callback_queries = Store(nothing)
 
+# Register event handlers
 telethn.add_event_handler(messages, events.NewMessage())
 telethn.add_event_handler(inline_queries, events.InlineQuery())
 telethn.add_event_handler(callback_queries, events.CallbackQuery())
@@ -120,98 +147,238 @@ telethn.add_event_handler(callback_queries, events.CallbackQuery())
 
 @telethn.on(events.NewMessage(pattern=r"/getstats", from_users=OWNER_ID))
 async def getstats(event):
-    await event.reply(
-        f"**__CUTIEPII EVENT STATISTICS__**\n**Average messages:** {messages.average()}/s\n**Average Callback Queries:** {callback_queries.average()}/s\n**Average Inline Queries:** {inline_queries.average()}/s",
-        parse_mode="md")
-
-
-@dev_plus
-async def pip_install(update: Update,
-                      context: CallbackContext) -> None:
-    message = update.effective_message
-    args = context.args
-    if not args:
-        await update.effective_message.reply_text("Enter a package name.")
-        return
-    if len(args) >= 1:
-        cmd = f"py -m pip install {' '.join(args)}"
-        process = subprocess.Popen(
-            cmd.split(" "),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            shell=True,
+    """Get bot statistics (owner only)"""
+    try:
+        await event.reply(
+            "<b>Event Statistics</b>\n\n"
+            f"<b>Average Messages:</b> <code>{messages.average()}/s</code>\n"
+            f"<b>Average Callback Queries:</b> <code>{callback_queries.average()}/s</code>\n"
+            f"<b>Average Inline Queries:</b> <code>{inline_queries.average()}/s</code>",
+            parse_mode="html"
         )
-        stdout, stderr = process.communicate()
-        reply = ""
-        stderr = stderr.decode()
-        if stdout := stdout.decode():
-            reply += f"*Stdout*\n`{stdout}`\n"
-        if stderr:
-            reply += f"*Stderr*\n`{stderr}`\n"
-
-        await message.reply_text(text=reply, parse_mode=ParseMode.MARKDOWN)
+        LOGGER.info(f"[Dev] Stats requested by owner")
+    except Exception as e:
+        LOGGER.error(f"[Dev] Error in getstats: {e}")
 
 
 @dev_plus
-async def leave(update: Update, context: CallbackContext) -> None:
-    bot = context.bot
-    if args := context.args:
-        chat_id = str(args[0])
-        leave_msg = " ".join(args[1:])
+@cutiepii_cmd(command="install")
+async def pip_install(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Install Python packages (developer only) - USE WITH CAUTION"""
+    try:
+        message = update.effective_message
+        args = context.args
+        
+        if not args:
+            await message.reply_text(
+                "<b>Usage:</b>\n<code>/install &lt;package_name&gt;</code>\n\n"
+                "<b>Warning:</b> This command installs packages directly onto the host system. "
+                "Ensure you only install trusted dependencies.",
+                parse_mode=ParseMode.HTML
+            )
+            return
+        
+        # Security: Validate package names (alphanumeric, hyphens, underscores only)
+        package_names = []
+        for arg in args:
+            if not re.match(r'^[a-zA-Z0-9_\-\.]+$', arg):
+                await message.reply_text(
+                    f"<b>Error:</b> Invalid package name: <code>{html.escape(arg)}</code>\n"
+                    "Package names must be alphanumeric, including hyphens/underscores/dots.",
+                    parse_mode=ParseMode.HTML
+                )
+                return
+            package_names.append(arg)
+        
+        await message.reply_text(
+            f"<b>Package Manager</b>\nInstalling packages: <code>{', '.join(html.escape(p) for p in package_names)}</code>\n"
+            "This may take a moment...",
+            parse_mode=ParseMode.HTML
+        )
+        
+        # Use subprocess.run with list of arguments (NOT shell=True for security)
+        cmd = [sys.executable, "-m", "pip", "install"] + package_names
+        
         try:
-            await context.bot.send_message(chat_id, leave_msg)
-            await bot.leave_chat(int(chat_id))
-            await update.effective_message.reply_text("Left chat.")
-        except TelegramError:
-            await update.effective_message.reply_text(
-                "Failed to leave chat for some reason.")
-    else:
-        chat = update.effective_chat
-        # user = update.effective_user
-        kb = [[
-            InlineKeyboardButton(text="I am sure of this action.",
-                                 callback_data=f"leavechat_cb_({chat.id})")
-        ]]
-
-        await update.effective_message.reply_text(
-            f"I'm going to leave {chat.title}, press the button below to confirm",
-            reply_markup=InlineKeyboardMarkup(kb))
+            process = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=120,  # 2 minute timeout
+                check=False
+            )
+            
+            stdout = process.stdout
+            stderr = process.stderr
+            reply = ""
+            
+            if stdout:
+                reply += f"<b>Stdout:</b>\n<code>{html.escape(stdout[:3000])}</code>\n"  # Limit output
+            if stderr:
+                reply += f"<b>Stderr:</b>\n<code>{html.escape(stderr[:1000])}</code>\n"
+            
+            if process.returncode == 0:
+                reply += "\n<b>Installation Successful</b>"
+            else:
+                reply += f"\n<b>Installation Failed</b> (Exit code: <code>{process.returncode}</code>)"
+            
+            await message.reply_text(text=reply, parse_mode=ParseMode.HTML)
+            LOGGER.info(f"[Dev] Package installed: {package_names} by {update.effective_user.id}")
+            
+        except subprocess.TimeoutExpired:
+            await message.reply_text("<b>Error:</b> Installation timed out (120s limit).", parse_mode=ParseMode.HTML)
+        except Exception as e:
+            LOGGER.error(f"[Dev] Error installing package: {e}")
+            await message.reply_text(f"<b>Error:</b> An error occurred during installation: <code>{html.escape(str(e))}</code>", parse_mode=ParseMode.HTML)
+            
+    except Exception as e:
+        LOGGER.error(f"[Dev] Error in pip_install: {e}")
+        await update.effective_message.reply_text("An error occurred during package installation.")
 
 
 @dev_plus
-async def gitpull(update: Update):
-    sent_msg = await update.effective_message.reply_text(
-        "Pulling all changes from remote and then attempting to restart.")
-    subprocess.Popen("git pull", stdout=subprocess.PIPE, shell=True)
-
-    sent_msg_text = sent_msg.text + "\n\nChanges pulled...I guess.. Restarting in "
-
-    for i in reversed(range(5)):
-        sent_msg.edit_text(sent_msg_text + str(i + 1))
-        await sleep(1)
-
-    sent_msg.edit_text("Restarted.")
-
-    os.system("restart.bat")
-    os.execv("start.bat", sys.argv)
+@cutiepii_cmd(command="leave")
+async def leave(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Leave a chat (developer only)"""
+    try:
+        message = update.effective_message
+        args = context.args
+        
+        if args:
+            # Leave specified chat
+            try:
+                chat_id = int(args[0])
+            except ValueError:
+                await message.reply_text("<b>Error:</b> Invalid chat ID. Must be a numeric value.", parse_mode=ParseMode.HTML)
+                return
+            
+            leave_msg = " ".join(args[1:]) if len(args) > 1 else "Goodbye!"
+            
+            try:
+                await context.bot.send_message(chat_id, leave_msg)
+                await context.bot.leave_chat(chat_id)
+                await message.reply_text(f"<b>Success:</b> Left chat <code>{chat_id}</code>.", parse_mode=ParseMode.HTML)
+                LOGGER.info(f"[Dev] Left chat {chat_id} by {update.effective_user.id}")
+            except TelegramError as e:
+                await message.reply_text(f"<b>Error:</b> Failed to leave chat: <code>{html.escape(str(e))}</code>", parse_mode=ParseMode.HTML)
+        else:
+            # Leave current chat with confirmation
+            chat = update.effective_chat
+            leave_button = [[
+                InlineKeyboardButton(
+                    text="Leave Chat",
+                    callback_data=f"leavechat_cb_({chat.id})"
+                )
+            ]]
+            await message.reply_text(
+                f"<b>Leave Confirmation</b>\nAre you sure you want to leave <b>{html.escape(chat.title)}</b>?\n"
+                "Press the button below to confirm.",
+                reply_markup=InlineKeyboardMarkup(leave_button),
+                parse_mode=ParseMode.HTML
+            )
+            
+    except Exception as e:
+        LOGGER.error(f"[Dev] Error in leave: {e}")
+        await update.effective_message.reply_text("An error occurred while processing leave command.")
 
 
 @dev_plus
-async def restart(update: Update):
-    await update.effective_message.reply_text(
-        "Exiting all Processes and starting a new Instance!")
-    process = subprocess.run("pkill python3 && python3 -m Cutiepii_Robot",
-                             shell=True,
-                             check=True)
-    process.communicate()
+@cutiepii_cmd(command="gitpull")
+async def gitpull(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Pull latest changes from git repository (developer only)"""
+    try:
+        message = update.effective_message
+        
+        await message.reply_text("<b>Git Pull</b>\nPulling latest changes from the git repository...", parse_mode=ParseMode.HTML)
+        
+        # Use subprocess.run without shell=True for security
+        try:
+            process = subprocess.run(
+                ["git", "pull"],
+                capture_output=True,
+                text=True,
+                timeout=60,
+                check=False
+            )
+            
+            output = process.stdout + "\n" + process.stderr
+            
+            if process.returncode == 0:
+                await message.reply_text(
+                    "<b>Git Pull Successful</b>\n\n"
+                    f"<code>{html.escape(output[:3000])}</code>\n\n"
+                    "<b>Notice:</b> A reboot is required to apply the changes.\n"
+                    "Use <code>/reboot</code> to restart the bot.",
+                    parse_mode=ParseMode.HTML
+                )
+                LOGGER.info(f"[Dev] Git pull executed by {update.effective_user.id}")
+            else:
+                await message.reply_text(
+                    f"<b>Git Pull Failed</b> (Exit code: <code>{process.returncode}</code>)\n\n"
+                    f"<code>{html.escape(output[:2000])}</code>",
+                    parse_mode=ParseMode.HTML
+                )
+                
+        except subprocess.TimeoutExpired:
+            await message.reply_text("<b>Error:</b> Git pull operation timed out (60s limit).", parse_mode=ParseMode.HTML)
+        except FileNotFoundError:
+            await message.reply_text("<b>Error:</b> Git binary was not found. Please ensure Git is installed.", parse_mode=ParseMode.HTML)
+        except Exception as e:
+            LOGGER.error(f"[Dev] Error in gitpull: {e}")
+            await message.reply_text(f"<b>Error:</b> An error occurred during git pull: <code>{html.escape(str(e))}</code>", parse_mode=ParseMode.HTML)
+            
+    except Exception as e:
+        LOGGER.error(f"[Dev] Error in gitpull: {e}")
+        await update.effective_message.reply_text("An error occurred during git pull.")
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("install", pip_install))
-CUTIEPII_PTB.add_handler(CommandHandler("leave", leave))
-CUTIEPII_PTB.add_handler(CommandHandler("gitpull", gitpull))
-CUTIEPII_PTB.add_handler(CommandHandler("reboot", restart))
-CUTIEPII_PTB.add_handler(CommandHandler("lockdown", allow_groups))
-CUTIEPII_PTB.add_handler(
-    CallbackQueryHandler(leave_cb, pattern=r"leavechat_cb_"))
+@dev_plus
+@cutiepii_cmd(command="reboot")
+async def restart(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Restart the bot (developer only) - USE WITH CAUTION"""
+    try:
+        message = update.effective_message
+        
+        await message.reply_text(
+            "<b>Rebooting</b>\n"
+            "Restarting the bot... All processes will be terminated and a new instance will start. This may take a few moments.",
+            parse_mode=ParseMode.HTML
+        )
+        
+        LOGGER.warning(f"[Dev] Bot restart initiated by {update.effective_user.id}")
+        
+        # For Unix/Linux systems
+        if sys.platform != "win32":
+            try:
+                # Proper restart for Unix systems
+                os.execv(sys.executable, [sys.executable, "-m", "Cutiepii_Robot"])
+            except Exception as e:
+                LOGGER.error(f"[Dev] Unix restart failed: {e}")
+                # Fallback: Kill current process (supervisor/systemd should restart)
+                sys.exit(1)
+        else:
+            # For Windows
+            try:
+                # Try to use restart.bat if it exists
+                if os.path.exists("restart.bat"):
+                    subprocess.Popen(["restart.bat"], shell=True)
+                    sys.exit(0)
+                else:
+                    # Direct restart
+                    python = sys.executable
+                    os.execl(python, python, *sys.argv)
+            except Exception as e:
+                LOGGER.error(f"[Dev] Windows restart failed: {e}")
+                sys.exit(1)
+                
+    except Exception as e:
+        LOGGER.error(f"[Dev] Error in restart: {e}")
+        await update.effective_message.reply_text("An error occurred during restart attempt.")
+
+
+# Register handlers
+
 
 __mod_name__ = "Dev"
+__handlers__ = [
+]

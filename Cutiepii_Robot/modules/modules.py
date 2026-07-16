@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,31 +29,33 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 import importlib
 import collections
 
-from Cutiepii_Robot import CUTIEPII_PTB, telethn
+from Cutiepii_Robot import dispatcher, telethn
 from Cutiepii_Robot.__main__ import CHAT_SETTINGS, DATA_EXPORT, DATA_IMPORT, HELPABLE, IMPORTED, MIGRATEABLE, STATS, USER_INFO, USER_SETTINGS
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus, sudo_plus
 from telegram import Update
 from telegram.constants import ParseMode
-from telegram.ext import CommandHandler
+from telegram.ext import CommandHandler, ContextTypes
+CallbackContext = ContextTypes.DEFAULT_TYPE
+
 
 
 @dev_plus
-async def load(update: Update):
+@cutiepii_cmd(command="load")
+async def load(update: Update, context: CallbackContext):
     message = update.effective_message
-    text = await message.text.split(" ", 1)[1]
-    load_messasge = await message.reply_text(
-        f"Attempting to load module : <b>{text}</b>",
-        parse_mode=ParseMode.HTML,
+    text = message.text.split(" ", 1)[1]
+    load_message = await message.reply_text(
+        f"Attempting to load module : <b>{text}</b>", parse_mode=ParseMode.HTML,
     )
 
     try:
-        imported_module = importlib.import_module(
-            f"Cutiepii_Robot.modules.{text}")
-    except Exception:
-        await load_messasge.edit_text("Does that module even exist?")
+        imported_module = importlib.import_module("Cutiepii_Robot.modules." + text)
+    except:
+        await load_message.edit_text("Does that module even exist?")
         return
 
     if not hasattr(imported_module, "__mod_name__"):
@@ -62,22 +64,25 @@ async def load(update: Update):
     if imported_module.__mod_name__.lower() not in IMPORTED:
         IMPORTED[imported_module.__mod_name__.lower()] = imported_module
     else:
-        await load_messasge.edit_text("Module already loaded.")
+        await load_message.edit_text("Module already loaded.")
         return
-    if "__handlers__" in dir(imported_module):
-        handlers = imported_module.__handlers__
-        for handler in handlers:
-            if not isinstance(handler, tuple):
-                CUTIEPII_PTB.add_handler(handler)
-            elif isinstance(handler[0], collections.Callable):
-                callback, telethon_event = handler
-                telethn.add_event_handler(callback, telethon_event)
-            else:
-                handler_name, priority = handler
-                CUTIEPII_PTB.add_handler(handler_name, priority)
+    from Cutiepii_Robot.modules.helper_funcs.decorators import MODULE_HANDLERS
+
+    if "__handlers__" in dir(imported_module) or imported_module.__name__ in MODULE_HANDLERS:
+        if "__handlers__" in dir(imported_module):
+            handlers = imported_module.__handlers__
+            for handler in handlers:
+                if not isinstance(handler, tuple):
+                    dispatcher.add_handler(handler)
+                elif callable(handler[0]):
+                    callback, telethon_event = handler
+                    telethn.add_event_handler(callback, telethon_event)
+                else:
+                    handler_name, priority = handler
+                    dispatcher.add_handler(handler_name, priority)
     else:
         IMPORTED.pop(imported_module.__mod_name__.lower())
-        await load_messasge.edit_text("The module cannot be loaded.")
+        await load_message.edit_text("The module cannot be loaded.")
         return
 
     if hasattr(imported_module, "__help__") and imported_module.__help__:
@@ -105,26 +110,25 @@ async def load(update: Update):
     if hasattr(imported_module, "__user_settings__"):
         USER_SETTINGS[imported_module.__mod_name__.lower()] = imported_module
 
-    await load_messasge.edit_text(
-        f"Successfully loaded module : <b>{text}</b>",
-        parse_mode=ParseMode.HTML,
+    await load_message.edit_text(
+        "Successfully loaded module : <b>{}</b>".format(text), parse_mode=ParseMode.HTML,
     )
+
 
 
 @dev_plus
-async def unload(update: Update):
+@cutiepii_cmd(command="unload")
+async def unload(update: Update, context: CallbackContext):
     message = update.effective_message
-    text = await message.text.split(" ", 1)[1]
-    unload_messasge = await message.reply_text(
-        f"Attempting to unload module : <b>{text}</b>",
-        parse_mode=ParseMode.HTML,
+    text = message.text.split(" ", 1)[1]
+    unload_message = await message.reply_text(
+        f"Attempting to unload module : <b>{text}</b>", parse_mode=ParseMode.HTML,
     )
 
     try:
-        imported_module = importlib.import_module(
-            f"Cutiepii_Robot.modules.{text}")
-    except Exception:
-        await unload_messasge.edit_text("Does that module even exist?")
+        imported_module = importlib.import_module("Cutiepii_Robot.modules." + text)
+    except:
+        await unload_message.edit_text("Does that module even exist?")
         return
 
     if not hasattr(imported_module, "__mod_name__"):
@@ -132,26 +136,31 @@ async def unload(update: Update):
     if imported_module.__mod_name__.lower() in IMPORTED:
         IMPORTED.pop(imported_module.__mod_name__.lower())
     else:
-        await unload_messasge.edit_text(
-            "Can't unload something that isn't loaded.")
+        await unload_message.edit_text("Can't unload something that isn't loaded.")
         return
-    if "__handlers__" in dir(imported_module):
-        handlers = imported_module.__handlers__
-        for handler in handlers:
-            if isinstance(handler, bool):
-                await unload_messasge.edit_text(
-                    "This module can't be unloaded!")
-                return
-            if not isinstance(handler, tuple):
-                CUTIEPII_PTB.remove_handler(handler)
-            elif isinstance(handler[0], collections.Callable):
-                callback, telethon_event = handler
-                telethn.remove_event_handler(callback, telethon_event)
-            else:
-                handler_name, priority = handler
-                CUTIEPII_PTB.remove_handler(handler_name, priority)
+    from Cutiepii_Robot.modules.helper_funcs.decorators import MODULE_HANDLERS
+
+    if "__handlers__" in dir(imported_module) or imported_module.__name__ in MODULE_HANDLERS:
+        if "__handlers__" in dir(imported_module):
+            handlers = imported_module.__handlers__
+            for handler in handlers:
+                if isinstance(handler, bool):
+                    await unload_message.edit_text("This module can't be unloaded!")
+                    return
+                if not isinstance(handler, tuple):
+                    dispatcher.remove_handler(handler)
+                elif callable(handler[0]):
+                    callback, telethon_event = handler
+                    telethn.remove_event_handler(callback, telethon_event)
+                else:
+                    handler_name, priority = handler
+                    dispatcher.remove_handler(handler_name, priority)
+        
+        dec_handlers = MODULE_HANDLERS.pop(imported_module.__name__, [])
+        for handler, group in dec_handlers:
+            dispatcher.remove_handler(handler, group)
     else:
-        await unload_messasge.edit_text("The module cannot be unloaded.")
+        await unload_message.edit_text("The module cannot be unloaded.")
         return
 
     if hasattr(imported_module, "__help__") and imported_module.__help__:
@@ -179,14 +188,15 @@ async def unload(update: Update):
     if hasattr(imported_module, "__user_settings__"):
         USER_SETTINGS.pop(imported_module.__mod_name__.lower())
 
-    await unload_messasge.edit_text(
-        f"Successfully unloaded module : <b>{text}</b>",
-        parse_mode=ParseMode.HTML,
+    await unload_message.edit_text(
+        f"Successfully unloaded module : <b>{text}</b>", parse_mode=ParseMode.HTML,
     )
 
 
+
 @sudo_plus
-async def listmodules(update: Update):
+@cutiepii_cmd(command="listmodules")
+async def listmodules(update: Update, context: CallbackContext):
     message = update.effective_message
     module_list = []
 
@@ -200,8 +210,6 @@ async def listmodules(update: Update):
     await message.reply_text(module_list, parse_mode=ParseMode.HTML)
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("load", load))
-CUTIEPII_PTB.add_handler(CommandHandler("unload", unload))
-CUTIEPII_PTB.add_handler(CommandHandler("listmodules", listmodules))
+
 
 __mod_name__ = "Modules"

@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,152 +29,250 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from os import remove
-from pyrogram import filters
+import aiohttp
+import html
+from telegram import Update, ChatMember
+from telegram.ext import ContextTypes, MessageHandler, filters
+from telegram.error import BadRequest
 
-from Cutiepii_Robot import SUDO_USERS, arq, pgram
-from Cutiepii_Robot.utils.errors import capture_err
-from Cutiepii_Robot.utils.permissions import adminsOnly
-from Cutiepii_Robot.modules.mongo.nsfw_mongo import is_nsfw_on, nsfw_off, nsfw_on
+from Cutiepii_Robot import dispatcher, REDIS, LOGGER, arq
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_msg
+from Cutiepii_Robot.modules.log_channel import loggable
 
 
-async def get_file_id_from_message(message):
-    file_id = None
-    if message.document:
-        if int(message.document.file_size) > 3145728:
-            return
-        mime_type = message.document.mime_type
-        if mime_type not in ("image/png", "image/jpeg"):
-            return
-        file_id = message.document.file_id
+async def is_nsfw_enabled(chat_id: int) -> bool:
+    """Check if NSFW filter is enabled for a chat"""
+    return REDIS.get(f"antinsfw_{chat_id}") == "true"
 
-    if message.sticker:
-        if message.sticker.is_animated:
-            if not message.sticker.thumbs:
-                return
-            file_id = message.sticker.thumbs[0].file_id
-        else:
-            file_id = message.sticker.file_id
 
+async def enable_nsfw(chat_id: int):
+    """Enable NSFW filter for a chat"""
+    REDIS.set(f"antinsfw_{chat_id}", "true")
+
+
+async def disable_nsfw(chat_id: int):
+    """Disable NSFW filter for a chat"""
+    REDIS.delete(f"antinsfw_{chat_id}")
+
+
+@cutiepii_msg(pattern=(filters.PHOTO | filters.Document.IMAGE) & filters.ChatType.GROUPS, group=10)
+@loggable
+async def check_nsfw_content(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Check images for NSFW content"""
+    message = update.effective_message
+    chat = update.effective_chat
+    user = update.effective_user
+    
+    if not await is_nsfw_enabled(chat.id):
+        return None
+    
+    # Skip if user is admin
+    try:
+        member = await context.bot.get_chat_member(chat.id, user.id)
+        if member.status in [ChatMember.ADMINISTRATOR, ChatMember.OWNER]:
+            return None
+    except BadRequest:
+        pass
+    
+    # Get photo
     if message.photo:
-        file_id = message.photo.file_id
-
-    if message.animation:
-        if not message.animation.thumbs:
-            return
-        file_id = message.animation.thumbs[0].file_id
-
-    if message.video:
-        if not message.video.thumbs:
-            return
-        file_id = message.video.thumbs[0].file_id
-    return file_id
-
-
-@pgram.on_message(
-    (filters.document
-     | filters.photo
-     | filters.sticker
-     | filters.animation
-     | filters.video)
-    & ~filters.private,
-    group=8,
-)
-@capture_err
-async def detect_nsfw(_, message):
-    if not await is_nsfw_on(message.chat.id):
-        return
-    if not message.from_user:
-        return
-    file_id = await get_file_id_from_message(message)
-    if not file_id:
-        return
-    file = await pgram.download_media(file_id)
-    try:
-        results = await arq.nsfw_scan(file=file)
-    except Exception:
-        return
-    if not results.ok:
-        return
-    results = results.result
-    remove(file)
-    nsfw = results.is_nsfw
-    if message.from_user.id in SUDO_USERS:
-        return
-    if not nsfw:
-        return
-    try:
-        await message.delete()
-    except Exception:
-        return
-    await message.reply_text(f"""
-**NSFW Image Detected & Deleted Successfully!
-————————————————————**
-**User:** {message.from_user.mention} [`{message.from_user.id}`]
-**Safe:** `{results.neutral} %`
-**Porn:** `{results.porn} %`
-**Adult:** `{results.sexy} %`
-**Hentai:** `{results.hentai} %`
-**Drawings:** `{results.drawings} %`
-**————————————————————**
-__Powered by__@Yuki_Network.
-""")
-
-
-@pgram.on_message(filters.command(["nsfwscan", "nsfwscan@Cutiepii_Robot"]))
-@capture_err
-async def nsfw_scan_command(_, message):
-    if not message.reply_to_message:
-        await message.reply_text(
-            "Reply to an image/document/sticker/animation to scan it.")
-        return
-    reply = message.reply_to_message
-    if (not reply.document and not reply.photo and not reply.sticker
-            and not reply.animation and not reply.video):
-        await message.reply_text(
-            "Reply to an image/document/sticker/animation to scan it.")
-        return
-    m = await message.reply_text("Scanning")
-    file_id = await get_file_id_from_message(reply)
-    if not file_id:
-        return await m.edit("Something wrong happened.")
-    file = await pgram.download_media(file_id)
-    try:
-        results = await arq.nsfw_scan(file=file)
-    except Exception:
-        return
-    remove(file)
-    if not results.ok:
-        return await m.edit(results.result)
-    results = results.result
-    await m.edit(f"""
-**Neutral:** `{results.neutral} %`
-**Porn:** `{results.porn} %`
-**Hentai:** `{results.hentai} %`
-**Sexy:** `{results.sexy} %`
-**Drawings:** `{results.drawings} %`
-**NSFW:** `{results.is_nsfw}`
-""")
-
-
-@pgram.on_message(
-    filters.command(["antinsfw", "antinsfw@Cutiepii_Robot"]) & ~filters.private
-)
-@adminsOnly("can_change_info")
-async def nsfw_enable_disable(_, message):
-    if len(message.command) != 2:
-        await message.reply_text("Usage: /antinsfw [on/off]")
-        return
-    status = message.text.split(None, 1)[1].strip()
-    status = status.lower()
-    chat_id = message.chat.id
-    if status in ("on", "yes"):
-        await nsfw_on(chat_id)
-        await message.reply_text(
-            "Enabled AntiNSFW System. I will Delete Messages Containing Inappropriate Content."
-        )
-    elif status in ("off", "no"):
-        await nsfw_off(chat_id)
-        await message.reply_text("Disabled AntiNSFW System.")
+        file_id = message.photo[-1].file_id
+    elif message.document and message.document.mime_type and message.document.mime_type.startswith('image'):
+        file_id = message.document.file_id
     else:
-        await message.reply_text("Unknown Suffix, Use /antinsfw [on/off]")
+        return None
+    
+    log_text = None
+    try:
+        # Download image
+        file = await context.bot.get_file(file_id)
+        file_path = await file.download_to_drive()
+        
+        # Check using ARQ NSFW detection
+        if arq:
+            try:
+                res = await arq.nsfw_scan(file=file_path)
+                if res.ok and res.result.is_nsfw:
+                    await message.delete()
+                    
+                    # Fetch settings
+                    mode = REDIS.get(f"antinsfw_mode_{chat.id}") or "delete"
+                    log_group = REDIS.get(f"antinsfw_log_{chat.id}") == "true"
+                    
+                    if mode == "warn":
+                        try:
+                            from Cutiepii_Robot.modules.warns import warn
+                            await warn(user, update, "Automated NSFW Content Detection", message)
+                        except Exception as e:
+                            LOGGER.error(f"[ANTINSFW]: Failed to warn user: {e}")
+                            
+                    elif mode == "mute":
+                        try:
+                            from telegram import ChatPermissions
+                            await chat.restrict_member(user.id, permissions=ChatPermissions(can_send_messages=False))
+                            warn_msg = await context.bot.send_message(
+                                chat.id,
+                                f"<b>NSFW Content Detected</b>\n{user.mention_html()} has been muted permanently for sending NSFW content.",
+                                parse_mode='HTML'
+                            )
+                            if not log_group:
+                                async def delete_warn(job_context):
+                                    try:
+                                        await warn_msg.delete()
+                                    except Exception:
+                                        pass
+                                context.job_queue.run_once(delete_warn, 10)
+                        except Exception as e:
+                            LOGGER.error(f"[ANTINSFW]: Failed to mute user: {e}")
+                            
+                    elif mode == "kick":
+                        try:
+                            await chat.ban_member(user.id)
+                            await chat.unban_member(user.id)
+                            warn_msg = await context.bot.send_message(
+                                chat.id,
+                                f"<b>NSFW Content Detected</b>\n{user.mention_html()} has been kicked for sending NSFW content.",
+                                parse_mode='HTML'
+                            )
+                            if not log_group:
+                                async def delete_warn(job_context):
+                                    try:
+                                        await warn_msg.delete()
+                                    except Exception:
+                                        pass
+                                context.job_queue.run_once(delete_warn, 10)
+                        except Exception as e:
+                            LOGGER.error(f"[ANTINSFW]: Failed to kick user: {e}")
+                            
+                    elif mode == "ban":
+                        try:
+                            await chat.ban_member(user.id)
+                            warn_msg = await context.bot.send_message(
+                                chat.id,
+                                f"<b>NSFW Content Detected</b>\n{user.mention_html()} has been banned for sending NSFW content.",
+                                parse_mode='HTML'
+                            )
+                            if not log_group:
+                                async def delete_warn(job_context):
+                                    try:
+                                        await warn_msg.delete()
+                                    except Exception:
+                                        pass
+                                context.job_queue.run_once(delete_warn, 10)
+                        except Exception as e:
+                            LOGGER.error(f"[ANTINSFW]: Failed to ban user: {e}")
+                            
+                    else: # delete / default
+                        warn_msg = await context.bot.send_message(
+                            chat.id,
+                            f"<b>NSFW Content Removed</b>\n{user.mention_html()}, NSFW content has been detected and removed. Please maintain appropriate content in this group.",
+                            parse_mode='HTML'
+                        )
+                        if not log_group:
+                            async def delete_warn(job_context):
+                                try:
+                                    await warn_msg.delete()
+                                except Exception:
+                                    pass
+                            context.job_queue.run_once(delete_warn, 10)
+                            
+                    log_text = (
+                        f"<b>{html.escape(chat.title)}:</b>\n"
+                        f"#NSFW_CONTENT\n"
+                        f"<b>Action:</b> {mode.capitalize()}\n"
+                        f"<b>User:</b> {user.mention_html()}\n"
+                        f"<b>User ID:</b> <code>{user.id}</code>"
+                    )
+            except Exception as e:
+                LOGGER.warning(f"[ANTINSFW]: NSFW scan failed: {e}")
+        
+        # Clean up
+        import os
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            
+    except Exception as e:
+        LOGGER.warning(f"[ANTINSFW]: Image download or scan failed: {e}")
+        
+    return log_text
+
+
+@cutiepii_cmd(command="antinsfw", filters=filters.ChatType.GROUPS)
+async def antinsfw_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Enable/disable NSFW filter, set actions, and toggle group logging"""
+    message = update.effective_message
+    chat = update.effective_chat
+    user = update.effective_user
+    args = context.args
+    
+    # Check if user is admin
+    member = await context.bot.get_chat_member(chat.id, user.id)
+    if member.status not in [ChatMember.ADMINISTRATOR, ChatMember.OWNER]:
+        await message.reply_text("<b>Action Denied</b>\nYou do not have administrator privileges to run this command.", parse_mode='HTML')
+        return
+    
+    status = "enabled" if await is_nsfw_enabled(chat.id) else "disabled"
+    mode = REDIS.get(f"antinsfw_mode_{chat.id}") or "delete"
+    log_status = "enabled" if REDIS.get(f"antinsfw_log_{chat.id}") == "true" else "disabled"
+    
+    if not args:
+        await message.reply_text(
+            f"<b>NSFW Filter Settings</b>\n"
+            f"• <b>Status:</b> {status.capitalize()}\n"
+            f"• <b>Action Mode:</b> {mode.capitalize()}\n"
+            f"• <b>Group Chat Logging:</b> {log_status.capitalize()}\n\n"
+            f"<b>Commands:</b>\n"
+            f"• <code>/antinsfw [on|off]</code>: Enable/disable NSFW filter\n"
+            f"• <code>/antinsfw mode [delete|warn|mute|kick|ban]</code>: Set detection action\n"
+            f"• <code>/antinsfw log [on|off]</code>: Toggle persistent log in group chat",
+            parse_mode='HTML'
+        )
+        return
+        
+    action = args[0].lower()
+    
+    if action in ["on", "yes", "enable"]:
+        await enable_nsfw(chat.id)
+        await message.reply_text(
+            "<b>NSFW Filter Updated</b>\nNSFW filter has been enabled. Incoming media will be scanned and removed if inappropriate content is detected.",
+            parse_mode='HTML'
+        )
+    elif action in ["off", "no", "disable"]:
+        await disable_nsfw(chat.id)
+        await message.reply_text("<b>NSFW Filter Updated</b>\nNSFW filter has been disabled.", parse_mode='HTML')
+        
+    elif action == "mode":
+        if len(args) < 2:
+            await message.reply_text("<b>Usage:</b>\n<code>/antinsfw mode [delete|warn|mute|kick|ban]</code>", parse_mode='HTML')
+            return
+        new_mode = args[1].lower()
+        if new_mode in ["delete", "del", "warn", "mute", "kick", "ban"]:
+            if new_mode == "del":
+                new_mode = "delete"
+            REDIS.set(f"antinsfw_mode_{chat.id}", new_mode)
+            await message.reply_text(f"<b>NSFW Filter Updated</b>\nAction mode set to: <b>{new_mode.capitalize()}</b>.", parse_mode='HTML')
+        else:
+            await message.reply_text("<b>Invalid Mode</b>\nChoose one of: <code>delete</code>, <code>warn</code>, <code>mute</code>, <code>kick</code>, <code>ban</code>.", parse_mode='HTML')
+            
+    elif action == "log":
+        if len(args) < 2:
+            await message.reply_text("<b>Usage:</b>\n<code>/antinsfw log [on|off]</code>", parse_mode='HTML')
+            return
+        val = args[1].lower()
+        if val in ["on", "yes", "enable", "true"]:
+            REDIS.set(f"antinsfw_log_{chat.id}", "true")
+            await message.reply_text("<b>NSFW Filter Updated</b>\nGroup chat logging has been enabled. Log messages will remain in the group.", parse_mode='HTML')
+        elif val in ["off", "no", "disable", "false"]:
+            REDIS.set(f"antinsfw_log_{chat.id}", "false")
+            await message.reply_text("<b>NSFW Filter Updated</b>\nGroup chat logging has been disabled. Warning messages will be auto-deleted after 10 seconds.", parse_mode='HTML')
+        else:
+            await message.reply_text("<b>Usage:</b>\n<code>/antinsfw log [on|off]</code>", parse_mode='HTML')
+    else:
+        await message.reply_text("<b>Usage:</b>\n<code>/antinsfw [on|off]</code>\n<code>/antinsfw mode [delete|warn|mute|kick|ban]</code>\n<code>/antinsfw log [on|off]</code>", parse_mode='HTML')
+
+
+# Handler registration
+
+
+__mod_name__ = "Anti-NSFW"
+__help__ = True

@@ -1,77 +1,81 @@
 """
 BSD 2-Clause License
-
-Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+NSFW SQL Module - Replaces nsfw_mongo.py
 """
 
+from sqlalchemy import Column, Boolean
+from sqlalchemy.sql.sqltypes import BigInteger
+from Cutiepii_Robot.modules.sql import BASE, SESSION
 import threading
 
-from sqlalchemy import Column, String
-from Cutiepii_Robot.modules.sql import BASE, SESSION
-#   |----------------------------------|
-#   |  Test Module by @EverythingSuckz |
-#   |        Kang with Credits         |
-#   |----------------------------------|
-class NSFWChats(BASE):
-    __tablename__ = "nsfw_chats"
-    chat_id = Column(String(14), primary_key=True)
-
-    def __init__(self, chat_id):
-        self.chat_id = chat_id
-
-NSFWChats.__table__.create(checkfirst=True)
 INSERTION_LOCK = threading.RLock()
 
 
-def is_nsfw(chat_id):
+class NSFWSettings(BASE):
+    __tablename__ = "nsfw_settings"
+    
+    chat_id = Column(BigInteger, primary_key=True)
+    enabled = Column(Boolean, default=False)
+    
+    def __init__(self, chat_id, enabled=False):
+        self.chat_id = chat_id
+        self.enabled = enabled
+    
+    def __repr__(self):
+        return f"<NSFWSettings(chat={self.chat_id}, enabled={self.enabled})>"
+
+
+NSFWSettings.__table__.create(checkfirst=True)
+
+
+def is_nsfw_enabled(chat_id: int) -> bool:
+    """Check if NSFW filter is enabled"""
     try:
-        chat = SESSION.query(NSFWChats).get(str(chat_id))
-        return bool(chat)
+        settings = SESSION.query(NSFWSettings).filter(
+            NSFWSettings.chat_id == chat_id
+        ).first()
+        return settings.enabled if settings else False
     finally:
         SESSION.close()
 
-def set_nsfw(chat_id):
+
+def enable_nsfw(chat_id: int):
+    """Enable NSFW filter"""
     with INSERTION_LOCK:
-        nsfwchat = SESSION.query(NSFWChats).get(str(chat_id))
-        if not nsfwchat:
-            nsfwchat = NSFWChats(str(chat_id))
-        SESSION.add(nsfwchat)
+        settings = SESSION.query(NSFWSettings).filter(
+            NSFWSettings.chat_id == chat_id
+        ).first()
+        
+        if settings:
+            settings.enabled = True
+        else:
+            settings = NSFWSettings(chat_id, True)
+            SESSION.add(settings)
+        
         SESSION.commit()
 
-def rem_nsfw(chat_id):
+
+def disable_nsfw(chat_id: int):
+    """Disable NSFW filter"""
     with INSERTION_LOCK:
-        if nsfwchat := SESSION.query(NSFWChats).get(str(chat_id)):
-            SESSION.delete(nsfwchat)
+        settings = SESSION.query(NSFWSettings).filter(
+            NSFWSettings.chat_id == chat_id
+        ).first()
+        
+        if settings:
+            settings.enabled = False
+        else:
+            settings = NSFWSettings(chat_id, False)
+            SESSION.add(settings)
+        
         SESSION.commit()
 
 
-def get_all_nsfw_chats():
+def get_all_nsfw_chats() -> list:
+    """Get all chats with NSFW enabled"""
     try:
-        return SESSION.query(NSFWChats.chat_id).all()
+        return SESSION.query(NSFWSettings).filter(
+            NSFWSettings.enabled == True
+        ).all()
     finally:
         SESSION.close()

@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -30,10 +30,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import threading
+import contextlib
 
 from sqlalchemy import Column, String, UnicodeText, Boolean, Integer, distinct, func
 
-from Cutiepii_Robot import LOGGER
 from Cutiepii_Robot.modules.helper_funcs.msg_types import Types
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
@@ -95,10 +95,10 @@ class CustomFilters(BASE):
         self.file_id = file_id
 
     def __repr__(self):
-        return f"<Permissions for {self.chat_id}>"
+        return "<Permissions for %s>" % self.chat_id
 
     def __eq__(self, other):
-        return (
+        return bool(
             isinstance(other, CustomFilters)
             and self.chat_id == other.chat_id
             and self.keyword == other.keyword,
@@ -121,10 +121,14 @@ class NewCustomFilters(BASE):
         self.file_id = file_id
 
     def __repr__(self):
-        return f"<Filter for {self.chat_id}>"
+        return "<Filter for %s>" % self.chat_id
 
     def __eq__(self, other):
-        return isinstance(other, CustomFilters) and self.chat_id == other.chat_id and self.keyword == other.keyword
+        return bool(
+            isinstance(other, CustomFilters)
+            and self.chat_id == other.chat_id
+            and self.keyword == other.keyword,
+        )
 
 
 class Buttons(BASE):
@@ -171,12 +175,14 @@ def add_filter(
     is_video=False,
     buttons=None,
 ):
+    global CHAT_FILTERS
 
     if buttons is None:
         buttons = []
 
     with CUST_FILT_LOCK:
-        if prev := SESSION.query(CustomFilters).get((str(chat_id), keyword)):
+        prev = SESSION.query(CustomFilters).get((str(chat_id), keyword))
+        if prev:
             with BUTTON_LOCK:
                 prev_buttons = (
                     SESSION.query(Buttons)
@@ -214,12 +220,14 @@ def add_filter(
 
 
 def new_add_filter(chat_id, keyword, reply_text, file_type, file_id, buttons):
+    global CHAT_FILTERS
 
     if buttons is None:
         buttons = []
 
     with CUST_FILT_LOCK:
-        if prev := SESSION.query(CustomFilters).get((str(chat_id), keyword)):
+        prev = SESSION.query(CustomFilters).get((str(chat_id), keyword))
+        if prev:
             with BUTTON_LOCK:
                 prev_buttons = (
                     SESSION.query(Buttons)
@@ -260,8 +268,10 @@ def new_add_filter(chat_id, keyword, reply_text, file_type, file_id, buttons):
 
 
 def remove_filter(chat_id, keyword):
+    global CHAT_FILTERS
     with CUST_FILT_LOCK:
-        if filt := SESSION.query(CustomFilters).get((str(chat_id), keyword)):
+        filt = SESSION.query(CustomFilters).get((str(chat_id), keyword))
+        if filt:
             if keyword in CHAT_FILTERS.get(str(chat_id), []):  # Sanity check
                 CHAT_FILTERS.get(str(chat_id), []).remove(keyword)
 
@@ -379,7 +389,7 @@ def __migrate_filters():
             else:
                 file_type = Types.TEXT
 
-            LOGGER.debug(x.chat_id, x.keyword, x.reply, file_type.value)
+            #OGGER.debug(x.chat_id, x.keyword, x.reply, file_type.value)
             if file_type == Types.TEXT:
                 filt = CustomFilters(
                     str(x.chat_id), x.keyword, x.reply, file_type.value, None,
@@ -406,7 +416,8 @@ def migrate_chat(old_chat_id, new_chat_id):
         for filt in chat_filters:
             filt.chat_id = str(new_chat_id)
         SESSION.commit()
-        if old_filt := CHAT_FILTERS.get(str(old_chat_id)):
+        old_filt = CHAT_FILTERS.get(str(old_chat_id))
+        if old_filt:
             CHAT_FILTERS[str(new_chat_id)] = old_filt
             del CHAT_FILTERS[str(old_chat_id)]
 

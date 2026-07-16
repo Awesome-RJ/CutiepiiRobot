@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -48,7 +48,7 @@ class LoggerSettings(BASE):
         self.setting = disabled
 
     def __repr__(self):
-        return f"<Chat log setting {self.chat_id} ({self.setting})>"
+        return "<Chat log setting {} ({})>".format(self.chat_id, self.setting)
 
 
 LoggerSettings.__table__.create(checkfirst=True)
@@ -99,7 +99,8 @@ def __load_chat_log_stat_list():
 
 def migrate_chat(old_chat_id, new_chat_id):
     with LOG_SETTING_LOCK:
-        if chat := SESSION.query(LoggerSettings).get(str(old_chat_id)):
+        chat = SESSION.query(LoggerSettings).get(str(old_chat_id))
+        if chat:
             chat.chat_id = new_chat_id
             SESSION.add(chat)
 

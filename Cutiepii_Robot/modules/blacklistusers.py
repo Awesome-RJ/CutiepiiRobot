@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,6 +29,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 import html
 import Cutiepii_Robot.modules.sql.blacklistusers_sql as sql
 
@@ -39,7 +40,7 @@ from Cutiepii_Robot import (
     SUPPORT_USERS,
     TIGER_USERS,
     WHITELIST_USERS,
-    CUTIEPII_PTB,
+    dispatcher,
 )
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from Cutiepii_Robot.modules.helper_funcs.extraction import (
@@ -48,51 +49,48 @@ from Cutiepii_Robot.modules.helper_funcs.extraction import (
 )
 from Cutiepii_Robot.modules.log_channel import gloggable
 from telegram import Update
-from telegram.error import BadRequest
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext, CommandHandler, filters
+from telegram.error import BadRequest
+from telegram.ext import ContextTypes, CommandHandler, filters
+CallbackContext = ContextTypes.DEFAULT_TYPE  # Alias for backward compatibility
+Filters = filters  # Alias for backward compatibility
 from telegram.helpers import mention_html
 
-BLACKLISTWHITELIST = [
-    OWNER_ID
-] + DEV_USERS + SUDO_USERS + WHITELIST_USERS + SUPPORT_USERS
+BLACKLISTWHITELIST = [OWNER_ID] + DEV_USERS + SUDO_USERS + WHITELIST_USERS + SUPPORT_USERS
 BLABLEUSERS = [OWNER_ID] + DEV_USERS
 
 
 @dev_plus
 @gloggable
-async def bl_user(update: Update, context: CallbackContext) -> str:
+@cutiepii_cmd(command="ignore", filters=filters.User(OWNER_ID))
+async def bl_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     message = update.effective_message
     user = update.effective_user
     bot, args = context.bot, context.args
     user_id, reason = await extract_user_and_text(message, args)
 
     if not user_id:
-        await update.effective_message.reply_text("I doubt that's a user.")
+        await update.effective_message.reply_text("⚠️ User not found\n\nI don't know who you're talking about, you're going to need to specify a user...")
         return ""
 
     if user_id == bot.id:
-        await update.effective_message.reply_text(
-            "How am I supposed to do my work if I am ignoring myself?")
+        await update.effective_message.reply_text("How am I supposed to do my work if I am ignoring myself?")
         return ""
 
     if user_id in BLACKLISTWHITELIST:
-        await update.effective_message.reply_text(
-            "No!\nNoticing Disasters is my job.")
+        await update.effective_message.reply_text("No!\nNoticing Disasters is my job.")
         return ""
 
     try:
         target_user = await bot.get_chat(user_id)
     except BadRequest as excp:
         if excp.message == "User not found":
-            await update.effective_message.reply_text(
-                "I can't seem to find this user.")
+            await update.effective_message.reply_text("I can't seem to find this user.")
             return ""
         raise
 
     sql.blacklist_user(user_id, reason)
-    await update.effective_message.reply_text(
-        "I shall ignore the existence of this user!")
+    await update.effective_message.reply_text("I shall ignore the existence of this user!")
     log_message = (
         f"#BLACKLIST\n"
         f"<b>Admin:</b> {mention_html(user.id, html.escape(user.first_name))}\n"
@@ -106,14 +104,15 @@ async def bl_user(update: Update, context: CallbackContext) -> str:
 
 @dev_plus
 @gloggable
+@cutiepii_cmd(command="notice", filters=filters.User(OWNER_ID))
 async def unbl_user(update: Update, context: CallbackContext) -> str:
     message = update.effective_message
     user = update.effective_user
     bot, args = context.bot, context.args
-    user_id = extract_user(message, args)
+    user_id = await extract_user(message, args)
 
     if not user_id:
-        await update.effective_message.reply_text("I doubt that's a user.")
+        await update.effective_message.reply_text("⚠️ User not found\n\nI don't know who you're talking about, you're going to need to specify a user...")
         return ""
 
     if user_id == bot.id:
@@ -124,13 +123,11 @@ async def unbl_user(update: Update, context: CallbackContext) -> str:
         target_user = await bot.get_chat(user_id)
     except BadRequest as excp:
         if excp.message == "User not found":
-            await update.effective_message.reply_text(
-                "I can't seem to find this user.")
+            await update.effective_message.reply_text("I can't seem to find this user.")
             return ""
         raise
 
     if sql.is_user_blacklisted(user_id):
-
         sql.unblacklist_user(user_id)
         await update.effective_message.reply_text("*notices user*")
         log_message = (
@@ -140,29 +137,30 @@ async def unbl_user(update: Update, context: CallbackContext) -> str:
         )
 
         return log_message
-    await update.effective_message.reply_text(
-        "I am not ignoring them at all though!")
+    await update.effective_message.reply_text("I am not ignoring them at all though!")
     return ""
 
 
 @dev_plus
-async def bl_users(context: CallbackContext):
+@cutiepii_cmd(command="ignoredlist", filters=filters.User(OWNER_ID))
+async def bl_users(update: Update, context: ContextTypes.DEFAULT_TYPE):
     users = []
     bot = context.bot
     for each_user in sql.BLACKLIST_USERS:
-        user = await bot.get_chat(each_user)
-        if reason := sql.get_reason(each_user):
-            users.append(
-                f"➛ {mention_html(user.id, html.escape(user.first_name))} :- {reason}",
-            )
-        else:
-            users.append(
-                f"➛ {mention_html(user.id, html.escape(user.first_name))}")
+        try:
+            user = await bot.get_chat(each_user)
+            if reason := sql.get_reason(each_user):
+                users.append(
+                    f"- {mention_html(user.id, html.escape(user.first_name))} :- {reason}",
+                )
+            else:
+                users.append(f"- {mention_html(user.id, html.escape(user.first_name))}")
+        except Exception:
+            users.append(f"- Ignored User ID: {each_user}")
 
-    message = "<b>Blacklisted Users</b>\n" + (
-        "\n".join(users) if users else "Noone is being ignored as of yet.")
-
-    await message.reply_text(message, parse_mode=ParseMode.HTML)
+    message = "<b>Blacklisted Users</b>\n"
+    message += "\n".join(users) if users else "Noone is being ignored as of yet."
+    await update.effective_message.reply_text(message, parse_mode=ParseMode.HTML)
 
 
 def __user_info__(user_id):
@@ -171,9 +169,9 @@ def __user_info__(user_id):
     text = "Blacklisted: <b>{}</b>"
     if user_id in [777000, 1087968824]:
         return ""
-    if user_id == 1241223850:
+    if user_id == dispatcher.bot.id:
         return ""
-    if (user_id) in SUDO_USERS + TIGER_USERS + WHITELIST_USERS:
+    if int(user_id) in SUDO_USERS + TIGER_USERS + WHITELIST_USERS:
         return ""
     if is_blacklisted:
         text = text.format("Yes")
@@ -185,11 +183,8 @@ def __user_info__(user_id):
     return text
 
 
-CUTIEPII_PTB.add_handler(
-    CommandHandler("ignore", unbl_user, filters=filters.User(OWNER_ID)))
-CUTIEPII_PTB.add_handler(
-    CommandHandler("notice", unbl_user, filters=filters.User(OWNER_ID)))
-CUTIEPII_PTB.add_handler(
-    CommandHandler("ignoredlist", bl_users, filters=filters.User(OWNER_ID)))
+
 
 __mod_name__ = "Blacklisting Users"
+__handlers__ = [
+]

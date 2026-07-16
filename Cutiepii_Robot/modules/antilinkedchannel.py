@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,109 +29,129 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 import html
-from telegram.error import TelegramError
-from telegram import Update
-from telegram.ext import CallbackContext
-from telegram.ext import filters
 
-from Cutiepii_Robot import CUTIEPII_PTB
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
-from Cutiepii_Robot.modules.helper_funcs.anonymous import user_admin
-from Cutiepii_Robot.modules.helper_funcs.chat_status import bot_can_delete, bot_admin
+from telegram import Update
+from telegram.error import TelegramError
+from telegram.ext import ContextTypes, filters as Filters
+CallbackContext = ContextTypes.DEFAULT_TYPE  # Alias for backward compatibility
+
+from Cutiepii_Robot.modules.helper_funcs.chat_status import connection_status
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd, cutiepii_msg
+from Cutiepii_Robot.modules.helper_funcs.admin_status import (
+    user_admin_check,
+    bot_admin_check,
+    AdminPerms,
+    user_is_admin,
+    u_na_errmsg
+)
 import Cutiepii_Robot.modules.sql.antilinkedchannel_sql as sql
 
 
-@bot_can_delete
-@user_admin
-async def set_antilinkedchannel(update: Update,
-                                context: CallbackContext) -> None:
+@cutiepii_cmd(command="cleanlinked", group=112)
+@connection_status
+@bot_admin_check(AdminPerms.CAN_DELETE_MESSAGES)
+@user_admin_check()
+# @loggable
+async def set_antilinkedchannel(update: Update, context: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
+    user = update.effective_user
     if len(args) > 0:
+        if not user_is_admin(update, user.id, perm = AdminPerms.CAN_CHANGE_INFO):
+            await message.reply_text("<b>Action Denied</b>\nYou do not have the required administrator privileges in this chat.", parse_mode=ParseMode.HTML)
+            return u_na_errmsg(message, AdminPerms.CAN_CHANGE_INFO)
+
         s = args[0].lower()
         if s in ["yes", "on"]:
-            sql.enable(chat.id)
-            await message.reply_html(
-                f"Enabled anti linked channel in {html.escape(chat.title)}")
-
+            if sql.status_pin(chat.id):
+                sql.disable_pin(chat.id)
+                sql.enable_linked(chat.id)
+                await message.reply_html("<b>CleanLinked Updated</b>\nEnabled CleanLinked and disabled anti-channel pinning in <b>{}</b>.".format(html.escape(chat.title)))
+            else:
+                sql.enable_linked(chat.id)
+                await message.reply_html("<b>CleanLinked Updated</b>\nEnabled anti-linked channel protection in <b>{}</b>.".format(html.escape(chat.title)))
         elif s in ["off", "no"]:
-            sql.disable(chat.id)
-            await message.reply_html(
-                f"Disabled anti linked channel in {html.escape(chat.title)}")
-
+            sql.disable_linked(chat.id)
+            await message.reply_html("<b>CleanLinked Updated</b>\nDisabled anti-linked channel protection in <b>{}</b>.".format(html.escape(chat.title)))
         else:
-            await update.effective_message.reply_text(
-                f"Unrecognized arguments {s}")
+            await message.reply_text("<b>Invalid Argument</b>\nUnrecognized argument: <code>{}</code>. Accepted values: <code>yes</code>, <code>on</code>, <code>no</code>, <code>off</code>.".format(html.escape(s)), parse_mode=ParseMode.HTML)
         return
-    message.reply_html(
-        f"Linked channel deletion is currently {sql.status(chat.id)} in {html.escape(chat.title)}"
-    )
+
+    await message.reply_html(
+        "<b>CleanLinked Status</b>\nChat: <b>{}</b>\nStatus: <code>{}</code>".format(html.escape(chat.title), "Enabled" if sql.status_linked(chat.id) else "Disabled"))
 
 
-async def eliminate_linked_channel_msg(update: Update):
+@cutiepii_msg(Filters.IS_AUTOMATIC_FORWARD, group=111)
+async def eliminate_linked_channel_msg(update: Update, _: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
-    if not sql.status(chat.id):
+    if not sql.status_linked(chat.id):
         return
     try:
         await message.delete()
     except TelegramError:
+        sql.disable_linked(chat.id)
+        await message.reply_text(
+            "<b>Action Denied</b>\nI do not have message deletion permissions. CleanLinked has been disabled.",
+            parse_mode=ParseMode.HTML
+        )
         return
 
 
-@bot_admin
-@user_admin
-async def set_antipinchannel(update: Update,
-                             context: CallbackContext) -> None:
+@cutiepii_cmd(command="antichannelpin", group=114)
+@connection_status
+@bot_admin_check(AdminPerms.CAN_DELETE_MESSAGES)
+@user_admin_check()
+# @loggable
+async def set_antipinchannel(update: Update, context: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
     args = context.args
+    user = update.effective_user
+
     if len(args) > 0:
+        if not user_is_admin(update, user.id, perm = AdminPerms.CAN_CHANGE_INFO):
+            await message.reply_text("<b>Action Denied</b>\nYou do not have the required administrator privileges in this chat.", parse_mode=ParseMode.HTML)
+            return u_na_errmsg(message, AdminPerms.CAN_CHANGE_INFO)
+
         s = args[0].lower()
         if s in ["yes", "on"]:
             if sql.status_linked(chat.id):
                 sql.disable_linked(chat.id)
                 sql.enable_pin(chat.id)
-                await message.reply_html(
-                    f"Disabled Linked channel deletion and Enabled anti channel pin in {html.escape(chat.title)}"
-                )
-
+                await message.reply_html("<b>Anti Channel Pin Updated</b>\nDisabled CleanLinked and enabled anti-channel pinning in <b>{}</b>.".format(html.escape(chat.title)))
             else:
                 sql.enable_pin(chat.id)
-                await message.reply_html(
-                    f"Enabled anti channel pin in {html.escape(chat.title)}")
-
+                await message.reply_html("<b>Anti Channel Pin Updated</b>\nEnabled anti-channel pinning in <b>{}</b>.".format(html.escape(chat.title)))
         elif s in ["off", "no"]:
             sql.disable_pin(chat.id)
-            await message.reply_html(
-                f"Disabled anti channel pin in {html.escape(chat.title)}")
-
+            await message.reply_html("<b>Anti Channel Pin Updated</b>\nDisabled anti-channel pinning in <b>{}</b>.".format(html.escape(chat.title)))
         else:
-            await update.effective_message.reply_text(
-                f"Unrecognized arguments {s}")
+            await message.reply_text("<b>Invalid Argument</b>\nUnrecognized argument: <code>{}</code>. Accepted values: <code>yes</code>, <code>on</code>, <code>no</code>, <code>off</code>.".format(html.escape(s)), parse_mode=ParseMode.HTML)
         return
-    message.reply_html(
-        f"Linked channel message unpin is currently {sql.status_pin(chat.id)} in {html.escape(chat.title)}"
-    )
+
+    await message.reply_html(
+        "<b>Anti Channel Pin Status</b>\nChat: <b>{}</b>\nStatus: <code>{}</code>".format(html.escape(chat.title), "Enabled" if sql.status_pin(chat.id) else "Disabled"))
 
 
-def eliminate_linked_channel_msg(update: Update):
+@cutiepii_msg(Filters.IS_AUTOMATIC_FORWARD | Filters.StatusUpdate.PINNED_MESSAGE, group=113)
+async def eliminate_linked_channel_msg(update: Update, _: CallbackContext):
     message = update.effective_message
     chat = update.effective_chat
     if not sql.status_pin(chat.id):
         return
+
     try:
         message.unpin()
     except TelegramError:
+        sql.disable_pin(chat.id)
+        await message.reply_text(
+            "<b>Action Denied</b>\nI do not have pinned message unpinning permissions. Anti-channel pinning has been disabled.",
+            parse_mode=ParseMode.HTML
+        )
         return
 
+__mod_name__ = "CleanLinked"
 
-CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("antilinkedchan",
-                              set_antilinkedchannel,
-                              filters=filters.ChatType.GROUPS))
-CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler("antichannelpin",
-                              set_antipinchannel,
-                              filters=filters.ChatType.GROUPS))
+__help__ = True

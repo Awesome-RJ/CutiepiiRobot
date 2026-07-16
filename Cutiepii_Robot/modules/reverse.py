@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -28,149 +28,260 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
-import os
-import requests
-import urllib
-import urllib.request
-import urllib.parse
 
-from io import BytesIO
-from bs4 import BeautifulSoup
-from telegram.error import BadRequest, TelegramError
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+import io
+from typing import Union
+import httpx
+from telegram import (
+    Animation,
+    Document,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    Message,
+    PhotoSize,
+    Sticker,
+    Update
+)
 from telegram.constants import ParseMode
-from telegram.ext import CallbackContext
+from telegram.ext import ContextTypes
 
-from Cutiepii_Robot import CUTIEPII_PTB
-from typing import List
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
+from Cutiepii_Robot.modules.sql.clear_cmd_sql import get_clearcmd
 
-from Cutiepii_Robot.modules.disable import DisableAbleCommandHandler
+CATBOX_URL = 'https://catbox.moe/user/api.php'
 
-opener = urllib.request.build_opener()
-useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36 Edg/88.0.705.68"
-opener.addheaders = [("User-agent", useragent)]
+class UnsupportedDocumentMimeType(Exception):
+    def __init__(self, mime_type: str) -> None:
+        self.mime_type = mime_type
+        super().__init__(f"Unsupported MIME type: {self.mime_type}")
 
+class STRINGS:
+    PROCESSING = (
+        "⏳ <b>Processing...</b>\n\n"
+        "🔄 Please wait while we process your request."
+    )
+    
+    USAGE = (
+        "📕 <b>Usage:</b>\n"
+        "🤖 <b>Command:</b> <code>/reverse (image_url)</code>\n"
+        "▪ <i>image_url is optional.</i>\n"
+        "▪ <i>Reply to a message containing media to search it.</i>\n"
+        "▪ <i>If multiple media files are present, only the first one will be selected.</i>\n\n"
+        "╭── 🗂️ <b>Supported Media Types:</b>\n"
+        "├── 🎞️ <code>Animation (GIF)</code>\n"
+        "├── 📄 <code>Document</code>\n"
+        "├── 🖼️ <code>Photo</code>\n"
+        "╰── 🏷️ <code>Sticker</code>"
+    )
+    
+    UNSUPPORTED_DOCUMENT_TYPE = (
+        "⚠️ <b>Unsupported Document Type:</b> <code>{unsupported_document_type}</code>\n\n"
+        "╭── 🗂️ <b>Supported Document Types:</b>\n"
+        "├── 🎞️ <code>Animation (GIF)</code>\n"
+        "├── 📄 <code>Document</code>\n"
+        "├── 🖼️ <code>Photo</code>\n"
+        "╰── 🏷️ <code>Sticker</code>"
+    )
+    
+    REPLIED_MESSAGE_HAS_NO_SUPPORTED_MEDIA = (
+        "⚠️ <b>No supported media found!</b>\n\n"
+        "ℹ️ The replied message does not contain any supported media types.\n\n"
+        "╭── 🗂️ <b>Supported Media Types:</b>\n"
+        "├── 🎞️ <code>Animation (GIF)</code>\n"
+        "├── 📄 <code>Document</code>\n"
+        "├── 🖼️ <code>Photo</code>\n"
+        "╰── 🏷️ <code>Sticker</code>"
+    )
+    
+    DOWNLOADING_MEDIA = "⏳ <b>Downloading media...</b>"
+    FAILED_TO_DOWNLOAD_MEDIA = (
+        "❌ <b>Failed to download media</b>\n\n"
+        "⚠️ <b>Error:</b>\n"
+        "<code>{error}</code>"
+    )
+    
+    UPLOADING_MEDIA = "⏳ <b>Uploading media...</b>"
+    FAILED_TO_UPLOAD_MEDIA = (
+        "❌ <b>Failed to upload image</b>\n\n"
+        "⚠️ <b>Error:</b>\n"
+        "<code>{error}</code>"
+    )
+    
+    GENERATING_LINKS = "<b>❍ Generating reverse search links...</b>"
+    REVERSE_RESULT = "<b>Reverse search results for the image:</b>"
 
-async def reverse(update: Update, context: CallbackContext) -> None:
-    msg = update.effective_message
-    chat_id = update.effective_chat.id
-    rtmid = msg.message_id
-    imagename = "googlereverse.png"
+async def deletion(update: Update, context: ContextTypes.DEFAULT_TYPE, delmsg):
+    chat = update.effective_chat
+    cleartime = get_clearcmd(chat.id, "reverse")
 
-    if os.path.isfile(imagename):
-        os.remove(imagename)
+    if cleartime:
+        import asyncio
+        async def _delete_task():
+            await asyncio.sleep(cleartime.time)
+            try:
+                if isinstance(delmsg, list):
+                    for m in delmsg:
+                        await m.delete()
+                else:
+                    await delmsg.delete()
+            except:
+                pass
+        asyncio.create_task(_delete_task())
 
-    if reply := msg.reply_to_message:
-        if reply.sticker:
-            file_id = reply.sticker.file_id
-        elif reply.photo:
-            file_id = reply.photo[-1].file_id
-        elif reply.document:
-            file_id = reply.document.file_id
+async def download_media_to_memory(media: Union[Animation, Document, PhotoSize, Sticker]) -> io.BytesIO:
+    file = await media.get_file()
+    file_stream = io.BytesIO()
+    await file.download_to_memory(file_stream)
+    file_stream.seek(0)
+    return file_stream
+
+def extract_media(message: Message) -> tuple[str, Union[Animation, Document, PhotoSize, Sticker], str] | None:
+    if message.animation:
+        return (message.animation.file_name or "animation.gif", message.animation, message.animation.mime_type or "image/gif")
+    elif message.document:
+        if not message.document.mime_type or not message.document.mime_type.startswith("image/"):
+            raise UnsupportedDocumentMimeType(mime_type=message.document.mime_type or "unknown")
         else:
-            await msg.reply_text("Reply To An Image Or Sticker To Lookup!")
-            return
-
-        image_file = await context.bot.get_file(file_id)
-        image_file.download(imagename, out=BytesIO())
+            return (message.document.file_name or "image.jpg", message.document, message.document.mime_type)
+    elif message.photo:
+        return ("image.jpg", message.photo[-1], "image/jpeg")
+    elif message.sticker:
+        sticker_mime_type = "image/webp"
+        if message.sticker.is_animated:
+            sticker_mime_type = "application/x-tgsticker"
+        elif message.sticker.is_video:
+            sticker_mime_type = "video/webm"
+        
+        return ("sticker.webp", message.sticker, sticker_mime_type)
     else:
-        await msg.reply_text(
-            "Please Reply To A Sticker, Or An Image To Search It!",
-            parse_mode=ParseMode.MARKDOWN,
+        return None
+
+
+@cutiepii_cmd(command=['reverse', 'grs', 'pp', 'gis', 'lens', 'glens'], rate_limit_calls=20, rate_limit_window=60, add_error_handler=True)
+async def reverse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    message = update.effective_message
+    
+    status_msg = await message.reply_text(
+        text=STRINGS.PROCESSING,
+        parse_mode=ParseMode.HTML
+    )
+    
+    file_name = None
+    file = None
+    mime_type = None
+    url = None
+    
+    reply_msg = message.reply_to_message
+    if reply_msg:
+        try:
+            res = extract_media(reply_msg)
+            if res:
+                file_name, media, mime_type = res
+            else:
+                media = None
+        except UnsupportedDocumentMimeType as exc:
+            await status_msg.edit_text(
+                text=STRINGS.UNSUPPORTED_DOCUMENT_TYPE.format(unsupported_document_type=exc.mime_type),
+                parse_mode=ParseMode.HTML
+            )
+            return
+        
+        if media is not None:
+            await status_msg.edit_text(
+                text=STRINGS.DOWNLOADING_MEDIA,
+                parse_mode=ParseMode.HTML
+            )
+            
+            try:
+                file = await download_media_to_memory(media)
+            except Exception as exc:
+                await status_msg.edit_text(
+                    text=STRINGS.FAILED_TO_DOWNLOAD_MEDIA.format(error=exc),
+                    parse_mode=ParseMode.HTML
+                )
+                return
+        else:
+            await status_msg.edit_text(
+                text=STRINGS.REPLIED_MESSAGE_HAS_NO_SUPPORTED_MEDIA,
+                parse_mode=ParseMode.HTML
+            )
+            return
+    else:
+        url = context.args[0] if context.args else None
+    
+    # If we have an image URL, we don't upload it, we use it directly as the public url!
+    if file is None and url is None:
+        await status_msg.edit_text(
+            text=STRINGS.USAGE,
+            parse_mode=ParseMode.HTML
         )
         return
-
-    MsG = await context.bot.send_message(
-        chat_id,
-        "Let Me See...",
-        reply_to_message_id=rtmid,
-    )
-    try:
-        searchUrl = "https://www.google.com/searchbyimage/upload"
-        multipart = {
-            "encoded_image": (imagename, open(imagename, "rb")),
-            "image_content": "",
-        }
-        response = requests.post(searchUrl,
-                                 files=multipart,
-                                 allow_redirects=False)
-        fetchUrl = response.headers.get("Location")
-
-        os.remove(imagename)
-        if response != 400:
-            MsG.edit_text("Downloading...")
-        else:
-            MsG.edit_text("Google Told Me To Go Away...")
-            return
-
-        match = ParseSauce(f"{fetchUrl}&hl=en")
-        guess = match.get("best_guess")
-        MsG.edit_text("Uploading...")
-        if match.get("override") and (match.get("override") != ""
-                                      or match.get("override") is not None):
-            imgspage = match.get("override")
-        else:
-            imgspage = match.get("similar_images")
-
-        buttuns = []
-        if guess:
-            MsG.edit_text("Hmmm....")
-            search_result = guess.replace("Possible related search: ", "")
-            buttuns.append(
-                [InlineKeyboardButton(text="Images Link", url=fetchUrl)])
-        else:
-            MsG.edit_text("Couldn't Find Anything!")
-            return
-
-        if imgspage:
-            buttuns.append(
-                [InlineKeyboardButton(text="Similar Images", url=imgspage)])
-
-        MsG.edit_text(
-            f"*Search Results*: \n\n`{search_result}`",
-            parse_mode=ParseMode.MARKDOWN,
-            reply_markup=InlineKeyboardMarkup(buttuns),
+        
+    if file is not None:
+        await status_msg.edit_text(
+            text=STRINGS.UPLOADING_MEDIA,
+            parse_mode=ParseMode.HTML
         )
+        try:
+            async with httpx.AsyncClient(timeout=30) as async_client:
+                files = {"fileToUpload": (file_name, file, mime_type)}
+                data = {"reqtype": "fileupload"}
+                response = await async_client.post(CATBOX_URL, data=data, files=files)
+                
+                if response.status_code != 200:
+                    await status_msg.edit_text(
+                        text=STRINGS.FAILED_TO_UPLOAD_MEDIA.format(error=f"HTTP status code {response.status_code}"),
+                        parse_mode=ParseMode.HTML
+                    )
+                    return
+                
+                public_url = response.text.strip()
+                if not public_url.startswith("http"):
+                    await status_msg.edit_text(
+                        text=STRINGS.FAILED_TO_UPLOAD_MEDIA.format(error=public_url),
+                        parse_mode=ParseMode.HTML
+                    )
+                    return
+        except Exception as exc:
+            await status_msg.edit_text(
+                text=STRINGS.FAILED_TO_UPLOAD_MEDIA.format(error=exc),
+                parse_mode=ParseMode.HTML
+            )
+            return
+    else:
+        public_url = url
 
-    except BadRequest as Bdr:
-        MsG.edit_text(
-            f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: BadRequest!\n\n{Bdr}",
-            parse_mode=ParseMode.MARKDOWN)
-    except TelegramError as Tge:
-        MsG.edit_text(
-            f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: TelegramError!\n\n{Tge}",
-            parse_mode=ParseMode.MARKDOWN)
-    except Exception as Exp:
-        MsG.edit_text(
-            f"ERROR! - _Couldn't Find Anything!!_ \n\n*Reason*: Exception!\n\n{Exp}",
-            parse_mode=ParseMode.MARKDOWN)
+    await status_msg.edit_text(
+        text=STRINGS.GENERATING_LINKS,
+        parse_mode=ParseMode.HTML
+    )
 
+    google_url = f"https://lens.google.com/uploadbyurl?url={public_url}"
+    yandex_url = f"https://yandex.com/images/search?rpt=imageview&url={public_url}"
+    bing_url = f"https://www.bing.com/images/searchbyimage?cbir=sbi&imgurl={public_url}"
+    tineye_url = f"https://tineye.com/search?url={public_url}"
 
-def ParseSauce(googleurl):
-    source = opener.open(googleurl).read()
-    soup = BeautifulSoup(source, "html.parser")
+    buttons = [
+        [
+            InlineKeyboardButton("Google Lens 🔍", url=google_url),
+            InlineKeyboardButton("Yandex 🖼️", url=yandex_url)
+        ],
+        [
+            InlineKeyboardButton("Bing 🔎", url=bing_url),
+            InlineKeyboardButton("TinEye 👁️", url=tineye_url)
+        ]
+    ]
+    
+    reply_markup = InlineKeyboardMarkup(buttons)
+    reply_msg = await msg_text_if_needed(status_msg, message, reply_markup)
+    await deletion(update, context, reply_msg)
 
-    results = {"similar_images": "", "override": "", "best_guess": ""}
-
+async def msg_text_if_needed(status_msg, message, reply_markup):
     try:
-        for bess in soup.findAll("a", {"class": "PBorbe"}):
-            url = "https://www.google.com" + bess.get("href")
-            results["override"] = url
-    except:
+        await status_msg.delete()
+    except Exception:
         pass
+    return await message.reply_text(STRINGS.REVERSE_RESULT, reply_markup=reply_markup, parse_mode=ParseMode.HTML)
 
-    for similar_image in soup.findAll("input", {"class": "gLFyf"}):
-        url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(
-            similar_image.get("value"))
-        results["similar_images"] = url
-
-    for best_guess in soup.findAll("div", attrs={"class": "r5a77d"}):
-        results["best_guess"] = best_guess.get_text()
-
-    return results
-
-
-CUTIEPII_PTB.add_handler(
-    DisableAbleCommandHandler(["grs", "reverse", "pp"], reverse))
 
 __mod_name__ = "Reverse"

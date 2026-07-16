@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -46,13 +46,14 @@ Nsfwatch.__table__.create(checkfirst=True)
 
 
 def add_nsfwatch(chat_id: str):
-    nsfws = Nsfwatch(chat_id)
+    nsfws = Nsfwatch(str(chat_id))
     SESSION.add(nsfws)
     SESSION.commit()
 
 
 def rmnsfwatch(chat_id: str):
-    if nsfwm := SESSION.query(Nsfwatch).get(chat_id):
+    nsfwm = SESSION.query(Nsfwatch).get(str(chat_id))
+    if nsfwm:
         SESSION.delete(nsfwm)
         SESSION.commit()
 
@@ -65,7 +66,8 @@ def get_all_nsfw_enabled_chat():
 
 def is_nsfwatch_indb(chat_id: str):
     try:
-        if s__ := SESSION.query(Nsfwatch).get(chat_id):
+        s__ = SESSION.query(Nsfwatch).get(str(chat_id))
+        if s__:
             return str(s__.chat_id)
     finally:
         SESSION.close()

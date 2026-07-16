@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -31,6 +31,28 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from telethon import events
 from Cutiepii_Robot import telethn
+from functools import wraps
+import asyncio
+
+def _release_session(func):
+    from Cutiepii_Robot.modules.sql import SESSION
+
+    if asyncio.iscoroutinefunction(func):
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            try:
+                return await func(*args, **kwargs)
+            finally:
+                SESSION.remove()
+        return wrapper
+    else:
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            finally:
+                SESSION.remove()
+        return wrapper
 
 
 def register(**args):
@@ -45,7 +67,7 @@ def register(**args):
     args["pattern"] = pattern.replace("^/", r_pattern, 1)
 
     def decorator(func):
-        telethn.add_event_handler(func, events.NewMessage(**args))
+        telethn.add_event_handler(_release_session(func), events.NewMessage(**args))
         return func
 
     return decorator
@@ -53,9 +75,8 @@ def register(**args):
 
 def chataction(**args):
     """ Registers chat actions. """
-
     def decorator(func):
-        telethn.add_event_handler(func, events.ChatAction(**args))
+        telethn.add_event_handler(_release_session(func), events.ChatAction(**args))
         return func
 
     return decorator
@@ -63,9 +84,8 @@ def chataction(**args):
 
 def userupdate(**args):
     """ Registers user updates. """
-
     def decorator(func):
-        telethn.add_event_handler(func, events.UserUpdate(**args))
+        telethn.add_event_handler(_release_session(func), events.UserUpdate(**args))
         return func
 
     return decorator
@@ -79,7 +99,7 @@ def inlinequery(**args):
         args["pattern"] = "(?i)" + pattern
 
     def decorator(func):
-        telethn.add_event_handler(func, events.InlineQuery(**args))
+        telethn.add_event_handler(_release_session(func), events.InlineQuery(**args))
         return func
 
     return decorator
@@ -87,9 +107,8 @@ def inlinequery(**args):
 
 def callbackquery(**args):
     """ Registers inline query. """
-
     def decorator(func):
-        telethn.add_event_handler(func, events.CallbackQuery(**args))
+        telethn.add_event_handler(_release_session(func), events.CallbackQuery(**args))
         return func
 
     return decorator

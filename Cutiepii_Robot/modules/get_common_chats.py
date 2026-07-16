@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -32,23 +32,22 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import os
 
 from time import sleep
-from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot import OWNER_ID, dispatcher
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 from Cutiepii_Robot.modules.helper_funcs.extraction import extract_user
 from Cutiepii_Robot.modules.sql.users_sql import get_user_com_chats
-
 from telegram import Update
-from telegram.constants import ParseMode
 from telegram.error import BadRequest, RetryAfter, Forbidden
-from telegram.ext import CallbackContext, CommandHandler
+from telegram.ext import ContextTypes, CommandHandler
+CallbackContext = ContextTypes.DEFAULT_TYPE  # Alias for backward compatibility
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 
-
+@cutiepii_cmd(command="getchats")
 @dev_plus
-async def get_user_common_chats(update: Update,
-                                context: CallbackContext) -> None:
+async def get_user_common_chats(update: Update, context: CallbackContext):
     bot, args = context.bot, context.args
     msg = update.effective_message
-    user = extract_user(msg, args)
+    user = await extract_user(msg, args)
     if not user:
         await msg.reply_text("I share no common chats with the void.")
         return
@@ -56,26 +55,27 @@ async def get_user_common_chats(update: Update,
     if not common_list:
         await msg.reply_text("No common chats with this user!")
         return
-    name = await bot.get_chat(user).first_name
+    chat = await bot.get_chat(user)
+    name = chat.first_name
     text = f"<b>Common chats with {name}</b>\n"
-    for chat in common_list:
+    for chat_id in common_list:
         try:
-            chat_name = await bot.get_chat(chat).title
-            await sleep(0.3)
-            text += f"➛ <code>{chat_name}</code>\n"
-        except (BadRequest, Forbidden):
+            chat_info = await bot.get_chat(chat_id)
+            chat_name = chat_info.title
+            sleep(0.3)
+            text += f"- <code>{chat_name}</code>\n"
+        except BadRequest:
+            pass
+        except Forbidden:
             pass
         except RetryAfter as e:
-           await sleep(e.retry_after)
+            sleep(e.retry_after)
 
     if len(text) < 4096:
-        await msg.reply_text(text, parse_mode=ParseMode.HTML)
+        await msg.reply_text(text, parse_mode="HTML")
     else:
         with open("common_chats.txt", "w") as f:
             f.write(text)
         with open("common_chats.txt", "rb") as f:
-            msg.reply_document(f)
+            await msg.reply_document(f)
         os.remove("common_chats.txt")
-
-
-CUTIEPII_PTB.add_handler(CommandHandler("getchats", get_user_common_chats))

@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -28,28 +28,63 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
+
+from telegram.error import BadRequest
+from telegram import Update
 from functools import wraps
-from telegram import error
+from telegram.constants import ChatAction
+from telegram.ext import ContextTypes
+from Cutiepii_Robot import dispatcher, LOGGER, SUPPORT_CHAT
+
+async def send_message(message, text, target_id=None, *args, **kwargs):
+    if not target_id:
+        try:
+            return await message.reply_text(text, *args, **kwargs)
+        except BadRequest as err:
+            if str(err) == "Reply message not found":
+                try:
+                    return await message.reply_text(text, do_quote=False, *args, **kwargs)
+                except BadRequest as err:
+                    LOGGER.exception("ERROR: {}".format(err))
+            elif str(err) == "Have no rights to send a message":
+                try:
+                    await dispatcher.bot.leave_chat(message.chat.id)
+                    await dispatcher.bot.send_message(SUPPORT_CHAT, "I am leave chat `{}`\nBecause of: `Muted`".format(message.chat.title))
+                except BadRequest as err:
+                    if str(err) == "Chat not found":
+                        pass
+            else:
+                LOGGER.exception("ERROR: {}".format(err))
+    else:
+        try:
+            await dispatcher.bot.send_message(target_id, text, *args, **kwargs)
+        except BadRequest as err:
+            LOGGER.exception("ERROR: {}".format(err))
 
 
-async def send_message(message, *args, **kwargs):
-    try:
-        return await message.reply_text(*args, **kwargs)
-    except error.BadRequest as err:
-        if str(err) == "Reply message not found":
-            return await message.reply_text(quote=False, *args, **kwargs)
+def typing_action(func):
+    """Sends typing action while processing func command."""
+
+    @wraps(func)
+    async def command_func(update: Update, context: ContextTypes.DEFAULT_TYPE, *args, **kwargs):
+        await context.bot.send_chat_action(
+            chat_id=update.effective_chat.id, action=ChatAction.TYPING,
+        )
+        return await func(update, context, *args, **kwargs)
+
+    return command_func
 
 
 def send_action(action):
     """Sends `action` while processing func command."""
 
     def decorator(func):
-
         @wraps(func)
         async def command_func(update, context, *args, **kwargs):
             await context.bot.send_chat_action(
-                chat_id=update.effective_chat.id, action=action)
-            return func(update, context, *args, **kwargs)
+                chat_id=update.effective_chat.id, action=action
+            )
+            return await func(update, context, *args, **kwargs)
 
         return command_func
 

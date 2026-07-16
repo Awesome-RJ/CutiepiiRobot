@@ -1,74 +1,148 @@
-alphabet-detector==0.0.7
-bleach==5.0.0
-cachetools==5.2.0
-emoji==1.6.1
-pyrate-limiter==2.8.1
-lxml==4.9.1
-nltk==3.7
-pretty-errors==1.2.25
-psutil==5.9.1
-python-telegram-bot==20.0a4
-regex==2022.4.24
-requests==2.28.1
-SQLAlchemy==1.4.40
-telethon==1.24.0
-wikipedia==1.4.0
-zalgo-text==0.6
-nekos.py==1.1.0
-telegraph==2.1.0
-tgcrypto==1.2.3
-pymongo
-motor>==2.3.1
-redis
-gtts==2.2.4
-wget==3.2
-tswift==0.7.0
-lyricsgenius==3.0.1
-odmantic==0.4.0
-pykeyboard==0.1.5
-aiofiles==0.8.0
-hachoir==3.1.3
-bing_image_downloader==1.1.2
-pytz==2022.1
-NumPy==1.23.1
-gpytranslate==1.4.0
-glitch_this==1.0.2
-countryinfo==0.1.2
-faker==13.14.0
-PyDictionary==2.0.1
-markdown2==2.4.3
-cowpy==1.1.5
-secureme==0.0.4
-git+https://github.com/Awesome-RJ/GoGoAnimeAPI.git
-pydub==0.25.1
-bs4==0.0.1
-multicolorcaptcha==1.2.0
-jikanpy==4.3.2
-future==0.18.2
-geopy==2.2.0
-humanize==4.3.0
-pyrogram==2.0.40
-python-arq==6.0.5
-aiohttp
-search_engine_parser
-googletrans
-youtube_search_python==1.6.5
-httpx
-httpx[http2]
-pyYAML==6.0
-pygithub==1.55
-gitpython
-flask
-gunicorn
-dateparser
-python-barcode==0.14.0
-pytimeparse
-APScheduler==3.9.1
-CloudScraper
-dnspython==2.2.1
-async-timeout==4.0.2
-psycopg2
-pycountry
-opencv-python-headless==4.5.4.60
-pycryptodome
-base58
+# ====================================
+# Core Dependencies (install first)
+# ====================================
+# aiohttp and its dependencies must be installed first - required by many modules
+aiohttp==3.9.5
+aiosignal>=1.1.2
+async-timeout>=4.0,<5.0
+attrs>=17.3.0
+frozenlist>=1.1.1
+multidict>=4.5,<7.0
+yarl>=1.0,<2.0
+
+# ====================================
+# Core Telegram Libraries
+# ====================================
+python-telegram-bot==22.8
+telethon>=1.42.0
+# ptbcontrib - Not available on PyPI, only referenced in logging config (optional)
+
+# ====================================
+# Database & Caching
+# ====================================
+# Using SQLAlchemy 1.4.x for backward compatibility with 2.0 migration path
+sqlalchemy==1.4.54
+psycopg2-binary>=2.9.9
+pymongo>=4.6.1
+motor>=3.3.2
+odmantic>=1.0.2
+redis>=5.0.1
+
+# ====================================
+# Web & HTTP
+# ====================================
+aiofiles>=23.2.1
+httpx>=0.27.0,<0.29
+requests>=2.31.0
+flask>=3.0.0
+cloudscraper>=1.2.71
+
+# ====================================
+# Scheduling & Async
+# ====================================
+APScheduler>=3.10.4
+uvloop>=0.19.0; sys_platform != "win32"
+# asyncio is part of Python standard library, no need to install
+
+# ====================================
+# API Clients
+# ====================================
+python-arq>=6.0.6
+Python_ARQ
+telegraph>=2.2.0
+jikanpy>=4.3.2
+lyricsgenius>=3.0.1
+youtube-search-python>=1.6.6
+youtube-search>=2.1.2
+wikipedia>=1.4.0
+
+# ====================================
+# Media Processing
+# ====================================
+pillow>=10.2.0
+opencv-python-headless>=4.9.0.80
+ffmpeg-python>=0.2.0
+ffmpeg==1.4
+hachoir>=3.2.0
+pydub>=0.25.1
+audioop-lts>=0.2.1; python_version >= "3.13"  # Required for Python 3.13+ compatibility (audioop was removed)
+yt-dlp>=2024.1.0
+
+# ====================================
+# Image & PDF
+# ====================================
+img2pdf>=0.5.1
+python-barcode>=0.15.1
+glitch-this>=1.0.2
+rembg>=2.0.69
+imageio-ffmpeg>=0.4.9
+
+# ====================================
+# Text & Translation
+# ====================================
+googletrans-py>=4.0.0
+gpytranslate>=1.5.1
+gtts>=2.5.0
+emoji>=2.10.1
+alphabet-detector>=0.0.7
+zalgo-text>=0.6
+markdown2>=2.4.13
+pyrate-limiter>=3.1.1
+
+# ====================================
+# Utilities
+# ====================================
+beautifulsoup4>=4.12.3
+bs4>=0.0.2
+bleach>=6.1.0
+cachetools>=5.3.2
+python-dotenv>=1.0.1
+python-rapidjson>=1.14
+python-dateutil>=2.8.2
+dateparser>=1.2.0
+pytimeparse>=1.1.8
+pytz>=2024.1
+humanize>=4.9.0
+pyyaml>=6.0.1
+regex>=2023.12.25
+wget>=3.2
+zipp>=3.17.0
+pycountry>=23.12.11
+pycryptodome>=3.20.0
+psutil>=5.9.8
+pydantic>=2.6.1
+fontTools>=4.48.1
+geopy>=2.4.1
+countryinfo>=0.1.2
+cowpy>=1.1.5
+faker>=22.6.0
+
+# ====================================
+# Encoding & Security
+# ====================================
+base58>=2.1.1
+pybase64>=1.3.2
+secureme>=0.0.4
+
+# ====================================
+# Scientific & Numeric
+# ====================================
+numpy>=1.26.4
+
+# ====================================
+# Web & Content
+# ====================================
+bing-image-downloader>=1.1.2
+# carbonnow - Removed due to aiohttp dependency conflict (alternative implementation in utils/carbon.py)
+multicolorcaptcha>=1.2.0
+nekos.py>=1.0.1
+pynewtonmath>=1.0.1
+nltk>=3.8.1
+urllib3>=2.2.0
+future>=1.0.0
+
+# ====================================
+# Critical: Ensure aiohttp is installed
+# ====================================
+# aiohttp is required by the bot - ensure it's installed even if there are conflicts
+aiohttp==3.9.5

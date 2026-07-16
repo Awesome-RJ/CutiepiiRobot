@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -30,50 +30,63 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import aiohttp
+import html
 
-from pyrogram import filters
-from Cutiepii_Robot import pgram, LOGGER
-from Cutiepii_Robot.utils.errors import capture_err
+from telegram import Update
+from telegram.ext import ContextTypes
+from telegram.constants import ParseMode
+
+from Cutiepii_Robot import LOGGER
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
+
 
 __mod_name__ = "Github"
 
 
-@pgram.on_message(filters.command("github"))
-@capture_err
-async def github(_, message):
-    if len(message.command) != 2:
-        await message.reply_text("/git Username")
+@cutiepii_cmd(command=["github", "gitinfo", "gifinfo"])
+async def github(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    message = update.effective_message
+    
+    if len(context.args) != 1:
+        await message.reply_text("Usage: `/github <username>` or `/gitinfo <username>`")
         return
-    username = message.text.split(None, 1)[1]
+    
+    username = context.args[0]
     URL = f"https://api.github.com/users/{username}"
+    
     async with aiohttp.ClientSession() as session, session.get(URL) as request:
         if request.status == 404:
-            return await message.reply_text("404")
+            return await message.reply_text("404 - User not found")
 
         result = await request.json()
         try:
-            url = result["html_url"]
-            name = result["name"]
-            company = result["company"]
-            bio = result["bio"]
-            created_at = result["created_at"]
-            avatar_url = result["avatar_url"]
-            blog = result["blog"]
-            location = result["location"]
-            repositories = result["public_repos"]
-            followers = result["followers"]
-            following = result["following"]
-            caption = f"""**Info Of {name}**
-**Username:** `{username}`
-**Bio:** `{bio}`
-**Profile Link:** [Here]({url})
-**Company:** `{company}`
-**Created On:** `{created_at}`
-**Repositories:** `{repositories}`
-**Blog:** `{blog}`
-**Location:** `{location}`
-**Followers:** `{followers}`
-**Following:** `{following}`"""
+            url = result.get("html_url", "")
+            name = result.get("name") or username
+            company = result.get("company") or "N/A"
+            bio = result.get("bio") or "N/A"
+            created_at = result.get("created_at", "N/A")
+            avatar_url = result.get("avatar_url", "")
+            blog = result.get("blog") or "N/A"
+            location = result.get("location") or "N/A"
+            repositories = result.get("public_repos", 0)
+            followers = result.get("followers", 0)
+            following = result.get("following", 0)
+            
+            caption = f"""👤 <b>Info Of {html.escape(str(name))}</b>
+━━━━━━━━━━━━━━━━━━━━━━━
+
+❍ <b>Username:</b> <code>{html.escape(str(username))}</code>
+❍ <b>Bio:</b> <code>{html.escape(str(bio))}</code>
+❍ <b>Profile Link:</b> <a href="{url}">Here</a>
+❍ <b>Company:</b> <code>{html.escape(str(company))}</code>
+❍ <b>Created On:</b> <code>{html.escape(str(created_at))}</code>
+❍ <b>Repositories:</b> <code>{repositories}</code>
+❍ <b>Blog:</b> <code>{html.escape(str(blog))}</code>
+❍ <b>Location:</b> <code>{html.escape(str(location))}</code>
+❍ <b>Followers:</b> <code>{followers}</code>
+❍ <b>Following:</b> <code>{following}</code>"""
         except Exception as e:
             LOGGER.debug(e)
-    await message.reply_photo(photo=avatar_url, caption=caption)
+            return await message.reply_text("Failed to fetch GitHub data")
+    
+    await message.reply_photo(photo=avatar_url, caption=caption, parse_mode=ParseMode.HTML)

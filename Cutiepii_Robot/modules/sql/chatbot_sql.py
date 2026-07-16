@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -34,41 +34,69 @@ import threading
 from sqlalchemy import Column, String
 from Cutiepii_Robot.modules.sql import BASE, SESSION
 
-class KukiChats(BASE):
-    __tablename__ = "kuki_chats"
+class CutiepiiChats(BASE):
+    __tablename__ = "cutiepii_chats"
     chat_id = Column(String(14), primary_key=True)
 
     def __init__(self, chat_id):
         self.chat_id = chat_id
 
-KukiChats.__table__.create(checkfirst=True)
+CutiepiiChats.__table__.create(checkfirst=True)
 INSERTION_LOCK = threading.RLock()
 
 
-def is_kuki(chat_id):
+# Migration from old kuki_chats table to cutiepii_chats table if it exists
+def migrate_kuki_to_cutiepii():
     try:
-        chat = SESSION.query(KukiChats).get(str(chat_id))
+        from sqlalchemy import inspect, text
+        with INSERTION_LOCK:
+            engine = SESSION.bind
+            inspector = inspect(engine)
+            tables = inspector.get_table_names()
+            if "kuki_chats" in tables:
+                # Retrieve all chat_ids from kuki_chats
+                result = SESSION.execute(text("SELECT chat_id FROM kuki_chats")).fetchall()
+                if result:
+                    for row in result:
+                        chat_id = row[0]
+                        # Check if it already exists in cutiepii_chats
+                        existing = SESSION.query(CutiepiiChats).get(str(chat_id))
+                        if not existing:
+                            SESSION.add(CutiepiiChats(str(chat_id)))
+                    SESSION.commit()
+    except Exception:
+        SESSION.rollback()
+    finally:
+        SESSION.close()
+
+migrate_kuki_to_cutiepii()
+
+
+def is_cutiepii(chat_id):
+    try:
+        chat = SESSION.query(CutiepiiChats).get(str(chat_id))
         return bool(chat)
     finally:
         SESSION.close()
 
-def set_kuki(chat_id):
+def set_cutiepii(chat_id):
     with INSERTION_LOCK:
-        kukichat = SESSION.query(KukiChats).get(str(chat_id))
-        if not kukichat:
-            kukichat = KukiChats(str(chat_id))
-        SESSION.add(kukichat)
+        cutiepiichat = SESSION.query(CutiepiiChats).get(str(chat_id))
+        if not cutiepiichat:
+            cutiepiichat = CutiepiiChats(str(chat_id))
+        SESSION.add(cutiepiichat)
         SESSION.commit()
 
-def rem_kuki(chat_id):
+def rem_cutiepii(chat_id):
     with INSERTION_LOCK:
-        if kukichat := SESSION.query(KukiChats).get(str(chat_id)):
-            SESSION.delete(kukichat)
+        cutiepiichat = SESSION.query(CutiepiiChats).get(str(chat_id))
+        if cutiepiichat:
+            SESSION.delete(cutiepiichat)
         SESSION.commit()
 
 
-def get_all_kuki_chats():
+def get_all_cutiepii_chats():
     try:
-        return SESSION.query(KukiChats.chat_id).all()
+        return SESSION.query(CutiepiiChats.chat_id).all()
     finally:
         SESSION.close()

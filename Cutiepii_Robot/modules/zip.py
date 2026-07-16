@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -30,6 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import os
+import html
 import time
 import zipfile
 
@@ -40,24 +41,26 @@ from telethon.tl.types import DocumentAttributeVideo
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
-from Cutiepii_Robot import TEMP_DOWNLOAD_DIRECTORY, telethn
-from Cutiepii_Robot.events import register
+
+from Cutiepii_Robot import DOWNLOAD_DIRECTORY, telethn
+from Cutiepii_Robot.modules.helper_funcs.decorators import register
 
 
 async def is_register_admin(chat, user):
     if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
 
         return isinstance(
-            (await
-             telethn(functions.channels.GetParticipantRequest(chat, user)
-                     )).participant,
+            (
+                await telethn(functions.channels.GetParticipantRequest(chat, user))
+            ).participant,
             (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
         )
     if isinstance(chat, types.InputPeerChat):
 
         ui = await telethn.get_peer_id(user)
-        ps = (await telethn(functions.messages.GetFullChatRequest(chat.chat_id)
-                            )).full_chat.participants.participants
+        ps = (
+            await telethn(functions.messages.GetFullChatRequest(chat.chat_id))
+        ).full_chat.participants.participants
         return isinstance(
             next((p for p in ps if p.user_id == ui), None),
             (types.ChatParticipantAdmin, types.ChatParticipantCreator),
@@ -65,108 +68,100 @@ async def is_register_admin(chat, user):
     return None
 
 
-@register(pattern="^/zip")
-async def _(event):
+@register(pattern="zip")
+async def zip(event):
     if event.fwd_from:
         return
 
     if not event.is_reply:
-        await event.reply("Reply to a file to compress it.")
+        await event.reply("<b>Invalid Target</b>\nPlease reply to a file to compress it.", parse_mode="html")
         return
-    if (event.is_group and not (await is_register_admin(
-            event.input_chat, event.message.sender_id))):
+    if (
+        event.is_group
+        and not (await is_register_admin(event.input_chat, event.message.sender_id))
+    ):
         await event.reply(
-            "Hey, You are not admin. You can't use this command, But you can use in my pm 🙂"
+            "<b>Action Denied</b>\nYou must be an administrator to use this command in groups. However, you can use it in private messages.", parse_mode="html"
         )
         return
-    mone = await event.reply("⏳️ Please wait...")
-    if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
+    mone = await event.reply("<b>Processing</b>\nPlease wait...", parse_mode="html")
+    if not os.path.isdir(DOWNLOAD_DIRECTORY):
+        os.makedirs(DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
         reply_message = await event.get_reply_message()
         try:
-            time.time()
             downloaded_file_name = await event.telethn.download_media(
-                reply_message, TEMP_DOWNLOAD_DIRECTORY)
+                reply_message, DOWNLOAD_DIRECTORY
+            )
             directory_name = downloaded_file_name
-        except Exception as e:  # pylint:disable=C0103,W0703
-            await mone.reply(str(e))
-    zipfile.ZipFile(f"{directory_name}.zip", "w",
-                    zipfile.ZIP_DEFLATED).write(directory_name)
-
-    await event.telethn.send_file(
-        event.chat_id,
-        f"{directory_name}.zip",
-        force_document=True,
-        allow_cache=False,
-        reply_to=event.message.id,
-    )
-
-    await mone.delete()
+            zipfile.ZipFile(directory_name + ".zip", "w", zipfile.ZIP_DEFLATED).write(
+                directory_name
+            )
+            await event.telethn.send_file(
+                event.chat_id,
+                directory_name + ".zip",
+                force_document=True,
+                allow_cache=False,
+                reply_to=event.message.id,
+            )
+        except Exception as e:
+            await mone.reply(f"<b>Error</b>\nAn error occurred: <code>{html.escape(str(e))}</code>", parse_mode="html")
+        finally:
+            await mone.delete()
+            try:
+                if 'directory_name' in locals():
+                    if os.path.exists(directory_name):
+                        os.remove(directory_name)
+                    if os.path.exists(directory_name + ".zip"):
+                        os.remove(directory_name + ".zip")
+            except Exception:
+                pass
 
 
 def zipdir(path, ziph):
     # ziph is zipfile handle
-    for root, files in os.walk(path):
+    for root, dirs, files in os.walk(path):
         for file in files:
             ziph.write(os.path.join(root, file))
             os.remove(os.path.join(root, file))
 
 
-extracted = f"{TEMP_DOWNLOAD_DIRECTORY}extracted/"
-thumb_image_path = f"{TEMP_DOWNLOAD_DIRECTORY}/thumb_image.jpg"
+extracted = DOWNLOAD_DIRECTORY + "extracted/"
+thumb_image_path = DOWNLOAD_DIRECTORY + "/thumb_image.jpg"
 if not os.path.isdir(extracted):
     os.makedirs(extracted)
 
 
-async def is_register_admin(chat, user):
-    if isinstance(chat, (types.InputPeerChannel, types.InputChannel)):
-
-        return isinstance(
-            (await
-             telethn(functions.channels.GetParticipantRequest(chat, user)
-                     )).participant,
-            (types.ChannelParticipantAdmin, types.ChannelParticipantCreator),
-        )
-    if isinstance(chat, types.InputPeerChat):
-
-        ui = await telethn.get_peer_id(user)
-        ps = (await telethn(functions.messages.GetFullChatRequest(chat.chat_id)
-                            )).full_chat.participants.participants
-        return isinstance(
-            next((p for p in ps if p.user_id == ui), None),
-            (types.ChatParticipantAdmin, types.ChatParticipantCreator),
-        )
-    return None
-
-
-@register(pattern="^/unzip")
-async def _(event):
+@register(pattern="unzip")
+async def unzip(event):
     if event.fwd_from:
         return
 
     if not event.is_reply:
-        await event.reply("Reply to a zip file.")
+        await event.reply("<b>Invalid Target</b>\nPlease reply to a zip file.", parse_mode="html")
         return
-    if (event.is_group and not (await is_register_admin(
-            event.input_chat, event.message.sender_id))):
+    if (
+        event.is_group
+        and not (await is_register_admin(event.input_chat, event.message.sender_id))
+    ):
         await event.reply(
-            "Hey, You are not admin. You can't use this command, But you can use in my pm 🙂"
+            "<b>Action Denied</b>\nYou must be an administrator to use this command in groups. However, you can use it in private messages.", parse_mode="html"
         )
         return
 
-    mone = await event.reply("Processing...")
-    if not os.path.isdir(TEMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(TEMP_DOWNLOAD_DIRECTORY)
+    mone = await event.reply("<b>Processing</b>\nPlease wait...", parse_mode="html")
+    if not os.path.isdir(DOWNLOAD_DIRECTORY):
+        os.makedirs(DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
         start = datetime.now()
         reply_message = await event.get_reply_message()
         try:
             time.time()
             downloaded_file_name = await telethn.download_media(
-                reply_message, TEMP_DOWNLOAD_DIRECTORY)
+                reply_message, DOWNLOAD_DIRECTORY
+            )
         except Exception as e:
-            await mone.reply(str(e))
+            await mone.reply(f"<b>Error</b>\nAn error occurred: <code>{html.escape(str(e))}</code>", parse_mode="html")
         else:
             end = datetime.now()
             (end - start).seconds
@@ -174,7 +169,7 @@ async def _(event):
         with zipfile.ZipFile(downloaded_file_name, "r") as zip_ref:
             zip_ref.extractall(extracted)
         filename = sorted(get_lst_of_files(extracted, []))
-        await mone.edit("Unzipping now 😌")
+        await mone.edit("<b>Extraction in Progress</b>\nExtracting files...", parse_mode="html")
         for single_file in filename:
             if os.path.exists(single_file):
                 caption_rts = os.path.basename(single_file)
@@ -185,11 +180,9 @@ async def _(event):
                     metadata = extractMetadata(createParser(single_file))
                     width = 0
                     height = 0
-                    duration = metadata.get(
-                        "duration").seconds if metadata.has("duration") else 0
+                    duration = metadata.get("duration").seconds if metadata.has("duration") else 0
                     if os.path.exists(thumb_image_path):
-                        metadata = extractMetadata(
-                            createParser(thumb_image_path))
+                        metadata = extractMetadata(createParser(thumb_image_path))
                         if metadata.has("width"):
                             width = metadata.get("width")
                         if metadata.has("height"):
@@ -216,10 +209,10 @@ async def _(event):
                 except Exception as e:
                     await telethn.send_message(
                         event.chat_id,
-                        f"{caption_rts} caused `{str(e)}`",
+                        f"<b>Error</b>\nFailed to send <code>{html.escape(caption_rts)}</code>: <code>{html.escape(str(e))}</code>",
                         reply_to=event.message.id,
+                        parse_mode="html"
                     )
-
                     continue
                 await mone.delete()
                 os.remove(single_file)

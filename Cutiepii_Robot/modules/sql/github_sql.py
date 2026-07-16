@@ -1,6 +1,8 @@
 import threading
 
-from sqlalchemy import Column, String, UnicodeText, Integer
+from sqlalchemy import Column, String, UnicodeText, func, distinct, Integer
+
+from Cutiepii_Robot.modules.helper_funcs.msg_types import Types
 from Cutiepii_Robot.modules.sql import SESSION, BASE
 
 
@@ -20,7 +22,7 @@ class GitHub(BASE):
         self.backoffset = backoffset
 
     def __repr__(self):
-        return f"<Git Repo {self.name}>"
+        return "<Git Repo %s>" % self.name
 
 
 GitHub.__table__.create(checkfirst=True)
@@ -30,7 +32,8 @@ GIT_LOCK = threading.RLock()
 
 def add_repo_to_db(chat_id, name, value, backoffset):
     with GIT_LOCK:
-        if prev := SESSION.query(GitHub).get((str(chat_id), name)):
+        prev = SESSION.query(GitHub).get((str(chat_id), name))
+        if prev:
             SESSION.delete(prev)
         repo = GitHub(str(chat_id), name, value, backoffset)
         SESSION.add(repo)
@@ -46,12 +49,14 @@ def get_repo(chat_id, name):
 
 def rm_repo(chat_id, name):
     with GIT_LOCK:
-        if repo := SESSION.query(GitHub).get((str(chat_id), name)):
+        repo = SESSION.query(GitHub).get((str(chat_id), name))
+        if repo:
             SESSION.delete(repo)
             SESSION.commit()
             return True
-        SESSION.close()
-        return False
+        else:
+            SESSION.close()
+            return False
 
 
 def get_all_repos(chat_id):

@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -28,17 +28,32 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
+from Cutiepii_Robot.modules.helper_funcs.decorators import register
+
+import sys
+import os
+import datetime
+import time
 from telethon import *
+from telethon.tl import functions, types
 from telethon.tl.functions.account import *
 from telethon.tl.functions.channels import *
 from telethon.tl.functions.photos import *
+from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import *
+from telethon.utils import get_input_location
+import asyncio
+from telethon import utils
+from Cutiepii_Robot.utils.pluginhelpers import admins_only
 from Cutiepii_Robot.events import register
 from Cutiepii_Robot import telethn as borg
+import html
 from html import *
 import logging
 
 logger = logging.getLogger(__name__)
+
+
 
 if 1 == 1:
     name = "Profile Photos"
@@ -46,32 +61,30 @@ if 1 == 1:
 
     @register(pattern=("/pfp"))
     async def PPScmd(event):
-        #        """Gets the profile photos of replied users, channels or chats"""
-        id = "".join(event.raw_text.split(maxsplit=2)[1:])
+#        """Gets the profile photos of replied users, channels or chats"""
+        id = "".join(event.raw_text.split(maxsplit=2)[1:]) 
         user = await event.get_reply_message()
+        chat = await event.get_chat()
         if user:
             photos = await event.client.get_profile_photos(user.sender)
         else:
             photos = await event.client.get_profile_photos(event.chat_id)
-        if not id.strip():
+        if id.strip() == "":
             try:
                 await event.client.send_file(event.chat.id, photos)
             except a:
-                photo = await event.client.download_profile_photo(event.chat_id
-                                                                  )
+                photo = await event.client.download_profile_photo(event.chat_id)
                 await borg.send_file(event.chat.id, photo)
         else:
             try:
                 id = int(id)
                 if id <= 0:
-                    await event.edit(
-                        "<code>ID number you entered is invalid</code>")
+                    await event.edit("<code>ID number you entered is invalid</code>")
                     return
             except:
-                await event.edit(
-                    "<code>ID number you entered is invalid</code>")
-                return
-            if id <= (len(photos)):
+                 await event.edit("<code>ID number you entered is invalid</code>")
+                 return
+            if int(id) <= (len(photos)):
                 send_photos = await event.client.download_media(photos[id - 1])
                 await borg.send_file(event.chat.id, send_photos)
             else:

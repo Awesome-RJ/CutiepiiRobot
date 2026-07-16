@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -29,54 +29,54 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+from Cutiepii_Robot.modules.helper_funcs.decorators import cutiepii_cmd
 import os
 import datetime
 
 from telethon import events
 from telegram import Update
-from telegram.ext import CallbackContext, CommandHandler
-from Cutiepii_Robot import telethn, CUTIEPII_PTB, LOGGER
+from telegram.ext import CommandHandler, ContextTypes
+CallbackContext = ContextTypes.DEFAULT_TYPE
+from Cutiepii_Robot import telethn, dispatcher
 from Cutiepii_Robot.modules.helper_funcs.chat_status import dev_plus
 
 DEBUG_MODE = False
 
-
 @dev_plus
-async def debug(update: Update):
+@cutiepii_cmd(command="debug")
+async def debug(update: Update, context: CallbackContext):
     global DEBUG_MODE
+    args = update.effective_message.text.split(None, 1)
     message = update.effective_message
-    args = message.text.split(" " or None, 1)
-    LOGGER.debug(DEBUG_MODE)
+    print(DEBUG_MODE)
     if len(args) > 1:
         if args[1] in ("yes", "on"):
             DEBUG_MODE = True
-            await update.effective_message.reply_text("Debug mode is now on.")
+            await message.reply_text("Debug mode is now on.")
         elif args[1] in ("no", "off"):
             DEBUG_MODE = False
-            await update.effective_message.reply_text("Debug mode is now off.")
-    elif DEBUG_MODE:
-        await update.effective_message.reply_text("Debug mode is currently on."
-                                                  )
+            await message.reply_text("Debug mode is now off.")
     else:
-        await update.effective_message.reply_text(
-            "Debug mode is currently off.")
+        if DEBUG_MODE:
+            await message.reply_text("Debug mode is currently on.")
+        else:
+            await message.reply_text("Debug mode is currently off.")
 
 
 @telethn.on(events.NewMessage(pattern="[/!].*"))
 async def i_do_nothing_yes(event):
+    global DEBUG_MODE
     if DEBUG_MODE:
-        LOGGER.debug(f"-{event.sender_id} ({event.chat_id}) : {event.text}")
+        print(f"-{event.from_id} ({event.chat_id}) : {event.text}")
         if os.path.exists("updates.txt"):
             with open("updates.txt", "r") as f:
                 text = f.read()
             with open("updates.txt", "w+") as f:
-                f.write(
-                    f"{text}\n-{event.sender_id} ({event.chat_id}) : {event.text}"
-                )
+                f.write(text + f"\n-{event.from_id} ({event.chat_id}) : {event.text}")
         else:
             with open("updates.txt", "w+") as f:
                 f.write(
-                    f"- {event.sender_id} ({event.chat_id}) : {event.text} | {datetime.datetime.now()}",
+                    f"- {event.from_id} ({event.chat_id}) : {event.text} | {datetime.datetime.now()}"
                 )
 
 
@@ -84,15 +84,25 @@ support_chat = os.getenv("SUPPORT_CHAT")
 
 
 @dev_plus
-def logs(update: Update, context: CallbackContext) -> None:
+@cutiepii_cmd(command="logs")
+async def logs(update: Update, context: CallbackContext):
     user = update.effective_user
+    if not os.path.exists('log.txt'):
+        await update.effective_message.reply_text("Log saving is disabled and log.txt does not exist.")
+        return
+    if os.path.getsize('log.txt') > (45 * 1024 * 1024):
+        await update.effective_message.reply_text("Log file is too big to be sent!")
+        return
+
     with open("log.txt", "rb") as f:
-        context.bot.send_document(document=f, filename=f.name, chat_id=user.id)
+        await context.bot.send_document(document=f, filename=f.name, chat_id=user.id)
 
 
-CUTIEPII_PTB.add_handler(CommandHandler("logs", logs))
-CUTIEPII_PTB.add_handler(CommandHandler("debug", debug))
+
 
 __mod_name__ = "Debug"
 
 __command_list__ = ["debug"]
+
+__handlers__ = [
+]

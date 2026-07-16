@@ -2,8 +2,8 @@
 BSD 2-Clause License
 
 Copyright (C) 2017-2019, Paul Larsen
-Copyright (C) 2021-2022, Awesome-RJ, [ https://github.com/Awesome-RJ ]
-Copyright (c) 2021-2022, Yūki • Black Knights Union, [ https://github.com/Awesome-RJ/CutiepiiRobot ]
+Copyright (c) 2021-2026, Awesome-RJ, <https://github.com/Awesome-RJ>
+Copyright (c) 2021-2026, Yūki - Black Knights Union, <https://github.com/Awesome-RJ/CutiepiiRobot>
 
 All rights reserved.
 
@@ -43,7 +43,6 @@ from Cutiepii_Robot import telethn, BOT_ID, OWNER_ID, SUPPORT_CHAT
 
 TMP_DOWNLOAD_DIRECTORY = "./"
 
-
 @telethn.on(events.NewMessage(pattern="/bassboost (.*)"))
 async def __(event):
     if not event.is_group:
@@ -68,25 +67,22 @@ async def __(event):
             if int(ar) >= 2 and int(ar) <= 100:
                 accentuate_db = int(ar)
             else:
-                await event.reply(
-                    "`BassBost Level Should Be From 2 to 100 Only.`")
+                await event.reply("`BassBost Level Should Be From 2 to 100 Only.`")
                 return
         except Exception as exx:
-            await event.reply("`SomeThing Went Wrong..` \n**Error:** " +
-                              str(exx))
+            await event.reply("`SomeThing Went Wrong..` \n**Error:** " + str(exx))
             return
     else:
         accentuate_db = 2
     lel = await event.reply("`Downloading This File...`")
     # fname = await telethn.download_media(message=reply.media)
-    r_message = reply.media
+    r_message = message = reply.media
     fname = await telethn.download_media(r_message, TMP_DOWNLOAD_DIRECTORY)
     await lel.edit("`BassBoosting In Progress..`")
     if fname.endswith(".oga") or fname.endswith(".ogg"):
         v = True
         audio = AudioSegment.from_file(fname)
-    elif fname.endswith(".mp3") or fname.endswith(".m4a") or fname.endswith(
-            ".wav"):
+    elif fname.endswith(".mp3") or fname.endswith(".m4a") or fname.endswith(".wav"):
         audio = AudioSegment.from_file(fname)
     else:
         await lel.edit(

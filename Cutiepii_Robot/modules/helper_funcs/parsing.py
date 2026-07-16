@@ -9,10 +9,11 @@ from telegram.helpers import mention_html
 
 from Cutiepii_Robot.modules.helper_funcs.admin_status import user_is_admin
 from Cutiepii_Robot.modules.sql.notes_sql import Buttons
-from Cutiepii_Robot import CUTIEPII_PTB
+from Cutiepii_Robot import dispatcher
+
 
 BTN_LINK_REGEX = re.compile(
-    r"(?<!\\)\[(.+?)\]\(((?!b(?:utto|t)nurl:).+?)\)|(?m)^(\n?\[(.+?)\]\(b(?:utto|t)nurl:(?:/*)?(.+?)(:same)?\))$"
+        r"(?m)(?<!\\)\[(.+?)\]\(((?!b(?:utto|t)nurl:).+?)\)|^(\n?\[(.+?)\]\(b(?:utto|t)nurl:(?:/*)?(.+?)(:same)?\))$"
 )
 
 
@@ -30,14 +31,15 @@ class Types(IntEnum):
 
 
 ENUM_FUNC_MAP = {
-    Types.TEXT.value: CUTIEPII_PTB.bot.send_message,
-    Types.BUTTON_TEXT.value: CUTIEPII_PTB.bot.send_message,
-    Types.STICKER.value: CUTIEPII_PTB.bot.send_sticker,
-    Types.DOCUMENT.value: CUTIEPII_PTB.bot.send_document,
-    Types.PHOTO.value: CUTIEPII_PTB.bot.send_photo,
-    Types.AUDIO.value: CUTIEPII_PTB.bot.send_audio,
-    Types.VOICE.value: CUTIEPII_PTB.bot.send_voice,
-    Types.VIDEO.value: CUTIEPII_PTB.bot.send_video,
+    Types.TEXT.value: dispatcher.bot.send_message,
+    Types.BUTTON_TEXT.value: dispatcher.bot.send_message,
+    Types.STICKER.value: dispatcher.bot.send_sticker,
+    Types.DOCUMENT.value: dispatcher.bot.send_document,
+    Types.PHOTO.value: dispatcher.bot.send_photo,
+    Types.AUDIO.value: dispatcher.bot.send_audio,
+    Types.VOICE.value: dispatcher.bot.send_voice,
+    Types.VIDEO.value: dispatcher.bot.send_video,
+    Types.VIDEO_NOTE.value: dispatcher.bot.send_video_note,
 }
 
 VALID_FORMATTERS = [
@@ -56,16 +58,14 @@ VALID_FORMATTERS = [
 
 
 def get_data(
-    msg: Message,
-    welcome: bool = False
-) -> tuple[str, str, Types, Optional[str], Union[str, list[Optional[tuple[
-        str, Optional[str], bool]]]]]:
+        msg: Message, welcome: bool = False
+             ) -> tuple[str, str, Types, Optional[str], Union[str, list[Optional[tuple[str, Optional[str], bool]]]]]:
     data_type: Types = Types.TEXT
     content: Optional[str] = None
     text: str = ""
     raw_text: str = msg.text_html or msg.caption_html
-    args: list[str] = raw_text.split(None, 1 if welcome else 2)
-    note_name: str = "" if welcome else args[1]
+    args: list[str] = raw_text.split(None, 2 if not welcome else 1)  # use python's maxsplit to separate cmd and args
+    note_name: str = args[1] if not welcome else ""
 
     buttons: Union[str, list[Optional[tuple[str, Optional[str], bool]]]] = []
     # determine what the contents of the filter are - text, image, sticker, etc
@@ -79,10 +79,8 @@ def get_data(
 
     elif rep := msg.reply_to_message:
         msgtext = msg.reply_to_message.text_html or msg.reply_to_message.caption_html
-        if (len(args) >= (1 if welcome else 2)
-                and msg.reply_to_message.text_html):  # not caption, text
-            text, buttons = parser(
-                msgtext, reply_markup=msg.reply_to_message.reply_markup)
+        if len(args) >= (2 if not welcome else 1) and msg.reply_to_message.text_html:  # not caption, text
+            text, buttons = parser(msgtext, reply_markup=msg.reply_to_message.reply_markup)
             data_type = Types.BUTTON_TEXT if buttons else Types.TEXT
         elif rep.sticker:
             content = msg.reply_to_message.sticker.file_id
@@ -94,8 +92,7 @@ def get_data(
             data_type = Types.DOCUMENT
 
         elif rep.photo:
-            content = msg.reply_to_message.photo[
-                -1].file_id  # last elem = best quality
+            content = msg.reply_to_message.photo[-1].file_id  # last elem = best quality
             text, buttons = parser(msgtext)
             data_type = Types.PHOTO
 
@@ -114,6 +111,15 @@ def get_data(
             text, buttons = parser(msgtext)
             data_type = Types.VIDEO
 
+        elif rep.video_note:
+            content = msg.reply_to_message.video_note.file_id
+            data_type = Types.VIDEO_NOTE
+
+        elif rep.animation:
+            content = msg.reply_to_message.animation.file_id
+            text, buttons = parser(msgtext)
+            data_type = Types.DOCUMENT
+
     if buttons and not text:
         text = note_name
 
@@ -121,8 +127,7 @@ def get_data(
 
 
 def parser(
-    txt: str,
-    reply_markup: InlineKeyboardMarkup = None
+        txt: str, reply_markup: InlineKeyboardMarkup = None
 ) -> tuple[str, Union[str, list[Optional[tuple[str, Optional[str], bool]]]]]:
     buttons: Union[str, list[Optional[tuple[str, Optional[str], bool]]]] = []
     prev = 0
@@ -135,13 +140,13 @@ def parser(
 
     if txt:
         for match in BTN_LINK_REGEX.finditer(txt):
-            if match[1]:
+            if match.group(1):
                 note_data += txt[prev:match.start(1) - 1]
-                note_data += f"<a href=\"{match[2]}\">{match[1]}</a>"
+                note_data += f"<a href=\"{match.group(2)}\">{match.group(1)}</a>"
                 prev = match.end(2) + 1
             else:
-                buttons.append((match[4], match[5], bool(match[6])))
-                note_data += txt[prev:match.start(3)].rstrip()
+                buttons.append((match.group(4), match.group(5), bool(match.group(6))))
+                note_data += txt[prev: match.start(3)].rstrip()
                 prev = match.end(3)
         note_data += txt[prev:]
 
@@ -152,40 +157,42 @@ def parser(
 
 def Md2HTML(text: str) -> str:
     _whitespace_re = re.compile(
-        r"(?<!<)(?P<t_b><[^></]*?>)(?P<str>[^<>](?:.*?\s*?)*?(?P<ws>\s*?))(?P<t_e></[^<>]*?>)(?!>)"
-    )
+            r"(?<!<)(?P<t_b><[^></]*?>)(?P<str>[^<>](?:.*?\s*?)*?(?P<ws>\s*?))(?P<t_e></[^<>]*?>)(?!>)")
     _pre_re = re.compile(r'`{3}(.*?[^\s].*?)(\s*?)`{3}', re.DOTALL)
     _code_re = re.compile(r'`(.*?[^\s].*?)(\s*?)`', re.DOTALL)
     _bold_re = re.compile(r'\*(.*?[^\s].*?)(\s*?)\*', re.DOTALL)
-    _underline_re = re.compile(r'(?<!_)__(.*?[^\s].*?)(\s*?)__(?!_)',
-                               re.DOTALL)
+    _underline_re = re.compile(r'(?<!_)__(.*?[^\s].*?)(\s*?)__(?!_)', re.DOTALL)
     _italic_re = re.compile(r'_(.*?[^\s].*?)(\s*?)_', re.DOTALL)
     _strike_re = re.compile(r'~(.*?[^\s].*?)(\s*?)~', re.DOTALL)
     _spoiler_re = re.compile(r'\|\|(.*?[^\s].*?)(\s*?)\|\|', re.DOTALL)
+    _blockquote_re = re.compile(r'^\s*>\s*(.*?)$', re.MULTILINE)
 
     def repl_whitespace(match):
         return f"{match.group('t_b')}{match.group('str')}{match.group('t_e')}{match.group('ws')}"
 
     def _pre_repl(match):
-        return f'<pre>{match[1]}</pre>{match[2]}'
+        return f'<pre>{match.group(1)}</pre>{match.group(2)}'
 
     def _code_repl(match):
-        return f'<code>{match[1]}</code>{match[2]}'
+        return f'<code>{match.group(1)}</code>{match.group(2)}'
 
     def _bold_repl(match):
-        return f'<b>{match[1]}</b>{match[2]}'
+        return f'<b>{match.group(1)}</b>{match.group(2)}'
 
     def _underline_repl(match):
-        return f'<u>{match[1]}</u>{match[2]}'
+        return f'<u>{match.group(1)}</u>{match.group(2)}'
 
     def _italic_repl(match):
-        return f'<i>{match[1]}</i>{match[2]}'
+        return f'<i>{match.group(1)}</i>{match.group(2)}'
 
     def _strike_repl(match):
-        return f'<s>{match[1]}</s>{match[2]}'
+        return f'<s>{match.group(1)}</s>{match.group(2)}'
 
     def _spoiler_repl(match):
-        return f'<span class="tg-spoiler">{match[1]}</span>{match[2]}'
+        return f'<span class="tg-spoiler">{match.group(1)}</span>{match.group(2)}'
+
+    def _blockquote_repl(match):
+        return f'<blockquote>{match.group(1)}</blockquote>'
 
     text = _whitespace_re.sub(repl_whitespace, text)
     text = _pre_re.sub(_pre_repl, text)
@@ -195,6 +202,7 @@ def Md2HTML(text: str) -> str:
     text = _italic_re.sub(_italic_repl, text)
     text = _strike_re.sub(_strike_repl, text)
     text = _spoiler_re.sub(_spoiler_repl, text)
+    text = _blockquote_re.sub(_blockquote_repl, text)
 
     return text
 
@@ -206,39 +214,39 @@ def revertMd2HTML(text: str, buttons: Buttons) -> str:
     _underline_re = re.compile(r'<u>(.*?[^\s].*?)(\s*?)</u>')
     _italic_re = re.compile(r'<i>(.*?[^\s].*?)(\s*?)</i>')
     _strike_re = re.compile(r'<s>(.*?[^\s].*?)(\s*?)</s>')
-    _spoiler_re = re.compile(
-        r'<span class="tg-spoiler">(.*?[^\s].*?)(\s*?)</span>')
-    _link_re = re.compile(
-        r'<a href=(?:"(.*?[^\s].*?)"|\'(.*?[^\s].*?)\')>(.*?[^\s].*?)</a>')
+    _spoiler_re = re.compile(r'<span class="tg-spoiler">(.*?[^\s].*?)(\s*?)</span>')
+    _blockquote_re = re.compile(r'<blockquote(?: expandable)?>(.*?[^\s].*?)(\s*?)</blockquote>', re.DOTALL)
+    _link_re = re.compile(r'<a href=(?:"(.*?[^\s].*?)"|\'(.*?[^\s].*?)\')>(.*?[^\s].*?)</a>')
 
     def _pre_repl(match):
-        return f'```{match[1]}```{match[2]}'
+        return f'```{match.group(1)}```{match.group(2)}'
 
     def _code_repl(match):
-        return f'`{match[1]}`{match[2]}'
+        return f'`{match.group(1)}`{match.group(2)}'
 
     def _bold_repl(match):
-        return f'*{match[1]}*{match[2]}'
+        return f'*{match.group(1)}*{match.group(2)}'
 
     def _underline_repl(match):
-        return f'__{match[1]}__{match[2]}'
+        return f'__{match.group(1)}__{match.group(2)}'
 
     def _italic_repl(match):
-        return f'_{match[1]}_{match[2]}'
+        return f'_{match.group(1)}_{match.group(2)}'
 
     def _strike_repl(match):
-        return f'~{match[1]}~{match[2]}'
+        return f'~{match.group(1)}~{match.group(2)}'
 
     def _spoiler_repl(match):
-        return f'||{match[1]}||{match[2]}'
+        return f'||{match.group(1)}||{match.group(2)}'
+
+    def _blockquote_repl(match):
+        return f'> {match.group(1)}{match.group(2)}'
 
     def _link_repl(match):
-        return f"[{match[2]}]({match[1]})"
+        return f"[{match.group(2)}]({match.group(1)})"
 
     def _buttons_repl(txt, btns):
-        return txt + "".join(
-            f"\n[{i.name}](buttonurl://{i.url}{':same' if i.same_line else ''})"
-            for i in btns)
+        return txt + "".join(f"\n[{i.name}](buttonurl://{i.url}{':same' if i.same_line else ''})" for i in btns)
 
     text = _pre_re.sub(_pre_repl, text)
     text = _code_re.sub(_code_repl, text)
@@ -247,6 +255,7 @@ def revertMd2HTML(text: str, buttons: Buttons) -> str:
     text = _italic_re.sub(_italic_repl, text)
     text = _strike_re.sub(_strike_repl, text)
     text = _spoiler_re.sub(_spoiler_repl, text)
+    text = _blockquote_re.sub(_blockquote_repl, text)
     text = _link_re.sub(_link_repl, text)
 
     if buttons:
@@ -266,8 +275,7 @@ def build_keyboard_from_list(buttons) -> list[list[InlineKeyboardButton]]:
     return kb
 
 
-def parse_filler(update: Update, user_id: int,
-                 text: str) -> (bool, bool, bool, str):
+def parse_filler(update: Update, user_id: int, text: str) -> (bool, bool, bool, str):
     message = update.effective_message
 
     if "{admin}" in text and user_is_admin(update, user_id):
@@ -275,37 +283,41 @@ def parse_filler(update: Update, user_id: int,
     if "{user}" in text and not user_is_admin(update, user_id):
         return True, False, False, ""
     preview = "{preview}" not in text
-    protect = "{protect}" in text
+    protect ="{protect}" in text
     text = text.format(
-        first=escape(message.from_user.first_name),
-        last=escape(
-            message.from_user.last_name or message.from_user.first_name, ),
-        fullname=escape(
-            " ".join([
-                message.from_user.first_name,
-                message.from_user.last_name or "",
-            ]), ),
-        username=f'@{message.from_user.username}'
-        if message.from_user.username else mention_html(
-            message.from_user.id,
-            message.from_user.first_name,
-        ),
-        mention=mention_html(
-            message.from_user.id,
-            message.from_user.first_name,
-        ),
-        chatname=escape(
-            message.chat.title if message.chat.type != "private" else
-            message.from_user.first_name, ),
-        id=message.from_user.id,
-        user="",
-        admin="",
-        preview="",
-        protect="",
+            first = escape(message.from_user.first_name),
+            last = escape(
+                    message.from_user.last_name
+                    or message.from_user.first_name,
+                    ),
+            fullname = escape(
+                    " ".join(
+                            [
+                                message.from_user.first_name,
+                                message.from_user.last_name or "",
+                                ]
+                    ),
+            ),
+            username = f'@{message.from_user.username}'
+            if message.from_user.username
+            else mention_html(
+                    message.from_user.id,
+                    message.from_user.first_name,
+            ),
+            mention = mention_html(
+                    message.from_user.id,
+                    message.from_user.first_name,
+            ),
+            chatname = escape(
+                    message.chat.title
+                    if message.chat.type != "private"
+                    else message.from_user.first_name,
+            ),
+            id = message.from_user.id,
+            user = "",
+            admin = "",
+            preview = "",
+            protect = "",
     )
 
-    return (
-        False,
-        preview,
-        protect,
-    )
+    return False, preview, protect, text
