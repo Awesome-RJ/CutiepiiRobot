@@ -3,7 +3,7 @@
 # ====================================
 # aiohttp and its dependencies must be installed first - required by many modules
 aiohttp==3.9.5
-aiosignal>=1.1.2
+aiosignal>=1.4.0
 async-timeout>=4.0,<5.0
 attrs>=17.3.0
 frozenlist>=1.1.1
