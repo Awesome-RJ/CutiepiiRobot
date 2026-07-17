@@ -87,7 +87,7 @@ emoji>=2.10.1
 alphabet-detector>=0.0.7
 zalgo-text>=0.6
 markdown2>=2.4.13
-pyrate-limiter>=3.1.1
+pyrate-limiter>=4.4.0
 
 # ====================================
 # Utilities
