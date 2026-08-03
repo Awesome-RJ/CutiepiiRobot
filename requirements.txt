@@ -63,7 +63,7 @@ pillow>=10.2.0
 opencv-python-headless>=4.9.0.80
 ffmpeg-python>=0.2.0
 ffmpeg==1.4
-hachoir>=3.2.0
+hachoir>=3.3.0
 pydub>=0.25.1
 audioop-lts>=0.2.1; python_version >= "3.13"  # Required for Python 3.13+ compatibility (audioop was removed)
 yt-dlp>=2024.1.0
