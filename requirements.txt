@@ -21,7 +21,7 @@ telethon>=1.42.0
 # Database & Caching
 # ====================================
 # Using SQLAlchemy 1.4.x for backward compatibility with 2.0 migration path
-sqlalchemy==1.4.54
+sqlalchemy==2.0.51
 psycopg2-binary>=2.9.9
 pymongo>=4.6.1
 motor>=3.3.2
