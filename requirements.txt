@@ -132,7 +132,7 @@ numpy>=1.26.4
 # ====================================
 # Web & Content
 # ====================================
-bing-image-downloader>=1.1.2
+bing-image-downloader>=1.1.3
 # carbonnow - Removed due to aiohttp dependency conflict (alternative implementation in utils/carbon.py)
 multicolorcaptcha>=1.2.0
 nekos.py>=1.0.1
