@@ -1,3 +1,5 @@
+
+
 <div align="center">
 
 # 🌸 Cutiepii Robot
@@ -34,7 +36,7 @@ Cutiepii Robot is a fully-featured, modular Telegram bot built for group managem
 | Basic admin modules | 50+ modules |
 | No AI chatbot | Gemini + OpenRouter AI chatbot |
 | No welcome image | Dynamic Pillow welcome cards |
-| Single language | 5 languages (EN, HI, ES, JA, RU) |
+| Single language | 10 languages (EN, HI, ES, FR, DE, PT, RU, AR, ID, IT) |
 | Redis optional | Redis + PostgreSQL required |
 
 ---
@@ -64,7 +66,7 @@ Cutiepii Robot is a fully-featured, modular Telegram bot built for group managem
 - 🔒 **Locks & Anti-Spam** — Flood control, blacklists, NSFW detection
 - 🎌 **Anime & Fun** — AniList, Jikan, wallpapers, memes, and more
 - ⏰ **Reminders** — Set personal or group reminders
-- 🌍 **Multi-language** — English, Hindi, Spanish, Japanese, Russian
+- 🌍 **Multi-language** — English, Hindi, Spanish, French, German, Portuguese, Russian, Arabic, Indonesian, Italian
 
 ---
 
